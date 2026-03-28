@@ -1,0 +1,93 @@
+name: Update PAGE_INDEX.txt
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  update-index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate PAGE_INDEX.txt
+        run: |
+          BASE_URL="https://zuwasi.github.io/Public-html-pages"
+          DATE=$(date -u +%Y-%m-%d)
+
+          # Collect HTML files (index.html first, then alphabetical)
+          HTML_FILES=()
+          if [ -f "index.html" ]; then
+            HTML_FILES+=("index.html")
+          fi
+          while IFS= read -r f; do
+            [ "$f" = "index.html" ] && continue
+            HTML_FILES+=("$f")
+          done < <(find . -maxdepth 1 -name '*.html' -printf '%f\n' | sort)
+
+          # Collect non-HTML, non-system files
+          OTHER_FILES=()
+          while IFS= read -r f; do
+            case "$f" in
+              *.html|LICENSE|PAGE_INDEX.txt|README.md) continue ;;
+              .*) continue ;;
+              *) OTHER_FILES+=("$f") ;;
+            esac
+          done < <(find . -maxdepth 1 -maxdepth 1 -not -name '.' -not -path './.git' -not -path './.github' -printf '%f\n' | sort)
+
+          # Write the file
+          cat > PAGE_INDEX.txt << HEADER
+          ═══════════════════════════════════════════════════════════════
+            Public HTML Pages — zuwasi/Public-html-pages
+            GitHub Pages: ${BASE_URL}/
+            Auto-updated on every commit via GitHub Actions
+          ═══════════════════════════════════════════════════════════════
+
+          Last updated: ${DATE}
+
+          ──────────────────────────────────────────────────────────────
+            PAGE LINKS
+          ──────────────────────────────────────────────────────────────
+
+          HEADER
+
+          # Use sed to remove leading whitespace from heredoc
+          sed -i 's/^          //' PAGE_INDEX.txt
+
+          COUNT=1
+          for f in "${HTML_FILES[@]}"; do
+            echo "${COUNT}. ${f}" >> PAGE_INDEX.txt
+            echo "   ${BASE_URL}/${f}" >> PAGE_INDEX.txt
+            echo "" >> PAGE_INDEX.txt
+            COUNT=$((COUNT + 1))
+          done
+
+          if [ ${#OTHER_FILES[@]} -gt 0 ]; then
+            cat >> PAGE_INDEX.txt << SECTION
+          ──────────────────────────────────────────────────────────────
+            OTHER FILES
+          ──────────────────────────────────────────────────────────────
+
+          SECTION
+            sed -i 's/^          //' PAGE_INDEX.txt
+
+            for f in "${OTHER_FILES[@]}"; do
+              echo "• ${f}" >> PAGE_INDEX.txt
+              echo "  ${BASE_URL}/${f}" >> PAGE_INDEX.txt
+              echo "" >> PAGE_INDEX.txt
+            done
+          fi
+
+          echo "══════════════════════════════════════════════════════════════" >> PAGE_INDEX.txt
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add PAGE_INDEX.txt
+          git diff --staged --quiet && echo "No changes" && exit 0
+          git commit -m "Auto-update PAGE_INDEX.txt"
+          git push
