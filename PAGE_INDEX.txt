@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-03-28
+Last updated: 2026-03-29
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -25,7 +25,10 @@ Last updated: 2026-03-28
 5. Ampcode_CISO_Security_Review.html
    https://zuwasi.github.io/Public-html-pages/Ampcode_CISO_Security_Review.html
 
-6. why-amp-doesnt-need-node9-proxy.html
+6. Trivy-Attack-SBOMator-Defense.html
+   https://zuwasi.github.io/Public-html-pages/Trivy-Attack-SBOMator-Defense.html
+
+7. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
 ──────────────────────────────────────────────────────────────
