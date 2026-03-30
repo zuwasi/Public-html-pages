@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Unified Enterprise Intelligence Platform — Sourcegraph Technical Proposal</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0a0a0f; color: #e4e4e7; }
+
+.deck {
+  display: flex; height: 100vh; width: max-content;
+  transition: transform 0.45s cubic-bezier(.4,0,.2,1);
+}
+.slide {
+  width: 100vw; height: 100vh; flex-shrink: 0;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  padding: 28px 32px; overflow-y: auto; position: relative;
+  -webkit-overflow-scrolling: touch;
+}
+.slide::-webkit-scrollbar { width: 4px; }
+.slide::-webkit-scrollbar-thumb { background: #a112ff55; border-radius: 4px; }
+
+/* Nav */
+.nav { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; gap: 10px; align-items: center; background: #18181bdd; backdrop-filter: blur(12px); border: 1px solid #333; border-radius: 30px; padding: 8px 18px; }
+.nav button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #555; background: #27272a; color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.nav button:hover { background: #a112ff; border-color: #a112ff; }
+.nav button:disabled { opacity: .25; cursor: default; background: #27272a; border-color: #555; }
+.nav .counter { font-size: 12px; color: #888; min-width: 50px; text-align: center; }
+
+.dots { display: flex; gap: 5px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #444; transition: all .3s; cursor: pointer; }
+.dot.active { background: #a112ff; width: 20px; border-radius: 4px; }
+
+/* Sourcegraph Logo SVG */
+.sg-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.sg-logo svg { width: 32px; height: 32px; }
+.sg-logo-text { font-size: 15px; font-weight: 700; color: #e4e4e7; letter-spacing: -0.3px; }
+.sg-logo-large svg { width: 64px; height: 64px; }
+.sg-logo-large .sg-logo-text { font-size: 28px; }
+
+/* Header bar with logo */
+.slide-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.slide-header .sg-logo svg { width: 24px; height: 24px; }
+.slide-header .sg-logo-text { font-size: 12px; color: #71717a; }
+
+/* Typography */
+h1 { font-size: clamp(22px, 5vw, 36px); font-weight: 800; margin-bottom: 6px; background: linear-gradient(135deg, #a112ff, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+h2 { font-size: clamp(16px, 3.5vw, 24px); font-weight: 700; color: #a78bfa; margin: 16px 0 8px; }
+h3 { font-size: clamp(13px, 2.8vw, 18px); font-weight: 600; color: #818cf8; margin: 12px 0 6px; }
+p, li { font-size: clamp(11px, 2.4vw, 14px); line-height: 1.6; color: #a1a1aa; }
+ul { padding-left: 18px; }
+li { margin-bottom: 4px; }
+strong { color: #e4e4e7; }
+
+.subtitle { font-size: clamp(12px, 2.5vw, 16px); color: #71717a; margin-bottom: 18px; }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-right: 5px; }
+.badge-purple { background: #a112ff22; color: #a78bfa; border: 1px solid #a112ff44; }
+.badge-blue { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f644; }
+.badge-green { background: #22c55e22; color: #4ade80; border: 1px solid #22c55e44; }
+.badge-orange { background: #f9731622; color: #fb923c; border: 1px solid #f9731644; }
+.badge-pink { background: #ec489922; color: #f472b6; border: 1px solid #ec489944; }
+.badge-teal { background: #14b8a622; color: #2dd4bf; border: 1px solid #14b8a644; }
+.badge-red { background: #ef444422; color: #f87171; border: 1px solid #ef444444; }
+
+.card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; margin: 8px 0; }
+.card-accent { border-left: 3px solid #a112ff; }
+.card-blue { border-left: 3px solid #3b82f6; }
+.card-green { border-left: 3px solid #22c55e; }
+.card-orange { border-left: 3px solid #f97316; }
+.card-pink { border-left: 3px solid #ec4899; }
+.card-teal { border-left: 3px solid #14b8a6; }
+
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: clamp(10px, 2.2vw, 13px); }
+th { background: #1e1e2e; color: #a78bfa; padding: 8px 10px; text-align: left; border-bottom: 2px solid #a112ff44; font-weight: 700; }
+td { padding: 7px 10px; border-bottom: 1px solid #27272a; color: #a1a1aa; }
+tr:hover td { background: #1a1a2e; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+@media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
+
+.hero-icon { font-size: 48px; margin-bottom: 10px; }
+.divider { height: 1px; background: linear-gradient(90deg, transparent, #a112ff44, transparent); margin: 14px 0; }
+
+.phase-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; margin-bottom: 4px; }
+.phase1 { background: #3b82f633; color: #60a5fa; }
+.phase2 { background: #22c55e33; color: #4ade80; }
+.phase3 { background: #f9731633; color: #fb923c; }
+.phase4 { background: #ec489933; color: #f472b6; }
+.phase5 { background: #14b8a633; color: #2dd4bf; }
+
+.oss-tag { display: inline-block; background: #22c55e22; color: #4ade80; border: 1px solid #22c55e44; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; }
+
+.tbd { font-size: clamp(20px, 4vw, 32px); font-weight: 800; color: #a78bfa; }
+
+/* Block diagram styles */
+.block-diagram { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+.block-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.block { padding: 10px 14px; border-radius: 10px; text-align: center; font-size: 11px; font-weight: 600; min-width: 120px; flex: 1; max-width: 200px; }
+.block-purple { background: #a112ff22; border: 2px solid #a112ff; color: #c084fc; }
+.block-blue { background: #3b82f622; border: 2px solid #3b82f6; color: #60a5fa; }
+.block-green { background: #22c55e22; border: 2px solid #22c55e; color: #4ade80; }
+.block-orange { background: #f9731622; border: 2px solid #f97316; color: #fb923c; }
+.block-pink { background: #ec489922; border: 2px solid #ec4899; color: #f472b6; }
+.block-teal { background: #14b8a622; border: 2px solid #14b8a6; color: #2dd4bf; }
+.block-dark { background: #27272a; border: 2px solid #555; color: #a1a1aa; }
+.arrow-down { text-align: center; font-size: 20px; color: #555; line-height: 1; }
+.arrow-right { font-size: 18px; color: #555; display: flex; align-items: center; }
+
+.flow-step { display: flex; align-items: center; gap: 6px; margin: 4px 0; flex-wrap: wrap; }
+.flow-box { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; white-space: nowrap; }
+
+.swipe-hint {
+  position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+  font-size: 11px; color: #555; animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100% { opacity: .3; } 50% { opacity: .8; } }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- ===== SVG Logo Template (reused) ===== -->
+<!-- Inline SVG of Sourcegraph logo mark -->
+
+<!-- ==================== SLIDE 1: TITLE ==================== -->
+<div class="slide" style="justify-content:center; text-align:center;">
+  <div style="margin:0 auto 16px;">
+    <svg width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/>
+      <rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/>
+      <rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/>
+    </svg>
+  </div>
+  <h1 style="font-size:clamp(24px,5.5vw,40px);">Unified Enterprise<br>Intelligence Platform</h1>
+  <p class="subtitle" style="max-width:500px; margin:8px auto;">Powered by <strong style="color:#a78bfa;">Sourcegraph</strong> + <strong style="color:#60a5fa;">Amp</strong><br>Code · Knowledge · Design · Project Management</p>
+  <div style="margin:16px 0;">
+    <span class="badge badge-purple">TECHNICAL PROPOSAL</span>
+    <span class="badge badge-blue">ARCHITECTURE</span>
+    <span class="badge badge-green">SOW</span>
+  </div>
+  <p style="color:#555; font-size:11px; margin-top:20px;">March 2026 &nbsp;·&nbsp; Confidential</p>
+  <p style="color:#444; font-size:10px; margin-top:30px;">16 slides — Swipe ← → or use arrows to navigate</p>
+</div>
+
+<!-- ==================== SLIDE 2: PROBLEM STATEMENT ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>The Challenge</h1>
+  <p class="subtitle">Your requirements span 4 domains — no single tool covers all of them</p>
+
+  <div class="card card-accent">
+    <h3>🎯 Requirements Cross 4 Product Categories</h3>
+    <p>The needs span <strong>code intelligence</strong>, <strong>enterprise knowledge management</strong>, <strong>design systems</strong>, and <strong>project management</strong>. Today, these exist as isolated silos.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <span class="badge badge-blue">Code</span>
+      <p><strong>Cross-repo search</strong>, semantic navigation, PR impact analysis, code review across 100s of repos</p>
+    </div>
+    <div class="card card-green">
+      <span class="badge badge-green">Knowledge</span>
+      <p><strong>Confluence RAG</strong> — 150K pages, 500K attachments, ~100GB of text, images, diagrams, plugins</p>
+    </div>
+    <div class="card card-pink">
+      <span class="badge badge-pink">Design</span>
+      <p><strong>Figma intelligence</strong> — "who uses this component?", design system dependency graph</p>
+    </div>
+    <div class="card card-teal">
+      <span class="badge badge-teal">PM</span>
+      <p><strong>JIRA Cloud</strong> integration — bi-directional sync, agentic task creation from code context</p>
+    </div>
+  </div>
+
+  <div class="card" style="background:#1a0a0a; border-color:#ef444444; border-left:3px solid #ef4444;">
+    <h3 style="color:#f87171;">⚠️ Additional Complexity</h3>
+    <ul>
+      <li><strong>Image/Multimodal RAG</strong> — attachments include Visio, Draw.io, screenshots</li>
+      <li><strong>Contradicting sources</strong> — 150K pages with overlapping/outdated info</li>
+      <li><strong>Scale</strong> — ~100GB of heterogeneous content</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: MARKET REALITY ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Market Reality: No Single Tool Exists</h1>
+  <p class="subtitle">The requirements span 3 distinct product categories that have never been unified</p>
+
+  <div class="card" style="border-left:3px solid #ef4444; background:#1a0a0a;">
+    <h3 style="color:#f87171;">⛔ The Hard Truth</h3>
+    <p>We evaluated every major platform on the market. <strong>No single tool in the world addresses 100% of these requirements.</strong> The needs cross three fundamentally different product domains that no vendor has ever unified.</p>
+  </div>
+
+  <h2>Enterprise Search — Competitive Landscape</h2>
+  <p style="margin-bottom:8px;">We evaluated every major enterprise search platform. Here's how they compare:</p>
+  <div style="overflow-x:auto;">
+  <table>
+    <tr>
+      <th>Capability</th>
+      <th style="background:#a112ff; font-size:12px;">✦ Sourcegraph</th>
+      <th>Glean</th>
+      <th>Elastic / OpenSearch</th>
+      <th>Coveo</th>
+      <th>Atlassian Rovo</th>
+    </tr>
+    <tr>
+      <td><strong>Cross-repo code search</strong></td>
+      <td style="color:#4ade80;">✅ SCIP semantic</td>
+      <td style="color:#fb923c;">⚠️ Text-only</td>
+      <td style="color:#fb923c;">⚠️ Text-only</td>
+      <td style="color:#f87171;">❌ Not for code</td>
+      <td style="color:#f87171;">❌ None</td>
+    </tr>
+    <tr>
+      <td><strong>Go-to-def / Find-refs across repos</strong></td>
+      <td style="color:#4ade80;">✅ SCIP native</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+    </tr>
+    <tr>
+      <td><strong>AI / NLP semantic search</strong></td>
+      <td style="color:#4ade80;">✅ Deep Search 7.0</td>
+      <td style="color:#4ade80;">✅ Strong</td>
+      <td style="color:#fb923c;">⚠️ ELSER basic</td>
+      <td style="color:#4ade80;">✅ Relevance AI</td>
+      <td style="color:#4ade80;">✅ Rovo AI</td>
+    </tr>
+    <tr>
+      <td><strong>Batch Changes across repos</strong></td>
+      <td style="color:#4ade80;">✅ Native</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+    </tr>
+    <tr>
+      <td><strong>Code review (CI-integrated)</strong></td>
+      <td style="color:#4ade80;">✅ Amp Review</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+    </tr>
+    <tr>
+      <td><strong>MCP server (agentic access)</strong></td>
+      <td style="color:#4ade80;">✅ GA</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+    </tr>
+    <tr>
+      <td><strong>Confluence indexing</strong></td>
+      <td style="color:#60a5fa;">🔌 MCP extension</td>
+      <td style="color:#4ade80;">✅ Native</td>
+      <td style="color:#4ade80;">✅ Connector</td>
+      <td style="color:#4ade80;">✅ Native</td>
+      <td style="color:#4ade80;">✅ Native</td>
+    </tr>
+    <tr>
+      <td><strong>Figma indexing</strong></td>
+      <td style="color:#60a5fa;">🔌 MCP extension</td>
+      <td style="color:#fb923c;">⚠️ Basic</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+    </tr>
+    <tr>
+      <td><strong>Image / multimodal search</strong></td>
+      <td style="color:#4ade80;">✅ Deep Search 7.0</td>
+      <td style="color:#fb923c;">⚠️ Limited</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#fb923c;">⚠️ Basic</td>
+    </tr>
+    <tr>
+      <td><strong>Multi code-host support</strong></td>
+      <td style="color:#4ade80;">✅ GitHub, GitLab, BB, Perforce</td>
+      <td style="color:#fb923c;">⚠️ GitHub only</td>
+      <td style="color:#f87171;">❌ Manual</td>
+      <td style="color:#f87171;">❌</td>
+      <td style="color:#fb923c;">⚠️ Bitbucket focus</td>
+    </tr>
+    <tr>
+      <td><strong>Scale (repos)</strong></td>
+      <td style="color:#4ade80;">✅ 1M+ repos</td>
+      <td style="color:#fb923c;">⚠️ Limited</td>
+      <td style="color:#4ade80;">✅ Scalable</td>
+      <td style="color:#4ade80;">✅ Scalable</td>
+      <td style="color:#fb923c;">⚠️ Atlassian only</td>
+    </tr>
+  </table>
+  </div>
+
+  <div class="card card-accent" style="margin-top:10px;">
+    <h3>💡 The Verdict</h3>
+    <p><strong>Sourcegraph is the only platform that combines deep code intelligence with extensible MCP integration.</strong> Competitors like Glean index Confluence natively but have shallow code understanding. Elastic is powerful for text but has zero code intelligence. Rovo is locked to the Atlassian ecosystem. <strong>Only Sourcegraph</strong> provides SCIP navigation, Batch Changes, and an MCP server — making it the natural hub to extend into Confluence, Figma, and JIRA via purpose-built integrations.</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: SOLUTION ARCHITECTURE ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Solution Architecture</h1>
+  <p class="subtitle">Sourcegraph as the core, extended via MCP Gateway</p>
+
+  <!-- Block Diagram -->
+  <div class="block-diagram">
+    <div class="block-row">
+      <div class="block block-purple">🖥️ Unified Developer Portal<br><small>Web UI · CLI · IDE · Mobile</small></div>
+    </div>
+    <div class="arrow-down">▼</div>
+    <div class="block-row">
+      <div class="block block-dark">🔌 MCP Gateway<br><small>Router · Auth · Cache · Audit</small></div>
+    </div>
+    <div class="arrow-down">▼ &nbsp;&nbsp;&nbsp; ▼ &nbsp;&nbsp;&nbsp; ▼ &nbsp;&nbsp;&nbsp; ▼ &nbsp;&nbsp;&nbsp; ▼</div>
+    <div class="block-row">
+      <div class="block block-blue">📦 Sourcegraph<br><small>Code Search · Deep Search · SCIP · Batch Changes · Insights</small></div>
+      <div class="block block-purple" style="border-color:#8b5cf6;">⚡ Amp Agent<br><small>Code Review · Agentic Coding · Checks</small></div>
+      <div class="block block-green">📚 Confluence RAG<br><small>Crawler · Embeddings · Vector DB · Hybrid Search</small></div>
+      <div class="block block-orange">🖼️ Multimodal<br><small>OCR · Vision LLM · CLIP · Image Search</small></div>
+      <div class="block block-pink">🎨 Figma Intel<br><small>Component Graph · Design Search</small></div>
+    </div>
+    <div class="arrow-down" style="margin-top:4px;">▲</div>
+    <div class="block-row">
+      <div class="block block-teal">📋 JIRA MCP<br><small>Bi-directional Sync · Context Enrichment</small></div>
+    </div>
+  </div>
+
+  <div class="card card-accent">
+    <h3>🔑 Key Design Decisions</h3>
+    <ul>
+      <li><strong>MCP-native:</strong> Every layer exposes tools via MCP — agents query all sources uniformly</li>
+      <li><strong>Sourcegraph at center:</strong> Code intelligence is the primary layer; others extend it</li>
+      <li><strong>Incremental:</strong> Each layer delivers value independently — no big-bang deployment</li>
+      <li><strong>Agent-agnostic:</strong> Works with Amp, Cody, or any MCP-compatible agent</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 5: CODE INTELLIGENCE LAYER ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Layer 1: Code Intelligence</h1>
+  <p class="subtitle">Sourcegraph 7.0 + Amp — Production-ready, zero custom development</p>
+
+  <div class="card card-blue">
+    <h3>📦 Sourcegraph Enterprise — Already Built</h3>
+    <table>
+      <tr><th>Component</th><th>Status</th><th>Capability</th></tr>
+      <tr><td>Code Search</td><td>✅ Production</td><td>Regex, structural, multi-repo, multi-host (GitHub, GitLab, Bitbucket, Perforce)</td></tr>
+      <tr><td>Deep Search (NLP)</td><td>✅ Production</td><td>Natural language code queries + image support (v7.0)</td></tr>
+      <tr><td>SCIP Cross-Repo Nav</td><td>✅ Production</td><td>Go-to-definition, find-references across ALL repos with version awareness</td></tr>
+      <tr><td>Batch Changes</td><td>✅ Production</td><td>Apply code changes across 100s of repos in a single operation</td></tr>
+      <tr><td>Code Insights</td><td>✅ Production</td><td>Migration tracking, version adoption, custom metric dashboards</td></tr>
+      <tr><td>Code Monitors</td><td>✅ Production</td><td>Alert on code patterns appearing in any repo</td></tr>
+      <tr><td>MCP Server</td><td>✅ GA</td><td>Agents query code intelligence via standard MCP protocol</td></tr>
+    </table>
+  </div>
+
+  <div class="card" style="border-left:3px solid #8b5cf6;">
+    <h3>⚡ Amp — Agentic Code Review & Development</h3>
+    <table>
+      <tr><th>Feature</th><th>Description</th></tr>
+      <tr><td>Amp Review</td><td>CI-integrated code review, posts to PRs, custom Checks per codebase area</td></tr>
+      <tr><td>Cross-Repo Context</td><td>Librarian sub-agent reads across private repos via GitHub/Bitbucket</td></tr>
+      <tr><td>Oracle</td><td>Deep reasoning engine for architecture review and complex debugging</td></tr>
+      <tr><td>Thread Sharing</td><td>Team-visible conversation threads for knowledge sharing</td></tr>
+      <tr><td>Skills & MCP</td><td>Extensible via custom skills and MCP servers</td></tr>
+    </table>
+  </div>
+
+  <div class="card" style="border-left:3px solid #22c55e;">
+    <p><strong style="color:#4ade80;">✅ This entire layer is production-ready. Zero custom development needed.</strong></p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: CONFLUENCE RAG PIPELINE ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Layer 2: Confluence Knowledge RAG</h1>
+  <p class="subtitle">Custom pipeline for 150K pages + 500K attachments</p>
+
+  <!-- Flow diagram -->
+  <div class="card card-green">
+    <h3>📚 Data Flow Pipeline</h3>
+    <div class="flow-step">
+      <div class="flow-box block-green">Confluence API</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-green">Crawler</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-green">Doc Processor</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-green">Chunker</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-green">Embeddings</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-green">Vector DB</div>
+    </div>
+    <div class="flow-step" style="margin-top:6px;">
+      <div class="flow-box block-orange">Attachments</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">Tika / Unstructured</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">OCR + Vision</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">CLIP Embed</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">Image Vector DB</div>
+    </div>
+    <div class="flow-step" style="margin-top:6px;">
+      <div class="flow-box block-dark">Agent Query</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-purple">MCP Gateway</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-green">Hybrid RAG</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-dark">Re-rank</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-purple">Answer + Sources</div>
+    </div>
+  </div>
+
+  <table>
+    <tr><th>Component</th><th>Technology</th><th>Purpose</th></tr>
+    <tr><td>Confluence Crawler</td><td>Atlassian REST API + Webhooks</td><td>Incremental crawl of all spaces, pages, attachments</td></tr>
+    <tr><td>Document Processor</td><td>Unstructured.io <span class="oss-tag">OSS</span></td><td>Parse HTML, PDF, DOCX, PPTX → structured text</td></tr>
+    <tr><td>Chunking Engine</td><td>LangChain <span class="oss-tag">OSS</span></td><td>Semantic chunking with metadata preservation</td></tr>
+    <tr><td>Deduplication</td><td>MinHash + SimHash</td><td>Handle contradicting/duplicate sources</td></tr>
+    <tr><td>Freshness Ranker</td><td>Custom scoring</td><td>Rank by last-modified, activity, endorsements</td></tr>
+    <tr><td>Embedding Service</td><td>OpenAI text-embedding-3-large</td><td>Dense vector embeddings (3072 dims)</td></tr>
+    <tr><td>Vector Database</td><td>Weaviate <span class="oss-tag">OSS</span></td><td>Store ~5M+ chunks with metadata filtering</td></tr>
+    <tr><td>BM25 Index</td><td>Elasticsearch <span class="oss-tag">OSS</span></td><td>Sparse keyword search for hybrid retrieval</td></tr>
+    <tr><td>Hybrid RAG Engine</td><td>LlamaIndex <span class="oss-tag">OSS</span></td><td>Dense + sparse retrieval with re-ranking</td></tr>
+    <tr><td>MCP Server</td><td>TypeScript MCP SDK</td><td>Expose RAG as MCP tools for Sourcegraph/Amp</td></tr>
+  </table>
+</div>
+
+<!-- ==================== SLIDE 7: MULTIMODAL + FIGMA + JIRA ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Layers 3–5: Image · Figma · JIRA</h1>
+  <p class="subtitle">Extending Sourcegraph's reach beyond code</p>
+
+  <div class="card card-orange">
+    <h3>🖼️ Layer 3: Multimodal / Image RAG</h3>
+    <div class="flow-step">
+      <div class="flow-box block-orange">Images from Confluence</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">Tesseract OCR</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">Vision LLM Caption</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">OpenCLIP Embed</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-orange">Image Vector Store</div>
+    </div>
+    <p style="margin-top:8px;">Handles PNG, SVG, Visio, Draw.io diagrams. Vision LLM generates searchable text descriptions. CLIP enables "find diagrams similar to X" queries.</p>
+  </div>
+
+  <div class="card card-pink">
+    <h3>🎨 Layer 4: Figma Design Intelligence</h3>
+    <div class="flow-step">
+      <div class="flow-box block-pink">Figma REST API</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-pink">Component Crawler</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-pink">Dependency Graph (Neo4j)</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-pink">Figma MCP Server</div>
+    </div>
+    <p style="margin-top:8px;">Builds a full component dependency graph. Answer queries like <em>"who uses this component?"</em>, <em>"find pages using color X"</em>, <em>"which designs reference this token?"</em></p>
+  </div>
+
+  <div class="card card-teal">
+    <h3>📋 Layer 5: JIRA Integration</h3>
+    <div class="flow-step">
+      <div class="flow-box block-teal">JIRA Cloud API</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-teal">JIRA MCP Server</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-teal">Bi-directional Sync</div>
+      <span class="arrow-right">→</span>
+      <div class="flow-box block-teal">Context Enrichment</div>
+    </div>
+    <p style="margin-top:8px;">JQL search, create/update issues via MCP. Attach Sourcegraph code links to JIRA tickets automatically. Amp can create JIRA epics from batch migration results.</p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: SYSTEM BLOCK DIAGRAM ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Final System — Block Diagram</h1>
+  <p class="subtitle">Complete integrated architecture</p>
+
+  <div class="block-diagram" style="font-size:11px;">
+    <!-- Clients -->
+    <div style="text-align:center; color:#71717a; font-size:10px; font-weight:600;">CLIENTS</div>
+    <div class="block-row">
+      <div class="block block-purple">👤 Developer<br>IDE / CLI / Amp</div>
+      <div class="block block-purple">🤖 CI/CD Pipeline<br>Automated Agents</div>
+      <div class="block block-purple">🌐 Web Portal<br>Dashboard</div>
+    </div>
+    <div class="arrow-down">▼ &nbsp; MCP Protocol &nbsp; ▼</div>
+
+    <!-- Gateway -->
+    <div style="text-align:center; color:#71717a; font-size:10px; font-weight:600;">ORCHESTRATION</div>
+    <div class="block-row">
+      <div class="block block-dark" style="max-width:100%; flex:none; width:90%;">
+        🔌 <strong>MCP Gateway</strong> — Router · OAuth2/OIDC Auth · Redis Cache · Query Planner · Audit Logger
+      </div>
+    </div>
+    <div class="arrow-down">▼ &nbsp;&nbsp; ▼ &nbsp;&nbsp; ▼ &nbsp;&nbsp; ▼ &nbsp;&nbsp; ▼</div>
+
+    <!-- Intelligence Layers -->
+    <div style="text-align:center; color:#71717a; font-size:10px; font-weight:600;">INTELLIGENCE LAYERS</div>
+    <div class="block-row">
+      <div class="block block-blue" style="border-width:3px;">
+        <svg width="16" height="16" viewBox="0 0 100 100" style="vertical-align:middle;"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+        <strong>Sourcegraph 7.0</strong><br>
+        Code Search · Deep Search<br>SCIP Nav · Batch Changes<br>Code Insights · Monitors
+      </div>
+      <div class="block block-green">
+        📚 <strong>Confluence RAG</strong><br>
+        Crawler · Embeddings<br>Vector DB · BM25<br>Hybrid Retrieval · Re-rank
+      </div>
+      <div class="block block-orange">
+        🖼️ <strong>Multimodal Engine</strong><br>
+        OCR · Vision Captioning<br>CLIP Embeddings<br>Image Vector Search
+      </div>
+    </div>
+    <div class="block-row">
+      <div class="block" style="background:#8b5cf622; border:2px solid #8b5cf6; color:#c084fc;">
+        ⚡ <strong>Amp Agent</strong><br>
+        Code Review · Checks<br>Oracle · Librarian<br>Thread Sharing
+      </div>
+      <div class="block block-pink">
+        🎨 <strong>Figma Intelligence</strong><br>
+        Component Graph<br>Design Search<br>Usage Analytics
+      </div>
+      <div class="block block-teal">
+        📋 <strong>JIRA Integration</strong><br>
+        JQL via MCP<br>Bi-directional Sync<br>Code Link Enrichment
+      </div>
+    </div>
+
+    <div class="arrow-down">▼ &nbsp;&nbsp; ▼ &nbsp;&nbsp; ▼</div>
+
+    <!-- Data Stores -->
+    <div style="text-align:center; color:#71717a; font-size:10px; font-weight:600;">DATA STORES</div>
+    <div class="block-row">
+      <div class="block block-dark">🗄️ Sourcegraph DB<br><small>SCIP indexes · Repo metadata</small></div>
+      <div class="block block-dark">🔢 Weaviate / Qdrant<br><small>Text + Image vectors</small></div>
+      <div class="block block-dark">🔍 Elasticsearch<br><small>BM25 keyword index</small></div>
+      <div class="block block-dark">🕸️ Neo4j<br><small>Figma component graph</small></div>
+      <div class="block block-dark">⚡ Redis<br><small>Cache + sessions</small></div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: WORKFLOW DIAGRAMS ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Agentic Workflow Examples</h1>
+  <p class="subtitle">Real-world scenarios powered by the unified platform</p>
+
+  <div class="card card-blue">
+    <h3>🔍 Workflow 1: "Will this PR break anything?"</h3>
+    <div class="flow-step"><div class="flow-box block-purple">Developer opens PR</div><span class="arrow-right">→</span><div class="flow-box block-blue">Sourcegraph SCIP: Find all references</div><span class="arrow-right">→</span><div class="flow-box block-green">Confluence: Architecture docs</div><span class="arrow-right">→</span><div class="flow-box block-teal">JIRA: Related issues</div><span class="arrow-right">→</span><div class="flow-box block-purple">Impact Report</div></div>
+  </div>
+
+  <div class="card card-green">
+    <h3>📚 Workflow 2: "How does our payment system work?"</h3>
+    <div class="flow-step"><div class="flow-box block-purple">Agent Query</div><span class="arrow-right">→</span><div class="flow-box block-green">Confluence: Design docs</div><span class="arrow-right">→</span><div class="flow-box block-blue">Deep Search: Payment code</div><span class="arrow-right">→</span><div class="flow-box block-orange">Image RAG: Architecture diagrams</div><span class="arrow-right">→</span><div class="flow-box block-purple">Full Explanation</div></div>
+  </div>
+
+  <div class="card card-pink">
+    <h3>🎨 Workflow 3: "Who uses the Button component?"</h3>
+    <div class="flow-step"><div class="flow-box block-purple">Agent Query</div><span class="arrow-right">→</span><div class="flow-box block-pink">Figma: 47 design files</div><span class="arrow-right">→</span><div class="flow-box block-blue">Sourcegraph: 12 repos import &lt;Button&gt;</div><span class="arrow-right">→</span><div class="flow-box block-purple">Unified Usage Report</div></div>
+  </div>
+
+  <div class="card card-teal">
+    <h3>🔄 Workflow 4: "Migrate lodash across all repos"</h3>
+    <div class="flow-step"><div class="flow-box block-blue">Sourcegraph: Find vulnerable versions</div><span class="arrow-right">→</span><div class="flow-box block-green">Confluence: Migration guide</div><span class="arrow-right">→</span><div class="flow-box block-blue">Batch Changes: PRs across repos</div><span class="arrow-right">→</span><div class="flow-box block-teal">JIRA: Auto-create epic + tasks</div></div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 10: SOW ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Statement of Work (SOW)</h1>
+  <p class="subtitle">Scope, deliverables, assumptions</p>
+
+  <div class="card card-accent">
+    <h3>📄 Project Scope</h3>
+    <p>Design, develop, and deploy a Unified Enterprise Intelligence Platform with Sourcegraph + Amp at its core, extended with Confluence knowledge RAG, Figma design intelligence, JIRA project management, and multimodal image understanding — all unified through an MCP Gateway.</p>
+  </div>
+
+  <h3>📦 Deliverables</h3>
+  <table>
+    <tr><th>#</th><th>Deliverable</th><th>Phase</th></tr>
+    <tr><td>D1</td><td>MCP Gateway with routing, auth, caching, audit logging</td><td><span class="phase-tag phase1">Phase 1</span></td></tr>
+    <tr><td>D2</td><td>Sourcegraph Enterprise deployment + MCP integration</td><td><span class="phase-tag phase1">Phase 1</span></td></tr>
+    <tr><td>D3</td><td>JIRA MCP Server with bi-directional sync</td><td><span class="phase-tag phase1">Phase 1</span></td></tr>
+    <tr><td>D4</td><td>Confluence crawler + document processor (text only)</td><td><span class="phase-tag phase2">Phase 2</span></td></tr>
+    <tr><td>D5</td><td>Vector DB + hybrid RAG engine + MCP server</td><td><span class="phase-tag phase2">Phase 2</span></td></tr>
+    <tr><td>D6</td><td>Deduplication & freshness ranking system</td><td><span class="phase-tag phase2">Phase 2</span></td></tr>
+    <tr><td>D7</td><td>Image extraction + OCR + vision captioning pipeline</td><td><span class="phase-tag phase3">Phase 3</span></td></tr>
+    <tr><td>D8</td><td>CLIP image embeddings + image vector search</td><td><span class="phase-tag phase3">Phase 3</span></td></tr>
+    <tr><td>D9</td><td>Figma component graph + MCP server</td><td><span class="phase-tag phase4">Phase 4</span></td></tr>
+    <tr><td>D10</td><td>Unified dashboard / developer portal</td><td><span class="phase-tag phase5">Phase 5</span></td></tr>
+    <tr><td>D11</td><td>Documentation, runbooks, training materials</td><td><span class="phase-tag phase5">Phase 5</span></td></tr>
+    <tr><td>D12</td><td>Load testing report (150K pages, 500K attachments validated)</td><td><span class="phase-tag phase5">Phase 5</span></td></tr>
+  </table>
+
+  <h3>🔒 Assumptions</h3>
+  <ul>
+    <li>Confluence on-prem API access with admin credentials will be provided</li>
+    <li>Figma team plan with API token access will be provided</li>
+    <li>JIRA Cloud with OAuth app registration will be authorized</li>
+    <li>GPU infrastructure for embedding generation (or cloud API budget)</li>
+  </ul>
+</div>
+
+<!-- ==================== SLIDE 11: TIMELINE ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Project Timeline</h1>
+  <p class="subtitle">5 phases over ~20 weeks</p>
+
+  <div class="card card-blue">
+    <span class="phase-tag phase1">Phase 1 — Foundation (Weeks 1–4)</span>
+    <ul>
+      <li><strong>MCP Gateway</strong> — Router, auth, caching, audit</li>
+      <li><strong>Sourcegraph deployment</strong> — Enterprise setup, repo indexing, MCP server config</li>
+      <li><strong>JIRA MCP</strong> — Configure + bi-directional sync</li>
+      <li>✅ <strong>Milestone:</strong> Agent can search code + query JIRA through unified MCP</li>
+    </ul>
+  </div>
+
+  <div class="card card-green">
+    <span class="phase-tag phase2">Phase 2 — Confluence RAG (Weeks 5–12)</span>
+    <ul>
+      <li><strong>Crawler</strong> — Incremental Confluence sync, attachment download</li>
+      <li><strong>Document processing</strong> — Unstructured.io pipeline, chunking, metadata</li>
+      <li><strong>Vector DB + RAG</strong> — Weaviate setup, hybrid retrieval, re-ranking</li>
+      <li><strong>Dedup + freshness</strong> — MinHash dedup, recency scoring</li>
+      <li>✅ <strong>Milestone:</strong> Agent can answer questions from 150K Confluence pages</li>
+    </ul>
+  </div>
+
+  <div class="card card-orange">
+    <span class="phase-tag phase3">Phase 3 — Multimodal (Weeks 10–15)</span>
+    <ul>
+      <li><strong>Image extraction</strong> — From Confluence attachments, inline images</li>
+      <li><strong>OCR + Vision</strong> — Tesseract + Vision LLM captioning</li>
+      <li><strong>CLIP embeddings</strong> — Image vectorization + visual search</li>
+      <li>✅ <strong>Milestone:</strong> Agent can search and understand images/diagrams</li>
+    </ul>
+  </div>
+
+  <div class="card card-pink">
+    <span class="phase-tag phase4">Phase 4 — Figma (Weeks 13–17)</span>
+    <ul>
+      <li><strong>Figma crawler</strong> — REST API sync of team files, components, styles</li>
+      <li><strong>Component graph</strong> — Dependency graph in Neo4j</li>
+      <li>✅ <strong>Milestone:</strong> Agent can query Figma design system dependencies</li>
+    </ul>
+  </div>
+
+  <div class="card card-teal">
+    <span class="phase-tag phase5">Phase 5 — Integration & Hardening (Weeks 17–20)</span>
+    <ul>
+      <li><strong>Unified dashboard</strong> — Cross-layer search portal</li>
+      <li><strong>Load testing</strong> — Full 100GB corpus validation</li>
+      <li>✅ <strong>Milestone:</strong> Production-ready, all layers connected</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 12: EFFORT ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Effort & Investment</h1>
+  <p class="subtitle">Team composition and effort breakdown</p>
+
+  <h3>👥 Team Composition</h3>
+  <table>
+    <tr><th>Role</th><th>Count</th><th>Duration</th></tr>
+    <tr><td>Tech Lead / Architect</td><td>1</td><td>20 weeks (full)</td></tr>
+    <tr><td>Backend Engineers (Python/Go/TS)</td><td>3</td><td>16–20 weeks</td></tr>
+    <tr><td>ML / RAG Engineer</td><td>1</td><td>12 weeks (Phase 2–3)</td></tr>
+    <tr><td>DevOps / Infrastructure</td><td>1</td><td>10 weeks</td></tr>
+    <tr><td>QA Engineer</td><td>1</td><td>8 weeks (Phase 3–5)</td></tr>
+  </table>
+
+  <h3>📊 Effort Breakdown by Phase</h3>
+  <table>
+    <tr><th>Phase</th><th>Duration</th><th>Person-Weeks</th><th>% of Total</th></tr>
+    <tr><td><span class="phase-tag phase1">Foundation</span></td><td>4 weeks</td><td>14 pw</td><td>16%</td></tr>
+    <tr><td><span class="phase-tag phase2">Confluence RAG</span></td><td>8 weeks</td><td>32 pw</td><td>38%</td></tr>
+    <tr><td><span class="phase-tag phase3">Multimodal</span></td><td>6 weeks</td><td>16 pw</td><td>19%</td></tr>
+    <tr><td><span class="phase-tag phase4">Figma</span></td><td>5 weeks</td><td>12 pw</td><td>14%</td></tr>
+    <tr><td><span class="phase-tag phase5">Integration</span></td><td>4 weeks</td><td>10 pw</td><td>12%</td></tr>
+    <tr style="font-weight:bold;"><td>TOTAL</td><td>~20 weeks</td><td>~84 pw</td><td>100%</td></tr>
+  </table>
+
+  <div class="grid2">
+    <div class="card card-accent">
+      <h3>💰 Development Investment</h3>
+      <p class="tbd">TBD</p>
+      <p>Depends on final assessment of Confluence content complexity, infrastructure requirements, and team composition.</p>
+    </div>
+    <div class="card card-blue">
+      <h3>🏗️ Annual Infrastructure</h3>
+      <p class="tbd">TBD</p>
+      <p>Depends on final assessment of hosting model (cloud vs. on-prem), LLM API usage volume, and scale requirements.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 13: RISKS ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Risks & Mitigations</h1>
+  <p class="subtitle">Key risks with mitigation strategies</p>
+
+  <table>
+    <tr><th>Risk</th><th>Impact</th><th>Likelihood</th><th>Mitigation</th></tr>
+    <tr>
+      <td>Confluence content too heterogeneous (plugins, macros)</td>
+      <td><span class="badge badge-red">HIGH</span></td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td>Early content audit in Phase 2. Build plugin-specific parsers for top 5 most used.</td>
+    </tr>
+    <tr>
+      <td>100GB embedding generation takes too long</td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td>Batch processing with parallelized workers. Incremental re-indexing after initial load.</td>
+    </tr>
+    <tr>
+      <td>Contradicting sources degrade RAG quality</td>
+      <td><span class="badge badge-red">HIGH</span></td>
+      <td><span class="badge badge-red">HIGH</span></td>
+      <td>Freshness ranking + source authority scoring. Show provenance. Allow marking pages as canonical.</td>
+    </tr>
+    <tr>
+      <td>Figma API rate limits at scale</td>
+      <td><span class="badge badge-blue">LOW</span></td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td>Webhook-based incremental sync. Aggressive caching. Full crawl during off-hours.</td>
+    </tr>
+    <tr>
+      <td>Image RAG accuracy insufficient</td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td>Multi-signal retrieval: OCR text + vision captions + CLIP vectors combined.</td>
+    </tr>
+    <tr>
+      <td>Confluence on-prem connectivity / firewall</td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td><span class="badge badge-orange">MED</span></td>
+      <td>Deploy crawler inside network perimeter. Push processed chunks to cloud vector DB.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ==================== SLIDE 14: SUCCESS CRITERIA ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Success Criteria & KPIs</h1>
+  <p class="subtitle">Measurable outcomes per phase</p>
+
+  <table>
+    <tr><th>KPI</th><th>Target</th><th>Measurement</th></tr>
+    <tr><td>Cross-repo code search latency</td><td>p95 &lt; 2 sec</td><td>Sourcegraph performance dashboard</td></tr>
+    <tr><td>Confluence RAG query latency</td><td>p95 &lt; 3 sec</td><td>RAG pipeline metrics</td></tr>
+    <tr><td>Confluence coverage</td><td>&gt; 95% of 150K pages indexed</td><td>Crawler completion report</td></tr>
+    <tr><td>Attachment processing</td><td>&gt; 90% of 500K attachments parsed</td><td>Document processor stats</td></tr>
+    <tr><td>RAG answer relevance</td><td>&gt; 80% user satisfaction (top-5)</td><td>User feedback sampling</td></tr>
+    <tr><td>Image search precision</td><td>&gt; 70% relevant in top-3</td><td>Manual evaluation set</td></tr>
+    <tr><td>Figma component coverage</td><td>100% of published components</td><td>Figma API vs. graph DB count</td></tr>
+    <tr><td>JIRA sync latency</td><td>&lt; 30 sec webhook-to-update</td><td>Webhook processing logs</td></tr>
+    <tr><td>MCP Gateway uptime</td><td>&gt; 99.5%</td><td>Health check monitoring</td></tr>
+    <tr><td>End-to-end cross-layer query</td><td>&lt; 8 sec total</td><td>Orchestrator tracing</td></tr>
+  </table>
+
+  <div class="card card-accent">
+    <h3>📈 Expected Business Impact</h3>
+    <div class="grid2">
+      <div>
+        <strong>Before:</strong>
+        <ul>
+          <li>30+ min/day searching for code context</li>
+          <li>Confluence knowledge siloed, hard to find</li>
+          <li>PR impact analysis = manual + faith-based</li>
+          <li>Design-code alignment = tribal knowledge</li>
+        </ul>
+      </div>
+      <div>
+        <strong>After (with Sourcegraph):</strong>
+        <ul>
+          <li>&lt; 5 min — agent finds code + docs + design in one query</li>
+          <li>All 150K pages searchable semantically</li>
+          <li>Automated cross-repo impact reports on every PR</li>
+          <li>"Who uses this component?" — seconds (code + Figma)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 15: WHY SOURCEGRAPH ==================== -->
+<div class="slide">
+  <div class="slide-header">
+    <div></div>
+    <div class="sg-logo">
+      <svg width="24" height="24" viewBox="0 0 100 100"><rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/><rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/><rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/></svg>
+      <span class="sg-logo-text">sourcegraph</span>
+    </div>
+  </div>
+  <h1>Why Sourcegraph Is the Right Foundation</h1>
+  <p class="subtitle">The only platform that can anchor this solution</p>
+
+  <div class="grid2">
+    <div class="card card-blue">
+      <h3>🔍 Unmatched Code Intelligence</h3>
+      <ul>
+        <li>SCIP-powered cross-repo navigation — no other tool has this</li>
+        <li>Deep Search with NLP + image support (v7.0)</li>
+        <li>Supports GitHub, GitLab, Bitbucket, Perforce simultaneously</li>
+        <li>Scales to 1M+ repositories</li>
+      </ul>
+    </div>
+    <div class="card card-accent">
+      <h3>🔄 Batch Changes</h3>
+      <ul>
+        <li>Apply code changes across 100s of repos in one operation</li>
+        <li>Security patches, dependency upgrades, API migrations</li>
+        <li>No other platform offers this at enterprise scale</li>
+      </ul>
+    </div>
+    <div class="card card-green">
+      <h3>🔌 MCP-Native</h3>
+      <ul>
+        <li>GA MCP server — the natural orchestration hub</li>
+        <li>Any AI agent can query Sourcegraph intelligence</li>
+        <li>Future-proof: works with Amp, Claude, GPT, Cursor</li>
+      </ul>
+    </div>
+    <div class="card" style="border-left:3px solid #8b5cf6;">
+      <h3>⚡ Amp Agent</h3>
+      <ul>
+        <li>CI-integrated code review with custom Checks</li>
+        <li>Oracle for deep reasoning, Librarian for cross-repo research</li>
+        <li>Thread sharing for team knowledge</li>
+        <li>Skills + MCP extensibility</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="border-left:3px solid #f59e0b; margin-top:8px;">
+    <h3 style="color:#fbbf24;">🏢 Enterprise Trust</h3>
+    <ul>
+      <li>Used by <strong>Databricks, Uber, Lyft, Reddit, GE, Dropbox, Palo Alto Networks, Leidos</strong></li>
+      <li>SOC 2 Type II · Zero data retention on LLM inference · SSO (Okta, SAML)</li>
+      <li>Self-hosted, cloud, or air-gapped deployment options</li>
+      <li>Backed by Andreessen Horowitz, Sequoia Capital</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 16: NEXT STEPS ==================== -->
+<div class="slide" style="justify-content:center; text-align:center;">
+  <div style="margin:0 auto 16px;">
+    <svg width="64" height="64" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <rect x="42" y="8" width="16" height="84" rx="8" fill="#F76E11" transform="rotate(15 50 50)"/>
+      <rect x="42" y="8" width="16" height="84" rx="8" fill="#A112FF" transform="rotate(-45 50 50)"/>
+      <rect x="8" y="42" width="84" height="16" rx="8" fill="#38BDF8" transform="rotate(-10 50 50)"/>
+    </svg>
+  </div>
+  <h1>Next Steps</h1>
+  <p class="subtitle">From proposal to production</p>
+
+  <div style="text-align:left; max-width:600px; margin:0 auto;">
+    <div class="card card-accent">
+      <h3>1️⃣ Technical Discovery (1 week)</h3>
+      <p>Confluence content audit, Figma team inventory, infrastructure review, final assessment</p>
+    </div>
+    <div class="card card-blue">
+      <h3>2️⃣ Architecture Validation (1 week)</h3>
+      <p>PoC with 1,000 Confluence pages → validate RAG quality before full scale</p>
+    </div>
+    <div class="card card-green">
+      <h3>3️⃣ Scoping & Kickoff (1 week)</h3>
+      <p>Finalize SOW based on discovery findings, Sourcegraph licensing, team onboarding</p>
+    </div>
+    <div class="card card-orange">
+      <h3>4️⃣ Phase 1 Start</h3>
+      <p>MCP Gateway + Sourcegraph + JIRA — <strong>first value delivered in 4 weeks</strong></p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+  <p style="color:#a78bfa; margin-top:10px; font-size: 14px; font-weight:600;">
+    Let's build the intelligence layer your engineering team deserves.
+  </p>
+  <p style="color:#71717a; margin-top:8px; font-size: 12px;">
+    <strong>Contact:</strong> amp-devs@ampcode.com &nbsp;|&nbsp; sourcegraph.com/contact
+  </p>
+  <p style="color:#444; font-size:10px; margin-top:20px;">Confidential — March 2026</p>
+</div>
+
+</div><!-- end deck -->
+
+<!-- Navigation -->
+<div class="nav">
+  <button id="prev" onclick="go(-1)">◀</button>
+  <div class="dots" id="dots"></div>
+  <span class="counter" id="counter">1 / 16</span>
+  <button id="next" onclick="go(1)">▶</button>
+</div>
+<div class="swipe-hint" id="hint">← swipe or use arrow keys →</div>
+
+<script>
+let cur = 0;
+const deck = document.getElementById('deck');
+const slides = deck.querySelectorAll('.slide');
+const total = slides.length;
+const counter = document.getElementById('counter');
+const dotsEl = document.getElementById('dots');
+const hint = document.getElementById('hint');
+
+for (let i = 0; i < total; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => { cur = i; update(); };
+  dotsEl.appendChild(d);
+}
+
+function update() {
+  deck.style.transform = `translateX(-${cur * 100}vw)`;
+  counter.textContent = `${cur + 1} / ${total}`;
+  document.getElementById('prev').disabled = cur === 0;
+  document.getElementById('next').disabled = cur === total - 1;
+  dotsEl.querySelectorAll('.dot').forEach((d, i) => d.className = 'dot' + (i === cur ? ' active' : ''));
+}
+
+function go(dir) { cur = Math.max(0, Math.min(total - 1, cur + dir)); update(); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') go(-1);
+});
+
+let sx = 0, sy = 0;
+document.addEventListener('touchstart', e => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; });
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - sx;
+  const dy = e.changedTouches[0].clientY - sy;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+});
+
+document.addEventListener('keydown', () => hint.style.display = 'none', { once: true });
+document.addEventListener('touchstart', () => hint.style.display = 'none', { once: true });
+</script>
+</body>
+</html>
