@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SQL Injection — Data Flow Analysis | BD-SECURITY-TDSQL</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface-2: #1a2236;
+    --surface-3: #1e293b;
+    --border: #2a3550;
+    --accent: #3b82f6;
+    --accent-glow: #60a5fa;
+    --danger: #ef4444;
+    --danger-glow: #f87171;
+    --success: #10b981;
+    --success-glow: #34d399;
+    --warning: #f59e0b;
+    --warning-glow: #fbbf24;
+    --purple: #8b5cf6;
+    --purple-glow: #a78bfa;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+    --text-muted: #64748b;
+    --code-bg: #0d1117;
+    --tainted: #ff6b6b;
+    --clean: #4ade80;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* ═══════════════════ SLIDESHOW CONTAINER ═══════════════════ */
+  #deck {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2.5rem 4.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform .5s cubic-bezier(.4,0,.2,1), opacity .5s ease;
+    pointer-events: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.prev {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+
+  .slide-inner {
+    max-width: 1050px;
+    width: 100%;
+    padding-bottom: 5rem;
+  }
+
+  /* ═══════════════════ NAVIGATION ═══════════════════ */
+  .nav-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border);
+    background: rgba(17,24,39,.85);
+    backdrop-filter: blur(8px);
+    color: var(--text);
+    font-size: 1.3rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .2s, border-color .2s, transform .15s;
+  }
+  .nav-arrow:hover {
+    background: rgba(59,130,246,.15);
+    border-color: var(--accent);
+  }
+  .nav-arrow:active { transform: translateY(-50%) scale(.92); }
+  .nav-arrow.left  { left: .75rem; }
+  .nav-arrow.right { right: .75rem; }
+  .nav-arrow:disabled {
+    opacity: .2;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ── Progress bar ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--purple));
+    z-index: 200;
+    transition: width .4s ease;
+  }
+
+  /* ── Dot indicators ── */
+  #dots {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: .5rem;
+    z-index: 100;
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+    cursor: pointer;
+    transition: background .3s, transform .2s;
+    border: none;
+  }
+  .dot.active {
+    background: var(--accent-glow);
+    transform: scale(1.3);
+  }
+
+  /* ── Slide counter ── */
+  #counter {
+    position: fixed;
+    top: 1rem; right: 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    color: var(--text-muted);
+    z-index: 100;
+    background: rgba(17,24,39,.7);
+    backdrop-filter: blur(6px);
+    padding: .25rem .65rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+
+  /* ═══════════════════ TYPOGRAPHY ═══════════════════ */
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    margin-bottom: .75rem;
+    padding: .3rem .8rem;
+    border-radius: 100px;
+  }
+  .section-label.blue   { color: var(--accent-glow); background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.2); }
+  .section-label.red    { color: var(--danger-glow); background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); }
+  .section-label.green  { color: var(--success-glow); background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.2); }
+  .section-label.purple { color: var(--purple-glow); background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.2); }
+  .section-label.amber  { color: var(--warning-glow); background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2); }
+
+  .slide-title {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    font-weight: 800;
+    margin-bottom: .5rem;
+    line-height: 1.15;
+  }
+  .slide-subtitle {
+    font-size: clamp(.85rem, 2vw, 1.05rem);
+    color: var(--text-dim);
+    max-width: 750px;
+    margin-bottom: 1.75rem;
+  }
+
+  /* ═══════════════════ HERO SLIDE ═══════════════════ */
+  .slide.hero-slide {
+    align-items: center;
+    text-align: center;
+  }
+  .slide.hero-slide .slide-inner { max-width: 900px; }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem 1.1rem;
+    background: rgba(239,68,68,.12);
+    border: 1px solid rgba(239,68,68,.25);
+    border-radius: 100px;
+    font-size: .75rem;
+    font-weight: 600;
+    color: var(--danger-glow);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero-badge .pulse {
+    width: 8px; height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: 0 0 0 0 rgba(239,68,68,.5); }
+    50% { box-shadow: 0 0 0 8px rgba(239,68,68,0); }
+  }
+  .hero-title {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    line-height: 1.08;
+    margin-bottom: 1.25rem;
+    background: linear-gradient(135deg, #fff 30%, var(--accent-glow) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero-sub {
+    font-size: clamp(.95rem, 2.5vw, 1.2rem);
+    color: var(--text-dim);
+    max-width: 700px;
+    margin: 0 auto 2rem;
+  }
+  .rule-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    color: var(--accent-glow);
+    padding: .35rem .9rem;
+    border: 1px solid rgba(59,130,246,.3);
+    border-radius: 6px;
+    background: rgba(59,130,246,.08);
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+  .hero-hint {
+    color: var(--text-muted);
+    font-size: .8rem;
+    margin-top: 1.5rem;
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(6px); } }
+
+  /* ═══════════════════ CARDS ═══════════════════ */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .card.danger::before  { background: linear-gradient(90deg, var(--danger), var(--warning)); }
+  .card.safe::before    { background: linear-gradient(90deg, var(--success), var(--accent)); }
+  .card.info::before    { background: linear-gradient(90deg, var(--accent), var(--purple)); }
+  .card.warn::before    { background: linear-gradient(90deg, var(--warning), var(--danger)); }
+
+  .card h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: .6rem;
+  }
+  .card p, .card li { color: var(--text-dim); font-size: .9rem; }
+
+  /* ═══════════════════ CODE ═══════════════════ */
+  pre.code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.62rem, 1.3vw, .78rem);
+    line-height: 1.7;
+    margin: 1rem 0;
+    position: relative;
+  }
+  pre.code-block .ln {
+    color: var(--text-muted);
+    user-select: none;
+    display: inline-block;
+    width: 2.2em;
+    text-align: right;
+    margin-right: 1.2em;
+  }
+  .code-label {
+    position: absolute;
+    top: .6rem; right: .6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .6rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: .15rem .5rem;
+    border-radius: 4px;
+  }
+  .code-label.vuln { background: rgba(239,68,68,.15); color: var(--danger-glow); }
+  .code-label.safe { background: rgba(16,185,129,.15); color: var(--success-glow); }
+  .code-label.llm  { background: rgba(139,92,246,.15); color: var(--purple-glow); }
+
+  .t  { color: var(--tainted); font-weight: 600; }
+  .c  { color: var(--clean); font-weight: 600; }
+  .kw { color: #7dd3fc; }
+  .fn { color: #c4b5fd; }
+  .str{ color: #86efac; }
+  .cmt{ color: #64748b; font-style: italic; }
+  .typ{ color: #93c5fd; }
+  .num{ color: #fcd34d; }
+
+  /* ═══════════════════ FLOW DIAGRAM ═══════════════════ */
+  .flow-diagram {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 1.25rem 0;
+  }
+  .flow-node {
+    padding: .5rem 1rem;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(.6rem, 1.3vw, .75rem);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .flow-node.source    { background: rgba(239,68,68,.12); border: 1.5px solid rgba(239,68,68,.4); color: var(--danger-glow); }
+  .flow-node.process   { background: rgba(245,158,11,.1); border: 1.5px solid rgba(245,158,11,.3); color: var(--warning-glow); }
+  .flow-node.sink      { background: rgba(239,68,68,.2); border: 2px solid rgba(239,68,68,.6); color: #fca5a5; box-shadow: 0 0 20px rgba(239,68,68,.15); }
+  .flow-node.sanitized { background: rgba(16,185,129,.1); border: 1.5px solid rgba(16,185,129,.3); color: var(--success-glow); }
+  .flow-arrow { font-size: 1.2rem; padding: 0 .35rem; }
+  .flow-arrow.tainted { color: var(--danger); }
+  .flow-arrow.safe    { color: var(--success); }
+
+  /* ═══════════════════ CALLOUT ═══════════════════ */
+  .callout {
+    border-left: 4px solid;
+    padding: 1rem 1.25rem;
+    border-radius: 0 10px 10px 0;
+    margin: 1rem 0;
+    font-size: .88rem;
+  }
+  .callout.danger { border-color: var(--danger); background: rgba(239,68,68,.06); color: var(--danger-glow); }
+  .callout.info   { border-color: var(--accent); background: rgba(59,130,246,.06); color: var(--accent-glow); }
+  .callout.warn   { border-color: var(--warning); background: rgba(245,158,11,.06); color: var(--warning-glow); }
+  .callout.purple { border-color: var(--purple); background: rgba(139,92,246,.06); color: var(--purple-glow); }
+  .callout strong { color: #fff; }
+  .callout code { font-size: .78rem; }
+
+  /* ═══════════════════ STATS ═══════════════════ */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .stat-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  .stat-card .number {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: .2rem;
+  }
+  .stat-card .number.red    { color: var(--danger-glow); }
+  .stat-card .number.amber  { color: var(--warning-glow); }
+  .stat-card .number.blue   { color: var(--accent-glow); }
+  .stat-card .number.purple { color: var(--purple-glow); }
+  .stat-card .label { font-size: .72rem; color: var(--text-muted); font-weight: 500; }
+
+  /* ═══════════════════ TABLE ═══════════════════ */
+  .flow-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 1rem 0;
+    font-size: .8rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .flow-table th {
+    background: var(--surface-3);
+    padding: .65rem .8rem;
+    text-align: left;
+    font-weight: 600;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+  }
+  .flow-table td {
+    padding: .55rem .8rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+  .flow-table tr:last-child td { border-bottom: none; }
+  .tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    font-weight: 600;
+    padding: .12rem .45rem;
+    border-radius: 4px;
+  }
+  .tag.tainted { background: rgba(239,68,68,.15); color: var(--danger-glow); }
+  .tag.clean   { background: rgba(16,185,129,.15); color: var(--success-glow); }
+  .tag.sink    { background: rgba(245,158,11,.15); color: var(--warning-glow); }
+
+  /* ═══════════════════ TIMELINE ═══════════════════ */
+  .timeline {
+    position: relative;
+    padding-left: 2.2rem;
+    margin: 1.5rem 0;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: .6rem; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent), var(--danger), var(--warning));
+  }
+  .timeline-item { position: relative; padding-bottom: 1.25rem; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.9rem; top: .25rem;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    background: var(--bg);
+  }
+  .timeline-item .year {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    color: var(--accent-glow);
+    font-weight: 600;
+  }
+  .timeline-item .event { font-size: .85rem; color: var(--text-dim); margin-top: .15rem; }
+
+  /* ═══════════════════ PARAM LIST ═══════════════════ */
+  ul.param-list { list-style: none; padding: 0; margin: .75rem 0; }
+  ul.param-list li {
+    padding: .35rem 0 .35rem 1.3rem;
+    position: relative;
+    color: var(--text-dim);
+    font-size: .85rem;
+  }
+  ul.param-list li::before {
+    content: '›';
+    position: absolute;
+    left: .2rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ═══════════════════ REFS ═══════════════════ */
+  .ref-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: .75rem;
+    margin-top: 1rem;
+  }
+  .ref-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: .85rem 1rem;
+    transition: border-color .2s;
+  }
+  .ref-card:hover { border-color: var(--accent); }
+  .ref-card .ref-title { font-weight: 600; font-size: .82rem; margin-bottom: .2rem; }
+  .ref-card .ref-sub { font-size: .72rem; color: var(--text-muted); }
+  .ref-card a {
+    color: var(--accent-glow);
+    text-decoration: none;
+    font-size: .72rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ref-card a:hover { text-decoration: underline; }
+
+  /* ═══════════════════ GRID HELPERS ═══════════════════ */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+  .grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .mini-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem;
+  }
+  .mini-card h4 { font-size: .85rem; margin-bottom: .35rem; }
+  .mini-card p  { font-size: .8rem; color: var(--text-dim); }
+
+  /* ═══════════════════ FOOTER SLIDE ═══════════════════ */
+  .slide.footer-slide { align-items: center; text-align: center; }
+  .footer-slide .slide-inner { max-width: 700px; }
+  .footer-slide a { color: var(--accent-glow); text-decoration: none; }
+
+  /* ═══════════════════ KEYBOARD HINT ═══════════════════ */
+  .kbd {
+    display: inline-block;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: .1rem .4rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    color: var(--text-dim);
+  }
+
+  /* ═══════════════════ MOBILE ═══════════════════ */
+  @media (max-width: 768px) {
+    .slide { padding: 1.5rem 1rem; padding-bottom: 4rem; }
+    .nav-arrow { width: 40px; height: 40px; font-size: 1rem; }
+    .nav-arrow.left  { left: .35rem; }
+    .nav-arrow.right { right: .35rem; }
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .ref-grid  { grid-template-columns: 1fr; }
+    .flow-diagram { gap: .25rem; }
+    .flow-node { padding: .35rem .6rem; font-size: .6rem; }
+    .flow-arrow { font-size: .9rem; padding: 0 .2rem; }
+    .hero-title { font-size: clamp(1.6rem, 8vw, 2.5rem); }
+    pre.code-block { font-size: .6rem; padding: .75rem; line-height: 1.6; }
+    pre.code-block .ln { width: 1.8em; margin-right: .8em; }
+    .flow-table { font-size: .7rem; }
+    .flow-table th, .flow-table td { padding: .4rem .5rem; }
+    #counter { top: .5rem; right: .5rem; font-size: .65rem; }
+    .card { padding: 1.1rem; }
+  }
+
+  @media (max-width: 480px) {
+    .slide { padding: 1rem .75rem; padding-bottom: 3.5rem; }
+    .nav-arrow { width: 34px; height: 34px; font-size: .85rem; }
+    .stats-row { grid-template-columns: 1fr 1fr; gap: .6rem; }
+    .stat-card { padding: .85rem; }
+    .stat-card .number { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="counter"></div>
+
+<button class="nav-arrow left" id="prevBtn" onclick="go(-1)" aria-label="Previous slide">‹</button>
+<button class="nav-arrow right" id="nextBtn" onclick="go(1)" aria-label="Next slide">›</button>
+
+<div id="dots"></div>
+
+<div id="deck">
+
+<!-- ═══════════════ SLIDE 0 — HERO ═══════════════ -->
+<div class="slide hero-slide active" data-i="0">
+  <div class="slide-inner">
+    <div class="hero-badge"><span class="pulse"></span> Critical Security Rule</div>
+    <h1 class="hero-title">SQL Injection<br>Data Flow Analysis</h1>
+    <p class="hero-sub">
+      Known since 1996. Still #3 on OWASP Top 10.
+      Why the oldest vulnerability class can become a <strong style="color:#f87171;">zero-day</strong> any day — through data flow blind spots, bad practices, and LLM-generated code.
+    </p>
+    <span class="rule-id">BD-SECURITY-TDSQL — Parasoft C/C++test</span>
+    <div class="hero-hint">Use <span class="kbd">←</span> <span class="kbd">→</span> arrows or swipe to navigate</div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 1 — OVERVIEW ═══════════════ -->
+<div class="slide" data-i="1">
+  <div class="slide-inner">
+    <span class="section-label blue">Overview</span>
+    <h2 class="slide-title">What is BD-SECURITY-TDSQL?</h2>
+    <p class="slide-subtitle">
+      Detects possible SQL injections when <em>tainted</em> data reaches functions that prepare or execute SQL queries. Supported APIs: <strong>ODBC, ADO, OLE DB</strong>.
+    </p>
+
+    <div class="card info">
+      <h3>🔍 Rule Description</h3>
+      <p>
+        When an application uses unverified user data to construct SQL queries, an attacker can alter the SQL statements — taking <strong>total control of the database</strong> or executing system commands.
+      </p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card"><div class="number red">30</div><div class="label">Years known (since 1996)</div></div>
+      <div class="stat-card"><div class="number amber">#3</div><div class="label">OWASP Top 10 (2021)</div></div>
+      <div class="stat-card"><div class="number blue">CWE-89</div><div class="label">Weakness Enumeration</div></div>
+      <div class="stat-card"><div class="number purple">∞</div><div class="label">New flows every day</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 2 — DATA FLOW PRIMER ═══════════════ -->
+<div class="slide" data-i="2">
+  <div class="slide-inner">
+    <span class="section-label purple">Core Concept</span>
+    <h2 class="slide-title">Understanding Data Flow Analysis</h2>
+    <p class="slide-subtitle">
+      Static analysis tracks data from <strong>sources</strong> through <strong>propagators</strong> to <strong>sinks</strong>. No sanitizer on the path = vulnerability.
+    </p>
+
+    <div class="flow-diagram" style="margin:1.5rem 0 2rem;">
+      <div class="flow-node source">📥 Source<br><small>User / file / network</small></div>
+      <div class="flow-arrow tainted">━━▶</div>
+      <div class="flow-node process">⚙️ Propagator<br><small>strcat / sprintf</small></div>
+      <div class="flow-arrow tainted">━━▶</div>
+      <div class="flow-node sink">💀 Sink<br><small>SQLExecDirect()</small></div>
+    </div>
+
+    <div class="callout danger">
+      <strong>Key Insight:</strong> SQL injection is a <em>data flow problem</em>. If <em>any</em> path exists from source to sink without sanitization, the vulnerability exists — no matter how well-known the pattern is.
+    </div>
+
+    <div class="flow-table" style="margin-top:1.25rem;">
+      <table class="flow-table">
+        <thead><tr><th>Taint Sources</th><th>Propagators</th><th>Sinks</th><th>Sanitizers</th></tr></thead>
+        <tbody>
+          <tr><td>Files, Pipes, Console</td><td><code>strcpy</code>, <code>strcat</code></td><td><code>SQLExecDirect</code></td><td><code>SQLBindParameter</code></td></tr>
+          <tr><td>Network, Sockets</td><td><code>sprintf</code>, <code>snprintf</code></td><td><code>SQLExecute</code></td><td>Custom validators</td></tr>
+          <tr><td>Environment Variables</td><td>Assignment, returns</td><td><code>mysql_query</code></td><td>Prepared statements</td></tr>
+          <tr><td>Entry-point params</td><td>Container insertions</td><td><code>PQexec</code></td><td>Parameterized queries</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 3 — EXAMPLE 1 VULN ═══════════════ -->
+<div class="slide" data-i="3">
+  <div class="slide-inner">
+    <span class="section-label red">Example 1 — Classic</span>
+    <h2 class="slide-title">❌ File-Based Auth Bypass — Vulnerable</h2>
+    <p class="slide-subtitle">
+      Credentials read from a file concatenated directly into SQL. Tainted data flows from <code>fread()</code> → <code>SQLExecDirect()</code>.
+    </p>
+
+    <pre class="code-block"><span class="code-label vuln">VULNERABLE</span>
+<span class="ln"> 1</span><span class="kw">#include</span> <span class="str">&lt;sql.h&gt;</span>
+<span class="ln"> 2</span><span class="kw">#include</span> <span class="str">&lt;stdio.h&gt;</span>
+<span class="ln"> 3</span>
+<span class="ln"> 4</span><span class="kw">const char</span>* reqBegin = <span class="str">"SELECT user_id, user_class, rights FROM users WHERE user_name = '"</span>;
+<span class="ln"> 5</span><span class="kw">const char</span>* reqPass  = <span class="str">"' and password = '"</span>;
+<span class="ln"> 6</span><span class="kw">const char</span>* reqEnd   = <span class="str">"'"</span>;
+<span class="ln"> 7</span>
+<span class="ln"> 8</span><span class="kw">void</span> <span class="fn">handleRequest</span>(<span class="typ">FILE</span>* file) {
+<span class="ln"> 9</span>    <span class="typ">char</span> params[<span class="num">1000</span>];
+<span class="ln">10</span>    <span class="t">fread(params, 1, 1000, file);</span>              <span class="cmt">// ← SOURCE</span>
+<span class="ln">11</span>    <span class="typ">SQLCHAR</span> req[<span class="num">1000</span>];
+<span class="ln">12</span>    <span class="fn">strcpy</span>(req, reqBegin);
+<span class="ln">13</span>    <span class="t">strcat(req, extractUsername(params));</span>      <span class="cmt">// ← PROPAGATION</span>
+<span class="ln">14</span>    <span class="fn">strcat</span>(req, reqPass);
+<span class="ln">15</span>    <span class="t">strcat(req, extractPassword(params));</span>      <span class="cmt">// ← PROPAGATION</span>
+<span class="ln">16</span>    <span class="fn">strcat</span>(req, reqEnd);
+<span class="ln">17</span>    <span class="t">SQLExecDirect(stmtHandle, req, strlen(req));</span>  <span class="cmt">// ← SINK 💀</span>
+<span class="ln">18</span>}</pre>
+
+    <div class="flow-diagram">
+      <div class="flow-node source">fread()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">extractUsername()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">strcat()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node sink">SQLExecDirect() 💀</div>
+    </div>
+
+    <div class="callout danger">
+      <strong>Attack:</strong> Input <code>' or ''='</code> → <code style="color:#fca5a5;">WHERE user_name = '' or ''='' and password = '' or ''=''</code><br>
+      → All rows returned. Attacker authenticated as first user.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 4 — EXAMPLE 1 FIX ═══════════════ -->
+<div class="slide" data-i="4">
+  <div class="slide-inner">
+    <span class="section-label green">Example 1 — Repaired</span>
+    <h2 class="slide-title">✅ Parameterized Query — Safe</h2>
+    <p class="slide-subtitle">
+      Using <code>SQLPrepare()</code> + <code>SQLBindParameter()</code> separates data from query structure — taint is neutralized.
+    </p>
+
+    <pre class="code-block"><span class="code-label safe">SAFE</span>
+<span class="ln"> 1</span><span class="kw">const char</span>* reqStr = <span class="str">"SELECT user_id, user_class, rights FROM users WHERE user_name = '?' and password = '?'"</span>;
+<span class="ln"> 2</span>
+<span class="ln"> 3</span><span class="kw">void</span> <span class="fn">handleRequest</span>(<span class="typ">FILE</span>* file) {
+<span class="ln"> 4</span>    <span class="typ">char</span> params[<span class="num">1000</span>];
+<span class="ln"> 5</span>    <span class="fn">fread</span>(params, <span class="num">1</span>, <span class="num">1000</span>, file);
+<span class="ln"> 6</span>    <span class="typ">char</span>* name = <span class="fn">extractUsername</span>(params);
+<span class="ln"> 7</span>    <span class="typ">char</span>* pass = <span class="fn">extractPassword</span>(params);
+<span class="ln"> 8</span>
+<span class="ln"> 9</span>    <span class="c">SQLBindParameter(stmtHandle, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 20, 0, name, 0, &amp;nameLen);</span>
+<span class="ln">10</span>    <span class="c">SQLBindParameter(stmtHandle, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 20, 0, pass, 0, &amp;passLen);</span>
+<span class="ln">11</span>
+<span class="ln">12</span>    <span class="c">SQLPrepare(stmtHandle, reqStr, SQL_NTS);</span>  <span class="cmt">// ← SANITIZED</span>
+<span class="ln">13</span>    <span class="c">SQLExecute(stmtHandle);</span>                   <span class="cmt">// ← SAFE</span>
+<span class="ln">14</span>}</pre>
+
+    <div class="flow-diagram">
+      <div class="flow-node source">fread()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">extractUsername()</div>
+      <div class="flow-arrow safe">━▶</div>
+      <div class="flow-node sanitized">SQLBindParameter() ✓</div>
+      <div class="flow-arrow safe">━▶</div>
+      <div class="flow-node sanitized">SQLExecute() ✓</div>
+    </div>
+
+    <div class="callout info">
+      <strong>Why it works:</strong> Prepared statements send the query structure and data <em>separately</em> to the database engine. User input can never alter the SQL grammar — the injection is structurally impossible.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 5 — EXAMPLE 2 VULN ═══════════════ -->
+<div class="slide" data-i="5">
+  <div class="slide-inner">
+    <span class="section-label red">Example 2 — Hidden Flow</span>
+    <h2 class="slide-title">❌ The "Safe Wrapper" Illusion</h2>
+    <p class="slide-subtitle">
+      A trusted <code>db_fetch()</code> helper looks safe — but taint flows through 4 functions across 2 files. A new caller creates a <strong>zero-day</strong> without changing existing code.
+    </p>
+
+    <pre class="code-block"><span class="code-label vuln">db_helpers.c — VULNERABLE</span>
+<span class="ln">1</span><span class="cmt">// Developer assumes callers will sanitize — they don't.</span>
+<span class="ln">2</span><span class="kw">int</span> <span class="fn">db_fetch</span>(<span class="kw">const char</span>* table, <span class="kw">const char</span>* where_clause,
+<span class="ln">3</span>             <span class="typ">SQLCHAR</span>* result, <span class="typ">SQLLEN</span> maxlen) {
+<span class="ln">4</span>    <span class="typ">SQLCHAR</span> query[<span class="num">2048</span>];
+<span class="ln">5</span>    <span class="fn">snprintf</span>((<span class="typ">char</span>*)query, <span class="kw">sizeof</span>(query),
+<span class="ln">6</span>             <span class="str">"SELECT * FROM %s WHERE %s"</span>, table, <span class="t">where_clause</span>);  <span class="cmt">// ← taint in</span>
+<span class="ln">7</span>    <span class="t">SQLExecDirect(g_stmt, query, SQL_NTS);</span>                    <span class="cmt">// ← SINK 💀</span>
+<span class="ln">8</span>    <span class="cmt">// ...</span>
+<span class="ln">9</span>}</pre>
+
+    <pre class="code-block"><span class="code-label vuln">request_handler.c — VULNERABLE</span>
+<span class="ln"> 1</span><span class="kw">void</span> <span class="fn">handle_product_lookup</span>(<span class="kw">int</span> sock) {
+<span class="ln"> 2</span>    <span class="typ">char</span> buf[<span class="num">4096</span>];
+<span class="ln"> 3</span>    <span class="t">recv(sock, buf, sizeof(buf)-1, 0);</span>                  <span class="cmt">// ← SOURCE</span>
+<span class="ln"> 4</span>    buf[<span class="kw">sizeof</span>(buf)-<span class="num">1</span>] = <span class="str">'\0'</span>;
+<span class="ln"> 5</span>    <span class="typ">char</span>* pid = <span class="t">parse_json_field(buf, "product_id");</span>    <span class="cmt">// ← taint extracted</span>
+<span class="ln"> 6</span>    <span class="typ">char</span>* clause = <span class="t">build_filter(pid);</span>                    <span class="cmt">// ← taint wrapped</span>
+<span class="ln"> 7</span>    <span class="typ">SQLCHAR</span> result[<span class="num">1024</span>];
+<span class="ln"> 8</span>    <span class="t">db_fetch("products", clause, result, sizeof(result));</span><span class="cmt">// ← reaches sink 💀</span>
+<span class="ln"> 9</span>}</pre>
+
+    <div class="flow-diagram">
+      <div class="flow-node source">recv() 📡</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">parse_json_field()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">build_filter()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">db_fetch()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node sink">SQLExecDirect() 💀</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 6 — EXAMPLE 2 ANALYSIS + FIX ═══════════════ -->
+<div class="slide" data-i="6">
+  <div class="slide-inner">
+    <span class="section-label green">Example 2 — Analysis &amp; Fix</span>
+    <h2 class="slide-title">✅ Taint Trace → Parameterized Fix</h2>
+
+    <table class="flow-table">
+      <thead><tr><th>Step</th><th>Variable</th><th>Status</th><th>Location</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td><code>buf</code></td><td><span class="tag tainted">TAINTED</span></td><td>request_handler.c:3</td></tr>
+        <tr><td>2</td><td><code>pid</code></td><td><span class="tag tainted">TAINTED</span></td><td>request_handler.c:5</td></tr>
+        <tr><td>3</td><td><code>clause</code></td><td><span class="tag tainted">TAINTED</span></td><td>request_handler.c:6</td></tr>
+        <tr><td>4</td><td><code>query</code></td><td><span class="tag tainted">TAINTED</span></td><td>db_helpers.c:6</td></tr>
+        <tr><td>5</td><td><code>SQLExecDirect</code></td><td><span class="tag sink">SINK 💀</span></td><td>db_helpers.c:7</td></tr>
+      </tbody>
+    </table>
+
+    <pre class="code-block"><span class="code-label safe">db_helpers.c — SAFE</span>
+<span class="ln">1</span><span class="kw">int</span> <span class="fn">db_fetch_by_id</span>(<span class="kw">const char</span>* table, <span class="kw">const char</span>* column,
+<span class="ln">2</span>                    <span class="kw">const char</span>* value, <span class="typ">SQLCHAR</span>* result, <span class="typ">SQLLEN</span> maxlen) {
+<span class="ln">3</span>    <span class="typ">SQLCHAR</span> query[<span class="num">2048</span>];
+<span class="ln">4</span>    <span class="fn">snprintf</span>((<span class="typ">char</span>*)query, <span class="kw">sizeof</span>(query),
+<span class="ln">5</span>             <span class="str">"SELECT * FROM %s WHERE %s = ?"</span>, table, column);
+<span class="ln">6</span>    <span class="c">SQLPrepare(g_stmt, query, SQL_NTS);</span>
+<span class="ln">7</span>    <span class="typ">SQLLEN</span> len = SQL_NTS;
+<span class="ln">8</span>    <span class="c">SQLBindParameter(g_stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR,</span>
+<span class="ln">9</span>    <span class="c">                   SQL_CHAR, 256, 0, (SQLPOINTER)value, 0, &amp;len);</span>
+<span class="ln">A</span>    <span class="c">SQLExecute(g_stmt);</span>  <span class="cmt">// ← taint neutralized ✓</span>
+<span class="ln">B</span>    <span class="cmt">// ...</span>
+<span class="ln">C</span>}</pre>
+
+    <div class="callout info">
+      <strong>Zero-Day Insight:</strong> A single new caller of <code>db_fetch()</code> that passes network data creates a <em>new flow path</em> — a new zero-day — even if <code>db_helpers.c</code> hasn't changed. The vulnerability emerges from <strong>relationships between components</strong>.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 7 — EXAMPLE 3 VULN ═══════════════ -->
+<div class="slide" data-i="7">
+  <div class="slide-inner">
+    <span class="section-label purple">Example 3 — LLM-Generated</span>
+    <h2 class="slide-title">❌ AI Copilot Zero-Day Factory</h2>
+    <p class="slide-subtitle">
+      💬 <em style="color:var(--purple-glow);">"Write a C function that searches products by name from a CGI query string."</em>
+    </p>
+
+    <pre class="code-block"><span class="code-label llm">AI-GENERATED CODE</span>
+<span class="ln"> 1</span><span class="cmt">/* search_products() — AI-generated, developer approved "looks good" */</span>
+<span class="ln"> 2</span><span class="typ">char</span>* <span class="fn">get_cgi_param</span>(<span class="kw">const char</span>* name) {
+<span class="ln"> 3</span>    <span class="kw">const char</span>* qs = <span class="t">getenv("QUERY_STRING");</span>  <span class="cmt">// ← SOURCE: attacker-controlled</span>
+<span class="ln"> 4</span>    <span class="cmt">// ... parse and extract param ...</span>
+<span class="ln"> 5</span>    <span class="kw">return</span> <span class="t">url_decode(val);</span>                  <span class="cmt">// ← URL decode ≠ sanitization!</span>
+<span class="ln"> 6</span>}
+<span class="ln"> 7</span>
+<span class="ln"> 8</span><span class="kw">void</span> <span class="fn">search_products</span>(<span class="kw">void</span>) {
+<span class="ln"> 9</span>    <span class="typ">char</span>* term = <span class="t">get_cgi_param("q");</span>           <span class="cmt">// ← tainted</span>
+<span class="ln">10</span>    <span class="kw">if</span> (!term) <span class="kw">return</span>;
+<span class="ln">11</span>
+<span class="ln">12</span>    <span class="cmt">// LLM added a length check — devs think this is "validation"</span>
+<span class="ln">13</span>    <span class="kw">if</span> (<span class="fn">strlen</span>(term) > <span class="num">200</span>) { <span class="fn">free</span>(term); <span class="kw">return</span>; }
+<span class="ln">14</span>
+<span class="ln">15</span>    <span class="typ">SQLCHAR</span> query[<span class="num">1024</span>];
+<span class="ln">16</span>    <span class="fn">snprintf</span>((<span class="typ">char</span>*)query, <span class="kw">sizeof</span>(query),
+<span class="ln">17</span>             <span class="str">"SELECT id,name,price FROM products WHERE name LIKE '%%%s%%'"</span>,
+<span class="ln">18</span>             <span class="t">term</span>);                                <span class="cmt">// ← taint injected into LIKE</span>
+<span class="ln">19</span>    <span class="t">SQLExecDirect(g_stmt, query, SQL_NTS);</span>   <span class="cmt">// ← SINK 💀</span>
+<span class="ln">20</span>    <span class="fn">free</span>(term);
+<span class="ln">21</span>}</pre>
+
+    <div class="flow-diagram">
+      <div class="flow-node source">getenv() 🌐</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">url_decode()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">strlen() check<br><small style="color:#f87171;">NOT a sanitizer!</small></div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node process">snprintf()</div>
+      <div class="flow-arrow tainted">━▶</div>
+      <div class="flow-node sink">SQLExecDirect() 💀</div>
+    </div>
+
+    <div class="callout danger">
+      <strong>Attack:</strong> <code>?q=' UNION SELECT username,password,'1' FROM admin_users --</code><br>
+      → <strong>Full database exfiltration.</strong> strlen + url_decode = false sense of security.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 8 — EXAMPLE 3 ANALYSIS + FIX ═══════════════ -->
+<div class="slide" data-i="8">
+  <div class="slide-inner">
+    <span class="section-label green">Example 3 — Why LLMs Fail &amp; Fix</span>
+    <h2 class="slide-title">🧠 Why the LLM Got It Wrong</h2>
+
+    <table class="flow-table">
+      <thead><tr><th>What the LLM Did</th><th>Why It Seems Safe</th><th>Why It's Not</th></tr></thead>
+      <tbody>
+        <tr><td><code>url_decode()</code></td><td>Looks like input processing</td><td>Decodes <code>%27</code> back to <code>'</code> — <strong>expands</strong> attack surface</td></tr>
+        <tr><td><code>strlen()</code> check</td><td>Appears to limit input</td><td><code>' UNION SELECT…--</code> is only 30 chars. Length ≠ safety</td></tr>
+        <tr><td>Bounded <code>snprintf</code></td><td>Prevents buffer overflow</td><td>Buffer safety ≠ SQL safety</td></tr>
+        <tr><td>Nice comments</td><td>Gives reviewer confidence</td><td>Comments don't execute. <strong>Data flow is what matters</strong></td></tr>
+      </tbody>
+    </table>
+
+    <pre class="code-block"><span class="code-label safe">SAFE — Parameterized LIKE</span>
+<span class="ln">1</span><span class="kw">void</span> <span class="fn">search_products</span>(<span class="kw">void</span>) {
+<span class="ln">2</span>    <span class="typ">char</span>* term = <span class="fn">get_cgi_param</span>(<span class="str">"q"</span>);
+<span class="ln">3</span>    <span class="kw">if</span> (!term) <span class="kw">return</span>;
+<span class="ln">4</span>    <span class="typ">char</span> pattern[<span class="num">256</span>];
+<span class="ln">5</span>    <span class="fn">snprintf</span>(pattern, <span class="kw">sizeof</span>(pattern), <span class="str">"%%%s%%"</span>, term);
+<span class="ln">6</span>    <span class="kw">const char</span>* sql = <span class="str">"SELECT id,name,price FROM products WHERE name LIKE ?"</span>;
+<span class="ln">7</span>    <span class="c">SQLPrepare(g_stmt, (SQLCHAR*)sql, SQL_NTS);</span>
+<span class="ln">8</span>    <span class="typ">SQLLEN</span> len = SQL_NTS;
+<span class="ln">9</span>    <span class="c">SQLBindParameter(g_stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR,</span>
+<span class="ln">A</span>    <span class="c">                   SQL_CHAR, 256, 0, pattern, 0, &amp;len);</span>  <span class="cmt">// ← taint neutralized</span>
+<span class="ln">B</span>    <span class="c">SQLExecute(g_stmt);</span>
+<span class="ln">C</span>    <span class="fn">free</span>(term);
+<span class="ln">D</span>}</pre>
+
+    <div class="callout purple">
+      <strong>🤖 The LLM Blind Spot:</strong> LLMs generate code from statistical patterns. They've seen millions of <code>sprintf + SQL</code> snippets — including vulnerable ones. They <em>cannot</em> reason about taint propagation across functions. They produce code that <em>looks correct</em> but <em>is exploitable</em>.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 9 — ZERO-DAY THESIS ═══════════════ -->
+<div class="slide" data-i="9">
+  <div class="slide-inner">
+    <span class="section-label red">Key Thesis</span>
+    <h2 class="slide-title">Known Since 1996 — Zero-Day Any Day</h2>
+    <p class="slide-subtitle">
+      SQL injection isn't a single vulnerability — it's an <strong>infinite class of data flow problems</strong>.
+    </p>
+
+    <div class="timeline">
+      <div class="timeline-item"><div class="year">1996</div><div class="event">SQL injection first described in <em>Phrack</em> magazine</div></div>
+      <div class="timeline-item"><div class="year">2008</div><div class="event">Heartland Payment Systems — 130M credit cards via SQLi</div></div>
+      <div class="timeline-item"><div class="year">2011</div><div class="event">Sony PSN — 77M accounts compromised</div></div>
+      <div class="timeline-item"><div class="year">2017</div><div class="event">Equifax — 147M records (began with injection)</div></div>
+      <div class="timeline-item"><div class="year">2023</div><div class="event">MOVEit Transfer — mass SQLi exploitation</div></div>
+      <div class="timeline-item"><div class="year">2024–26</div><div class="event">LLM copilots generate vulnerable SQL at scale — <strong>new zero-days daily</strong></div></div>
+    </div>
+
+    <div class="grid-4">
+      <div class="mini-card"><h4 style="color:var(--danger-glow);">1. Infinite Flow Paths</h4><p>Every new function creates new taint paths. Safe yesterday → vulnerable after one commit.</p></div>
+      <div class="mini-card"><h4 style="color:var(--warning-glow);">2. Human Assumptions</h4><p>"The wrapper is safe." "It was validated elsewhere." Only data flow analysis can verify.</p></div>
+      <div class="mini-card"><h4 style="color:var(--purple-glow);">3. LLM Generation</h4><p>AI copilots produce well-commented code with classic injection patterns. Can't reason about taint.</p></div>
+      <div class="mini-card"><h4 style="color:var(--accent-glow);">4. Cross-Module Depth</h4><p>Taint traverses 10+ calls across 5+ files. Only automated inter-procedural analysis can find them.</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 10 — PARAMETERS ═══════════════ -->
+<div class="slide" data-i="10">
+  <div class="slide-inner">
+    <span class="section-label blue">Configuration</span>
+    <h2 class="slide-title">Rule Parameters</h2>
+    <p class="slide-subtitle">Customize how BD-SECURITY-TDSQL detects taint sources, sanitizers, and data flow paths.</p>
+
+    <div class="card info">
+      <h3>📥 Sources of Tainted Data</h3>
+      <ul class="param-list">
+        <li>Files &amp; Pipes</li>
+        <li>Stream-oriented APIs (std::istream, CArchive, CFile)</li>
+        <li>Low-level input (Windows API, POSIX)</li>
+        <li>Console &amp; Environment variables</li>
+        <li>Entry-point method parameters</li>
+        <li>Network &amp; Sockets</li>
+        <li>Random number generators</li>
+      </ul>
+    </div>
+
+    <div class="card info">
+      <h3>🛡️ Validating Functions</h3>
+      <ul class="param-list">
+        <li><strong>Type/namespace</strong> — declaring type (<code>*</code> for any)</li>
+        <li><strong>Function name</strong> — sanitizer name (wildcards)</li>
+        <li><strong>Subclass defs</strong> — apply to overrides in derived classes</li>
+        <li><strong>'this' validated</strong> — cleans calling object</li>
+        <li><strong>Returns validated</strong> — cleans return value</li>
+        <li><strong>Validated params</strong> — 1-based indexes or <code>*</code></li>
+      </ul>
+    </div>
+
+    <div class="card info">
+      <h3>🔢 Numerical Data</h3>
+      <p>When enabled, numerical data is <strong>never considered tainted</strong> — reduces false positives for numeric IDs.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 11 — REFERENCES ═══════════════ -->
+<div class="slide" data-i="11">
+  <div class="slide-inner">
+    <span class="section-label green">References</span>
+    <h2 class="slide-title">Standards &amp; Compliance</h2>
+    <p class="slide-subtitle">BD-SECURITY-TDSQL maps to the following industry standards.</p>
+
+    <div class="ref-grid">
+      <div class="ref-card"><div class="ref-title">OWASP Top 10 — 2021</div><div class="ref-sub">A03:2021 — Injection</div><a href="https://owasp.org/Top10/A03_2021-Injection/" target="_blank">owasp.org → A03:2021</a></div>
+      <div class="ref-card"><div class="ref-title">OWASP API Security — 2023</div><div class="ref-sub">API10 — Unsafe Consumption of APIs</div><a href="https://owasp.org/API-Security/editions/2023/en/0xaa-unsafe-consumption-of-apis/" target="_blank">owasp.org → API10</a></div>
+      <div class="ref-card"><div class="ref-title">CWE-89</div><div class="ref-sub">SQL Injection</div><a href="https://cwe.mitre.org/data/definitions/89.html" target="_blank">cwe.mitre.org → CWE-89</a></div>
+      <div class="ref-card"><div class="ref-title">CWE-20</div><div class="ref-sub">Improper Input Validation</div><a href="https://cwe.mitre.org/data/definitions/20.html" target="_blank">cwe.mitre.org → CWE-20</a></div>
+      <div class="ref-card"><div class="ref-title">MISRA C:2025</div><div class="ref-sub">Dir 4.14 — Validate external data</div></div>
+      <div class="ref-card"><div class="ref-title">MISRA C:2012 Amd 1</div><div class="ref-sub">Dir 4.14 — Security guidelines</div></div>
+      <div class="ref-card"><div class="ref-title">SEI CERT C</div><div class="ref-sub">STR02-C — Sanitize data to subsystems</div><a href="https://wiki.sei.cmu.edu/confluence/display/c/STR02-C.+Sanitize+data+passed+to+complex+subsystems" target="_blank">wiki.sei.cmu.edu → STR02-C</a></div>
+      <div class="ref-card"><div class="ref-title">DISA STIG</div><div class="ref-sub">APSC-DV-002540</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ SLIDE 12 — END ═══════════════ -->
+<div class="slide hero-slide footer-slide" data-i="12">
+  <div class="slide-inner">
+    <h1 class="hero-title" style="font-size:clamp(1.8rem,5vw,3rem);">Data Flow Analysis<br>Stops Zero-Days</h1>
+    <p class="hero-sub" style="margin-bottom:2.5rem;">
+      SQL injection has been known for 30 years — but every new function, every refactor, every LLM suggestion can create a <strong style="color:var(--danger-glow);">fresh zero-day</strong>.<br>
+      Automated inter-procedural taint analysis is the only reliable defense.
+    </p>
+    <span class="rule-id">BD-SECURITY-TDSQL — Parasoft C/C++test · Since v7.2</span>
+    <p style="margin-top:1.5rem; font-size:.85rem; color:var(--text-muted);">
+      <a href="https://app.hackedu.com/link/9a894cb7-ebaf-4cdc-9d6d-554fde43775a" target="_blank">HackEdu Training →</a>
+    </p>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let cur = 0;
+
+  const bar    = document.getElementById('progress-bar');
+  const counter= document.getElementById('counter');
+  const prevBtn= document.getElementById('prevBtn');
+  const nextBtn= document.getElementById('nextBtn');
+  const dotsEl = document.getElementById('dots');
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const d = document.createElement('button');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.setAttribute('aria-label', 'Slide ' + (i+1));
+    d.onclick = () => goTo(i);
+    dotsEl.appendChild(d);
+  }
+  const dots = dotsEl.querySelectorAll('.dot');
+
+  function update() {
+    slides.forEach((s, i) => {
+      s.classList.remove('active', 'prev');
+      if (i === cur)      s.classList.add('active');
+      else if (i < cur)   s.classList.add('prev');
+    });
+    dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+    bar.style.width = ((cur / (total - 1)) * 100) + '%';
+    counter.textContent = (cur + 1) + ' / ' + total;
+    prevBtn.disabled = cur === 0;
+    nextBtn.disabled = cur === total - 1;
+  }
+
+  function goTo(i) {
+    if (i < 0 || i >= total) return;
+    cur = i;
+    update();
+  }
+
+  window.go = function(dir) { goTo(cur + dir); };
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                   { e.preventDefault(); go(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End')  { e.preventDefault(); goTo(total - 1); }
+  });
+
+  // Touch / swipe
+  let tx = 0, ty = 0, swiping = false;
+  document.addEventListener('touchstart', (e) => {
+    tx = e.touches[0].clientX;
+    ty = e.touches[0].clientY;
+    swiping = true;
+  }, { passive: true });
+  document.addEventListener('touchmove', (e) => {
+    // allow vertical scroll inside slide
+  }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    if (!swiping) return;
+    swiping = false;
+    const dx = e.changedTouches[0].clientX - tx;
+    const dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      go(dx < 0 ? 1 : -1);
+    }
+  }, { passive: true });
+
+  update();
+})();
+</script>
+</body>
+</html>
