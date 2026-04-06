@@ -31,22 +31,25 @@ Last updated: 2026-04-06
 7. BD-SECURITY-TDSQL-Presentation.html
    https://zuwasi.github.io/Public-html-pages/BD-SECURITY-TDSQL-Presentation.html
 
-8. MLX5-to-Zephyr-MISRA-Journey.html
+8. Claude-Code-Qwen-Local-Guide.html
+   https://zuwasi.github.io/Public-html-pages/Claude-Code-Qwen-Local-Guide.html
+
+9. MLX5-to-Zephyr-MISRA-Journey.html
    https://zuwasi.github.io/Public-html-pages/MLX5-to-Zephyr-MISRA-Journey.html
 
-9. Trivy-Attack-SBOMator-Defense.html
+10. Trivy-Attack-SBOMator-Defense.html
    https://zuwasi.github.io/Public-html-pages/Trivy-Attack-SBOMator-Defense.html
 
-10. Unified_Intelligence_Platform_Proposal.html
+11. Unified_Intelligence_Platform_Proposal.html
    https://zuwasi.github.io/Public-html-pages/Unified_Intelligence_Platform_Proposal.html
 
-11. ai_agent_eval_presentation.html
+12. ai_agent_eval_presentation.html
    https://zuwasi.github.io/Public-html-pages/ai_agent_eval_presentation.html
 
-12. nono-ampcode-presentation.html
+13. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-13. why-amp-doesnt-need-node9-proxy.html
+14. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
 ──────────────────────────────────────────────────────────────
