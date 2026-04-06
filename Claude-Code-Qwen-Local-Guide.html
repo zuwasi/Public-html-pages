@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Connect Claude Code to Local Qwen 2.5 Coder 14B</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f5}
+  /* ── slide wrapper ── */
+  .deck{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);height:100%;will-change:transform}
+  .slide{min-width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto}
+  .card{background:#fff;border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,.08);max-width:720px;width:100%;padding:44px 38px;position:relative}
+  /* ── typography ── */
+  h1{font-size:clamp(1.5rem,4vw,2.2rem);color:#1a1a2e;margin-bottom:10px;line-height:1.25}
+  h2{font-size:clamp(1.15rem,3vw,1.55rem);color:#2d2d44;margin-bottom:14px}
+  p,li{font-size:clamp(.92rem,2.4vw,1.08rem);color:#3a3a52;line-height:1.7}
+  ul,ol{padding-left:22px;margin:10px 0}
+  li{margin-bottom:8px}
+  a{color:#0969da;text-decoration:none;border-bottom:1px solid #0969da44}
+  a:hover{color:#0550ae;border-bottom-color:#0550ae}
+  code{background:#f3f4f8;padding:2px 7px;border-radius:5px;font-size:.92em;font-family:'Cascadia Code','Fira Code',Consolas,monospace;color:#6b21a8}
+  pre{background:#1e1e2e;color:#cdd6f4;padding:18px 20px;border-radius:12px;overflow-x:auto;margin:14px 0;font-size:clamp(.78rem,2vw,.92rem);line-height:1.65;font-family:'Cascadia Code','Fira Code',Consolas,monospace}
+  pre .cmt{color:#6c7086}
+  pre .hl{color:#89dceb}
+  pre .str{color:#a6e3a1}
+  .badge{display:inline-block;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;padding:5px 14px;border-radius:20px;font-size:.82rem;font-weight:600;margin-bottom:14px;letter-spacing:.3px}
+  .step-num{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;background:#e8eaf6;color:#3949ab;border-radius:50%;font-weight:700;font-size:.95rem;margin-right:8px;flex-shrink:0}
+  .tip{background:#e8f5e9;border-left:4px solid #43a047;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;font-size:.93rem}
+  .warn{background:#fff3e0;border-left:4px solid #ef6c00;padding:12px 16px;border-radius:0 10px 10px 0;margin:14px 0;font-size:.93rem}
+  .center{text-align:center}
+  .subtitle{color:#6b6b8d;font-size:clamp(.88rem,2.2vw,1.05rem);margin-bottom:8px}
+  .tag{display:inline-block;background:#e3f2fd;color:#1565c0;padding:3px 10px;border-radius:8px;font-size:.8rem;margin:3px 2px}
+  .img-placeholder{background:linear-gradient(135deg,#e3eeff,#f0e6ff);border-radius:12px;padding:28px;text-align:center;margin:14px 0;font-size:.9rem;color:#5a5a8a}
+  /* ── nav arrows ── */
+  .nav-btn{position:fixed;top:50%;transform:translateY(-50%);z-index:100;background:#ffffffdd;border:1px solid #ddd;width:48px;height:48px;border-radius:50%;font-size:1.4rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.08);transition:background .2s,opacity .2s;color:#333;-webkit-tap-highlight-color:transparent}
+  .nav-btn:hover{background:#f5f5ff}
+  .nav-btn.left{left:12px}
+  .nav-btn.right{right:12px}
+  .nav-btn:disabled{opacity:.25;cursor:default}
+  /* ── progress bar ── */
+  .progress{position:fixed;bottom:0;left:0;height:4px;background:linear-gradient(90deg,#667eea,#764ba2);transition:width .4s;z-index:100;border-radius:0 4px 0 0}
+  /* ── slide counter ── */
+  .counter{position:fixed;bottom:12px;right:18px;font-size:.8rem;color:#999;z-index:100}
+  /* ── mobile touch ── */
+  @media(max-width:600px){
+    .card{padding:28px 20px;border-radius:14px}
+    .nav-btn{width:40px;height:40px;font-size:1.1rem}
+    .nav-btn.left{left:6px}
+    .nav-btn.right{right:6px}
+    pre{padding:14px 12px;font-size:.78rem}
+  }
+  /* slide accent tops */
+  .accent-bar{height:5px;border-radius:5px 5px 0 0;margin:-44px -38px 24px -38px}
+  @media(max-width:600px){.accent-bar{margin:-28px -20px 18px -20px}}
+  .accent-purple{background:linear-gradient(90deg,#667eea,#764ba2)}
+  .accent-blue{background:linear-gradient(90deg,#2196f3,#00bcd4)}
+  .accent-green{background:linear-gradient(90deg,#43a047,#66bb6a)}
+  .accent-orange{background:linear-gradient(90deg,#ef6c00,#ffa726)}
+  .accent-teal{background:linear-gradient(90deg,#00897b,#4db6ac)}
+  .accent-pink{background:linear-gradient(90deg,#e91e63,#f48fb1)}
+  .cols{display:flex;gap:18px;flex-wrap:wrap}
+  .cols>div{flex:1;min-width:200px}
+</style>
+</head>
+<body>
+
+<!-- ── SLIDES ── -->
+<div class="deck" id="deck">
+
+<!-- SLIDE 0 – Title -->
+<div class="slide">
+  <div class="card center">
+    <div class="accent-bar accent-purple"></div>
+    <div class="badge">Step-by-Step Guide</div>
+    <h1>Connect Claude Code<br>to a Local Qwen 2.5 Coder 14B</h1>
+    <p class="subtitle" style="margin-top:12px">Run a powerful coding LLM on your own machine — then use it from Claude Code (Amp CLI)</p>
+    <div style="margin-top:22px">
+      <span class="tag">Qwen 2.5 Coder</span>
+      <span class="tag">Ollama / LM Studio</span>
+      <span class="tag">Claude Code / Amp</span>
+      <span class="tag">100 % Local</span>
+    </div>
+    <p style="margin-top:28px;color:#888;font-size:.85rem">Use <b>← →</b> arrow keys or swipe to navigate&nbsp;&nbsp;•&nbsp;&nbsp;12 slides</p>
+  </div>
+</div>
+
+<!-- SLIDE 1 – What You Need -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-blue"></div>
+    <h2><span class="step-num">1</span> Prerequisites</h2>
+    <p>Before you start, make sure you have:</p>
+    <ul>
+      <li><b>16 GB+ RAM</b> (the 14B model needs ~10 GB VRAM or ~12 GB system RAM with CPU offload)</li>
+      <li><b>NVIDIA GPU</b> with ≥ 12 GB VRAM <i>recommended</i> (RTX 3060 12 GB+, RTX 4060 Ti 16 GB, etc.) — CPU-only works but is slower</li>
+      <li><b>~15 GB free disk space</b> for model weights</li>
+      <li><b>Node.js 18+</b> — <a href="https://nodejs.org/" target="_blank">nodejs.org</a></li>
+      <li><b>Claude Code (or Amp CLI)</b> installed — <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">Claude Code docs</a></li>
+    </ul>
+    <div class="tip">💡 Don't have a beefy GPU? Use the <b>Q4_K_M</b> quantised variant — it runs well on 8 GB VRAM.</div>
+  </div>
+</div>
+
+<!-- SLIDE 2 – Choose Your Runtime -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-green"></div>
+    <h2><span class="step-num">2</span> Choose a Local Model Server</h2>
+    <p>You need software that hosts Qwen locally and exposes an <b>OpenAI-compatible API</b>. Two popular options:</p>
+    <div class="cols" style="margin-top:16px">
+      <div style="background:#f5f7ff;padding:18px;border-radius:12px">
+        <h2 style="font-size:1.1rem">🦙 Ollama</h2>
+        <p style="font-size:.9rem">CLI-first, lightweight, auto-downloads models. Great for devs.</p>
+        <p style="margin-top:8px"><a href="https://ollama.com/download" target="_blank">⬇ Download Ollama</a></p>
+      </div>
+      <div style="background:#f9f5ff;padding:18px;border-radius:12px">
+        <h2 style="font-size:1.1rem">🖥️ LM Studio</h2>
+        <p style="font-size:.9rem">GUI app, model browser, easy quantisation picks. Great for beginners.</p>
+        <p style="margin-top:8px"><a href="https://lmstudio.ai/" target="_blank">⬇ Download LM Studio</a></p>
+      </div>
+    </div>
+    <p style="margin-top:16px">This guide covers <b>both</b> paths. Pick one and follow the matching steps.</p>
+  </div>
+</div>
+
+<!-- SLIDE 3 – Install Ollama -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-green"></div>
+    <h2><span class="step-num">3a</span> Path A — Install &amp; Run with Ollama</h2>
+    <ol>
+      <li>Download &amp; install from <a href="https://ollama.com/download" target="_blank">ollama.com/download</a></li>
+      <li>Open a terminal and pull the model:</li>
+    </ol>
+    <pre>ollama pull qwen2.5-coder:14b</pre>
+    <p>This downloads the <b>Q4_K_M</b> quantised weights (~9 GB). For the full-precision variant:</p>
+    <pre>ollama pull qwen2.5-coder:14b-instruct-fp16</pre>
+    <ol start="3">
+      <li>Verify it works — run a quick chat:</li>
+    </ol>
+    <pre>ollama run qwen2.5-coder:14b "Write hello world in Python"</pre>
+    <ol start="4">
+      <li>Start the Ollama server (it usually auto-starts, but to be sure):</li>
+    </ol>
+    <pre>ollama serve</pre>
+    <div class="tip">✅ Ollama's API is live at <code>http://localhost:11434</code> — it is already OpenAI-compatible at <code>/v1/chat/completions</code>.</div>
+  </div>
+</div>
+
+<!-- SLIDE 4 – Install LM Studio -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-teal"></div>
+    <h2><span class="step-num">3b</span> Path B — Install &amp; Run with LM Studio</h2>
+    <ol>
+      <li>Download &amp; install from <a href="https://lmstudio.ai/" target="_blank">lmstudio.ai</a></li>
+      <li>Open LM Studio → click <b>Search</b> → type <code>Qwen2.5-Coder-14B-Instruct</code></li>
+      <li>Pick a quantisation (recommended: <b>Q4_K_M</b> for balanced speed/quality)</li>
+      <li>Click <b>Download</b>, wait for it to finish</li>
+      <li>Go to the <b>Local Server</b> tab (left sidebar, server icon)</li>
+      <li>Select the downloaded Qwen model from the dropdown</li>
+      <li>Click <b>Start Server</b></li>
+    </ol>
+    <div class="tip">✅ LM Studio's API is live at <code>http://localhost:1234</code> — fully OpenAI-compatible at <code>/v1/chat/completions</code>.</div>
+  </div>
+</div>
+
+<!-- SLIDE 5 – Verify the API -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-blue"></div>
+    <h2><span class="step-num">4</span> Verify the Local API Works</h2>
+    <p>Before connecting Claude Code, confirm the API responds. Open a new terminal:</p>
+    <p><b>For Ollama (port 11434):</b></p>
+    <pre>curl http://localhost:11434/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5-coder:14b",
+    "messages": [{"role":"user","content":"Say hello"}]
+  }'</pre>
+    <p><b>For LM Studio (port 1234):</b></p>
+    <pre>curl http://localhost:1234/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "qwen2.5-coder-14b-instruct",
+    "messages": [{"role":"user","content":"Say hello"}]
+  }'</pre>
+    <p>On <b>Windows PowerShell</b>, use <code>Invoke-RestMethod</code> or install <code>curl</code> via <a href="https://curl.se/windows/" target="_blank">curl.se</a>.</p>
+    <div class="tip">✅ If you get a JSON response with a <code>"choices"</code> array — you're good!</div>
+  </div>
+</div>
+
+<!-- SLIDE 6 – Configure Claude Code -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-purple"></div>
+    <h2><span class="step-num">5</span> Configure Claude Code to Use Your Local Model</h2>
+    <p>Claude Code supports custom API providers via environment variables. Set these before launching:</p>
+    <p><b>Linux / macOS (bash/zsh):</b></p>
+    <pre><span class="cmt"># For Ollama</span>
+export CLAUDE_CODE_USE_BEDROCK=0
+export ANTHROPIC_BASE_URL=http://localhost:11434/v1
+export ANTHROPIC_API_KEY=ollama  <span class="cmt"># any non-empty string</span>
+export ANTHROPIC_MODEL=qwen2.5-coder:14b
+
+<span class="cmt"># For LM Studio</span>
+export ANTHROPIC_BASE_URL=http://localhost:1234/v1
+export ANTHROPIC_API_KEY=lm-studio
+export ANTHROPIC_MODEL=qwen2.5-coder-14b-instruct</pre>
+    <p><b>Windows PowerShell:</b></p>
+    <pre>$env:ANTHROPIC_BASE_URL = "http://localhost:11434/v1"
+$env:ANTHROPIC_API_KEY = "ollama"
+$env:ANTHROPIC_MODEL = "qwen2.5-coder:14b"</pre>
+    <div class="warn">⚠️ The API key can be any non-empty string — local servers don't validate it, but Claude Code requires it to be set.</div>
+  </div>
+</div>
+
+<!-- SLIDE 7 – Alternative: settings.json -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-orange"></div>
+    <h2><span class="step-num">6</span> Alternative: Use a <code>settings.json</code></h2>
+    <p>Instead of env vars, you can create/edit Claude Code's settings file:</p>
+    <pre><span class="cmt">// ~/.claude/settings.json  (create if missing)</span>
+{
+  "apiProvider": "custom-openai",
+  "customApiBaseUrl": "http://localhost:11434/v1",
+  "customApiKey": "ollama",
+  "customModelId": "qwen2.5-coder:14b"
+}</pre>
+    <p>Or run the built-in config command:</p>
+    <pre>claude config set apiProvider custom-openai
+claude config set customApiBaseUrl http://localhost:11434/v1
+claude config set customModelId "qwen2.5-coder:14b"</pre>
+    <div class="tip">💡 The settings file approach persists across sessions — no need to re-export env vars each time.</div>
+    <p style="margin-top:10px;font-size:.9rem">📖 <a href="https://docs.anthropic.com/en/docs/claude-code/settings" target="_blank">Full Claude Code settings reference</a></p>
+  </div>
+</div>
+
+<!-- SLIDE 8 – Launch -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-green"></div>
+    <h2><span class="step-num">7</span> Launch Claude Code</h2>
+    <p>With your local server running and config in place, just start Claude Code normally:</p>
+    <pre>claude</pre>
+    <p>You should see it connect. Try a prompt:</p>
+    <pre style="background:#f5f7ff;color:#333;border:1px solid #ddd">
+<span style="color:#6b21a8;font-weight:700">You:</span> Explain what a decorator is in Python, with an example.
+
+<span style="color:#0969da;font-weight:700">Qwen 2.5 Coder:</span> A decorator is a function that takes another
+function as an argument and extends its behavior without
+modifying it...
+    </pre>
+    <div class="tip">✅ If you see responses — congratulations, you're running a fully local coding LLM through Claude Code!</div>
+  </div>
+</div>
+
+<!-- SLIDE 9 – Performance Tips -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-teal"></div>
+    <h2><span class="step-num">8</span> Performance Tuning Tips</h2>
+    <ul>
+      <li><b>GPU layers:</b> In Ollama, set <code>OLLAMA_NUM_GPU=999</code> to offload all layers to GPU</li>
+      <li><b>Context window:</b> Default is 2048 tokens. Increase for code tasks:
+        <pre>ollama run qwen2.5-coder:14b --num-ctx 8192</pre>
+        Or in LM Studio: Settings → Context Length → 8192
+      </li>
+      <li><b>Quantisation trade-offs:</b>
+        <ul>
+          <li><code>Q4_K_M</code> — best balance (speed + quality)</li>
+          <li><code>Q5_K_M</code> — slightly better quality, needs more VRAM</li>
+          <li><code>fp16</code> — full precision, needs ~28 GB VRAM</li>
+        </ul>
+      </li>
+      <li><b>Batch size:</b> If using CPU, increase batch size for faster prompt processing</li>
+    </ul>
+    <p style="margin-top:10px;font-size:.9rem">📖 <a href="https://github.com/ollama/ollama/blob/main/docs/modelfile.md" target="_blank">Ollama Modelfile options</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen 2.5 Coder GitHub</a></p>
+  </div>
+</div>
+
+<!-- SLIDE 10 – Troubleshooting -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-orange"></div>
+    <h2><span class="step-num">9</span> Troubleshooting</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px">
+      <tr style="background:#f5f5f5"><td style="padding:10px;border-radius:8px 0 0 0;font-weight:600">Problem</td><td style="padding:10px;border-radius:0 8px 0 0;font-weight:600">Solution</td></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee"><code>Connection refused</code></td><td style="padding:10px;border-bottom:1px solid #eee">Make sure <code>ollama serve</code> or LM Studio server is running</td></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee"><code>Model not found</code></td><td style="padding:10px;border-bottom:1px solid #eee">Check model name matches exactly — run <code>ollama list</code></td></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee">Very slow responses</td><td style="padding:10px;border-bottom:1px solid #eee">Ensure GPU offload is enabled; reduce context length</td></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee">Out of memory</td><td style="padding:10px;border-bottom:1px solid #eee">Use a smaller quant (<code>Q4_K_M</code>) or reduce <code>num_ctx</code></td></tr>
+      <tr><td style="padding:10px">API key error</td><td style="padding:10px">Set <code>ANTHROPIC_API_KEY</code> to any non-empty string</td></tr>
+    </table>
+    <div class="warn">⚠️ Qwen 2.5 Coder 14B is excellent at code, but may not support all Claude-specific features (tool use, artifacts, etc.).</div>
+  </div>
+</div>
+
+<!-- SLIDE 11 – Quick Reference -->
+<div class="slide">
+  <div class="card">
+    <div class="accent-bar accent-pink"></div>
+    <h2><span class="step-num">10</span> Quick Reference Card</h2>
+    <table style="width:100%;border-collapse:collapse;font-size:.88rem">
+      <tr style="background:#fce4ec"><td style="padding:8px 10px;font-weight:600;width:40%">Item</td><td style="padding:8px 10px;font-weight:600">Value</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">Ollama API URL</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>http://localhost:11434/v1</code></td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">LM Studio API URL</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>http://localhost:1234/v1</code></td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">Model name (Ollama)</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>qwen2.5-coder:14b</code></td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">Model name (LM Studio)</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>qwen2.5-coder-14b-instruct</code></td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">RAM needed</td><td style="padding:8px 10px;border-bottom:1px solid #eee">~10 GB VRAM or ~12 GB system RAM</td></tr>
+      <tr><td style="padding:8px 10px">Disk space</td><td style="padding:8px 10px">~9 GB (Q4_K_M)</td></tr>
+    </table>
+    <div style="margin-top:18px;display:flex;flex-wrap:wrap;gap:8px">
+      <a href="https://ollama.com/library/qwen2.5-coder" target="_blank" class="tag" style="text-decoration:none;border:none">Ollama Model Page ↗</a>
+      <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank" class="tag" style="text-decoration:none;border:none">Qwen GitHub ↗</a>
+      <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank" class="tag" style="text-decoration:none;border:none">Claude Code Docs ↗</a>
+      <a href="https://lmstudio.ai/" target="_blank" class="tag" style="text-decoration:none;border:none">LM Studio ↗</a>
+      <a href="https://huggingface.co/Qwen/Qwen2.5-Coder-14B-Instruct" target="_blank" class="tag" style="text-decoration:none;border:none">HuggingFace Model ↗</a>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 12 – Summary -->
+<div class="slide">
+  <div class="card center">
+    <div class="accent-bar accent-purple"></div>
+    <h1>🎉 You're All Set!</h1>
+    <p style="margin-top:14px;font-size:1.05rem">Recap — the 4 key steps:</p>
+    <ol style="text-align:left;max-width:420px;margin:18px auto">
+      <li><b>Install</b> Ollama or LM Studio</li>
+      <li><b>Download</b> Qwen 2.5 Coder 14B</li>
+      <li><b>Start</b> the local API server</li>
+      <li><b>Configure</b> Claude Code via env vars or settings.json</li>
+    </ol>
+    <p style="margin-top:22px;color:#888;font-size:.9rem">Now you have a fully local, private, zero-cost coding AI running through the Claude Code interface.</p>
+    <div style="margin-top:24px">
+      <a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank" style="margin:4px 8px">Qwen GitHub ↗</a>
+      <a href="https://ollama.com/" target="_blank" style="margin:4px 8px">Ollama ↗</a>
+      <a href="https://lmstudio.ai/" target="_blank" style="margin:4px 8px">LM Studio ↗</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<button class="nav-btn left" id="prevBtn" onclick="go(-1)" aria-label="Previous slide">◀</button>
+<button class="nav-btn right" id="nextBtn" onclick="go(1)" aria-label="Next slide">▶</button>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+
+<script>
+const deck=document.getElementById('deck');
+const slides=document.querySelectorAll('.slide');
+const total=slides.length;
+let cur=0;
+
+function go(d){moveTo(cur+d)}
+function moveTo(i){
+  if(i<0||i>=total)return;
+  cur=i;
+  deck.style.transform=`translateX(-${cur*100}vw)`;
+  document.getElementById('prevBtn').disabled=cur===0;
+  document.getElementById('nextBtn').disabled=cur===total-1;
+  document.getElementById('progress').style.width=((cur+1)/total*100)+'%';
+  document.getElementById('counter').textContent=(cur+1)+' / '+total;
+}
+
+// keyboard
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')go(1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(-1);
+});
+
+// touch swipe
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>50){dx<0?go(1):go(-1)}
+},{passive:true});
+
+moveTo(0);
+</script>
+</body>
+</html>
