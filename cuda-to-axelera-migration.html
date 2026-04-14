@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>CUDA → Axelera Migration Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  :root {
+    --ax-yellow: #F4BE18;
+    --ax-night-blue: #121D3D;
+    --ax-neon-purple: #3E53E5;
+    --ax-sea-blue: #005B63;
+    --ax-slate-petrol: #0090A8;
+    --ax-shell-green: #9EBFAE;
+    --ax-warm-grey: #DFDCDD;
+    --ax-black: #000000;
+    --ax-white: #FFFFFF;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ax-night-blue);
+    color: var(--ax-white);
+    -webkit-font-smoothing: antialiased;
+    touch-action: pan-y;
+  }
+
+  /* ── Slide Container ── */
+  .slides-wrapper {
+    display: flex;
+    width: 100%; height: 100%;
+    transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
+
+  .slide {
+    min-width: 100vw; min-height: 100vh;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 40px 60px;
+    position: relative;
+    overflow-y: auto;
+  }
+
+  /* ── Navigation Arrows ── */
+  .nav-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    z-index: 100;
+    background: rgba(244, 190, 24, 0.15);
+    border: 2px solid var(--ax-yellow);
+    color: var(--ax-yellow);
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    font-size: 22px; font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(8px);
+  }
+  .nav-arrow:hover { background: var(--ax-yellow); color: var(--ax-night-blue); }
+  .nav-arrow.left { left: 16px; }
+  .nav-arrow.right { right: 16px; }
+  .nav-arrow.hidden { opacity: 0; pointer-events: none; }
+
+  /* ── Progress Bar ── */
+  .progress-bar {
+    position: fixed; bottom: 0; left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--ax-yellow), var(--ax-neon-purple));
+    transition: width 0.45s ease;
+    z-index: 100;
+  }
+
+  /* ── Slide Counter ── */
+  .slide-counter {
+    position: fixed; bottom: 14px; right: 20px;
+    font-size: 13px; color: rgba(255,255,255,0.5);
+    z-index: 100; font-weight: 500;
+  }
+
+  /* ── Logo ── */
+  .slide-logo {
+    position: absolute; top: 20px; left: 24px;
+    height: 28px; opacity: 0.7;
+  }
+
+  /* ── Typography ── */
+  h1 { font-size: clamp(28px, 5vw, 56px); font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+  h2 { font-size: clamp(22px, 3.5vw, 40px); font-weight: 700; line-height: 1.2; margin-bottom: 14px; }
+  h3 { font-size: clamp(16px, 2.5vw, 26px); font-weight: 600; margin-bottom: 10px; }
+  p, li { font-size: clamp(13px, 1.8vw, 18px); line-height: 1.65; color: rgba(255,255,255,0.88); }
+  .subtitle { font-size: clamp(15px, 2.2vw, 22px); color: var(--ax-warm-grey); font-weight: 400; margin-bottom: 20px; }
+
+  .highlight { color: var(--ax-yellow); }
+  .purple { color: var(--ax-neon-purple); }
+  .petrol { color: var(--ax-slate-petrol); }
+
+  /* ── Cards / Boxes ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px; width: 100%; max-width: 1100px;
+    margin-top: 16px;
+  }
+  .card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 20px 22px;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: var(--ax-yellow); }
+  .card .icon { font-size: 28px; margin-bottom: 10px; display: block; }
+  .card h3 { font-size: 16px; margin-bottom: 6px; color: var(--ax-yellow); }
+  .card p { font-size: 13px; color: rgba(255,255,255,0.75); line-height: 1.5; }
+
+  /* ── Tables ── */
+  table {
+    width: 100%; max-width: 1000px;
+    border-collapse: collapse;
+    margin-top: 12px; font-size: clamp(11px, 1.5vw, 15px);
+  }
+  th { background: var(--ax-neon-purple); color: white; padding: 10px 14px; text-align: left; font-weight: 600; }
+  td { padding: 9px 14px; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  tr:nth-child(even) td { background: rgba(255,255,255,0.03); }
+
+  /* ── Code ── */
+  .code-block {
+    background: rgba(0,0,0,0.5);
+    border: 1px solid rgba(62,83,229,0.3);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-family: 'Cascadia Code', 'Fira Code', monospace;
+    font-size: clamp(11px, 1.4vw, 14px);
+    line-height: 1.6;
+    color: #e0e0e0;
+    overflow-x: auto;
+    width: 100%; max-width: 900px;
+    margin-top: 12px;
+    white-space: pre;
+  }
+  .code-block .kw { color: var(--ax-neon-purple); }
+  .code-block .str { color: var(--ax-yellow); }
+  .code-block .cmt { color: #6a7a8a; }
+  .code-block .fn { color: var(--ax-slate-petrol); }
+
+  /* ── VS comparison ── */
+  .vs-container {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 16px; align-items: center;
+    width: 100%; max-width: 1000px; margin-top: 16px;
+  }
+  .vs-box {
+    background: rgba(255,255,255,0.05);
+    border-radius: 14px;
+    padding: 22px; text-align: center;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .vs-badge {
+    background: var(--ax-yellow); color: var(--ax-night-blue);
+    font-weight: 800; font-size: 20px;
+    width: 50px; height: 50px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ── Flow / Steps ── */
+  .flow-steps {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; align-items: center;
+    margin-top: 16px; width: 100%; max-width: 1100px;
+  }
+  .flow-step {
+    background: linear-gradient(135deg, rgba(62,83,229,0.2), rgba(0,144,168,0.2));
+    border: 1px solid rgba(62,83,229,0.4);
+    border-radius: 12px;
+    padding: 14px 18px;
+    text-align: center; min-width: 120px;
+  }
+  .flow-step .num { font-size: 22px; font-weight: 800; color: var(--ax-yellow); }
+  .flow-step .label { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+  .flow-arrow { font-size: 24px; color: var(--ax-yellow); font-weight: 700; }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; padding: 0; max-width: 800px; width: 100%; }
+  .checklist li {
+    padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: clamp(13px, 1.6vw, 16px);
+  }
+  .checklist .check { color: #4ade80; font-size: 18px; flex-shrink: 0; }
+  .checklist .cross { color: #f87171; font-size: 18px; flex-shrink: 0; }
+
+  /* ── Slide Themes ── */
+  .slide.dark { background: var(--ax-night-blue); }
+  .slide.gradient { background: linear-gradient(135deg, var(--ax-night-blue) 0%, #1a2a55 50%, var(--ax-sea-blue) 100%); }
+  .slide.purple-bg { background: linear-gradient(135deg, #1a1f4e 0%, var(--ax-neon-purple) 100%); }
+  .slide.black { background: var(--ax-black); }
+  .slide.petrol-bg { background: linear-gradient(135deg, var(--ax-night-blue), var(--ax-sea-blue)); }
+
+  .content { max-width: 1100px; width: 100%; }
+
+  /* ── Badge/Tag ── */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .tag.yellow { background: var(--ax-yellow); color: var(--ax-night-blue); }
+  .tag.purple { background: var(--ax-neon-purple); color: white; }
+  .tag.petrol { background: var(--ax-slate-petrol); color: white; }
+
+  /* ── Mobile ── */
+  @media (max-width: 768px) {
+    .slide { padding: 60px 24px 40px; }
+    .card-grid { grid-template-columns: 1fr; }
+    .vs-container { grid-template-columns: 1fr; }
+    .vs-badge { margin: 0 auto; }
+    .flow-steps { flex-direction: column; }
+    .flow-arrow { transform: rotate(90deg); }
+    .nav-arrow { width: 40px; height: 40px; font-size: 18px; }
+    .nav-arrow.left { left: 8px; }
+    .nav-arrow.right { right: 8px; }
+    .slide-logo { height: 22px; top: 14px; left: 16px; }
+    table { font-size: 11px; }
+    th, td { padding: 6px 8px; }
+  }
+
+  /* ── Swipe hint animation ── */
+  @keyframes swipeHint {
+    0%, 100% { transform: translateX(0); opacity: 0.6; }
+    50% { transform: translateX(-12px); opacity: 1; }
+  }
+  .swipe-hint {
+    position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%);
+    color: rgba(255,255,255,0.4); font-size: 13px;
+    animation: swipeHint 2s infinite;
+    z-index: 50;
+  }
+
+  /* ── Metric highlight ── */
+  .metric { font-size: clamp(32px, 5vw, 64px); font-weight: 900; color: var(--ax-yellow); line-height: 1; }
+  .metric-label { font-size: clamp(12px, 1.5vw, 16px); color: rgba(255,255,255,0.6); margin-top: 4px; }
+  .metrics-row { display: flex; gap: 40px; flex-wrap: wrap; justify-content: center; margin: 20px 0; }
+  .metric-box { text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<button class="nav-arrow left hidden" id="prevBtn" onclick="navigate(-1)">‹</button>
+<button class="nav-arrow right" id="nextBtn" onclick="navigate(1)">›</button>
+<div class="progress-bar" id="progressBar"></div>
+<div class="slide-counter" id="slideCounter"></div>
+
+<div class="slides-wrapper" id="slidesWrapper">
+
+<!-- ═══════════ SLIDE 1: Title ═══════════ -->
+<div class="slide gradient">
+  <div style="text-align:center;">
+    <img src="axelera-logo-white.png" alt="Axelera AI" style="height:50px;margin-bottom:30px;opacity:0.9;">
+    <h1>From <span class="highlight">CUDA</span> to <span class="highlight">Axelera</span></h1>
+    <p class="subtitle">Migrating GPU Inference Pipelines to Edge AI with Voyager SDK</p>
+    <div style="margin-top:30px; display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <span class="tag yellow">EDGE AI</span>
+      <span class="tag purple">VOYAGER SDK</span>
+      <span class="tag petrol">METIS AIPU</span>
+    </div>
+    <p style="margin-top:40px;font-size:13px;color:rgba(255,255,255,0.4);">Swipe or use arrow keys to navigate →</p>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 2: CUDA vs Axelera Overview ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content">
+    <h2>CUDA <span class="highlight">vs</span> Axelera — At a Glance</h2>
+    <div class="vs-container">
+      <div class="vs-box">
+        <h3 style="color:#76b900;">NVIDIA CUDA</h3>
+        <ul style="text-align:left;list-style:none;padding:0;">
+          <li>🖥️ Datacenter & workstation GPUs</li>
+          <li>⚡ Training + inference</li>
+          <li>🔥 150–350W per GPU</li>
+          <li>💰 $500–$40,000 per card</li>
+          <li>🔧 C++/Python + CUDA kernels</li>
+          <li>📦 TensorRT optimization</li>
+          <li>🔒 NVIDIA-only ecosystem</li>
+        </ul>
+      </div>
+      <div class="vs-badge">VS</div>
+      <div class="vs-box" style="border-color:var(--ax-yellow);">
+        <h3 style="color:var(--ax-yellow);">Axelera Metis AIPU</h3>
+        <ul style="text-align:left;list-style:none;padding:0;">
+          <li>📱 Edge devices & embedded</li>
+          <li>⚡ Inference-optimized</li>
+          <li>🔋 5–25W per card</li>
+          <li>💰 $50–$600 per card</li>
+          <li>🔧 YAML pipelines + deploy.py</li>
+          <li>📦 Auto-quantize & compile</li>
+          <li>🔓 Open-source SDK on GitHub</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 3: Performance Comparison ═══════════ -->
+<div class="slide petrol-bg">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Performance per Watt: <span class="highlight">The Real Metric</span></h2>
+    <p class="subtitle">Axelera Metis delivers datacenter-class throughput at edge power budgets</p>
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="metric">214</div>
+        <div class="metric-label">TOPS (single chip)</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric">856</div>
+        <div class="metric-label">TOPS (4-chip PCIe)</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric">3,200</div>
+        <div class="metric-label">FPS ResNet-50</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric">834</div>
+        <div class="metric-label">FPS YOLOv8n</div>
+      </div>
+    </div>
+    <table style="margin:16px auto 0;">
+      <tr><th>Model</th><th>Metis PCIe FPS</th><th>Accuracy Loss</th><th>Form Factor</th></tr>
+      <tr><td>YOLOv8n (640×640)</td><td style="color:var(--ax-yellow);font-weight:700;">834</td><td>1.18%</td><td>M.2 / PCIe</td></tr>
+      <tr><td>YOLOv8s (640×640)</td><td style="color:var(--ax-yellow);font-weight:700;">643</td><td>0.93%</td><td>M.2 / PCIe</td></tr>
+      <tr><td>ResNet-50 (224×224)</td><td style="color:var(--ax-yellow);font-weight:700;">1,946</td><td>0.18%</td><td>M.2 / PCIe</td></tr>
+      <tr><td>EfficientNet-B0</td><td style="color:var(--ax-yellow);font-weight:700;">1,429</td><td>1.12%</td><td>M.2 / PCIe</td></tr>
+      <tr><td>MobileNetV2</td><td style="color:var(--ax-yellow);font-weight:700;">3,670</td><td>1.50%</td><td>M.2 / PCIe</td></tr>
+      <tr><td>YOLO11n (640×640)</td><td style="color:var(--ax-yellow);font-weight:700;">759</td><td>0.71%</td><td>M.2 / PCIe</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 4: When to Migrate ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content">
+    <h2>When to Migrate? <span class="highlight">Decision Matrix</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:1000px;margin-top:16px;">
+      <div>
+        <h3 style="color:#4ade80;">✅ Migrate When:</h3>
+        <ul class="checklist">
+          <li><span class="check">✓</span> Deploying CV inference at the edge</li>
+          <li><span class="check">✓</span> Scaling multi-camera analytics (24+ streams)</li>
+          <li><span class="check">✓</span> Power budget < 25W per inference node</li>
+          <li><span class="check">✓</span> Shipping hundreds/thousands of devices (BOM cost)</li>
+          <li><span class="check">✓</span> Models are YOLO, ResNet, MobileNet, EfficientNet, etc.</li>
+          <li><span class="check">✓</span> Simplifying DevOps (no CUDA driver management)</li>
+          <li><span class="check">✓</span> Need M.2 / fanless / embedded form factor</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color:#f87171;">❌ Stay on CUDA When:</h3>
+        <ul class="checklist">
+          <li><span class="cross">✗</span> Training models (Axelera = inference only)</li>
+          <li><span class="cross">✗</span> Models > 16 GB (need A100/H100 VRAM)</li>
+          <li><span class="cross">✗</span> Datacenter-scale LLMs (70B+ params)</li>
+          <li><span class="cross">✗</span> Heavy custom CUDA kernels throughout</li>
+          <li><span class="cross">✗</span> Deep TensorRT/cuDNN/NCCL dependencies</li>
+          <li><span class="cross">✗</span> R&D / rapid prototyping phase</li>
+          <li><span class="cross">✗</span> Generative AI (diffusion, large transformers)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 5: Advantages of Upgrading ═══════════ -->
+<div class="slide gradient">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Advantages of <span class="highlight">Upgrading to Axelera</span></h2>
+    <div class="card-grid" style="margin-top:20px;">
+      <div class="card">
+        <span class="icon">🔋</span>
+        <h3>10-50× Better Perf/Watt</h3>
+        <p>214 TOPS at ~15W vs 300W for datacenter GPUs. Run AI without cooling infrastructure.</p>
+      </div>
+      <div class="card">
+        <span class="icon">💰</span>
+        <h3>10× Lower BOM Cost</h3>
+        <p>M.2 card at ~$150 vs $2,000+ GPU. Massive savings at volume deployment.</p>
+      </div>
+      <div class="card">
+        <span class="icon">📐</span>
+        <h3>Edge Form Factors</h3>
+        <p>M.2, PCIe half-height, SBC. Fits in cameras, gateways, industrial equipment.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🧑‍💻</span>
+        <h3>YAML, Not CUDA</h3>
+        <p>Declare pipelines in YAML. No memory management, no kernel launches, no stream sync.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🔄</span>
+        <h3>Auto-Quantization</h3>
+        <p>INT8 quantization handled by compiler. No TensorRT calibrator or manual tuning needed.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🔓</span>
+        <h3>Open Source SDK</h3>
+        <p>Voyager SDK on GitHub. No vendor lock-in. GStreamer-based, API-compatible with standards.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 6: Migration Process Overview ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>The Migration Process — <span class="highlight">8 Steps</span></h2>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="num">1</div><div class="label">Analyze<br>CUDA Code</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">2</div><div class="label">Export<br>to ONNX</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">3</div><div class="label">Check ONNX<br>Op Compat</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">4</div><div class="label">Generate<br>YAML Pipeline</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">5</div><div class="label">Configure<br>Model YAML</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">6</div><div class="label">Deploy &<br>Compile</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">7</div><div class="label">Benchmark<br>& Validate</div></div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step"><div class="num">8</div><div class="label">Integrate<br>& Ship</div></div>
+    </div>
+    <p style="margin-top:24px;color:rgba(255,255,255,0.6);font-size:14px;">Each step is detailed in the following slides</p>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 7: Step 1 & 2 — ONNX Export ═══════════ -->
+<div class="slide purple-bg">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content">
+    <span class="tag yellow">STEPS 1–2</span>
+    <h2 style="margin-top:10px;">Analyze & Export to <span class="highlight">ONNX</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px;">
+      <div>
+        <h3>PyTorch Export</h3>
+        <div class="code-block"><span class="kw">import</span> torch
+
+model.eval()
+dummy = torch.randn(<span class="str">1, 3, 640, 640</span>)
+torch.onnx.export(
+    model, dummy, <span class="str">"model.onnx"</span>,
+    opset_version=<span class="str">17</span>,  <span class="cmt"># Axelera recommended</span>
+    input_names=[<span class="str">"images"</span>],
+    output_names=[<span class="str">"output"</span>]
+)</div>
+      </div>
+      <div>
+        <h3>Ultralytics YOLO</h3>
+        <div class="code-block"><span class="cmt"># One command export</span>
+yolo export model=best.pt \
+     format=onnx opset=17
+
+<span class="cmt"># Then simplify (recommended)</span>
+pip install onnxsim
+onnxsim model.onnx model_sim.onnx</div>
+        <h3 style="margin-top:16px;">Verify Operators</h3>
+        <div class="code-block"><span class="kw">import</span> onnx
+m = onnx.load(<span class="str">"model.onnx"</span>)
+ops = sorted({n.op_type <span class="kw">for</span> n <span class="kw">in</span> m.graph.node})
+print(<span class="str">"Operators:"</span>, ops)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 8: Step 3 — ONNX Op Compatibility ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <span class="tag yellow">STEP 3</span>
+    <h2 style="margin-top:10px;">ONNX Operator <span class="highlight">Compatibility</span></h2>
+    <p class="subtitle">AIPU-accelerated operators run on hardware • Others auto-fallback to CPU</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:900px;margin:16px auto 0;text-align:left;">
+      <div>
+        <h3 style="color:#4ade80;">✅ Fully Supported</h3>
+        <p>BatchNormalization, GlobalAveragePool, GlobalMaxPool, HardSwish, LeakyRelu, Relu, Sigmoid, Tanh</p>
+        <h3 style="margin-top:16px;color:var(--ax-yellow);">⚡ Constrained (check rules)</h3>
+        <p>Add, AveragePool, Clip, Concat, Conv, ConvTranspose, Flatten, Gemm, HardSigmoid, MatMul, MaxPool, Mul, PRelu, Pad, Reshape, Resize, Selu, Slice, Softmax, Split, Squeeze, Sub, Transpose</p>
+      </div>
+      <div>
+        <h3 style="color:var(--ax-slate-petrol);">🔄 Auto CPU Fallback</h3>
+        <p>Any unsupported operator is automatically extracted into <strong>preamble.onnx</strong> or <strong>postamble.onnx</strong> and runs on the host CPU — no manual work required!</p>
+        <div class="code-block" style="margin-top:12px;font-size:12px;"><span class="cmt"># Compiler handles this automatically:</span>
+Model ONNX
+  → preamble.onnx  <span class="cmt"># CPU pre-ops</span>
+  → model.axm      <span class="cmt"># AIPU core</span>
+  → postamble.onnx <span class="cmt"># CPU post-ops</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 9: Step 4 — YAML Pipeline ═══════════ -->
+<div class="slide gradient">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content">
+    <span class="tag yellow">STEP 4</span>
+    <h2 style="margin-top:10px;">CUDA Preprocessing → <span class="highlight">YAML Pipeline</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px;">
+      <div>
+        <h3>Mapping Table</h3>
+        <table>
+          <tr><th>CUDA / PyTorch</th><th>Voyager YAML</th></tr>
+          <tr><td><code>transforms.Resize()</code></td><td><code>resize: {w, h}</code></td></tr>
+          <tr><td><code>transforms.CenterCrop()</code></td><td><code>centercrop: {w, h}</code></td></tr>
+          <tr><td>YOLO letterbox</td><td><code>letterbox: {w, h}</code></td></tr>
+          <tr><td><code>transforms.ToTensor()</code></td><td><code>torch-totensor:</code></td></tr>
+          <tr><td><code>transforms.Normalize()</code></td><td><code>normalize: {mean, std}</code></td></tr>
+          <tr><td><code>img/127.5 - 1</code></td><td><code>linear-scaling:</code></td></tr>
+          <tr><td><code>cv2.cvtColor(BGR2RGB)</code></td><td><code>convert-color:</code></td></tr>
+          <tr><td>Custom CUDA kernel</td><td>AxOperator plugin</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Example: YOLO Pipeline</h3>
+        <div class="code-block" style="font-size:12px;"><span class="kw">pipeline:</span>
+  - detections:
+      model_name: yolov8n
+      input:
+        type: image
+      <span class="fn">preprocess:</span>
+        - letterbox:
+            height: <span class="str">640</span>
+            width: <span class="str">640</span>
+            scaleup: true
+        - torch-totensor:
+      <span class="fn">inference:</span>
+        handle_all: <span class="str">true</span>
+      <span class="fn">postprocess:</span>
+        - decodeyolo:
+            conf_threshold: <span class="str">0.25</span>
+            nms_iou_threshold: <span class="str">0.45</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 10: Step 5&6 — Deploy & Compile ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content">
+    <span class="tag yellow">STEPS 5–6</span>
+    <h2 style="margin-top:10px;">Configure & <span class="highlight">Deploy</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px;">
+      <div>
+        <h3>Model Configuration</h3>
+        <div class="code-block" style="font-size:12px;"><span class="kw">models:</span>
+  my-model:
+    class: <span class="str">AxONNXModel</span>
+    class_path: <span class="str">$AXELERA_FRAMEWORK/
+      ax_models/base_onnx.py</span>
+    weight_path: <span class="str">/path/to/model.onnx</span>
+    task_category: <span class="str">ObjectDetection</span>
+    input_tensor_layout: <span class="str">NCHW</span>
+    input_tensor_shape: <span class="str">[1, 3, 640, 640]</span>
+    input_color_format: <span class="str">RGB</span>
+    num_classes: <span class="str">80</span>
+    extra_kwargs:
+      compiler_config_file: <span class="str">yolov8s.toml</span></div>
+      </div>
+      <div>
+        <h3>Deploy Commands</h3>
+        <div class="code-block" style="font-size:12px;"><span class="cmt"># Compile for Metis AIPU</span>
+./deploy.py my-model.yaml
+
+<span class="cmt"># Better accuracy (more cal images)</span>
+./deploy.py my-model.yaml \
+  --num-cal-images=400
+
+<span class="cmt"># Multi-core deployment</span>
+./deploy.py my-model.yaml \
+  --aipu-cores 4</div>
+        <h3 style="margin-top:14px;">Output Artifacts</h3>
+        <div class="code-block" style="font-size:11px;">build/my-model/quantized/
+├── model.axm         <span class="cmt"># AIPU binary</span>
+├── preamble.onnx     <span class="cmt"># CPU pre-ops</span>
+├── postamble.onnx    <span class="cmt"># CPU post-ops</span>
+├── manifest.json     <span class="cmt"># Metadata</span>
+└── quantization_params.json</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 11: Tools & Compilers ═══════════ -->
+<div class="slide petrol-bg">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Tools, Compilers & <span class="highlight">Infrastructure</span></h2>
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+      <div class="card">
+        <span class="icon">⚙️</span>
+        <h3>deploy.py</h3>
+        <p>One-command compilation. Quantizes FP32→INT8, compiles for AIPU, generates pipeline.</p>
+      </div>
+      <div class="card">
+        <span class="icon">▶️</span>
+        <h3>inference.py</h3>
+        <p>Run inference on cameras, videos, or datasets. Benchmark FPS and measure accuracy.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🔧</span>
+        <h3>axdevice</h3>
+        <p>List and configure all connected Metis boards. Firmware updates, diagnostics.</p>
+      </div>
+      <div class="card">
+        <span class="icon">📊</span>
+        <h3>axrunmodel</h3>
+        <p>Low-level model runner. DMA buffers, double buffering, multi-core dispatch.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🧮</span>
+        <h3>TVM Compiler</h3>
+        <p>Apache TVM-based ML compiler. Auto-quantization with proprietary algorithms.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🎬</span>
+        <h3>GStreamer</h3>
+        <p>Production pipeline framework. Hardware-accelerated video decode + AI inference.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🐍</span>
+        <h3>Pipeline Builder</h3>
+        <p>New Python API (v1.6). Composable operators: op.seq(), op.par(), op.foreach().</p>
+      </div>
+      <div class="card">
+        <span class="icon">🏪</span>
+        <h3>Model Zoo</h3>
+        <p>90+ pre-tested models with YAML configs. Classification, detection, segmentation, pose, LLM.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 12: Step 7 — Benchmarking ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content">
+    <span class="tag yellow">STEP 7</span>
+    <h2 style="margin-top:10px;">Benchmarking & <span class="highlight">Validation</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px;">
+      <div>
+        <h3>Benchmark Commands</h3>
+        <div class="code-block" style="font-size:12px;"><span class="cmt"># Live camera inference</span>
+./inference.py my-model usb:0
+
+<span class="cmt"># FPS benchmark (production pipe)</span>
+./inference.py my-model \
+  media/test.mp4 \
+  --pipe=gst --no-display
+
+<span class="cmt"># Accuracy evaluation</span>
+./inference.py my-model dataset \
+  --pipe=torch-aipu --no-display
+
+<span class="cmt"># Compare pure PyTorch vs AIPU</span>
+./inference.py my-model dataset \
+  --pipe=torch --no-display</div>
+      </div>
+      <div>
+        <h3>Pipeline Modes</h3>
+        <table>
+          <tr><th>Mode</th><th>Use Case</th></tr>
+          <tr><td><code>--pipe=torch</code></td><td>Pure CPU baseline (debug)</td></tr>
+          <tr><td><code>--pipe=torch-aipu</code></td><td>AIPU + PyTorch pre/post (accuracy)</td></tr>
+          <tr><td><code>--pipe=gst</code></td><td>Full GStreamer (production FPS)</td></tr>
+        </table>
+        <h3 style="margin-top:16px;">Accuracy Targets</h3>
+        <ul class="checklist">
+          <li><span class="check">✓</span> Quantization loss < 2% mAP typical</li>
+          <li><span class="check">✓</span> ResNet-50: only 0.18% loss</li>
+          <li><span class="check">✓</span> YOLOv8s: only 0.93% loss</li>
+          <li><span class="check">✓</span> Increase --num-cal-images if higher</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 13: Migration with Amp ═══════════ -->
+<div class="slide purple-bg">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Migrating with <span class="highlight">Amp</span> AI Agent</h2>
+    <p class="subtitle">Amp has a built-in <code>cuda-to-axelera-migration</code> skill</p>
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));">
+      <div class="card">
+        <span class="icon">🔍</span>
+        <h3>Step 1: Analyze</h3>
+        <p>"Amp, analyze my CUDA inference code and suggest Axelera migration path"</p>
+      </div>
+      <div class="card">
+        <span class="icon">📤</span>
+        <h3>Step 2: Export</h3>
+        <p>Amp writes torch.onnx.export() code, verifies operators, simplifies with onnxsim</p>
+      </div>
+      <div class="card">
+        <span class="icon">📝</span>
+        <h3>Step 3: Generate YAML</h3>
+        <p>Amp generates complete Voyager YAML pipeline from your CUDA preprocessing code</p>
+      </div>
+      <div class="card">
+        <span class="icon">🧪</span>
+        <h3>Step 4: Test & Debug</h3>
+        <p>Amp generates benchmark scripts, compares accuracy, troubleshoots compilation errors</p>
+      </div>
+    </div>
+    <div class="code-block" style="max-width:700px;margin:20px auto 0;text-align:left;font-size:13px;"><span class="cmt"># Just tell Amp what you need:</span>
+<span class="str">"Migrate my YOLOv8 CUDA inference pipeline
+ to Axelera Voyager SDK. My model is at
+ /models/yolov8n_custom.pt trained on 5 classes."</span>
+
+<span class="cmt"># Amp will:</span>
+<span class="cmt"># 1. Export to ONNX with correct opset</span>
+<span class="cmt"># 2. Check operator compatibility</span>
+<span class="cmt"># 3. Generate complete YAML pipeline</span>
+<span class="cmt"># 4. Write deploy & benchmark commands</span></div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 14: Testing & QA ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content">
+    <h2>Testing & <span class="highlight">QA Verification</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:12px;">
+      <div>
+        <h3>Verification Layers</h3>
+        <table>
+          <tr><th>Layer</th><th>Test</th><th>Pass Criteria</th></tr>
+          <tr><td>ONNX Export</td><td>onnxruntime inference</td><td>Matches PyTorch output</td></tr>
+          <tr><td>Compilation</td><td>deploy.py exit 0</td><td>No errors</td></tr>
+          <tr><td>Quantization</td><td>torch-aipu vs torch</td><td>&lt; 2% accuracy loss</td></tr>
+          <tr><td>Pipeline</td><td>gst end-to-end</td><td>Correct detections</td></tr>
+          <tr><td>Performance</td><td>FPS benchmark</td><td>Meets target FPS</td></tr>
+          <tr><td>Integration</td><td>App API test</td><td>Output format correct</td></tr>
+          <tr><td>Thermal</td><td>Sustained load</td><td>Within TDP</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>QA Checklist</h3>
+        <ul class="checklist">
+          <li><span class="check">✓</span> ONNX loads in onnxruntime (CPU baseline)</li>
+          <li><span class="check">✓</span> deploy.py completes without errors</li>
+          <li><span class="check">✓</span> Accuracy within 2% of FP32 baseline</li>
+          <li><span class="check">✓</span> FPS meets target on Metis hardware</li>
+          <li><span class="check">✓</span> Preprocess YAML matches training exactly</li>
+          <li><span class="check">✓</span> Multi-stream scales linearly</li>
+          <li><span class="check">✓</span> Thermal/power within edge budget</li>
+          <li><span class="check">✓</span> API output matches app expectations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 15: Troubleshooting ═══════════ -->
+<div class="slide gradient">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2><span class="highlight">Troubleshooting</span> Common Issues</h2>
+    <table style="margin:16px auto 0;">
+      <tr><th>Problem</th><th>Cause</th><th>Solution</th></tr>
+      <tr><td>Accuracy loss &gt; 2%</td><td>Insufficient calibration</td><td><code>--num-cal-images=400</code>, try <code>per_tensor_histogram</code></td></tr>
+      <tr><td>Unsupported ONNX op</td><td>Op not on AIPU</td><td>Auto CPU fallback. Simplify with <code>onnxsim</code></td></tr>
+      <tr><td>Model too large</td><td>Exceeds card memory</td><td>M.2=1GB, M.2 Max=16GB, PCIe=4-16GB</td></tr>
+      <tr><td>Low FPS</td><td>Wrong pipeline mode</td><td>Use <code>--pipe=gst</code>, <code>handle_all: false</code>, multi-core</td></tr>
+      <tr><td>Preprocessing mismatch</td><td>YAML ≠ training code</td><td>Verify mean/std, resize mode, color order exactly</td></tr>
+      <tr><td>Custom CUDA kernels</td><td>No direct equivalent</td><td>Reimplement as AxTransform C++ plugin</td></tr>
+      <tr><td>GStreamer pipeline crash</td><td>Plugin path or format</td><td>Check <code>GST_PLUGIN_PATH</code>, test with sample video first</td></tr>
+      <tr><td>No device found</td><td>Hardware/driver issue</td><td>Run <code>axdevice list</code>, check PCIe seating, update firmware</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 16: Hardware Options ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Hardware <span class="highlight">Options</span></h2>
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));">
+      <div class="card" style="border-color:var(--ax-yellow);">
+        <span class="icon">💳</span>
+        <h3>M.2 Card</h3>
+        <p><strong>214 TOPS</strong> • 1 GB DRAM<br>Smallest form factor. Fits any M.2 socket. Perfect for cameras, IoT gateways.</p>
+      </div>
+      <div class="card" style="border-color:var(--ax-neon-purple);">
+        <span class="icon">💳</span>
+        <h3>M.2 Max Card</h3>
+        <p><strong>214 TOPS</strong> • up to 16 GB<br>LLM/VLM capable. Multi-camera, cascade models. Secure boot.</p>
+      </div>
+      <div class="card" style="border-color:var(--ax-slate-petrol);">
+        <span class="icon">🖥️</span>
+        <h3>PCIe Card (1×)</h3>
+        <p><strong>214 TOPS</strong> • Up to 3,200 FPS ResNet-50<br>For servers, workstations, eval kits.</p>
+      </div>
+      <div class="card" style="border-color:var(--ax-shell-green);">
+        <span class="icon">🖥️</span>
+        <h3>PCIe Card (4×)</h3>
+        <p><strong>856 TOPS</strong> • 12,800 FPS ResNet-50<br>Maximum performance. 4 Metis AIPUs on one card.</p>
+      </div>
+      <div class="card">
+        <span class="icon">📟</span>
+        <h3>Compute Board</h3>
+        <p>Metis AIPU + ARM RK3588<br>Complete SBC. USB, HDMI, LAN, GPIO. Ready to deploy.</p>
+      </div>
+      <div class="card">
+        <span class="icon">🚀</span>
+        <h3>Europa AIPU</h3>
+        <p><strong>629 TOPS</strong> • Next-gen<br>Edge servers, robotics, autonomous systems. Early access.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 17: Application Integration ═══════════ -->
+<div class="slide petrol-bg">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Application <span class="highlight">Integration APIs</span></h2>
+    <p class="subtitle">Choose the right abstraction level for your application</p>
+    <table style="margin:16px auto 0;max-width:900px;">
+      <tr><th>API Level</th><th>Language</th><th>Use Case</th><th>Complexity</th></tr>
+      <tr><td><strong>InferenceStream</strong></td><td>Python</td><td>Read pipeline results in your app</td><td style="color:#4ade80;">Low</td></tr>
+      <tr><td><strong>Pipeline Builder</strong></td><td>Python</td><td>Compose pipelines as Python expressions</td><td style="color:#4ade80;">Low</td></tr>
+      <tr><td><strong>AxInferenceNet</strong></td><td>C/C++</td><td>Integrate inference into C++ apps</td><td style="color:var(--ax-yellow);">Medium</td></tr>
+      <tr><td><strong>AxRuntime</strong></td><td>Python/C++</td><td>Manual pipeline construction</td><td style="color:#f87171;">High</td></tr>
+      <tr><td><strong>GStreamer Plugins</strong></td><td>C/C++</td><td>Custom video pipeline elements</td><td style="color:#f87171;">High</td></tr>
+    </table>
+    <div class="code-block" style="max-width:700px;margin:20px auto 0;text-align:left;font-size:12px;"><span class="cmt"># Pipeline Builder API (v1.6) — Python native</span>
+<span class="kw">from</span> axelera.pipeline <span class="kw">import</span> op
+
+pipeline = op.seq(
+    op.load(<span class="str">"yolov8n.axm"</span>),
+    op.tracker(algo=<span class="str">"bytetrack"</span>),
+    op.nms(iou=<span class="str">0.45</span>)
+)
+<span class="kw">for</span> result <span class="kw">in</span> pipeline.run(source=<span class="str">"usb:0"</span>):
+    <span class="kw">for</span> obj <span class="kw">in</span> result.objects:
+        print(obj.label, obj.confidence)</div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 18: Summary ═══════════ -->
+<div class="slide gradient">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Migration <span class="highlight">Summary</span></h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;max-width:900px;margin:20px auto 0;">
+      <div class="card" style="text-align:center;border-color:var(--ax-yellow);">
+        <div class="metric" style="font-size:48px;">1</div>
+        <h3>Export</h3>
+        <p>PyTorch → ONNX<br>One command</p>
+      </div>
+      <div class="card" style="text-align:center;border-color:var(--ax-neon-purple);">
+        <div class="metric" style="font-size:48px;">2</div>
+        <h3>Deploy</h3>
+        <p>YAML + deploy.py<br>Auto-quantize</p>
+      </div>
+      <div class="card" style="text-align:center;border-color:var(--ax-slate-petrol);">
+        <div class="metric" style="font-size:48px;">3</div>
+        <h3>Run</h3>
+        <p>inference.py<br>Production ready</p>
+      </div>
+    </div>
+    <div style="margin-top:30px;padding:20px 30px;background:rgba(244,190,24,0.1);border:1px solid var(--ax-yellow);border-radius:14px;max-width:700px;display:inline-block;">
+      <h3 style="color:var(--ax-yellow);margin-bottom:8px;">Bottom Line</h3>
+      <p>If your workload is <strong>computer vision inference at the edge</strong> — Axelera delivers <strong>10-50× better perf/watt</strong>, <strong>10× lower cost</strong>, and <strong>dramatically simpler deployment</strong> than CUDA GPUs.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 19: ESL — Skill Creator & Migration Experts ═══════════ -->
+<div class="slide black">
+  <div class="content" style="text-align:center;">
+    <img src="ESL-AI-LOGOS.png" alt="ESL — Engineering Software Lab" style="max-width:420px;width:80%;margin-bottom:24px;mix-blend-mode:screen;">
+    <h2 style="margin-bottom:6px;">Built by <span class="highlight">ESL</span> — Engineering Software Lab</h2>
+    <p class="subtitle" style="max-width:700px;margin:0 auto 24px;">The <code style="background:rgba(62,83,229,0.25);padding:2px 8px;border-radius:6px;">cuda-to-axelera-migration</code> Amp skill was envisioned and developed by ESL to make CUDA → Axelera migration seamless and repeatable.</p>
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));max-width:900px;margin:0 auto;">
+      <div class="card" style="border-color:var(--ax-yellow);">
+        <span class="icon">🧠</span>
+        <h3>Consultancy & Expertise</h3>
+        <p>ESL provides hands-on consulting for CUDA-to-edge migration — architecture review, model optimization, and production deployment on Axelera hardware.</p>
+      </div>
+      <div class="card" style="border-color:var(--ax-neon-purple);">
+        <span class="icon">🛠️</span>
+        <h3>Know-How & Tooling</h3>
+        <p>Deep knowledge of ONNX export, Voyager SDK pipelines, quantization tuning, and GStreamer integration — packaged into reusable Amp skills.</p>
+      </div>
+      <div class="card" style="border-color:var(--ax-slate-petrol);">
+        <span class="icon">🚀</span>
+        <h3>End-to-End Migration</h3>
+        <p>From analyzing your CUDA codebase to benchmarking on Metis hardware — ESL guides every step so your team ships faster with confidence.</p>
+      </div>
+    </div>
+    <a href="https://eswlab.com/products/amp/amp/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;margin-top:32px;padding:14px 32px;background:var(--ax-yellow);color:var(--ax-night-blue);font-weight:700;font-size:16px;border-radius:12px;text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 4px 20px rgba(244,190,24,0.3);" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 28px rgba(244,190,24,0.45)';" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 20px rgba(244,190,24,0.3)';">
+      Visit ESL →
+    </a>
+    <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,0.45);">eswlab.com/products/amp/amp/</p>
+  </div>
+</div>
+
+<!-- ═══════════ SLIDE 20: Resources & Next Steps ═══════════ -->
+<div class="slide dark">
+  <img src="axelera-logo-white.png" alt="" class="slide-logo">
+  <div class="content" style="text-align:center;">
+    <h2>Resources & <span class="highlight">Next Steps</span></h2>
+    <div class="card-grid" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));">
+      <div class="card">
+        <span class="icon">📦</span>
+        <h3>Voyager SDK</h3>
+        <p><a href="https://github.com/axelera-ai-hub/voyager-sdk" style="color:var(--ax-yellow);">github.com/axelera-ai-hub/voyager-sdk</a></p>
+      </div>
+      <div class="card">
+        <span class="icon">🏪</span>
+        <h3>Order Hardware</h3>
+        <p><a href="https://store.axelera.ai" style="color:var(--ax-yellow);">store.axelera.ai</a></p>
+      </div>
+      <div class="card">
+        <span class="icon">💬</span>
+        <h3>Community</h3>
+        <p><a href="https://community.axelera.ai" style="color:var(--ax-yellow);">community.axelera.ai</a></p>
+      </div>
+      <div class="card" style="border-color:var(--ax-yellow);background:rgba(244,190,24,0.08);">
+        <span class="icon">🤖</span>
+        <h3>Migrate with ESL & Amp</h3>
+        <p>Expert-guided migration with the <code>cuda-to-axelera-migration</code> skill built by ESL</p>
+        <a href="https://eswlab.com/products/amp/amp/" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;padding:8px 18px;background:var(--ax-yellow);color:var(--ax-night-blue);font-weight:700;font-size:13px;border-radius:8px;text-decoration:none;">ESL → eswlab.com</a>
+      </div>
+    </div>
+    <div style="margin-top:40px;display:flex;align-items:center;justify-content:center;gap:30px;flex-wrap:wrap;">
+      <img src="axelera-logo-white.png" alt="Axelera AI" style="height:36px;opacity:0.6;">
+      <span style="color:rgba(255,255,255,0.2);font-size:24px;">×</span>
+      <img src="ESL-AI-LOGOS.png" alt="ESL" style="height:50px;mix-blend-mode:screen;opacity:0.8;">
+    </div>
+    <p style="margin-top:14px;color:rgba(255,255,255,0.4);font-size:13px;">© 2026 Axelera AI & ESL Engineering Software Lab</p>
+  </div>
+</div>
+
+</div><!-- end slides-wrapper -->
+
+<div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+
+<script>
+  let currentSlide = 0;
+  const wrapper = document.getElementById('slidesWrapper');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const progressBar = document.getElementById('progressBar');
+  const counter = document.getElementById('slideCounter');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const swipeHint = document.getElementById('swipeHint');
+
+  function goToSlide(n) {
+    currentSlide = Math.max(0, Math.min(n, total - 1));
+    wrapper.style.transform = `translateX(-${currentSlide * 100}vw)`;
+    progressBar.style.width = `${((currentSlide + 1) / total) * 100}%`;
+    counter.textContent = `${currentSlide + 1} / ${total}`;
+    prevBtn.classList.toggle('hidden', currentSlide === 0);
+    nextBtn.classList.toggle('hidden', currentSlide === total - 1);
+    if (currentSlide > 0) swipeHint.style.display = 'none';
+  }
+
+  function navigate(dir) { goToSlide(currentSlide + dir); }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'Home') { e.preventDefault(); goToSlide(0); }
+    if (e.key === 'End') { e.preventDefault(); goToSlide(total - 1); }
+  });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0, swiping = false;
+  wrapper.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    swiping = true;
+  }, { passive: true });
+
+  wrapper.addEventListener('touchend', e => {
+    if (!swiping) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      navigate(dx < 0 ? 1 : -1);
+    }
+    swiping = false;
+  }, { passive: true });
+
+  // Mouse drag (desktop)
+  let mouseDown = false, mouseStartX = 0;
+  wrapper.addEventListener('mousedown', e => { mouseDown = true; mouseStartX = e.clientX; });
+  document.addEventListener('mouseup', e => {
+    if (!mouseDown) return;
+    const dx = e.clientX - mouseStartX;
+    if (Math.abs(dx) > 80) navigate(dx < 0 ? 1 : -1);
+    mouseDown = false;
+  });
+
+  goToSlide(0);
+</script>
+</body>
+</html>
