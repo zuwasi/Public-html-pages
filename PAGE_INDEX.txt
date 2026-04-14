@@ -58,13 +58,16 @@ Last updated: 2026-04-14
 16. ai_agent_eval_presentation.html
    https://zuwasi.github.io/Public-html-pages/ai_agent_eval_presentation.html
 
-17. nono-ampcode-presentation.html
+17. amp-vs-token-optimizer-presentation.html
+   https://zuwasi.github.io/Public-html-pages/amp-vs-token-optimizer-presentation.html
+
+18. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-18. static-code-analysis-2026.html
+19. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-19. why-amp-doesnt-need-node9-proxy.html
+20. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
 ──────────────────────────────────────────────────────────────
