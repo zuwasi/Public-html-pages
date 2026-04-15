@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-04-14
+Last updated: 2026-04-15
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -61,16 +61,19 @@ Last updated: 2026-04-14
 17. amp-vs-token-optimizer-presentation.html
    https://zuwasi.github.io/Public-html-pages/amp-vs-token-optimizer-presentation.html
 
-18. cuda-to-axelera-migration.html
+18. ampcode-vs-claudecode-presentation.html
+   https://zuwasi.github.io/Public-html-pages/ampcode-vs-claudecode-presentation.html
+
+19. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-19. nono-ampcode-presentation.html
+20. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-20. static-code-analysis-2026.html
+21. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-21. why-amp-doesnt-need-node9-proxy.html
+22. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
 ──────────────────────────────────────────────────────────────
