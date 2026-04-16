@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SBOMator vs Finite State — Tool Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { overflow: hidden; height: 100%; font-family: 'Inter', system-ui, -apple-system, sans-serif; background: #0a0e1a; color: #e2e8f0; }
+
+  /* Password overlay */
+  .pw-overlay { position:fixed; inset:0; z-index:9999; background:#0a0e1a; display:flex; align-items:center; justify-content:center; }
+  .pw-overlay.hidden { display:none; }
+  .pw-box { text-align:center; }
+  .pw-box h2 { font-size:28px; font-weight:700; color:#e2e8f0; margin-bottom:8px; }
+  .pw-box p { color:#94a3b8; margin-bottom:20px; font-size:14px; }
+  .pw-box input { width:220px; padding:12px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:#e2e8f0; font-size:16px; text-align:center; outline:none; font-family:inherit; letter-spacing:4px; }
+  .pw-box input:focus { border-color:#22d3ee; box-shadow:0 0 0 3px rgba(34,211,238,0.15); }
+  .pw-box button { display:block; width:220px; margin:16px auto 0; padding:12px; border-radius:10px; border:none; background:linear-gradient(135deg,#0891b2,#22d3ee); color:#0a0e1a; font-weight:700; font-size:15px; cursor:pointer; font-family:inherit; }
+  .pw-box button:hover { opacity:0.9; }
+  .pw-error { color:#f87171; font-size:13px; margin-top:10px; min-height:20px; }
+
+  .slides-container { display: flex; height: 100vh; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+  .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: clamp(20px, 4vw, 60px); position: relative; overflow-y: auto; }
+
+  /* Slide Backgrounds */
+  .slide-title { background: linear-gradient(135deg, #0a0e1a 0%, #1a1f3a 50%, #0d1025 100%); }
+  .slide-compare { background: linear-gradient(160deg, #0c1020 0%, #111833 100%); }
+  .slide-sbomator { background: linear-gradient(160deg, #0a1628 0%, #0f2035 100%); }
+  .slide-finitestate { background: linear-gradient(160deg, #1a0f20 0%, #1f1535 100%); }
+  .slide-summary { background: linear-gradient(135deg, #0a1628 0%, #151d3a 50%, #0d1025 100%); }
+
+  /* Typography */
+  h1 { font-size: clamp(28px, 4vw, 56px); font-weight: 800; line-height: 1.1; margin-bottom: 16px; }
+  h2 { font-size: clamp(22px, 3vw, 40px); font-weight: 700; line-height: 1.2; margin-bottom: 12px; }
+  h3 { font-size: clamp(16px, 2vw, 24px); font-weight: 600; margin-bottom: 8px; }
+  p, li { font-size: clamp(13px, 1.4vw, 18px); line-height: 1.6; }
+  .subtitle { font-size: clamp(14px, 1.6vw, 22px); color: #94a3b8; font-weight: 400; margin-bottom: 24px; }
+  .label { font-size: clamp(11px, 1vw, 13px); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px; }
+
+  /* Colors */
+  .text-cyan { color: #22d3ee; }
+  .text-purple { color: #a78bfa; }
+  .text-green { color: #4ade80; }
+  .text-amber { color: #fbbf24; }
+  .text-red { color: #f87171; }
+  .text-slate { color: #94a3b8; }
+  .text-white { color: #f1f5f9; }
+
+  /* Cards */
+  .card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: clamp(16px, 2vw, 28px); }
+  .card-cyan { border-left: 4px solid #22d3ee; }
+  .card-purple { border-left: 4px solid #a78bfa; }
+  .card-green { border-left: 4px solid #4ade80; }
+  .card-amber { border-left: 4px solid #fbbf24; }
+
+  /* Tables */
+  .compare-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: clamp(11px, 1.2vw, 15px); }
+  .compare-table th { background: rgba(255,255,255,0.06); padding: clamp(8px, 1vw, 14px) clamp(10px, 1.2vw, 18px); text-align: left; font-weight: 600; border-bottom: 2px solid rgba(255,255,255,0.1); }
+  .compare-table td { padding: clamp(6px, 0.8vw, 12px) clamp(10px, 1.2vw, 18px); border-bottom: 1px solid rgba(255,255,255,0.05); vertical-align: middle; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.03); }
+  .compare-table th:first-child { border-radius: 10px 0 0 0; }
+  .compare-table th:last-child { border-radius: 0 10px 0 0; }
+  .col-feature { width: 36%; }
+  .col-tool { width: 27%; text-align: center; }
+  .col-winner { width: 10%; text-align: center; }
+
+  /* Status badges */
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: clamp(10px, 0.9vw, 13px); font-weight: 600; }
+  .badge-yes { background: rgba(74,222,128,0.15); color: #4ade80; }
+  .badge-no { background: rgba(248,113,113,0.15); color: #f87171; }
+  .badge-partial { background: rgba(251,191,36,0.15); color: #fbbf24; }
+  .badge-better { background: rgba(34,211,238,0.15); color: #22d3ee; }
+
+  /* Score bars */
+  .score-row { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+  .score-label { width: clamp(100px, 18vw, 200px); font-size: clamp(11px, 1.1vw, 14px); text-align: right; color: #cbd5e1; }
+  .score-bar-bg { flex: 1; height: 22px; background: rgba(255,255,255,0.06); border-radius: 11px; overflow: hidden; position: relative; }
+  .score-bar { height: 100%; border-radius: 11px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; font-size: 11px; font-weight: 700; transition: width 0.8s ease; }
+  .score-cyan { background: linear-gradient(90deg, #0891b2, #22d3ee); }
+  .score-purple { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+  /* Layout helpers */
+  .content { width: 100%; max-width: 1200px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 24px); }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: clamp(12px, 2vw, 24px); }
+  .flex-center { display: flex; justify-content: center; align-items: center; }
+  .gap-16 { gap: 16px; }
+  .gap-24 { gap: 24px; }
+  .mt-8 { margin-top: 8px; }
+  .mt-16 { margin-top: 16px; }
+  .mt-24 { margin-top: 24px; }
+  .mb-16 { margin-bottom: 16px; }
+  .mb-24 { margin-bottom: 24px; }
+
+  /* Versus badge */
+  .vs-badge { display: inline-flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+  .vs-badge .tool-name { font-size: clamp(18px, 2.5vw, 36px); font-weight: 800; }
+  .vs-badge .vs { font-size: clamp(14px, 1.8vw, 24px); font-weight: 300; color: #64748b; }
+
+  /* Decorative */
+  .glow-line { width: 80px; height: 3px; border-radius: 2px; margin-bottom: 20px; }
+  .glow-cyan { background: linear-gradient(90deg, #22d3ee, transparent); }
+  .glow-purple { background: linear-gradient(90deg, #a78bfa, transparent); }
+  .glow-green { background: linear-gradient(90deg, #4ade80, transparent); }
+
+  /* Winner highlight */
+  .winner-card { background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.2); border-radius: 16px; padding: clamp(16px, 2vw, 28px); text-align: center; }
+
+  /* Navigation */
+  .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: clamp(36px, 4vw, 52px); height: clamp(36px, 4vw, 52px); border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #e2e8f0; font-size: clamp(18px, 2vw, 26px); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 100; transition: all 0.2s; backdrop-filter: blur(8px); }
+  .nav-btn:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.3); }
+  .nav-btn.hidden { opacity: 0; pointer-events: none; }
+  #prevBtn { left: clamp(8px, 1.5vw, 20px); }
+  #nextBtn { right: clamp(8px, 1.5vw, 20px); }
+
+  /* Progress bar */
+  .progress-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 4px; background: rgba(255,255,255,0.06); z-index: 100; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #22d3ee, #a78bfa); transition: width 0.4s ease; border-radius: 0 2px 2px 0; }
+
+  /* Slide counter */
+  .slide-counter { position: fixed; bottom: 14px; right: 20px; font-size: 12px; color: #64748b; z-index: 100; font-weight: 500; }
+
+  /* Swipe hint */
+  .swipe-hint { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); color: #475569; font-size: 13px; z-index: 100; animation: swipeHint 2s ease-in-out infinite; white-space: nowrap; }
+  @keyframes swipeHint { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.9; } }
+  .swipe-hint.hidden { display: none; }
+
+  /* Logo placeholder */
+  .logo-icon { width: clamp(48px, 6vw, 80px); height: clamp(48px, 6vw, 80px); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: clamp(24px, 3vw, 40px); font-weight: 900; margin-bottom: 16px; }
+  .logo-sbomator { background: linear-gradient(135deg, #0891b2, #22d3ee); color: #0a0e1a; }
+  .logo-finitestate { background: linear-gradient(135deg, #7c3aed, #a78bfa); color: #0a0e1a; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .grid-2 { grid-template-columns: 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
+    .score-label { width: 90px; }
+    .compare-table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Password Protection Overlay -->
+<div class="pw-overlay" id="pwOverlay">
+  <div class="pw-box">
+    <h2>🔒 Protected Content</h2>
+    <p>Enter password to view this presentation</p>
+    <input type="password" id="pwInput" placeholder="•••••" autofocus>
+    <button id="pwBtn">Unlock</button>
+    <div class="pw-error" id="pwError"></div>
+  </div>
+</div>
+
+<div class="slides-container" id="slidesContainer" style="display:none;">
+
+<!-- ═══════════════════════ SLIDE 1: TITLE ═══════════════════════ -->
+<div class="slide slide-title">
+  <div class="content" style="text-align:center;">
+    <div class="vs-badge" style="justify-content:center;">
+      <span class="tool-name text-cyan">SBOMator</span>
+      <span class="vs">vs</span>
+      <span class="tool-name text-purple">Finite State</span>
+    </div>
+    <h1 class="text-white">SBOM & Supply Chain<br>Security Platform Comparison</h1>
+    <p class="subtitle" style="max-width:700px; margin: 0 auto;">A data-driven comparison to help engineering leadership choose the right tool for Azure DevOps CI/CD, SBOM generation, vulnerability management, and regulatory compliance.</p>
+    <div class="mt-24" style="display:flex; justify-content:center; gap:32px; flex-wrap:wrap;">
+      <div><span class="label text-slate">Date</span><br><span class="text-white" style="font-weight:600;">April 2026</span></div>
+      <div><span class="label text-slate">Audience</span><br><span class="text-white" style="font-weight:600;">Engineering Managers · DevSecOps · Procurement</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 2: AT A GLANCE ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-cyan"></div>
+    <h2>At a Glance</h2>
+    <div class="grid-2 mt-16">
+      <div class="card card-cyan">
+        <div class="logo-icon logo-sbomator">S</div>
+        <h3 class="text-cyan">ESL SBOMator</h3>
+        <p class="text-slate mb-16">Self-hosted SBOM platform</p>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:8px;">
+          <li>🏢 <strong>Deployment:</strong> On-premises / air-gapped / cloud-optional</li>
+          <li>💰 <strong>Pricing:</strong> Per-license (no recurring SaaS fees)</li>
+          <li>☁️ <strong>Cloud:</strong> Deploy to AWS / Azure — cost per your cloud agreement</li>
+          <li>🔧 <strong>Approach:</strong> Source-level parsing + multi-scanner fusion</li>
+          <li>🏥 <strong>Focus:</strong> FDA VEX + Embedded/RTOS + deep SBOM</li>
+          <li>📡 <strong>Offline:</strong> Fully functional without internet</li>
+        </ul>
+      </div>
+      <div class="card card-purple">
+        <div class="logo-icon logo-finitestate">F</div>
+        <h3 class="text-purple">Finite State</h3>
+        <p class="text-slate mb-16">Cloud SaaS security platform</p>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:8px;">
+          <li>☁️ <strong>Deployment:</strong> Cloud-only (vendor-managed)</li>
+          <li>💰 <strong>Pricing:</strong> Enterprise SaaS subscription</li>
+          <li>🔧 <strong>Approach:</strong> Binary/firmware reverse engineering</li>
+          <li>🏭 <strong>Focus:</strong> Fleet-level risk scoring + compliance</li>
+          <li>📡 <strong>Offline:</strong> Requires internet connection</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 3: SBOM GENERATION ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-cyan"></div>
+    <h2>SBOM Generation & Scanning</h2>
+    <table class="compare-table mt-16">
+      <thead>
+        <tr><th class="col-feature">Capability</th><th class="col-tool text-cyan">SBOMator</th><th class="col-tool text-purple">Finite State</th><th class="col-winner">Winner</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CycloneDX 1.6 JSON</td><td class="col-tool"><span class="badge badge-yes">✅ Native</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>SPDX JSON output</td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Multi-scanner fusion (4 engines)</td><td class="col-tool"><span class="badge badge-better">⭐ 4 scanners</span></td><td class="col-tool"><span class="badge badge-no">❌ Single</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Source-level project parsing</td><td class="col-tool"><span class="badge badge-better">⭐ Native</span></td><td class="col-tool"><span class="badge badge-no">❌ Artifact only</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Binary analysis (7 architectures)</td><td class="col-tool"><span class="badge badge-yes">✅ ARM, RISC-V, MIPS, x86…</span></td><td class="col-tool"><span class="badge badge-better">⭐ Core strength</span></td><td class="col-tool"><span class="text-purple">Finite State</span></td></tr>
+        <tr><td>SBOM import & enrichment</td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Container image scanning</td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Supply chain IOC detection</td><td class="col-tool"><span class="badge badge-better">⭐ Shai-Hulud</span></td><td class="col-tool"><span class="badge badge-no">❌ No</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 4: LANGUAGE SUPPORT ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-cyan"></div>
+    <h2>Language & Ecosystem Coverage</h2>
+    <table class="compare-table mt-16">
+      <thead>
+        <tr><th class="col-feature">Ecosystem</th><th class="col-tool text-cyan">SBOMator</th><th class="col-tool text-purple">Finite State</th><th class="col-winner">Winner</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>C# / .NET (NuGet)</td><td class="col-tool"><span class="badge badge-yes">✅ Native parser</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>TypeScript / JavaScript</td><td class="col-tool"><span class="badge badge-yes">✅ npm/yarn/pnpm</span></td><td class="col-tool"><span class="badge badge-yes">✅ Node</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Python (pip/poetry)</td><td class="col-tool"><span class="badge badge-yes">✅ Native parser</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Conda</td><td class="col-tool"><span class="badge badge-yes">✅ Native parser</span></td><td class="col-tool"><span class="badge badge-partial">⚠️ Unverified</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>C/C++ (CMake, Make, Meson)</td><td class="col-tool"><span class="badge badge-better">⭐ 160+ libs DB</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Java / Go / Rust / Ruby / PHP</td><td class="col-tool"><span class="badge badge-yes">✅ All supported</span></td><td class="col-tool"><span class="badge badge-yes">✅ All supported</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Zephyr RTOS / nRF SDK</td><td class="col-tool"><span class="badge badge-better">⭐ Dedicated</span></td><td class="col-tool"><span class="badge badge-no">❌ No</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>FreeRTOS / ESP-IDF / STM32</td><td class="col-tool"><span class="badge badge-better">⭐ Dedicated</span></td><td class="col-tool"><span class="badge badge-no">❌ No</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Yocto / Bitbake</td><td class="col-tool"><span class="badge badge-better">⭐ Native workflow</span></td><td class="col-tool"><span class="badge badge-no">❌ No</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 5: VEX & FDA ═══════════════════════ -->
+<div class="slide slide-sbomator">
+  <div class="content">
+    <div class="glow-line glow-green"></div>
+    <h2>VEX & FDA Compliance <span class="text-green" style="font-size:0.6em;">— SBOMator Advantage</span></h2>
+    <table class="compare-table mt-16">
+      <thead>
+        <tr><th class="col-feature">Capability</th><th class="col-tool text-cyan">SBOMator</th><th class="col-tool text-purple">Finite State</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CycloneDX VEX 1.6 JSON export</td><td class="col-tool"><span class="badge badge-better">⭐ Native first-class</span></td><td class="col-tool"><span class="badge badge-partial">⚠️ Schema unverified</span></td></tr>
+        <tr><td>Exploitability classification</td><td class="col-tool"><span class="badge badge-yes">✅ Full taxonomy</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td></tr>
+        <tr><td>FDA patient harm assessment</td><td class="col-tool"><span class="badge badge-better">⭐ Per-CVE scoring</span></td><td class="col-tool"><span class="badge badge-no">❌ Not available</span></td></tr>
+        <tr><td>FDA compensating controls</td><td class="col-tool"><span class="badge badge-better">⭐ Named + effectiveness</span></td><td class="col-tool"><span class="badge badge-no">❌ Not available</span></td></tr>
+        <tr><td>FDA mitigation timelines</td><td class="col-tool"><span class="badge badge-better">⭐ Time-boxed response</span></td><td class="col-tool"><span class="badge badge-no">❌ Not available</span></td></tr>
+        <tr><td>CISA KEV enrichment in VEX</td><td class="col-tool"><span class="badge badge-better">⭐ Weaponized flags</span></td><td class="col-tool"><span class="badge badge-partial">⚠️ Unverified</span></td></tr>
+        <tr><td>Build-dep auto-tagging (not_affected)</td><td class="col-tool"><span class="badge badge-better">⭐ Automatic</span></td><td class="col-tool"><span class="badge badge-no">❌ No</span></td></tr>
+      </tbody>
+    </table>
+    <div class="card card-green mt-24" style="text-align:center;">
+      <p><strong class="text-green">SBOMator's VEX is purpose-built for FDA/IEC 62304 submissions</strong> — Finite State does not offer patient harm assessment or compensating controls.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 6: BINARY ANALYSIS DEEP DIVE ═══════════════════════ -->
+<div class="slide slide-sbomator">
+  <div class="content">
+    <div class="glow-line glow-cyan"></div>
+    <h2>Binary Analysis — ELF/EXE vs. Firmware Blobs</h2>
+    <p class="subtitle">SBOMator supports 7 CPU architectures with symbol-level fingerprinting</p>
+
+    <div class="grid-2 mt-16">
+      <!-- Left: Architecture support -->
+      <div class="card card-cyan">
+        <h3 class="text-cyan mb-16">Supported Architectures</h3>
+        <table class="compare-table" style="font-size:clamp(11px,1.1vw,13px);">
+          <thead><tr><th>Architecture</th><th>Toolchain</th><th>Use Case</th></tr></thead>
+          <tbody>
+            <tr><td><strong>ARM Cortex-M</strong></td><td style="font-family:monospace;font-size:11px;">arm-none-eabi-</td><td>nRF, STM32</td></tr>
+            <tr><td><strong>AArch64 / ARM64</strong></td><td style="font-family:monospace;font-size:11px;">aarch64-none-elf-</td><td>RPi, A-profile</td></tr>
+            <tr><td><strong>RISC-V</strong></td><td style="font-family:monospace;font-size:11px;">riscv32-unknown-elf-</td><td>SiFive, ESP32-C3</td></tr>
+            <tr><td><strong>Xtensa / ESP32</strong></td><td style="font-family:monospace;font-size:11px;">xtensa-esp32-elf-</td><td>Espressif</td></tr>
+            <tr><td><strong>MIPS</strong></td><td style="font-family:monospace;font-size:11px;">mips-linux-gnu-</td><td>Routers, embedded Linux</td></tr>
+            <tr><td><strong>PowerPC</strong></td><td style="font-family:monospace;font-size:11px;">powerpc-linux-gnu-</td><td>Automotive, aerospace</td></tr>
+            <tr><td><strong>x86 / x86_64</strong></td><td style="font-family:monospace;font-size:11px;">native</td><td>Desktop, server</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Right: How it works -->
+      <div class="card card-green">
+        <h3 class="text-green mb-16">How It Works</h3>
+        <div style="display:flex; flex-direction:column; gap:12px; font-size:clamp(12px,1.2vw,15px);">
+          <div class="card" style="padding:12px; background:rgba(74,222,128,0.04);">
+            <p class="label text-green" style="margin-bottom:4px;">Step 1 — Toolchain Detection</p>
+            <p class="text-slate">Auto-detects installed GNU binutils across all 7 architectures</p>
+          </div>
+          <div class="card" style="padding:12px; background:rgba(74,222,128,0.04);">
+            <p class="label text-green" style="margin-bottom:4px;">Step 2 — Symbol Extraction</p>
+            <p class="text-slate">Uses <strong>nm</strong>, <strong>ar</strong>, <strong>objdump</strong> to extract global symbols from .a / .lib / .o files</p>
+          </div>
+          <div class="card" style="padding:12px; background:rgba(74,222,128,0.04);">
+            <p class="label text-green" style="margin-bottom:4px;">Step 3 — Library Fingerprinting</p>
+            <p class="text-slate">Matches symbols against known patterns (Mbed TLS, OpenSSL, FreeRTOS, lwIP…) — requires ≥3 matches</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ELF vs Firmware comparison -->
+    <div class="mt-24">
+      <h3 class="mb-16">Standard Binaries (ELF/PE) vs. Opaque Firmware Blobs</h3>
+      <div class="grid-2">
+        <div class="card" style="border-left:4px solid #4ade80;">
+          <p class="label text-green">✅ ELF / PE / .a / .lib — SBOMator Analyzes Directly</p>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px; font-size:clamp(12px,1.1vw,14px); margin-top:8px;">
+            <li>• Standard headers with accessible symbol tables</li>
+            <li>• GNU binutils can parse and extract symbols natively</li>
+            <li>• Library fingerprinting identifies components (OpenSSL, Mbed TLS, FreeRTOS…)</li>
+            <li>• Works on .a static libraries, .o object files, ELF executables, PE/COFF binaries</li>
+            <li>• <strong>SBOMator handles this with full accuracy</strong></li>
+          </ul>
+        </div>
+        <div class="card" style="border-left:4px solid #f87171;">
+          <p class="label text-red">⚠️ Opaque Firmware Blobs — Requires Unpacking First</p>
+          <ul style="list-style:none; display:flex; flex-direction:column; gap:6px; font-size:clamp(12px,1.1vw,14px); margin-top:8px;">
+            <li>• Proprietary headers (e.g., D-Link <span style="font-family:monospace;font-size:12px;">0x81012468</span>)</li>
+            <li>• Compressed payloads (gzip, LZMA) at arbitrary offsets</li>
+            <li>• Nested filesystems (SquashFS, CramFS) inside the blob</li>
+            <li>• No standard symbol tables — <strong>nm</strong> cannot parse directly</li>
+            <li>• Needs firmware unpacker (e.g., binwalk) to extract ELFs first</li>
+            <li>• <strong>Finite State specializes in this</strong> — SBOMator focuses on standard binaries</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-amber mt-16" style="text-align:center;">
+      <p><strong class="text-amber">Key insight:</strong> For standard binaries (ELF/PE/static libraries), SBOMator provides precise symbol-level detection across 7 CPU architectures. For opaque vendor firmware blobs (like D-Link .had files), a firmware unpacking layer is needed first — this is Finite State's specialty.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 7: CI/CD & ADO ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-cyan"></div>
+    <h2>CI/CD & Azure DevOps Integration</h2>
+    <table class="compare-table mt-16">
+      <thead>
+        <tr><th class="col-feature">Capability</th><th class="col-tool text-cyan">SBOMator</th><th class="col-tool text-purple">Finite State</th><th class="col-winner">Winner</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Azure DevOps YAML pipeline</td><td class="col-tool"><span class="badge badge-yes">✅ Templates + CLI</span></td><td class="col-tool"><span class="badge badge-yes">✅ Native extension</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>ADO Marketplace extension</td><td class="col-tool"><span class="badge badge-partial">⚠️ Roadmap</span></td><td class="col-tool"><span class="badge badge-yes">✅ Published</span></td><td class="col-tool"><span class="text-purple">Finite State</span></td></tr>
+        <tr><td>GitHub Actions</td><td class="col-tool"><span class="badge badge-yes">✅ Workflow</span></td><td class="col-tool"><span class="badge badge-partial">⚠️ Not documented</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Policy engine (pass/fail)</td><td class="col-tool"><span class="badge badge-yes">✅ Configurable</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Build gating (exit codes)</td><td class="col-tool"><span class="badge badge-yes">✅ Non-zero exit</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>JSON summary output</td><td class="col-tool"><span class="badge badge-yes">✅ Machine-readable</span></td><td class="col-tool"><span class="badge badge-yes">✅ API</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>PR comments</td><td class="col-tool"><span class="badge badge-no">❌ Not yet</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="text-purple">Finite State</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 7: MONITORING & ALERTS ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-cyan"></div>
+    <h2>Monitoring, Alerting & Notifications</h2>
+    <table class="compare-table mt-16">
+      <thead>
+        <tr><th class="col-feature">Capability</th><th class="col-tool text-cyan">SBOMator</th><th class="col-tool text-purple">Finite State</th><th class="col-winner">Winner</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Continuous CVE re-evaluation</td><td class="col-tool"><span class="badge badge-yes">✅ Watch mode</span></td><td class="col-tool"><span class="badge badge-yes">✅ Nightly updates</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>DB auto-update (NVD/KEV/OSV/Grype)</td><td class="col-tool"><span class="badge badge-yes">✅ Background</span></td><td class="col-tool"><span class="badge badge-yes">✅ Managed</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Microsoft Teams notifications</td><td class="col-tool"><span class="badge badge-yes">✅ Webhook</span></td><td class="col-tool"><span class="badge badge-partial">⚠️ Custom webhook</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Slack notifications</td><td class="col-tool"><span class="badge badge-yes">✅ Webhook</span></td><td class="col-tool"><span class="badge badge-yes">✅ Native</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>Azure DevOps work items</td><td class="col-tool"><span class="badge badge-yes">✅ REST API</span></td><td class="col-tool"><span class="badge badge-partial">⚠️ Custom API</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Jira integration</td><td class="col-tool"><span class="badge badge-no">❌ Roadmap</span></td><td class="col-tool"><span class="badge badge-yes">✅ Native</span></td><td class="col-tool"><span class="text-purple">Finite State</span></td></tr>
+        <tr><td>Scan history & inventory store</td><td class="col-tool"><span class="badge badge-yes">✅ SQLite</span></td><td class="col-tool"><span class="badge badge-yes">✅ Cloud</span></td><td class="col-tool">Tie</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 8: DASHBOARD & IDENTITY ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-purple"></div>
+    <h2>Dashboard, API & Identity</h2>
+    <table class="compare-table mt-16">
+      <thead>
+        <tr><th class="col-feature">Capability</th><th class="col-tool text-cyan">SBOMator</th><th class="col-tool text-purple">Finite State</th><th class="col-winner">Winner</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Web dashboard</td><td class="col-tool"><span class="badge badge-yes">✅ FastAPI-based</span></td><td class="col-tool"><span class="badge badge-better">⭐ Mature SaaS</span></td><td class="col-tool"><span class="text-purple">Finite State</span></td></tr>
+        <tr><td>REST API</td><td class="col-tool"><span class="badge badge-yes">✅ FastAPI</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool">Tie</td></tr>
+        <tr><td>GraphQL API</td><td class="col-tool"><span class="badge badge-no">❌ No</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="text-purple">Finite State</span></td></tr>
+        <tr><td>Desktop GUI</td><td class="col-tool"><span class="badge badge-better">⭐ Full app</span></td><td class="col-tool"><span class="badge badge-no">❌ No</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Interactive HTML reports</td><td class="col-tool"><span class="badge badge-better">⭐ 3 report modes</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="text-cyan">SBOMator</span></td></tr>
+        <tr><td>Azure AD / Entra SSO</td><td class="col-tool"><span class="badge badge-partial">⚠️ Roadmap</span></td><td class="col-tool"><span class="badge badge-partial">⚠️ Unverified</span></td><td class="col-tool">Unclear</td></tr>
+        <tr><td>RBAC (role-based access)</td><td class="col-tool"><span class="badge badge-partial">⚠️ Roadmap</span></td><td class="col-tool"><span class="badge badge-yes">✅ Yes</span></td><td class="col-tool"><span class="text-purple">Finite State</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 9: PRICING ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-green"></div>
+    <h2>Pricing & Total Cost of Ownership</h2>
+    <p class="subtitle">All prices are annual subscription (12 months)</p>
+
+    <div class="grid-2 mt-24">
+      <!-- Finite State -->
+      <div class="card card-purple">
+        <h3 class="text-purple mb-16">Finite State</h3>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div class="card" style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.15); padding:16px;">
+            <p class="label text-purple">Cloud — 2 Products</p>
+            <p class="label text-slate" style="margin-bottom:4px; font-size:10px;">Mergebase migration program</p>
+            <p style="font-size:clamp(28px,3vw,40px); font-weight:800; color:#a78bfa;">$9,200<span class="text-slate" style="font-size:14px; font-weight:400;"> /yr</span></p>
+            <p class="text-slate" style="font-size:12px;">= $4,600 per product</p>
+          </div>
+          <div class="card" style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.15); padding:16px;">
+            <p class="label text-purple">Cloud — Unlimited Products</p>
+            <p style="font-size:clamp(28px,3vw,40px); font-weight:800; color:#a78bfa;">$20,000<span class="text-slate" style="font-size:14px; font-weight:400;"> /yr</span></p>
+          </div>
+          <div class="card" style="background:rgba(167,139,250,0.06); border:1px solid rgba(167,139,250,0.15); padding:16px;">
+            <p class="label text-purple">On-Premises — Unlimited Products</p>
+            <p style="font-size:clamp(28px,3vw,40px); font-weight:800; color:#a78bfa;">$100,000<span class="text-slate" style="font-size:14px; font-weight:400;"> /yr</span></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SBOMator -->
+      <div class="card card-cyan">
+        <h3 class="text-cyan mb-16">ESL SBOMator</h3>
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div class="winner-card" style="padding:16px;">
+            <p class="label text-green">Cloud + On-Premises — Unlimited Products</p>
+            <p style="font-size:clamp(28px,3vw,40px); font-weight:800; color:#22d3ee;">$8,600<span class="text-slate" style="font-size:14px; font-weight:400;"> /yr</span></p>
+            <p class="text-green" style="font-size:13px; font-weight:600; margin-top:8px;">Same price for cloud and on-prem</p>
+          </div>
+          <div class="card" style="background:rgba(74,222,128,0.04); border:1px solid rgba(74,222,128,0.15); padding:16px; text-align:center;">
+            <p class="label text-green">Includes</p>
+            <ul style="list-style:none; text-align:left; display:flex; flex-direction:column; gap:6px; font-size:clamp(12px,1.1vw,14px);">
+              <li>✅ Unlimited products / scans</li>
+              <li>✅ Cloud <strong>and</strong> on-premises deployment</li>
+              <li>✅ Deploy to <strong>AWS / Azure</strong> — infra cost per your cloud agreement</li>
+              <li>✅ Desktop GUI + CLI + Web API</li>
+              <li>✅ All vulnerability databases</li>
+              <li>✅ VEX + FDA compliance reports</li>
+              <li>✅ CI/CD pipeline integration</li>
+              <li>✅ Teams & ADO notifications</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Savings table -->
+    <div class="mt-24">
+      <table class="compare-table">
+        <thead>
+          <tr><th style="width:40%;">Scenario</th><th style="width:20%; text-align:center;" class="text-purple">Finite State</th><th style="width:20%; text-align:center;" class="text-cyan">SBOMator</th><th style="width:20%; text-align:center;" class="text-green">Annual Savings</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cloud, 2 products (migration deal)</td><td style="text-align:center;">$9,200</td><td style="text-align:center;">$8,600</td><td style="text-align:center;"><span class="badge badge-yes">$600 (7%)</span></td></tr>
+          <tr><td>Cloud, unlimited products</td><td style="text-align:center;">$20,000</td><td style="text-align:center;">$8,600</td><td style="text-align:center;"><span class="badge badge-better">$11,400 (57%)</span></td></tr>
+          <tr><td>On-premises, unlimited products</td><td style="text-align:center;">$100,000</td><td style="text-align:center;">$8,600</td><td style="text-align:center;"><span class="badge badge-better">$91,400 (91%)</span></td></tr>
+          <tr style="font-weight:700;"><td>3-year on-prem TCO</td><td style="text-align:center;">$300,000</td><td style="text-align:center;">$25,800</td><td style="text-align:center;"><span class="badge badge-better">$274,200 saved</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 10: SCORECARD ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content">
+    <div class="glow-line glow-green"></div>
+    <h2>Category Scorecard</h2>
+    <p class="subtitle">Strength rating per category (higher = better)</p>
+    <div class="mt-16">
+      <div class="score-row"><span class="score-label">SBOM Generation</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:100%">5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:60%">3/5</div></div></div>
+      <div class="score-row"><span class="score-label">Language Breadth</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:100%">5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:60%">3/5</div></div></div>
+      <div class="score-row"><span class="score-label">Embedded / RTOS</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:100%">5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:20%">1/5</div></div></div>
+      <div class="score-row"><span class="score-label">Binary Analysis</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:70%">3.5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:100%">5/5</div></div></div>
+      <div class="score-row"><span class="score-label">VEX / FDA</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:100%">5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:40%">2/5</div></div></div>
+      <div class="score-row"><span class="score-label">CVE Enrichment</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:100%">5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:80%">4/5</div></div></div>
+      <div class="score-row"><span class="score-label">CI/CD Integration</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:80%">4/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:80%">4/5</div></div></div>
+      <div class="score-row"><span class="score-label">Monitoring</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:80%">4/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:80%">4/5</div></div></div>
+      <div class="score-row"><span class="score-label">Web Dashboard</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:60%">3/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:100%">5/5</div></div></div>
+      <div class="score-row"><span class="score-label">Enterprise SSO</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:20%">1/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:60%">3/5</div></div></div>
+      <div class="score-row"><span class="score-label">Offline / Air-gap</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:100%">5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:20%">1/5</div></div></div>
+      <div class="score-row"><span class="score-label">Threat Intel (IOC)</span><div class="score-bar-bg"><div class="score-bar score-cyan" style="width:100%">5/5</div></div><div class="score-bar-bg"><div class="score-bar score-purple" style="width:40%">2/5</div></div></div>
+    </div>
+    <div class="mt-16" style="display:flex; gap:24px; justify-content:center; font-size:13px;">
+      <span><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:linear-gradient(90deg,#0891b2,#22d3ee);vertical-align:middle;margin-right:6px;"></span> SBOMator</span>
+      <span><span style="display:inline-block;width:14px;height:14px;border-radius:3px;background:linear-gradient(90deg,#7c3aed,#a78bfa);vertical-align:middle;margin-right:6px;"></span> Finite State</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 10: TOTAL SCORE ═══════════════════════ -->
+<div class="slide slide-compare">
+  <div class="content" style="text-align:center;">
+    <div class="glow-line glow-green" style="margin:0 auto 20px;"></div>
+    <h2>Overall Score</h2>
+    <p class="subtitle">Across 13 evaluation categories</p>
+    <div class="grid-2 mt-24">
+      <div class="winner-card">
+        <div class="logo-icon logo-sbomator" style="margin:0 auto 12px;">S</div>
+        <h2 class="text-cyan" style="font-size:clamp(40px,5vw,64px);">56 / 65</h2>
+        <p class="text-slate">Total points</p>
+        <div class="mt-16">
+          <span class="badge badge-better" style="font-size:16px; padding:6px 18px;">🏆 WINNER — 8 categories</span>
+        </div>
+      </div>
+      <div class="card" style="text-align:center; border-color:rgba(167,139,250,0.3);">
+        <div class="logo-icon logo-finitestate" style="margin:0 auto 12px;">F</div>
+        <h2 class="text-purple" style="font-size:clamp(40px,5vw,64px);">42 / 65</h2>
+        <p class="text-slate">Total points</p>
+        <div class="mt-16">
+          <span class="badge badge-partial" style="font-size:16px; padding:6px 18px;">3 categories</span>
+        </div>
+      </div>
+    </div>
+    <p class="text-slate mt-24" style="font-size:clamp(12px,1.2vw,15px);">SBOMator wins in SBOM depth, language coverage, embedded/RTOS, VEX/FDA, CVE enrichment, notifications, offline, and threat intel.<br>Finite State leads in binary analysis, web dashboard maturity, and enterprise SSO. Two categories tied.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 11: WHEN TO CHOOSE ═══════════════════════ -->
+<div class="slide slide-summary">
+  <div class="content">
+    <div class="glow-line glow-green"></div>
+    <h2>Decision Guide — When to Choose What</h2>
+    <div class="grid-2 mt-24">
+      <div class="card card-cyan">
+        <h3 class="text-cyan mb-16">Choose SBOMator When</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+          <li>✅ You need <strong>FDA / IEC 62304 VEX</strong> with patient harm assessment</li>
+          <li>✅ Your stack includes <strong>embedded / RTOS</strong> (Zephyr, nRF, FreeRTOS, Yocto)</li>
+          <li>✅ You require <strong>offline / air-gapped</strong> operation</li>
+          <li>✅ You want <strong>source-level SBOM precision</strong> (not binary heuristics)</li>
+          <li>✅ You use <strong>Azure DevOps + Teams</strong> and want native ADO work items</li>
+          <li>✅ You prefer <strong>self-hosted</strong> with no recurring SaaS costs</li>
+          <li>✅ You need <strong>Conda</strong> support</li>
+          <li>✅ You value <strong>supply chain threat detection</strong> (IOC database)</li>
+        </ul>
+      </div>
+      <div class="card card-purple">
+        <h3 class="text-purple mb-16">Choose Finite State When</h3>
+        <ul style="list-style:none; display:flex; flex-direction:column; gap:10px;">
+          <li>✅ You primarily analyze <strong>opaque firmware/binaries</strong> from third-party vendors</li>
+          <li>✅ You need <strong>fleet-level risk scoring</strong> across many device variants</li>
+          <li>✅ You require a <strong>mature cloud dashboard</strong> with no self-hosting</li>
+          <li>✅ You use <strong>Jira</strong> as your primary issue tracker</li>
+          <li>✅ You need <strong>reachability analysis</strong> to reduce CVE noise</li>
+          <li>✅ Your compliance team prefers <strong>vendor-managed</strong> infrastructure</li>
+          <li>✅ You need <strong>GraphQL API</strong> for complex custom integrations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SLIDE 12: CLOSING ═══════════════════════ -->
+<div class="slide slide-title">
+  <div class="content" style="text-align:center;">
+    <div class="vs-badge" style="justify-content:center;">
+      <span class="tool-name text-cyan">SBOMator</span>
+      <span class="vs">vs</span>
+      <span class="tool-name text-purple">Finite State</span>
+    </div>
+    <h1 class="text-white" style="margin-bottom:24px;">Recommendation</h1>
+    <div class="card card-green" style="max-width:800px; margin:0 auto; text-align:left;">
+      <h3 class="text-green mb-16">For Azure DevOps + FDA/Embedded environments:</h3>
+      <p style="font-size:clamp(14px,1.6vw,20px); line-height:1.7;">
+        <strong class="text-cyan">SBOMator</strong> delivers <strong>deeper SBOM generation</strong>, <strong>superior VEX compliance</strong>, <strong>broader ecosystem coverage</strong>, and <strong>native ADO + Teams integration</strong> — at a lower total cost of ownership with no cloud dependency.
+      </p>
+      <p class="text-slate mt-16" style="font-size:clamp(12px,1.2vw,15px);">
+        Finite State remains the better choice only when opaque binary/firmware reverse-engineering is the primary use case and source code access is not available.
+      </p>
+    </div>
+    <p class="text-slate mt-24" style="font-size:clamp(11px,1vw,13px);">ESL Engineering Software Lab · April 2026</p>
+  </div>
+</div>
+
+</div><!-- end slides-container -->
+
+<!-- Navigation -->
+<button class="nav-btn hidden" id="prevBtn" aria-label="Previous slide">‹</button>
+<button class="nav-btn" id="nextBtn" aria-label="Next slide">›</button>
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+<div class="slide-counter" id="slideCounter">1 / 14</div>
+<div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+
+<script>
+// Password protection
+(function() {
+  const HASH = '1d98c5a13249a9b58b8c1135afe3ccea0ac3e6cfef668931e414eb9a8676d104'; // SHA-256 of 86999
+  const overlay = document.getElementById('pwOverlay');
+  const pwInput = document.getElementById('pwInput');
+  const pwBtn = document.getElementById('pwBtn');
+  const pwError = document.getElementById('pwError');
+  const slidesEl = document.getElementById('slidesContainer');
+  const navPrev = document.getElementById('prevBtn');
+  const navNext = document.getElementById('nextBtn');
+  const progBar = document.querySelector('.progress-bar');
+  const counter = document.getElementById('slideCounter');
+  const hint = document.getElementById('swipeHint');
+
+  async function sha256(msg) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function unlock() {
+    const h = await sha256(pwInput.value);
+    if (h === HASH) {
+      overlay.classList.add('hidden');
+      slidesEl.style.display = 'flex';
+      [navPrev, navNext, progBar, counter, hint].forEach(el => { if(el) el.style.visibility = 'visible'; });
+    } else {
+      pwError.textContent = 'Incorrect password';
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  }
+  pwBtn.addEventListener('click', unlock);
+  pwInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') unlock(); });
+
+  // Hide nav elements until unlocked
+  [navPrev, navNext, progBar, counter, hint].forEach(el => { if(el) el.style.visibility = 'hidden'; });
+})();
+
+(function() {
+  const container = document.getElementById('slidesContainer');
+  const slides = container.children;
+  const total = slides.length;
+  let current = 0;
+
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const progressFill = document.getElementById('progressFill');
+  const slideCounter = document.getElementById('slideCounter');
+  const swipeHint = document.getElementById('swipeHint');
+
+  function goTo(index) {
+    if (index < 0 || index >= total) return;
+    current = index;
+    container.style.transform = `translateX(-${current * 100}vw)`;
+    prevBtn.classList.toggle('hidden', current === 0);
+    nextBtn.classList.toggle('hidden', current === total - 1);
+    progressFill.style.width = ((current + 1) / total * 100) + '%';
+    slideCounter.textContent = (current + 1) + ' / ' + total;
+    if (!swipeHint.classList.contains('hidden')) swipeHint.classList.add('hidden');
+  }
+
+  prevBtn.addEventListener('click', () => goTo(current - 1));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+  });
+
+  let touchStartX = 0, touchEndX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+  document.addEventListener('touchend', (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    const diff = touchStartX - touchEndX;
+    if (Math.abs(diff) > 50) { diff > 0 ? goTo(current + 1) : goTo(current - 1); }
+  });
+
+  let mouseDown = false, mouseStartX = 0;
+  document.addEventListener('mousedown', (e) => { mouseDown = true; mouseStartX = e.screenX; });
+  document.addEventListener('mouseup', (e) => {
+    if (!mouseDown) return;
+    mouseDown = false;
+    const diff = mouseStartX - e.screenX;
+    if (Math.abs(diff) > 50) { diff > 0 ? goTo(current + 1) : goTo(current - 1); }
+  });
+
+  goTo(0);
+})();
+</script>
+</body>
+</html>
