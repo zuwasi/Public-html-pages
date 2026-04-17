@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-04-16
+Last updated: 2026-04-17
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -61,25 +61,28 @@ Last updated: 2026-04-16
 17. ai_agent_eval_presentation.html
    https://zuwasi.github.io/Public-html-pages/ai_agent_eval_presentation.html
 
-18. amp-vs-token-optimizer-presentation.html
+18. amp-deep3-vs-claude-opus47-benchmark.html
+   https://zuwasi.github.io/Public-html-pages/amp-deep3-vs-claude-opus47-benchmark.html
+
+19. amp-vs-token-optimizer-presentation.html
    https://zuwasi.github.io/Public-html-pages/amp-vs-token-optimizer-presentation.html
 
-19. ampcode-prompt-injection-immunity.html
+20. ampcode-prompt-injection-immunity.html
    https://zuwasi.github.io/Public-html-pages/ampcode-prompt-injection-immunity.html
 
-20. ampcode-vs-claudecode-presentation.html
+21. ampcode-vs-claudecode-presentation.html
    https://zuwasi.github.io/Public-html-pages/ampcode-vs-claudecode-presentation.html
 
-21. cuda-to-axelera-migration.html
+22. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-22. nono-ampcode-presentation.html
+23. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-23. static-code-analysis-2026.html
+24. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-24. why-amp-doesnt-need-node9-proxy.html
+25. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
 ──────────────────────────────────────────────────────────────
