@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-04-17
+Last updated: 2026-04-22
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -73,16 +73,19 @@ Last updated: 2026-04-17
 21. ampcode-vs-claudecode-presentation.html
    https://zuwasi.github.io/Public-html-pages/ampcode-vs-claudecode-presentation.html
 
-22. cuda-to-axelera-migration.html
+22. cpp26-embedded-mavlink.html
+   https://zuwasi.github.io/Public-html-pages/cpp26-embedded-mavlink.html
+
+23. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-23. nono-ampcode-presentation.html
+24. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-24. static-code-analysis-2026.html
+25. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-25. why-amp-doesnt-need-node9-proxy.html
+26. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
 ──────────────────────────────────────────────────────────────
