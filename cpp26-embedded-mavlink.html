@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>C++26 for Embedded: MAVLink on RP2040</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0e17;color:#c9d1d9;overflow-x:hidden}
+.slides{display:flex;transition:transform 0.5s cubic-bezier(.4,0,.2,1);width:700vw}
+.slide{width:100vw;min-height:100vh;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:clamp(20px,4vw,60px)}
+.card{max-width:900px;width:100%}
+
+h1{font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:700;color:#58a6ff;margin-bottom:0.4em;line-height:1.2}
+h2{font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:600;color:#79c0ff;margin-bottom:0.6em}
+h3{font-size:clamp(1rem,2vw,1.3rem);font-weight:600;color:#d2a8ff;margin-bottom:0.5em}
+p,li{font-size:clamp(0.85rem,1.6vw,1.05rem);line-height:1.7;margin-bottom:0.5em}
+ul{padding-left:1.4em;margin-bottom:1em}
+li{margin-bottom:0.3em}
+
+.tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.75rem;font-weight:600;margin-right:6px;margin-bottom:4px}
+.tag-green{background:#0d4429;color:#3fb950;border:1px solid #238636}
+.tag-blue{background:#0c2d6b;color:#58a6ff;border:1px solid #1f6feb}
+.tag-purple{background:#2d1653;color:#d2a8ff;border:1px solid #8957e5}
+.tag-yellow{background:#3d2e00;color:#e3b341;border:1px solid #9e6a03}
+.tag-red{background:#3d1418;color:#f85149;border:1px solid #da3633}
+
+.subtitle{color:#8b949e;font-size:clamp(0.9rem,1.8vw,1.15rem);margin-bottom:1.5em}
+
+/* Syntax-highlighted code blocks */
+pre{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:clamp(12px,2vw,20px);overflow-x:auto;margin:1em 0;font-size:clamp(0.72rem,1.3vw,0.88rem);line-height:1.65}
+code{font-family:'JetBrains Mono',monospace}
+.kw{color:#ff7b72}
+.tp{color:#79c0ff}
+.fn{color:#d2a8ff}
+.cm{color:#8b949e;font-style:italic}
+.st{color:#a5d6ff}
+.num{color:#79c0ff}
+.pp{color:#ffa657}
+.op{color:#c9d1d9}
+.ct{color:#3fb950}
+
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:1em 0}
+.feature-box{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px}
+.feature-box h3{margin-bottom:0.3em;font-size:1rem}
+.feature-box p{font-size:0.88rem;color:#8b949e;margin:0}
+
+.compiler-table{width:100%;border-collapse:collapse;margin:1em 0;font-size:clamp(0.78rem,1.4vw,0.92rem)}
+.compiler-table th{background:#161b22;color:#58a6ff;padding:10px 12px;text-align:left;border-bottom:2px solid #30363d}
+.compiler-table td{padding:8px 12px;border-bottom:1px solid #21262d}
+.compiler-table tr:hover{background:#161b22}
+.yes{color:#3fb950;font-weight:600}
+.no{color:#f85149}
+.partial{color:#e3b341}
+
+.divider{height:1px;background:linear-gradient(90deg,transparent,#30363d,transparent);margin:1.5em 0}
+
+/* Nav */
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(22,27,34,0.85);border:1px solid #30363d;color:#58a6ff;font-size:1.4rem;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background 0.2s}
+.nav-btn:hover{background:rgba(31,111,235,0.3)}
+#prevBtn{left:16px}
+#nextBtn{right:16px}
+.progress{position:fixed;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#1f6feb,#8957e5,#da3633);transition:width 0.4s;z-index:100}
+.counter{position:fixed;bottom:10px;right:16px;font-size:0.78rem;color:#484f58;z-index:100;font-family:'JetBrains Mono',monospace}
+.swipe-hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);color:#484f58;font-size:0.85rem;animation:sway 2s ease-in-out infinite;z-index:100;transition:opacity 0.3s}
+@keyframes sway{0%,100%{transform:translateX(-50%) translateX(-8px)}50%{transform:translateX(-50%) translateX(8px)}}
+
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin:0.8em 0}
+
+@media(max-width:600px){
+  .feature-grid{grid-template-columns:1fr}
+  .nav-btn{width:38px;height:38px;font-size:1.1rem}
+  #prevBtn{left:8px}#nextBtn{right:8px}
+}
+</style>
+</head>
+<body>
+
+<div class="slides" id="slides">
+
+<!-- SLIDE 1: Title -->
+<div class="slide">
+<div class="card" style="text-align:center">
+<div class="chip-row" style="justify-content:center">
+  <span class="tag tag-blue">C++26</span>
+  <span class="tag tag-green">Embedded</span>
+  <span class="tag tag-purple">MAVLink</span>
+  <span class="tag tag-yellow">RP2040</span>
+</div>
+<h1 style="margin-top:0.5em">C++26 for Embedded Systems</h1>
+<p class="subtitle">From C spaghetti to zero-cost abstractions on MAVLink + RP2040</p>
+<div class="divider"></div>
+<p style="color:#8b949e">A practical look at what C++26 brings to firmware development,<br>and what you can ship today with GCC 15 and <code style="color:#79c0ff">-std=c++20</code></p>
+</div>
+</div>
+
+<!-- SLIDE 2: Intro text -->
+<div class="slide">
+<div class="card">
+<h2>The Vision</h2>
+<p>C++26 and GCC 16 are just a few days (maybe weeks) away. Let's play the game: <em>"what if C++26 and GCC 16 are already here?"</em> -- because it takes embedded C++ much further.</p>
+<p>Contracts, <code style="color:#79c0ff">inplace_vector</code>, and reflection are game changers:</p>
+<div class="feature-grid">
+  <div class="feature-box">
+    <h3>Contracts</h3>
+    <p>pre/post replace hand-written assert() with standard, toolchain-aware checks. Strip them in release = zero overhead.</p>
+  </div>
+  <div class="feature-box">
+    <h3>inplace_vector</h3>
+    <p>Finally a standard resizable container with no heap. Perfect for MAVLink packet buffers.</p>
+  </div>
+  <div class="feature-box">
+    <h3>Reflection</h3>
+    <p>Auto-generate serialization, debug logs, enum-to-string, all at compile time, zero runtime cost.</p>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 3: C++26 code -->
+<div class="slide">
+<div class="card">
+<h2>C++26 Code <span class="tag tag-purple">future</span> <span class="tag tag-red">no compiler yet</span></h2>
+<p class="subtitle">Based on the C++26 draft. When compilers catch up, we'll write it this way:</p>
+<pre><code><span class="pp">#include</span> <span class="st">&lt;contracts&gt;</span>
+<span class="pp">#include</span> <span class="st">&lt;inplace_vector&gt;</span>
+<span class="pp">#include</span> <span class="st">&lt;meta&gt;</span>
+
+<span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="tp">T</span>&gt;
+<span class="kw">concept</span> <span class="tp">Handler</span> <span class="op">=</span> <span class="kw">requires</span>(<span class="tp">T</span> t) {
+    t.<span class="fn">init</span>();
+    t.<span class="fn">exec</span>();
+};
+
+<span class="cm">// C++26: resizable container, ZERO heap allocation</span>
+<span class="cm">// perfect for MAVLink packet buffers</span>
+std::<span class="tp">inplace_vector</span>&lt;<span class="tp">uint8_t</span>, <span class="num">280</span>&gt; mavlink_buf;
+
+<span class="kw">struct</span> <span class="tp">MavlinkHandler</span> {
+    <span class="cm">// C++26 contracts: preconditions checked at build/debug</span>
+    <span class="kw">void</span> <span class="fn">parse</span>(<span class="tp">uint8_t</span>* data, <span class="tp">size_t</span> len)
+        <span class="ct">pre</span>(data <span class="op">!=</span> <span class="kw">nullptr</span>)
+        <span class="ct">pre</span>(len <span class="op">&lt;=</span> <span class="num">280</span>)
+    {
+        mavlink_buf.<span class="fn">assign</span>(data, data + len);
+    }
+    <span class="kw">void</span> <span class="fn">init</span>();
+    <span class="kw">void</span> <span class="fn">exec</span>();
+};
+
+<span class="cm">// C++26 reflection: auto-generate debug logs</span>
+<span class="cm">// for all handler types, zero boilerplate</span>
+<span class="kw">template</span>&lt;<span class="tp">Handler</span> <span class="tp">H</span>&gt;
+<span class="kw">void</span> <span class="fn">log_handler_info</span>() {
+    <span class="kw">constexpr</span> <span class="kw">auto</span> name <span class="op">=</span> std::meta::<span class="fn">name_of</span>(^<span class="tp">H</span>);
+    Serial.<span class="fn">print</span>(name.<span class="fn">data</span>());
+    Serial.<span class="fn">println</span>(<span class="st">" initialized"</span>);
+}
+
+<span class="kw">template</span>&lt;<span class="tp">Handler</span> <span class="tp">H1</span>, <span class="tp">Handler</span> <span class="tp">H2</span>&gt;
+<span class="kw">struct</span> <span class="tp">App</span> {
+    <span class="tp">H1</span> mavlink;
+    <span class="tp">H2</span> sensors;
+
+    <span class="kw">void</span> <span class="fn">run</span>() {
+        mavlink.<span class="fn">init</span>();
+        sensors.<span class="fn">init</span>();
+        <span class="fn">log_handler_info</span>&lt;<span class="tp">H1</span>&gt;();
+        <span class="fn">log_handler_info</span>&lt;<span class="tp">H2</span>&gt;();
+        <span class="fn">multicore_launch_core1</span>([<span class="kw">this</span>] { sensors.<span class="fn">exec</span>(); });
+        <span class="kw">while</span> (<span class="kw">true</span>) { mavlink.<span class="fn">exec</span>(); <span class="fn">__wfi</span>(); }
+    }
+};</code></pre>
+</div>
+</div>
+
+<!-- SLIDE 4: Why C++26 for embedded -->
+<div class="slide">
+<div class="card">
+<h2>Why C++26 Matters for Embedded</h2>
+<div class="feature-grid">
+  <div class="feature-box" style="border-left:3px solid #3fb950">
+    <h3 style="color:#3fb950">Contracts</h3>
+    <p><code style="color:#3fb950">pre</code> / <code style="color:#3fb950">post</code> replace hand-written <code>assert()</code> with standard, toolchain-aware checks. Strip them in release = zero overhead. The compiler and static analyzers can reason about them.</p>
+  </div>
+  <div class="feature-box" style="border-left:3px solid #58a6ff">
+    <h3 style="color:#58a6ff">inplace_vector</h3>
+    <p>A standard resizable container with fixed capacity and <strong>no heap allocation</strong>. Drop-in replacement for hand-rolled ring buffers. Perfect for MAVLink packet buffers on microcontrollers.</p>
+  </div>
+  <div class="feature-box" style="border-left:3px solid #d2a8ff">
+    <h3 style="color:#d2a8ff">Reflection</h3>
+    <p>Auto-generate serialization, debug logs, enum-to-string -- all at compile time with zero runtime cost. No more macro hacks or code generators.</p>
+  </div>
+</div>
+<div class="divider"></div>
+<p style="color:#8b949e">No globals, no vtables, no heap, no RTTI. Just the way embedded should be.</p>
+</div>
+</div>
+
+<!-- SLIDE 5: Compiler support table -->
+<div class="slide">
+<div class="card">
+<h2>Compiler Reality Check</h2>
+<p class="subtitle">As of April 2026, no compiler supports all C++26 features for production use.</p>
+<table class="compiler-table">
+<thead><tr><th>Feature</th><th>Standard</th><th>GCC 15</th><th>GCC 16 (trunk)</th></tr></thead>
+<tbody>
+<tr><td>Concepts</td><td>C++20</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td>constexpr placement new</td><td>C++26</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td>=delete("reason")</td><td>C++26</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td>Pack indexing</td><td>C++26</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td>#embed</td><td>C++26</td><td class="yes">Yes</td><td class="yes">Yes</td></tr>
+<tr><td>Contracts (pre/post)</td><td>C++26</td><td class="no">No</td><td class="yes">Yes</td></tr>
+<tr><td>inplace_vector</td><td>C++26</td><td class="no">No</td><td class="yes">Yes</td></tr>
+<tr><td>Reflection (meta)</td><td>C++26</td><td class="no">No</td><td class="no">No</td></tr>
+</tbody>
+</table>
+<p style="color:#8b949e;margin-top:1em">Since no compiler fully supports C++26 today, the next slide shows what you can ship <strong>right now</strong>.</p>
+</div>
+</div>
+
+<!-- SLIDE 6: GCC 15 code -->
+<div class="slide">
+<div class="card">
+<h2>What You Can Ship Today <span class="tag tag-green">GCC 15</span> <span class="tag tag-blue">-std=c++20</span></h2>
+<pre><code><span class="pp">#include</span> <span class="st">&lt;array&gt;</span>
+<span class="pp">#include</span> <span class="st">&lt;cstdint&gt;</span>
+<span class="pp">#include</span> <span class="st">&lt;cstddef&gt;</span>
+
+<span class="cm">// zero-cost interface check, no vtable</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="tp">T</span>&gt;
+<span class="kw">concept</span> <span class="tp">Handler</span> <span class="op">=</span> <span class="kw">requires</span>(<span class="tp">T</span> t) {
+    t.<span class="fn">init</span>();
+    t.<span class="fn">exec</span>();
+};
+
+<span class="cm">// heap-free resizable buffer for MAVLink packets</span>
+<span class="kw">template</span>&lt;<span class="kw">typename</span> <span class="tp">T</span>, <span class="tp">size_t</span> <span class="tp">N</span>&gt;
+<span class="kw">struct</span> <span class="tp">FixedVec</span> {
+    std::<span class="tp">array</span>&lt;<span class="tp">T</span>, <span class="tp">N</span>&gt; buf{};
+    <span class="tp">size_t</span> len{};
+    <span class="kw">constexpr</span> <span class="kw">void</span> <span class="fn">push</span>(<span class="tp">T</span> v) { buf[len++] <span class="op">=</span> v; }
+    <span class="kw">constexpr</span> <span class="tp">T</span><span class="op">&amp;</span> <span class="kw">operator</span>[](<span class="tp">size_t</span> i) { <span class="kw">return</span> buf[i]; }
+    <span class="kw">constexpr</span> <span class="tp">size_t</span> <span class="fn">size</span>() <span class="kw">const</span> { <span class="kw">return</span> len; }
+    <span class="kw">constexpr</span> <span class="tp">T</span>* <span class="fn">data</span>() { <span class="kw">return</span> buf.<span class="fn">data</span>(); }
+};
+
+<span class="kw">struct</span> <span class="tp">MavlinkHandler</span> {
+    <span class="tp">FixedVec</span>&lt;<span class="tp">uint8_t</span>, <span class="num">280</span>&gt; rx_buf;
+    <span class="kw">void</span> <span class="fn">init</span>() { Serial.<span class="fn">begin</span>(<span class="num">57600</span>); }
+    <span class="kw">void</span> <span class="fn">exec</span>() { <span class="cm">/* parse mavlink */</span> }
+};
+
+<span class="kw">struct</span> <span class="tp">SensorsHandler</span> {
+    <span class="kw">void</span> <span class="fn">init</span>() { <span class="cm">/* setup sensors */</span> }
+    <span class="kw">void</span> <span class="fn">exec</span>() { <span class="cm">/* read + send */</span> }
+};
+
+<span class="cm">// no globals, no pointers, no RTTI</span>
+<span class="kw">template</span>&lt;<span class="tp">Handler</span> <span class="tp">H1</span>, <span class="tp">Handler</span> <span class="tp">H2</span>&gt;
+<span class="kw">struct</span> <span class="tp">App</span> {
+    <span class="tp">H1</span> core0;
+    <span class="tp">H2</span> core1;
+
+    <span class="kw">void</span> <span class="fn">run</span>() {
+        core0.<span class="fn">init</span>();
+        core1.<span class="fn">init</span>();
+        <span class="fn">multicore_launch_core1</span>([<span class="kw">this</span>] { core1.<span class="fn">exec</span>(); });
+        <span class="kw">while</span> (<span class="kw">true</span>) { core0.<span class="fn">exec</span>(); <span class="fn">__wfi</span>(); }
+    }
+};
+
+<span class="cm">// one line in main</span>
+<span class="tp">App</span>&lt;<span class="tp">MavlinkHandler</span>, <span class="tp">SensorsHandler</span>&gt; app;
+<span class="kw">void</span> <span class="fn">setup</span>() { app.<span class="fn">run</span>(); }
+<span class="kw">void</span> <span class="fn">loop</span>() {}</code></pre>
+</div>
+</div>
+
+<!-- SLIDE 7: Summary -->
+<div class="slide">
+<div class="card" style="text-align:center">
+<h1>Ship Today, Upgrade Tomorrow</h1>
+<div class="divider"></div>
+<div class="feature-grid" style="text-align:left">
+  <div class="feature-box" style="border-left:3px solid #3fb950">
+    <h3 style="color:#3fb950">Today (GCC 15 / C++20)</h3>
+    <ul>
+      <li>Concepts for zero-cost interface checks</li>
+      <li>FixedVec as heap-free buffer</li>
+      <li>Templates for compile-time polymorphism</li>
+      <li>No globals, no vtables, no RTTI</li>
+    </ul>
+  </div>
+  <div class="feature-box" style="border-left:3px solid #58a6ff">
+    <h3 style="color:#58a6ff">Tomorrow (GCC 16 / C++26)</h3>
+    <ul>
+      <li>Swap FixedVec for std::inplace_vector</li>
+      <li>Add contracts (pre/post) -- zero code rewrite</li>
+      <li>Reflection for auto-generated logging</li>
+      <li>Same architecture, more guarantees</li>
+    </ul>
+  </div>
+</div>
+<div class="divider"></div>
+<div class="chip-row" style="justify-content:center;margin-top:1em">
+  <span class="tag tag-blue">#EmbeddedSystems</span>
+  <span class="tag tag-green">#Firmware</span>
+  <span class="tag tag-purple">#QGroundControl</span>
+  <span class="tag tag-yellow">#MAVLink</span>
+  <span class="tag tag-blue">#Cpp26</span>
+</div>
+</div>
+</div>
+
+</div><!-- /slides -->
+
+<button class="nav-btn" id="prevBtn" onclick="go(-1)">&#8249;</button>
+<button class="nav-btn" id="nextBtn" onclick="go(1)">&#8250;</button>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter"></div>
+<div class="swipe-hint" id="hint">&larr; Swipe to navigate &rarr;</div>
+
+<script>
+const total=7;let cur=0;
+const slides=document.getElementById('slides');
+const prev=document.getElementById('prevBtn');
+const next=document.getElementById('nextBtn');
+const prog=document.getElementById('progress');
+const cnt=document.getElementById('counter');
+const hint=document.getElementById('hint');
+
+function go(d){
+  cur=Math.max(0,Math.min(total-1,cur+d));
+  slides.style.transform=`translateX(-${cur*100}vw)`;
+  prev.style.display=cur===0?'none':'flex';
+  next.style.display=cur===total-1?'none':'flex';
+  prog.style.width=((cur+1)/total*100)+'%';
+  cnt.textContent=(cur+1)+' / '+total;
+  if(hint.style.opacity!=='0'){hint.style.opacity='0'}
+}
+go(0);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')go(-1);
+  else if(e.key==='ArrowRight'||e.key===' ')go(1);
+});
+
+let tx=0,ty=0,mx=0;
+document.addEventListener('touchstart',e=>{tx=e.changedTouches[0].screenX;ty=e.changedTouches[0].screenY});
+document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-tx;if(Math.abs(dx)>50)go(dx<0?1:-1)});
+document.addEventListener('mousedown',e=>{mx=e.screenX});
+document.addEventListener('mouseup',e=>{const dx=e.screenX-mx;if(Math.abs(dx)>50)go(dx<0?1:-1)});
+</script>
+</body>
+</html>
