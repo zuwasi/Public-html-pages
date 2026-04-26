@@ -312,28 +312,28 @@
   <section class="slide">
     <span class="tag">The Problem</span>
     <h2>"Lost in the Middle" is a <span class="accent">measurable</span> failure mode</h2>
-    <p class="lead">Liu et al. (Stanford, 2023) showed LLMs systematically degrade as context grows. The middle of the window becomes <em>noise</em> the model cannot retrieve from reliably.</p>
+    <p class="lead">Liu et al. (arXiv 2023 / TACL 2024) showed that long-context models often retrieve best from the beginning or end of the prompt, while information placed in the middle is used less reliably.</p>
     <div class="grid-3" style="margin-top:20px">
       <div class="card good">
-        <div class="stat" style="font-size:clamp(28px,3.5vw,46px)">90%+</div>
-        <div class="stat-label">10K–50K tokens</div>
-        <p style="margin-top:10px">High retrieval accuracy. Model "sees" everything.</p>
+        <div class="stat" style="font-size:clamp(28px,3.5vw,46px)">Start</div>
+        <div class="stat-label">Beginning of context</div>
+        <p style="margin-top:10px">In Liu et al.'s experiments, relevant information near the beginning was often retrieved more reliably.</p>
       </div>
       <div class="card">
-        <div class="stat" style="font-size:clamp(28px,3.5vw,46px); background:linear-gradient(135deg,#fbbf24,#f97316); -webkit-background-clip:text">~70%</div>
-        <div class="stat-label">100K–500K tokens</div>
-        <p style="margin-top:10px">Gradual decline. Recall of middle-positioned facts drops.</p>
+        <div class="stat" style="font-size:clamp(28px,3.5vw,46px); background:linear-gradient(135deg,#fbbf24,#f97316); -webkit-background-clip:text">Middle</div>
+        <div class="stat-label">Middle of context</div>
+        <p style="margin-top:10px">The paper's key result is a pronounced dip when the answer-bearing document or key sits in the middle.</p>
       </div>
       <div class="card warn">
-        <div class="stat" style="font-size:clamp(28px,3.5vw,46px); background:linear-gradient(135deg,#fca5a5,#ef4444); -webkit-background-clip:text">40–50%</div>
-        <div class="stat-label">500K+ tokens (Danger Zone)</div>
-        <p style="margin-top:10px">Catastrophic drop. The agent is technically reading but not understanding.</p>
+        <div class="stat" style="font-size:clamp(28px,3.5vw,46px); background:linear-gradient(135deg,#fca5a5,#ef4444); -webkit-background-clip:text">End</div>
+        <div class="stat-label">End of context</div>
+        <p style="margin-top:10px">Many models rebound when the same information is moved near the end, producing the familiar U-shaped curve.</p>
       </div>
     </div>
     <div class="card" style="margin-top:24px">
       <h3>Two compounding sources of bloat</h3>
-      <p><strong style="color:#fff">(1) Static tool-definition tax:</strong> GitHub MCP alone = 90+ tools ≈ 50K tokens loaded <em>before</em> the user types a single character. Add Slack, Jira, Sonar → 30–40% of a 128K window gone.</p>
-      <p style="margin-top:8px"><strong style="color:#fff">(2) Dynamic execution noise:</strong> Every grep output, every stack trace, every read file accumulates. A 4-hour debugging session can balloon to 200K+ tokens of mostly-irrelevant history.</p>
+      <p><strong style="color:#fff">(1) Static tool-definition tax:</strong> Public GitHub MCP reports have shown dozens of tools and roughly tens of thousands of tokens depending on version and configuration. Add Slack, Jira, Sonar, and the starting context can get crowded fast.</p>
+      <p style="margin-top:8px"><strong style="color:#fff">(2) Dynamic execution noise:</strong> Every grep output, stack trace, and large file read accumulates. Long debugging sessions can end up dominated by history that is no longer useful.</p>
     </div>
   </section>
 
@@ -347,7 +347,7 @@
       <div class="card">
         <h3>✅ What Gateway/Filter solves</h3>
         <ul class="clean">
-          <li>Static tool-definition bloat (the 50K-token GitHub MCP problem)</li>
+          <li>Static tool-definition bloat (the large GitHub MCP tool-list problem)</li>
           <li>Tool catalog discovery at scale (1,000+ endpoints)</li>
           <li>RBAC and audit at the tool boundary</li>
           <li>Per-session relevance scoring of tool descriptions</li>
@@ -359,7 +359,7 @@
           <li>Tool <em>output</em> pollution (10K-line log dumps)</li>
           <li>Long search/grep chains accumulating in main context</li>
           <li>Heavy reasoning passes that fill the window mid-task</li>
-          <li>Cross-repo / external-doc reads dragging in 100K tokens</li>
+          <li>Cross-repo / external-doc reads dragging large amounts of text into the main context</li>
           <li>Multi-step refactors where intermediate state piles up</li>
           <li>Session-level decay — context never <em>shrinks</em></li>
         </ul>
@@ -384,30 +384,30 @@
         <h3>Traditional Agent (single context)</h3>
         <pre><span class="com">// Everything lives in one window</span>
 main_context = [
-  system_prompt,         <span class="com">// 4K</span>
-  all_tool_defs,         <span class="com">// 50K</span>
-  AGENTS.md,             <span class="com">// 8K</span>
-  read_file_1..N,        <span class="com">// 40K</span>
-  grep_output_1..M,      <span class="com">// 25K</span>
-  oracle_reasoning,      <span class="com">// 30K</span>
-  user_turns,            <span class="com">// 12K</span>
+  system_prompt,
+  all_tool_defs,
+  AGENTS.md,
+  read_file_1..N,
+  grep_output_1..M,
+  oracle_reasoning,
+  user_turns,
 ]
-<span class="com">// Total: ~169K → middle is dead zone</span></pre>
+<span class="com">// Search results, raw reads, and reasoning all accumulate in one place</span></pre>
       </div>
       <div class="card good">
         <h3>Amp (orchestrated isolation)</h3>
         <pre>main_context = [
-  system_prompt,         <span class="com">// 4K</span>
-  builtin_tools,         <span class="com">// ~6K</span>
-  AGENTS.md (scoped),    <span class="com">// 2K</span>
-  user_turns + summaries <span class="com">// 8K</span>
+  system_prompt,
+  builtin_tools,
+  AGENTS.md (scoped),
+  user_turns + summaries
 ]
-<span class="com">// ↓ delegates to isolated subagents</span>
-Task(...)     → own 200K window
-oracle(...)   → own 200K window
-finder(...)   → own 200K window
-librarian(.)  → own 200K window
-<span class="com">// Main stays under 30K → always sharp</span></pre>
+<span class="com">// delegates large work to focused tools/subagents</span>
+Task(...)
+oracle(...)
+finder(...)
+librarian(...)
+<span class="com">// Main thread stays smaller because children return distilled results</span></pre>
       </div>
     </div>
   </section>
@@ -422,17 +422,17 @@ librarian(.)  → own 200K window
       <div class="card">
         <h3>Technical contract</h3>
         <ul class="clean">
-          <li><span class="mono">prompt</span> — full task brief (parent must include all context the child needs)</li>
-          <li>Child has access to: <span class="mono">Read, Bash, edit_file, create_file, Grep, glob, finder, web_search, look_at, skill, task_list</span></li>
+          <li>The parent passes a focused task brief and any context the child needs</li>
+          <li>The child runs in its own context window</li>
           <li>No back-channel: parent cannot mid-course correct</li>
-          <li>No shared memory: child starts fresh</li>
-          <li>Output: single summary message → parent context</li>
+          <li>No shared memory: child starts fresh rather than inheriting the whole thread</li>
+          <li>Output: result or summary back to the parent thread</li>
         </ul>
       </div>
       <div class="card accent">
         <h3>Why it defeats Lost-in-the-Middle</h3>
-        <p>A subagent that reads 40 files, runs 12 greps, and edits 8 modules consumes <strong style="color:#fff">~80K tokens of its own window</strong>. The parent sees only the 800-token summary. Net cost to main context: <span class="mono">~1K</span> instead of <span class="mono">~80K</span>.</p>
-        <p style="margin-top:10px">Parallel fan-out: 3 subagents in one turn = 3× work, 1× main-context cost.</p>
+        <p>A child agent can search, read, edit, and verify in its own window while the parent keeps only the task brief and the outcome.</p>
+        <p style="margin-top:10px">Parallel fan-out lets Amp do independent work in parallel without stuffing every intermediate grep, file read, and failed attempt into the main thread.</p>
       </div>
     </div>
 
@@ -450,7 +450,7 @@ librarian(.)  → own 200K window
   <section class="slide">
     <span class="tag">Mechanism 2 of 11</span>
     <h2><span class="accent">Oracle</span> — heavy reasoning in a separate context</h2>
-    <p class="lead">A second-opinion advisor backed by GPT-5 (reasoning model). Reads files, searches code, browses web — all in <strong style="color:#fff">its own context</strong>. Returns advice, not raw thought traces.</p>
+    <p class="lead">A second-opinion advisor backed by GPT-5.4. It can read files, search code, and browse the web, then return focused advice instead of raw investigative output.</p>
 
     <div class="grid-3" style="margin-top:20px">
       <div class="card">
@@ -469,12 +469,12 @@ librarian(.)  → own 200K window
           <span class="pill">web_search</span><span class="pill">read_web_page</span>
           <span class="pill">read_thread</span><span class="pill">find_thread</span>
         </div>
-        <p style="margin-top:10px">Oracle can read 30 files and run 50 greps without polluting the parent.</p>
+        <p style="margin-top:10px">Oracle is useful for architecture review, code review, and tricky bugs that benefit from a stronger reasoning pass.</p>
       </div>
       <div class="card good">
-        <h3>Token economics</h3>
-        <p>A typical "review this auth system" oracle call ingests ~60K tokens of code + reasoning. Returns ~2K of structured advice.</p>
-        <p style="margin-top:10px"><strong style="color:#fff">30× compression</strong> ratio — entirely organic.</p>
+        <h3>Why it helps</h3>
+        <p>It keeps deep analysis off the main interaction path, so the parent thread gets the recommendation rather than the whole reasoning journey.</p>
+        <p style="margin-top:10px"><strong style="color:#fff">Tradeoff:</strong> Oracle is intentionally slower and more expensive than Amp's everyday coding path, so it is best used where the extra reasoning matters.</p>
       </div>
     </div>
 
@@ -491,18 +491,18 @@ librarian(.)  → own 200K window
   <section class="slide">
     <span class="tag">Mechanism 3 of 11</span>
     <h2><span class="accent">finder</span> / codebase_search_agent — search as a subagent</h2>
-    <p class="lead">"Where do we validate JWT headers?" used to mean 8 chained greps in main context (~15K tokens). Amp delegates the entire multi-step search to a subagent that returns only file paths + line ranges.</p>
+    <p class="lead">"Where do we validate JWT headers?" no longer has to mean a long grep/read/grep chain in the main thread. Amp can delegate that search to a dedicated search subagent and bring back just the useful pointers.</p>
 
     <div class="grid-2" style="margin-top:20px">
       <div class="card warn">
         <h3>Without finder (naive)</h3>
-        <pre><span class="fn">Grep</span>(<span class="str">"jwt"</span>) → 220 hits, 8K tokens
-<span class="fn">Grep</span>(<span class="str">"verify"</span>) → 410 hits, 14K tokens
-<span class="fn">Grep</span>(<span class="str">"validateToken"</span>) → 12 hits
-<span class="fn">Read</span>(file_a) → 2K
-<span class="fn">Read</span>(file_b) → 3K
-<span class="fn">Grep</span>(<span class="str">"middleware"</span>) → 90 hits
-<span class="com">// Main context: ~30K of grep noise</span></pre>
+        <pre><span class="fn">Grep</span>(<span class="str">"jwt"</span>)
+<span class="fn">Grep</span>(<span class="str">"verify"</span>)
+<span class="fn">Grep</span>(<span class="str">"validateToken"</span>)
+<span class="fn">Read</span>(file_a)
+<span class="fn">Read</span>(file_b)
+<span class="fn">Grep</span>(<span class="str">"middleware"</span>)
+<span class="com">// The main thread accumulates search noise and dead ends</span></pre>
       </div>
       <div class="card good">
         <h3>With finder</h3>
@@ -511,18 +511,18 @@ librarian(.)  → own 200K window
     JWT auth headers. Return file
     paths + line numbers."</span>
 })
-<span class="com">// → subagent runs 8 greps internally
+<span class="com">// → search subagent runs the investigation internally
 // → returns:
 // src/auth/jwt.ts:42-58
 // src/middleware/auth.ts:15
 // src/api/routes.ts:233
-// Main context cost: ~400 tokens</span></pre>
+// Main thread sees the answer, not the full search trail</span></pre>
       </div>
     </div>
 
     <div class="card accent" style="margin-top:22px">
       <h3>Why this matters for Lost-in-the-Middle</h3>
-      <p>Search output is the #1 source of mid-session context bloat in coding agents. By making search itself a subagent, Amp guarantees that <strong style="color:#fff">no grep result ever lives in the main context unless explicitly needed</strong>. The model only sees actionable pointers.</p>
+      <p>Search is one of the easiest ways to flood a thread with low-value text. By making search itself a subagent, Amp can keep bulky intermediate results out of the main thread unless they are explicitly needed.</p>
     </div>
   </section>
 
@@ -544,11 +544,9 @@ librarian(.)  → own 200K window
         </ul>
       </div>
       <div class="card good">
-        <h3>Token impact</h3>
-        <p>Asking "How does Kubernetes handle pod admission?" with naive tooling = clone repo, read 40 files = 200K+ tokens.</p>
-        <p style="margin-top:10px">Via Librarian: parent sees a ~3K-token explanation. The 200K of source code lived only in the librarian's transient window.</p>
-        <div class="stat" style="margin-top:14px; font-size:clamp(28px,3vw,42px)">~65×</div>
-        <div class="stat-label">Context savings on cross-repo research</div>
+        <h3>Why it matters</h3>
+        <p>Cross-repo research can easily swamp a coding thread with code that is not local to the task at hand.</p>
+        <p style="margin-top:10px">Librarian keeps that investigation off to the side and brings back a focused explanation instead of raw repository spelunking.</p>
       </div>
     </div>
   </section>
@@ -557,7 +555,7 @@ librarian(.)  → own 200K window
   <section class="slide">
     <span class="tag">Mechanism 5 of 11</span>
     <h2><span class="accent">Agent Skills</span> — instructions loaded on demand</h2>
-    <p class="lead">Skills are <span class="mono">SKILL.md</span> files registered with the agent. Only <strong style="color:#fff">name + description</strong> stay in the system prompt (~50 tokens each). The full body — workflows, scripts, references — loads <em>only when invoked</em>.</p>
+    <p class="lead">Skills are <span class="mono">SKILL.md</span> files registered with the agent. Only the <strong style="color:#fff">name + description</strong> stay visible by default. The full body - workflows, scripts, references - loads <em>only when invoked</em>.</p>
 
     <div class="grid-2" style="margin-top:20px">
       <div class="card">
@@ -575,15 +573,15 @@ librarian(.)  → own 200K window
         <h3>The killer feature: MCP-in-skills</h3>
         <p>An MCP server bundled inside a skill (<span class="mono">mcp.json</span>) <strong style="color:#fff">starts at launch but its tools stay hidden</strong> until the skill is loaded. This is Amp's organic answer to Gal's "Semantic Filter" — without a Gateway service.</p>
         <ul class="clean" style="margin-top:10px">
-          <li>50 MCPs registered → 0 tool tokens in default context</li>
-          <li>Load 1 skill → only its 3-5 MCP tools become visible</li>
-          <li>Per-session, per-task, automatic</li>
+          <li>Hide MCP tools until they are actually needed</li>
+          <li>Expose only the tools bundled with the invoked skill</li>
+          <li>Amp's own chrome-devtools example drops visible tool definitions from 26 tools / 17K tokens to 4 tools / 1.5K tokens</li>
         </ul>
       </div>
     </div>
 
     <p style="margin-top:18px; color:#94a3b8; font-style:italic">
-      This is exactly the architecture Gal Dahan describes — except it ships as a built-in primitive, not as separate Gateway infrastructure.
+      This lines up with the broader idea of pre-filtering tool exposure before the model sees a large catalog.
     </p>
   </section>
 
@@ -591,7 +589,7 @@ librarian(.)  → own 200K window
   <section class="slide">
     <span class="tag">Mechanism 6 of 11</span>
     <h2><span class="accent">AGENTS.md</span> with granular globs — scoped guidance</h2>
-    <p class="lead">Project context lives in nested <span class="mono">AGENTS.md</span> files. The killer is <strong style="color:#fff">glob-scoped @-mentions</strong>: a referenced file only enters context if a matching file has been touched.</p>
+    <p class="lead">Project context lives in nested <span class="mono">AGENTS.md</span> files. The key feature is <strong style="color:#fff">glob-scoped @-mentions</strong>: a referenced file only enters context if Amp has read a matching file.</p>
 
     <pre style="margin-top:18px"><span class="com"># AGENTS.md (project root)</span>
 
@@ -610,7 +608,7 @@ librarian(.)  → own 200K window
     <div class="grid-2" style="margin-top:20px">
       <div class="card warn">
         <h3>Naive: load everything always</h3>
-        <p>Frontend rules + backend rules + test rules + style guide = ~12K tokens permanently in context. Most of it irrelevant for any single task.</p>
+        <p>Without scoping, unrelated project guidance stays active all the time even when it has nothing to do with the task in front of the model.</p>
       </div>
       <div class="card good">
         <h3>Amp: glob-gated</h3>
@@ -646,33 +644,29 @@ librarian(.)  → own 200K window
         <ul class="clean">
           <li>Each check = isolated subagent, isolated context</li>
           <li>PCI rules never pollute the auth review's window</li>
-          <li>4 checks run in parallel, each ~80K window</li>
+          <li>Checks can run in parallel without becoming one giant review prompt</li>
           <li>Main thread receives only structured findings</li>
-          <li>Block Engineering case study: hundreds of checks, zero context bloat</li>
+          <li>Checks are scoped by directory, so local invariants stay local</li>
         </ul>
       </div>
     </div>
-
-    <p style="margin-top:18px; color:#94a3b8; font-style:italic">
-      Cited externally: Block Engineering blog (Oct 2025) calls this "the cleanest organic context-isolation pattern we've seen in any agent."
-    </p>
   </section>
 
   <!-- ============ SLIDE 12: MECHANISM 8 — HANDOFF ============ -->
   <section class="slide">
     <span class="tag">Mechanism 8 of 11</span>
     <h2><span class="accent">Handoff</span> — fresh thread with curated context</h2>
-    <p class="lead">When a thread accumulates noise (failed attempts, dead-end traces), <span class="mono">handoff</span> spawns a new thread pre-loaded with <em>only</em> the relevant files and a goal statement. The dead context is left behind.</p>
+    <p class="lead">When a thread accumulates noise (failed attempts, dead-end traces), <span class="mono">handoff</span> analyzes the thread, drafts a prompt for a new one, and carries forward the relevant files for the next task.</p>
 
     <div class="arch">
       <div class="arch-box">
         <h3 style="margin:0">Old Thread</h3>
-        <p style="margin-top:6px">180K tokens<br/><span style="color:#fca5a5">90% noise</span></p>
+        <p style="margin-top:6px">Long thread<br/><span style="color:#fca5a5">dead ends + stale history</span></p>
       </div>
       <div class="arch-arrow">⟶ handoff ⟶</div>
       <div class="arch-box main">
         <h3 style="margin:0">New Thread</h3>
-        <p style="margin-top:6px">8K tokens<br/><span style="color:#6ee7b7">Goal + 3 relevant files</span></p>
+        <p style="margin-top:6px">Fresh thread<br/><span style="color:#6ee7b7">drafted prompt + relevant files</span></p>
       </div>
     </div>
 
@@ -688,8 +682,8 @@ librarian(.)  → own 200K window
       </div>
       <div class="card good">
         <h3>Why it's organic</h3>
-        <p>No "compaction summary" hallucinations. No lossy compression. Just a clean reset with explicitly-selected context. The model never has to reason through 90% irrelevant history.</p>
-        <p style="margin-top:10px"><strong style="color:#fff">Counters session-level decay</strong> — the one thing Gateways cannot fix.</p>
+        <p>Handoff replaces summary-stacking with a user-reviewable fresh start. Amp drafts the next-thread prompt, shows it to you, and lets you edit it before sending.</p>
+        <p style="margin-top:10px"><strong style="color:#fff">Why it helps:</strong> you leave behind irrelevant history instead of carrying it forever in the same conversation.</p>
       </div>
     </div>
   </section>
@@ -706,13 +700,13 @@ librarian(.)  → own 200K window
       </div>
       <div class="card">
         <h3>10. Built-in tools first</h3>
-        <p>Amp's 16 built-ins (<span class="mono">Read, Grep, glob, Bash, edit_file, Task, oracle, finder, librarian, ...</span>) cover 95% of coding work with <strong style="color:#fff">~6K total token budget</strong>.</p>
+        <p>Amp's built-in tools (<span class="mono">Read, Grep, glob, Bash, Task, oracle, finder, librarian, ...</span>) cover common coding workflows without needing an MCP server for everything.</p>
         <p style="margin-top:10px">The official guidance: <em>"Use built-ins. Add MCP only when truly needed. Bundle MCPs in skills."</em></p>
       </div>
       <div class="card">
         <h3>11. Permissions / RBAC</h3>
         <p>Tool-level allow/deny lists per workspace. Untrusted MCPs and skills can be sandboxed. <span class="mono">amp permissions list</span>.</p>
-        <p style="margin-top:10px"><strong style="color:#fff">Same governance value</strong> as a Gateway — without putting a network hop on every tool call.</p>
+        <p style="margin-top:10px"><strong style="color:#fff">Governance at the tool boundary</strong> is built into Amp instead of requiring a separate gateway layer.</p>
       </div>
     </div>
 
@@ -731,33 +725,32 @@ librarian(.)  → own 200K window
       <div class="card warn">
         <h3>Naive single-context agent</h3>
         <div class="bar">
-          <div class="seg" style="background:#dc2626; flex:50">Tool defs 50K</div>
-          <div class="seg" style="background:#ea580c; flex:60">File reads 60K</div>
-          <div class="seg" style="background:#ca8a04; flex:40">Grep noise 40K</div>
-          <div class="seg" style="background:#7c3aed; flex:30">Reasoning 30K</div>
-          <div class="seg" style="background:#0891b2; flex:15">Conv 15K</div>
+          <div class="seg" style="background:#dc2626; flex:24">Tool defs</div>
+          <div class="seg" style="background:#ea580c; flex:28">File reads</div>
+          <div class="seg" style="background:#ca8a04; flex:20">Search noise</div>
+          <div class="seg" style="background:#7c3aed; flex:16">Reasoning</div>
+          <div class="seg" style="background:#0891b2; flex:12">Thread history</div>
         </div>
-        <p style="margin-top:8px"><strong>Total ≈ 195K tokens</strong> in one window.</p>
-        <p style="color:#fca5a5">Mid-task accuracy: ~50% (Lost-in-the-Middle).</p>
+        <p style="margin-top:8px"><strong>Everything piles into one window.</strong></p>
+        <p style="color:#fca5a5">The danger is not one specific number. It is that search trails, raw reads, and intermediate reasoning all compete with the actual task.</p>
       </div>
 
       <div class="card good">
         <h3>Amp orchestrated</h3>
         <div class="bar">
-          <div class="seg" style="background:#10b981; flex:6">Builtin 6K</div>
-          <div class="seg" style="background:#059669; flex:2">AGENTS 2K</div>
-          <div class="seg" style="background:#047857; flex:8">User+sums 8K</div>
-          <div class="seg" style="background:#1f2937; flex:84">Free 184K</div>
+          <div class="seg" style="background:#10b981; flex:22">Built-ins</div>
+          <div class="seg" style="background:#059669; flex:14">Scoped guidance</div>
+          <div class="seg" style="background:#047857; flex:20">Goal + summaries</div>
+          <div class="seg" style="background:#1f2937; flex:44">Heavy work offloaded</div>
         </div>
-        <p style="margin-top:8px"><strong>Main thread ≈ 16K tokens.</strong></p>
-        <p style="color:#6ee7b7">Background: 3 × <span class="mono">finder</span> (parallel) + 1 × <span class="mono">oracle</span> + 1 × <span class="mono">librarian</span>, each with own 200K window.</p>
-        <p style="color:#6ee7b7">Mid-task accuracy: ~92%.</p>
+        <p style="margin-top:8px"><strong>Main thread stays closer to the actual goal.</strong></p>
+        <p style="color:#6ee7b7">Search, deep analysis, and remote-repo research can happen in dedicated tools/subagents, so the parent sees the result instead of every intermediate step.</p>
       </div>
     </div>
 
     <div class="card accent" style="margin-top:24px">
       <h3>The arithmetic of orchestration</h3>
-      <p>Amp doesn't have a smaller context window — it has <strong style="color:#fff">N×</strong> bigger one, distributed across short-lived child contexts. Each child operates in the high-accuracy <span class="mono">10K–50K</span> band. The main thread also stays in that band. Lost-in-the-Middle is structurally avoided.</p>
+      <p>Amp does not magically eliminate context limits. It changes <em>where</em> bulky work happens, so the main conversation can stay more focused while child contexts do the noisy investigation.</p>
     </div>
   </section>
 
@@ -781,37 +774,37 @@ librarian(.)  → own 200K window
         </tr>
         <tr>
           <td>Tool output pollution</td>
-          <td class="bad">✗ No mechanism</td>
+          <td class="bad">△ Not addressed by filtering alone</td>
           <td class="good">✓ Task / finder / oracle in own contexts</td>
         </tr>
         <tr>
           <td>Long search chains</td>
-          <td class="bad">✗ Still runs in main</td>
+          <td class="bad">△ Depends on the main agent's search behavior</td>
           <td class="good">✓ <span class="mono">finder</span> subagent returns summaries</td>
         </tr>
         <tr>
           <td>Heavy reasoning passes</td>
-          <td class="bad">✗ Still in main</td>
-          <td class="good">✓ <span class="mono">oracle</span> in isolated GPT-5 context</td>
+          <td class="bad">△ Depends on the main agent's design</td>
+          <td class="good">✓ <span class="mono">oracle</span> offloads deep analysis</td>
         </tr>
         <tr>
           <td>Cross-repo research</td>
-          <td class="bad">✗ Drags external code into main</td>
+          <td class="bad">△ Can still expand the main context if done inline</td>
           <td class="good">✓ <span class="mono">librarian</span> quarantines it</td>
         </tr>
         <tr>
           <td>Per-module guidance</td>
-          <td class="bad">✗ No file-level scoping</td>
+          <td class="bad">△ Not inherent to gateway/filter design</td>
           <td class="good">✓ Nested <span class="mono">AGENTS.md</span> + glob-gated @-refs</td>
         </tr>
         <tr>
           <td>Code-review at scale</td>
-          <td class="bad">✗ One big prompt</td>
+          <td class="bad">△ Not inherent to gateway/filter design</td>
           <td class="good">✓ Per-module <span class="mono">.agents/checks/*.md</span> in parallel subagents</td>
         </tr>
         <tr>
           <td>Session-level decay</td>
-          <td class="bad">✗ Cannot fix</td>
+          <td class="bad">△ Does not reset conversation history by itself</td>
           <td class="good">✓ <span class="mono">handoff</span> resets with curated context</td>
         </tr>
         <tr>
@@ -821,7 +814,7 @@ librarian(.)  → own 200K window
         </tr>
         <tr>
           <td>Per-call latency</td>
-          <td class="bad">+1 network hop on every tool call</td>
+          <td class="bad">Often adds an extra network/policy layer</td>
           <td class="good">In-process</td>
         </tr>
       </tbody>
@@ -832,7 +825,7 @@ librarian(.)  → own 200K window
   <section class="slide">
     <span class="tag">The Deeper Insight</span>
     <h2>Orchestration <span class="accent">subsumes</span> filtering</h2>
-    <p class="lead">A Gateway with Semantic Filter is a special case of subagent orchestration: it's "one filter subagent that picks tools, then runs the main agent." Amp generalizes the pattern.</p>
+    <p class="lead">One useful way to think about the difference: filtering decides what the model sees, while orchestration also decides where bulky work happens.</p>
 
     <div class="grid-3" style="margin-top:20px">
       <div class="card">
@@ -845,7 +838,7 @@ librarian(.)  → own 200K window
       </div>
       <div class="card accent">
         <h3>Composition wins</h3>
-        <p>Amp does both. Skills + <span class="mono">mcp.json</span> filter <em>what loads</em>. Subagents control <em>where it runs</em>. The combination is provably stronger than either alone.</p>
+        <p>Amp does both. Skills + <span class="mono">mcp.json</span> filter <em>what loads</em>. Subagents control <em>where work runs</em>. In practice, that addresses more of the context problem than filtering alone.</p>
       </div>
     </div>
 
@@ -882,7 +875,7 @@ where summaries(t) = Σ subagent_i.summary
       </div>
       <div class="card">
         <h3>4. Built to evolve with new models</h3>
-        <p>When 1M-token models arrive, Lost-in-the-Middle gets <em>worse</em>, not better. The orchestration architecture compounds rather than ages.</p>
+        <p>Longer context windows do not automatically fix middle-retrieval problems. As models scale, orchestration can still matter because it keeps work focused instead of merely making the window larger.</p>
       </div>
     </div>
     <p class="lead" style="margin-top:24px">
@@ -923,7 +916,7 @@ where summaries(t) = Σ subagent_i.summary
       <p style="font-size:clamp(15px, 1.4vw, 20px); color:#e8e8f0; line-height:1.6">
         A Gateway treats Lost-in-the-Middle as an <em>input filtering</em> problem.<br/>
         Amp treats it as an <em>execution architecture</em> problem.<br/>
-        The second framing is more powerful, more general, and ships in the binary.
+        The second framing addresses a broader part of the problem and ships inside the agent itself.
       </p>
       <p style="margin-top:14px; font-size:clamp(13px,1.1vw,16px); color:#a5b4fc">
         <strong>Your agent isn't dumb. It's just lost in the middle.</strong><br/>
@@ -946,7 +939,7 @@ where summaries(t) = Σ subagent_i.summary
     </p>
 
     <div class="footer-note">
-      Sources: ampcode.com/manual · Block Engineering blog (Oct 2025) · Liu et al., "Lost in the Middle" (Stanford 2023)
+      Sources: ampcode.com/manual · ampcode.com/news/handoff · ampcode.com/news/agent-skills · ampcode.com/news/lazy-load-mcp-with-skills · ampcode.com/news/liberating-code-review · Liu et al., "Lost in the Middle" (arXiv 2023 / TACL 2024)
     </div>
   </section>
 
