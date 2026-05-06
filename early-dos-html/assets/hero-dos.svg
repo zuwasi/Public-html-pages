@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 520" role="img" aria-label="איור בסגנון מחשב IBM PC מוקדם עם מסך DOS ודיסקטים">
+<rect width="1400" height="520" fill="#101820"/><rect x="70" y="60" width="1260" height="400" rx="28" fill="#f1efe5"/>
+<rect x="145" y="105" width="520" height="315" rx="18" fill="#1b2b1a" stroke="#0b0f0b" stroke-width="10"/>
+<text x="180" y="165" font-family="Consolas, monospace" font-size="34" fill="#83ff8f">A&gt;DEBUG HELLO.ASM</text>
+<text x="180" y="218" font-family="Consolas, monospace" font-size="34" fill="#83ff8f">HELLO 2026 PEOPLE</text>
+<text x="180" y="271" font-family="Consolas, monospace" font-size="34" fill="#83ff8f">HELLO 2026 PEOPLE</text>
+<text x="180" y="324" font-family="Consolas, monospace" font-size="34" fill="#83ff8f">HELLO 2026 PEOPLE</text>
+<rect x="750" y="105" width="470" height="315" rx="16" fill="#d8d2c5" stroke="#9b9282" stroke-width="8"/>
+<rect x="810" y="155" width="350" height="170" fill="#1d2533"/><rect x="860" y="350" width="250" height="34" fill="#8b8477"/>
+<circle cx="1240" cy="345" r="28" fill="#444"/><rect x="755" y="440" width="460" height="35" rx="12" fill="#c9c1b0"/>
+<rect x="1030" y="55" width="150" height="150" rx="14" fill="#202833"/><rect x="1050" y="75" width="110" height="35" fill="#111"/><rect x="1070" y="130" width="70" height="55" fill="#d7d7d7"/>
+</svg>
