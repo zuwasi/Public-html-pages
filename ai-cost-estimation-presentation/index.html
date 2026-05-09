@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>AI Coding Agent Cost Estimation Dashboards | Engineering Software Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --esl-blue: #4a90e2;
+      --esl-blue-dark: #1768bd;
+      --esl-orange: #f5a623;
+      --text: #222222;
+      --muted: #666666;
+      --bg: #f5f5f5;
+      --card: #ffffff;
+      --line: rgba(34, 34, 34, 0.12);
+      --shadow: 0 24px 70px rgba(23, 104, 189, 0.16);
+      --radius: 28px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 16%, rgba(74, 144, 226, 0.18), transparent 30%),
+        radial-gradient(circle at 88% 12%, rgba(245, 166, 35, 0.20), transparent 28%),
+        linear-gradient(135deg, #ffffff 0%, var(--bg) 44%, #edf5ff 100%);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    a {
+      color: var(--esl-blue-dark);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    a:hover,
+    a:focus-visible {
+      color: var(--esl-orange);
+      text-decoration: underline;
+    }
+
+    .deck {
+      height: 100vh;
+      display: flex;
+      transform: translateX(0);
+      transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      flex: 0 0 100vw;
+      padding: clamp(22px, 4vw, 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .shell {
+      width: min(1200px, 100%);
+      height: min(780px, calc(100vh - clamp(44px, 8vw, 128px)));
+      min-height: 0;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      backdrop-filter: blur(18px);
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: clamp(16px, 2vw, 26px) clamp(18px, 3vw, 38px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.76);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.14);
+    }
+
+    .brand-mark::before {
+      left: 1px;
+      top: 9px;
+      background: var(--esl-blue);
+    }
+
+    .brand-mark::after {
+      right: 1px;
+      top: 2px;
+      background: var(--esl-orange);
+      opacity: 0.94;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: clamp(0.9rem, 1.4vw, 1.08rem);
+      line-height: 1.05;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .brand span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .credit {
+      color: var(--muted);
+      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+      font-size: clamp(0.68rem, 1vw, 0.82rem);
+      text-align: right;
+    }
+
+    .content {
+      min-height: 0;
+      padding: clamp(22px, 4vw, 50px);
+      display: grid;
+      gap: clamp(18px, 3vw, 38px);
+      align-items: center;
+      overflow: auto;
+    }
+
+    .two-col {
+      grid-template-columns: minmax(0, 1.02fr) minmax(280px, 0.98fr);
+    }
+
+    .three-col {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      align-items: stretch;
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(74, 144, 226, 0.10);
+      color: var(--esl-blue-dark);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      font-size: clamp(2.2rem, 7vw, 5.6rem);
+      line-height: 0.96;
+      letter-spacing: -0.07em;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 4.5vw, 3.9rem);
+      line-height: 1;
+      letter-spacing: -0.055em;
+    }
+
+    h3 {
+      font-size: clamp(1rem, 1.8vw, 1.35rem);
+      line-height: 1.16;
+    }
+
+    .lead {
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.32rem);
+      line-height: 1.55;
+    }
+
+    .highlight {
+      color: var(--esl-blue-dark);
+    }
+
+    .orange {
+      color: var(--esl-orange);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.07);
+      padding: clamp(18px, 2.5vw, 28px);
+      min-width: 0;
+    }
+
+    .card.blue {
+      background: linear-gradient(135deg, rgba(74, 144, 226, 0.14), #ffffff 60%);
+    }
+
+    .card.orange-card {
+      background: linear-gradient(135deg, rgba(245, 166, 35, 0.18), #ffffff 58%);
+    }
+
+    .mockup {
+      width: 100%;
+      border-radius: 22px;
+      border: 1px solid rgba(34, 34, 34, 0.12);
+      box-shadow: 0 22px 55px rgba(0, 0, 0, 0.16);
+      object-fit: cover;
+      background: #fff;
+    }
+
+    .screenshot {
+      width: 100%;
+      max-height: 340px;
+      object-fit: contain;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.13);
+      background: #151515;
+    }
+
+    .mini-shot {
+      width: 100%;
+      max-height: 190px;
+      object-fit: contain;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: #111;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+      margin-bottom: 14px;
+    }
+
+    .badge-row,
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 13px;
+      border-radius: 999px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    .badge::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--esl-orange);
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: var(--esl-blue);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 12px 26px rgba(74, 144, 226, 0.28);
+    }
+
+    .button.secondary {
+      background: #fff;
+      color: var(--esl-blue-dark);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+
+    .button:hover,
+    .button:focus-visible {
+      color: #fff;
+      text-decoration: none;
+      transform: translateY(-1px);
+    }
+
+    .button.secondary:hover,
+    .button.secondary:focus-visible {
+      color: var(--esl-orange);
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      position: relative;
+      padding-left: 28px;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: clamp(0.95rem, 1.5vw, 1.08rem);
+    }
+
+    .list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.58em;
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, var(--esl-blue), var(--esl-orange));
+    }
+
+    .formula {
+      padding: 18px;
+      border-radius: 18px;
+      background: #101828;
+      color: #d9f7ff;
+      font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      font-size: clamp(0.78rem, 1.25vw, 1rem);
+      line-height: 1.65;
+      overflow-x: auto;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .metric {
+      padding: 18px;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--esl-blue-dark);
+      font-size: clamp(1.4rem, 3vw, 2.3rem);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .metric span {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.88rem;
+    }
+
+    .stepper {
+      display: grid;
+      gap: 12px;
+      counter-reset: step;
+    }
+
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 16px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .step::before {
+      content: counter(step);
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, var(--esl-blue), var(--esl-orange));
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .step p {
+      color: var(--muted);
+      line-height: 1.45;
+      margin-top: 4px;
+    }
+
+    .terminal {
+      background: #111827;
+      color: #e5e7eb;
+      border-radius: 20px;
+      padding: 18px;
+      font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
+      font-size: clamp(0.72rem, 1.2vw, 0.92rem);
+      line-height: 1.65;
+      overflow-x: auto;
+      border: 1px solid rgba(255, 255, 255, 0.10);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .terminal .comment {
+      color: #9ca3af;
+    }
+
+    .terminal .prompt {
+      color: #93c5fd;
+    }
+
+    .nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: clamp(42px, 5vw, 58px);
+      height: clamp(42px, 5vw, 58px);
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--text);
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.16);
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .nav:hover,
+    .nav:focus-visible {
+      transform: translateY(-50%) scale(1.05);
+      color: var(--esl-blue-dark);
+    }
+
+    .nav.prev {
+      left: clamp(10px, 2vw, 28px);
+    }
+
+    .nav.next {
+      right: clamp(10px, 2vw, 28px);
+    }
+
+    .nav[hidden] {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 8px;
+      background: rgba(34, 34, 34, 0.10);
+      z-index: 30;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--esl-blue), var(--esl-orange));
+      transition: width 320ms ease;
+    }
+
+    .counter {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 31;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 900;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+      font-size: 0.82rem;
+    }
+
+    .swipe-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 34px;
+      transform: translateX(-50%);
+      z-index: 32;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(16, 24, 40, 0.88);
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.84rem;
+      animation: pulseHint 1.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .swipe-hint.hide {
+      display: none;
+    }
+
+    @keyframes pulseHint {
+      0%, 100% { opacity: 0.72; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 1; transform: translateX(-50%) translateY(-5px); }
+    }
+
+    @media (max-width: 850px) {
+      .slide {
+        padding: 14px;
+      }
+
+      .shell {
+        height: calc(100vh - 28px);
+        border-radius: 22px;
+      }
+
+      .topbar {
+        padding: 14px 16px;
+      }
+
+      .credit {
+        display: none;
+      }
+
+      .content,
+      .two-col,
+      .three-col {
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        top: auto;
+        bottom: 44px;
+        transform: none;
+      }
+
+      .nav:hover,
+      .nav:focus-visible {
+        transform: scale(1.05);
+      }
+
+      .nav.prev {
+        left: 16px;
+      }
+
+      .nav.next {
+        right: 16px;
+      }
+
+      .counter {
+        right: 14px;
+        bottom: 12px;
+      }
+
+      .swipe-hint {
+        bottom: 76px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck" aria-live="polite">
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand">
+            <div class="brand-mark" aria-hidden="true"></div>
+            <div>
+              <strong>Engineering Software Lab</strong>
+              <span>AI cost engineering dashboards</span>
+            </div>
+          </div>
+          <div class="credit">Created by Engineering Software Lab Israel</div>
+        </header>
+        <div class="content two-col">
+          <div class="stack">
+            <span class="eyebrow">Claude · Amp · Droid</span>
+            <h1>AI Coding Agent <span class="highlight">Cost Estimation</span></h1>
+            <p class="lead">A practical, customer-ready process for analyzing a repository, selecting real engineering tasks, and estimating the cost of implementing code, documentation, and tests before a long AI-agent run begins.</p>
+            <div class="badge-row">
+              <span class="badge">Budget before execution</span>
+              <span class="badge">Compare dashboards</span>
+              <span class="badge">Export reusable tests</span>
+            </div>
+            <div class="cta-row">
+              <a class="button" href="https://github.com/zuwasi/ai-coding-agents-cost-calculators" target="_blank" rel="noopener">Open repository</a>
+              <a class="button secondary" href="https://www.eswlab.com" target="_blank" rel="noopener">Engineering Software Lab</a>
+            </div>
+          </div>
+          <div class="stack">
+            <img class="mockup" src="assets/esl-mockup.jpg" alt="Engineering Software Lab visual identity mockup" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>The problem</strong><span>AI-agent runs can be expensive and unpredictable</span></div></div>
+          <div class="credit">www.eswlab.com</div>
+        </header>
+        <div class="content two-col">
+          <div class="stack">
+            <span class="eyebrow">Why estimate first?</span>
+            <h2>Large repositories create <span class="orange">cost uncertainty</span>.</h2>
+            <p class="lead">A coding agent may read thousands of files, plan multiple implementation paths, generate tests, retry failures, and consume cached context differently in every provider.</p>
+          </div>
+          <div class="stack">
+            <div class="card blue">
+              <h3>Without a dashboard</h3>
+              <ul class="list">
+                <li>No quick way to compare Claude, Amp, and Droid runs.</li>
+                <li>Task scope is unclear before the expensive implementation phase.</li>
+                <li>Timeouts, CLI failures, and stale logs confuse operators.</li>
+                <li>One-off tests are hard to repeat on another machine or dashboard.</li>
+              </ul>
+            </div>
+            <div class="card orange-card">
+              <h3>With the ESL dashboards</h3>
+              <ul class="list">
+                <li>Analyze the repo once, select candidate tasks, estimate selected work.</li>
+                <li>Use provider-specific pricing logic rather than one generic formula.</li>
+                <li>Save and import tests for repeatable customer demonstrations.</li>
+                <li>Keep runs bounded with timeouts, cancellation, and clear progress logs.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>Process overview</strong><span>From repository path to actionable forecast</span></div></div>
+          <div class="credit">Created by Engineering Software Lab Israel</div>
+        </header>
+        <div class="content two-col">
+          <div class="stack">
+            <span class="eyebrow">Workflow</span>
+            <h2>Two-stage estimation keeps the run understandable.</h2>
+            <p class="lead">The dashboards separate repository analysis from per-task estimation. This makes it easy to explain where the money goes: discovery, selected task work, and team-scale forecast.</p>
+          </div>
+          <div class="stepper">
+            <div class="step"><div><h3>Choose repository and provider</h3><p>Select a local repo and the dashboard that matches the target agent: Claude, Amp, or Droid.</p></div></div>
+            <div class="step"><div><h3>Analyze the codebase</h3><p>The provider CLI inspects the repo and returns practical candidate tasks with an analysis cost.</p></div></div>
+            <div class="step"><div><h3>Select tasks safely</h3><p>Safety mode selects only the first task by default; operators can select more when the machine can handle longer runs.</p></div></div>
+            <div class="step"><div><h3>Estimate implementation work</h3><p>The dashboard asks for code, documentation, and test effort for each selected task, records usage, and reports totals.</p></div></div>
+            <div class="step"><div><h3>Save or export the test</h3><p>Exported JSON includes repo path, selected tasks, settings, analysis cost, and results so another dashboard can replay the scenario.</p></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>Algorithms</strong><span>Provider-specific pricing logic</span></div></div>
+          <div class="credit">www.eswlab.com</div>
+        </header>
+        <div class="content two-col">
+          <div class="stack">
+            <span class="eyebrow">Core formula</span>
+            <h2>Estimate cost from measured usage, not guesses.</h2>
+            <p class="lead">Each dashboard reads the provider CLI output and applies the relevant pricing model. When the provider directly reports cost, that value is preferred.</p>
+            <div class="formula">
+total = analysis_cost + Σ selected_task_cost<br />
+token_cost = (input_tokens × input_rate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ output_tokens × output_rate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ cache_read × cache_read_rate<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ cache_write × cache_write_rate) / 1,000,000
+            </div>
+          </div>
+          <div class="stack">
+            <div class="card">
+              <h3>Claude dashboard</h3>
+              <ul class="list"><li>Uses Claude Code reported cost when available.</li><li>Shows analysis cost and selected task costs as the direct baseline.</li><li>Default model is Opus for high-capability enterprise estimates.</li></ul>
+            </div>
+            <div class="card">
+              <h3>Amp dashboard</h3>
+              <ul class="list"><li>Amp is credits-based, not per-seat pricing.</li><li>Smart mode is priced as Opus-class according to current Amp behavior.</li><li>Forecast shows token/credit usage instead of fake subscription totals.</li></ul>
+            </div>
+            <div class="card">
+              <h3>Droid dashboard</h3>
+              <ul class="list"><li>Shows API-equivalent estimates from observed token usage.</li><li>Real Factory bill depends on plan limits, Core usage, and Extra Usage.</li><li>Operators should compare final billing in Factory usage tools.</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>Dashboard screenshots</strong><span>Three providers, one repeatable operating model</span></div></div>
+          <div class="credit">Created by Engineering Software Lab Israel</div>
+        </header>
+        <div class="content three-col">
+          <div class="card">
+            <img class="mini-shot" src="assets/claude-code-cost-dashboard.png" alt="Claude Code cost dashboard screenshot" />
+            <h3>Claude Code Cost Dashboard</h3>
+            <ul class="list"><li>Direct Claude Code cost baseline.</li><li>Best for explaining Opus/Sonnet implementation budgets.</li><li>Exports tests for customer replay.</li></ul>
+          </div>
+          <div class="card">
+            <img class="mini-shot" src="assets/amp-dashboard.png" alt="Amp cost dashboard screenshot" />
+            <h3>Amp Cost Dashboard</h3>
+            <ul class="list"><li>Credit-oriented usage estimate.</li><li>No misleading seat-price model.</li><li>Shows cache and token breakdown.</li></ul>
+          </div>
+          <div class="card">
+            <img class="mini-shot" src="assets/droid-dashboard.png" alt="Droid cost dashboard screenshot" />
+            <h3>Droid Cost Dashboard</h3>
+            <ul class="list"><li>API-equivalent estimate for Factory Droid runs.</li><li>Separates observed usage from real plan billing.</li><li>Supports imported tests and repeat runs.</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>Reliability considerations</strong><span>Designed for long-running customer demos</span></div></div>
+          <div class="credit">www.eswlab.com</div>
+        </header>
+        <div class="content two-col">
+          <div class="stack">
+            <span class="eyebrow">Operational safety</span>
+            <h2>The estimation process protects the workstation.</h2>
+            <p class="lead">Large repositories can produce slow CLI calls and heavy context processing. The dashboards use bounded subprocess handling and clear UI states to avoid accidental reruns and confusing logs.</p>
+            <div class="metric-grid">
+              <div class="metric"><strong>300s</strong><span>analysis timeout window</span></div>
+              <div class="metric"><strong>900s</strong><span>per-task estimate timeout window</span></div>
+              <div class="metric"><strong>1st</strong><span>task selected by default in safety mode</span></div>
+              <div class="metric"><strong>JSON</strong><span>portable saved test format</span></div>
+            </div>
+          </div>
+          <div class="card blue">
+            <h3>Customer-ready behavior</h3>
+            <ul class="list">
+              <li>Old logs are cleared on restart, re-analysis, and import.</li>
+              <li>Black console windows are hidden during dashboard actions.</li>
+              <li>Timeout and cancellation labels are friendly, not raw stack traces.</li>
+              <li>Process-tree cleanup kills child commands when the operator cancels.</li>
+              <li>Timeout disables immediate rerun until the operator re-analyzes or imports a saved test.</li>
+              <li>Save/export confirms the full file path and creates missing folders.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>Prerequisites and installation</strong><span>What must be ready before estimating</span></div></div>
+          <div class="credit">Created by Engineering Software Lab Israel</div>
+        </header>
+        <div class="content two-col">
+          <div class="stack">
+            <span class="eyebrow">Setup</span>
+            <h2>Install once, then run provider-specific dashboards.</h2>
+            <p class="lead">The dashboards are local Python/PyQt tools. Each provider CLI must already be installed and authenticated before its dashboard can collect real usage data.</p>
+            <ul class="list">
+              <li>Windows workstation with enough RAM for the target repository.</li>
+              <li>Python 3.11+ and Git installed.</li>
+              <li>Claude Code, Amp, and/or Droid CLI installed and logged in.</li>
+              <li>A local repository path for the project being analyzed.</li>
+            </ul>
+          </div>
+          <div class="terminal" aria-label="Installation commands">
+<span class="comment"># Clone the dashboards</span><br />
+<span class="prompt">git clone</span> https://github.com/zuwasi/ai-coding-agents-cost-calculators.git<br />
+<span class="prompt">cd</span> ai-coding-agents-cost-calculators<br /><br />
+<span class="comment"># Install Python dependencies</span><br />
+<span class="prompt">python -m venv</span> .venv<br />
+<span class="prompt">.venv\Scripts\activate</span><br />
+<span class="prompt">pip install -r</span> requirements.txt<br /><br />
+<span class="comment"># Run the dashboard you need</span><br />
+<span class="prompt">python</span> qt_dashboard\claude_cost_dashboard.py<br />
+<span class="prompt">python</span> amp_dashboard\amp_cost_dashboard.py<br />
+<span class="prompt">python</span> droid_dashboard\droid_cost_dashboard.py
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>Usage process</strong><span>How an operator runs a reliable estimate</span></div></div>
+          <div class="credit">www.eswlab.com</div>
+        </header>
+        <div class="content two-col">
+          <div class="card orange-card">
+            <h3>Recommended demo flow</h3>
+            <ul class="list">
+              <li>Start with a small or medium repository to verify authentication and parsing.</li>
+              <li>Run analysis and review the suggested tasks before selecting more work.</li>
+              <li>Estimate one task first; add tasks only when the workstation is stable.</li>
+              <li>Use Save / Export test after a good run so the scenario can be repeated.</li>
+              <li>Import the JSON in another dashboard to compare providers on the same task list.</li>
+            </ul>
+          </div>
+          <div class="stack">
+            <span class="eyebrow">Interpretation</span>
+            <h2>Use estimates as engineering guidance, not invoices.</h2>
+            <p class="lead">The dashboards are built to explain cost drivers before a real implementation. Final cost still depends on actual agent decisions, retries, test failures, cache behavior, provider pricing changes, and the customer’s plan.</p>
+            <div class="card">
+              <h3>Key concepts</h3>
+              <ul class="list"><li><strong>Analysis cost:</strong> repository discovery and task suggestion.</li><li><strong>Task estimate:</strong> projected code, docs, and tests for selected work.</li><li><strong>Provider model:</strong> Claude direct cost, Amp credits, or Droid API-equivalent estimate.</li><li><strong>Forecast:</strong> per-task usage scaled into team planning assumptions.</li></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="shell">
+        <header class="topbar">
+          <div class="brand"><div class="brand-mark" aria-hidden="true"></div><div><strong>Benefits</strong><span>Immediate understanding for technical and business users</span></div></div>
+          <div class="credit">Created by Engineering Software Lab Israel</div>
+        </header>
+        <div class="content two-col">
+          <div class="stack">
+            <span class="eyebrow">Outcome</span>
+            <h2>Make AI coding costs explainable before they happen.</h2>
+            <p class="lead">Engineering Software Lab turns provider CLI usage into a repeatable decision process for demos, customer planning, and internal engineering governance.</p>
+            <div class="cta-row">
+              <a class="button" href="https://github.com/zuwasi/ai-coding-agents-cost-calculators" target="_blank" rel="noopener">Repository</a>
+              <a class="button secondary" href="https://www.eswlab.com" target="_blank" rel="noopener">www.eswlab.com</a>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="card blue"><h3>For engineering</h3><ul class="list"><li>See which tasks are likely expensive.</li><li>Compare providers on the same saved task set.</li><li>Reduce workstation freezes and runaway CLI calls.</li></ul></div>
+            <div class="card orange-card"><h3>For management</h3><ul class="list"><li>Translate token usage into budget conversations.</li><li>Explain pricing differences without misleading seat math.</li><li>Keep customer demos repeatable and auditable.</li></ul></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="nav prev" id="prev" type="button" aria-label="Previous slide">‹</button>
+  <button class="nav next" id="next" type="button" aria-label="Next slide">›</button>
+  <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+  <div class="counter" id="counter">1 / 9</div>
+  <div class="progress" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const progressFill = document.getElementById('progressFill');
+    const swipeHint = document.getElementById('swipeHint');
+
+    let index = 0;
+    let startX = 0;
+    let mouseDownX = 0;
+    let hasNavigated = false;
+
+    function update() {
+      deck.style.transform = `translateX(-${index * 100}vw)`;
+      prev.hidden = index === 0;
+      next.hidden = index === slides.length - 1;
+      counter.textContent = `${index + 1} / ${slides.length}`;
+      progressFill.style.width = `${((index + 1) / slides.length) * 100}%`;
+      if (hasNavigated || index > 0) swipeHint.classList.add('hide');
+    }
+
+    function goTo(nextIndex) {
+      const bounded = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      if (bounded !== index) {
+        hasNavigated = true;
+        index = bounded;
+        update();
+      }
+    }
+
+    prev.addEventListener('click', () => goTo(index - 1));
+    next.addEventListener('click', () => goTo(index + 1));
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') {
+        event.preventDefault();
+        goTo(index + 1);
+      }
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        goTo(index - 1);
+      }
+    });
+
+    document.addEventListener('touchstart', (event) => {
+      startX = event.changedTouches[0].screenX;
+    }, { passive: true });
+
+    document.addEventListener('touchend', (event) => {
+      const endX = event.changedTouches[0].screenX;
+      const delta = endX - startX;
+      if (Math.abs(delta) > 50) goTo(delta < 0 ? index + 1 : index - 1);
+    }, { passive: true });
+
+    document.addEventListener('mousedown', (event) => {
+      mouseDownX = event.screenX;
+    });
+
+    document.addEventListener('mouseup', (event) => {
+      if (!mouseDownX) return;
+      const delta = event.screenX - mouseDownX;
+      mouseDownX = 0;
+      if (Math.abs(delta) > 50) goTo(delta < 0 ? index + 1 : index - 1);
+    });
+
+    update();
+  </script>
+</body>
+</html>
