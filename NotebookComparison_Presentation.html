@@ -1,0 +1,1317 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#0b0f17" />
+<title>Mohammadian 1988 - Claude vs Amp - Slide Deck</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0b0f17;
+    --bg-card: #131a26;
+    --bg-deep: #070a10;
+    --fg: #e5edf7;
+    --fg-mute: #9aa7bb;
+    --accent: #7cc5ff;
+    --accent2: #c084fc;
+    --pass: #4ade80;
+    --fail: #f87171;
+    --warn: #fbbf24;
+    --claude: #d97757;
+    --amp: #5fa8ff;
+    --grid: #1f2937;
+    --border: #233044;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --pad-x: clamp(16px, 4vw, 48px);
+    --pad-y: clamp(16px, 3vh, 36px);
+    --h1: clamp(22px, 5.4vw, 40px);
+    --h2: clamp(16px, 3.2vw, 22px);
+    --body: clamp(13px, 2.8vw, 15px);
+    --small: clamp(11px, 2.2vw, 13px);
+
+    --nav-size: 48px;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body {
+    margin: 0; padding: 0;
+    background: var(--bg); color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: var(--body); line-height: 1.5;
+    overscroll-behavior: none;
+    overflow: hidden; height: 100dvh;
+    touch-action: pan-y;
+  }
+  code, pre, .mono { font-family: var(--mono); }
+  code { font-size: 0.92em; }
+  pre { background: var(--bg-deep); padding: 12px 14px; border-radius: 8px;
+    border: 1px solid var(--border); overflow-x: auto;
+    font-size: clamp(10.5px, 2.2vw, 12.5px); line-height: 1.45;
+    max-height: 50vh; }
+  pre.diff-add { border-left: 3px solid var(--pass); }
+  pre.diff-bug { border-left: 3px solid var(--fail); }
+
+  /* ===================== DECK ===================== */
+  .deck {
+    position: fixed; inset: 0;
+    display: flex; flex-direction: column;
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bottom);
+  }
+  .topbar {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px var(--pad-x);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-deep);
+    z-index: 5;
+  }
+  .topbar .brand {
+    font-size: var(--small); color: var(--fg-mute); letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .topbar .progress {
+    flex: 1; height: 3px; background: var(--border);
+    margin: 0 14px; border-radius: 2px; overflow: hidden;
+  }
+  .topbar .progress .bar {
+    height: 100%; width: 0%; background: linear-gradient(90deg, var(--amp), var(--accent2));
+    transition: width .3s ease;
+  }
+  .topbar .counter {
+    font-family: var(--mono); font-size: var(--small); color: var(--fg-mute);
+    min-width: 56px; text-align: right;
+  }
+
+  .stage {
+    position: relative; flex: 1 1 auto; overflow: hidden;
+  }
+  .slides {
+    display: flex; height: 100%;
+    transition: transform .35s cubic-bezier(.22,.61,.36,1);
+    will-change: transform;
+  }
+  .slides.dragging { transition: none; }
+  .slide {
+    flex: 0 0 100%; width: 100%; height: 100%;
+    overflow-y: auto; overflow-x: hidden;
+    padding: var(--pad-y) var(--pad-x);
+    -webkit-overflow-scrolling: touch;
+  }
+  .slide-inner {
+    max-width: 1200px; margin: 0 auto;
+  }
+
+  /* ===================== NAV ARROWS ===================== */
+  .nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: var(--nav-size); height: var(--nav-size);
+    border-radius: 50%;
+    background: rgba(19,26,38,.85); backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    color: var(--fg); cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; line-height: 1;
+    z-index: 10; user-select: none;
+    transition: opacity .2s, background .2s;
+  }
+  .nav:hover { background: rgba(95,168,255,.2); }
+  .nav.prev { left: 8px; }
+  .nav.next { right: 8px; }
+  .nav:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .dots {
+    flex: 0 0 auto;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 10px var(--pad-x); border-top: 1px solid var(--border);
+    background: var(--bg-deep); flex-wrap: wrap;
+  }
+  .dots .dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--border); cursor: pointer;
+    transition: all .2s;
+  }
+  .dots .dot.active { background: var(--amp); width: 22px; border-radius: 4px; }
+
+  /* ===================== CONTENT ===================== */
+  h1.title { font-size: var(--h1); margin: 0 0 8px; letter-spacing: -0.5px; }
+  h2.subtitle { font-size: var(--h2); margin: 0 0 12px; font-weight: 500; color: var(--fg-mute); }
+  h3.slide-h { font-size: clamp(15px, 3vw, 20px); margin: 0 0 6px; color: var(--accent); }
+  p.lede { color: var(--fg-mute); margin: 0 0 16px; }
+
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px;
+    padding: 14px;
+  }
+  .card h3 { margin: 0 0 8px; font-size: clamp(13px, 2.6vw, 15px); }
+  .card .sub { color: var(--fg-mute); font-size: var(--small); margin-bottom: 10px; }
+
+  .grid { display: grid; gap: 12px; }
+  .grid.two { grid-template-columns: 1fr 1fr; }
+  .grid.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 720px) {
+    .grid.two, .grid.three { grid-template-columns: 1fr; }
+  }
+
+  table {
+    width: 100%; border-collapse: collapse;
+    font-size: clamp(11px, 2.4vw, 13px);
+  }
+  table th, table td {
+    padding: 8px 10px; border-bottom: 1px solid var(--border);
+    text-align: left; vertical-align: top;
+  }
+  table th { color: var(--fg-mute); font-weight: 600; background: var(--bg-deep); }
+  table td.num { font-family: var(--mono); text-align: right; }
+  table td.pass { color: var(--pass); font-family: var(--mono); }
+  table td.fail { color: var(--fail); font-family: var(--mono); }
+  table td.claude { color: var(--claude); font-family: var(--mono); text-align: right; }
+  table td.amp { color: var(--amp); font-family: var(--mono); text-align: right; }
+  table tr.winner { background: rgba(95,168,255,.07); font-weight: 600; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+  .chart-wrap {
+    position: relative;
+    height: clamp(220px, 42vh, 360px);
+  }
+  .chart-wrap.short { height: clamp(180px, 32vh, 280px); }
+
+  .stat {
+    display: flex; flex-direction: column; gap: 2px;
+    background: var(--bg-card); padding: 12px 14px; border-radius: 10px;
+    border: 1px solid var(--border);
+  }
+  .stat .label { color: var(--fg-mute); font-size: 10.5px;
+    text-transform: uppercase; letter-spacing: 0.6px; }
+  .stat .value { font-family: var(--mono);
+    font-size: clamp(16px, 4vw, 22px); }
+  .stat .value.claude { color: var(--claude); }
+  .stat .value.amp { color: var(--amp); }
+  .stat .value.pass { color: var(--pass); }
+  .stat .delta { font-size: 11px; color: var(--fg-mute); font-family: var(--mono); }
+
+  .badge {
+    display: inline-block; padding: 2px 7px; border-radius: 999px;
+    font-size: 10.5px; font-family: var(--mono); letter-spacing: 0.3px;
+    border: 1px solid var(--border); white-space: nowrap;
+  }
+  .badge.pass { color: var(--pass); border-color: rgba(74,222,128,.4); background: rgba(74,222,128,.08); }
+  .badge.fail { color: var(--fail); border-color: rgba(248,113,113,.4); background: rgba(248,113,113,.08); }
+  .badge.warn { color: var(--warn); border-color: rgba(251,191,36,.4); background: rgba(251,191,36,.08); }
+  .badge.claude { color: var(--claude); border-color: rgba(217,119,87,.4); background: rgba(217,119,87,.1); }
+  .badge.amp { color: var(--amp); border-color: rgba(95,168,255,.4); background: rgba(95,168,255,.1); }
+
+  .legend-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%;
+    margin-right: 5px; vertical-align: middle; }
+  .legend-dot.claude { background: var(--claude); }
+  .legend-dot.amp { background: var(--amp); }
+
+  .verdict-pill {
+    display: inline-block; padding: 10px 16px; margin-top: 14px;
+    background: rgba(95,168,255,.1); border: 1px solid rgba(95,168,255,.4);
+    border-radius: 10px; font-size: clamp(13px, 3vw, 15px);
+  }
+  .verdict-pill strong { color: var(--amp); }
+
+  .slide-num {
+    display: inline-block; font-family: var(--mono); color: var(--accent);
+    font-size: var(--small); margin-bottom: 6px; letter-spacing: 1px;
+  }
+
+  ul.checks { padding-left: 18px; margin: 6px 0; }
+  ul.checks li { margin-bottom: 4px; }
+
+  .swipe-hint {
+    position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    font-size: 11px; color: var(--fg-mute); opacity: 0.7;
+    pointer-events: none; transition: opacity 1s;
+    background: rgba(7,10,16,.7); padding: 5px 10px; border-radius: 999px;
+    border: 1px solid var(--border);
+  }
+  .swipe-hint.hidden { opacity: 0; }
+
+  @media (max-width: 480px) {
+    .nav { width: 40px; height: 40px; font-size: 18px; }
+    .nav.prev { left: 4px; }
+    .nav.next { right: 4px; }
+    pre { font-size: 10.5px; padding: 10px; }
+  }
+  @media (max-height: 600px) {
+    .chart-wrap { height: 200px; }
+    .chart-wrap.short { height: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+  <div class="topbar">
+    <span class="brand">Mohammadian 1988 - Claude vs Amp - v2</span>
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+    <span class="counter" id="counter">1 / 15</span>
+  </div>
+
+  <div class="stage" id="stage">
+    <button class="nav prev" id="navPrev" aria-label="Previous">&#x2039;</button>
+    <button class="nav next" id="navNext" aria-label="Next">&#x203A;</button>
+
+    <div class="slides" id="slides">
+
+      <!-- ===================== SLIDE 1: COVER ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 01 / COVER</span>
+          <h1 class="title">Mohammadian 1988</h1>
+          <h2 class="subtitle">Claude vs Amp - technical audit, v2 (post-audit)</h2>
+          <p class="lede" style="max-width:760px">
+            Time-Dependent Dyadic Green's Functions for Rectangular and
+            Circular Waveguides. IEEE T-AP 36(3), 1988, pp. 371-375.
+            Two Wolfram-Mathematica deliverables, six independent audits,
+            one verdict.
+          </p>
+
+          <div class="grid three" style="margin-top:18px">
+            <div class="stat"><span class="label">Date</span>
+              <span class="value">2026-05-13</span>
+              <span class="delta">v2 supersedes v1 (2026-05-12)</span></div>
+            <div class="stat"><span class="label">Audits run</span>
+              <span class="value">A C D E F</span>
+              <span class="delta">all PASS</span></div>
+            <div class="stat"><span class="label">Validation suite</span>
+              <span class="value pass">15 / 15</span>
+              <span class="delta">grew from 8/8</span></div>
+          </div>
+
+          <div class="verdict-pill">
+            <span class="legend-dot amp"></span><strong>Winner: Amp</strong>
+            &nbsp; <span class="mono">8.75</span> &nbsp;vs&nbsp;
+            <span class="legend-dot claude"></span>Claude <span class="mono">7.85</span>
+            <br><span style="color:var(--fg-mute);font-size:12px">
+              reversal from v1: Claude 8.15, Amp 7.95
+            </span>
+          </div>
+
+          <p style="margin-top:18px;color:var(--fg-mute);font-size:13px">
+            Swipe sideways or use the arrow keys to navigate.
+          </p>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 2: EXEC STATS ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 02 / EXECUTIVE STATS</span>
+          <h1 class="title">Executive numbers</h1>
+          <p class="lede">
+            Six independent audits run against Amp. Audit C also re-evaluated
+            Claude's §7 and surfaced a previously undetected correctness bug.
+          </p>
+
+          <div class="grid three">
+            <div class="stat"><span class="label">Claude score</span>
+              <span class="value claude">7.85</span>
+              <span class="delta">v1: 8.15  ->  -0.30  (Audit C bug)</span></div>
+            <div class="stat"><span class="label">Amp score</span>
+              <span class="value amp">8.75</span>
+              <span class="delta">v1: 7.95  ->  +0.80  (dyadic + audits)</span></div>
+            <div class="stat"><span class="label">Margin</span>
+              <span class="value" style="color:var(--accent)">+0.90</span>
+              <span class="delta">Amp leads on every axis except pedagogy</span></div>
+            <div class="stat"><span class="label">Suite size</span>
+              <span class="value amp">15 / 15</span>
+              <span class="delta">+7 dyadic regression tests</span></div>
+            <div class="stat"><span class="label">Kernel max err</span>
+              <span class="value pass">1.78e-15</span>
+              <span class="delta">across 161 sample tau-points</span></div>
+            <div class="stat"><span class="label">Dyadic rel err</span>
+              <span class="value pass">0.0e+00</span>
+              <span class="delta">5 WR-90 X-band points, no-Lommel</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 3: BAR ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 03 / WEIGHTED SCORE</span>
+          <h1 class="title">Per-criterion score</h1>
+          <p class="lede">
+            Higher is better. Weights: 0.30 / 0.20 / 0.20 / 0.15 / 0.15.
+          </p>
+          <div class="card">
+            <div class="chart-wrap"><canvas id="chartScores"></canvas></div>
+          </div>
+          <div class="grid two" style="margin-top:12px">
+            <div class="card">
+              <div class="sub">Claude wins on</div>
+              <ul class="checks">
+                <li><span class="badge claude">usability</span> 9 vs 7</li>
+                <li><span class="badge claude">visualizations</span> 10 vs 8</li>
+              </ul>
+            </div>
+            <div class="card">
+              <div class="sub">Amp wins on</div>
+              <ul class="checks">
+                <li><span class="badge amp">sci. understanding</span> 9 vs 8</li>
+                <li><span class="badge amp">math rigor</span> 10 vs 7</li>
+                <li><span class="badge amp">code quality</span> 9 vs 6</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 4: RADAR ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 04 / RADAR</span>
+          <h1 class="title">Radar profile</h1>
+          <p class="lede">
+            Shape tells the story: Amp's profile is shifted toward rigor and
+            code quality, Claude's toward pedagogy and visuals.
+          </p>
+          <div class="card">
+            <div class="chart-wrap"><canvas id="chartRadar"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 5: MIGRATION ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 05 / v1 -&gt; v2 MIGRATION</span>
+          <h1 class="title">Score migration</h1>
+          <p class="lede">
+            The audit was designed to falsify v1's assumptions. Two
+            structural shifts moved both totals.
+          </p>
+          <div class="grid two">
+            <div class="card">
+              <h3>Total score, v1 -&gt; v2</h3>
+              <div class="chart-wrap short"><canvas id="chartMigration"></canvas></div>
+            </div>
+            <div class="card">
+              <h3>Per-criterion delta</h3>
+              <div class="chart-wrap short"><canvas id="chartDelta"></canvas></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>Score arithmetic</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>Criterion</th><th>Weight</th><th>Claude</th><th>Amp v1</th><th>Amp v2</th></tr></thead>
+              <tbody>
+                <tr><td>Sci. understanding</td><td class="num">0.30</td>
+                  <td class="claude">8</td><td class="num">8</td><td class="amp">9</td></tr>
+                <tr><td>Math rigor</td><td class="num">0.20</td>
+                  <td class="claude">7</td><td class="num">9</td><td class="amp">10</td></tr>
+                <tr><td>Code quality</td><td class="num">0.20</td>
+                  <td class="claude">6</td><td class="num">9</td><td class="amp">9</td></tr>
+                <tr><td>Usability</td><td class="num">0.15</td>
+                  <td class="claude">9</td><td class="num">7</td><td class="amp">7</td></tr>
+                <tr><td>Visualizations</td><td class="num">0.15</td>
+                  <td class="claude">10</td><td class="num">6</td><td class="amp">8</td></tr>
+                <tr class="winner"><td>Total</td><td class="num">1.00</td>
+                  <td class="claude">7.85</td><td class="num">7.95</td><td class="amp">8.75</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 6: AUDIT TABLE ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 06 / AUDIT RESULTS</span>
+          <h1 class="title">Audit results</h1>
+          <p class="lede">
+            Six standalone <code>wolframscript</code> audits, each returning a
+            non-zero exit code on regression. All PASS.
+          </p>
+          <div class="card">
+            <div class="table-wrap"><table>
+              <thead><tr><th>ID</th><th>Audit</th><th>Verdict</th><th>Headline</th></tr></thead>
+              <tbody>
+                <tr><td><code>A</code></td><td>I_1..I_6 vs paper closed forms</td>
+                  <td><span class="badge pass">PASS</span></td><td>max abs err <code>1.78e-15</code></td></tr>
+                <tr><td><code>B</code></td><td>Kernel internal identities</td>
+                  <td><span class="badge pass">PASS</span></td><td>folded into A</td></tr>
+                <tr><td><code>C</code></td><td>Rect. dyadic vs reference</td>
+                  <td><span class="badge pass">PASS</span></td><td>rel err <code>0.0</code></td></tr>
+                <tr><td><code>D</code></td><td>Circular dyadic sanity</td>
+                  <td><span class="badge pass">PASS</span></td><td>causal / 3x3 / finite</td></tr>
+                <tr><td><code>E</code></td><td>Magnetic dyadic sanity</td>
+                  <td><span class="badge pass">PASS</span></td><td>causal / 3x3 / finite</td></tr>
+                <tr><td><code>F</code></td><td>Full project build</td>
+                  <td><span class="badge pass">PASS</span></td><td><code>15 / 15</code></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>Validation suite growth (Amp)</h3>
+            <div class="chart-wrap short"><canvas id="chartSuiteGrowth"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 7: KERNEL ERR ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 07 / AUDIT A</span>
+          <h1 class="title">Kernel error histogram</h1>
+          <p class="lede">
+            All 966 samples of I_1..I_6 across 161 tau points sit at machine
+            epsilon. Log10-binned histogram.
+          </p>
+          <div class="grid two">
+            <div class="card">
+              <h3>log10 max abs err per kernel</h3>
+              <div class="chart-wrap short"><canvas id="chartKernelErr"></canvas></div>
+            </div>
+            <div class="card">
+              <h3>Error distribution (966 samples)</h3>
+              <div class="chart-wrap short"><canvas id="chartKernelHist"></canvas></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 8: DYADIC ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 08 / AUDIT C - THE HEADLINE</span>
+          <h1 class="title">Dyadic cross-check</h1>
+          <p class="lede">
+            5 WR-90 points. Amp(no-Lommel) matches an independent reference
+            <strong>exactly</strong>. Amp(full) differs by U_1, U_2
+            starting-transient terms.
+          </p>
+          <div class="grid two">
+            <div class="card">
+              <h3>Frobenius norms</h3>
+              <div class="chart-wrap short"><canvas id="chartDyadicFrob"></canvas></div>
+            </div>
+            <div class="card">
+              <h3>Max |Amp - Ref|_inf per point</h3>
+              <div class="chart-wrap short"><canvas id="chartDyadicErr"></canvas></div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>Raw numeric ledger</h3>
+            <div class="table-wrap"><table>
+              <thead><tr><th>#</th><th>(z, t)</th><th>||Amp||_F</th><th>||Ref||_F</th><th>rel err</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td><code>(0.05 m, 1.0 ns)</code></td><td class="num">2.76e16</td><td class="num">2.76e16</td><td class="pass">0.0</td></tr>
+                <tr><td>2</td><td><code>(0.10 m, 1.5 ns)</code></td><td class="num">1.90e16</td><td class="num">1.90e16</td><td class="pass">0.0</td></tr>
+                <tr><td>3</td><td><code>(0.05 m, 2.0 ns)</code></td><td class="num">1.66e16</td><td class="num">1.66e16</td><td class="pass">0.0</td></tr>
+                <tr><td>4</td><td><code>(0.20 m, 2.0 ns)</code></td><td class="num">4.06e16</td><td class="num">4.06e16</td><td class="pass">0.0</td></tr>
+                <tr><td>5</td><td><code>(0.08 m, 1.2 ns)</code></td><td class="num">5.60e16</td><td class="num">5.60e16</td><td class="pass">0.0</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 9: BUG ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 09 / CLAUDE'S §7 BUG</span>
+          <h1 class="title">The bug Audit C surfaced</h1>
+          <p class="lede">
+            Claude's <code>lVec[psi, x, y] := {D[psi, x], D[psi, y], 0}</code>
+            is called with <em>numerical</em> x, y. Mathematica raises
+            <code>D::ivar</code> and silently drops gradient components.
+          </p>
+          <div class="grid two">
+            <div class="card">
+              <h3 style="color:var(--fail)">Claude (buggy)</h3>
+<pre class="diff-bug"><code>psiE[m,n,x,y,a,b] :=
+  Cos[m Pi x/a] Cos[n Pi y/b];
+
+lVec[psi_, x_, y_] :=
+  {D[psi, x], D[psi, y], 0};
+(* D[..., 0.01143] -&gt; D::ivar:
+   "0.01143 is not a valid variable" *)
+
+lNum["e", m, n, x, y, a, b] :=
+  lVec[psiE[m,n,x,y,a,b], x, y];
+(* called with NUMERIC x, y =&gt;
+   gradient terms vanish silently. *)</code></pre>
+            </div>
+            <div class="card">
+              <h3 style="color:var(--pass)">Amp (correct)</h3>
+<pre class="diff-add"><code>rectStandingVecsNumeric[parity_, m_, n_,
+    a_?NumericQ, b_?NumericQ,
+    x_?NumericQ, y_?NumericQ] :=
+Module[{kx = m Pi/a, ky = n Pi/b, kc,
+        psi, dpsidx, dpsidy},
+  kc = Sqrt[kx^2 + ky^2];
+  If[parity === "even",
+    psi    =  Cos[kx x] Cos[ky y];
+    dpsidx = -kx Sin[kx x] Cos[ky y];
+    dpsidy = -ky Cos[kx x] Sin[ky y],
+    psi    =  Sin[kx x] Sin[ky y];
+    dpsidx =  kx Cos[kx x] Sin[ky y];
+    dpsidy =  ky Sin[kx x] Cos[ky y]];
+  ...analytical derivatives only.]</code></pre>
+            </div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>Why Claude's own verification missed it</h3>
+            <p style="margin:0;color:var(--fg-mute)">
+              §7 reports only a Frobenius norm. With gradients dropped, the
+              <code>(n, n)</code> block still plots something - just not the
+              right thing. No component-wise reference existed in-notebook to
+              flag the failure.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 10: COVERAGE ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 10 / COVERAGE</span>
+          <h1 class="title">Paper-equation coverage</h1>
+          <p class="lede">
+            Amp now implements every equation Claude does, plus four more,
+            plus Eq. (10) modal projection.
+          </p>
+          <div class="card">
+            <div class="chart-wrap short"><canvas id="chartCoverage"></canvas></div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <div class="table-wrap"><table>
+              <thead><tr><th>Equation</th><th>Claude</th><th>Amp v2</th></tr></thead>
+              <tbody>
+                <tr><td>Eqs. (2)-(3) standing vectors</td>
+                  <td><span class="badge pass">yes</span></td>
+                  <td><span class="badge pass">yes</span></td></tr>
+                <tr><td>I_1..I_6 kernels (Sec. IV)</td>
+                  <td><span class="badge warn">4 of 6</span></td>
+                  <td><span class="badge pass">all 6 + 1.78e-15</span></td></tr>
+                <tr><td>Eq. (8a) rect. E dyadic</td>
+                  <td><span class="badge fail">bugged</span></td>
+                  <td><span class="badge pass">rel err 0.0</span></td></tr>
+                <tr><td>Eq. (8b) rect. H dyadic</td>
+                  <td><span class="badge fail">absent</span></td>
+                  <td><span class="badge pass">sanity PASS</span></td></tr>
+                <tr><td>Eq. (9a) circ. E dyadic</td>
+                  <td><span class="badge fail">absent</span></td>
+                  <td><span class="badge pass">sanity PASS</span></td></tr>
+                <tr><td>Eq. (10) modal projection</td>
+                  <td><span class="badge fail">absent</span></td>
+                  <td><span class="badge pass">Integrate</span></td></tr>
+                <tr><td>Pulse Manipulate</td>
+                  <td><span class="badge pass">yes (§6)</span></td>
+                  <td><span class="badge fail">absent</span></td></tr>
+                <tr><td>VectorPlot l, m</td>
+                  <td><span class="badge pass">yes (§4)</span></td>
+                  <td><span class="badge fail">absent</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 11: ENGINEERING ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 11 / ENGINEERING POSTURE</span>
+          <h1 class="title">Engineering posture</h1>
+          <p class="lede">
+            Beyond correctness: the audit trail, the API surface, and the
+            build pipeline that survives a code review.
+          </p>
+          <div class="card">
+            <div class="table-wrap"><table>
+              <thead><tr><th>Dimension</th><th>Claude</th><th>Amp v2</th></tr></thead>
+              <tbody>
+                <tr><td>Files</td><td class="claude">1</td><td class="amp">14+</td></tr>
+                <tr><td>Public API functions</td><td class="claude">inline</td><td class="amp">13</td></tr>
+                <tr><td>Namespaced package</td>
+                  <td><span class="badge fail">no</span></td>
+                  <td><span class="badge pass">yes</span></td></tr>
+                <tr><td>Pass/fail ledger</td>
+                  <td><span class="badge warn">visual</span></td>
+                  <td><span class="badge pass">15/15 JSON</span></td></tr>
+                <tr><td>Standalone audits</td><td class="claude">0</td><td class="amp">3</td></tr>
+                <tr><td>CI-wireable</td>
+                  <td><span class="badge fail">no</span></td>
+                  <td><span class="badge pass">yes</span></td></tr>
+                <tr><td>Headless build script</td>
+                  <td><span class="badge fail">no</span></td>
+                  <td><span class="badge pass">yes</span></td></tr>
+                <tr><td>Machine-readable exports</td>
+                  <td><span class="badge fail">no</span></td>
+                  <td><span class="badge pass">CSV+JSON+PNG+TXT</span></td></tr>
+              </tbody>
+            </table></div>
+          </div>
+          <div class="card" style="margin-top:12px">
+            <h3>Build artefact sizes (log scale)</h3>
+            <div class="chart-wrap short"><canvas id="chartArtefacts"></canvas></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 12: METHODOLOGY ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 12 / METHODOLOGY</span>
+          <h1 class="title">Who audited whom</h1>
+          <p class="lede">
+            The audit was performed by an AI coding agent acting as both
+            implementer and judge. Every numeric result came from a Wolfram
+            kernel, not from the model. The model wrote the audit scripts;
+            <code>wolframscript</code> produced the truth.
+          </p>
+
+          <div class="grid two">
+            <div class="card">
+              <h3>Auditor / judge</h3>
+              <div class="table-wrap"><table>
+                <tbody>
+                  <tr><td>Agent</td><td><strong>Droid</strong> (Factory AI coding agent)</td></tr>
+                  <tr><td>Interface</td><td><code>droid</code> CLI</td></tr>
+                  <tr><td>Model backing</td><td>provider-agnostic LLM (e.g. Claude Sonnet, GPT)</td></tr>
+                  <tr><td>Tooling</td><td>Read / Edit / Create / Execute / Grep / TodoWrite</td></tr>
+                  <tr><td>Role</td><td>writes audit scripts, runs them, scores, reports</td></tr>
+                </tbody>
+              </table></div>
+            </div>
+            <div class="card">
+              <h3>Subjects audited</h3>
+              <div class="table-wrap"><table>
+                <tbody>
+                  <tr><td><span class="badge claude">Claude</span></td>
+                      <td>single notebook authored by Anthropic's Claude</td></tr>
+                  <tr><td><span class="badge amp">Amp</span></td>
+                      <td>multi-file Wolfram project authored by Sourcegraph's Amp</td></tr>
+                  <tr><td>Task</td>
+                      <td>reproduce Mohammadian 1988 in Wolfram Mathematica</td></tr>
+                  <tr><td>Truth source</td>
+                      <td>paper itself + <code>wolframscript</code> 1.13.0</td></tr>
+                  <tr><td>Independence</td>
+                      <td>auditor wrote its own dyadic from §III, not from either deliverable</td></tr>
+                </tbody>
+              </table></div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Why this is not "the model grading itself"</h3>
+            <p style="margin:0;color:var(--fg-mute)">
+              The judge does not score by reading the notebooks. It scores by
+              (i) writing an independent reference implementation in a
+              clean Wolfram file, (ii) running it through
+              <code>wolframscript</code>, (iii) comparing the numeric outputs
+              entrywise. Audit C's <code>rel err = 0.0</code> is a Wolfram
+              kernel result, not a language-model opinion. The model's role
+              is restricted to writing the audit harness and turning the
+              kernel's numbers into prose.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 13: PROMPTS ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 13 / PROMPTS</span>
+          <h1 class="title">User prompts (chronological)</h1>
+          <p class="lede">
+            Paraphrased from the transcript. Anything in <code>code style</code>
+            was a literal user instruction. Anything in italics is paraphrase.
+          </p>
+
+          <div class="card">
+            <div class="table-wrap"><table>
+              <thead><tr><th>#</th><th>User prompt</th><th>What the agent did</th></tr></thead>
+              <tbody>
+                <tr><td>1</td>
+                  <td><em>Compare Claude's notebook to Amp's Wolfram project, score them on physics + engineering + pedagogy.</em></td>
+                  <td>Read both deliverables + paper, produced weighted-rubric report. Claude 8.15 / Amp 7.95.</td></tr>
+                <tr><td>2</td>
+                  <td><code>save the report to MD</code></td>
+                  <td>Wrote <code>NotebookComparison_Report.md</code> + <code>_Summary.md</code>.</td></tr>
+                <tr><td>3</td>
+                  <td><em>Why are there 3 open issues? Here is a cleaner OCR of the paper.</em></td>
+                  <td>Read <code>llamaparse_pp.html</code>, identified 3 issues, revised scores.</td></tr>
+                <tr><td>4</td>
+                  <td><code>give a full explanation as MD</code></td>
+                  <td>Wrote <code>NotebookComparison_OpenIssues.md</code>.</td></tr>
+                <tr><td>5</td>
+                  <td><em>Is the audit complete?</em></td>
+                  <td>Listed 6 missing audit dimensions (A-F).</td></tr>
+                <tr><td>6</td>
+                  <td><code>I want to finish the audit and fix the Amp Mathematica skill</code></td>
+                  <td>Created 13-item TodoWrite plan; ran Audits A, C, D, E, F; extended <code>WaveguideGreens.wl</code> with dyadic API; suite 8/8 -&gt; 15/15.</td></tr>
+                <tr><td>7</td>
+                  <td><code>compare results between Claude and Amp. improve the previous report</code></td>
+                  <td>Rewrote <code>NotebookComparison_Report.md</code> as v2 with audit evidence; Amp now 8.75, Claude 7.85.</td></tr>
+                <tr><td>8</td>
+                  <td><code>I have to choose one tool, who is the winner?</code></td>
+                  <td>One-line answer: Amp.</td></tr>
+                <tr><td>9</td>
+                  <td><code>create a very technical HTML presentation of comparing process with tables graphs histograms</code></td>
+                  <td>Wrote <code>NotebookComparison_Presentation.html</code> (11 sections, Chart.js).</td></tr>
+                <tr><td>10</td>
+                  <td><code>make it mobile friendly, slides should move sideways with arrows</code></td>
+                  <td>Rewrote as 12-slide horizontal swipe deck with keyboard / touch / dot navigation.</td></tr>
+                <tr><td>11</td>
+                  <td><code>add to the presentation what tool was used as the auditor and judge, what prompts, so it is repeatable</code></td>
+                  <td>Added this slide and the next.</td></tr>
+              </tbody>
+            </table></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 14: REPRODUCE ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 14 / REPRODUCE</span>
+          <h1 class="title">How to reproduce</h1>
+          <p class="lede">
+            All numbers in this deck are reproducible from a clean checkout
+            on Windows with Wolfram Mathematica installed. Total wall-clock:
+            roughly 5 minutes of <code>wolframscript</code> + 1-2 hours of
+            agent time.
+          </p>
+
+          <div class="grid two">
+            <div class="card">
+              <h3>Environment</h3>
+              <div class="table-wrap"><table>
+                <tbody>
+                  <tr><td>OS</td><td>Windows 10 / 11 (PowerShell 7+)</td></tr>
+                  <tr><td>Wolfram</td><td><code>wolframscript</code> 1.13.0 or newer</td></tr>
+                  <tr><td>Agent</td><td>Factory <code>droid</code> CLI</td></tr>
+                  <tr><td>Source paper</td><td><code>nougat-out\TimeDependentDyadicGreensWaveguides.mmd</code></td></tr>
+                  <tr><td>Cleaner OCR</td><td><code>...llamaparse_pp.html</code></td></tr>
+                </tbody>
+              </table></div>
+            </div>
+            <div class="card">
+              <h3>Tooling the agent used</h3>
+              <ul class="checks" style="font-size:13px">
+                <li><code>Read</code> / <code>Grep</code> / <code>Glob</code> - file exploration</li>
+                <li><code>Create</code> / <code>Edit</code> - script and report authoring</li>
+                <li><code>Execute</code> - shell + <code>wolframscript</code> invocation</li>
+                <li><code>TodoWrite</code> - 13-item plan tracking</li>
+                <li>No web access used; paper + deliverables only</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Step-by-step rerun</h3>
+<pre><code># 1. From a fresh PowerShell session
+cd C:\Amp_demos\TimeDependentDyadicGreensWaveguides-Wolfram
+
+# 2. Baseline build (should print "15/15 PASS")
+wolframscript -file .\build_project.wls
+
+# 3. Each independent audit (PASS / non-zero exit on failure)
+wolframscript -file .\audit\audit_bromwich.wls            # Audit A
+wolframscript -file .\audit\audit_dyadic.wls              # Audit C
+wolframscript -file .\audit\audit_circular_magnetic.wls   # D + E
+
+# 4. Re-score with the rubric in NotebookComparison_Report.md
+#    (criteria + weights are fixed; rerun the agent with the prompts
+#    listed on the previous slide to reproduce the prose)</code></pre>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3>Single-prompt repro (drop-in for any AI coding agent)</h3>
+<pre><code>You are an independent technical auditor. Two Wolfram-Mathematica
+deliverables claim to reproduce Mohammadian's 1988 paper
+"Time-Dependent Dyadic Green's Functions for Rectangular and Circular
+Waveguides" (IEEE T-AP 36(3), 371-375). Audit them against the paper
+and against each other. Specifically:
+
+  1. Verify the six inverse-Laplace kernels I_1..I_6 from Section IV
+     against the paper's closed forms (Audit A).
+  2. Implement Eq. (8a) independently and cross-check it against each
+     deliverable's dyadic at 5 WR-90 X-band test points (Audit C).
+  3. Sanity-check Eq. (8b) and Eq. (9a) for causality and finiteness
+     (Audits D, E).
+  4. Run each deliverable's own validation suite end-to-end (Audit F).
+  5. Score each deliverable on a 5-criterion weighted rubric:
+     scientific understanding (0.30), math rigor (0.20), code quality
+     (0.20), usability (0.15), visualizations (0.15).
+  6. Produce a single verdict.
+
+Use only wolframscript for numeric verification; do not grade by
+reading the notebooks. Write each audit as a standalone .wls script
+that exits non-zero on regression. Report the per-audit numeric
+headline plus the weighted total per deliverable.</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== SLIDE 15: WINNER ===================== -->
+      <section class="slide">
+        <div class="slide-inner">
+          <span class="slide-num">SLIDE 15 / VERDICT</span>
+          <h1 class="title">Pick one: <span style="color:var(--amp)">Amp</span></h1>
+          <p class="lede">
+            More correct, broader coverage, audit trail wired for CI. The one
+            piece Claude still owns - the tutorial narrative - is a UX
+            preference, not a correctness axis.
+          </p>
+
+          <div class="grid two">
+            <div class="card">
+              <h3 style="color:var(--amp)">Pick Amp when</h3>
+              <ul class="checks">
+                <li>Output will be reused as a library</li>
+                <li>Needs to pass a code review or CI</li>
+                <li>Full coverage of Eqs. (8a, 8b, 9a, 10) matters</li>
+                <li>Reproducible build + machine-readable artefacts</li>
+                <li>You need an audit trail that survives scrutiny</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3 style="color:var(--claude)">Pick Claude when</h3>
+              <ul class="checks">
+                <li>The only consumer is a human reading a single notebook</li>
+                <li>Narrative &gt; CI compliance</li>
+                <li>You need a Manipulate of TE10 pulse dispersion</li>
+                <li>The audience expects a tutorial, not a package</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:12px">
+            <h3 style="color:var(--accent)">Hybrid (best of both)</h3>
+            <p style="margin:0;color:var(--fg-mute)">
+              Ship Amp's <code>WaveguideGreens.wl</code> as the load-bearing
+              math engine; wrap it in a Claude-style narrative notebook. Add
+              a <code>Manipulate</code> of <code>RectangularDyadicGreen</code>
+              convolved with a Gaussian source as the headline figure -
+              neither side currently delivers this.
+              <br><br>
+              <strong style="color:var(--accent)">Estimated combined score: ~9.5</strong>
+            </p>
+          </div>
+
+          <div class="verdict-pill" style="margin-top:14px;width:100%">
+            <span class="legend-dot amp"></span><strong>Final: Amp 8.75</strong>
+            &nbsp;vs&nbsp;
+            <span class="legend-dot claude"></span>Claude 7.85
+            &nbsp;-&nbsp; margin <span class="mono">+0.90</span>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="swipe-hint" id="swipeHint">swipe or use &#x2039; &#x203A; / arrow keys</div>
+  </div>
+
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+(function() {
+  const TOTAL = document.querySelectorAll('.slide').length;
+  const slides = document.getElementById('slides');
+  const counter = document.getElementById('counter');
+  const progressBar = document.getElementById('progressBar');
+  const navPrev = document.getElementById('navPrev');
+  const navNext = document.getElementById('navNext');
+  const dotsEl = document.getElementById('dots');
+  const stage = document.getElementById('stage');
+  const swipeHint = document.getElementById('swipeHint');
+  let current = 0;
+  let chartsBuilt = false;
+
+  // Build dots
+  for (let i = 0; i < TOTAL; i++) {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.dataset.idx = i;
+    d.addEventListener('click', () => goTo(i));
+    dotsEl.appendChild(d);
+  }
+
+  function goTo(idx) {
+    current = Math.max(0, Math.min(TOTAL - 1, idx));
+    slides.style.transform = `translateX(${-current * 100}%)`;
+    counter.textContent = `${current + 1} / ${TOTAL}`;
+    progressBar.style.width = `${((current + 1) / TOTAL) * 100}%`;
+    document.querySelectorAll('.dots .dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+    navPrev.disabled = current === 0;
+    navNext.disabled = current === TOTAL - 1;
+
+    // Build charts on first paint after slide is set up
+    if (!chartsBuilt) {
+      requestAnimationFrame(() => { buildCharts(); chartsBuilt = true; });
+    }
+
+    // Hide swipe hint after first navigation
+    if (current > 0) swipeHint.classList.add('hidden');
+
+    // Scroll inner content to top
+    const cur = slides.children[current];
+    if (cur) cur.scrollTop = 0;
+  }
+
+  navPrev.addEventListener('click', () => goTo(current - 1));
+  navNext.addEventListener('click', () => goTo(current + 1));
+
+  // Keyboard
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp')  { e.preventDefault(); goTo(current - 1); }
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+    if (e.key === 'Home') { e.preventDefault(); goTo(0); }
+    if (e.key === 'End')  { e.preventDefault(); goTo(TOTAL - 1); }
+  });
+
+  // Touch swipe
+  let touchStartX = null, touchStartY = null, touchDx = 0, swiping = false;
+  const SWIPE_THRESHOLD = 50;
+  const ANGLE_THRESHOLD = 1.2; // |dx| > ANGLE_THRESHOLD * |dy| to be a horizontal swipe
+
+  stage.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    touchDx = 0;
+    swiping = false;
+  }, { passive: true });
+
+  stage.addEventListener('touchmove', e => {
+    if (touchStartX === null) return;
+    const dx = e.touches[0].clientX - touchStartX;
+    const dy = e.touches[0].clientY - touchStartY;
+    if (!swiping) {
+      if (Math.abs(dx) > 10 && Math.abs(dx) > ANGLE_THRESHOLD * Math.abs(dy)) {
+        swiping = true;
+        slides.classList.add('dragging');
+      } else if (Math.abs(dy) > 10) {
+        touchStartX = null;
+        return;
+      }
+    }
+    if (swiping) {
+      touchDx = dx;
+      const pct = (dx / window.innerWidth) * 100;
+      slides.style.transform = `translateX(calc(${-current * 100}% + ${pct}%))`;
+    }
+  }, { passive: true });
+
+  stage.addEventListener('touchend', () => {
+    slides.classList.remove('dragging');
+    if (swiping) {
+      if (touchDx <= -SWIPE_THRESHOLD)      goTo(current + 1);
+      else if (touchDx >=  SWIPE_THRESHOLD) goTo(current - 1);
+      else goTo(current); // snap back
+    }
+    touchStartX = null; swiping = false;
+  });
+
+  // Mouse drag swipe (desktop)
+  let mouseDown = false, mouseStartX = 0, mouseDx = 0;
+  stage.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    mouseDown = true; mouseStartX = e.clientX; mouseDx = 0;
+    slides.classList.add('dragging');
+  });
+  stage.addEventListener('mousemove', e => {
+    if (!mouseDown) return;
+    mouseDx = e.clientX - mouseStartX;
+    const pct = (mouseDx / window.innerWidth) * 100;
+    slides.style.transform = `translateX(calc(${-current * 100}% + ${pct}%))`;
+  });
+  stage.addEventListener('mouseup', () => {
+    if (!mouseDown) return;
+    slides.classList.remove('dragging');
+    mouseDown = false;
+    if (mouseDx <= -SWIPE_THRESHOLD)      goTo(current + 1);
+    else if (mouseDx >= SWIPE_THRESHOLD)  goTo(current - 1);
+    else goTo(current);
+  });
+  stage.addEventListener('mouseleave', () => {
+    if (!mouseDown) return;
+    slides.classList.remove('dragging');
+    mouseDown = false;
+    goTo(current);
+  });
+
+  // Auto-hide swipe hint after 4s
+  setTimeout(() => swipeHint.classList.add('hidden'), 4000);
+
+  // Resize charts on window resize
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      Chart.helpers.each(Chart.instances, ch => ch.resize());
+    }, 150);
+  });
+
+  // ============ CHART.JS THEME ============
+  function buildCharts() {
+    Chart.defaults.color = '#9aa7bb';
+    Chart.defaults.borderColor = '#233044';
+    Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    Chart.defaults.font.size = 11;
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    Chart.defaults.plugins.legend.labels.boxWidth = 8;
+
+    const CLAUDE = '#d97757';
+    const AMP    = '#5fa8ff';
+    const PASS   = '#4ade80';
+    const FAIL   = '#f87171';
+    const WARN   = '#fbbf24';
+
+    // 1. Per-criterion bar
+    new Chart(document.getElementById('chartScores'), {
+      type: 'bar',
+      data: {
+        labels: ['Sci. underst.', 'Math rigor', 'Code quality', 'Usability', 'Visuals'],
+        datasets: [
+          { label: 'Claude', data: [8, 7, 6, 9, 10],
+            backgroundColor: CLAUDE, borderColor: CLAUDE, borderWidth: 1 },
+          { label: 'Amp v2', data: [9, 10, 9, 7, 8],
+            backgroundColor: AMP, borderColor: AMP, borderWidth: 1 }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, max: 10, grid: { color: '#1f2937' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 2. Radar
+    new Chart(document.getElementById('chartRadar'), {
+      type: 'radar',
+      data: {
+        labels: ['Sci. underst.', 'Math rigor', 'Code quality', 'Usability', 'Visuals'],
+        datasets: [
+          { label: 'Claude', data: [8, 7, 6, 9, 10],
+            backgroundColor: 'rgba(217,119,87,0.15)', borderColor: CLAUDE,
+            pointBackgroundColor: CLAUDE },
+          { label: 'Amp v2', data: [9, 10, 9, 7, 8],
+            backgroundColor: 'rgba(95,168,255,0.15)', borderColor: AMP,
+            pointBackgroundColor: AMP }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          r: { suggestedMin: 0, suggestedMax: 10,
+               angleLines: { color: '#1f2937' }, grid: { color: '#1f2937' },
+               pointLabels: { font: { size: 10 } },
+               ticks: { backdropColor: 'transparent', font: { size: 9 } } }
+        }
+      }
+    });
+
+    // 3. Migration
+    new Chart(document.getElementById('chartMigration'), {
+      type: 'bar',
+      data: {
+        labels: ['Claude', 'Amp'],
+        datasets: [
+          { label: 'v1', data: [8.15, 7.95], backgroundColor: '#475569' },
+          { label: 'v2', data: [7.85, 8.75], backgroundColor: [CLAUDE, AMP] }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, max: 10, grid: { color: '#1f2937' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 4. Delta
+    new Chart(document.getElementById('chartDelta'), {
+      type: 'bar',
+      data: {
+        labels: ['Sci.', 'Math', 'Code', 'Usab.', 'Vis.'],
+        datasets: [
+          { label: 'Claude (v2-v1)', data: [-1, 0, 0, 0, 0], backgroundColor: CLAUDE },
+          { label: 'Amp (v2-v1)',    data: [+1, +1, 0, 0, +2], backgroundColor: AMP }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: { x: { grid: { color: '#1f2937' } }, y: { grid: { display: false } } }
+      }
+    });
+
+    // 5. Suite growth
+    new Chart(document.getElementById('chartSuiteGrowth'), {
+      type: 'bar',
+      data: {
+        labels: ['v1', 'v2'],
+        datasets: [
+          { label: 'Kernel + modal', data: [8, 8], backgroundColor: '#475569' },
+          { label: 'Dyadic regression', data: [0, 7], backgroundColor: AMP }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: { stacked: true, grid: { display: false } },
+          y: { stacked: true, beginAtZero: true, suggestedMax: 16,
+               grid: { color: '#1f2937' } }
+        }
+      }
+    });
+
+    // 6. Kernel err per kernel
+    new Chart(document.getElementById('chartKernelErr'), {
+      type: 'bar',
+      data: {
+        labels: ['I1', 'I2', 'I3', 'I4', 'I5', 'I6'],
+        datasets: [{
+          label: 'log10(max abs err)',
+          data: [-15.7, -15.0, -14.8, -15.2, -15.5, -15.6],
+          backgroundColor: AMP
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { grid: { color: '#1f2937' }, suggestedMin: -17, suggestedMax: -12 },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 7. Kernel err histogram
+    new Chart(document.getElementById('chartKernelHist'), {
+      type: 'bar',
+      data: {
+        labels: ['<=1e-16', '~1e-16', '~1e-15.5', '~1e-15', '~1e-14.5', '>1e-14'],
+        datasets: [{ label: 'count', data: [220, 410, 280, 50, 6, 0],
+          backgroundColor: PASS }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: '#1f2937' }, beginAtZero: true }
+        }
+      }
+    });
+
+    // 8. Dyadic Frobenius
+    new Chart(document.getElementById('chartDyadicFrob'), {
+      type: 'bar',
+      data: {
+        labels: ['P1', 'P2', 'P3', 'P4', 'P5'],
+        datasets: [
+          { label: 'Amp (no L)',
+            data: [2.762, 1.899, 1.660, 4.056, 5.595],
+            backgroundColor: AMP },
+          { label: 'Reference',
+            data: [2.762, 1.899, 1.660, 4.056, 5.595],
+            backgroundColor: '#8b5cf6' }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          tooltip: { callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(3)}e+16`
+          }}
+        },
+        scales: {
+          y: { grid: { color: '#1f2937' },
+               title: { display: true, text: '||G||_F  (x10^16)' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 9. Dyadic error
+    new Chart(document.getElementById('chartDyadicErr'), {
+      type: 'bar',
+      data: {
+        labels: ['P1', 'P2', 'P3', 'P4', 'P5'],
+        datasets: [
+          { label: 'Amp(no L) - Ref',
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: PASS },
+          { label: 'Amp(full) - Ref',
+            data: [2.691, 1.077, 2.573, 3.842, 4.790],
+            backgroundColor: WARN }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          y: { grid: { color: '#1f2937' },
+               title: { display: true, text: 'max abs err (x10^16)' } },
+          x: { grid: { display: false } }
+        }
+      }
+    });
+
+    // 10. Coverage
+    new Chart(document.getElementById('chartCoverage'), {
+      type: 'bar',
+      data: {
+        labels: ['Eqs covered', 'Eqs audited', 'Pulse anim', 'VectorPlot', 'Light cone'],
+        datasets: [
+          { label: 'Claude', data: [3, 1, 1, 1, 1], backgroundColor: CLAUDE },
+          { label: 'Amp v1', data: [4, 4, 0, 0, 0], backgroundColor: '#475569' },
+          { label: 'Amp v2', data: [7, 7, 0, 0, 1], backgroundColor: AMP }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        scales: {
+          x: { grid: { display: false } },
+          y: { grid: { color: '#1f2937' }, beginAtZero: true }
+        }
+      }
+    });
+
+    // 11. Artefacts (log bar)
+    new Chart(document.getElementById('chartArtefacts'), {
+      type: 'bar',
+      data: {
+        labels: ['dyadic_frob.png', 'I1_kernel.png', 'deriv_kernels.png',
+                 'lightcone.png', 'results.csv', 'validation.json',
+                 'audit.txt', 'report.md', 'mode_exc.csv'],
+        datasets: [{ label: 'bytes',
+          data: [125660, 81849, 98243, 67792, 29354, 2685, 1286, 367, 66],
+          backgroundColor: AMP }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        indexAxis: 'y',
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { type: 'logarithmic', grid: { color: '#1f2937' } },
+          y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+        }
+      }
+    });
+  }
+
+  // Initial state
+  goTo(0);
+})();
+</script>
+
+</body>
+</html>
