@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-05-13
+Last updated: 2026-05-14
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -106,6 +106,9 @@ Last updated: 2026-05-13
 32. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
+33. wolfram-engine-gpu-demo-presentation.html
+   https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
+
 ──────────────────────────────────────────────────────────────
   OTHER FILES
 ──────────────────────────────────────────────────────────────
@@ -145,5 +148,8 @@ Last updated: 2026-05-13
 
 • nono-logo.png
   https://zuwasi.github.io/Public-html-pages/nono-logo.png
+
+• wolfram-engine-gpu-demo-assets
+  https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-assets
 
 ══════════════════════════════════════════════════════════════
