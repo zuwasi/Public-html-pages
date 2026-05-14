@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>Wolfram Engine GPU Telemetry Demo — Customer Release Flow</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #070a12;
+      --panel: rgba(255,255,255,0.08);
+      --panel-strong: rgba(255,255,255,0.13);
+      --text: #f8fafc;
+      --muted: #b7c4d6;
+      --line: rgba(255,255,255,0.18);
+      --red: #dc2626;
+      --wolfram: #e01b24;
+      --blue: #2563eb;
+      --cyan: #22d3ee;
+      --green: #22c55e;
+      --amber: #f59e0b;
+      --orange: #f97316;
+      --shadow: 0 24px 80px rgba(0,0,0,.45);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    body::before {
+      content: "";
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(circle at 15% 15%, rgba(224,27,36,.30), transparent 32%),
+        radial-gradient(circle at 85% 20%, rgba(37,99,235,.30), transparent 34%),
+        radial-gradient(circle at 60% 85%, rgba(34,211,238,.18), transparent 36%),
+        linear-gradient(135deg, #060914 0%, #111827 50%, #020617 100%);
+      z-index: -2;
+    }
+    body::after {
+      content: ""; position: fixed; inset: 0; z-index: -1; opacity: .22;
+      background-image: linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: radial-gradient(circle at center, black, transparent 82%);
+    }
+    .deck { height: 100vh; display: flex; transition: transform .55s cubic-bezier(.22,.75,.18,1); will-change: transform; }
+    .slide { min-width: 100vw; height: 100vh; padding: clamp(28px, 5vw, 72px); display: flex; flex-direction: column; justify-content: center; position: relative; }
+    .slide-inner { width: min(1240px, 100%); margin: 0 auto; }
+    .kicker { color: var(--cyan); text-transform: uppercase; letter-spacing: .16em; font-weight: 800; font-size: clamp(12px, 1.4vw, 15px); margin-bottom: 14px; }
+    h1, h2, h3 { margin: 0; line-height: .98; letter-spacing: -.04em; }
+    h1 { font-size: clamp(44px, 7.8vw, 104px); font-weight: 900; max-width: 1050px; }
+    h2 { font-size: clamp(34px, 5.5vw, 72px); font-weight: 900; margin-bottom: 22px; }
+    h3 { font-size: clamp(20px, 2.4vw, 32px); font-weight: 800; margin-bottom: 12px; }
+    p, li { color: var(--muted); font-size: clamp(16px, 1.65vw, 22px); line-height: 1.5; }
+    p.lead { font-size: clamp(20px, 2.4vw, 30px); color: #e5edf8; max-width: 980px; }
+    a { color: #93c5fd; text-decoration: none; border-bottom: 1px solid rgba(147,197,253,.45); }
+    ul { padding-left: 1.2em; margin: 14px 0; }
+    .grid { display: grid; gap: 22px; }
+    .grid.two { grid-template-columns: 1fr 1fr; align-items: stretch; }
+    .grid.three { grid-template-columns: repeat(3, 1fr); }
+    .grid.four { grid-template-columns: repeat(4, 1fr); }
+    .card { background: var(--panel); border: 1px solid var(--line); border-radius: 26px; padding: clamp(18px, 2.2vw, 30px); box-shadow: var(--shadow); backdrop-filter: blur(18px); }
+    .card.light { background: rgba(255,255,255,.94); color: #0f172a; }
+    .card.light p, .card.light li { color: #334155; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 13px; border-radius: 999px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.16); color: #e2e8f0; font-weight: 700; font-size: 14px; margin: 4px 6px 4px 0; }
+    .tag-red { color: #fecaca; background: rgba(220,38,38,.25); }
+    .tag-green { color: #bbf7d0; background: rgba(34,197,94,.18); }
+    .tag-blue { color: #bfdbfe; background: rgba(37,99,235,.22); }
+    .brand-row { display: flex; gap: 24px; align-items: center; flex-wrap: wrap; margin-top: 28px; }
+    .brand-img { max-height: 92px; max-width: min(360px, 42vw); object-fit: contain; background: rgba(255,255,255,.94); border-radius: 18px; padding: 10px; box-shadow: var(--shadow); }
+    .screenshot { width: 100%; border-radius: 22px; border: 1px solid var(--line); box-shadow: var(--shadow); display: block; }
+    .dashboard-layout { display: grid; grid-template-columns: minmax(190px, 230px) minmax(0, 1fr) minmax(190px, 230px); gap: 20px; align-items: center; margin-top: 12px; }
+    .dashboard-center { position: relative; }
+    .dashboard-shot { width: 100%; display: block; border-radius: 18px; border: 1px solid rgba(255,255,255,.24); box-shadow: var(--shadow); }
+    .callout-stack { display: grid; gap: 14px; }
+    .callout { position: relative; z-index: 5; max-width: none; padding: 10px 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,.24); background: rgba(15,23,42,.90); color: #f8fafc; font-size: clamp(11px, .95vw, 14px); line-height: 1.25; box-shadow: 0 14px 36px rgba(0,0,0,.34); backdrop-filter: blur(12px); }
+    .callout strong { display: block; color: #fff; font-size: clamp(12px, 1.05vw, 15px); margin-bottom: 3px; }
+    .callout::after { content: ""; position: absolute; top: 50%; height: 2px; width: 22px; background: linear-gradient(90deg, var(--cyan), var(--amber)); }
+    .callout::before { content: ""; position: absolute; top: calc(50% - 4px); width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+    .callout.left::after { left: 100%; }
+    .callout.left::before { left: calc(100% + 20px); border-left: 8px solid var(--amber); }
+    .callout.right::after { right: 100%; background: linear-gradient(90deg, var(--amber), var(--cyan)); }
+    .callout.right::before { right: calc(100% + 20px); border-right: 8px solid var(--amber); }
+    .callout.controls { transform: translateY(-6px); }
+    .callout.table { transform: translateY(2px); }
+    .callout.report { transform: translateY(10px); }
+    .callout.kpis { transform: translateY(32px); }
+    .callout.log { transform: translateY(56px); }
+    .diagram { white-space: pre; overflow-x: auto; font-family: "Cascadia Mono", "Consolas", monospace; font-size: clamp(12px, 1.2vw, 17px); line-height: 1.25; color: #dbeafe; background: rgba(2,6,23,.72); border: 1px solid rgba(148,163,184,.28); border-radius: 20px; padding: 18px; }
+    .formula { font-family: "Cascadia Mono", "Consolas", monospace; color: #e0f2fe; background: rgba(2,6,23,.65); border-left: 5px solid var(--cyan); padding: 14px 16px; border-radius: 12px; font-size: clamp(13px, 1.25vw, 18px); overflow-x: auto; }
+    .metric { display: grid; grid-template-columns: 1.1fr .75fr .75fr 1.6fr; gap: 0; overflow: hidden; border-radius: 18px; border: 1px solid rgba(255,255,255,.14); }
+    .metric div { padding: 12px 14px; border-bottom: 1px solid rgba(255,255,255,.10); color: #dbeafe; font-size: clamp(12px, 1.1vw, 16px); }
+    .metric .head { background: rgba(255,255,255,.12); color: #fff; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; font-size: 12px; }
+    .badge { display: inline-block; min-width: 74px; text-align: center; padding: 5px 10px; border-radius: 999px; font-weight: 800; color: white; font-size: 12px; }
+    .green { background: #16a34a; } .amber { background: #ca8a04; } .red { background: #dc2626; } .blue { background: #2563eb; }
+    .timeline { counter-reset: step; display: grid; gap: 16px; }
+    .step { display: grid; grid-template-columns: 54px 1fr; gap: 16px; align-items: start; }
+    .step::before { counter-increment: step; content: counter(step); width: 48px; height: 48px; border-radius: 15px; display: grid; place-items: center; background: linear-gradient(135deg, var(--wolfram), var(--orange)); font-weight: 900; box-shadow: var(--shadow); }
+    .step strong { color: #fff; font-size: clamp(17px, 1.55vw, 23px); }
+    .step span { display: block; color: var(--muted); font-size: clamp(14px, 1.25vw, 18px); margin-top: 5px; line-height: 1.45; }
+    .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25); background: rgba(15,23,42,.72); color: white; display: grid; place-items: center; font-size: 34px; cursor: pointer; z-index: 20; backdrop-filter: blur(16px); transition: .2s ease; }
+    .nav:hover { background: rgba(224,27,36,.85); transform: translateY(-50%) scale(1.05); }
+    .nav.left { left: 18px; } .nav.right { right: 18px; }
+    .nav.hidden { opacity: 0; pointer-events: none; }
+    .progress { position: fixed; left: 0; bottom: 0; width: 100%; height: 6px; background: rgba(255,255,255,.10); z-index: 30; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--wolfram), var(--orange), var(--cyan)); transition: width .35s ease; }
+    .counter { position: fixed; right: 18px; bottom: 18px; z-index: 31; background: rgba(15,23,42,.72); border: 1px solid rgba(255,255,255,.20); border-radius: 999px; padding: 8px 13px; color: #e2e8f0; font-weight: 800; font-size: 13px; backdrop-filter: blur(14px); }
+    .hint { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 31; color: #e2e8f0; font-weight: 700; font-size: 13px; opacity: .88; animation: pulse 1.8s infinite; }
+    .hint.hidden { display: none; }
+    @keyframes pulse { 0%, 100% { opacity: .45; transform: translateX(-50%) translateY(0); } 50% { opacity: 1; transform: translateX(-50%) translateY(-3px); } }
+    .footer-note { position: absolute; left: clamp(28px, 5vw, 72px); bottom: 26px; color: rgba(226,232,240,.72); font-size: 13px; }
+    .big-number { font-size: clamp(48px, 7vw, 96px); font-weight: 900; letter-spacing: -.06em; color: white; }
+    .small { font-size: clamp(13px, 1.1vw, 16px); color: #cbd5e1; }
+    @media (max-width: 820px) {
+      .slide { padding: 28px 20px 60px; justify-content: flex-start; overflow-y: auto; }
+      .grid.two, .grid.three, .grid.four { grid-template-columns: 1fr; }
+      .brand-img { max-width: 100%; }
+      .nav { display: none; }
+      .metric { grid-template-columns: 1fr; }
+      .metric .head:nth-child(n+2) { display: none; }
+      .dashboard-layout { grid-template-columns: 1fr; }
+      .callout { position: static; max-width: none; margin: 0; transform: none !important; }
+      .callout::after, .callout::before { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Customer-ready demo package</div>
+        <h1>Wolfram Engine GPU Telemetry Demo</h1>
+        <p class="lead">A native C++/Qt dashboard that uses Wolfram Engine locally as the calculation engine for GPU telemetry health analysis.</p>
+        <div class="brand-row">
+          <img class="brand-img" src="wolfram-engine-gpu-demo-assets/esl-logo.jpg" alt="ESL Engineering Software Lab logo" />
+          <img class="brand-img" src="wolfram-engine-gpu-demo-assets/wolfram-homepage.png" alt="Wolfram homepage screenshot" />
+        </div>
+      </div>
+      <div class="footer-note">Release: wolfram-engine-gpu-telemetry-demo v0.1.1 • MIT demo</div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">What the customer sees</div>
+        <h2>From download to local calculation</h2>
+        <div class="timeline">
+          <div class="step"><div><strong>Download the release ZIP</strong><span>GitHub release asset: <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/releases/tag/v0.1.1">v0.1.1 customer package</a>.</span></div></div>
+          <div class="step"><div><strong>Install and activate Wolfram Engine</strong><span>Customer uses their own Wolfram account/license. Wolfram Engine is not redistributed by the demo.</span></div></div>
+          <div class="step"><div><strong>Run the included installer script</strong><span><code>powershell -ExecutionPolicy Bypass -File .\install.ps1</code> creates local install and shortcuts.</span></div></div>
+          <div class="step"><div><strong>Open the dashboard</strong><span>Default engine: <b>Wolfram Engine Calculation Engine</b>.</span></div></div>
+          <div class="step"><div><strong>Click Start</strong><span>Telemetry is sampled, sent to Wolfram Engine through <code>wolframscript</code>, and displayed as a color-coded report.</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Why Wolfram Engine?</div>
+        <h2>Wolfram Engine is the calculation runtime</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>What it is</h3>
+            <ul>
+              <li>A local Wolfram Language kernel/runtime.</li>
+              <li>Runs calculations through <code>wolframscript</code>.</li>
+              <li>Good for automation, embedded workflows and local compute.</li>
+              <li>Separate from the Mathematica notebook front end.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Why it matters here</h3>
+            <ul>
+              <li>Customer can license and run the calculation locally.</li>
+              <li>No cloud dependency for the health analysis.</li>
+              <li>The algorithm remains readable Wolfram Language.</li>
+              <li>Advanced mathematics stays in a runtime designed for mathematics.</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:18px;">
+          <span class="pill tag-red">Wolfram Engine</span>
+          <span class="pill tag-blue">Wolfram Language</span>
+          <span class="pill">wolframscript</span>
+          <span class="pill tag-green">Local customer runtime</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Wolfram ecosystem links</div>
+        <h2>Positioning in the Wolfram product family</h2>
+        <div class="grid two">
+          <div class="card">
+            <img class="screenshot" src="wolfram-engine-gpu-demo-assets/wolfram-homepage.png" alt="Wolfram homepage screenshot" />
+          </div>
+          <div class="card">
+            <h3>Useful customer links</h3>
+            <p>Wolfram describes a unified computation vision across research, education, development, AI deployment and more.</p>
+            <p>
+              <a href="https://www.wolfram.com/?source=nav">Wolfram home</a><br>
+              <a href="https://www.wolfram.com/engine/commercial-options/">Wolfram Engine commercial options</a><br>
+              <a href="https://www.wolfram.com/language/">Wolfram Language</a><br>
+              <a href="https://www.wolframalpha.com/">Wolfram|Alpha</a><br>
+              <a href="https://www.wolfram.com/mathematica/">Mathematica</a><br>
+              <a href="https://www.wolfram.com/artificial-intelligence/">AI Products</a><br>
+              <a href="https://consulting.wolfram.com/">Consulting</a><br>
+              <a href="https://www.wolfram.com/company/contact/global-sales/?Country=Israel">Global Sales — Israel</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">ESL role</div>
+        <h2>ESL: local enablement and integration partner</h2>
+        <div class="grid two">
+          <div class="card light">
+            <img class="screenshot" src="wolfram-engine-gpu-demo-assets/esl-logo.jpg" alt="ESL Engineering Software Lab" />
+          </div>
+          <div class="card">
+            <h3>Role in the customer journey</h3>
+            <ul>
+              <li>Explain the Wolfram Engine deployment model to Israeli customers.</li>
+              <li>Guide installation, activation and local validation.</li>
+              <li>Package engineering demos into customer-consumable releases.</li>
+              <li>Bridge Wolfram algorithms into C++/Qt systems and customer workflows without replacing Wolfram's math engine.</li>
+              <li>Support customer teams as formulas, scoring rules and diagnostics evolve.</li>
+            </ul>
+            <p class="small">This aligns with the customer-facing flow linked from Wolfram global sales for Israel: <a href="https://www.wolfram.com/company/contact/global-sales/?Country=Israel">Wolfram Global Sales Directory</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Release package anatomy</div>
+        <h2>What is shipped to the customer?</h2>
+        <div class="grid two">
+          <div>
+            <pre class="diagram">WolframEngineGpuTelemetryDemo-0.1.1-win64/
+├─ GpuTelemetryDashboard.exe
+├─ Qt6Core.dll / Qt6Gui.dll / Qt6Widgets.dll
+├─ platforms/qwindows.dll
+├─ notebooks/
+│  ├─ GpuHealthReference.wl
+│  ├─ GpuHealthReferenceRunner.wls
+│  └─ GpuHealthReference.nb
+├─ install.ps1
+├─ uninstall.ps1
+├─ CUSTOMER_INSTALL_GUIDE.md
+├─ README_RUNTIME.txt
+└─ LICENSE</pre>
+          </div>
+          <div class="card">
+            <h3>Deliberately not included</h3>
+            <p><b>Wolfram Engine is not bundled.</b> The customer installs and activates it separately under their own Wolfram license.</p>
+            <div class="formula">wolframscript.exe -code '$Version'</div>
+            <p class="small">If this returns a Wolfram version string, the dashboard can call the local calculation engine.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Install flow diagram</div>
+        <h2>Customer installation flow</h2>
+        <pre class="diagram">╭──────────────────────╮
+│ GitHub Release ZIP   │
+╰──────────┬───────────╯
+           ▼
+╭──────────────────────╮       ╭────────────────────────────╮
+│ Extract package      │──────▶│ CUSTOMER_INSTALL_GUIDE.md  │
+╰──────────┬───────────╯       ╰────────────────────────────╯
+           ▼
+╭──────────────────────╮
+│ install.ps1          │
+│ copies app locally   │
+│ creates shortcuts    │
+╰──────────┬───────────╯
+           ▼
+╭──────────────────────╮       ╭────────────────────────────╮
+│ Customer verifies    │──────▶│ wolframscript -code        │
+│ Wolfram Engine       │       │ '$Version'                 │
+╰──────────┬───────────╯       ╰────────────────────────────╯
+           ▼
+╭──────────────────────╮
+│ Launch Dashboard     │
+╰──────────────────────╯</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Runtime architecture</div>
+        <h2>How the dashboard uses Wolfram Engine</h2>
+        <pre class="diagram">╭──────────────╮
+│ Qt Dashboard │
+╰──────┬───────╯
+       │ collects samples every second
+       ▼
+╭─────────────────────────╮
+│ Telemetry JSON temp file │
+╰──────┬──────────────────╯
+       │ hidden CreateProcess
+       ▼
+╭─────────────────────────╮
+│ wolframscript.exe       │
+│ GpuHealthReferenceRunner│
+╰──────┬──────────────────╯
+       │ loads .wl calculation source
+       ▼
+╭─────────────────────────╮
+│ Wolfram Engine          │
+│ calculate health report │
+╰──────┬──────────────────╯
+       │ writes output JSON
+       ▼
+╭─────────────────────────╮
+│ Qt color-coded report   │
+╰─────────────────────────╯</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Dashboard walkthrough</div>
+        <h2>Qt dashboard components</h2>
+        <div class="dashboard-layout">
+          <div class="callout-stack">
+            <div class="callout left controls"><strong>1. Sampling controls</strong>Choose GPU, sample duration, Wolfram Engine calculation, then Start/Stop.</div>
+            <div class="callout left table"><strong>2. Live telemetry grid</strong>Raw sample rows: temperature, fan, power, utilization, memory and throttle flags.</div>
+            <div class="callout left report"><strong>4. Color-coded report</strong>Metric table converts Wolfram JSON into status badges and engineering interpretation.</div>
+          </div>
+          <div class="dashboard-center">
+            <img class="dashboard-shot" src="wolfram-engine-gpu-demo-assets/qt-dashboard.png" alt="Qt dashboard screenshot with Wolfram Engine calculation report" />
+          </div>
+          <div class="callout-stack">
+            <div class="callout right kpis"><strong>3. KPI cards</strong>Health score, predicted temperature, anomaly count and utilization stability.</div>
+            <div class="callout right log"><strong>5. Status log</strong>Shows sampling progress, selected engine and report rendering messages.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Notebook and script model</div>
+        <h2>Notebook, .wl and .wls — what each file does</h2>
+        <div class="grid three">
+          <div class="card">
+            <h3>.nb</h3>
+            <p><b>GpuHealthReference.nb</b></p>
+            <p>Human-facing notebook wrapper: explanation, presentation, exploration. Not the automated runtime target.</p>
+          </div>
+          <div class="card">
+            <h3>.wl</h3>
+            <p><b>GpuHealthReference.wl</b></p>
+            <p>The reusable Wolfram Language calculation source: smoothing, regression, correlations, anomaly detection and scoring.</p>
+          </div>
+          <div class="card">
+            <h3>.wls</h3>
+            <p><b>GpuHealthReferenceRunner.wls</b></p>
+            <p>Command-line runner: imports telemetry JSON, loads the .wl file, exports analysis JSON.</p>
+          </div>
+        </div>
+        <p class="lead" style="margin-top:24px;">For customer automation, we do not run the notebook UI. We run the Wolfram Engine kernel through <code>wolframscript</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Calculation details</div>
+        <h2>What we calculate</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>Inputs sampled by the dashboard</h3>
+            <ul>
+              <li>Temperature, fan, power, power limit</li>
+              <li>GPU utilization and memory utilization</li>
+              <li>Total/used memory and clock values</li>
+              <li>Throttle reason flags</li>
+              <li>Timestamps for trend estimation</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Outputs from Wolfram Engine</h3>
+            <ul>
+              <li>Composite health score, 0–100</li>
+              <li>Thermal risk and 60-second temperature forecast</li>
+              <li>Power instability and memory pressure</li>
+              <li>Utilization stability</li>
+              <li>Anomaly count and human diagnosis</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Algorithm pipeline</div>
+        <h2>Inside the Wolfram calculation</h2>
+        <pre class="diagram">╭──────────────╮
+│ JSON samples │
+╰──────┬───────╯
+       ▼
+╭──────────────────────╮
+│ Sort + fill defaults │
+╰──────┬───────────────╯
+       ▼
+╭──────────────────────╮
+│ Exponential smoothing│ α = 0.35
+╰──────┬───────────────╯
+       ▼
+╭──────────────────────╮
+│ Linear thermal trend │ temperature slope
+╰──────┬───────────────╯
+       ▼
+╭──────────────────────╮
+│ Risk components      │ thermal / power / memory / anomaly / throttle
+╰──────┬───────────────╯
+       ▼
+╭──────────────────────╮
+│ Composite score      │ weighted 0–100 health
+╰──────┬───────────────╯
+       ▼
+╭──────────────────────╮
+│ Diagnosis + JSON     │ rendered by Qt report table
+╰──────────────────────╯</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Formula view</div>
+        <h2>Key scoring concepts</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>Smoothing and forecast</h3>
+            <div class="formula">smooth[t] = α·value[t] + (1-α)·smooth[t-1]
+α = 0.35
+
+predictedTemperature60s = currentSmoothedTemp + 60·slope</div>
+            <p>Wolfram Engine estimates the thermal trend from smoothed temperature values over time.</p>
+          </div>
+          <div class="card">
+            <h3>Composite health</h3>
+            <div class="formula">healthScore = 100 × (1
+  - 0.30·thermalRisk
+  - 0.20·powerInstability
+  - 0.15·memoryPressure
+  - 0.15·anomalyRisk
+  - 0.20·throttleRisk)</div>
+            <p>The score is clamped to 0–100 and translated into a readable diagnosis.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Report output</div>
+        <h2>What the demo checks and displays</h2>
+        <div class="metric">
+          <div class="head">Metric</div><div class="head">Value</div><div class="head">Status</div><div class="head">Meaning</div>
+          <div>Composite health</div><div>82.8 / 100</div><div><span class="badge amber">Stable</span></div><div>Weighted GPU health score from Wolfram Engine.</div>
+          <div>Predicted temperature</div><div>84.9 °C</div><div><span class="badge amber">Watch</span></div><div>60-second thermal forecast from smoothed slope.</div>
+          <div>Thermal risk</div><div>27%</div><div><span class="badge amber">Medium</span></div><div>Current temperature, trend and forecast risk.</div>
+          <div>Power instability</div><div>2%</div><div><span class="badge green">Low</span></div><div>Variation and rapid power changes.</div>
+          <div>Memory pressure</div><div>37%</div><div><span class="badge amber">Medium</span></div><div>Memory utilization and growth behavior.</div>
+          <div>Utilization stability</div><div>100%</div><div><span class="badge green">Stable</span></div><div>Variance/correlation based stability model.</div>
+          <div>Anomaly events</div><div>0</div><div><span class="badge green">Clear</span></div><div>Robust z-score outliers across key metrics.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Why not just C++?</div>
+        <h2>Why use Wolfram Engine instead of a C++ DLL/lib?</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>C++ is strong at product integration</h3>
+            <ul>
+              <li>Native UI, hardware APIs, drivers and operating-system integration.</li>
+              <li>Predictable deployment and performance-critical implementation.</li>
+              <li>But advanced math often becomes custom code, third-party libraries and long validation cycles.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Wolfram Engine is a math engine</h3>
+            <ul>
+              <li>Symbolic algebra, calculus, equation solving and optimization.</li>
+              <li>Statistics, time-series analysis, fitting, transforms and anomaly exploration.</li>
+              <li>Rapid formula iteration: change the model, rerun, inspect results, then ship locally.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="lead">The demo keeps C++ focused on the dashboard/product shell and keeps mathematical reasoning in Wolfram Engine, where symbolic and high-level numeric capabilities already exist.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Symbolic + numeric examples</div>
+        <h2>Examples that are natural in Wolfram Engine</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>Symbolic model work</h3>
+            <div class="formula">D[100 (1 - a thermal - b power - c memory), thermal]
+
+Solve[predictedTemp == 90, seconds]
+
+FullSimplify[scoreFormula, assumptions]</div>
+            <p>Useful when engineers want to derive sensitivities, solve threshold equations, or explain formulas — not only execute fixed numeric code.</p>
+          </div>
+          <div class="card">
+            <h3>High-level analytics</h3>
+            <div class="formula">TimeSeriesModelFit[tempSeries]
+
+FindAnomalies[powerSeries]
+
+Correlation[utilization, temperature]</div>
+            <p>Wolfram Language lets the demo grow from simple scoring to richer diagnostics without rebuilding a math stack inside C++.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">Validation</div>
+        <h2>How we prove the release works</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>Engine check</h3>
+            <div class="formula">wolframscript.exe -code '$Version'</div>
+            <p>Confirms the customer's Wolfram Engine is installed, licensed and accessible.</p>
+          </div>
+          <div class="card">
+            <h3>Wolfram path</h3>
+            <div class="formula">GpuTelemetryDashboard.exe --wolfram-engine-self-test</div>
+            <p>Runs built-in samples through Wolfram Engine and validates analysis JSON.</p>
+          </div>
+        </div>
+        <p class="lead" style="margin-top:24px;"><code>--self-test</code> remains available as a short alias for the same Wolfram Engine validation path.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">End-to-end story</div>
+        <h2>The demo message</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>For the customer</h3>
+            <ul>
+              <li>Install Wolfram Engine locally.</li>
+              <li>Run an engineering dashboard.</li>
+              <li>See Wolfram calculations inside a customer-style product UI.</li>
+              <li>Validate everything with packaged self-tests.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>For ESL and Wolfram</h3>
+            <ul>
+              <li>Demonstrate a practical licensing and install path.</li>
+              <li>Show how Wolfram Engine embeds into C++ workflows.</li>
+              <li>Explain why a math engine is stronger than reimplementing advanced math in a C++ DLL.</li>
+              <li>Provide an MIT public demo customers can inspect and extend.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="nav left hidden" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav right" id="next" aria-label="Next slide">›</button>
+  <div class="hint" id="hint">← Swipe to navigate →</div>
+  <div class="counter" id="counter">1 / 18</div>
+  <div class="progress"><div class="progress-fill" id="progress"></div></div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const progress = document.getElementById('progress');
+    const hint = document.getElementById('hint');
+    let index = 0;
+    let startX = null;
+    let mouseStartX = null;
+    let hasNavigated = false;
+
+    function update() {
+      deck.style.transform = `translateX(${-index * 100}vw)`;
+      prev.classList.toggle('hidden', index === 0);
+      next.classList.toggle('hidden', index === slides.length - 1);
+      counter.textContent = `${index + 1} / ${slides.length}`;
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+      if (hasNavigated || index > 0) hint.classList.add('hidden');
+    }
+    function go(delta) {
+      const nextIndex = Math.max(0, Math.min(slides.length - 1, index + delta));
+      if (nextIndex !== index) { index = nextIndex; hasNavigated = true; update(); }
+    }
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+    });
+    window.addEventListener('touchstart', (e) => { startX = e.changedTouches[0].clientX; }, { passive: true });
+    window.addEventListener('touchend', (e) => {
+      if (startX === null) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+      startX = null;
+    }, { passive: true });
+    window.addEventListener('mousedown', (e) => { mouseStartX = e.clientX; });
+    window.addEventListener('mouseup', (e) => {
+      if (mouseStartX === null) return;
+      const dx = e.clientX - mouseStartX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+      mouseStartX = null;
+    });
+    update();
+  </script>
+</body>
+</html>
