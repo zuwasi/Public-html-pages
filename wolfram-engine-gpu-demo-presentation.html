@@ -366,7 +366,7 @@
           <div class="card">
             <h3>.m</h3>
             <p><b>GpuHealthPackageExample.m</b></p>
-            <p>Traditional Wolfram package file: exposes named helper APIs, usage messages, contexts and symbolic examples. <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/blob/main/notebooks/GpuHealthPackageExample.m">View source</a>.</p>
+            <p>Traditional Wolfram package file: reusable API layer with exported functions, usage messages, contexts and symbolic examples. <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/blob/main/notebooks/GpuHealthPackageExample.m">View source</a>.</p>
           </div>
           <div class="card">
             <h3>.wls</h3>
@@ -375,6 +375,34 @@
           </div>
         </div>
         <p class="lead" style="margin-top:24px;">For customer automation, we do not run the notebook UI. We run the Wolfram Engine kernel through <code>wolframscript</code>.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-inner">
+        <div class="kicker">When to use each Wolfram file type</div>
+        <h2>Why include a .m package example?</h2>
+        <div class="grid two">
+          <div class="card">
+            <h3>Why .m is useful</h3>
+            <ul>
+              <li><b>Package boundary:</b> groups reusable functions under a context such as <code>GpuHealthExample`</code>.</li>
+              <li><b>Public API:</b> exported functions have usage messages, which helps customer teams understand what is supported.</li>
+              <li><b>Symbolic helpers:</b> good place for model explanation utilities like sensitivity derivatives and threshold solving.</li>
+              <li><b>Stable reuse:</b> notebooks, scripts and other Wolfram code can load the same package with <code>Get["file.m"]</code>.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Decision guide</h3>
+            <ul>
+              <li><b>.nb</b> — use for human exploration, teaching, screenshots and algorithm explanation.</li>
+              <li><b>.wl</b> — use for plain Wolfram Language source: calculation logic that can be loaded by scripts.</li>
+              <li><b>.m</b> — use when the code should behave like a package/library with named public functions.</li>
+              <li><b>.wls</b> — use for command-line automation: parse arguments, call the engine, write output files.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="lead" style="margin-top:24px;">In this demo, <code>.wl</code> holds the runtime health calculation, <code>.wls</code> is the executable runner, and <code>.m</code> demonstrates how a customer-facing math API can expose symbolic explanations without rewriting the model in C++.</p>
       </div>
     </section>
 
@@ -593,7 +621,7 @@ Correlation[utilization, temperature]</div>
   <button class="nav left hidden" id="prev" aria-label="Previous slide">‹</button>
   <button class="nav right" id="next" aria-label="Next slide">›</button>
   <div class="hint" id="hint">← Swipe to navigate →</div>
-  <div class="counter" id="counter">1 / 18</div>
+  <div class="counter" id="counter">1 / 19</div>
   <div class="progress"><div class="progress-fill" id="progress"></div></div>
 
   <script>
