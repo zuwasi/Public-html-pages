@@ -135,7 +135,7 @@
           <img class="brand-img" src="wolfram-engine-gpu-demo-assets/wolfram-homepage.png" alt="Wolfram homepage screenshot" />
         </div>
       </div>
-      <div class="footer-note">Release: wolfram-engine-gpu-telemetry-demo v0.1.3 • MIT demo</div>
+      <div class="footer-note">Release: wolfram-engine-gpu-telemetry-demo v0.1.4 • MIT demo</div>
     </section>
 
     <section class="slide">
@@ -143,10 +143,10 @@
         <div class="kicker">What the customer sees</div>
         <h2>From download to local calculation</h2>
         <div class="timeline">
-          <div class="step"><div><strong>Download the release ZIP</strong><span>GitHub release asset: <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/releases/tag/v0.1.3">v0.1.3 customer package</a>.</span></div></div>
+          <div class="step"><div><strong>Download the release ZIP</strong><span>GitHub release asset: <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/releases/tag/v0.1.4">v0.1.4 customer package</a>.</span></div></div>
           <div class="step"><div><strong>Install and activate Wolfram Engine</strong><span>Customer uses their own Wolfram account/license. Wolfram Engine is not redistributed by the demo.</span></div></div>
           <div class="step"><div><strong>Run the included installer script</strong><span><code>powershell -ExecutionPolicy Bypass -File .\install.ps1</code> creates local install and shortcuts.</span></div></div>
-          <div class="step"><div><strong>Open the dashboard</strong><span>Default engine: <b>Wolfram Engine Calculation Engine</b>.</span></div></div>
+          <div class="step"><div><strong>Open the dashboard</strong><span>Choose <b>Wolfram .wls runner using .wl source</b> or <b>Wolfram .m package API</b>.</span></div></div>
           <div class="step"><div><strong>Click Start</strong><span>Telemetry is sampled, sent to Wolfram Engine through <code>wolframscript</code>, and displayed as a color-coded report.</span></div></div>
         </div>
       </div>
@@ -240,7 +240,7 @@
         <h2>What is shipped to the customer?</h2>
         <div class="grid two">
           <div>
-            <pre class="diagram">WolframEngineGpuTelemetryDemo-0.1.3-win64/
+            <pre class="diagram">WolframEngineGpuTelemetryDemo-0.1.4-win64/
 ├─ GpuTelemetryDashboard.exe
 ├─ Qt runtime files
 ├─ Windows platform plugin
@@ -248,6 +248,7 @@
 │  ├─ GpuHealthReference.wl
 │  ├─ GpuHealthPackageExample.m
 │  ├─ GpuHealthReferenceRunner.wls
+│  ├─ GpuHealthPackageRunner.wls
 │  └─ GpuHealthReference.nb
 ├─ install.ps1
 ├─ uninstall.ps1
@@ -333,7 +334,7 @@
         <h2>Qt dashboard components</h2>
         <div class="dashboard-layout">
           <div class="callout-stack">
-            <div class="callout left controls"><strong>1. Sampling controls</strong>Choose GPU, sample duration, Wolfram Engine calculation, then Start/Stop.</div>
+            <div class="callout left controls"><strong>1. Sampling controls</strong>Choose GPU, duration, and Wolfram file mode: .wls runner or .m package API.</div>
             <div class="callout left table"><strong>2. Live telemetry grid</strong>Raw sample rows: temperature, fan, power, utilization, memory and throttle flags.</div>
             <div class="callout left report"><strong>4. Color-coded report</strong>Metric table converts Wolfram JSON into status badges and engineering interpretation.</div>
           </div>
@@ -366,12 +367,12 @@
           <div class="card">
             <h3>.m</h3>
             <p><b>GpuHealthPackageExample.m</b></p>
-            <p>Traditional Wolfram package file: reusable API layer with exported functions, usage messages, contexts and symbolic examples. <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/blob/main/notebooks/GpuHealthPackageExample.m">View source</a>.</p>
+            <p>Traditional Wolfram package file: reusable API layer with exported calculation function, usage messages, contexts and symbolic examples. <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/blob/main/notebooks/GpuHealthPackageExample.m">View source</a>.</p>
           </div>
           <div class="card">
             <h3>.wls</h3>
             <p><b>GpuHealthReferenceRunner.wls</b></p>
-            <p>Command-line runner: imports telemetry JSON, loads Wolfram source, exports analysis JSON.</p>
+            <p>Command-line runner: imports telemetry JSON, loads the .wl source, exports analysis JSON. The package path uses <b>GpuHealthPackageRunner.wls</b>.</p>
           </div>
         </div>
         <p class="lead" style="margin-top:24px;">For customer automation, we do not run the notebook UI. We run the Wolfram Engine kernel through <code>wolframscript</code>.</p>
@@ -402,7 +403,7 @@
             </ul>
           </div>
         </div>
-        <p class="lead" style="margin-top:24px;">In this demo, <code>.wl</code> holds the runtime health calculation, <code>.wls</code> is the executable runner, and <code>.m</code> demonstrates how a customer-facing math API can expose symbolic explanations directly through Wolfram Engine.</p>
+        <p class="lead" style="margin-top:24px;">In this demo, <code>.wl</code> is still relevant: it is the plain calculation source loaded by the .wls runner. The <code>.m</code> path is the package/API style alternative, also executed by Wolfram Engine.</p>
       </div>
     </section>
 

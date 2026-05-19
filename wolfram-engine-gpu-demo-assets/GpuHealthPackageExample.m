@@ -16,7 +16,12 @@ ScoreSensitivityRules::usage =
 ThermalThresholdSeconds::usage =
   "ThermalThresholdSeconds[currentTemp, slope, threshold] solves for the number of seconds until the thermal forecast reaches threshold.";
 
+AnalyzeGpuTelemetry::usage =
+  "AnalyzeGpuTelemetry[samples] calculates the GPU health report through the package API.";
+
 Begin["`Private`"];
+
+Get[FileNameJoin[{DirectoryName[$InputFileName], "GpuHealthReference.wl"}]];
 
 SymbolicHealthScore[] :=
   100 (1 - 0.30 thermalRisk - 0.20 powerInstability -
@@ -34,6 +39,8 @@ ThermalThresholdSeconds[currentTemp_, slope_, threshold_: 90] := Module[{seconds
   If[slope == 0, Return[Indeterminate]];
   seconds /. First@Solve[currentTemp + seconds slope == threshold, seconds]
 ];
+
+AnalyzeGpuTelemetry[samples_List] := analyzeGpuTelemetry[samples];
 
 End[];
 
