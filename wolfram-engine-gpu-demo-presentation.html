@@ -129,7 +129,7 @@
       <div class="slide-inner">
         <div class="kicker">Customer-ready demo package</div>
         <h1>Wolfram Engine GPU Telemetry Demo</h1>
-        <p class="lead">A native C++/Qt dashboard that uses Wolfram Engine locally as the calculation engine for GPU telemetry health analysis.</p>
+        <p class="lead">A Qt dashboard that uses Wolfram Engine locally as the calculation engine for GPU telemetry health analysis.</p>
         <div class="brand-row">
           <img class="brand-img" src="wolfram-engine-gpu-demo-assets/esl-logo.jpg" alt="ESL Engineering Software Lab logo" />
           <img class="brand-img" src="wolfram-engine-gpu-demo-assets/wolfram-homepage.png" alt="Wolfram homepage screenshot" />
@@ -225,7 +225,7 @@
               <li>Explain the Wolfram Engine deployment model to Israeli customers.</li>
               <li>Guide installation, activation and local validation.</li>
               <li>Package engineering demos into customer-consumable releases.</li>
-              <li>Bridge Wolfram algorithms into C++/Qt systems and customer workflows without replacing Wolfram's math engine.</li>
+              <li>Bridge Wolfram algorithms into Qt dashboards and customer workflows without replacing Wolfram's math engine.</li>
               <li>Support customer teams as formulas, scoring rules and diagnostics evolve.</li>
             </ul>
             <p class="small">This aligns with the customer-facing flow linked from Wolfram global sales for Israel: <a href="https://www.wolfram.com/company/contact/global-sales/?Country=Israel">Wolfram Global Sales Directory</a>.</p>
@@ -242,8 +242,8 @@
           <div>
             <pre class="diagram">WolframEngineGpuTelemetryDemo-0.1.2-win64/
 ├─ GpuTelemetryDashboard.exe
-├─ Qt6Core.dll / Qt6Gui.dll / Qt6Widgets.dll
-├─ platforms/qwindows.dll
+├─ Qt runtime files
+├─ Windows platform plugin
 ├─ notebooks/
 │  ├─ GpuHealthReference.wl
 │  ├─ GpuHealthPackageExample.m
@@ -402,7 +402,7 @@
             </ul>
           </div>
         </div>
-        <p class="lead" style="margin-top:24px;">In this demo, <code>.wl</code> holds the runtime health calculation, <code>.wls</code> is the executable runner, and <code>.m</code> demonstrates how a customer-facing math API can expose symbolic explanations without rewriting the model in C++.</p>
+        <p class="lead" style="margin-top:24px;">In this demo, <code>.wl</code> holds the runtime health calculation, <code>.wls</code> is the executable runner, and <code>.m</code> demonstrates how a customer-facing math API can expose symbolic explanations directly through Wolfram Engine.</p>
       </div>
     </section>
 
@@ -515,27 +515,27 @@ predictedTemperature60s = currentSmoothedTemp + 60·slope</div>
 
     <section class="slide">
       <div class="slide-inner">
-        <div class="kicker">Why not just C++?</div>
-        <h2>Why use Wolfram Engine instead of a C++ DLL/lib?</h2>
+        <div class="kicker">Why Wolfram Engine?</div>
+        <h2>Why use Wolfram Engine as the calculation engine?</h2>
         <div class="grid two">
           <div class="card">
-            <h3>C++ is strong at product integration</h3>
+            <h3>Keep mathematics in a math engine</h3>
             <ul>
-              <li>Native UI, hardware APIs, drivers and operating-system integration.</li>
-              <li>Predictable deployment and performance-critical implementation.</li>
-              <li>But advanced math often becomes custom code, third-party libraries and long validation cycles.</li>
+              <li>Use one environment for symbolic, numeric and statistical analysis.</li>
+              <li>Keep formulas readable for engineers, analysts and customer reviewers.</li>
+              <li>Change scoring logic quickly without rebuilding a custom math stack.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Wolfram Engine is a math engine</h3>
+            <h3>Wolfram Engine is local and automatable</h3>
             <ul>
               <li>Symbolic algebra, calculus, equation solving and optimization.</li>
               <li>Statistics, time-series analysis, fitting, transforms and anomaly exploration.</li>
-              <li>Rapid formula iteration: change the model, rerun, inspect results, then ship locally.</li>
+              <li>Run locally through <code>wolframscript</code>, then return clean JSON to the dashboard.</li>
             </ul>
           </div>
         </div>
-        <p class="lead">The demo keeps C++ focused on the dashboard/product shell and keeps mathematical reasoning in Wolfram Engine, where symbolic and high-level numeric capabilities already exist.</p>
+        <p class="lead">The demo keeps mathematical reasoning in Wolfram Engine, where symbolic and high-level numeric capabilities already exist.</p>
       </div>
     </section>
 
@@ -564,7 +564,7 @@ FullSimplify[scoreFormula, assumptions]</div>
 FindAnomalies[powerSeries]
 
 Correlation[utilization, temperature]</div>
-            <p>Wolfram Language lets the demo grow from simple scoring to richer diagnostics without rebuilding a math stack inside C++.</p>
+            <p>Wolfram Language lets the demo grow from simple scoring to richer diagnostics while staying inside Wolfram Engine.</p>
           </div>
         </div>
       </div>
@@ -608,8 +608,8 @@ Correlation[utilization, temperature]</div>
             <h3>For ESL and Wolfram</h3>
             <ul>
               <li>Demonstrate a practical licensing and install path.</li>
-              <li>Show how Wolfram Engine embeds into C++ workflows.</li>
-              <li>Explain why a math engine is stronger than reimplementing advanced math in a C++ DLL.</li>
+              <li>Show how Wolfram Engine powers a local dashboard workflow.</li>
+              <li>Explain why a dedicated calculation engine is the right place for advanced math.</li>
               <li>Provide an MIT public demo customers can inspect and extend.</li>
             </ul>
           </div>
