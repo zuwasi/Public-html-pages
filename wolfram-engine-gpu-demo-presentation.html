@@ -135,7 +135,7 @@
           <img class="brand-img" src="wolfram-engine-gpu-demo-assets/wolfram-homepage.png" alt="Wolfram homepage screenshot" />
         </div>
       </div>
-      <div class="footer-note">Release: wolfram-engine-gpu-telemetry-demo v0.1.1 • MIT demo</div>
+      <div class="footer-note">Release: wolfram-engine-gpu-telemetry-demo v0.1.2 • MIT demo</div>
     </section>
 
     <section class="slide">
@@ -143,7 +143,7 @@
         <div class="kicker">What the customer sees</div>
         <h2>From download to local calculation</h2>
         <div class="timeline">
-          <div class="step"><div><strong>Download the release ZIP</strong><span>GitHub release asset: <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/releases/tag/v0.1.1">v0.1.1 customer package</a>.</span></div></div>
+          <div class="step"><div><strong>Download the release ZIP</strong><span>GitHub release asset: <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/releases/tag/v0.1.2">v0.1.2 customer package</a>.</span></div></div>
           <div class="step"><div><strong>Install and activate Wolfram Engine</strong><span>Customer uses their own Wolfram account/license. Wolfram Engine is not redistributed by the demo.</span></div></div>
           <div class="step"><div><strong>Run the included installer script</strong><span><code>powershell -ExecutionPolicy Bypass -File .\install.ps1</code> creates local install and shortcuts.</span></div></div>
           <div class="step"><div><strong>Open the dashboard</strong><span>Default engine: <b>Wolfram Engine Calculation Engine</b>.</span></div></div>
@@ -240,12 +240,13 @@
         <h2>What is shipped to the customer?</h2>
         <div class="grid two">
           <div>
-            <pre class="diagram">WolframEngineGpuTelemetryDemo-0.1.1-win64/
+            <pre class="diagram">WolframEngineGpuTelemetryDemo-0.1.2-win64/
 ├─ GpuTelemetryDashboard.exe
 ├─ Qt6Core.dll / Qt6Gui.dll / Qt6Widgets.dll
 ├─ platforms/qwindows.dll
 ├─ notebooks/
 │  ├─ GpuHealthReference.wl
+│  ├─ GpuHealthPackageExample.m
 │  ├─ GpuHealthReferenceRunner.wls
 │  └─ GpuHealthReference.nb
 ├─ install.ps1
@@ -312,6 +313,7 @@
 │ GpuHealthReferenceRunner│
 ╰──────┬──────────────────╯
        │ loads .wl calculation source
+       │ optional .m package example
        ▼
 ╭─────────────────────────╮
 │ Wolfram Engine          │
@@ -349,8 +351,8 @@
     <section class="slide">
       <div class="slide-inner">
         <div class="kicker">Notebook and script model</div>
-        <h2>Notebook, .wl and .wls — what each file does</h2>
-        <div class="grid three">
+        <h2>Notebook, .wl, .m and .wls — what each file does</h2>
+        <div class="grid four">
           <div class="card">
             <h3>.nb</h3>
             <p><b>GpuHealthReference.nb</b></p>
@@ -362,9 +364,14 @@
             <p>The reusable Wolfram Language calculation source: smoothing, regression, correlations, anomaly detection and scoring.</p>
           </div>
           <div class="card">
+            <h3>.m</h3>
+            <p><b>GpuHealthPackageExample.m</b></p>
+            <p>Traditional Wolfram package file: exposes named helper APIs, usage messages, contexts and symbolic examples. <a href="https://github.com/zuwasi/wolfram-engine-gpu-telemetry-demo/blob/main/notebooks/GpuHealthPackageExample.m">View source</a>.</p>
+          </div>
+          <div class="card">
             <h3>.wls</h3>
             <p><b>GpuHealthReferenceRunner.wls</b></p>
-            <p>Command-line runner: imports telemetry JSON, loads the .wl file, exports analysis JSON.</p>
+            <p>Command-line runner: imports telemetry JSON, loads Wolfram source, exports analysis JSON.</p>
           </div>
         </div>
         <p class="lead" style="margin-top:24px;">For customer automation, we do not run the notebook UI. We run the Wolfram Engine kernel through <code>wolframscript</code>.</p>
@@ -511,7 +518,11 @@ predictedTemperature60s = currentSmoothedTemp + 60·slope</div>
         <div class="grid two">
           <div class="card">
             <h3>Symbolic model work</h3>
-            <div class="formula">D[100 (1 - a thermal - b power - c memory), thermal]
+            <div class="formula">Get["GpuHealthPackageExample.m"]
+
+GpuHealthExample`ScoreSensitivityRules[]
+
+D[100 (1 - a thermal - b power - c memory), thermal]
 
 Solve[predictedTemp == 90, seconds]
 
