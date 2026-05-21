@@ -47,17 +47,16 @@
   .slide{
     flex:0 0 100vw;
     height:100vh;
-    padding:clamp(18px, 4vw, 60px);
+    padding:clamp(56px, 5vh, 80px) clamp(18px, 4vw, 60px) clamp(34px, 5vh, 60px);
     display:flex;
     flex-direction:column;
     justify-content:center;
     align-items:stretch;
     position:relative;
-    overflow-y:auto;
-    overflow-x:hidden;
+    overflow:hidden;
   }
-  .slide::-webkit-scrollbar{width:6px;}
-  .slide::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
+  .slide.dense{justify-content:flex-start;padding-top:clamp(56px,7vh,90px);}
+  .slide-body{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,1.2vh,14px);}
 
   /* topbar with ESL brand */
   .topbar{
@@ -85,11 +84,13 @@
   .esl-mark .tag .a{font-size:clamp(13px,1.45vw,17px);font-weight:800;}
   .esl-mark .tag .b{font-size:clamp(10px,1.05vw,11px);font-weight:500;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
 
-  h1,h2,h3{font-weight:800;letter-spacing:-.01em;}
-  h1{font-size:clamp(28px,5.2vw,68px);line-height:1.05;}
-  h2{font-size:clamp(22px,3.6vw,44px);line-height:1.1;margin-bottom:clamp(8px,1.4vw,18px);}
-  h3{font-size:clamp(16px,2vw,22px);color:var(--accent);font-weight:700;margin-bottom:8px;}
-  p,li{font-size:clamp(14px,1.45vw,18px);line-height:1.55;color:var(--text);}
+  h1,h2,h3{font-weight:700;letter-spacing:-.01em;}
+  h1{font-size:clamp(28px,5.2vw,68px);line-height:1.05;font-weight:800;}
+  h2{font-size:clamp(20px,3vw,38px);line-height:1.15;margin-bottom:clamp(6px,1vw,12px);}
+  h2.tight{font-size:clamp(18px,2.4vw,30px);}
+  h3{font-size:clamp(13px,1.55vw,17px);color:var(--accent);font-weight:600;margin-bottom:6px;}
+  p,li{font-size:clamp(12px,1.25vw,15px);line-height:1.45;color:var(--text);font-weight:400;}
+  p.lead{font-size:clamp(13px,1.45vw,17px);}
   .muted{color:var(--muted);}
   .accent{color:var(--accent);}
   .accent2{color:var(--accent-2);}
@@ -108,10 +109,12 @@
   .card{
     background:var(--panel);
     border:1px solid var(--line);
-    border-radius:14px;
-    padding:clamp(14px,2vw,22px);
+    border-radius:12px;
+    padding:clamp(10px,1.3vw,16px) clamp(12px,1.5vw,18px);
   }
-  .grid{display:grid;gap:clamp(10px,1.4vw,18px);}
+  .card p{font-size:clamp(11px,1.15vw,13.5px);line-height:1.4;}
+  .card ul.tight li{font-size:clamp(11px,1.1vw,13px);margin:2px 0;line-height:1.35;}
+  .grid{display:grid;gap:clamp(8px,1vw,14px);}
   .g-2{grid-template-columns:repeat(2,1fr);}
   .g-3{grid-template-columns:repeat(3,1fr);}
   .g-4{grid-template-columns:repeat(4,1fr);}
@@ -237,8 +240,9 @@
   .kicker{color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:clamp(11px,1.2vw,13px);margin-bottom:8px;}
 
   /* code block */
-  pre.code{background:#06080f;border:1px solid var(--line);border-radius:10px;padding:14px 16px;
-           font-family:var(--mono);font-size:clamp(11px,1.15vw,13px);overflow-x:auto;color:#cfd8dc;}
+  pre.code{background:#06080f;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+           font-family:var(--mono);font-size:clamp(9.5px,.95vw,12px);line-height:1.45;
+           overflow:hidden;color:#cfd8dc;white-space:pre-wrap;word-break:break-word;}
   pre.code .k{color:var(--accent);}
   pre.code .c{color:var(--muted);font-style:italic;}
   pre.code .s{color:#a5e0a5;}
@@ -552,347 +556,310 @@
     <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Implications</span></div>
 
     <div class="kicker">IMPLICATIONS FOR ARDUPILOT</div>
-    <h2>Real critical bugs surfaced by the benchmark</h2>
-    <p class="muted" style="margin-bottom:18px;">A single LAN-adjacent attacker can take over an ArduPilot vehicle in flight. The benchmark surfaced six distinct paths to that outcome.</p>
+    <h2 class="tight">Six paths to LAN-adjacent vehicle takeover</h2>
 
+    <div class="slide-body">
     <div class="grid g-2">
       <div class="card">
-        <h3>Unauthenticated DDS (ROS 2 over UDP:2019)</h3>
+        <h3>Unauthenticated DDS · UDP 2019</h3>
         <ul class="tight">
-          <li>ARM / DISARM service — no auth</li>
-          <li>MODE_SWITCH service — no auth</li>
-          <li>TAKEOFF service — no auth</li>
-          <li>SET_PARAMETERS service — disables ARMING_CHECK, FENCE_ENABLE, SCR_ENABLE</li>
-          <li>Joy topic — overrides all RC channels</li>
+          <li>ARM / DISARM service</li>
+          <li>MODE_SWITCH service</li>
+          <li>TAKEOFF service</li>
+          <li>SET_PARAMETERS · disables fence / arming-check</li>
+          <li>Joy topic · overrides all RC channels</li>
         </ul>
-        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS up to <strong class="bad">10.0</strong>. <code class="mono">libraries/AP_DDS/AP_DDS_Client.cpp</code></p>
+        <p class="muted" style="margin-top:6px;">CVSS up to 10.0 · <code class="mono">AP_DDS_Client.cpp</code></p>
       </div>
       <div class="card">
         <h3>MAVLink subsystem</h3>
         <ul class="tight">
-          <li>MAVFTP arbitrary file r/w + <code class="mono">..</code> traversal</li>
-          <li>MAVFTP → drop Lua script in <code class="mono">APM/scripts/</code> → RCE</li>
-          <li>SERIAL_CONTROL → drive any UART (ESC, GPS, modem, bootloader)</li>
-          <li><code class="mono">@SYS/storage.bin</code> exfiltrates MAVLink signing key</li>
+          <li>MAVFTP file r/w + <code class="mono">..</code> traversal</li>
+          <li>Drop <code class="mono">.lua</code> in <code class="mono">APM/scripts/</code> → RCE</li>
+          <li>SERIAL_CONTROL → any UART</li>
+          <li><code class="mono">@SYS/storage.bin</code> leaks signing key</li>
         </ul>
-        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS <strong class="bad">9.6</strong>. <code class="mono">GCS_FTP.cpp · GCS_serial_control.cpp</code></p>
+        <p class="muted" style="margin-top:6px;">CVSS 9.6 · <code class="mono">GCS_FTP.cpp · GCS_serial_control.cpp</code></p>
       </div>
       <div class="card">
         <h3>Signed-firmware fail-open</h3>
         <ul class="tight">
-          <li><code class="mono">check_signature()</code> returns <code class="mono">true</code> when all bootloader public keys are zero</li>
-          <li>SETUP_SIGNING accepted before signing is provisioned</li>
+          <li><code class="mono">check_signature()</code> returns <code class="mono">true</code> when keystore is zero</li>
+          <li>SETUP_SIGNING accepted pre-provisioning</li>
         </ul>
-        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS <strong class="bad">9.1</strong>. <code class="mono">AP_CheckFirmware_secure_command.cpp:199</code></p>
+        <p class="muted" style="margin-top:6px;">CVSS 9.1 · <code class="mono">AP_CheckFirmware_secure_command.cpp:199</code></p>
       </div>
       <div class="card">
-        <h3>Memory-safety cluster</h3>
+        <h3>Memory safety cluster</h3>
         <ul class="tight">
-          <li><code class="mono">handle_device_op_write</code> — 127-byte OOB read</li>
-          <li><code class="mono">@SYS</code> lseek signed/unsigned OOB read</li>
-          <li>Param upload OOB + biased <code class="mono">AP_Param</code> writes</li>
-          <li><code class="mono">apfs_fgets</code> int → uint8 truncation</li>
+          <li><code class="mono">handle_device_op_write</code> · 127-byte OOB read</li>
+          <li><code class="mono">@SYS</code> lseek signed/unsigned OOB</li>
+          <li>Param upload OOB + biased writes</li>
+          <li><code class="mono">apfs_fgets</code> int→uint8 truncation</li>
         </ul>
-        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS 4 – 7. Surfaced uniquely under <code class="mono">main_prompt.txt</code>.</p>
+        <p class="muted" style="margin-top:6px;">CVSS 4–7 · surfaced via <code class="mono">main_prompt.txt</code></p>
       </div>
+    </div>
     </div>
   </section>
 
   <!-- SLIDE 11: PLANNED FIXES -->
-  <section class="slide">
+  <section class="slide dense">
     <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Planned fixes</span></div>
 
     <div class="kicker">WHAT WE PLAN TO FIX</div>
-    <h2>Ordered by leverage</h2>
+    <h2 class="tight">Ordered by leverage</h2>
 
-    <div class="grid g-2" style="margin-top:14px;">
+    <div class="slide-body">
+    <div class="grid g-2">
       <div class="card">
-        <h3>1 · Make MAVLink signing mandatory</h3>
-        <p>Gate <code class="mono">FILE_TRANSFER_PROTOCOL</code>, <code class="mono">SERIAL_CONTROL</code>, <code class="mono">SECURE_COMMAND</code>, and <code class="mono">PARAM_SET</code> behind <code class="mono">signing_enabled()</code> in shipped builds. Default <code class="mono">GCS_SYSID_ENFORCE = 1</code>.</p>
+        <h3>1 · Mandatory MAVLink signing</h3>
+        <p>Gate FTP, SERIAL_CONTROL, SECURE_COMMAND, PARAM_SET behind <code class="mono">signing_enabled()</code>. Default <code class="mono">GCS_SYSID_ENFORCE=1</code>.</p>
       </div>
       <div class="card">
-        <h3>2 · Apply DDS-Security profile</h3>
-        <p>Authentication + access control + encryption on UDP:2019. Until then, bind the DDS transport to <code class="mono">127.0.0.1</code> and require an authenticated tunnel (WireGuard / IPsec) between vehicle and companion computer.</p>
+        <h3>2 · DDS-Security profile</h3>
+        <p>Auth + ACL + encryption on UDP 2019. Until then, bind DDS to <code class="mono">127.0.0.1</code> and require a WireGuard / IPsec tunnel.</p>
       </div>
       <div class="card">
-        <h3>3 · Remove the fail-open in <code class="mono">check_signature</code></h3>
-        <p>Delete the <code class="mono">if (all_zero_keys(...)) return true;</code> branch. If no keys are provisioned, refuse <code class="mono">SECURE_COMMAND</code> entirely. Provisioning must happen over USB + serial console only.</p>
+        <h3>3 · Close <code class="mono">check_signature</code> fail-open</h3>
+        <p>Drop the <code class="mono">all_zero_keys → true</code> branch. Provisioning happens only over USB console.</p>
       </div>
       <div class="card">
         <h3>4 · Allowlist MAVFTP paths</h3>
-        <p>Resolve <code class="mono">request.data</code> with realpath and reject anything outside <code class="mono">/APM, /@SYS, /@PARAM, /@MISSION, /@ROMFS</code>. Block <code class="mono">..</code> segments after normalization.</p>
+        <p>Realpath-normalize <code class="mono">request.data</code>; reject anything outside <code class="mono">/APM, /@SYS, /@PARAM, /@MISSION, /@ROMFS</code>.</p>
       </div>
       <div class="card">
         <h3>5 · Sign Lua scripts</h3>
-        <p>Refuse to load unsigned <code class="mono">.lua</code> from <code class="mono">APM/scripts/</code> when the script was written within the current boot via a non-USB transport.</p>
+        <p>Refuse unsigned <code class="mono">.lua</code> from <code class="mono">APM/scripts/</code> when written via a non-USB transport this boot.</p>
       </div>
       <div class="card">
         <h3>6 · Memory-safety patches</h3>
-        <p>Fix <code class="mono">handle_device_op_write</code> bounds, <code class="mono">@SYS</code> lseek, <code class="mono">apfs_fgets</code> truncation, and the param-upload OOB. Add unit tests.</p>
+        <p>Fix <code class="mono">handle_device_op_write</code>, <code class="mono">@SYS</code> lseek, <code class="mono">apfs_fgets</code> truncation, param-upload OOB. Add tests.</p>
       </div>
     </div>
 
-    <p style="text-align:center;margin-top:18px;color:var(--muted);font-size:clamp(13px,1.45vw,16px);">
-      Items <strong class="accent">1 – 3</strong> alone collapse every Critical finding in this benchmark.
+    <p class="muted" style="text-align:center;margin-top:10px;">
+      Items 1–3 alone collapse every Critical finding in this benchmark.
     </p>
+    </div>
   </section>
 
   <!-- SLIDE 12: WONTFIX -->
-  <section class="slide">
+  <section class="slide dense">
     <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Upstream reality</span></div>
 
     <div class="kicker">DON'T BOTHER · WONTFIX</div>
-    <h2>Real risks that match ArduPilot's stated design</h2>
-    <p class="muted" style="margin-bottom:16px;">ArduPilot's threat model is explicit: <strong class="warn">MAVLink and DDS run on operator-trusted links</strong>. Authentication, isolation, and link security are the <strong>operator's</strong> job, not the firmware's. PRs that "add auth" to these transports are closed as WONTFIX.</p>
+    <h2 class="tight">Real risks · match ArduPilot's stated design</h2>
+
+    <div class="slide-body">
+    <p class="muted">Upstream threat model: MAVLink and DDS run on operator-trusted links. Link auth and isolation are the operator's job, not the firmware's. PRs that bolt on auth get closed.</p>
 
     <div class="grid g-2">
       <div class="card">
         <h3 class="bad">MAVFTP unauth + <code class="mono">..</code> traversal</h3>
-        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "Use <code class="mono">SETUP_SIGNING</code> and set <code class="mono">GCS_SYSID_ENFORCE = 1</code>. Operators choose their radio link." Path normalization is rejected because it would break legitimate uses of <code class="mono">@SYS</code>, <code class="mono">@PARAM</code>, and operator-relative FTP scripts.</p>
+        <p class="muted">Use SETUP_SIGNING and <code class="mono">GCS_SYSID_ENFORCE=1</code>. Path normalization breaks <code class="mono">@SYS</code> / <code class="mono">@PARAM</code> scripts.</p>
       </div>
       <div class="card">
-        <h3 class="bad">Unauth DDS ARM / MODE / TAKEOFF / SET_PARAMETERS</h3>
-        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "DDS is for trusted LAN segments and companion computers. Deploy the DDS-Security profile or isolate the network. The protocol is designed for high-rate, low-overhead intra-vehicle messaging — auth checks per packet are a non-starter."</p>
+        <h3 class="bad">DDS ARM / MODE / TAKEOFF / SET_PARAMS</h3>
+        <p class="muted">DDS is for trusted LAN + companion. Use the DDS-Security profile. Per-packet auth is a non-starter.</p>
       </div>
       <div class="card">
-        <h3 class="bad">SERIAL_CONTROL unauth UART passthrough</h3>
-        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "It is intentional — that's how operators flash GPS firmware, talk to ESCs, and debug bootloaders. Require signing if you don't trust the link." Adding always-on gating breaks every existing ground-station workflow.</p>
+        <h3 class="bad">SERIAL_CONTROL UART passthrough</h3>
+        <p class="muted">Intentional — flashes GPS, talks to ESCs, debugs bootloaders. Always-on gating breaks every GCS workflow.</p>
       </div>
       <div class="card">
-        <h3 class="bad">DDS Joy topic overrides RC channels</h3>
-        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "<code class="mono">RC_Channels::set_override</code> is the canonical RC-failsafe mechanism; the Joy topic is the documented ROS 2 interface for external control." Removing it would break MoveIt, Nav2, and Gazebo integrations.</p>
+        <h3 class="bad">DDS Joy topic overrides RC</h3>
+        <p class="muted"><code class="mono">RC_Channels::set_override</code> is canonical; the Joy topic is the documented ROS 2 interface. Removing it breaks Nav2 / Gazebo.</p>
       </div>
     </div>
 
-    <div class="card" style="margin-top:16px;border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04);">
-      <h3 class="warn">✓ What CAN get merged: opt-in hardening parameters</h3>
-      <ul class="tight" style="font-size:14px;">
-        <li>New <code class="mono">FTP_OPTIONS</code> bitmask with <code class="mono">FTP_REQUIRE_SIGNING</code> and <code class="mono">FTP_ALLOWLIST_PATHS</code> bits</li>
-        <li>New <code class="mono">DDS_AUTH_MODE</code> parameter — reject ARM / MODE / TAKEOFF unless the origin is authenticated</li>
-        <li>New <code class="mono">SERIAL_PASS_REQUIRE_SIGNING</code> bit in <code class="mono">SERIAL_PASS</code></li>
+    <div class="card" style="border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04);">
+      <h3 class="warn">What CAN get merged · opt-in hardening parameters</h3>
+      <ul class="tight">
+        <li><code class="mono">FTP_OPTIONS</code> bitmask · <code class="mono">FTP_REQUIRE_SIGNING</code>, <code class="mono">FTP_ALLOWLIST_PATHS</code></li>
+        <li><code class="mono">DDS_AUTH_MODE</code> · reject ARM / MODE / TAKEOFF unless origin authenticated</li>
+        <li><code class="mono">SERIAL_PASS_REQUIRE_SIGNING</code> bit</li>
       </ul>
-      <p class="muted" style="margin-top:8px;font-size:12.5px;">These don't change default behavior (which maintainers value) but give security-conscious operators — medical, defense, commercial fleet — a switch to flip.</p>
+      <p class="muted" style="margin-top:6px;">Default behavior unchanged. Security-conscious operators get a switch to flip.</p>
     </div>
 
-    <p style="text-align:center;margin-top:14px;color:var(--muted);font-size:clamp(12.5px,1.35vw,15px);">
-      <strong>Strategy:</strong> ship the 7 memory-safety / fail-open patches as straight bug-fix PRs, then open RFC PRs for the opt-in hardening switches.
+    <p class="muted" style="text-align:center;margin-top:4px;">
+      Strategy · ship 7 memory-safety / fail-open patches as bug fixes, then RFC PRs for opt-in hardening.
     </p>
+    </div>
   </section>
 
   <!-- SLIDE 13: PR SUMMARY -->
-  <section class="slide">
+  <section class="slide dense">
     <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Upstream PR</span></div>
 
     <div class="kicker">PULL REQUEST · UPSTREAM</div>
-    <h2><a href="https://github.com/ArduPilot/ardupilot/pull/33147" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:2px solid var(--accent);">ArduPilot/ardupilot#33147</a></h2>
-    <p class="muted" style="margin-bottom:18px;">Three small, atomic, non-breaking commits targeting <code class="mono">master</code> — each is a pure bug fix that preserves existing default behavior.</p>
+    <h2 class="tight"><a href="https://github.com/ArduPilot/ardupilot/pull/33147" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:2px solid var(--accent);">ArduPilot/ardupilot#33147</a></h2>
 
-    <table style="margin-top:8px;">
+    <div class="slide-body">
+    <p class="muted">Three atomic, non-breaking commits targeting <code class="mono">master</code>. Each is a pure bug fix preserving default behavior.</p>
+
+    <table>
       <thead><tr><th>#</th><th>Subsystem</th><th>Class</th><th>File</th><th>+/−</th><th>Commit</th></tr></thead>
       <tbody>
         <tr>
           <td class="num">1</td>
           <td><code class="mono">AP_CheckFirmware</code></td>
-          <td><span class="pill bad">CWE-305 auth bypass</span></td>
+          <td><span class="pill bad">CWE-305</span></td>
           <td class="mono" style="font-size:11px;">AP_CheckFirmware_secure_command.cpp</td>
-          <td class="num"><span class="good">+13</span> / <span class="bad">−2</span></td>
+          <td class="num"><span class="good">+13</span>/<span class="bad">−2</span></td>
           <td class="mono" style="font-size:11px;">544689c4</td>
         </tr>
         <tr>
           <td class="num">2</td>
           <td><code class="mono">GCS_MAVLink</code></td>
-          <td><span class="pill warn">CWE-125 OOB read</span></td>
+          <td><span class="pill warn">CWE-125</span></td>
           <td class="mono" style="font-size:11px;">GCS_DeviceOp.cpp</td>
-          <td class="num"><span class="good">+7</span> / <span class="bad">−0</span></td>
+          <td class="num"><span class="good">+7</span>/<span class="bad">−0</span></td>
           <td class="mono" style="font-size:11px;">5efb802c</td>
         </tr>
         <tr>
           <td class="num">3</td>
           <td><code class="mono">AP_Filesystem</code></td>
-          <td><span class="pill warn">CWE-125 OOB read</span></td>
+          <td><span class="pill warn">CWE-125</span></td>
           <td class="mono" style="font-size:11px;">AP_Filesystem_Sys.cpp</td>
-          <td class="num"><span class="good">+25</span> / <span class="bad">−2</span></td>
+          <td class="num"><span class="good">+25</span>/<span class="bad">−2</span></td>
           <td class="mono" style="font-size:11px;">fb4410db</td>
         </tr>
       </tbody>
     </table>
 
-    <div class="grid g-3" style="margin-top:18px;">
-      <div class="card"><h3>Total diff</h3><p class="muted" style="font-size:13.5px;"><strong class="good">+45</strong> / <strong class="bad">−4</strong> across <strong>3 files</strong>. No new parameters. No API changes.</p></div>
-      <div class="card"><h3>Atomic commits</h3><p class="muted" style="font-size:13.5px;">Each fix is one commit, cherry-pickable. Maintainers can accept any subset independently.</p></div>
-      <div class="card"><h3>Build verified</h3><p class="muted" style="font-size:13.5px;"><code class="mono">waf configure --board sitl && waf plane</code> — clean build on the merged branch.</p></div>
+    <div class="grid g-3">
+      <div class="card"><h3>Total diff</h3><p class="muted">+45 / −4 across 3 files. No new params, no API changes.</p></div>
+      <div class="card"><h3>Atomic commits</h3><p class="muted">Cherry-pickable. Maintainers can accept any subset.</p></div>
+      <div class="card"><h3>Build verified</h3><p class="muted"><code class="mono">waf configure --board sitl &amp;&amp; waf plane</code> — clean build.</p></div>
+    </div>
     </div>
   </section>
 
   <!-- SLIDE 14: FIX 1 CODE DIFF -->
-  <section class="slide">
+  <section class="slide dense">
     <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Fix 1 of 3</span></div>
 
     <div class="kicker">FIX #1 · CWE-305 · SIGNED-FIRMWARE FAIL-OPEN</div>
-    <h2><code class="mono">check_signature()</code> bootstrap-only carve-out</h2>
-    <p class="muted" style="font-size:14.5px;margin-bottom:12px;">
-      <code class="mono">libraries/AP_CheckFirmware/AP_CheckFirmware_secure_command.cpp</code>
-    </p>
+    <h2 class="tight"><code class="mono">check_signature()</code> · bootstrap-only carve-out</h2>
+
+    <div class="slide-body">
+    <p class="muted"><code class="mono">libraries/AP_CheckFirmware/AP_CheckFirmware_secure_command.cpp</code></p>
 
     <div class="grid g-2">
       <div>
         <h3 class="bad">Before</h3>
-<pre class="code">bool AP_CheckFirmware::check_signature(
-        <span class="k">const</span> mavlink_secure_command_t &amp;pkt)
-{
-    <span class="k">const struct</span> ap_secure_data *sec_data =
-        find_public_keys();
-    <span class="k">if</span> (sec_data == <span class="k">nullptr</span>) {
-        <span class="k">return false</span>;
-    }
-    <span class="k">if</span> (all_zero_keys(sec_data)) {
-        <span class="c">// allow through if no keys are setup</span>
-        <span class="k">return true</span>;       <span class="c">// ◀ FAIL-OPEN</span>
-    }
-    <span class="k">if</span> (pkt.sig_length != 64) {
-        <span class="k">return false</span>;
-    }
-    ...
+<pre class="code"><span class="k">if</span> (all_zero_keys(sec_data)) {
+    <span class="c">// allow through if no keys</span>
+    <span class="k">return true</span>;   <span class="c">// ◀ FAIL-OPEN</span>
+}
+<span class="k">if</span> (pkt.sig_length != 64) {
+    <span class="k">return false</span>;
 }</pre>
-        <p class="muted" style="font-size:12.5px;margin-top:8px;">Every operation passes when keys are zero — including <code class="mono">GET_SESSION_KEY</code>, <code class="mono">REMOVE_PUBLIC_KEYS</code>, and any future op.</p>
+        <p class="muted" style="margin-top:6px;">Every op passes when keys are zero — including <code class="mono">GET_SESSION_KEY</code> and <code class="mono">REMOVE_PUBLIC_KEYS</code>.</p>
       </div>
       <div>
         <h3 class="good">After</h3>
-<pre class="code">bool AP_CheckFirmware::check_signature(
-        <span class="k">const</span> mavlink_secure_command_t &amp;pkt)
-{
-    <span class="k">const struct</span> ap_secure_data *sec_data =
-        find_public_keys();
-    <span class="k">if</span> (sec_data == <span class="k">nullptr</span>) {
-        <span class="k">return false</span>;
-    }
-    <span class="k">if</span> (all_zero_keys(sec_data)) {
-        <span class="c">// only allow bootstrap op</span>
-        <span class="k">return</span> pkt.operation ==
-            SECURE_COMMAND_SET_PUBLIC_KEYS;
-    }
-    <span class="k">if</span> (pkt.sig_length != 64) {
-        <span class="k">return false</span>;
-    }
-    ...
+<pre class="code"><span class="k">if</span> (all_zero_keys(sec_data)) {
+    <span class="c">// only allow bootstrap op</span>
+    <span class="k">return</span> pkt.operation ==
+        SECURE_COMMAND_SET_PUBLIC_KEYS;
+}
+<span class="k">if</span> (pkt.sig_length != 64) {
+    <span class="k">return false</span>;
 }</pre>
-        <p class="muted" style="font-size:12.5px;margin-top:8px;">First-time provisioning still works. Every other op (including additional <code class="mono">SET_PUBLIC_KEYS</code> after first install) requires valid Ed25519 signature.</p>
+        <p class="muted" style="margin-top:6px;">First-time provisioning still works. Every other op requires a valid Ed25519 signature.</p>
       </div>
     </div>
 
-    <div class="card" style="margin-top:14px;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
-      <p style="font-size:13.5px;"><strong class="good">Threat closed:</strong> attacker on a MAVLink-reachable interface against a board built with <code class="mono">AP_SIGNED_FIRMWARE</code> but never provisioned (or wiped via <code class="mono">REMOVE_PUBLIC_KEYS</code>) can no longer install their own keys, exfiltrate the would-be session key, or flash signed bootloader payloads.</p>
+    <div class="card" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+      <p><span class="good">Threat closed.</span> Against an <code class="mono">AP_SIGNED_FIRMWARE</code> board that was never provisioned (or wiped via <code class="mono">REMOVE_PUBLIC_KEYS</code>), an attacker can no longer install keys, leak the session key, or flash signed bootloader payloads.</p>
+    </div>
     </div>
   </section>
 
   <!-- SLIDE 15: FIX 2 CODE DIFF -->
-  <section class="slide">
+  <section class="slide dense">
     <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Fix 2 of 3</span></div>
 
     <div class="kicker">FIX #2 · CWE-125 · DEVICE_OP_WRITE OOB READ</div>
-    <h2><code class="mono">handle_device_op_write()</code> count bound check</h2>
-    <p class="muted" style="font-size:14.5px;margin-bottom:12px;">
-      <code class="mono">libraries/GCS_MAVLink/GCS_DeviceOp.cpp</code>
-    </p>
+    <h2 class="tight"><code class="mono">handle_device_op_write()</code> · count bound check</h2>
+
+    <div class="slide-body">
+    <p class="muted"><code class="mono">libraries/GCS_MAVLink/GCS_DeviceOp.cpp</code></p>
 
     <div class="grid g-2">
       <div>
-        <h3 class="bad">Before — read handler has it</h3>
-<pre class="code"><span class="c">// handle_device_op_READ() — line 56</span>
+        <h3 class="bad">Before · read handler had it, write did not</h3>
+<pre class="code"><span class="c">// READ path — bounded</span>
 <span class="k">if</span> (packet.count &gt; <span class="k">sizeof</span>(data)) {
-    retcode = 5;
-    <span class="k">goto</span> fail;
-}                <span class="c">// ◀ check exists</span>
-
-<span class="c">// handle_device_op_WRITE() — line 122</span>
-<span class="k">if</span> (!dev-&gt;get_semaphore()-&gt;take(10)) {
-    retcode = 3;
-    <span class="k">goto</span> fail;
+    retcode = 5; <span class="k">goto</span> fail;
 }
-<span class="k">if</span> (packet.regstart == 0xff) {
-    dev-&gt;transfer_bank(packet.bank,
-        packet.data, packet.count, ...);
-} <span class="k">else</span> {
-    <span class="k">for</span> (<span class="k">uint8_t</span> i=0; i&lt;packet.count; i++) {
-        dev-&gt;write_bank_register(packet.bank,
-            packet.regstart+i,
-            packet.data[i]);  <span class="c">// ◀ OOB</span>
-    }
+
+<span class="c">// WRITE path — unbounded</span>
+<span class="k">for</span> (<span class="k">uint8_t</span> i=0; i&lt;packet.count; i++) {
+    dev-&gt;write_bank_register(
+        packet.bank,
+        packet.regstart+i,
+        packet.data[i]);  <span class="c">// ◀ OOB</span>
 }</pre>
-        <p class="muted" style="font-size:12.5px;margin-top:8px;"><code class="mono">packet.count</code> is <code class="mono">uint8_t</code> (max 255), <code class="mono">packet.data</code> is 128 bytes. Stack contents leak onto the I2C/SPI bus.</p>
+        <p class="muted" style="margin-top:6px;"><code class="mono">packet.count</code> up to 255; <code class="mono">packet.data</code> is 128 B. Stack leaks onto I2C/SPI.</p>
       </div>
       <div>
         <h3 class="good">After</h3>
-<pre class="code"><span class="c">// handle_device_op_WRITE()</span>
-<span class="k">if</span> (!dev) { retcode = 2; <span class="k">goto</span> fail; }
-
-<span class="k">if</span> (packet.count &gt; <span class="k">sizeof</span>(packet.data)) {
-    <span class="c">// bound count against payload</span>
-    <span class="c">// buffer to prevent OOB read</span>
-    <span class="c">// from packet.data[i] in the</span>
-    <span class="c">// register write loop and OOB</span>
-    <span class="c">// read in transfer_bank() below.</span>
-    retcode = 5;
-    <span class="k">goto</span> fail;        <span class="c">// ◀ added</span>
+<pre class="code"><span class="c">// WRITE path</span>
+<span class="k">if</span> (!dev) {
+    retcode = 2; <span class="k">goto</span> fail;
 }
-
-<span class="k">if</span> (!dev-&gt;get_semaphore()-&gt;take(10)) {
-    retcode = 3;
-    <span class="k">goto</span> fail;
+<span class="k">if</span> (packet.count &gt;
+    <span class="k">sizeof</span>(packet.data)) {
+    retcode = 5;
+    <span class="k">goto</span> fail;   <span class="c">// ◀ added</span>
 }
 <span class="c">// ... rest unchanged ...</span></pre>
-        <p class="muted" style="font-size:12.5px;margin-top:8px;">Mirrors the existing check in the read handler. <strong>7 lines</strong> added, zero deletions.</p>
+        <p class="muted" style="margin-top:6px;">Mirrors the read-handler check. 7 lines added, 0 removed.</p>
       </div>
     </div>
 
-    <div class="card" style="margin-top:14px;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
-      <p style="font-size:13.5px;"><strong class="good">Threat closed:</strong> a malicious or buggy GCS can no longer push 127 bytes of stack contents onto a hardware bus or corrupt arbitrary peripheral register space via <code class="mono">DEVICE_OP_WRITE</code>.</p>
+    <div class="card" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+      <p><span class="good">Threat closed.</span> A malicious or buggy GCS can no longer push 127 bytes of stack contents onto a hardware bus via <code class="mono">DEVICE_OP_WRITE</code>.</p>
+    </div>
     </div>
   </section>
 
   <!-- SLIDE 16: FIX 3 CODE DIFF -->
-  <section class="slide">
+  <section class="slide dense">
     <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Fix 3 of 3</span></div>
 
     <div class="kicker">FIX #3 · CWE-125 · @SYS LSEEK WILD OOB READ</div>
-    <h2><code class="mono">AP_Filesystem_Sys::lseek()</code> signed/unsigned safety</h2>
-    <p class="muted" style="font-size:14.5px;margin-bottom:12px;">
-      <code class="mono">libraries/AP_Filesystem/AP_Filesystem_Sys.cpp</code>
-    </p>
+    <h2 class="tight"><code class="mono">AP_Filesystem_Sys::lseek()</code> · signed/unsigned safety</h2>
+
+    <div class="slide-body">
+    <p class="muted"><code class="mono">libraries/AP_Filesystem/AP_Filesystem_Sys.cpp</code></p>
 
     <div class="grid g-2">
       <div>
         <h3 class="bad">Before</h3>
-<pre class="code"><span class="k">int32_t</span> AP_Filesystem_Sys::lseek(
-    <span class="k">int</span> fd, <span class="k">int32_t</span> offset, <span class="k">int</span> seek_from)
-{
-    ...
-    <span class="k">struct</span> rfile &amp;r = file[fd];
-    <span class="k">switch</span> (seek_from) {
-    <span class="k">case</span> SEEK_SET:
-        r.file_ofs = MIN(offset,
-            (<span class="k">int32_t</span>)r.str-&gt;get_length());
-        <span class="k">break</span>;   <span class="c">// ◀ -1 → 0xFFFFFFFF</span>
-    <span class="k">case</span> SEEK_CUR:
-        r.file_ofs = MIN(r.str-&gt;get_length(),
-            offset + r.file_ofs);
-        <span class="k">break</span>;   <span class="c">// ◀ same hazard</span>
-    <span class="k">case</span> SEEK_END:
-        errno = EINVAL;
-        <span class="k">return</span> -1;
-    }
-    <span class="k">return</span> r.file_ofs;
-}
+<pre class="code"><span class="k">case</span> SEEK_SET:
+    r.file_ofs = MIN(offset,
+        (<span class="k">int32_t</span>)length);
+    <span class="k">break</span>;
+    <span class="c">// ◀ -1 → 0xFFFFFFFF</span>
+<span class="k">case</span> SEEK_CUR:
+    r.file_ofs = MIN(length,
+        offset + r.file_ofs);
+    <span class="k">break</span>;
+    <span class="c">// ◀ same hazard</span>
 
-<span class="c">// later, read() does:</span>
-count = MIN(count, get_length()-file_ofs);
-memcpy(buf, get_string()+file_ofs, count);
-<span class="c">//     ◀ wild address when file_ofs=0xFFFFFFFF</span></pre>
+<span class="c">// read() then does:</span>
+memcpy(buf,
+    get_string()+file_ofs, count);
+    <span class="c">// ◀ wild address</span></pre>
       </div>
       <div>
         <h3 class="good">After</h3>
 <pre class="code"><span class="k">case</span> SEEK_SET:
-    <span class="c">// reject negative absolute offset</span>
     <span class="k">if</span> (offset &lt; 0) {
         errno = EINVAL;
         <span class="k">return</span> -1;
@@ -900,10 +867,7 @@ memcpy(buf, get_string()+file_ofs, count);
     r.file_ofs = MIN(
         (<span class="k">uint32_t</span>)offset, length);
     <span class="k">break</span>;
-
 <span class="k">case</span> SEEK_CUR: {
-    <span class="c">// compute in int64_t, detect</span>
-    <span class="c">// under/overflow, then clamp</span>
     <span class="k">const int64_t</span> new_ofs =
         (<span class="k">int64_t</span>)r.file_ofs +
         (<span class="k">int64_t</span>)offset;
@@ -912,19 +876,15 @@ memcpy(buf, get_string()+file_ofs, count);
         <span class="k">return</span> -1;
     }
     r.file_ofs = MIN(
-        (<span class="k">uint32_t</span>)MIN&lt;<span class="k">int64_t</span>&gt;(
-            new_ofs, length),
-        length);
+        (<span class="k">uint32_t</span>)new_ofs, length);
     <span class="k">break</span>;
-}
-<span class="k">case</span> SEEK_END:
-    errno = EINVAL;
-    <span class="k">return</span> -1;</pre>
+}</pre>
       </div>
     </div>
 
-    <div class="card" style="margin-top:14px;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
-      <p style="font-size:13.5px;"><strong class="good">Threat closed:</strong> over MAVFTP, any client could request <code class="mono">OpenFileRO /@SYS/storage.bin</code> (or <code class="mono">flash.bin</code>) and lseek to a negative offset. The buffer base is the live EEPROM pointer or <code class="mono">0x08000000</code> internal flash — the attacker could read MAVLink2 signing keys and arbitrary firmware bytes. With this fix, negative offsets return <code class="mono">EINVAL</code>.</p>
+    <div class="card" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+      <p><span class="good">Threat closed.</span> Any MAVFTP client could <code class="mono">OpenFileRO /@SYS/storage.bin</code> and lseek to a negative offset; the buffer base is live EEPROM or <code class="mono">0x08000000</code> flash — leaking MAVLink2 signing keys. Negative offsets now return <code class="mono">EINVAL</code>.</p>
+    </div>
     </div>
   </section>
 
