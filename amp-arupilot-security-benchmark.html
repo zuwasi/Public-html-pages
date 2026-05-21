@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+<title>Amp-Optimized Security Prompt — Benchmark on ArduPilot · ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#0a0e1a;
+    --bg-2:#111827;
+    --panel:#151b2d;
+    --panel-2:#1c2440;
+    --line:#2a3358;
+    --text:#e7ecf6;
+    --muted:#8995b3;
+    --accent:#00d9ff;
+    --accent-2:#7c5cff;
+    --warn:#ffb020;
+    --good:#22c55e;
+    --bad:#ef4444;
+    --gold:#f5c542;
+    --silver:#cfd8dc;
+    --bronze:#cd7f32;
+    --mono:'JetBrains Mono', ui-monospace, monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  body{
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    background:radial-gradient(ellipse at top, #131a30 0%, var(--bg) 60%, #06080f 100%);
+    color:var(--text);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+  /* slide deck */
+  .deck{
+    display:flex;
+    height:100vh;
+    width:100vw;
+    transition:transform .55s cubic-bezier(.2,.85,.25,1);
+    will-change:transform;
+  }
+  .slide{
+    flex:0 0 100vw;
+    height:100vh;
+    padding:clamp(18px, 4vw, 60px);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:stretch;
+    position:relative;
+    overflow-y:auto;
+    overflow-x:hidden;
+  }
+  .slide::-webkit-scrollbar{width:6px;}
+  .slide::-webkit-scrollbar-thumb{background:var(--line);border-radius:6px;}
+
+  /* topbar with ESL brand */
+  .topbar{
+    position:absolute;top:clamp(12px,2.5vw,28px);left:clamp(18px,4vw,60px);
+    right:clamp(18px,4vw,60px);
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:clamp(11px,1.25vw,13px);color:var(--muted);
+    pointer-events:none;
+  }
+  .topbar a{pointer-events:auto;}
+  .esl-mark{
+    display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);
+    font-weight:700;letter-spacing:.5px;
+  }
+  .esl-logo{
+    width:clamp(34px,3.6vw,42px);height:clamp(34px,3.6vw,42px);
+    border-radius:10px;
+    background:linear-gradient(135deg,var(--accent) 0%, var(--accent-2) 100%);
+    display:flex;align-items:center;justify-content:center;
+    font-weight:900;font-size:clamp(13px,1.4vw,16px);color:#06080f;
+    box-shadow:0 4px 24px rgba(0,217,255,.25);
+    font-family:'Inter';
+  }
+  .esl-mark .tag{display:flex;flex-direction:column;line-height:1.1;}
+  .esl-mark .tag .a{font-size:clamp(13px,1.45vw,17px);font-weight:800;}
+  .esl-mark .tag .b{font-size:clamp(10px,1.05vw,11px);font-weight:500;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
+
+  h1,h2,h3{font-weight:800;letter-spacing:-.01em;}
+  h1{font-size:clamp(28px,5.2vw,68px);line-height:1.05;}
+  h2{font-size:clamp(22px,3.6vw,44px);line-height:1.1;margin-bottom:clamp(8px,1.4vw,18px);}
+  h3{font-size:clamp(16px,2vw,22px);color:var(--accent);font-weight:700;margin-bottom:8px;}
+  p,li{font-size:clamp(14px,1.45vw,18px);line-height:1.55;color:var(--text);}
+  .muted{color:var(--muted);}
+  .accent{color:var(--accent);}
+  .accent2{color:var(--accent-2);}
+  .good{color:var(--good);}
+  .bad{color:var(--bad);}
+  .warn{color:var(--warn);}
+  code,.mono{font-family:var(--mono);}
+  .pill{display:inline-block;padding:4px 12px;border-radius:999px;
+        background:rgba(0,217,255,.1);color:var(--accent);font-size:clamp(11px,1.1vw,13px);font-weight:600;
+        border:1px solid rgba(0,217,255,.3);}
+  .pill.purple{background:rgba(124,92,255,.12);color:var(--accent-2);border-color:rgba(124,92,255,.3);}
+  .pill.warn{background:rgba(255,176,32,.12);color:var(--warn);border-color:rgba(255,176,32,.3);}
+  .pill.bad{background:rgba(239,68,68,.12);color:var(--bad);border-color:rgba(239,68,68,.3);}
+  .pill.good{background:rgba(34,197,94,.12);color:var(--good);border-color:rgba(34,197,94,.3);}
+
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:clamp(14px,2vw,22px);
+  }
+  .grid{display:grid;gap:clamp(10px,1.4vw,18px);}
+  .g-2{grid-template-columns:repeat(2,1fr);}
+  .g-3{grid-template-columns:repeat(3,1fr);}
+  .g-4{grid-template-columns:repeat(4,1fr);}
+  @media (max-width:760px){
+    .g-2,.g-3,.g-4{grid-template-columns:1fr;}
+    .slide{padding-top:64px;}
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.3vw,15px);}
+  th,td{padding:clamp(6px,.9vw,10px) clamp(8px,1.1vw,14px);border-bottom:1px solid var(--line);text-align:left;}
+  th{color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px;font-size:clamp(10px,1.1vw,12px);}
+  tr:hover td{background:rgba(0,217,255,.04);}
+  td.num{font-family:var(--mono);text-align:right;font-weight:600;}
+  td.rank-1{color:var(--gold);font-weight:800;}
+  td.rank-2{color:var(--silver);font-weight:700;}
+  td.rank-3{color:var(--bronze);font-weight:700;}
+
+  /* navigation arrows */
+  .nav{
+    position:fixed;top:50%;transform:translateY(-50%);
+    width:clamp(40px,5.5vw,56px);height:clamp(40px,5.5vw,56px);
+    border-radius:50%;
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    border:1px solid rgba(255,255,255,.12);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    font-size:clamp(20px,2.4vw,28px);
+    font-weight:300;
+    backdrop-filter:blur(8px);
+    transition:all .2s;
+    z-index:100;
+    user-select:none;
+  }
+  .nav:hover{background:rgba(0,217,255,.15);border-color:var(--accent);color:var(--accent);transform:translateY(-50%) scale(1.06);}
+  .nav.left{left:clamp(10px,2vw,24px);}
+  .nav.right{right:clamp(10px,2vw,24px);}
+  .nav.hidden{opacity:0;pointer-events:none;}
+
+  /* progress + counter */
+  .progress{position:fixed;left:0;bottom:0;height:4px;width:100%;background:rgba(255,255,255,.06);z-index:90;}
+  .progress .bar{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .4s ease;}
+  .counter{position:fixed;right:clamp(12px,2vw,20px);bottom:clamp(14px,2vw,18px);
+           color:var(--muted);font-size:clamp(11px,1.2vw,13px);font-family:var(--mono);z-index:90;}
+
+  /* hint */
+  .hint{
+    position:absolute;bottom:clamp(40px,8vh,80px);left:50%;transform:translateX(-50%);
+    color:var(--muted);font-size:clamp(11px,1.3vw,14px);
+    animation:pulse 2s ease-in-out infinite;
+  }
+  .hint.hide{display:none;}
+  @keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}
+
+  /* slide 1 hero */
+  .hero{text-align:center;}
+  .hero h1{margin-top:8px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
+           -webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;}
+  .hero .sub{color:var(--muted);font-size:clamp(15px,1.8vw,22px);margin-top:14px;font-weight:500;}
+  .hero .meta{display:flex;justify-content:center;gap:clamp(10px,1.5vw,18px);margin-top:clamp(20px,3.5vh,36px);flex-wrap:wrap;}
+
+  .winner-card{
+    background:linear-gradient(135deg,rgba(0,217,255,.08),rgba(124,92,255,.08));
+    border:2px solid rgba(0,217,255,.4);
+    border-radius:18px;
+    padding:clamp(20px,3.5vw,40px);
+    text-align:center;
+  }
+  .winner-card .crown{font-size:clamp(40px,6vw,72px);margin-bottom:8px;}
+  .winner-card .score{
+    font-family:var(--mono);font-size:clamp(40px,8vw,96px);font-weight:900;
+    background:linear-gradient(135deg,var(--gold),var(--accent));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+    line-height:1;margin:8px 0;
+  }
+  .winner-card .label{color:var(--muted);font-size:clamp(13px,1.4vw,17px);letter-spacing:1px;text-transform:uppercase;}
+
+  .bar-chart{display:flex;flex-direction:column;gap:10px;}
+  .bar-row{display:grid;grid-template-columns:minmax(120px,2fr) 5fr 1fr;gap:10px;align-items:center;font-size:clamp(11px,1.25vw,14px);}
+  .bar-track{background:rgba(255,255,255,.05);border-radius:6px;height:24px;position:relative;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .5s ease;}
+  .bar-fill.faded{background:linear-gradient(90deg,#555,#777);opacity:.6;}
+  .bar-fill.gold{background:linear-gradient(90deg,var(--gold),#ffec8b);}
+  .bar-fill.silver{background:linear-gradient(90deg,#cfd8dc,#eceff1);}
+  .bar-fill.bronze{background:linear-gradient(90deg,var(--bronze),#deb887);}
+  .bar-label{font-family:var(--mono);font-weight:700;text-align:right;}
+
+  .flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(8px,1.2vw,14px);}
+  .flow-node{
+    background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:clamp(10px,1.4vw,16px) clamp(14px,1.8vw,20px);
+    font-weight:600;font-size:clamp(12px,1.3vw,15px);
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    min-width:clamp(120px,16vw,170px);
+  }
+  .flow-node .ico{font-size:clamp(20px,2.6vw,28px);}
+  .flow-arrow{color:var(--accent);font-size:clamp(18px,2vw,24px);font-weight:300;}
+
+  .checklist{list-style:none;display:flex;flex-direction:column;gap:8px;}
+  .checklist li{display:flex;gap:10px;align-items:flex-start;}
+  .checklist .ic{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:3px;font-weight:800;}
+  .checklist .ic.ok{background:rgba(34,197,94,.15);color:var(--good);}
+  .checklist .ic.no{background:rgba(239,68,68,.15);color:var(--bad);}
+  .checklist .ic.warn{background:rgba(255,176,32,.15);color:var(--warn);}
+
+  .footer-cta{
+    background:linear-gradient(135deg,rgba(0,217,255,.06),rgba(124,92,255,.06));
+    border:1px solid var(--line);border-radius:18px;
+    padding:clamp(20px,3vw,36px);text-align:center;
+  }
+  .cta-btn{
+    display:inline-block;margin-top:clamp(14px,2vh,22px);
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    color:#06080f;font-weight:800;
+    padding:clamp(12px,1.6vw,16px) clamp(22px,3vw,34px);
+    border-radius:999px;text-decoration:none;
+    font-size:clamp(14px,1.5vw,17px);
+    box-shadow:0 8px 32px rgba(0,217,255,.25);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .cta-btn:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,217,255,.35);}
+
+  .kicker{color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:clamp(11px,1.2vw,13px);margin-bottom:8px;}
+
+  /* code block */
+  pre.code{background:#06080f;border:1px solid var(--line);border-radius:10px;padding:14px 16px;
+           font-family:var(--mono);font-size:clamp(11px,1.15vw,13px);overflow-x:auto;color:#cfd8dc;}
+  pre.code .k{color:var(--accent);}
+  pre.code .c{color:var(--muted);font-style:italic;}
+  pre.code .s{color:#a5e0a5;}
+
+  .badge-row{display:flex;flex-wrap:wrap;gap:8px;}
+
+  ul.tight{padding-left:18px;}
+  ul.tight li{margin:4px 0;}
+
+  /* selection */
+  ::selection{background:rgba(0,217,255,.25);color:#fff;}
+
+  /* mobile tweaks */
+  @media (max-width:560px){
+    .topbar .topright{display:none;}
+    .nav{width:44px;height:44px;font-size:22px;}
+    th,td{padding:5px 6px;font-size:11px;}
+    pre.code{font-size:10.5px;}
+  }
+</style>
+</head>
+<body>
+
+<!-- SLIDES -->
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1: TITLE -->
+  <section class="slide hero">
+    <div class="topbar">
+      <a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">
+        <div class="esl-logo">ESL</div>
+        <div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div>
+      </a>
+      <span class="topright muted">eswlab.com</span>
+    </div>
+
+    <div>
+      <div class="kicker">RESEARCH BRIEF · 2026</div>
+      <h1>Amp-Optimized Security Prompt</h1>
+      <div class="sub">A multi-agent benchmark on the ArduPilot autopilot codebase</div>
+      <div class="meta">
+        <span class="pill">3 agents</span>
+        <span class="pill purple">2 prompts</span>
+        <span class="pill warn">6 runs</span>
+        <span class="pill good">29 k files audited</span>
+      </div>
+      <p class="muted" style="margin-top:clamp(24px,4vh,42px);font-size:clamp(13px,1.5vw,17px);">
+        Amp · Claude Code · Factory Droid<br/>
+        <code class="mono">main_prompt.txt</code> vs <code class="mono">amp_security_prompt.txt</code>
+      </p>
+    </div>
+
+    <div class="hint" id="hint">← Swipe / arrow keys to navigate →</div>
+  </section>
+
+  <!-- SLIDE 2: ORIGINAL REPO -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Origin</span></div>
+
+    <div class="kicker">THE STARTING POINT</div>
+    <h2><code class="mono">anshug/claude-mythos</code></h2>
+    <p class="muted" style="margin-bottom:18px;">A community red-teaming prompt framework that turns an LLM into a multi-agent offensive security system.</p>
+
+    <div class="grid g-2">
+      <div class="card">
+        <h3>Six specialized agents</h3>
+        <ul class="tight">
+          <li><strong>Recon</strong> — maps attack surface</li>
+          <li><strong>Hunter</strong> — finds vulnerabilities</li>
+          <li><strong>Adversarial</strong> — chains exploits</li>
+          <li><strong>Exploit</strong> — validates with PoCs</li>
+          <li><strong>Triage</strong> — scores severity (CVSS)</li>
+          <li><strong>AI Security</strong> — detects LLM-specific risks</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Schema (original)</h3>
+<pre class="code">{
+  <span class="k">"agent"</span>:        <span class="s">"HUNTER"</span>,
+  <span class="k">"file_path"</span>:    <span class="s">"..."</span>,
+  <span class="k">"vuln_class"</span>:   <span class="s">"..."</span>,
+  <span class="k">"confidence"</span>:   <span class="s">"plausible"</span>,
+  <span class="k">"cvss_vector"</span>:  <span class="s">"CVSS:3.1/..."</span>,
+  <span class="k">"cvss_score"</span>:   9.6,
+  <span class="k">"summary"</span>:      <span class="s">"..."</span>,
+  <span class="k">"detail"</span>:       <span class="s">"# markdown..."</span>
+}</pre>
+        <p class="muted" style="margin-top:10px;font-size:13px;">8 fields. No taint path. No per-metric CVSS rationale. No FP-disproof. Writes to <code class="mono">/tmp/</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3: WHY AMP-OPTIMIZED -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Improved prompt</span></div>
+
+    <div class="kicker">THE FIX</div>
+    <h2><code class="mono">amp_security_prompt.txt</code></h2>
+    <p class="muted" style="margin-bottom:18px;">Same six-agent skeleton, but engineered for Amp's tool harness and against speculation.</p>
+
+    <div class="grid g-3">
+      <div class="card">
+        <h3>Amp-native</h3>
+        <ul class="tight">
+          <li>Explicit guidance on <code class="mono">Task</code> subagents, <code class="mono">finder</code>, <code class="mono">oracle</code>, parallel reads</li>
+          <li>Tool-call budget enforced</li>
+          <li>Streaming <code class="mono">[FOUND]</code> / <code class="mono">[DROP]</code> status</li>
+          <li>Anti-prompt-injection guard</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Anti-speculation</h3>
+        <ul class="tight">
+          <li><strong>Mandatory taint path</strong> source → propagator → sink (file:line)</li>
+          <li><strong>Per-metric CVSS justification</strong> (AV/AC/PR/UI/S/C/I/A)</li>
+          <li><strong><code class="mono">why_not_false_positive</code></strong> with cited bypass</li>
+          <li>Confidence capped at <code class="mono">plausible</code> if no runtime</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Auditable</h3>
+        <ul class="tight">
+          <li>Adversarial phase <em>kills</em> findings → <code class="mono">rejected.jsonl</code></li>
+          <li>Stable <code class="mono">finding_id</code> from canonical sink signature</li>
+          <li>Mandatory <code class="mono">scope.json</code> + coverage-gaps section</li>
+          <li><code class="mono">.security/</code> (Windows-safe), not <code class="mono">/tmp/</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="muted" style="margin-top:18px;font-size:13px;text-align:center;">
+      ~25-field mandatory schema · AI-Security phase gated on <code class="mono">has_llm_or_agent_code</code> · Coverage-gaps section required
+    </p>
+  </section>
+
+  <!-- SLIDE 4: BENCHMARK FLOW -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Benchmark flow</span></div>
+
+    <div class="kicker">HOW WE TESTED</div>
+    <h2>3 agents × 2 prompts = 6 runs on the same target</h2>
+
+    <div style="margin:clamp(18px,3vh,32px) 0;">
+      <div class="flow">
+        <div class="flow-node"><div class="ico">⚙️</div>Amp</div>
+        <div class="flow-node"><div class="ico">🤖</div>Claude Code</div>
+        <div class="flow-node"><div class="ico">🛠️</div>Factory Droid</div>
+      </div>
+      <div style="text-align:center;margin:12px 0;font-size:24px;color:var(--accent);">×</div>
+      <div class="flow">
+        <div class="flow-node"><div class="ico">📜</div>main_prompt.txt</div>
+        <div class="flow-node"><div class="ico">⚡</div>amp_security_prompt.txt</div>
+      </div>
+      <div style="text-align:center;margin:12px 0;font-size:24px;color:var(--accent);">↓</div>
+      <div class="flow">
+        <div class="flow-node"><div class="ico">🎯</div>ArduPilot 4.6.3</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node"><div class="ico">📊</div>findings.jsonl × 6</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node"><div class="ico">🏆</div>Composite score</div>
+      </div>
+    </div>
+
+    <div class="grid g-4">
+      <div class="card"><h3>Controls</h3><p class="muted" style="font-size:13px;">Same OS, same workspace, no internet, no runtime.</p></div>
+      <div class="card"><h3>Budget</h3><p class="muted" style="font-size:13px;">~80 tool-call cap per run; confidence capped at <em>plausible</em>.</p></div>
+      <div class="card"><h3>Outputs</h3><p class="muted" style="font-size:13px;"><code class="mono">findings.jsonl</code> + <code class="mono">rejected.jsonl</code> + <code class="mono">scope.json</code></p></div>
+      <div class="card"><h3>Scoring</h3><p class="muted" style="font-size:13px;">8 weighted dimensions, 0–10 each, composite Σ(score × weight).</p></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5: ARDUPILOT TARGET -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Target</span></div>
+
+    <div class="kicker">THE TARGET</div>
+    <h2>ArduPilot Plane 4.6.3</h2>
+    <p class="muted" style="margin-bottom:20px;">Open-source autopilot used in real flying aircraft, rovers, submarines, and antenna trackers worldwide.</p>
+
+    <div class="grid g-4">
+      <div class="card" style="text-align:center;"><div class="mono" style="font-size:clamp(24px,3.6vw,40px);font-weight:800;color:var(--accent);">29 k</div><div class="muted">total files</div></div>
+      <div class="card" style="text-align:center;"><div class="mono" style="font-size:clamp(24px,3.6vw,40px);font-weight:800;color:var(--accent);">2.7 k</div><div class="muted">C/C++ libraries</div></div>
+      <div class="card" style="text-align:center;"><div class="mono" style="font-size:clamp(24px,3.6vw,40px);font-weight:800;color:var(--accent2);">82%</div><div class="muted">C++ · 10% Python · 5% Lua</div></div>
+      <div class="card" style="text-align:center;"><div class="mono" style="font-size:clamp(24px,3.6vw,40px);font-weight:800;color:var(--warn);">∞</div><div class="muted">attack surface</div></div>
+    </div>
+
+    <div style="margin-top:20px;" class="card">
+      <h3>Attack-surface inventory (recon output)</h3>
+      <div class="grid g-2" style="margin-top:8px;">
+        <div>
+          <p><strong class="accent">Network entry points</strong></p>
+          <ul class="tight muted" style="font-size:13.5px;">
+            <li>MAVLink (UDP / UART / USB)</li>
+            <li>DDS XRCE-DDS over UDP:2019 (ROS 2)</li>
+            <li>SERIAL_CONTROL passthrough</li>
+            <li>AP_Networking TCP/UDP listeners</li>
+            <li>CAN / DroneCAN</li>
+          </ul>
+        </div>
+        <div>
+          <p><strong class="accent2">Code-execution surface</strong></p>
+          <ul class="tight muted" style="font-size:13.5px;">
+            <li>Lua scripting (autoload from <code class="mono">APM/scripts/</code>)</li>
+            <li>MAVFTP arbitrary file write</li>
+            <li>SECURE_COMMAND signed firmware</li>
+            <li>Parameter store (EEPROM)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6: METHODOLOGY -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Methodology</span></div>
+
+    <div class="kicker">METHODOLOGY</div>
+    <h2>8 weighted dimensions, scored 0 – 10</h2>
+
+    <div style="margin-top:14px;">
+      <table>
+        <thead><tr><th>#</th><th>Dimension</th><th>Weight</th><th>Rationale</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">D1</td><td>Critical findings discovered</td><td class="num">25 %</td><td class="muted">primary security value</td></tr>
+          <tr><td class="mono">D2</td><td>False-positive resistance</td><td class="num">15 %</td><td class="muted">signal-to-noise</td></tr>
+          <tr><td class="mono">D3</td><td>Evidence quality (taint paths, CVSS rationale, disproof)</td><td class="num">20 %</td><td class="muted">auditability</td></tr>
+          <tr><td class="mono">D4</td><td>Reproducibility (stable IDs, scope.json, artifacts)</td><td class="num">10 %</td><td class="muted">re-runnable</td></tr>
+          <tr><td class="mono">D5</td><td>Coverage breadth (distinct vulnerable areas)</td><td class="num">10 %</td><td class="muted">completeness</td></tr>
+          <tr><td class="mono">D6</td><td>Efficiency (findings per tool call)</td><td class="num">5 %</td><td class="muted">cost</td></tr>
+          <tr><td class="mono">D7</td><td>Output-path portability (Windows + Linux)</td><td class="num">5 %</td><td class="muted">operational</td></tr>
+          <tr><td class="mono">D8</td><td>Calibration / honesty (per-metric CVSS, coverage gaps)</td><td class="num">10 %</td><td class="muted">anti-hallucination</td></tr>
+          <tr><td></td><td><strong>Total</strong></td><td class="num"><strong>100 %</strong></td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SLIDE 7: RESULTS TABLE -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Results</span></div>
+
+    <div class="kicker">RESULTS</div>
+    <h2>Scoring matrix — all six runs</h2>
+
+    <table style="margin-top:14px;">
+      <thead><tr><th>Rank</th><th>Run</th><th>D1</th><th>D2</th><th>D3</th><th>D4</th><th>D5</th><th>D6</th><th>D7</th><th>D8</th><th>Composite</th></tr></thead>
+      <tbody>
+        <tr><td class="rank-1">🥇</td><td><strong>Amp × amp_security</strong></td><td class="num">9</td><td class="num">10</td><td class="num">10</td><td class="num">10</td><td class="num">9</td><td class="num">5</td><td class="num">10</td><td class="num">9</td><td class="num rank-1">9.30</td></tr>
+        <tr><td class="rank-2">🥈</td><td>Claude × amp_security</td><td class="num">7</td><td class="num">10</td><td class="num">10</td><td class="num">10</td><td class="num">8</td><td class="num">7</td><td class="num">9</td><td class="num">10</td><td class="num rank-2">8.85</td></tr>
+        <tr><td class="rank-3">🥉</td><td>Droid × amp_security</td><td class="num">4</td><td class="num">10</td><td class="num">10</td><td class="num">10</td><td class="num">7</td><td class="num">7</td><td class="num">10</td><td class="num">10</td><td class="num rank-3">8.05</td></tr>
+        <tr><td>4</td><td>Droid × main_prompt</td><td class="num">5</td><td class="num">5</td><td class="num">6</td><td class="num">3</td><td class="num">9</td><td class="num">4</td><td class="num">3</td><td class="num">4</td><td class="num">5.15</td></tr>
+        <tr><td>5</td><td>Claude × main_prompt</td><td class="num">6</td><td class="num">5</td><td class="num">3</td><td class="num">3</td><td class="num">7</td><td class="num">9</td><td class="num">3</td><td class="num">4</td><td class="num">4.85</td></tr>
+        <tr><td>6</td><td>Amp × main_prompt</td><td class="num">6</td><td class="num">4</td><td class="num">5</td><td class="num">3</td><td class="num">5</td><td class="num">5</td><td class="num">3</td><td class="num">4</td><td class="num">4.70</td></tr>
+      </tbody>
+    </table>
+
+    <div style="margin-top:18px;" class="card">
+      <h3>Two-factor effects</h3>
+      <div class="grid g-2">
+        <p><span class="accent" style="font-weight:700;">Prompt effect</span> · +3.83 composite avg (range +2.90 to +4.60) — <strong class="good">large</strong></p>
+        <p><span class="accent2" style="font-weight:700;">Agent effect</span> · ±0.25 at composite — <strong class="muted">negligible</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8: BAR CHART VISUAL -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Visualisation</span></div>
+
+    <div class="kicker">AT A GLANCE</div>
+    <h2>Composite score per run</h2>
+
+    <div class="bar-chart" style="margin-top:22px;">
+      <div class="bar-row"><div>🥇 Amp × amp</div><div class="bar-track"><div class="bar-fill gold" style="width:93%"></div></div><div class="bar-label">9.30</div></div>
+      <div class="bar-row"><div>🥈 Claude × amp</div><div class="bar-track"><div class="bar-fill silver" style="width:88.5%"></div></div><div class="bar-label">8.85</div></div>
+      <div class="bar-row"><div>🥉 Droid × amp</div><div class="bar-track"><div class="bar-fill bronze" style="width:80.5%"></div></div><div class="bar-label">8.05</div></div>
+      <div class="bar-row"><div>Droid × main</div><div class="bar-track"><div class="bar-fill faded" style="width:51.5%"></div></div><div class="bar-label">5.15</div></div>
+      <div class="bar-row"><div>Claude × main</div><div class="bar-track"><div class="bar-fill faded" style="width:48.5%"></div></div><div class="bar-label">4.85</div></div>
+      <div class="bar-row"><div>Amp × main</div><div class="bar-track"><div class="bar-fill faded" style="width:47%"></div></div><div class="bar-label">4.70</div></div>
+    </div>
+
+    <p style="text-align:center;color:var(--muted);margin-top:24px;font-size:clamp(13px,1.4vw,16px);">
+      The <strong class="accent">worst</strong> optimized-prompt run beats the <strong>best</strong> original-prompt run by <strong class="good">+2.90</strong> points.
+    </p>
+  </section>
+
+  <!-- SLIDE 9: WINNER -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Winner</span></div>
+
+    <div class="kicker">THE WINNER</div>
+    <div class="winner-card" style="margin-top:18px;">
+      <div class="crown">👑</div>
+      <div class="label">Best composite score</div>
+      <div class="score">9.30</div>
+      <h2 style="font-size:clamp(20px,3vw,32px);margin-top:6px;">Amp × <code class="mono">amp_security_prompt.txt</code></h2>
+      <p class="muted" style="margin-top:8px;font-size:clamp(13px,1.4vw,16px);">
+        6 Critical findings · 0 false positives · 8/8 taint paths · full artifact trail
+      </p>
+    </div>
+
+    <div class="grid g-3" style="margin-top:22px;">
+      <div class="card"><h3 style="color:var(--good);">+3.83</h3><p class="muted">avg composite gain from the optimized prompt (across all 3 agents)</p></div>
+      <div class="card"><h3 style="color:var(--accent);">±0.25</h3><p class="muted">agent variance — prompt structure dominates agent choice</p></div>
+      <div class="card"><h3 style="color:var(--accent2);">100 %</h3><p class="muted">of optimized-prompt runs produced taint paths and per-metric CVSS</p></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10: IMPLICATIONS FOR ARDUPILOT -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Implications</span></div>
+
+    <div class="kicker">IMPLICATIONS FOR ARDUPILOT</div>
+    <h2>Real critical bugs surfaced by the benchmark</h2>
+    <p class="muted" style="margin-bottom:18px;">A single LAN-adjacent attacker can take over an ArduPilot vehicle in flight. The benchmark surfaced six distinct paths to that outcome.</p>
+
+    <div class="grid g-2">
+      <div class="card">
+        <h3>Unauthenticated DDS (ROS 2 over UDP:2019)</h3>
+        <ul class="tight">
+          <li>ARM / DISARM service — no auth</li>
+          <li>MODE_SWITCH service — no auth</li>
+          <li>TAKEOFF service — no auth</li>
+          <li>SET_PARAMETERS service — disables ARMING_CHECK, FENCE_ENABLE, SCR_ENABLE</li>
+          <li>Joy topic — overrides all RC channels</li>
+        </ul>
+        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS up to <strong class="bad">10.0</strong>. <code class="mono">libraries/AP_DDS/AP_DDS_Client.cpp</code></p>
+      </div>
+      <div class="card">
+        <h3>MAVLink subsystem</h3>
+        <ul class="tight">
+          <li>MAVFTP arbitrary file r/w + <code class="mono">..</code> traversal</li>
+          <li>MAVFTP → drop Lua script in <code class="mono">APM/scripts/</code> → RCE</li>
+          <li>SERIAL_CONTROL → drive any UART (ESC, GPS, modem, bootloader)</li>
+          <li><code class="mono">@SYS/storage.bin</code> exfiltrates MAVLink signing key</li>
+        </ul>
+        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS <strong class="bad">9.6</strong>. <code class="mono">GCS_FTP.cpp · GCS_serial_control.cpp</code></p>
+      </div>
+      <div class="card">
+        <h3>Signed-firmware fail-open</h3>
+        <ul class="tight">
+          <li><code class="mono">check_signature()</code> returns <code class="mono">true</code> when all bootloader public keys are zero</li>
+          <li>SETUP_SIGNING accepted before signing is provisioned</li>
+        </ul>
+        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS <strong class="bad">9.1</strong>. <code class="mono">AP_CheckFirmware_secure_command.cpp:199</code></p>
+      </div>
+      <div class="card">
+        <h3>Memory-safety cluster</h3>
+        <ul class="tight">
+          <li><code class="mono">handle_device_op_write</code> — 127-byte OOB read</li>
+          <li><code class="mono">@SYS</code> lseek signed/unsigned OOB read</li>
+          <li>Param upload OOB + biased <code class="mono">AP_Param</code> writes</li>
+          <li><code class="mono">apfs_fgets</code> int → uint8 truncation</li>
+        </ul>
+        <p class="muted" style="margin-top:8px;font-size:13px;">CVSS 4 – 7. Surfaced uniquely under <code class="mono">main_prompt.txt</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 11: PLANNED FIXES -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Planned fixes</span></div>
+
+    <div class="kicker">WHAT WE PLAN TO FIX</div>
+    <h2>Ordered by leverage</h2>
+
+    <div class="grid g-2" style="margin-top:14px;">
+      <div class="card">
+        <h3>1 · Make MAVLink signing mandatory</h3>
+        <p>Gate <code class="mono">FILE_TRANSFER_PROTOCOL</code>, <code class="mono">SERIAL_CONTROL</code>, <code class="mono">SECURE_COMMAND</code>, and <code class="mono">PARAM_SET</code> behind <code class="mono">signing_enabled()</code> in shipped builds. Default <code class="mono">GCS_SYSID_ENFORCE = 1</code>.</p>
+      </div>
+      <div class="card">
+        <h3>2 · Apply DDS-Security profile</h3>
+        <p>Authentication + access control + encryption on UDP:2019. Until then, bind the DDS transport to <code class="mono">127.0.0.1</code> and require an authenticated tunnel (WireGuard / IPsec) between vehicle and companion computer.</p>
+      </div>
+      <div class="card">
+        <h3>3 · Remove the fail-open in <code class="mono">check_signature</code></h3>
+        <p>Delete the <code class="mono">if (all_zero_keys(...)) return true;</code> branch. If no keys are provisioned, refuse <code class="mono">SECURE_COMMAND</code> entirely. Provisioning must happen over USB + serial console only.</p>
+      </div>
+      <div class="card">
+        <h3>4 · Allowlist MAVFTP paths</h3>
+        <p>Resolve <code class="mono">request.data</code> with realpath and reject anything outside <code class="mono">/APM, /@SYS, /@PARAM, /@MISSION, /@ROMFS</code>. Block <code class="mono">..</code> segments after normalization.</p>
+      </div>
+      <div class="card">
+        <h3>5 · Sign Lua scripts</h3>
+        <p>Refuse to load unsigned <code class="mono">.lua</code> from <code class="mono">APM/scripts/</code> when the script was written within the current boot via a non-USB transport.</p>
+      </div>
+      <div class="card">
+        <h3>6 · Memory-safety patches</h3>
+        <p>Fix <code class="mono">handle_device_op_write</code> bounds, <code class="mono">@SYS</code> lseek, <code class="mono">apfs_fgets</code> truncation, and the param-upload OOB. Add unit tests.</p>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:18px;color:var(--muted);font-size:clamp(13px,1.45vw,16px);">
+      Items <strong class="accent">1 – 3</strong> alone collapse every Critical finding in this benchmark.
+    </p>
+  </section>
+
+  <!-- SLIDE 12: WONTFIX -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Upstream reality</span></div>
+
+    <div class="kicker">DON'T BOTHER · WONTFIX</div>
+    <h2>Real risks that match ArduPilot's stated design</h2>
+    <p class="muted" style="margin-bottom:16px;">ArduPilot's threat model is explicit: <strong class="warn">MAVLink and DDS run on operator-trusted links</strong>. Authentication, isolation, and link security are the <strong>operator's</strong> job, not the firmware's. PRs that "add auth" to these transports are closed as WONTFIX.</p>
+
+    <div class="grid g-2">
+      <div class="card">
+        <h3 class="bad">MAVFTP unauth + <code class="mono">..</code> traversal</h3>
+        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "Use <code class="mono">SETUP_SIGNING</code> and set <code class="mono">GCS_SYSID_ENFORCE = 1</code>. Operators choose their radio link." Path normalization is rejected because it would break legitimate uses of <code class="mono">@SYS</code>, <code class="mono">@PARAM</code>, and operator-relative FTP scripts.</p>
+      </div>
+      <div class="card">
+        <h3 class="bad">Unauth DDS ARM / MODE / TAKEOFF / SET_PARAMETERS</h3>
+        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "DDS is for trusted LAN segments and companion computers. Deploy the DDS-Security profile or isolate the network. The protocol is designed for high-rate, low-overhead intra-vehicle messaging — auth checks per packet are a non-starter."</p>
+      </div>
+      <div class="card">
+        <h3 class="bad">SERIAL_CONTROL unauth UART passthrough</h3>
+        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "It is intentional — that's how operators flash GPS firmware, talk to ESCs, and debug bootloaders. Require signing if you don't trust the link." Adding always-on gating breaks every existing ground-station workflow.</p>
+      </div>
+      <div class="card">
+        <h3 class="bad">DDS Joy topic overrides RC channels</h3>
+        <p class="muted" style="font-size:13.5px;"><strong>Upstream answer:</strong> "<code class="mono">RC_Channels::set_override</code> is the canonical RC-failsafe mechanism; the Joy topic is the documented ROS 2 interface for external control." Removing it would break MoveIt, Nav2, and Gazebo integrations.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04);">
+      <h3 class="warn">✓ What CAN get merged: opt-in hardening parameters</h3>
+      <ul class="tight" style="font-size:14px;">
+        <li>New <code class="mono">FTP_OPTIONS</code> bitmask with <code class="mono">FTP_REQUIRE_SIGNING</code> and <code class="mono">FTP_ALLOWLIST_PATHS</code> bits</li>
+        <li>New <code class="mono">DDS_AUTH_MODE</code> parameter — reject ARM / MODE / TAKEOFF unless the origin is authenticated</li>
+        <li>New <code class="mono">SERIAL_PASS_REQUIRE_SIGNING</code> bit in <code class="mono">SERIAL_PASS</code></li>
+      </ul>
+      <p class="muted" style="margin-top:8px;font-size:12.5px;">These don't change default behavior (which maintainers value) but give security-conscious operators — medical, defense, commercial fleet — a switch to flip.</p>
+    </div>
+
+    <p style="text-align:center;margin-top:14px;color:var(--muted);font-size:clamp(12.5px,1.35vw,15px);">
+      <strong>Strategy:</strong> ship the 7 memory-safety / fail-open patches as straight bug-fix PRs, then open RFC PRs for the opt-in hardening switches.
+    </p>
+  </section>
+
+  <!-- SLIDE 13: PR SUMMARY -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Upstream PR</span></div>
+
+    <div class="kicker">PULL REQUEST · UPSTREAM</div>
+    <h2><a href="https://github.com/ArduPilot/ardupilot/pull/33147" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:none;border-bottom:2px solid var(--accent);">ArduPilot/ardupilot#33147</a></h2>
+    <p class="muted" style="margin-bottom:18px;">Three small, atomic, non-breaking commits targeting <code class="mono">master</code> — each is a pure bug fix that preserves existing default behavior.</p>
+
+    <table style="margin-top:8px;">
+      <thead><tr><th>#</th><th>Subsystem</th><th>Class</th><th>File</th><th>+/−</th><th>Commit</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="num">1</td>
+          <td><code class="mono">AP_CheckFirmware</code></td>
+          <td><span class="pill bad">CWE-305 auth bypass</span></td>
+          <td class="mono" style="font-size:11px;">AP_CheckFirmware_secure_command.cpp</td>
+          <td class="num"><span class="good">+13</span> / <span class="bad">−2</span></td>
+          <td class="mono" style="font-size:11px;">544689c4</td>
+        </tr>
+        <tr>
+          <td class="num">2</td>
+          <td><code class="mono">GCS_MAVLink</code></td>
+          <td><span class="pill warn">CWE-125 OOB read</span></td>
+          <td class="mono" style="font-size:11px;">GCS_DeviceOp.cpp</td>
+          <td class="num"><span class="good">+7</span> / <span class="bad">−0</span></td>
+          <td class="mono" style="font-size:11px;">5efb802c</td>
+        </tr>
+        <tr>
+          <td class="num">3</td>
+          <td><code class="mono">AP_Filesystem</code></td>
+          <td><span class="pill warn">CWE-125 OOB read</span></td>
+          <td class="mono" style="font-size:11px;">AP_Filesystem_Sys.cpp</td>
+          <td class="num"><span class="good">+25</span> / <span class="bad">−2</span></td>
+          <td class="mono" style="font-size:11px;">fb4410db</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="grid g-3" style="margin-top:18px;">
+      <div class="card"><h3>Total diff</h3><p class="muted" style="font-size:13.5px;"><strong class="good">+45</strong> / <strong class="bad">−4</strong> across <strong>3 files</strong>. No new parameters. No API changes.</p></div>
+      <div class="card"><h3>Atomic commits</h3><p class="muted" style="font-size:13.5px;">Each fix is one commit, cherry-pickable. Maintainers can accept any subset independently.</p></div>
+      <div class="card"><h3>Build verified</h3><p class="muted" style="font-size:13.5px;"><code class="mono">waf configure --board sitl && waf plane</code> — clean build on the merged branch.</p></div>
+    </div>
+  </section>
+
+  <!-- SLIDE 14: FIX 1 CODE DIFF -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Fix 1 of 3</span></div>
+
+    <div class="kicker">FIX #1 · CWE-305 · SIGNED-FIRMWARE FAIL-OPEN</div>
+    <h2><code class="mono">check_signature()</code> bootstrap-only carve-out</h2>
+    <p class="muted" style="font-size:14.5px;margin-bottom:12px;">
+      <code class="mono">libraries/AP_CheckFirmware/AP_CheckFirmware_secure_command.cpp</code>
+    </p>
+
+    <div class="grid g-2">
+      <div>
+        <h3 class="bad">Before</h3>
+<pre class="code">bool AP_CheckFirmware::check_signature(
+        <span class="k">const</span> mavlink_secure_command_t &amp;pkt)
+{
+    <span class="k">const struct</span> ap_secure_data *sec_data =
+        find_public_keys();
+    <span class="k">if</span> (sec_data == <span class="k">nullptr</span>) {
+        <span class="k">return false</span>;
+    }
+    <span class="k">if</span> (all_zero_keys(sec_data)) {
+        <span class="c">// allow through if no keys are setup</span>
+        <span class="k">return true</span>;       <span class="c">// ◀ FAIL-OPEN</span>
+    }
+    <span class="k">if</span> (pkt.sig_length != 64) {
+        <span class="k">return false</span>;
+    }
+    ...
+}</pre>
+        <p class="muted" style="font-size:12.5px;margin-top:8px;">Every operation passes when keys are zero — including <code class="mono">GET_SESSION_KEY</code>, <code class="mono">REMOVE_PUBLIC_KEYS</code>, and any future op.</p>
+      </div>
+      <div>
+        <h3 class="good">After</h3>
+<pre class="code">bool AP_CheckFirmware::check_signature(
+        <span class="k">const</span> mavlink_secure_command_t &amp;pkt)
+{
+    <span class="k">const struct</span> ap_secure_data *sec_data =
+        find_public_keys();
+    <span class="k">if</span> (sec_data == <span class="k">nullptr</span>) {
+        <span class="k">return false</span>;
+    }
+    <span class="k">if</span> (all_zero_keys(sec_data)) {
+        <span class="c">// only allow bootstrap op</span>
+        <span class="k">return</span> pkt.operation ==
+            SECURE_COMMAND_SET_PUBLIC_KEYS;
+    }
+    <span class="k">if</span> (pkt.sig_length != 64) {
+        <span class="k">return false</span>;
+    }
+    ...
+}</pre>
+        <p class="muted" style="font-size:12.5px;margin-top:8px;">First-time provisioning still works. Every other op (including additional <code class="mono">SET_PUBLIC_KEYS</code> after first install) requires valid Ed25519 signature.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+      <p style="font-size:13.5px;"><strong class="good">Threat closed:</strong> attacker on a MAVLink-reachable interface against a board built with <code class="mono">AP_SIGNED_FIRMWARE</code> but never provisioned (or wiped via <code class="mono">REMOVE_PUBLIC_KEYS</code>) can no longer install their own keys, exfiltrate the would-be session key, or flash signed bootloader payloads.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 15: FIX 2 CODE DIFF -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Fix 2 of 3</span></div>
+
+    <div class="kicker">FIX #2 · CWE-125 · DEVICE_OP_WRITE OOB READ</div>
+    <h2><code class="mono">handle_device_op_write()</code> count bound check</h2>
+    <p class="muted" style="font-size:14.5px;margin-bottom:12px;">
+      <code class="mono">libraries/GCS_MAVLink/GCS_DeviceOp.cpp</code>
+    </p>
+
+    <div class="grid g-2">
+      <div>
+        <h3 class="bad">Before — read handler has it</h3>
+<pre class="code"><span class="c">// handle_device_op_READ() — line 56</span>
+<span class="k">if</span> (packet.count &gt; <span class="k">sizeof</span>(data)) {
+    retcode = 5;
+    <span class="k">goto</span> fail;
+}                <span class="c">// ◀ check exists</span>
+
+<span class="c">// handle_device_op_WRITE() — line 122</span>
+<span class="k">if</span> (!dev-&gt;get_semaphore()-&gt;take(10)) {
+    retcode = 3;
+    <span class="k">goto</span> fail;
+}
+<span class="k">if</span> (packet.regstart == 0xff) {
+    dev-&gt;transfer_bank(packet.bank,
+        packet.data, packet.count, ...);
+} <span class="k">else</span> {
+    <span class="k">for</span> (<span class="k">uint8_t</span> i=0; i&lt;packet.count; i++) {
+        dev-&gt;write_bank_register(packet.bank,
+            packet.regstart+i,
+            packet.data[i]);  <span class="c">// ◀ OOB</span>
+    }
+}</pre>
+        <p class="muted" style="font-size:12.5px;margin-top:8px;"><code class="mono">packet.count</code> is <code class="mono">uint8_t</code> (max 255), <code class="mono">packet.data</code> is 128 bytes. Stack contents leak onto the I2C/SPI bus.</p>
+      </div>
+      <div>
+        <h3 class="good">After</h3>
+<pre class="code"><span class="c">// handle_device_op_WRITE()</span>
+<span class="k">if</span> (!dev) { retcode = 2; <span class="k">goto</span> fail; }
+
+<span class="k">if</span> (packet.count &gt; <span class="k">sizeof</span>(packet.data)) {
+    <span class="c">// bound count against payload</span>
+    <span class="c">// buffer to prevent OOB read</span>
+    <span class="c">// from packet.data[i] in the</span>
+    <span class="c">// register write loop and OOB</span>
+    <span class="c">// read in transfer_bank() below.</span>
+    retcode = 5;
+    <span class="k">goto</span> fail;        <span class="c">// ◀ added</span>
+}
+
+<span class="k">if</span> (!dev-&gt;get_semaphore()-&gt;take(10)) {
+    retcode = 3;
+    <span class="k">goto</span> fail;
+}
+<span class="c">// ... rest unchanged ...</span></pre>
+        <p class="muted" style="font-size:12.5px;margin-top:8px;">Mirrors the existing check in the read handler. <strong>7 lines</strong> added, zero deletions.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+      <p style="font-size:13.5px;"><strong class="good">Threat closed:</strong> a malicious or buggy GCS can no longer push 127 bytes of stack contents onto a hardware bus or corrupt arbitrary peripheral register space via <code class="mono">DEVICE_OP_WRITE</code>.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 16: FIX 3 CODE DIFF -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Fix 3 of 3</span></div>
+
+    <div class="kicker">FIX #3 · CWE-125 · @SYS LSEEK WILD OOB READ</div>
+    <h2><code class="mono">AP_Filesystem_Sys::lseek()</code> signed/unsigned safety</h2>
+    <p class="muted" style="font-size:14.5px;margin-bottom:12px;">
+      <code class="mono">libraries/AP_Filesystem/AP_Filesystem_Sys.cpp</code>
+    </p>
+
+    <div class="grid g-2">
+      <div>
+        <h3 class="bad">Before</h3>
+<pre class="code"><span class="k">int32_t</span> AP_Filesystem_Sys::lseek(
+    <span class="k">int</span> fd, <span class="k">int32_t</span> offset, <span class="k">int</span> seek_from)
+{
+    ...
+    <span class="k">struct</span> rfile &amp;r = file[fd];
+    <span class="k">switch</span> (seek_from) {
+    <span class="k">case</span> SEEK_SET:
+        r.file_ofs = MIN(offset,
+            (<span class="k">int32_t</span>)r.str-&gt;get_length());
+        <span class="k">break</span>;   <span class="c">// ◀ -1 → 0xFFFFFFFF</span>
+    <span class="k">case</span> SEEK_CUR:
+        r.file_ofs = MIN(r.str-&gt;get_length(),
+            offset + r.file_ofs);
+        <span class="k">break</span>;   <span class="c">// ◀ same hazard</span>
+    <span class="k">case</span> SEEK_END:
+        errno = EINVAL;
+        <span class="k">return</span> -1;
+    }
+    <span class="k">return</span> r.file_ofs;
+}
+
+<span class="c">// later, read() does:</span>
+count = MIN(count, get_length()-file_ofs);
+memcpy(buf, get_string()+file_ofs, count);
+<span class="c">//     ◀ wild address when file_ofs=0xFFFFFFFF</span></pre>
+      </div>
+      <div>
+        <h3 class="good">After</h3>
+<pre class="code"><span class="k">case</span> SEEK_SET:
+    <span class="c">// reject negative absolute offset</span>
+    <span class="k">if</span> (offset &lt; 0) {
+        errno = EINVAL;
+        <span class="k">return</span> -1;
+    }
+    r.file_ofs = MIN(
+        (<span class="k">uint32_t</span>)offset, length);
+    <span class="k">break</span>;
+
+<span class="k">case</span> SEEK_CUR: {
+    <span class="c">// compute in int64_t, detect</span>
+    <span class="c">// under/overflow, then clamp</span>
+    <span class="k">const int64_t</span> new_ofs =
+        (<span class="k">int64_t</span>)r.file_ofs +
+        (<span class="k">int64_t</span>)offset;
+    <span class="k">if</span> (new_ofs &lt; 0) {
+        errno = EINVAL;
+        <span class="k">return</span> -1;
+    }
+    r.file_ofs = MIN(
+        (<span class="k">uint32_t</span>)MIN&lt;<span class="k">int64_t</span>&gt;(
+            new_ofs, length),
+        length);
+    <span class="k">break</span>;
+}
+<span class="k">case</span> SEEK_END:
+    errno = EINVAL;
+    <span class="k">return</span> -1;</pre>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px;border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+      <p style="font-size:13.5px;"><strong class="good">Threat closed:</strong> over MAVFTP, any client could request <code class="mono">OpenFileRO /@SYS/storage.bin</code> (or <code class="mono">flash.bin</code>) and lseek to a negative offset. The buffer base is the live EEPROM pointer or <code class="mono">0x08000000</code> internal flash — the attacker could read MAVLink2 signing keys and arbitrary firmware bytes. With this fix, negative offsets return <code class="mono">EINVAL</code>.</p>
+    </div>
+  </section>
+
+  <!-- SLIDE 17: TAKEAWAYS / CTA -->
+  <section class="slide">
+    <div class="topbar"><a class="esl-mark" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener"><div class="esl-logo">ESL</div><div class="tag"><span class="a">ESL</span><span class="b">Engineering Software Lab</span></div></a><span class="topright muted">Talk to us</span></div>
+
+    <div class="kicker">WORK WITH ESL</div>
+    <h2 style="font-size:clamp(26px,4.5vw,52px);">Need a security audit you can defend?</h2>
+    <p class="muted" style="margin-top:14px;font-size:clamp(15px,1.7vw,20px);max-width:900px;">
+      ESL — <strong class="accent">Engineering Software Lab</strong> — runs benchmarks like this for real customers: medical devices, automotive ECUs, robotics, aerospace, embedded firmware. We deliver auditable findings with taint paths, calibrated CVSS, and disproof evidence — not pattern-matched speculation.
+    </p>
+
+    <div class="grid g-3" style="margin-top:24px;">
+      <div class="card"><h3>Threat-led audits</h3><p class="muted">Multi-agent offensive reviews of your codebase, with reproducible artifacts.</p></div>
+      <div class="card"><h3>SBOM &amp; supply chain</h3><p class="muted">ESL SBOMator — component-level CVE intelligence with KEV/ransomware enrichment.</p></div>
+      <div class="card"><h3>Standards &amp; compliance</h3><p class="muted">MISRA, CERT, AUTOSAR, IEC 62443, ISO 26262, FDA pre-market.</p></div>
+    </div>
+
+    <div class="footer-cta" style="margin-top:28px;">
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
+        <div class="esl-logo" style="width:54px;height:54px;font-size:18px;">ESL</div>
+        <div style="text-align:left;">
+          <div style="font-weight:800;font-size:clamp(16px,2vw,20px);">Engineering Software Lab</div>
+          <div class="muted" style="font-size:clamp(12px,1.3vw,14px);">eswlab.com</div>
+        </div>
+      </div>
+      <a class="cta-btn" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL →</a>
+      <p class="muted" style="margin-top:14px;font-size:clamp(12px,1.3vw,14px);">
+        <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener" style="color:var(--accent);">https://eswlab.com/contact-us/</a>
+      </p>
+    </div>
+  </section>
+
+</div>
+
+<!-- nav arrows -->
+<div class="nav left hidden" id="navLeft" aria-label="Previous slide">‹</div>
+<div class="nav right" id="navRight" aria-label="Next slide">›</div>
+
+<!-- progress + counter -->
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="counter" id="counter">1 / 17</div>
+
+<script>
+(function(){
+  const deck = document.getElementById('deck');
+  const slides = deck.querySelectorAll('.slide');
+  const total = slides.length;
+  const navL = document.getElementById('navLeft');
+  const navR = document.getElementById('navRight');
+  const bar = document.getElementById('bar');
+  const counter = document.getElementById('counter');
+  const hint = document.getElementById('hint');
+  let idx = 0;
+  let interacted = false;
+
+  function render(){
+    deck.style.transform = `translateX(-${idx*100}vw)`;
+    bar.style.width = `${((idx+1)/total)*100}%`;
+    counter.textContent = `${idx+1} / ${total}`;
+    navL.classList.toggle('hidden', idx===0);
+    navR.classList.toggle('hidden', idx===total-1);
+    if(interacted && hint){ hint.classList.add('hide'); }
+  }
+  function go(n){
+    idx = Math.max(0, Math.min(total-1, n));
+    interacted = true;
+    render();
+  }
+  navL.addEventListener('click',()=>go(idx-1));
+  navR.addEventListener('click',()=>go(idx+1));
+
+  // keyboard
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight',' ','PageDown'].includes(e.key)){e.preventDefault();go(idx+1);}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(idx-1);}
+    else if(e.key==='Home'){go(0);}
+    else if(e.key==='End'){go(total-1);}
+  });
+
+  // touch swipe
+  let touchStartX=0, touchStartY=0;
+  deck.addEventListener('touchstart',e=>{
+    const t=e.changedTouches[0]; touchStartX=t.screenX; touchStartY=t.screenY;
+  },{passive:true});
+  deck.addEventListener('touchend',e=>{
+    const t=e.changedTouches[0];
+    const dx=t.screenX-touchStartX, dy=t.screenY-touchStartY;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)){
+      if(dx<0)go(idx+1); else go(idx-1);
+    }
+  },{passive:true});
+
+  // mouse drag
+  let dragStartX=null;
+  deck.addEventListener('mousedown',e=>{ dragStartX=e.clientX; });
+  deck.addEventListener('mouseup',e=>{
+    if(dragStartX===null) return;
+    const dx=e.clientX-dragStartX;
+    if(Math.abs(dx)>60){
+      if(dx<0)go(idx+1); else go(idx-1);
+    }
+    dragStartX=null;
+  });
+  deck.addEventListener('mouseleave',()=>{dragStartX=null;});
+
+  // initial render
+  render();
+})();
+</script>
+
+</body>
+</html>
