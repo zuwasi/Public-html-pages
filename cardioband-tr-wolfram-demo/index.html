@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>AMP + Wolfram Paper-to-Simulation Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --panel: rgba(255, 255, 255, 0.08);
+      --panel-strong: rgba(255, 255, 255, 0.13);
+      --text: #f6fbff;
+      --muted: #b8c7d9;
+      --accent: #36d1dc;
+      --accent-2: #5b86e5;
+      --warm: #ffbc66;
+      --good: #7ee787;
+      --danger: #ff7b72;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(54, 209, 220, 0.20), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(91, 134, 229, 0.22), transparent 26%),
+        linear-gradient(135deg, #07111f 0%, #0b1730 45%, #120d22 100%);
+    }
+
+    .deck {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      transition: transform 520ms cubic-bezier(.22,.61,.36,1);
+    }
+
+    .slide {
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100vh;
+      padding: clamp(28px, 5vw, 72px);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: auto -20% -45% -20%;
+      height: 60%;
+      background: radial-gradient(ellipse at center, rgba(54, 209, 220, 0.16), transparent 60%);
+      pointer-events: none;
+    }
+
+    .content {
+      width: min(1180px, 100%);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: clamp(24px, 4vw, 56px);
+      align-items: center;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(18px, 3vw, 34px);
+      align-items: center;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 5.8rem);
+      line-height: .94;
+      letter-spacing: -0.07em;
+      margin-bottom: 22px;
+    }
+    h2 {
+      font-size: clamp(2rem, 4.6vw, 4.6rem);
+      line-height: 1;
+      letter-spacing: -0.055em;
+      margin-bottom: 24px;
+    }
+    h3 {
+      font-size: clamp(1.05rem, 1.8vw, 1.45rem);
+      margin-bottom: 10px;
+    }
+    p, li {
+      font-size: clamp(1rem, 1.55vw, 1.35rem);
+      line-height: 1.45;
+      color: var(--muted);
+    }
+    ul { padding-left: 1.25em; margin-bottom: 0; }
+    li + li { margin-top: 10px; }
+
+    .eyebrow {
+      color: var(--accent);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      font-size: clamp(.75rem, 1.1vw, .95rem);
+      margin-bottom: 16px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 28px;
+      padding: clamp(20px, 3vw, 34px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 26px;
+    }
+    .metric {
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    .metric strong {
+      display: block;
+      font-size: clamp(1.7rem, 3vw, 3rem);
+      color: var(--text);
+      letter-spacing: -0.05em;
+    }
+    .metric span { color: var(--muted); font-size: .92rem; }
+
+    .image-card {
+      background: rgba(255,255,255,.96);
+      border-radius: 26px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+    .image-card.dark { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); }
+    img { max-width: 100%; display: block; border-radius: 18px; }
+    .fit-img { max-height: 64vh; object-fit: contain; margin: auto; }
+    .logo { width: min(170px, 32vw); background: #fff; padding: 10px; border-radius: 22px; }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(54,209,220,.12);
+      border: 1px solid rgba(54,209,220,.32);
+      color: #dffbff;
+      font-weight: 700;
+      font-size: .9rem;
+      margin: 6px 8px 6px 0;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 26px;
+    }
+    .flow .step {
+      position: relative;
+      min-height: 150px;
+      padding: 18px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.09);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+    .flow .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-weight: 800;
+      font-size: 1.4rem;
+      z-index: 2;
+    }
+    .step-num { color: var(--warm); font-weight: 800; font-size: .9rem; }
+    .step p { font-size: .98rem; margin: 6px 0 0; }
+
+    .quote {
+      border-left: 4px solid var(--accent);
+      padding-left: 22px;
+      color: var(--text);
+      font-size: clamp(1.1rem, 2vw, 1.7rem);
+      line-height: 1.35;
+      margin: 24px 0;
+    }
+
+    .note {
+      font-size: clamp(.9rem, 1.2vw, 1.05rem);
+      color: #d7e5f6;
+      background: rgba(255,188,102,.12);
+      border: 1px solid rgba(255,188,102,.30);
+      padding: 14px 16px;
+      border-radius: 18px;
+      margin-top: 16px;
+    }
+
+    .nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 20;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.24);
+      color: var(--text);
+      background: rgba(9,18,35,.72);
+      backdrop-filter: blur(12px);
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .nav:hover { transform: translateY(-50%) scale(1.06); }
+    .nav.prev { left: 18px; }
+    .nav.next { right: 18px; }
+    .nav.hidden { opacity: 0; pointer-events: none; }
+
+    .progress {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 7px;
+      background: rgba(255,255,255,.12);
+      z-index: 30;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2), var(--warm));
+      transition: width 420ms ease;
+    }
+    .counter {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 31;
+      color: var(--muted);
+      font-weight: 700;
+      background: rgba(9,18,35,.72);
+      border: 1px solid rgba(255,255,255,.16);
+      border-radius: 999px;
+      padding: 8px 12px;
+    }
+    .swipe-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%);
+      z-index: 32;
+      color: #dffbff;
+      font-weight: 700;
+      animation: pulse 1.35s infinite ease-in-out;
+      pointer-events: none;
+    }
+    .swipe-hint.hidden { display: none; }
+    @keyframes pulse { 0%,100% { opacity: .5; transform: translateX(-50%) translateY(0); } 50% { opacity: 1; transform: translateX(-50%) translateY(-4px); } }
+
+    @media (max-width: 860px) {
+      .hero, .grid-2, .grid-3, .flow, .metric-row { grid-template-columns: 1fr; }
+      .flow .step:not(:last-child)::after { content: "↓"; right: 20px; top: auto; bottom: -23px; transform: none; }
+      .slide { overflow-y: auto; align-items: flex-start; }
+      .fit-img { max-height: 42vh; }
+      .nav { width: 42px; height: 42px; font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="content hero">
+        <div>
+          <div class="eyebrow">AMP + Wolfram research automation</div>
+          <h1>From paper to executable demo</h1>
+          <p class="quote">We used AMP to orchestrate the work and Wolfram Language to turn a clinical paper into notebooks, validations, figures, and a synthetic patient-level simulation demo.</p>
+          <span class="pill">Research PDF → claim ledger</span>
+          <span class="pill">Wolfram package</span>
+          <span class="pill">Verification scripts</span>
+          <span class="pill">Simulation notebook</span>
+          <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+        </div>
+        <div class="card">
+          <img class="logo" src="esl-logo.jpg" alt="ESL logo" />
+          <h3 style="margin-top:18px">Prepared as an ESL + Wolfram capability demo</h3>
+          <p>Focused on Wolfram notebooks, verification pipelines, reproducible exports, and training/consultancy services around Wolfram products.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">The combined process</div>
+          <h2>AMP manages the workflow; Wolfram executes the science</h2>
+          <p>AMP acts like the autonomous engineering layer: read the paper, extract claims, generate code, build notebooks, run checks, and publish artifacts.</p>
+          <p>Wolfram Language supplies the computational layer: statistics, symbolic/numeric checks, plotting, notebooks, scripts, and Wolfram Cloud-ready assets.</p>
+        </div>
+        <div class="image-card dark">
+          <img class="fit-img" src="workflow.png" alt="AMP and Wolfram workflow" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Wolfram skill workflow</div>
+        <h2>How a research paper becomes a computational project</h2>
+        <div class="flow">
+          <div class="step"><div class="step-num">01</div><h3>Read</h3><p>Extract paper title, design, endpoints, figures, tables, claims, and limitations.</p></div>
+          <div class="step"><div class="step-num">02</div><h3>Model</h3><p>Encode data and assumptions as Wolfram associations and reusable functions.</p></div>
+          <div class="step"><div class="step-num">03</div><h3>Notebook</h3><p>Create an NB interface for exploration, plots, and interactive demos.</p></div>
+          <div class="step"><div class="step-num">04</div><h3>Verify</h3><p>Run WLS scripts to rebuild outputs and audit paper-specific claims.</p></div>
+          <div class="step"><div class="step-num">05</div><h3>Publish</h3><p>Export figures, CSV/JSON reports, and cloud-ready notebooks for sharing.</p></div>
+        </div>
+        <p class="note">The skill requires evidence: generated exports, validation reports, audit scripts, and explicit limitations—not just a conceptual notebook.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Input paper</div>
+          <h2>What we analyzed</h2>
+          <p><strong>Input:</strong> <code>C:\Amp_demos\Edwards\1-s2.0-S1936879822013437-main.pdf</code></p>
+          <p><strong>Paper:</strong> “1-Year Outcomes of Cardioband Tricuspid Valve Reconstruction System Early Feasibility Study.”</p>
+          <p><strong>Clinical topic:</strong> transcatheter tricuspid valve repair using the Edwards Cardioband Tricuspid Valve Reconstruction System.</p>
+        </div>
+        <div class="card">
+          <h3>Key aggregate outcomes extracted</h3>
+          <div class="metric-row" style="grid-template-columns:1fr 1fr">
+            <div class="metric"><strong>37</strong><span>patients enrolled</span></div>
+            <div class="metric"><strong>29</strong><span>available at 1 year</span></div>
+            <div class="metric"><strong>73%</strong><span>TR ≤ moderate at 1 year</span></div>
+            <div class="metric"><strong>19.0</strong><span>KCCQ point improvement</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Connection to Edwards</div>
+        <h2>Why this paper matters for Edwards work</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Paper connection</h3>
+            <ul>
+              <li>The evaluated device is the <strong>Cardioband Tricuspid Valve Reconstruction System</strong> from Edwards Lifesciences.</li>
+              <li>The study was <strong>funded by Edwards Lifesciences</strong>.</li>
+              <li>The protocol states the sponsor funded trial activities and performed site selection, data collection/monitoring, and statistical analysis.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>People and disclosure note</h3>
+            <ul>
+              <li>The author list includes many clinical investigators, including Jin Liu, MD, affiliated in the paper with the Cardiovascular Research Foundation.</li>
+              <li>The extracted text does <strong>not</strong> identify a specific Edwards employee as an author.</li>
+              <li>Several authors disclose consulting, grants, advisory board, or research relationships with Edwards Lifesciences.</li>
+            </ul>
+          </div>
+        </div>
+        <p class="note">For presentation accuracy, we describe Edwards as sponsor/device company and avoid claiming a named Edwards employee unless confirmed by a source outside the PDF.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">What we built</div>
+          <h2>NB + WL + WLS architecture</h2>
+          <ul>
+            <li><strong>.wl package:</strong> reusable model, transcribed aggregate data, validation functions, simulation functions, exporters.</li>
+            <li><strong>.nb notebooks:</strong> human-facing exploration and synthetic demo interface.</li>
+            <li><strong>.wls scripts:</strong> reproducible command-line build and audit pipeline.</li>
+            <li><strong>exports:</strong> PNG figures, CSV tables, JSON validation, audit reports.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Repository outputs</h3>
+          <p><code>CardiobandTRNotebook.nb</code></p>
+          <p><code>CardiobandTRSimulationNotebook.nb</code></p>
+          <p><code>src/CardiobandTRModel.wl</code></p>
+          <p><code>build_project.wls</code> + <code>proof_audit.wls</code></p>
+          <p class="note">The build passed with 35 paper-specific audit checks and 0 failures.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Limitation</div>
+          <h2>This was not a full patient-level reanalysis</h2>
+          <p>The PDF contains aggregate tables, figure captions, means, percentages, and event counts. It does not include the raw patient-level measurements, censoring times, or event-time data.</p>
+          <p>Therefore, exact Kaplan-Meier reconstruction, Wilcoxon signed-rank replication, and patient-level subgroup modeling are not possible from the PDF alone.</p>
+        </div>
+        <div class="card">
+          <h3>What we can validate safely</h3>
+          <ul>
+            <li>Count-to-percentage consistency.</li>
+            <li>Reported mean changes where summary statistics exist.</li>
+            <li>Internal consistency of headline claims.</li>
+            <li>Transparent limitations and reproducible exports.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Synthetic data demo</div>
+          <h2>Making the demo more interesting without overclaiming</h2>
+          <p>We generated a synthetic patient-level CSV constrained to the paper’s aggregate values. Every row is flagged as synthetic and not real patient data.</p>
+          <p>This enables interactive scatter plots, response distributions, event curves, and what-if analysis while preserving scientific honesty.</p>
+        </div>
+        <div class="image-card">
+          <img class="fit-img" src="generated_data.png" alt="Generated synthetic data table" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Simulation check</div>
+          <h2>Synthetic summary versus paper targets</h2>
+          <p>The synthetic dataset is tuned to preserve the aggregate story: 37 rows, 26 with follow-up, 73.1% TR ≤ moderate, 21.3% annular reduction, 19-point KCCQ improvement, and matching event percentages.</p>
+        </div>
+        <div class="image-card">
+          <img class="fit-img" src="Synthetic summary versus aggregate paper targets.png" alt="Synthetic summary versus aggregate paper targets" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Result view 1</div>
+          <h2>TR grade shift</h2>
+          <p>This plot converts the aggregate “TR reduction” claim into an intuitive patient-level demo: baseline disease is concentrated in severe/massive/torrential grades, while the 1-year synthetic distribution shifts toward none/trace, mild, and moderate.</p>
+          <p class="note">Real-world meaning: this is the clinical story the Cardioband intervention is trying to show—less severe tricuspid regurgitation after annular reduction.</p>
+        </div>
+        <div class="image-card">
+          <img class="fit-img" src="TR_Grade_SHIFT.png" alt="TR grade shift" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Result view 2</div>
+          <h2>Paired annular response</h2>
+          <p>The Cardioband mechanism is annular reduction. The synthetic paired scatter shows each simulated patient’s baseline versus 1-year annular diameter, constrained to the paper’s reported 21.3% mean reduction.</p>
+          <p class="note">Engineering/clinical bridge: this connects a device mechanism—reshaping the valve annulus—to measurable echocardiographic outcomes.</p>
+        </div>
+        <div class="image-card">
+          <img class="fit-img" src="Paired annular response.png" alt="Paired annular response" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Result view 3</div>
+          <h2>KCCQ response</h2>
+          <p>KCCQ is a patient-reported quality-of-life score. The paper reports a 19-point improvement, which is clinically meaningful. The synthetic notebook makes that improvement explorable at a simulated patient level.</p>
+          <p class="note">Real-world meaning: beyond echo metrics, the workflow highlights whether patients may feel better and function better.</p>
+        </div>
+        <div class="image-card">
+          <img class="fit-img" src="KCCQ response.png" alt="KCCQ response" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content grid-2">
+        <div>
+          <div class="eyebrow">Interactive demo</div>
+          <h2>What-if scaling of treatment effect</h2>
+          <p>The simulation notebook includes a Wolfram <code>Manipulate</code> control to scale the KCCQ response. This turns a static paper result into an interactive training asset.</p>
+          <p>Users can ask: what if the response were 25%, 50%, or 75% stronger/weaker?</p>
+        </div>
+        <div class="image-card">
+          <img class="fit-img" src="Interactive what-if scale KCCQ treatment effect.png" alt="Interactive what-if KCCQ treatment effect" />
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">ESL + Wolfram offering</div>
+        <h2>From one paper demo to repeatable services</h2>
+        <div class="grid-3">
+          <div class="card"><h3>Consultancy</h3><p>Transform technical papers, clinical protocols, and engineering reports into Wolfram packages, notebooks, dashboards, and validation scripts.</p></div>
+          <div class="card"><h3>Training</h3><p>Teach teams how to use Wolfram Language, Mathematica notebooks, WolframScript, and Wolfram Cloud for scientific and engineering workflows.</p></div>
+          <div class="card"><h3>Enablement</h3><p>As local representatives for Wolfram Research products, ESL can help organizations adopt, prototype, and operationalize Wolfram-based solutions.</p></div>
+        </div>
+        <p class="note">The Edwards case study shows a practical path: take a published result, make it executable, document limitations, and build a trustworthy simulation demo.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content hero">
+        <div>
+          <div class="eyebrow">Takeaway</div>
+          <h2>Executable research is easier to inspect, teach, and extend</h2>
+          <ul>
+            <li>AMP accelerated the engineering loop from paper to repo.</li>
+            <li>Wolfram provided the notebook, validation, statistics, and visualization environment.</li>
+            <li>Edwards-related clinical evidence became a clear, reproducible, demo-ready workflow.</li>
+            <li>ESL can package this as consulting and training for Wolfram users.</li>
+          </ul>
+        </div>
+        <div class="card" style="text-align:center">
+          <img class="logo" style="margin:auto" src="esl-logo.jpg" alt="ESL logo" />
+          <h3 style="margin-top:20px">AMP + Wolfram + ESL</h3>
+          <p>Paper → notebook → verification → simulation → cloud-ready demo</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="nav prev hidden" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav next" id="next" aria-label="Next slide">›</button>
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="counter" id="counter">1 / 15</div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const progressFill = document.getElementById('progressFill');
+    const counter = document.getElementById('counter');
+    const swipeHint = document.getElementById('swipeHint');
+    let current = 0;
+    let touchStartX = 0;
+    let mouseStartX = 0;
+    let mouseDown = false;
+
+    function update() {
+      deck.style.transform = `translateX(${-current * 100}vw)`;
+      prev.classList.toggle('hidden', current === 0);
+      next.classList.toggle('hidden', current === slides.length - 1);
+      progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+      counter.textContent = `${current + 1} / ${slides.length}`;
+      if (current > 0) swipeHint.classList.add('hidden');
+    }
+
+    function go(delta) {
+      const nextIndex = Math.max(0, Math.min(slides.length - 1, current + delta));
+      if (nextIndex !== current) {
+        current = nextIndex;
+        update();
+      }
+    }
+
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') go(1);
+      if (event.key === 'ArrowLeft') go(-1);
+    });
+
+    document.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    }, { passive: true });
+    document.addEventListener('touchend', (event) => {
+      const dx = event.changedTouches[0].screenX - touchStartX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    }, { passive: true });
+
+    document.addEventListener('mousedown', (event) => {
+      mouseDown = true;
+      mouseStartX = event.screenX;
+    });
+    document.addEventListener('mouseup', (event) => {
+      if (!mouseDown) return;
+      mouseDown = false;
+      const dx = event.screenX - mouseStartX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+    });
+
+    update();
+  </script>
+</body>
+</html>
