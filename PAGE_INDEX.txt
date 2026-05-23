@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-05-21
+Last updated: 2026-05-23
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -145,6 +145,9 @@ Last updated: 2026-05-21
 
 • axelera-logo-white.png
   https://zuwasi.github.io/Public-html-pages/axelera-logo-white.png
+
+• cardioband-tr-wolfram-demo
+  https://zuwasi.github.io/Public-html-pages/cardioband-tr-wolfram-demo
 
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
