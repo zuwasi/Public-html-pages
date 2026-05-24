@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-05-23
+Last updated: 2026-05-24
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -148,6 +148,9 @@ Last updated: 2026-05-23
 
 • cardioband-tr-wolfram-demo
   https://zuwasi.github.io/Public-html-pages/cardioband-tr-wolfram-demo
+
+• cardiotwin-tr-product-demo
+  https://zuwasi.github.io/Public-html-pages/cardiotwin-tr-product-demo
 
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
