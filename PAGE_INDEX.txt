@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-05-24
+Last updated: 2026-05-29
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -61,55 +61,58 @@ Last updated: 2026-05-24
 17. agent-halflife-tester.html
    https://zuwasi.github.io/Public-html-pages/agent-halflife-tester.html
 
-18. ai_agent_eval_presentation.html
+18. ai-coding-agent-cost-calculator.html
+   https://zuwasi.github.io/Public-html-pages/ai-coding-agent-cost-calculator.html
+
+19. ai_agent_eval_presentation.html
    https://zuwasi.github.io/Public-html-pages/ai_agent_eval_presentation.html
 
-19. amp-arupilot-security-benchmark.html
+20. amp-arupilot-security-benchmark.html
    https://zuwasi.github.io/Public-html-pages/amp-arupilot-security-benchmark.html
 
-20. amp-deep3-vs-claude-opus47-benchmark.html
+21. amp-deep3-vs-claude-opus47-benchmark.html
    https://zuwasi.github.io/Public-html-pages/amp-deep3-vs-claude-opus47-benchmark.html
 
-21. amp-lost-in-the-middle-presentation.html
+22. amp-lost-in-the-middle-presentation.html
    https://zuwasi.github.io/Public-html-pages/amp-lost-in-the-middle-presentation.html
 
-22. amp-vs-token-optimizer-presentation.html
+23. amp-vs-token-optimizer-presentation.html
    https://zuwasi.github.io/Public-html-pages/amp-vs-token-optimizer-presentation.html
 
-23. ampcode-prompt-injection-immunity.html
+24. ampcode-prompt-injection-immunity.html
    https://zuwasi.github.io/Public-html-pages/ampcode-prompt-injection-immunity.html
 
-24. ampcode-vs-claudecode-presentation.html
+25. ampcode-vs-claudecode-presentation.html
    https://zuwasi.github.io/Public-html-pages/ampcode-vs-claudecode-presentation.html
 
-25. comparison-presentation-detailed.html
+26. comparison-presentation-detailed.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-detailed.html
 
-26. comparison-presentation-executive.html
+27. comparison-presentation-executive.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-executive.html
 
-27. comparison-report.html
+28. comparison-report.html
    https://zuwasi.github.io/Public-html-pages/comparison-report.html
 
-28. cpp26-embedded-mavlink.html
+29. cpp26-embedded-mavlink.html
    https://zuwasi.github.io/Public-html-pages/cpp26-embedded-mavlink.html
 
-29. cuda-to-axelera-migration.html
+30. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-30. nesher2gm-pentest-operator-guide.html
+31. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-31. nono-ampcode-presentation.html
+32. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-32. static-code-analysis-2026.html
+33. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-33. why-amp-doesnt-need-node9-proxy.html
+34. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-34. wolfram-engine-gpu-demo-presentation.html
+35. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
