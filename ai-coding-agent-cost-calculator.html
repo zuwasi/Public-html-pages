@@ -458,6 +458,67 @@
       margin-bottom: 8px;
     }
 
+    .histogram {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+
+    .histogram-row {
+      display: grid;
+      grid-template-columns: minmax(150px, 240px) 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .histogram-label {
+      color: var(--text);
+      font-size: 0.86rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .histogram-track {
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(2, 6, 23, 0.8);
+      overflow: hidden;
+    }
+
+    .histogram-bar {
+      height: 100%;
+      min-width: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .histogram-value {
+      color: var(--muted);
+      font-variant-numeric: tabular-nums;
+      font-size: 0.84rem;
+    }
+
+    .diff-table {
+      width: 100%;
+      margin-top: 18px;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .diff-table th,
+    .diff-table td {
+      border-bottom: 1px solid var(--border);
+      padding: 8px 6px;
+      text-align: left;
+    }
+
+    .diff-table th {
+      color: var(--text);
+      font-weight: 700;
+    }
+
     code {
       color: #bae6fd;
       font-family: Consolas, Monaco, monospace;
@@ -484,6 +545,20 @@
 
     .use-case-note strong {
       color: var(--text);
+    }
+
+    .session-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .session-hint {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.8rem;
+      line-height: 1.4;
     }
 
     button {
@@ -526,6 +601,10 @@
 
     @media (max-width: 560px) {
       .two-col {
+        grid-template-columns: 1fr;
+      }
+
+      .histogram-row {
         grid-template-columns: 1fr;
       }
     }
@@ -676,6 +755,16 @@
             <a href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">MISRA C</a> 2025 compliant. The preset assumes 50 engineers, a tight schedule,
             heavy codebase context, porting/debug sessions, safety-case evidence, static-analysis remediation, and repeated verification loops.
           </div>
+          <div class="session-actions" aria-label="Saved session actions">
+            <button type="button" id="saveJson">Save JSON</button>
+            <button type="button" id="saveHtml">Save HTML</button>
+            <button type="button" id="loadSession">Load saved session</button>
+            <button type="button" id="showDiff">Diff saved sessions</button>
+            <input id="sessionFile" type="file" accept="application/json,.json" hidden>
+          </div>
+          <p class="session-hint">
+            Save JSON stores the current run in this browser and downloads a reusable file. Save HTML downloads a standalone report. Load saved session imports a JSON file. Diff compares all browser-saved JSON snapshots.
+          </p>
         </div>
       </div>
 
@@ -773,6 +862,18 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="diffModal" role="dialog" aria-modal="true" aria-labelledby="diffTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="diffTitle">Saved session diff</h2>
+        <button type="button" id="closeDiff" aria-label="Close saved session diff">Close</button>
+      </div>
+      <div class="modal-body" id="diffBody">
+        <p>No saved sessions yet. Save JSON or HTML first to create local snapshots.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
     const inputs = {
       mode: document.getElementById('mode'),
@@ -803,6 +904,23 @@
       close: document.getElementById('closeExplanation'),
       modal: document.getElementById('explanationModal')
     };
+
+    const sessionEls = {
+      saveJson: document.getElementById('saveJson'),
+      saveHtml: document.getElementById('saveHtml'),
+      load: document.getElementById('loadSession'),
+      file: document.getElementById('sessionFile'),
+      showDiff: document.getElementById('showDiff')
+    };
+
+    const diffEls = {
+      modal: document.getElementById('diffModal'),
+      close: document.getElementById('closeDiff'),
+      body: document.getElementById('diffBody')
+    };
+
+    const savedSessionStorageKey = 'ai-agent-cost-calculator-sessions-v1';
+    let lastResult = null;
 
     const outputs = {
       sessionCost: document.getElementById('sessionCost'),
@@ -1171,6 +1289,35 @@
       const dailyTeamCost = workdays > 0 ? teamMonthly / workdays : 0;
       const daysToBurnBudget = dailyTeamCost > 0 && budget > 0 ? budget / dailyTeamCost : 0;
 
+      lastResult = {
+        engineers,
+        adoption: adoption * 100,
+        sessions,
+        workdays,
+        inputTokens,
+        outputTokens,
+        inputPrice,
+        outputPrice,
+        seatPrice,
+        budget,
+        contextMultiplier,
+        loopMultiplier,
+        effectiveInputTokens,
+        effectiveOutputTokens,
+        activeEngineers,
+        inputCost,
+        outputCost,
+        sessionCost,
+        engineerDaily,
+        engineerMonthly,
+        teamMonthly,
+        annualCost,
+        fixedSeatMonthly,
+        seatMultiple,
+        dailyTeamCost,
+        daysToBurnBudget
+      };
+
       outputs.sessionCost.textContent = money(sessionCost);
       outputs.tokenBreakdown.textContent = `Input ${money(inputCost)} + output ${money(outputCost)} (${plainNumber(effectiveInputTokens / 1000)}K in / ${plainNumber(effectiveOutputTokens / 1000)}K out effective tokens)`;
       outputs.engineerMonthly.textContent = money(engineerMonthly);
@@ -1188,6 +1335,203 @@
         outputs.budgetBurn.textContent = `${plainNumber(daysToBurnBudget)} workdays`;
         outputs.budgetText.textContent = `${compactMoney(budget)} budget ÷ ${compactMoney(dailyTeamCost)} daily run rate`;
       }
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>'"]/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+      }[char]));
+    }
+
+    function slug(value) {
+      return String(value).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 80) || 'session';
+    }
+
+    function currentValues() {
+      return {
+        engineers: numberValue(inputs.engineers),
+        adoption: numberValue(inputs.adoption),
+        sessions: numberValue(inputs.sessions),
+        workdays: numberValue(inputs.workdays),
+        inputTokens: numberValue(inputs.inputTokens),
+        outputTokens: numberValue(inputs.outputTokens),
+        inputPrice: numberValue(inputs.inputPrice),
+        outputPrice: numberValue(inputs.outputPrice),
+        seatPrice: numberValue(inputs.seatPrice),
+        budget: numberValue(inputs.budget),
+        contextMultiplier: numberValue(inputs.contextMultiplier),
+        loopMultiplier: numberValue(inputs.loopMultiplier)
+      };
+    }
+
+    function collectSession() {
+      calculate();
+      const mode = modes[inputs.mode.value];
+      const llm = currentModel();
+      const createdAt = new Date().toISOString();
+      const displayName = `${mode.title} · ${llm.label} · ${createdAt.slice(0, 19).replace('T', ' ')}`;
+      return {
+        schema: 'ai-agent-cost-calculator-session-v1',
+        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        createdAt,
+        displayName,
+        pageTitle: document.title,
+        sourceUrl: location.href,
+        modeKey: inputs.mode.value,
+        modeTitle: mode.title,
+        modeHomeUrl: mode.homeUrl,
+        modeNote: mode.note,
+        modeAssumptions: mode.assumptions,
+        llmKey: inputs.llm.value,
+        model: { ...llm },
+        values: currentValues(),
+        results: { ...lastResult },
+        resultText: {
+          sessionCost: outputs.sessionCost.textContent,
+          tokenBreakdown: outputs.tokenBreakdown.textContent,
+          engineerMonthly: outputs.engineerMonthly.textContent,
+          engineerDaily: outputs.engineerDaily.textContent,
+          teamMonthly: outputs.teamMonthly.textContent,
+          activeEngineers: outputs.activeEngineers.textContent,
+          annualCost: outputs.annualCost.textContent,
+          seatMultiple: outputs.seatMultiple.textContent,
+          seatCompare: outputs.seatCompare.textContent,
+          budgetBurn: outputs.budgetBurn.textContent,
+          budgetText: outputs.budgetText.textContent
+        }
+      };
+    }
+
+    function downloadText(filename, content, type) {
+      const blob = new Blob([content], { type });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function loadStoredSessions() {
+      try {
+        return JSON.parse(localStorage.getItem(savedSessionStorageKey) || '[]');
+      } catch {
+        return [];
+      }
+    }
+
+    function storeSession(session) {
+      try {
+        const sessions = loadStoredSessions();
+        sessions.push(session);
+        localStorage.setItem(savedSessionStorageKey, JSON.stringify(sessions.slice(-50)));
+      } catch {
+        alert('Saved the file, but browser storage is unavailable for diff history.');
+      }
+    }
+
+    function buildHtmlReport(session) {
+      const rows = [
+        ['Mode', session.modeTitle],
+        ['Model', session.model.label],
+        ['Engineers', session.values.engineers],
+        ['Adoption %', session.values.adoption],
+        ['Sessions / engineer / day', session.values.sessions],
+        ['Workdays / month', session.values.workdays],
+        ['Input tokens / session', session.values.inputTokens],
+        ['Output tokens / session', session.values.outputTokens],
+        ['Input price / 1M tokens', `$${session.values.inputPrice}`],
+        ['Output price / 1M tokens', `$${session.values.outputPrice}`],
+        ['Context multiplier', session.values.contextMultiplier],
+        ['Agent loop multiplier', session.values.loopMultiplier],
+        ['Cost / session', session.resultText.sessionCost],
+        ['Cost / active engineer / month', session.resultText.engineerMonthly],
+        ['Team monthly cost', session.resultText.teamMonthly],
+        ['Team annualized cost', session.resultText.annualCost],
+        ['Budget burn', session.resultText.budgetBurn]
+      ];
+      return `<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>${escapeHtml(session.displayName)}</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:32px;background:#0f172a;color:#e5e7eb;line-height:1.55}a{color:#38bdf8}.card{max-width:920px;border:1px solid #374151;border-radius:18px;background:#111827;padding:24px}table{width:100%;border-collapse:collapse;margin-top:18px}td,th{border-bottom:1px solid #374151;padding:9px;text-align:left}th{color:#fff}.muted{color:#9ca3af}code{color:#bae6fd}</style>
+</head>
+<body>
+  <main class="card">
+    <h1>${escapeHtml(session.displayName)}</h1>
+    <p class="muted">Saved ${escapeHtml(session.createdAt)} from the AI Coding Agent Cost Calculator.</p>
+    <p><strong>Agent:</strong> <a href="${escapeHtml(session.modeHomeUrl)}">${escapeHtml(session.modeTitle)}</a></p>
+    <p><strong>Assumption:</strong> ${escapeHtml(session.modeAssumptions)}</p>
+    <p><strong>Model note:</strong> ${escapeHtml(session.model.note)}</p>
+    <table><tbody>${rows.map(([key, value]) => `<tr><th>${escapeHtml(key)}</th><td>${escapeHtml(value)}</td></tr>`).join('')}</tbody></table>
+    <h2>Formula</h2>
+    <p><code>effective tokens = base_tokens × context_multiplier × agent_loop_multiplier</code></p>
+    <p><code>monthly cost = active_engineers × sessions_per_day × workdays × session_cost</code></p>
+  </main>
+</body>
+</html>`;
+    }
+
+    function applySession(session) {
+      const modeKey = session.modeKey || session.mode;
+      if (!modes[modeKey]) {
+        alert('This saved session uses an unknown agent mode.');
+        return;
+      }
+      inputs.mode.value = modeKey;
+      applyMode(modeKey);
+      const llmKey = session.llmKey || session.llm;
+      if (llmKey && modelCatalog[modeKey].some((entry) => entry.key === llmKey)) {
+        inputs.llm.value = llmKey;
+        applyLlm(llmKey);
+      }
+      if (session.values) {
+        setNumericValues(session.values);
+      }
+      const llm = currentModel();
+      modeEls.assumptions.textContent = `${modes[inputs.mode.value].assumptions} Loaded saved model: ${llm.label} — ${llm.note}`;
+      calculate();
+    }
+
+    function renderDiff() {
+      const sessions = loadStoredSessions();
+      if (sessions.length === 0) {
+        diffEls.body.innerHTML = '<p>No saved sessions yet. Save JSON or HTML first to create local snapshots.</p>';
+        return;
+      }
+      const maxMonthly = Math.max(...sessions.map((session) => session.results?.teamMonthly || 0), 1);
+      const histogram = sessions.map((session) => {
+        const monthly = session.results?.teamMonthly || 0;
+        const width = Math.max(1, monthly / maxMonthly * 100);
+        return `<div class="histogram-row">
+          <div class="histogram-label" title="${escapeHtml(session.displayName)}">${escapeHtml(session.displayName)}</div>
+          <div class="histogram-track"><div class="histogram-bar" style="width:${width}%"></div></div>
+          <div class="histogram-value">${escapeHtml(compactMoney(monthly))}</div>
+        </div>`;
+      }).join('');
+      const tableRows = sessions.map((session) => `<tr>
+        <td>${escapeHtml(session.createdAt?.slice(0, 19).replace('T', ' ') || 'Saved session')}</td>
+        <td>${escapeHtml(session.modeTitle || session.modeKey)}</td>
+        <td>${escapeHtml(session.model?.label || session.llmKey)}</td>
+        <td>${escapeHtml(session.values?.engineers ?? '')}</td>
+        <td>${escapeHtml(session.resultText?.sessionCost || money(session.results?.sessionCost || 0))}</td>
+        <td>${escapeHtml(session.resultText?.teamMonthly || compactMoney(session.results?.teamMonthly || 0))}</td>
+      </tr>`).join('');
+      diffEls.body.innerHTML = `<p>Histogram compares <strong>team monthly cost</strong> across ${sessions.length} browser-saved snapshots.</p>
+        <div class="histogram">${histogram}</div>
+        <table class="diff-table">
+          <thead><tr><th>Saved</th><th>Agent</th><th>Model</th><th>Engineers</th><th>Session</th><th>Monthly</th></tr></thead>
+          <tbody>${tableRows}</tbody>
+        </table>`;
     }
 
     inputs.mode.addEventListener('change', () => applyMode(inputs.mode.value));
@@ -1231,6 +1575,64 @@
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && explanationEls.modal.classList.contains('open')) {
         setExplanationOpen(false);
+      }
+    });
+
+    function setDiffOpen(isOpen) {
+      diffEls.modal.classList.toggle('open', isOpen);
+      if (isOpen) {
+        diffEls.close.focus();
+      } else {
+        sessionEls.showDiff.focus();
+      }
+    }
+
+    sessionEls.saveJson.addEventListener('click', () => {
+      const session = collectSession();
+      storeSession(session);
+      downloadText(`${slug(session.displayName)}.json`, JSON.stringify(session, null, 2), 'application/json');
+    });
+
+    sessionEls.saveHtml.addEventListener('click', () => {
+      const session = collectSession();
+      storeSession(session);
+      downloadText(`${slug(session.displayName)}.html`, buildHtmlReport(session), 'text/html');
+    });
+
+    sessionEls.load.addEventListener('click', () => sessionEls.file.click());
+    sessionEls.file.addEventListener('change', () => {
+      const file = sessionEls.file.files[0];
+      if (!file) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        try {
+          const session = JSON.parse(reader.result);
+          applySession(session);
+          storeSession({ ...session, id: `${Date.now()}-imported`, importedAt: new Date().toISOString() });
+        } catch {
+          alert('Could not load this saved session JSON file.');
+        } finally {
+          sessionEls.file.value = '';
+        }
+      });
+      reader.readAsText(file);
+    });
+
+    sessionEls.showDiff.addEventListener('click', () => {
+      renderDiff();
+      setDiffOpen(true);
+    });
+    diffEls.close.addEventListener('click', () => setDiffOpen(false));
+    diffEls.modal.addEventListener('click', (event) => {
+      if (event.target === diffEls.modal) {
+        setDiffOpen(false);
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && diffEls.modal.classList.contains('open')) {
+        setDiffOpen(false);
       }
     });
 
