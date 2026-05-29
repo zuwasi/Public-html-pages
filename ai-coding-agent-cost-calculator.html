@@ -471,6 +471,21 @@
       margin-top: 14px;
     }
 
+    .use-case-note {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(2, 6, 23, 0.46);
+      color: var(--muted);
+      padding: 12px;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .use-case-note strong {
+      color: var(--text);
+    }
+
     button {
       border: 1px solid var(--border);
       border-radius: 999px;
@@ -651,6 +666,15 @@
             <button type="button" data-scenario="article" title="Recreates the article-style example: 1,000 engineers, high adoption, token-metered usage.">Article example</button>
             <button type="button" data-scenario="heavy" title="Stress test with high adoption, frequent sessions, larger context, and more agent loops.">Heavy enterprise</button>
             <button type="button" data-scenario="uberish" title="Large-organization scenario inspired by the article's 5,000-engineer example claim.">5,000 engineers</button>
+            <button type="button" data-scenario="freertosLoongson" title="Safety-critical RTOS porting preset: 50 engineers, tight schedule, high validation loops, ISO 26262 and MISRA C compliance pressure.">FreeRTOS → Loongson safety RTOS</button>
+          </div>
+          <div class="use-case-note">
+            <strong>Specific use case:</strong>
+            converting <a href="https://www.freertos.org/" target="_blank" rel="noopener noreferrer">FreeRTOS</a>
+            to Chinese <a href="https://www.loongson.cn/" target="_blank" rel="noopener noreferrer">Loongson CPUs</a>
+            as an <a href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener noreferrer">ISO 26262</a>-compliant RTOS where all code is
+            <a href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">MISRA C</a> 2025 compliant. The preset assumes 50 engineers, a tight schedule,
+            heavy codebase context, porting/debug sessions, safety-case evidence, static-analysis remediation, and repeated verification loops.
           </div>
         </div>
       </div>
@@ -1030,6 +1054,17 @@
         contextMultiplier: 1,
         loopMultiplier: 1,
         budget: 10000000
+      },
+      freertosLoongson: {
+        engineers: 50,
+        adoption: 100,
+        sessions: 45,
+        workdays: 24,
+        inputTokens: 420000,
+        outputTokens: 70000,
+        contextMultiplier: 1.35,
+        loopMultiplier: 1.9,
+        budget: 250000
       }
     };
 
