@@ -17,6 +17,36 @@
       --accent-2: #22c55e;
       --warn: #f59e0b;
       --danger: #fb7185;
+      --glow-a: rgba(56, 189, 248, 0.18);
+      --glow-b: rgba(34, 197, 94, 0.14);
+    }
+
+    body[data-mode="amp"] {
+      --accent: #ef4444;
+      --accent-2: #00d4ff;
+      --glow-a: rgba(239, 68, 68, 0.22);
+      --glow-b: rgba(0, 212, 255, 0.16);
+    }
+
+    body[data-mode="claude"] {
+      --accent: #d97757;
+      --accent-2: #f5d0b5;
+      --glow-a: rgba(217, 119, 87, 0.22);
+      --glow-b: rgba(245, 208, 181, 0.12);
+    }
+
+    body[data-mode="cursor"] {
+      --accent: #ffffff;
+      --accent-2: #8b5cf6;
+      --glow-a: rgba(255, 255, 255, 0.16);
+      --glow-b: rgba(139, 92, 246, 0.18);
+    }
+
+    body[data-mode="droid"] {
+      --accent: #22c55e;
+      --accent-2: #a3e635;
+      --glow-a: rgba(34, 197, 94, 0.22);
+      --glow-b: rgba(163, 230, 53, 0.14);
     }
 
     * {
@@ -28,10 +58,11 @@
       min-height: 100vh;
       font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
       background:
-        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 32rem),
-        radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.14), transparent 32rem),
+        radial-gradient(circle at top left, var(--glow-a), transparent 32rem),
+        radial-gradient(circle at bottom right, var(--glow-b), transparent 32rem),
         var(--bg);
       color: var(--text);
+      transition: background 0.25s ease;
     }
 
     main {
@@ -99,7 +130,8 @@
       font-size: 0.9rem;
     }
 
-    input {
+    input,
+    select {
       width: 100%;
       border: 1px solid var(--border);
       border-radius: 10px;
@@ -109,9 +141,82 @@
       font: inherit;
     }
 
-    input:focus {
+    input:focus,
+    select:focus {
       outline: 2px solid rgba(56, 189, 248, 0.45);
       border-color: var(--accent);
+    }
+
+    select:disabled {
+      opacity: 0.58;
+      cursor: not-allowed;
+    }
+
+    .mode-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--glow-a), rgba(2, 6, 23, 0.45));
+      padding: 14px;
+    }
+
+    .mode-logo {
+      width: 58px;
+      height: 58px;
+      border: 1px solid var(--accent);
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #020617;
+      color: var(--accent);
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      box-shadow: 0 0 30px var(--glow-a);
+    }
+
+    .mode-logo.amp-logo {
+      color: #ef4444;
+    }
+
+    .mode-logo.claude-logo {
+      color: #d97757;
+      border-radius: 50%;
+    }
+
+    .mode-logo.cursor-logo {
+      color: #ffffff;
+      transform: rotate(-8deg);
+    }
+
+    .mode-logo.droid-logo {
+      color: #22c55e;
+      border-radius: 18px 18px 22px 22px;
+    }
+
+    .mode-title {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .mode-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .mode-assumptions {
+      margin-top: 14px;
+      border-left: 3px solid var(--accent);
+      padding-left: 12px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
     }
 
     .two-col {
@@ -234,13 +339,13 @@
     }
   </style>
 </head>
-<body>
+<body data-mode="amp">
   <main>
     <header>
       <h1>AI Coding Agent Cost Calculator</h1>
       <p class="lede">
-        Model the calculation behind token-metered coding tools: engineers × adoption × sessions × tokens × model price.
-        Defaults use the article-style example of $3 per 1M input tokens and $15 per 1M output tokens.
+        Compare Amp, Claude Code, Cursor, and Factory Droid modes. Each mode applies explicit assumptions about
+        context size, autonomy loops, model choice, and retry behavior on top of the same token-cost formula.
       </p>
     </header>
 
@@ -248,7 +353,36 @@
       <div class="card">
         <div class="card-body">
           <h2>Inputs</h2>
+          <div class="mode-card">
+            <div class="mode-logo amp-logo" id="modeLogo">A</div>
+            <div>
+              <p class="mode-title" id="modeTitle">Amp mode</p>
+              <p class="mode-note" id="modeNote">Governed agent workflow with context discipline and observability overhead.</p>
+            </div>
+          </div>
           <div class="inputs">
+            <div class="two-col">
+              <label>
+                Agent mode
+                <select id="mode">
+                  <option value="amp">Amp specific mode</option>
+                  <option value="claude">Claude Code specific mode</option>
+                  <option value="cursor">Cursor mode</option>
+                  <option value="droid">Factory Droid mode</option>
+                </select>
+              </label>
+              <label>
+                LLM / model assumption
+                <select id="llm">
+                  <option value="sonnet">Claude Sonnet-class</option>
+                  <option value="opus">Claude Opus-class</option>
+                  <option value="gpt">GPT premium-class</option>
+                  <option value="gemini">Gemini Pro-class</option>
+                  <option value="local">Local / open model</option>
+                </select>
+              </label>
+            </div>
+
             <div class="two-col">
               <label>
                 Engineers
@@ -303,6 +437,21 @@
                 <input id="budget" type="number" min="0" step="1000" value="1000000">
               </label>
             </div>
+
+            <div class="two-col">
+              <label>
+                Context multiplier
+                <input id="contextMultiplier" type="number" min="0" step="0.05" value="0.75">
+              </label>
+              <label>
+                Agent loop multiplier
+                <input id="loopMultiplier" type="number" min="0" step="0.05" value="1.10">
+              </label>
+            </div>
+          </div>
+
+          <div class="mode-assumptions" id="modeAssumptions">
+            Assumption: Amp uses a governed workflow, so it spends less raw repository context than a free-running CLI agent, but adds a small planning and verification overhead.
           </div>
 
           <div class="scenario-row" aria-label="Scenario presets">
@@ -351,7 +500,8 @@
           </div>
 
           <div class="formula">
-            <div><code>session cost = input_tokens / 1,000,000 × input_price + output_tokens / 1,000,000 × output_price</code></div>
+            <div><code>effective tokens = base_tokens × context_multiplier × agent_loop_multiplier</code></div>
+            <div><code>session cost = effective_input_tokens / 1,000,000 × input_price + effective_output_tokens / 1,000,000 × output_price</code></div>
             <div><code>monthly cost = active_engineers × sessions_per_day × workdays × session_cost</code></div>
           </div>
         </div>
@@ -365,6 +515,8 @@
 
   <script>
     const inputs = {
+      mode: document.getElementById('mode'),
+      llm: document.getElementById('llm'),
       engineers: document.getElementById('engineers'),
       adoption: document.getElementById('adoption'),
       sessions: document.getElementById('sessions'),
@@ -374,7 +526,16 @@
       inputPrice: document.getElementById('inputPrice'),
       outputPrice: document.getElementById('outputPrice'),
       seatPrice: document.getElementById('seatPrice'),
-      budget: document.getElementById('budget')
+      budget: document.getElementById('budget'),
+      contextMultiplier: document.getElementById('contextMultiplier'),
+      loopMultiplier: document.getElementById('loopMultiplier')
+    };
+
+    const modeEls = {
+      logo: document.getElementById('modeLogo'),
+      title: document.getElementById('modeTitle'),
+      note: document.getElementById('modeNote'),
+      assumptions: document.getElementById('modeAssumptions')
     };
 
     const outputs = {
@@ -391,6 +552,126 @@
       budgetText: document.getElementById('budgetText')
     };
 
+    const llms = {
+      sonnet: {
+        label: 'Claude Sonnet-class',
+        inputPrice: 3,
+        outputPrice: 15,
+        note: 'Balanced premium coding model assumption.'
+      },
+      opus: {
+        label: 'Claude Opus-class',
+        inputPrice: 15,
+        outputPrice: 75,
+        note: 'Expensive frontier-model assumption for hard tasks.'
+      },
+      gpt: {
+        label: 'GPT premium-class',
+        inputPrice: 2.5,
+        outputPrice: 10,
+        note: 'Premium general coding model assumption.'
+      },
+      gemini: {
+        label: 'Gemini Pro-class',
+        inputPrice: 1.25,
+        outputPrice: 10,
+        note: 'Lower input-cost, strong long-context model assumption.'
+      },
+      local: {
+        label: 'Local / open model',
+        inputPrice: 0.2,
+        outputPrice: 0.8,
+        note: 'Self-hosted/open-model proxy cost assumption, excluding hardware amortization.'
+      }
+    };
+
+    const modes = {
+      amp: {
+        title: 'Amp mode',
+        mark: 'A',
+        logoClass: 'amp-logo',
+        llm: 'sonnet',
+        lockLlm: true,
+        note: 'Governed agent workflow with context discipline and observability overhead.',
+        assumptions: 'Assumption: Amp uses a governed workflow, so it spends less raw repository context than a free-running CLI agent, but adds a small planning and verification overhead.',
+        values: {
+          engineers: 1000,
+          adoption: 80,
+          sessions: 24,
+          workdays: 20,
+          inputTokens: 180000,
+          outputTokens: 28000,
+          seatPrice: 80,
+          budget: 1000000,
+          contextMultiplier: 0.75,
+          loopMultiplier: 1.10
+        }
+      },
+      claude: {
+        title: 'Claude Code mode',
+        mark: 'C',
+        logoClass: 'claude-logo',
+        llm: 'sonnet',
+        lockLlm: true,
+        note: 'CLI coding agent with deep repo context, shell loops, and strong autonomous editing.',
+        assumptions: 'Assumption: Claude Code is modeled as a high-context, high-autonomy CLI agent. It reads more repository context and loops through edit/test/retry cycles more often than an IDE completion workflow.',
+        values: {
+          engineers: 1000,
+          adoption: 80,
+          sessions: 30,
+          workdays: 20,
+          inputTokens: 220000,
+          outputTokens: 35000,
+          seatPrice: 50,
+          budget: 1000000,
+          contextMultiplier: 1.00,
+          loopMultiplier: 1.30
+        }
+      },
+      cursor: {
+        title: 'Cursor mode',
+        mark: '◆',
+        logoClass: 'cursor-logo',
+        llm: 'gpt',
+        lockLlm: false,
+        note: 'IDE-first workflow where chat, autocomplete, and agent edits usually operate on narrower context.',
+        assumptions: 'Assumption: Cursor is modeled as an IDE workflow. It has frequent interactions, but lower average context per session than a terminal agent. Choose the LLM to model premium or budget configurations.',
+        values: {
+          engineers: 1000,
+          adoption: 85,
+          sessions: 35,
+          workdays: 20,
+          inputTokens: 90000,
+          outputTokens: 16000,
+          seatPrice: 40,
+          budget: 750000,
+          contextMultiplier: 0.65,
+          loopMultiplier: 0.95
+        }
+      },
+      droid: {
+        title: 'Factory Droid mode',
+        mark: 'D',
+        logoClass: 'droid-logo',
+        llm: 'sonnet',
+        lockLlm: false,
+        note: 'Factory-style autonomous agent running larger planned tasks with more tool calls per session.',
+        assumptions: 'Assumption: Factory Droid is modeled as a more autonomous task factory. It has fewer human-started sessions than IDE use, but each session has heavier planning, tool use, verification, and retry loops. Choose the backing LLM.',
+        values: {
+          engineers: 1000,
+          adoption: 60,
+          sessions: 14,
+          workdays: 20,
+          inputTokens: 320000,
+          outputTokens: 52000,
+          seatPrice: 120,
+          budget: 1500000,
+          contextMultiplier: 1.20,
+          loopMultiplier: 1.65
+        }
+      }
+    };
+
     const scenarios = {
       light: {
         engineers: 100,
@@ -399,6 +680,8 @@
         workdays: 20,
         inputTokens: 60000,
         outputTokens: 10000,
+        contextMultiplier: 0.7,
+        loopMultiplier: 0.9,
         budget: 50000
       },
       article: {
@@ -408,6 +691,8 @@
         workdays: 20,
         inputTokens: 200000,
         outputTokens: 30000,
+        contextMultiplier: 1,
+        loopMultiplier: 1,
         budget: 1000000
       },
       heavy: {
@@ -417,6 +702,8 @@
         workdays: 22,
         inputTokens: 500000,
         outputTokens: 80000,
+        contextMultiplier: 1.1,
+        loopMultiplier: 1.45,
         budget: 2000000
       },
       uberish: {
@@ -426,6 +713,8 @@
         workdays: 20,
         inputTokens: 200000,
         outputTokens: 30000,
+        contextMultiplier: 1,
+        loopMultiplier: 1,
         budget: 10000000
       }
     };
@@ -457,6 +746,33 @@
       }).format(value);
     }
 
+    function setNumericValues(values) {
+      Object.entries(values).forEach(([key, value]) => {
+        inputs[key].value = value;
+      });
+    }
+
+    function applyLlm(llmKey) {
+      const llm = llms[llmKey];
+      inputs.inputPrice.value = llm.inputPrice;
+      inputs.outputPrice.value = llm.outputPrice;
+    }
+
+    function applyMode(modeKey) {
+      const mode = modes[modeKey];
+      document.body.dataset.mode = modeKey;
+      modeEls.logo.textContent = mode.mark;
+      modeEls.logo.className = `mode-logo ${mode.logoClass}`;
+      modeEls.title.textContent = mode.title;
+      modeEls.note.textContent = mode.note;
+      modeEls.assumptions.textContent = mode.assumptions;
+      inputs.llm.value = mode.llm;
+      inputs.llm.disabled = mode.lockLlm;
+      setNumericValues(mode.values);
+      applyLlm(mode.llm);
+      calculate();
+    }
+
     function calculate() {
       const engineers = numberValue(inputs.engineers);
       const adoption = Math.min(Math.max(numberValue(inputs.adoption), 0), 100) / 100;
@@ -468,10 +784,14 @@
       const outputPrice = numberValue(inputs.outputPrice);
       const seatPrice = numberValue(inputs.seatPrice);
       const budget = numberValue(inputs.budget);
+      const contextMultiplier = numberValue(inputs.contextMultiplier);
+      const loopMultiplier = numberValue(inputs.loopMultiplier);
+      const effectiveInputTokens = inputTokens * contextMultiplier * loopMultiplier;
+      const effectiveOutputTokens = outputTokens * loopMultiplier;
 
       const activeEngineers = engineers * adoption;
-      const inputCost = inputTokens / 1_000_000 * inputPrice;
-      const outputCost = outputTokens / 1_000_000 * outputPrice;
+      const inputCost = effectiveInputTokens / 1_000_000 * inputPrice;
+      const outputCost = effectiveOutputTokens / 1_000_000 * outputPrice;
       const sessionCost = inputCost + outputCost;
       const engineerDaily = sessions * sessionCost;
       const engineerMonthly = engineerDaily * workdays;
@@ -483,7 +803,7 @@
       const daysToBurnBudget = dailyTeamCost > 0 && budget > 0 ? budget / dailyTeamCost : 0;
 
       outputs.sessionCost.textContent = money(sessionCost);
-      outputs.tokenBreakdown.textContent = `Input ${money(inputCost)} + output ${money(outputCost)}`;
+      outputs.tokenBreakdown.textContent = `Input ${money(inputCost)} + output ${money(outputCost)} (${plainNumber(effectiveInputTokens / 1000)}K in / ${plainNumber(effectiveOutputTokens / 1000)}K out effective tokens)`;
       outputs.engineerMonthly.textContent = money(engineerMonthly);
       outputs.engineerDaily.textContent = `${money(engineerDaily)} per active engineer per workday`;
       outputs.teamMonthly.textContent = compactMoney(teamMonthly);
@@ -501,19 +821,29 @@
       }
     }
 
-    Object.values(inputs).forEach((input) => input.addEventListener('input', calculate));
+    inputs.mode.addEventListener('change', () => applyMode(inputs.mode.value));
+    inputs.llm.addEventListener('change', () => {
+      applyLlm(inputs.llm.value);
+      const llm = llms[inputs.llm.value];
+      modeEls.assumptions.textContent = `${modes[inputs.mode.value].assumptions} LLM assumption: ${llm.label} — ${llm.note}`;
+      calculate();
+    });
+
+    Object.entries(inputs).forEach(([key, input]) => {
+      if (key !== 'mode' && key !== 'llm') {
+        input.addEventListener('input', calculate);
+      }
+    });
 
     document.querySelectorAll('[data-scenario]').forEach((button) => {
       button.addEventListener('click', () => {
         const scenario = scenarios[button.dataset.scenario];
-        Object.entries(scenario).forEach(([key, value]) => {
-          inputs[key].value = value;
-        });
+        setNumericValues(scenario);
         calculate();
       });
     });
 
-    calculate();
+    applyMode('amp');
   </script>
 </body>
 </html>
