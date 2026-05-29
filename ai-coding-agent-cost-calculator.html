@@ -76,6 +76,49 @@
       margin-bottom: 24px;
     }
 
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.86rem;
+      text-align: right;
+    }
+
+    .brand img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border);
+      padding: 4px;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
     h1,
     h2,
     p {
@@ -112,7 +155,7 @@
       border-radius: 18px;
       background: rgba(17, 24, 39, 0.86);
       box-shadow: 0 24px 70px rgba(0, 0, 0, 0.24);
-      overflow: hidden;
+      overflow: visible;
     }
 
     .card-body {
@@ -204,6 +247,10 @@
       font-weight: 800;
     }
 
+    .mode-title a {
+      color: var(--text);
+    }
+
     .mode-note {
       margin: 0;
       color: var(--muted);
@@ -218,6 +265,65 @@
       color: var(--muted);
       font-size: 0.88rem;
       line-height: 1.5;
+    }
+
+    .section-title,
+    .field-label,
+    .metric-title,
+    .formula-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .metric strong.metric-title {
+      display: inline-flex;
+    }
+
+    .help {
+      position: relative;
+      display: inline-grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      color: var(--accent);
+      background: #020617;
+      font-size: 0.72rem;
+      font-weight: 800;
+      cursor: help;
+    }
+
+    .help::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      z-index: 20;
+      bottom: calc(100% + 10px);
+      left: 50%;
+      width: min(320px, 78vw);
+      transform: translateX(-50%) translateY(4px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #020617;
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.38);
+      color: var(--text);
+      padding: 10px 12px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      line-height: 1.45;
+      letter-spacing: normal;
+      opacity: 0;
+      pointer-events: none;
+      text-transform: none;
+      transition: opacity 0.16s ease, transform 0.16s ease;
+      white-space: normal;
+    }
+
+    .help:hover::after,
+    .help:focus::after {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     .two-col {
@@ -291,6 +397,67 @@
       line-height: 1.7;
     }
 
+    .formula h2 {
+      margin-bottom: 10px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(2, 6, 23, 0.78);
+      padding: 18px;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      width: min(860px, 100%);
+      max-height: min(86vh, 900px);
+      overflow: auto;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      background: #0f172a;
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      position: sticky;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.96);
+      padding: 18px 20px;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .modal-body {
+      padding: 20px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .modal-body h3 {
+      margin: 22px 0 8px;
+      color: var(--text);
+    }
+
+    .modal-body li {
+      margin-bottom: 8px;
+    }
+
     code {
       color: #bae6fd;
       font-family: Consolas, Monaco, monospace;
@@ -327,6 +494,15 @@
     }
 
     @media (max-width: 900px) {
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column-reverse;
+      }
+
+      .brand {
+        text-align: left;
+      }
+
       .grid,
       .results {
         grid-template-columns: 1fr;
@@ -343,6 +519,21 @@
 <body data-mode="amp">
   <main>
     <header>
+      <div class="topbar">
+        <nav class="menu" aria-label="Page menu">
+          <button type="button" id="openExplanation">Explanation</button>
+        </nav>
+        <div class="brand" aria-label="ESL branding">
+          <span>
+            Made by <a href="https://www.eswlab.com" target="_blank" rel="noopener noreferrer">ESL</a>, the AI
+            <a href="https://en.wikipedia.org/wiki/Systems_development_life_cycle" target="_blank" rel="noopener noreferrer">SDLC</a>
+            Specialists
+          </span>
+          <a href="https://www.eswlab.com" target="_blank" rel="noopener noreferrer" aria-label="ESL website">
+            <img src="ESL-AI-LOGOS.png" alt="ESL AI logo">
+          </a>
+        </div>
+      </div>
       <h1>AI Coding Agent Cost Calculator</h1>
       <p class="lede">
         Compare Amp, Claude Code, Cursor, and Factory Droid modes. Each mode applies explicit assumptions about
@@ -353,19 +544,19 @@
     <section class="grid" aria-label="Calculator">
       <div class="card">
         <div class="card-body">
-          <h2>Inputs</h2>
+          <h2 class="section-title">Inputs <span class="help" tabindex="0" data-tooltip="Set the team size, adoption rate, usage intensity, model price, and adjustment multipliers. These controls turn the article's warning about token-metered spend into a transparent planning estimate.">?</span></h2>
           <div class="mode-card">
             <div class="mode-logo amp-logo" id="modeLogo">A</div>
             <div>
-              <p class="mode-title" id="modeTitle">Amp mode</p>
+              <p class="mode-title"><a id="modeTitle" href="https://ampcode.com" target="_blank" rel="noopener noreferrer">Amp mode</a></p>
               <p class="mode-note" id="modeNote">Governed agent workflow with context discipline and observability overhead.</p>
             </div>
           </div>
           <div class="inputs">
             <div class="two-col">
               <label>
-                Choose agent
-                <select id="mode">
+                <span class="field-label">Choose agent <span class="help" tabindex="0" data-tooltip="Select the coding-agent workflow being modeled. The selected mode changes default assumptions and links to the agent home page: Amp, Claude Code, Cursor, or Factory Droid.">?</span></span>
+                <select id="mode" title="Choose which AI coding-agent workflow to model.">
                   <option value="amp">Amp specific mode</option>
                   <option value="claude">Claude Code specific mode</option>
                   <option value="cursor">Cursor mode</option>
@@ -373,8 +564,8 @@
                 </select>
               </label>
               <label>
-                Chosen LLM / model
-                <select id="llm">
+                <span class="field-label">Chosen LLM / model <span class="help" tabindex="0" data-tooltip="Choose the model or vendor-specific mode used for token pricing. The options are populated from current public docs where possible; proxy rows are marked as planning estimates.">?</span></span>
+                <select id="llm" title="Choose the model or model-like mode used for input/output token price assumptions.">
                   <option value="sonnet">Claude Sonnet-class</option>
                   <option value="opus">Claude Opus-class</option>
                   <option value="gpt">GPT premium-class</option>
@@ -386,67 +577,67 @@
 
             <div class="two-col">
               <label>
-                Engineers
-                <input id="engineers" type="number" min="0" step="1" value="1000">
+                <span class="field-label">Engineers <span class="help" tabindex="0" data-tooltip="Total engineers in the population. The monthly team cost uses this number multiplied by Adoption %. Use this to model a department or whole engineering organization.">?</span></span>
+                <input id="engineers" type="number" min="0" step="1" value="1000" title="Total engineers in scope for the estimate.">
               </label>
               <label>
-                Adoption %
-                <input id="adoption" type="number" min="0" max="100" step="1" value="80">
-              </label>
-            </div>
-
-            <div class="two-col">
-              <label>
-                Sessions / engineer / day
-                <input id="sessions" type="number" min="0" step="1" value="30">
-              </label>
-              <label>
-                Workdays / month
-                <input id="workdays" type="number" min="0" step="1" value="20">
+                <span class="field-label">Adoption % <span class="help" tabindex="0" data-tooltip="Percent of engineers actively using the agent. The article's risk appears when enthusiastic adoption turns token-metered usage into a large variable spend line.">?</span></span>
+                <input id="adoption" type="number" min="0" max="100" step="1" value="80" title="Percent of engineers actively using the selected agent.">
               </label>
             </div>
 
             <div class="two-col">
               <label>
-                Input tokens / session
-                <input id="inputTokens" type="number" min="0" step="1000" value="200000">
+                <span class="field-label">Sessions / engineer / day <span class="help" tabindex="0" data-tooltip="Average agent interactions or task sessions per active engineer per workday. More sessions scale cost linearly, which is the core warning in the article.">?</span></span>
+                <input id="sessions" type="number" min="0" step="1" value="30" title="Average agent sessions per active engineer per workday.">
               </label>
               <label>
-                Output tokens / session
-                <input id="outputTokens" type="number" min="0" step="1000" value="30000">
-              </label>
-            </div>
-
-            <div class="two-col">
-              <label>
-                Input price / 1M tokens ($)
-                <input id="inputPrice" type="number" min="0" step="0.01" value="3">
-              </label>
-              <label>
-                Output price / 1M tokens ($)
-                <input id="outputPrice" type="number" min="0" step="0.01" value="15">
+                <span class="field-label">Workdays / month <span class="help" tabindex="0" data-tooltip="Number of billing-relevant working days in a month. Monthly cost equals active engineers times daily usage times this value.">?</span></span>
+                <input id="workdays" type="number" min="0" step="1" value="20" title="Working days per month used in the monthly estimate.">
               </label>
             </div>
 
             <div class="two-col">
               <label>
-                Fixed-seat benchmark / engineer ($)
-                <input id="seatPrice" type="number" min="0" step="1" value="50">
+                <span class="field-label">Input tokens / session <span class="help" tabindex="0" data-tooltip="Prompt, codebase context, retrieved files, tool transcripts, and cached context that may be billed as input. Large context windows can make this number dominate the bill.">?</span></span>
+                <input id="inputTokens" type="number" min="0" step="1000" value="200000" title="Input tokens consumed per session before multipliers.">
               </label>
               <label>
-                Monthly budget ($)
-                <input id="budget" type="number" min="0" step="1000" value="1000000">
+                <span class="field-label">Output tokens / session <span class="help" tabindex="0" data-tooltip="Agent responses, plans, code edits, summaries, and command explanations. Output tokens usually cost more per million than input tokens.">?</span></span>
+                <input id="outputTokens" type="number" min="0" step="1000" value="30000" title="Output tokens generated per session before multipliers.">
               </label>
             </div>
 
             <div class="two-col">
               <label>
-                Context multiplier
-                <input id="contextMultiplier" type="number" min="0" step="0.05" value="0.75">
+                <span class="field-label">Input price / 1M tokens ($) <span class="help" tabindex="0" data-tooltip="Published or proxy input price per million tokens for the selected model. For Factory Droid, this is a credit-equivalent estimate from the documented multiplier, not a public per-token invoice rate.">?</span></span>
+                <input id="inputPrice" type="number" min="0" step="0.01" value="3" title="Input token price per one million tokens.">
               </label>
               <label>
-                Agent loop multiplier
-                <input id="loopMultiplier" type="number" min="0" step="0.05" value="1.10">
+                <span class="field-label">Output price / 1M tokens ($) <span class="help" tabindex="0" data-tooltip="Published or proxy output price per million tokens. Output is often the expensive side of coding-agent loops, especially when agents generate long plans, diffs, and explanations.">?</span></span>
+                <input id="outputPrice" type="number" min="0" step="0.01" value="15" title="Output token price per one million tokens.">
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                <span class="field-label">Fixed-seat benchmark / engineer ($) <span class="help" tabindex="0" data-tooltip="A flat monthly per-seat comparison point. The article contrasts predictable seat pricing with variable token-metered usage that can exceed expectations at scale.">?</span></span>
+                <input id="seatPrice" type="number" min="0" step="1" value="50" title="Monthly fixed-seat benchmark per active engineer.">
+              </label>
+              <label>
+                <span class="field-label">Monthly budget ($) <span class="help" tabindex="0" data-tooltip="Budget to compare against the projected run rate. Budget burn estimates how many workdays the budget would last at the current daily team cost.">?</span></span>
+                <input id="budget" type="number" min="0" step="1000" value="1000000" title="Monthly budget used for budget-burn comparison.">
+              </label>
+            </div>
+
+            <div class="two-col">
+              <label>
+                <span class="field-label">Context multiplier <span class="help" tabindex="0" data-tooltip="Adjusts input tokens for workflow context behavior. IDE workflows may use narrower context; terminal agents, large tasks, or full-repo context may push this higher.">?</span></span>
+                <input id="contextMultiplier" type="number" min="0" step="0.05" value="0.75" title="Multiplier applied to input tokens for context behavior.">
+              </label>
+              <label>
+                <span class="field-label">Agent loop multiplier <span class="help" tabindex="0" data-tooltip="Adjusts for retries, tool calls, planning loops, validation passes, and autonomous agent work. Higher autonomy usually increases this multiplier.">?</span></span>
+                <input id="loopMultiplier" type="number" min="0" step="0.05" value="1.10" title="Multiplier applied for agent loops, retries, tool calls, and validation passes.">
               </label>
             </div>
           </div>
@@ -456,51 +647,52 @@
           </div>
 
           <div class="scenario-row" aria-label="Scenario presets">
-            <button type="button" data-scenario="light">Light use</button>
-            <button type="button" data-scenario="article">Article example</button>
-            <button type="button" data-scenario="heavy">Heavy enterprise</button>
-            <button type="button" data-scenario="uberish">5,000 engineers</button>
+            <button type="button" data-scenario="light" title="Lower-adoption, lower-token scenario for cautious pilots.">Light use</button>
+            <button type="button" data-scenario="article" title="Recreates the article-style example: 1,000 engineers, high adoption, token-metered usage.">Article example</button>
+            <button type="button" data-scenario="heavy" title="Stress test with high adoption, frequent sessions, larger context, and more agent loops.">Heavy enterprise</button>
+            <button type="button" data-scenario="uberish" title="Large-organization scenario inspired by the article's 5,000-engineer example claim.">5,000 engineers</button>
           </div>
         </div>
       </div>
 
       <div class="card">
         <div class="card-body">
-          <h2>Results</h2>
+          <h2 class="section-title">Results <span class="help" tabindex="0" data-tooltip="These cards convert the selected inputs into session cost, engineer cost, team run rate, seat-price comparison, and budget burn. They are planning estimates, not vendor invoices.">?</span></h2>
           <div class="results">
             <div class="metric accent">
-              <strong>Cost / session</strong>
+              <strong class="metric-title">Cost / session <span class="help" tabindex="0" data-tooltip="Estimated cost of one agent session after applying context and loop multipliers to input and output token costs.">?</span></strong>
               <span id="sessionCost">$0</span>
               <small id="tokenBreakdown">Input $0 + output $0</small>
             </div>
             <div class="metric green">
-              <strong>Cost / active engineer / month</strong>
+              <strong class="metric-title">Cost / active engineer / month <span class="help" tabindex="0" data-tooltip="Daily active-engineer cost multiplied by workdays per month. This exposes how a reasonable session cost becomes material when repeated many times.">?</span></strong>
               <span id="engineerMonthly">$0</span>
               <small id="engineerDaily">$0 per active engineer per workday</small>
             </div>
             <div class="metric warn">
-              <strong>Team monthly cost</strong>
+              <strong class="metric-title">Team monthly cost <span class="help" tabindex="0" data-tooltip="Active engineers multiplied by their monthly agent cost. This is the main enterprise-scale risk discussed in the article.">?</span></strong>
               <span id="teamMonthly">$0</span>
               <small id="activeEngineers">0 active engineers</small>
             </div>
             <div class="metric">
-              <strong>Team annualized cost</strong>
+              <strong class="metric-title">Team annualized cost <span class="help" tabindex="0" data-tooltip="Monthly run rate multiplied by 12. Useful for procurement and budget planning, but it assumes the same usage pattern continues all year.">?</span></strong>
               <span id="annualCost">$0</span>
               <small>Monthly run rate × 12</small>
             </div>
             <div class="metric danger">
-              <strong>Over fixed-seat model</strong>
+              <strong class="metric-title">Over fixed-seat model <span class="help" tabindex="0" data-tooltip="Compares token-metered spend with a fixed per-seat benchmark. Values above 1× mean token usage is more expensive than the benchmark.">?</span></strong>
               <span id="seatMultiple">0×</span>
               <small id="seatCompare">Token cost vs fixed seats</small>
             </div>
             <div class="metric">
-              <strong>Budget burn</strong>
+              <strong class="metric-title">Budget burn <span class="help" tabindex="0" data-tooltip="Shows how many workdays the monthly budget would last at the projected daily run rate.">?</span></strong>
               <span id="budgetBurn">—</span>
               <small id="budgetText">Enter a monthly budget to compare</small>
             </div>
           </div>
 
           <div class="formula">
+            <h2 class="formula-title">Formula <span class="help" tabindex="0" data-tooltip="The calculator keeps the math visible: adjust tokens for context and agent loops, price input/output separately, then scale by active engineers and workdays.">?</span></h2>
             <div><code>effective tokens = base_tokens × context_multiplier × agent_loop_multiplier</code></div>
             <div><code>session cost = effective_input_tokens / 1,000,000 × input_price + effective_output_tokens / 1,000,000 × output_price</code></div>
             <div><code>monthly cost = active_engineers × sessions_per_day × workdays × session_cost</code></div>
@@ -513,6 +705,49 @@
       This is a planning model, not an invoice. Real bills vary with model, caching, context reuse, retries, discounts, taxes, and whether tool vendors charge per seat, per token, or through a blended enterprise contract. Amp's manual says individual and non-enterprise workspaces are pass-through provider/API pricing, while Enterprise usage is 50% more expensive.
     </footer>
   </main>
+
+  <div class="modal-backdrop" id="explanationModal" role="dialog" aria-modal="true" aria-labelledby="explanationTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="explanationTitle">Explanation: why this calculator exists</h2>
+        <button type="button" id="closeExplanation" aria-label="Close explanation">Close</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          This page is a planning model for the risk described in
+          <a href="https://medium.com/@kanishks772/microsoft-couldnt-afford-claude-code-that-should-terrify-every-engineering-team-8d0cc9323883" target="_blank" rel="noopener noreferrer">“Microsoft Couldn’t Afford Claude Code. That Should Terrify Every Engineering Team.”</a>
+          The article argues that the danger is not that coding agents fail; the danger is that successful adoption turns AI coding into a variable, token-metered compute bill.
+        </p>
+
+        <h3>Core article claim</h3>
+        <p>
+          The article claims Microsoft rolled Claude Code out broadly, saw heavy adoption, and later decided to shut off licenses because usage was “very popular, perhaps a little too popular.” It also cites an Uber-scale example of 5,000 engineers and very high AI budget burn. Treat those numbers as article claims and scenario prompts, not as audited vendor billing data.
+        </p>
+
+        <h3>What the calculator models</h3>
+        <ul>
+          <li><strong>Adoption:</strong> how many engineers actually use the tool.</li>
+          <li><strong>Frequency:</strong> how many sessions each active engineer runs per day.</li>
+          <li><strong>Token load:</strong> how much context and output each session consumes.</li>
+          <li><strong>Model price:</strong> current public pricing or documented multipliers where available.</li>
+          <li><strong>Agent behavior:</strong> retries, tool calls, validation loops, background workers, and multi-agent orchestration.</li>
+        </ul>
+
+        <h3>Agent-specific sources</h3>
+        <ul>
+          <li><a href="https://ampcode.com/manual" target="_blank" rel="noopener noreferrer">Amp manual</a>: deep/smart/rush modes, subagents, Oracle/Librarian, and pass-through pricing assumptions.</li>
+          <li><a href="https://code.claude.com/docs/en/overview" target="_blank" rel="noopener noreferrer">Claude Code docs</a>: terminal/IDE/web agent behavior, model aliases, subscription/API caveats, and token billing context.</li>
+          <li><a href="https://cursor.com/docs" target="_blank" rel="noopener noreferrer">Cursor docs</a>: Agent workflow, Auto + Composer pool, API pool, Max Mode, and model pricing caveats.</li>
+          <li><a href="https://docs.factory.ai/welcome" target="_blank" rel="noopener noreferrer">Factory Droid docs</a>: CLI/App/Exec, Missions, AGENTS.md, skills, hooks, MCP, Droid Core, model multipliers, and rolling rate limits.</li>
+        </ul>
+
+        <h3>How to read the result</h3>
+        <p>
+          A high result does not prove a tool is bad. It shows where governance is needed: model selection, context discipline, caching, budgets, rate limits, review policies, and a rollout plan. The safest interpretation is to use this calculator before procurement, pilot expansion, or organization-wide deployment.
+        </p>
+      </div>
+    </div>
+  </div>
 
   <script>
     const inputs = {
@@ -537,6 +772,12 @@
       title: document.getElementById('modeTitle'),
       note: document.getElementById('modeNote'),
       assumptions: document.getElementById('modeAssumptions')
+    };
+
+    const explanationEls = {
+      open: document.getElementById('openExplanation'),
+      close: document.getElementById('closeExplanation'),
+      modal: document.getElementById('explanationModal')
     };
 
     const outputs = {
@@ -657,6 +898,7 @@
     const modes = {
       amp: {
         title: 'Amp mode',
+        homeUrl: 'https://ampcode.com',
         mark: 'A',
         logoClass: 'amp-logo',
         llm: 'amp-smart-opus47',
@@ -678,6 +920,7 @@
       },
       claude: {
         title: 'Claude Code mode',
+        homeUrl: 'https://code.claude.com',
         mark: 'C',
         logoClass: 'claude-logo',
         llm: 'claude-sonnet-46',
@@ -699,6 +942,7 @@
       },
       cursor: {
         title: 'Cursor mode',
+        homeUrl: 'https://cursor.com',
         mark: '◆',
         logoClass: 'cursor-logo',
         llm: 'cursor-auto',
@@ -720,6 +964,7 @@
       },
       droid: {
         title: 'Factory Droid mode',
+        homeUrl: 'https://factory.ai',
         mark: 'D',
         logoClass: 'droid-logo',
         llm: 'droid-sonnet-46',
@@ -831,6 +1076,7 @@
         const option = document.createElement('option');
         option.value = entry.key;
         option.textContent = entry.label;
+        option.title = entry.note;
         inputs.llm.appendChild(option);
       });
     }
@@ -839,6 +1085,7 @@
       const llm = modelCatalog[inputs.mode.value].find((entry) => entry.key === llmKey);
       inputs.inputPrice.value = llm.inputPrice;
       inputs.outputPrice.value = llm.outputPrice;
+      inputs.llm.title = `${llm.label}: ${llm.note}`;
     }
 
     function applyMode(modeKey) {
@@ -847,6 +1094,8 @@
       modeEls.logo.textContent = mode.mark;
       modeEls.logo.className = `mode-logo ${mode.logoClass}`;
       modeEls.title.textContent = mode.title;
+      modeEls.title.href = mode.homeUrl;
+      modeEls.title.title = `Open ${mode.title} home page`;
       modeEls.note.textContent = mode.note;
       modeEls.assumptions.textContent = mode.assumptions;
       populateModelOptions(modeKey);
@@ -926,6 +1175,28 @@
         setNumericValues(scenario);
         calculate();
       });
+    });
+
+    function setExplanationOpen(isOpen) {
+      explanationEls.modal.classList.toggle('open', isOpen);
+      if (isOpen) {
+        explanationEls.close.focus();
+      } else {
+        explanationEls.open.focus();
+      }
+    }
+
+    explanationEls.open.addEventListener('click', () => setExplanationOpen(true));
+    explanationEls.close.addEventListener('click', () => setExplanationOpen(false));
+    explanationEls.modal.addEventListener('click', (event) => {
+      if (event.target === explanationEls.modal) {
+        setExplanationOpen(false);
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && explanationEls.modal.classList.contains('open')) {
+        setExplanationOpen(false);
+      }
     });
 
     applyMode('amp');
