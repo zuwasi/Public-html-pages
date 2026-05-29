@@ -565,7 +565,7 @@
         `${label} · ${multiplier}× Factory multiplier`,
         Number((baselineInput * multiplier).toFixed(4)),
         Number((baselineOutput * multiplier).toFixed(4)),
-        `${note} Factory publishes usage multipliers rather than public per-token dollars here, so this calculator estimates credit-equivalent cost from a Sonnet-class $3/$15 baseline.`
+        `${note} Factory docs publish model multipliers and Standard Credit / Rate Limit behavior rather than public per-token dollars here, so this calculator estimates credit-equivalent cost from a Sonnet-class $3/$15 baseline.`
       );
     }
 
@@ -626,31 +626,31 @@
         model('cursor-kimi-k25', 'Kimi K2.5', 0.6, 3, 'Cursor docs: API-pool model rate; hidden by default.')
       ],
       droid: [
-        factoryModel('droid-claude-opus47', 'Claude Opus 4.7', 2, 'Factory docs: Anthropic flagship with Max reasoning.'),
-        factoryModel('droid-claude-opus47-fast', 'Claude Opus 4.7 Fast', 12, 'Factory docs: fast Opus 4.7 variant.'),
-        factoryModel('droid-claude-opus46', 'Claude Opus 4.6', 2, 'Factory docs: previous Anthropic flagship.'),
-        factoryModel('droid-claude-opus46-fast', 'Claude Opus 4.6 Fast', 12, 'Factory docs: faster Opus 4.6 variant.'),
-        factoryModel('droid-sonnet-46', 'Claude Sonnet 4.6', 1.2, 'Factory docs: Sonnet-priced daily driver with Max reasoning.'),
-        factoryModel('droid-opus-45', 'Claude Opus 4.5', 2, 'Factory docs: proven Opus model.'),
-        factoryModel('droid-sonnet-45', 'Claude Sonnet 4.5', 1.2, 'Factory docs: balanced daily-driver model.'),
-        factoryModel('droid-haiku-45', 'Claude Haiku 4.5', 0.4, 'Factory docs: fast, cost-efficient routine-task model.'),
-        factoryModel('droid-gpt55', 'GPT-5.5', 2, 'Factory docs: latest OpenAI model with Extra High reasoning.'),
-        factoryModel('droid-gpt55-fast', 'GPT-5.5 Fast', 5, 'Factory docs: faster GPT-5.5 variant.'),
-        factoryModel('droid-gpt55-pro', 'GPT-5.5 Pro', 12, 'Factory docs: highest-cost GPT-5.5 Pro variant.'),
-        factoryModel('droid-gpt54', 'GPT-5.4', 1, 'Factory docs: large-context OpenAI model.'),
-        factoryModel('droid-gpt54-fast', 'GPT-5.4 Fast', 2, 'Factory docs: faster GPT-5.4 variant.'),
-        factoryModel('droid-gpt54-mini', 'GPT-5.4 Mini', 0.3, 'Factory docs: smaller GPT-5.4 model.'),
-        factoryModel('droid-gpt53-codex', 'GPT-5.3-Codex', 0.7, 'Factory docs: newest OpenAI coding model.'),
-        factoryModel('droid-gpt53-codex-fast', 'GPT-5.3-Codex Fast', 1.4, 'Factory docs: faster GPT-5.3-Codex variant.'),
-        factoryModel('droid-gpt52', 'GPT-5.2', 0.7, 'Factory docs: OpenAI model with Extra High reasoning.'),
-        factoryModel('droid-gpt52-codex', 'GPT-5.2-Codex', 0.7, 'Factory docs: OpenAI coding model.'),
-        factoryModel('droid-gemini31-pro', 'Gemini 3.1 Pro', 0.8, 'Factory docs: newer Gemini Pro generation.'),
-        factoryModel('droid-gemini3-pro', 'Gemini 3 Pro', 0.8, 'Factory docs: Gemini Pro preview.'),
-        factoryModel('droid-gemini3-flash', 'Gemini 3 Flash', 0.2, 'Factory docs: fast, cheap high-volume model.'),
-        factoryModel('droid-glm51', 'Droid Core GLM-5.1', 0.55, 'Factory docs: open Droid Core model.'),
-        factoryModel('droid-kimi26', 'Droid Core Kimi K2.6', 0.4, 'Factory docs: open Droid Core model with image support.'),
-        factoryModel('droid-kimi25', 'Droid Core Kimi K2.5', 0.25, 'Factory docs: open Droid Core model.'),
-        factoryModel('droid-minimax27', 'Droid Core MiniMax M2.7', 0.12, 'Factory docs: cheapest Droid Core model.')
+        factoryModel('droid-claude-opus47', 'Claude Opus 4.7', 2, 'Factory models docs: `claude-opus-4-7`; Anthropic model with Max reasoning available.'),
+        factoryModel('droid-claude-opus47-fast', 'Claude Opus 4.7 Fast', 12, 'Factory models docs: `claude-opus-4-7-fast`; fast Anthropic model with Max reasoning available.'),
+        factoryModel('droid-claude-opus46', 'Claude Opus 4.6', 2, 'Factory models docs: `claude-opus-4-6`; Anthropic model with Max reasoning available.'),
+        factoryModel('droid-claude-opus46-fast', 'Claude Opus 4.6 Fast', 12, 'Factory models docs: `claude-opus-4-6-fast`; fast Anthropic model with Max reasoning available.'),
+        factoryModel('droid-sonnet-46', 'Claude Sonnet 4.6', 1.2, 'Factory models docs: `claude-sonnet-4-6`; Anthropic model with Max reasoning available.'),
+        factoryModel('droid-opus-45', 'Claude Opus 4.5', 2, 'Factory models docs: `claude-opus-4-5-20251101`; Anthropic model with Off default reasoning.'),
+        factoryModel('droid-sonnet-45', 'Claude Sonnet 4.5', 1.2, 'Factory models docs: `claude-sonnet-4-5-20250929`; Anthropic model with Off default reasoning.'),
+        factoryModel('droid-haiku-45', 'Claude Haiku 4.5', 0.4, 'Factory models docs: `claude-haiku-4-5-20251001`; lower-multiplier Anthropic model.'),
+        factoryModel('droid-gpt55', 'GPT-5.5', 2, 'Factory models docs: `gpt-5.5`; OpenAI model with Medium default reasoning and Extra High available.'),
+        factoryModel('droid-gpt55-fast', 'GPT-5.5 Fast', 5, 'Factory models docs: `gpt-5.5-fast`; OpenAI fast model with Extra High reasoning available.'),
+        factoryModel('droid-gpt55-pro', 'GPT-5.5 Pro', 12, 'Factory models docs: `gpt-5.5-pro`; highest listed OpenAI multiplier in this calculator.'),
+        factoryModel('droid-gpt54', 'GPT-5.4', 1, 'Factory models docs: `gpt-5.4`; OpenAI baseline multiplier model.'),
+        factoryModel('droid-gpt54-fast', 'GPT-5.4 Fast', 2, 'Factory models docs: `gpt-5.4-fast`; OpenAI fast model.'),
+        factoryModel('droid-gpt54-mini', 'GPT-5.4 Mini', 0.3, 'Factory models docs: `gpt-5.4-mini`; smaller OpenAI model.'),
+        factoryModel('droid-gpt53-codex', 'GPT-5.3-Codex', 0.7, 'Factory models docs: `gpt-5.3-codex`; OpenAI coding model.'),
+        factoryModel('droid-gpt53-codex-fast', 'GPT-5.3-Codex Fast', 1.4, 'Factory models docs: `gpt-5.3-codex-fast`; faster OpenAI coding model.'),
+        factoryModel('droid-gpt52', 'GPT-5.2', 0.7, 'Factory models docs: `gpt-5.2`; OpenAI model with Low default reasoning.'),
+        factoryModel('droid-gpt52-codex', 'GPT-5.2-Codex', 0.7, 'Factory models docs: `gpt-5.2-codex`; OpenAI coding model.'),
+        factoryModel('droid-gemini31-pro', 'Gemini 3.1 Pro', 0.8, 'Factory models docs: `gemini-3.1-pro-preview`; Google model with High default reasoning.'),
+        factoryModel('droid-gemini3-pro', 'Gemini 3 Pro', 0.8, 'Factory models docs: `gemini-3-pro-preview`; Google preview model.'),
+        factoryModel('droid-gemini3-flash', 'Gemini 3 Flash', 0.2, 'Factory models docs: `gemini-3-flash-preview`; low-multiplier Google preview model.'),
+        factoryModel('droid-glm51', 'Droid Core GLM-5.1', 0.55, 'Factory models docs: `glm-5.1`; Droid Core open model.'),
+        factoryModel('droid-kimi26', 'Droid Core Kimi K2.6', 0.4, 'Factory models docs: `kimi-k2.6`; Droid Core open model.'),
+        factoryModel('droid-kimi25', 'Droid Core Kimi K2.5', 0.25, 'Factory models docs: `kimi-k2.5`; Droid Core open model.'),
+        factoryModel('droid-minimax27', 'Droid Core MiniMax M2.7', 0.12, 'Factory models docs: `minimax-m2.7`; lowest listed Droid Core multiplier in this calculator.')
       ]
     };
 
@@ -724,8 +724,8 @@
         logoClass: 'droid-logo',
         llm: 'droid-sonnet-46',
         lockLlm: false,
-        note: 'Factory-style autonomous agent running larger planned tasks with more tool calls per session.',
-        assumptions: 'Assumption: Factory Droid is modeled as a more autonomous task factory. Factory publishes model usage multipliers; this calculator converts them into a transparent credit-equivalent token estimate so cheaper Droid Core models visibly reduce cost.',
+        note: 'Factory Droid workflow where CLI/App/Exec sessions can edit code, run commands, use AGENTS.md, skills, hooks, MCP, custom droids, and Missions.',
+        assumptions: 'Docs-backed assumption: Factory Droid is modeled as an agentic development platform with interactive CLI/App sessions, headless Droid Exec, and Missions for planned multi-agent work. Factory currently publishes model multipliers plus Standard Usage, rolling Rate Limits, Extra Usage, and Droid Core behavior; this calculator converts those multipliers into transparent credit-equivalent estimates, not invoices.',
         values: {
           engineers: 1000,
           adoption: 60,
