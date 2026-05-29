@@ -372,7 +372,7 @@
                 </select>
               </label>
               <label>
-                LLM / model assumption
+                Chosen LLM / model
                 <select id="llm">
                   <option value="sonnet">Claude Sonnet-class</option>
                   <option value="opus">Claude Opus-class</option>
@@ -552,37 +552,105 @@
       budgetText: document.getElementById('budgetText')
     };
 
-    const llms = {
-      sonnet: {
-        label: 'Claude Sonnet-class',
-        inputPrice: 3,
-        outputPrice: 15,
-        note: 'Balanced premium coding model assumption.'
-      },
-      opus: {
-        label: 'Claude Opus-class',
-        inputPrice: 15,
-        outputPrice: 75,
-        note: 'Expensive frontier-model assumption for hard tasks.'
-      },
-      gpt: {
-        label: 'GPT premium-class',
-        inputPrice: 2.5,
-        outputPrice: 10,
-        note: 'Premium general coding model assumption.'
-      },
-      gemini: {
-        label: 'Gemini Pro-class',
-        inputPrice: 1.25,
-        outputPrice: 10,
-        note: 'Lower input-cost, strong long-context model assumption.'
-      },
-      local: {
-        label: 'Local / open model',
-        inputPrice: 0.2,
-        outputPrice: 0.8,
-        note: 'Self-hosted/open-model proxy cost assumption, excluding hardware amortization.'
-      }
+    function model(key, label, inputPrice, outputPrice, note) {
+      return { key, label, inputPrice, outputPrice, note };
+    }
+
+    function factoryModel(key, label, multiplier, note) {
+      const baselineInput = 3;
+      const baselineOutput = 15;
+      return model(
+        key,
+        `${label} · ${multiplier}× Factory multiplier`,
+        Number((baselineInput * multiplier).toFixed(4)),
+        Number((baselineOutput * multiplier).toFixed(4)),
+        `${note} Factory publishes usage multipliers rather than public per-token dollars here, so this calculator estimates credit-equivalent cost from a Sonnet-class $3/$15 baseline.`
+      );
+    }
+
+    const modelCatalog = {
+      amp: [
+        model('amp-deep-gpt55', 'Amp Deep · GPT-5.5', 5, 30, 'Official Amp models page: deep uses GPT-5.5 with medium reasoning.'),
+        model('amp-smart-opus47', 'Amp Smart · Claude Opus 4.7', 5, 25, 'Official Amp models page: smart uses Claude Opus 4.7 with up to 300K input context tokens.'),
+        model('amp-rush-gpt55', 'Amp Rush · GPT-5.5', 5, 30, 'Official Amp models page: rush uses GPT-5.5 with no reasoning for fast low-token work.'),
+        model('amp-review-gemini31', 'Amp Review · Gemini 3.1 Pro', 2, 12, 'Official Amp models page: Review subagent uses Gemini 3.1 Pro.'),
+        model('amp-search-gemini3flash', 'Amp Search · Gemini 3 Flash', 0.5, 3, 'Official Amp models page: Search subagent uses Gemini 3 Flash.'),
+        model('amp-oracle-gpt55', 'Amp Oracle · GPT-5.5', 5, 30, 'Official Amp models page/manual: Oracle uses GPT-5.5 with high reasoning.'),
+        model('amp-librarian-sonnet46', 'Amp Librarian · Claude Sonnet 4.6', 3, 15, 'Official Amp models page: Librarian uses Claude Sonnet 4.6.'),
+        model('amp-viewmedia-gemini3flash', 'Amp View Media · Gemini 3 Flash', 0.5, 3, 'Official Amp models page: View Media uses Gemini 3 Flash.'),
+        model('amp-handoff-gemini3flash', 'Amp Handoff · Gemini 3 Flash', 0.5, 3, 'Official Amp models page: Handoff uses Gemini 3 Flash.'),
+        model('amp-titling-haiku45', 'Amp Titling · Claude Haiku 4.5', 1, 5, 'Official Amp models page: Titling uses Claude Haiku 4.5.')
+      ],
+      claude: [
+        model('claude-opus-48', 'Claude Opus 4.8', 5, 25, 'Anthropic docs: current most capable Claude model for complex reasoning and agentic coding.'),
+        model('claude-sonnet-46', 'Claude Sonnet 4.6', 3, 15, 'Anthropic docs: best speed/intelligence balance and a common Claude Code daily-driver choice.'),
+        model('claude-haiku-45', 'Claude Haiku 4.5', 1, 5, 'Anthropic docs: fastest current Claude model, suitable for routing and lightweight coding tasks.'),
+        model('claude-opus-47', 'Claude Opus 4.7', 5, 25, 'Anthropic docs: still available; strong complex coding model.'),
+        model('claude-opus-46', 'Claude Opus 4.6', 5, 25, 'Anthropic docs: still available; previous Opus generation.'),
+        model('claude-sonnet-45', 'Claude Sonnet 4.5', 3, 15, 'Anthropic docs: still available; balanced coding model.'),
+        model('claude-opus-45', 'Claude Opus 4.5', 5, 25, 'Anthropic docs: still available; previous Opus generation.'),
+        model('claude-opus-41', 'Claude Opus 4.1', 15, 75, 'Anthropic docs: still available legacy Opus pricing.'),
+        model('claude-sonnet-4', 'Claude Sonnet 4 deprecated', 3, 15, 'Anthropic docs: deprecated Sonnet 4 model.'),
+        model('claude-opus-4', 'Claude Opus 4 deprecated', 15, 75, 'Anthropic docs: deprecated Opus 4 model.')
+      ],
+      cursor: [
+        model('cursor-auto', 'Cursor Auto', 1.25, 6, 'Cursor docs: Auto + Composer pool pricing; Cursor chooses cost-efficient models.'),
+        model('cursor-composer2', 'Cursor Composer 2', 0.5, 2.5, 'Cursor docs: Cursor-owned Composer 2 model.'),
+        model('cursor-composer2-fast', 'Cursor Composer 2 Fast', 1.5, 7.5, 'Cursor docs: faster Composer 2 variant.'),
+        model('cursor-claude-sonnet4', 'Claude 4 Sonnet', 3, 15, 'Cursor docs API-pool model pricing.'),
+        model('cursor-claude-sonnet4-1m', 'Claude 4 Sonnet 1M', 6, 22.5, 'Cursor docs: 1M-context Sonnet pricing; expensive large-context mode.'),
+        model('cursor-claude-haiku45', 'Claude 4.5 Haiku', 1, 5, 'Cursor docs API-pool model pricing.'),
+        model('cursor-claude-sonnet45', 'Claude 4.5 Sonnet', 3, 15, 'Cursor docs API-pool model pricing.'),
+        model('cursor-claude-opus46', 'Claude 4.6 Opus', 5, 25, 'Cursor docs API-pool model pricing.'),
+        model('cursor-claude-opus46-fast', 'Claude 4.6 Opus Fast', 30, 150, 'Cursor docs: limited fast-mode research preview pricing.'),
+        model('cursor-claude-sonnet46', 'Claude 4.6 Sonnet', 3, 15, 'Cursor docs API-pool model pricing.'),
+        model('cursor-claude-opus47', 'Claude 4.7 Opus', 5, 25, 'Cursor docs API-pool model pricing.'),
+        model('cursor-claude-opus47-fast', 'Claude Opus 4.7 Fast', 30, 150, 'Cursor docs: limited fast-mode research preview pricing.'),
+        model('cursor-claude-opus48', 'Claude Opus 4.8', 5, 25, 'Cursor docs API-pool model pricing.'),
+        model('cursor-claude-opus48-fast', 'Claude Opus 4.8 Fast', 10, 50, 'Cursor docs: Opus 4.8 fast mode is listed as 3x lower per-token pricing than Opus 4.7 fast mode.'),
+        model('cursor-gemini3-flash', 'Gemini 3 Flash', 0.5, 3, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gemini3-pro', 'Gemini 3 Pro', 2, 12, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gemini3-pro-image', 'Gemini 3 Pro Image Preview', 2, 12, 'Cursor docs: text input/output priced like Gemini 3 Pro; image output has separate image-token pricing not modeled here.'),
+        model('cursor-gemini31-pro', 'Gemini 3.1 Pro', 2, 12, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gemini35-flash', 'Gemini 3.5 Flash', 1.5, 9, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gpt51-codex-mini', 'GPT-5.1 Codex Mini', 0.25, 2, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gpt53-codex', 'GPT-5.3 Codex', 1.75, 14, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gpt54', 'GPT-5.4', 2.5, 15, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gpt54-mini', 'GPT-5.4 Mini', 0.75, 4.5, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gpt54-nano', 'GPT-5.4 Nano', 0.2, 1.25, 'Cursor docs API-pool model pricing.'),
+        model('cursor-gpt55', 'GPT-5.5', 5, 30, 'Cursor docs API-pool model pricing.'),
+        model('cursor-grok420', 'Grok 4.20', 2, 6, 'Cursor docs API-pool model pricing.'),
+        model('cursor-grok43', 'Grok 4.3', 1.25, 2.5, 'Cursor docs API-pool model pricing.'),
+        model('cursor-grok-build', 'Grok Build 0.1', 1, 2, 'Cursor docs API-pool model pricing.'),
+        model('cursor-kimi-k25', 'Kimi K2.5', 0.6, 3, 'Cursor docs API-pool model pricing.')
+      ],
+      droid: [
+        factoryModel('droid-claude-opus47', 'Claude Opus 4.7', 2, 'Factory docs: Anthropic flagship with Max reasoning.'),
+        factoryModel('droid-claude-opus47-fast', 'Claude Opus 4.7 Fast', 12, 'Factory docs: fast Opus 4.7 variant.'),
+        factoryModel('droid-claude-opus46', 'Claude Opus 4.6', 2, 'Factory docs: previous Anthropic flagship.'),
+        factoryModel('droid-claude-opus46-fast', 'Claude Opus 4.6 Fast', 12, 'Factory docs: faster Opus 4.6 variant.'),
+        factoryModel('droid-sonnet-46', 'Claude Sonnet 4.6', 1.2, 'Factory docs: Sonnet-priced daily driver with Max reasoning.'),
+        factoryModel('droid-opus-45', 'Claude Opus 4.5', 2, 'Factory docs: proven Opus model.'),
+        factoryModel('droid-sonnet-45', 'Claude Sonnet 4.5', 1.2, 'Factory docs: balanced daily-driver model.'),
+        factoryModel('droid-haiku-45', 'Claude Haiku 4.5', 0.4, 'Factory docs: fast, cost-efficient routine-task model.'),
+        factoryModel('droid-gpt55', 'GPT-5.5', 2, 'Factory docs: latest OpenAI model with Extra High reasoning.'),
+        factoryModel('droid-gpt55-fast', 'GPT-5.5 Fast', 5, 'Factory docs: faster GPT-5.5 variant.'),
+        factoryModel('droid-gpt55-pro', 'GPT-5.5 Pro', 12, 'Factory docs: highest-cost GPT-5.5 Pro variant.'),
+        factoryModel('droid-gpt54', 'GPT-5.4', 1, 'Factory docs: large-context OpenAI model.'),
+        factoryModel('droid-gpt54-fast', 'GPT-5.4 Fast', 2, 'Factory docs: faster GPT-5.4 variant.'),
+        factoryModel('droid-gpt54-mini', 'GPT-5.4 Mini', 0.3, 'Factory docs: smaller GPT-5.4 model.'),
+        factoryModel('droid-gpt53-codex', 'GPT-5.3-Codex', 0.7, 'Factory docs: newest OpenAI coding model.'),
+        factoryModel('droid-gpt53-codex-fast', 'GPT-5.3-Codex Fast', 1.4, 'Factory docs: faster GPT-5.3-Codex variant.'),
+        factoryModel('droid-gpt52', 'GPT-5.2', 0.7, 'Factory docs: OpenAI model with Extra High reasoning.'),
+        factoryModel('droid-gpt52-codex', 'GPT-5.2-Codex', 0.7, 'Factory docs: OpenAI coding model.'),
+        factoryModel('droid-gemini31-pro', 'Gemini 3.1 Pro', 0.8, 'Factory docs: newer Gemini Pro generation.'),
+        factoryModel('droid-gemini3-pro', 'Gemini 3 Pro', 0.8, 'Factory docs: Gemini Pro preview.'),
+        factoryModel('droid-gemini3-flash', 'Gemini 3 Flash', 0.2, 'Factory docs: fast, cheap high-volume model.'),
+        factoryModel('droid-glm51', 'Droid Core GLM-5.1', 0.55, 'Factory docs: open Droid Core model.'),
+        factoryModel('droid-kimi26', 'Droid Core Kimi K2.6', 0.4, 'Factory docs: open Droid Core model with image support.'),
+        factoryModel('droid-kimi25', 'Droid Core Kimi K2.5', 0.25, 'Factory docs: open Droid Core model.'),
+        factoryModel('droid-minimax27', 'Droid Core MiniMax M2.7', 0.12, 'Factory docs: cheapest Droid Core model.')
+      ]
     };
 
     const modes = {
@@ -590,10 +658,10 @@
         title: 'Amp mode',
         mark: 'A',
         logoClass: 'amp-logo',
-        llm: 'sonnet',
-        lockLlm: true,
+        llm: 'amp-smart-opus47',
+        lockLlm: false,
         note: 'Governed agent workflow with context discipline and observability overhead.',
-        assumptions: 'Assumption: Amp uses a governed workflow, so it spends less raw repository context than a free-running CLI agent, but adds a small planning and verification overhead.',
+        assumptions: 'Assumption: Amp routes work through specific modes, subagents, and system models. Select the Amp surface/model you want to cost; Amp pricing is pass-through provider pricing for individual/non-enterprise workspaces.',
         values: {
           engineers: 1000,
           adoption: 80,
@@ -611,10 +679,10 @@
         title: 'Claude Code mode',
         mark: 'C',
         logoClass: 'claude-logo',
-        llm: 'sonnet',
-        lockLlm: true,
+        llm: 'claude-sonnet-46',
+        lockLlm: false,
         note: 'CLI coding agent with deep repo context, shell loops, and strong autonomous editing.',
-        assumptions: 'Assumption: Claude Code is modeled as a high-context, high-autonomy CLI agent. It reads more repository context and loops through edit/test/retry cycles more often than an IDE completion workflow.',
+        assumptions: 'Assumption: Claude Code is modeled as a high-context, high-autonomy CLI agent. Select the Claude API model used for the session; subscription plans may blend costs differently, but API token math shows model-price sensitivity.',
         values: {
           engineers: 1000,
           adoption: 80,
@@ -632,7 +700,7 @@
         title: 'Cursor mode',
         mark: '◆',
         logoClass: 'cursor-logo',
-        llm: 'gpt',
+        llm: 'cursor-auto',
         lockLlm: false,
         note: 'IDE-first workflow where chat, autocomplete, and agent edits usually operate on narrower context.',
         assumptions: 'Assumption: Cursor is modeled as an IDE workflow. It has frequent interactions, but lower average context per session than a terminal agent. Choose the LLM to model premium or budget configurations.',
@@ -653,10 +721,10 @@
         title: 'Factory Droid mode',
         mark: 'D',
         logoClass: 'droid-logo',
-        llm: 'sonnet',
+        llm: 'droid-sonnet-46',
         lockLlm: false,
         note: 'Factory-style autonomous agent running larger planned tasks with more tool calls per session.',
-        assumptions: 'Assumption: Factory Droid is modeled as a more autonomous task factory. It has fewer human-started sessions than IDE use, but each session has heavier planning, tool use, verification, and retry loops. Choose the backing LLM.',
+        assumptions: 'Assumption: Factory Droid is modeled as a more autonomous task factory. Factory publishes model usage multipliers; this calculator converts them into a transparent credit-equivalent token estimate so cheaper Droid Core models visibly reduce cost.',
         values: {
           engineers: 1000,
           adoption: 60,
@@ -752,8 +820,22 @@
       });
     }
 
+    function currentModel() {
+      return modelCatalog[inputs.mode.value].find((entry) => entry.key === inputs.llm.value);
+    }
+
+    function populateModelOptions(modeKey) {
+      inputs.llm.innerHTML = '';
+      modelCatalog[modeKey].forEach((entry) => {
+        const option = document.createElement('option');
+        option.value = entry.key;
+        option.textContent = entry.label;
+        inputs.llm.appendChild(option);
+      });
+    }
+
     function applyLlm(llmKey) {
-      const llm = llms[llmKey];
+      const llm = modelCatalog[inputs.mode.value].find((entry) => entry.key === llmKey);
       inputs.inputPrice.value = llm.inputPrice;
       inputs.outputPrice.value = llm.outputPrice;
     }
@@ -766,10 +848,12 @@
       modeEls.title.textContent = mode.title;
       modeEls.note.textContent = mode.note;
       modeEls.assumptions.textContent = mode.assumptions;
+      populateModelOptions(modeKey);
       inputs.llm.value = mode.llm;
       inputs.llm.disabled = mode.lockLlm;
       setNumericValues(mode.values);
       applyLlm(mode.llm);
+      modeEls.assumptions.textContent = `${mode.assumptions} Selected model: ${currentModel().label} — ${currentModel().note}`;
       calculate();
     }
 
@@ -824,7 +908,7 @@
     inputs.mode.addEventListener('change', () => applyMode(inputs.mode.value));
     inputs.llm.addEventListener('change', () => {
       applyLlm(inputs.llm.value);
-      const llm = llms[inputs.llm.value];
+      const llm = currentModel();
       modeEls.assumptions.textContent = `${modes[inputs.mode.value].assumptions} LLM assumption: ${llm.label} — ${llm.note}`;
       calculate();
     });
