@@ -583,16 +583,16 @@
         model('amp-titling-haiku45', 'Amp Titling proxy · Claude Haiku 4.5', 1, 5, 'Planning proxy: this estimates a low-cost title/summarization helper; the current manual excerpt does not specify a Titling model.')
       ],
       claude: [
-        model('claude-opus-48', 'Claude Opus 4.8', 5, 25, 'Anthropic docs: current most capable Claude model for complex reasoning and agentic coding.'),
-        model('claude-sonnet-46', 'Claude Sonnet 4.6', 3, 15, 'Anthropic docs: best speed/intelligence balance and a common Claude Code daily-driver choice.'),
-        model('claude-haiku-45', 'Claude Haiku 4.5', 1, 5, 'Anthropic docs: fastest current Claude model, suitable for routing and lightweight coding tasks.'),
-        model('claude-opus-47', 'Claude Opus 4.7', 5, 25, 'Anthropic docs: still available; strong complex coding model.'),
-        model('claude-opus-46', 'Claude Opus 4.6', 5, 25, 'Anthropic docs: still available; previous Opus generation.'),
-        model('claude-sonnet-45', 'Claude Sonnet 4.5', 3, 15, 'Anthropic docs: still available; balanced coding model.'),
-        model('claude-opus-45', 'Claude Opus 4.5', 5, 25, 'Anthropic docs: still available; previous Opus generation.'),
-        model('claude-opus-41', 'Claude Opus 4.1', 15, 75, 'Anthropic docs: still available legacy Opus pricing.'),
-        model('claude-sonnet-4', 'Claude Sonnet 4 deprecated', 3, 15, 'Anthropic docs: deprecated Sonnet 4 model.'),
-        model('claude-opus-4', 'Claude Opus 4 deprecated', 15, 75, 'Anthropic docs: deprecated Opus 4 model.')
+        model('claude-default', 'Claude Code default', 5, 25, 'Claude Code docs: default resolves by account type; Max, Team Premium, Enterprise pay-as-you-go, and Anthropic API default to Opus 4.8, while Pro/Team Standard/Enterprise subscription seats default to Sonnet 4.6.'),
+        model('claude-opus-48', 'Claude Opus 4.8 / opus alias', 5, 25, 'Claude Code model docs: on Anthropic API, opus resolves to Opus 4.8; use the full model name to pin a version.'),
+        model('claude-opus-48-fast', 'Claude Opus 4.8 Fast', 10, 50, 'Claude Code fast-mode docs: fast mode is Opus with a speed-prioritized API configuration, not a different model; Opus 4.8 fast pricing is $10/$50 MTok.'),
+        model('claude-sonnet-46', 'Claude Sonnet 4.6 / sonnet alias', 3, 15, 'Claude Code model docs: on Anthropic API and Claude Platform on AWS, sonnet resolves to Sonnet 4.6; use the full model name to pin a version.'),
+        model('claude-haiku', 'Claude Haiku / haiku alias', 1, 5, 'Claude Code model docs: haiku is the fast and efficient alias for simple tasks; the exact version can be controlled with ANTHROPIC_DEFAULT_HAIKU_MODEL.'),
+        model('claude-opusplan', 'Claude opusplan hybrid', 4, 20, 'Claude Code model docs: opusplan uses opus during plan mode and sonnet for execution. This row is a blended planning proxy, not a published single-model price.'),
+        model('claude-sonnet-1m', 'Claude Sonnet 1M context', 6, 22.5, 'Claude Code model docs: sonnet[1m] uses Sonnet with a 1M-token context window when the account/model supports it.'),
+        model('claude-opus-47', 'Claude Opus 4.7 provider-dependent', 5, 25, 'Claude Code model docs: Claude Platform on AWS maps opus to Opus 4.7; Bedrock, Vertex, and Foundry may require explicit full model names for newer models.'),
+        model('claude-opus-47-fast', 'Claude Opus 4.7 Fast', 30, 150, 'Claude Code fast-mode docs: Opus 4.7 fast mode is priced at $30/$150 MTok.'),
+        model('claude-sonnet-45', 'Claude Sonnet 4.5 provider-dependent', 3, 15, 'Claude Code model docs: Bedrock, Vertex, and Foundry map sonnet to Sonnet 4.5 unless a newer full model name or default environment variable is configured.')
       ],
       cursor: [
         model('cursor-auto', 'Cursor Auto', 1.25, 6, 'Cursor docs: Auto + Composer pool pricing; Cursor chooses cost-efficient models.'),
@@ -683,7 +683,7 @@
         llm: 'claude-sonnet-46',
         lockLlm: false,
         note: 'CLI coding agent with deep repo context, shell loops, and strong autonomous editing.',
-        assumptions: 'Assumption: Claude Code is modeled as a high-context, high-autonomy CLI agent. Select the Claude API model used for the session; subscription plans may blend costs differently, but API token math shows model-price sensitivity.',
+        assumptions: 'Docs-backed assumption: Claude Code is an agentic coding tool for terminal, IDE, desktop, and web that reads code, edits files, runs commands, and can run parallel agents. API users are charged by token consumption; Pro/Max/Team/Enterprise subscribers have included plan usage, so local dollar estimates are not authoritative billing. Costs vary with model alias/provider mapping, context size, prompt caching, auto-compaction, extended thinking, subagents, and agent teams.',
         values: {
           engineers: 1000,
           adoption: 80,
