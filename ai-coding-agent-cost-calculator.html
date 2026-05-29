@@ -452,7 +452,7 @@
           </div>
 
           <div class="mode-assumptions" id="modeAssumptions">
-            Assumption: Amp uses a governed workflow, so it spends less raw repository context than a free-running CLI agent, but adds a small planning and verification overhead.
+            Manual-backed assumption: Amp has deep, smart, and rush modes; can use subagents, Oracle, and Librarian; and charges pass-through provider/API costs for individual and non-enterprise workspaces. Mode rows below are planning proxies, not invoices.
           </div>
 
           <div class="scenario-row" aria-label="Scenario presets">
@@ -510,7 +510,7 @@
     </section>
 
     <footer>
-      This is a planning model, not an invoice. Real bills vary with model, caching, context reuse, retries, discounts, taxes, and whether tool vendors charge per seat, per token, or through a blended enterprise contract.
+      This is a planning model, not an invoice. Real bills vary with model, caching, context reuse, retries, discounts, taxes, and whether tool vendors charge per seat, per token, or through a blended enterprise contract. Amp's manual says individual and non-enterprise workspaces are pass-through provider/API pricing, while Enterprise usage is 50% more expensive.
     </footer>
   </main>
 
@@ -571,16 +571,16 @@
 
     const modelCatalog = {
       amp: [
-        model('amp-deep-gpt55', 'Amp Deep · GPT-5.5', 5, 30, 'Official Amp models page: deep uses GPT-5.5 with medium reasoning.'),
-        model('amp-smart-opus47', 'Amp Smart · Claude Opus 4.7', 5, 25, 'Official Amp models page: smart uses Claude Opus 4.7 with up to 300K input context tokens.'),
-        model('amp-rush-gpt55', 'Amp Rush · GPT-5.5', 5, 30, 'Official Amp models page: rush uses GPT-5.5 with no reasoning for fast low-token work.'),
-        model('amp-review-gemini31', 'Amp Review · Gemini 3.1 Pro', 2, 12, 'Official Amp models page: Review subagent uses Gemini 3.1 Pro.'),
-        model('amp-search-gemini3flash', 'Amp Search · Gemini 3 Flash', 0.5, 3, 'Official Amp models page: Search subagent uses Gemini 3 Flash.'),
-        model('amp-oracle-gpt55', 'Amp Oracle · GPT-5.5', 5, 30, 'Official Amp models page/manual: Oracle uses GPT-5.5 with high reasoning.'),
-        model('amp-librarian-sonnet46', 'Amp Librarian · Claude Sonnet 4.6', 3, 15, 'Official Amp models page: Librarian uses Claude Sonnet 4.6.'),
-        model('amp-viewmedia-gemini3flash', 'Amp View Media · Gemini 3 Flash', 0.5, 3, 'Official Amp models page: View Media uses Gemini 3 Flash.'),
-        model('amp-handoff-gemini3flash', 'Amp Handoff · Gemini 3 Flash', 0.5, 3, 'Official Amp models page: Handoff uses Gemini 3 Flash.'),
-        model('amp-titling-haiku45', 'Amp Titling · Claude Haiku 4.5', 1, 5, 'Official Amp models page: Titling uses Claude Haiku 4.5.')
+        model('amp-deep-gpt55', 'Amp Deep · GPT-5.5', 5, 30, 'Amp manual: deep uses GPT-5.5 with extended thinking for complex problems.'),
+        model('amp-smart-opus47', 'Amp Smart · state-of-the-art model mix', 5, 25, 'Amp manual: smart uses state-of-the-art models without constraints; Amp is multi-model across GPT-5.5, Opus 4.7, and fast models. This row uses an Opus-class price as a planning proxy.'),
+        model('amp-rush-gpt55', 'Amp Rush · GPT-5.5', 5, 30, 'Amp manual: rush is fast, low-token GPT-5.5 with no reasoning for small, well-defined tasks.'),
+        model('amp-review-gemini31', 'Amp Review proxy · Gemini 3.1 Pro', 2, 12, 'Planning proxy: the current manual documents subagents generally, mostly in smart mode, but does not specify a fixed Review model.'),
+        model('amp-search-gemini3flash', 'Amp Search/tool proxy · Gemini 3 Flash', 0.5, 3, 'Planning proxy: the manual says Amp charges for certain tools such as web search; this row estimates a low-cost fast-model/tool surface.'),
+        model('amp-oracle-gpt55', 'Amp Oracle · GPT-5.5', 5, 30, 'Amp manual: Oracle currently uses GPT-5.5 with high reasoning and is slower/more expensive than day-to-day editing.'),
+        model('amp-librarian-sonnet46', 'Amp Librarian proxy · Claude Sonnet 4.6', 3, 15, 'Planning proxy: the manual documents Librarian as a remote-codebase research subagent, but does not specify its current model.'),
+        model('amp-viewmedia-gemini3flash', 'Amp View Media proxy · Gemini 3 Flash', 0.5, 3, 'Planning proxy: this calculator estimates a low-cost vision/media helper surface; the current manual excerpt does not specify a View Media model.'),
+        model('amp-handoff-gemini3flash', 'Amp Handoff proxy · Gemini 3 Flash', 0.5, 3, 'Planning proxy: this estimates a lightweight handoff/summarization helper; the current manual excerpt does not specify a Handoff model.'),
+        model('amp-titling-haiku45', 'Amp Titling proxy · Claude Haiku 4.5', 1, 5, 'Planning proxy: this estimates a low-cost title/summarization helper; the current manual excerpt does not specify a Titling model.')
       ],
       claude: [
         model('claude-opus-48', 'Claude Opus 4.8', 5, 25, 'Anthropic docs: current most capable Claude model for complex reasoning and agentic coding.'),
@@ -662,7 +662,7 @@
         llm: 'amp-smart-opus47',
         lockLlm: false,
         note: 'Governed agent workflow with context discipline and observability overhead.',
-        assumptions: 'Assumption: Amp routes work through specific modes, subagents, and system models. Select the Amp surface/model you want to cost; Amp pricing is pass-through provider pricing for individual/non-enterprise workspaces.',
+        assumptions: 'Manual-backed assumption: Amp has deep, smart, and rush modes; can spawn subagents for suitable complex tasks; exposes Oracle and Librarian tools; and uses pass-through provider/API pricing for individual/non-enterprise workspaces. Specific helper-model rows are planning proxies when the manual does not name a fixed model.',
         values: {
           engineers: 1000,
           adoption: 80,
