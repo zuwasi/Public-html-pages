@@ -893,7 +893,7 @@
                   to Chinese <a href="https://www.loongson.cn/" target="_blank" rel="noopener noreferrer">Loongson CPUs</a>
                   as an <a href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener noreferrer">ISO 26262</a>-compliant RTOS where all code is
                   <a href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">MISRA C</a> 2025 compliant. The preset assumes 50 engineers, a tight schedule,
-                  heavy codebase context, safety-case evidence, static-analysis remediation, and repeated verification loops.
+                  heavy codebase context, Loongson/LoongArch porting, memory-protection design, temporal-independence evidence, safety-case documentation, static-analysis remediation, and repeated verification loops.
                 </p>
                 <button type="button" id="openFreertosFlow">Open RTOS flowgraph</button>
               </div>
@@ -990,29 +990,29 @@
       </div>
       <div class="modal-body">
         <p>
-          This use case is a safety-critical migration program: move a FreeRTOS-based embedded stack to Loongson CPUs, then harden it into an ISO 26262-oriented RTOS delivery where production C code must pass MISRA C compliance gates. The AI-agent cost risk is high because each task needs architecture context, hardware-port knowledge, standards evidence, static-analysis cleanup, and repeated verification loops.
+          This use case is a safety-critical migration program: move a FreeRTOS-based embedded stack to Loongson CPUs, then harden it into an ISO 26262-oriented RTOS delivery where production C code must pass MISRA C compliance gates. The central engineering issue is not only “can FreeRTOS run on Loongson?” but whether the complete hardware/software system can demonstrate safety mechanisms, spatial independence, temporal independence, controlled failure modes, and enough evidence for an assessor. The AI-agent cost risk is high because each task needs architecture context, hardware-port knowledge, standards evidence, static-analysis cleanup, and repeated verification loops.
         </p>
         <div class="flow-diagram" aria-label="FreeRTOS Loongson RTOS migration flowgraph">
           <div class="flow-row">
-            <div class="flow-node"><strong>1. Intake & scope</strong>FreeRTOS baseline, Loongson target CPUs, toolchain, safety goals, ASIL assumptions, legacy constraints.</div>
-            <div class="flow-node"><strong>2. Architecture gap</strong>Kernel port layer, interrupt model, timers, memory model, boot flow, drivers, compiler/runtime deltas.</div>
-            <div class="flow-node"><strong>3. Porting backlog</strong>Break down HAL, scheduler, context switch, atomic ops, BSP, diagnostics, and CI jobs.</div>
+            <div class="flow-node"><strong>1. Safety scope</strong>Define item boundary, ASIL target, safety-related vs non-safety software, Loongson target, toolchain, and certification strategy.</div>
+            <div class="flow-node"><strong>2. Independence concept</strong>Design spatial independence with MMU/MPU-style protection and temporal independence with timing budgets, monitors, and watchdog strategy.</div>
+            <div class="flow-node"><strong>3. Porting gap</strong>Kernel port layer, LoongArch context switch, interrupt model, timers, memory model, boot flow, BSP, drivers, and compiler/runtime deltas.</div>
           </div>
           <div class="flow-arrow">↓ validation and evidence gates ↓</div>
           <div class="flow-row">
-            <div class="flow-node"><strong>4. MISRA C cleanup</strong>Static analysis, rule deviations, code rewrites, generated evidence, peer-review packages.</div>
-            <div class="flow-node"><strong>5. ISO 26262 safety case</strong>Traceability, requirements, hazards, verification matrix, tool qualification notes, release artifacts.</div>
-            <div class="flow-node"><strong>6. Hardware verification</strong>Board bring-up, timing tests, interrupt latency, stress, fault injection, regression automation.</div>
+            <div class="flow-node"><strong>4. Kernel hardening</strong>Partition safety tasks, isolate non-safety tasks, control privileged access, define scheduler assumptions, and handle common-cause failure risk.</div>
+            <div class="flow-node"><strong>5. MISRA C 2025 cleanup</strong>Static analysis, rule deviations, code rewrites, generated evidence, peer-review packages, and enforceable CI gates.</div>
+            <div class="flow-node"><strong>6. Safety case</strong>Traceability, requirements, hazard links, verification matrix, coverage targets, tool qualification notes, and release artifacts.</div>
           </div>
           <div class="flow-arrow">↓ release decision ↓</div>
           <div class="flow-row">
-            <div class="flow-node"><strong>7. Compliance review</strong>Safety review board, MISRA deviation approval, coverage thresholds, unresolved-risk register.</div>
-            <div class="flow-node"><strong>8. Certified RTOS package</strong>Source, docs, safety manual, test reports, SBOM, reproducible build, customer integration guide.</div>
-            <div class="flow-node"><strong>9. Maintenance loop</strong>Security fixes, Loongson variants, regression suites, compliance delta analysis, customer support.</div>
+            <div class="flow-node"><strong>7. Hardware verification</strong>Board bring-up, timing tests, interrupt latency, stress, fault injection, watchdog-window tests, and regression automation.</div>
+            <div class="flow-node"><strong>8. Assessment package</strong>Source, docs, safety manual, test reports, MISRA deviations, SBOM, reproducible build, and integration guide.</div>
+            <div class="flow-node"><strong>9. Maintenance loop</strong>Security fixes, Loongson variants, regression suites, compliance delta analysis, customer support, and recertification impact checks.</div>
           </div>
         </div>
         <p>
-          Why this matters for the calculator: agent sessions are not simple chat. They include code search, porting decisions, standards interpretation, static-analysis repair, test generation, evidence writing, and re-checking. That is why the preset uses high context and loop multipliers even with only 50 engineers.
+          Why this matters for the calculator: agent sessions are not simple chat. They include code search, Loongson/LoongArch porting decisions, safety architecture tradeoffs, standards interpretation, MISRA repair, timing-analysis support, test generation, evidence writing, and re-checking. That is why the preset uses high context and loop multipliers even with only 50 engineers.
         </p>
       </div>
     </div>
