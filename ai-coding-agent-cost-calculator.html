@@ -450,6 +450,14 @@
       box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
     }
 
+    .modal.diff-modal {
+      width: min(1280px, 96vw);
+      height: min(88vh, 980px);
+      min-width: min(760px, 96vw);
+      min-height: 520px;
+      resize: both;
+    }
+
     .modal-header {
       position: sticky;
       top: 0;
@@ -541,6 +549,32 @@
     .diff-table th {
       color: var(--text);
       font-weight: 700;
+    }
+
+    .diff-task-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .diff-task-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(2, 6, 23, 0.58);
+      padding: 12px;
+    }
+
+    .diff-task-card strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .diff-task-card small {
+      display: block;
+      color: var(--muted);
+      line-height: 1.45;
     }
 
     .flow-diagram {
@@ -680,7 +714,8 @@
 
       .grid,
       .results,
-      .use-case-grid {
+      .use-case-grid,
+      .diff-task-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -971,7 +1006,7 @@
   </div>
 
   <div class="modal-backdrop" id="diffModal" role="dialog" aria-modal="true" aria-labelledby="diffTitle">
-    <div class="modal">
+    <div class="modal diff-modal">
       <div class="modal-header">
         <h2 id="diffTitle">Saved session diff</h2>
         <button type="button" id="closeDiff" aria-label="Close saved session diff">Close</button>
@@ -1113,6 +1148,7 @@
 
     const savedSessionStorageKey = 'ai-agent-cost-calculator-sessions-v1';
     let lastResult = null;
+    let activeScenarioKey = 'custom';
 
     const outputs = {
       sessionCost: document.getElementById('sessionCost'),
@@ -1389,6 +1425,44 @@
       }
     };
 
+    const scenarioMeta = {
+      custom: {
+        title: 'Custom calculator session',
+        description: 'Manually adjusted calculator values rather than one of the built-in presets.',
+        workType: 'Custom planning estimate'
+      },
+      light: {
+        title: 'Light use pilot',
+        description: 'Lower-adoption, lower-token pilot for cautious early rollout planning.',
+        workType: 'Pilot / limited deployment'
+      },
+      article: {
+        title: 'Article-style cost-risk example',
+        description: 'Scenario shaped around the article warning: high adoption, frequent sessions, and token-metered usage at enterprise scale.',
+        workType: 'AI coding cost-risk benchmark'
+      },
+      heavy: {
+        title: 'Heavy enterprise use',
+        description: 'Stress-test scenario with high adoption, frequent use, larger context, and more autonomous agent loops.',
+        workType: 'Enterprise stress test'
+      },
+      uberish: {
+        title: '5,000-engineer organization',
+        description: 'Large-organization scenario inspired by the article’s 5,000-engineer scale claim.',
+        workType: 'Large enterprise rollout'
+      },
+      freertosLoongson: {
+        title: 'FreeRTOS → Loongson ISO 26262 RTOS',
+        description: 'Safety-critical RTOS migration with Loongson/LoongArch porting, memory protection, temporal independence, MISRA C 2025 cleanup, safety-case evidence, and assessor-facing verification artifacts.',
+        workType: 'Safety-critical embedded / automotive RTOS program'
+      },
+      enterpriseSaas: {
+        title: 'Enterprise SaaS platform',
+        description: 'Large SaaS build covering multi-tenant backend, web UI, billing, identity, audit logs, observability, CI/CD, data migration, security reviews, and integrations.',
+        workType: 'Large cloud product engineering program'
+      }
+    };
+
     function numberValue(input) {
       return Number(input.value) || 0;
     }
@@ -1446,6 +1520,7 @@
 
     function applyMode(modeKey) {
       const mode = modes[modeKey];
+      activeScenarioKey = 'custom';
       document.body.dataset.mode = modeKey;
       modeEls.logo.textContent = mode.mark;
       modeEls.logo.className = `mode-logo ${mode.logoClass}`;
@@ -1575,13 +1650,16 @@
       calculate();
       const mode = modes[inputs.mode.value];
       const llm = currentModel();
+      const task = scenarioMeta[activeScenarioKey] || scenarioMeta.custom;
       const createdAt = new Date().toISOString();
-      const displayName = `${mode.title} · ${llm.label} · ${createdAt.slice(0, 19).replace('T', ' ')}`;
+      const displayName = `${task.title} · ${mode.title} · ${llm.label} · ${createdAt.slice(0, 19).replace('T', ' ')}`;
       return {
         schema: 'ai-agent-cost-calculator-session-v1',
         id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         createdAt,
         displayName,
+        scenarioKey: activeScenarioKey,
+        task,
         pageTitle: document.title,
         sourceUrl: location.href,
         modeKey: inputs.mode.value,
@@ -1712,27 +1790,46 @@
         return;
       }
       const maxMonthly = Math.max(...sessions.map((session) => session.results?.teamMonthly || 0), 1);
+      const totalMonthly = sessions.reduce((sum, session) => sum + (session.results?.teamMonthly || 0), 0);
+      const maxSession = sessions.reduce((max, session) => (session.results?.teamMonthly || 0) > (max.results?.teamMonthly || 0) ? session : max, sessions[0]);
       const histogram = sessions.map((session) => {
         const monthly = session.results?.teamMonthly || 0;
         const width = Math.max(1, monthly / maxMonthly * 100);
+        const task = session.task || scenarioMeta[session.scenarioKey] || scenarioMeta.custom;
         return `<div class="histogram-row">
-          <div class="histogram-label" title="${escapeHtml(session.displayName)}">${escapeHtml(session.displayName)}</div>
+          <div class="histogram-label" title="${escapeHtml(task.description)}">${escapeHtml(task.title)} · ${escapeHtml(session.modeTitle || session.modeKey)}</div>
           <div class="histogram-track"><div class="histogram-bar" style="width:${width}%"></div></div>
           <div class="histogram-value">${escapeHtml(compactMoney(monthly))}</div>
         </div>`;
       }).join('');
+      const detailCards = sessions.map((session) => {
+        const task = session.task || scenarioMeta[session.scenarioKey] || scenarioMeta.custom;
+        return `<div class="diff-task-card">
+          <strong>${escapeHtml(task.title)}</strong>
+          <small><b>Work type:</b> ${escapeHtml(task.workType)}</small>
+          <small><b>Agent/model:</b> ${escapeHtml(session.modeTitle || session.modeKey)} / ${escapeHtml(session.model?.label || session.llmKey)}</small>
+          <small><b>Scale:</b> ${escapeHtml(session.values?.engineers ?? '')} engineers, ${escapeHtml(session.values?.adoption ?? '')}% adoption, ${escapeHtml(session.values?.sessions ?? '')} sessions/engineer/day</small>
+          <small><b>Task:</b> ${escapeHtml(task.description)}</small>
+        </div>`;
+      }).join('');
       const tableRows = sessions.map((session) => `<tr>
         <td>${escapeHtml(session.createdAt?.slice(0, 19).replace('T', ' ') || 'Saved session')}</td>
+        <td>${escapeHtml((session.task || scenarioMeta[session.scenarioKey] || scenarioMeta.custom).title)}</td>
         <td>${escapeHtml(session.modeTitle || session.modeKey)}</td>
         <td>${escapeHtml(session.model?.label || session.llmKey)}</td>
         <td>${escapeHtml(session.values?.engineers ?? '')}</td>
+        <td>${escapeHtml(session.values?.sessions ?? '')}</td>
+        <td>${escapeHtml(plainNumber(session.values?.inputTokens || 0))} / ${escapeHtml(plainNumber(session.values?.outputTokens || 0))}</td>
+        <td>${escapeHtml(session.values?.contextMultiplier ?? '')}× / ${escapeHtml(session.values?.loopMultiplier ?? '')}×</td>
         <td>${escapeHtml(session.resultText?.sessionCost || money(session.results?.sessionCost || 0))}</td>
         <td>${escapeHtml(session.resultText?.teamMonthly || compactMoney(session.results?.teamMonthly || 0))}</td>
       </tr>`).join('');
-      diffEls.body.innerHTML = `<p>Histogram compares <strong>team monthly cost</strong> across ${sessions.length} browser-saved snapshots.</p>
+      diffEls.body.innerHTML = `<p>Histogram compares <strong>team monthly cost</strong> across ${sessions.length} browser-saved snapshots. Combined saved monthly run rate: <strong>${escapeHtml(compactMoney(totalMonthly))}</strong>. Highest saved scenario: <strong>${escapeHtml((maxSession.task || scenarioMeta[maxSession.scenarioKey] || scenarioMeta.custom).title)}</strong> at <strong>${escapeHtml(compactMoney(maxSession.results?.teamMonthly || 0))}</strong>.</p>
         <div class="histogram">${histogram}</div>
+        <h3>Task details in this diff</h3>
+        <div class="diff-task-grid">${detailCards}</div>
         <table class="diff-table">
-          <thead><tr><th>Saved</th><th>Agent</th><th>Model</th><th>Engineers</th><th>Session</th><th>Monthly</th></tr></thead>
+          <thead><tr><th>Saved</th><th>Task</th><th>Agent</th><th>Model</th><th>Engineers</th><th>Sessions/day</th><th>Tokens in/out</th><th>Ctx/loop</th><th>Session</th><th>Monthly</th></tr></thead>
           <tbody>${tableRows}</tbody>
         </table>`;
     }
@@ -1747,12 +1844,16 @@
 
     Object.entries(inputs).forEach(([key, input]) => {
       if (key !== 'mode' && key !== 'llm') {
-        input.addEventListener('input', calculate);
+        input.addEventListener('input', () => {
+          activeScenarioKey = 'custom';
+          calculate();
+        });
       }
     });
 
     document.querySelectorAll('[data-scenario]').forEach((button) => {
       button.addEventListener('click', () => {
+        activeScenarioKey = button.dataset.scenario;
         const scenario = scenarios[button.dataset.scenario];
         setNumericValues(scenario);
         calculate();
