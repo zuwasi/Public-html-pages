@@ -526,6 +526,39 @@
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
     }
 
+    .tool-amp {
+      --tool-color: #ef4444;
+      --tool-color-soft: rgba(239, 68, 68, 0.18);
+    }
+
+    .tool-claude {
+      --tool-color: #d97757;
+      --tool-color-soft: rgba(217, 119, 87, 0.2);
+    }
+
+    .tool-cursor {
+      --tool-color: #8b5cf6;
+      --tool-color-soft: rgba(139, 92, 246, 0.22);
+    }
+
+    .tool-droid {
+      --tool-color: #22c55e;
+      --tool-color-soft: rgba(34, 197, 94, 0.2);
+    }
+
+    .tool-custom {
+      --tool-color: var(--accent);
+      --tool-color-soft: var(--glow-a);
+    }
+
+    .histogram-row.tool-amp .histogram-bar,
+    .histogram-row.tool-claude .histogram-bar,
+    .histogram-row.tool-cursor .histogram-bar,
+    .histogram-row.tool-droid .histogram-bar,
+    .histogram-row.tool-custom .histogram-bar {
+      background: linear-gradient(90deg, var(--tool-color), var(--accent-2));
+    }
+
     .histogram-value {
       color: var(--muted);
       font-variant-numeric: tabular-nums;
@@ -563,6 +596,53 @@
       border-radius: 14px;
       background: rgba(2, 6, 23, 0.58);
       padding: 12px;
+    }
+
+    .diff-task-card.tool-amp,
+    .diff-task-card.tool-claude,
+    .diff-task-card.tool-cursor,
+    .diff-task-card.tool-droid,
+    .diff-task-card.tool-custom {
+      border-color: var(--tool-color);
+      background: linear-gradient(135deg, var(--tool-color-soft), rgba(2, 6, 23, 0.58));
+      box-shadow: 0 0 28px var(--tool-color-soft);
+    }
+
+    .tool-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--tool-color);
+      border-radius: 999px;
+      background: var(--tool-color-soft);
+      color: var(--text);
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .diff-controls {
+      display: grid;
+      gap: 8px;
+      margin: 16px 0;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(2, 6, 23, 0.58);
+      padding: 12px;
+    }
+
+    .diff-controls input[type="range"] {
+      width: 100%;
+    }
+
+    .diff-controls-output {
+      color: var(--text);
+      font-weight: 800;
+    }
+
+    .diff-row-tool {
+      border-left: 4px solid var(--tool-color);
+      background: linear-gradient(90deg, var(--tool-color-soft), transparent 45%);
     }
 
     .diff-task-card strong {
@@ -1783,48 +1863,85 @@
       calculate();
     }
 
-    function renderDiff() {
+    function toolClass(session) {
+      return `tool-${['amp', 'claude', 'cursor', 'droid'].includes(session.modeKey) ? session.modeKey : 'custom'}`;
+    }
+
+    function adjustedSessionResults(session, engineerOverride) {
+      const baseEngineers = Number(session.values?.engineers) || 0;
+      const engineers = engineerOverride ?? baseEngineers;
+      const adoption = Math.min(Math.max(Number(session.values?.adoption) || 0, 0), 100) / 100;
+      const sessionsPerDay = Number(session.values?.sessions) || 0;
+      const workdays = Number(session.values?.workdays) || 0;
+      const sessionCost = Number(session.results?.sessionCost) || 0;
+      const activeEngineers = engineers * adoption;
+      const engineerDaily = sessionsPerDay * sessionCost;
+      const engineerMonthly = engineerDaily * workdays;
+      const teamMonthly = activeEngineers * engineerMonthly;
+      return {
+        engineers,
+        activeEngineers,
+        engineerMonthly,
+        teamMonthly,
+        annualCost: teamMonthly * 12,
+        sessionCost
+      };
+    }
+
+    function renderDiff(engineerOverride = null) {
       const sessions = loadStoredSessions();
       if (sessions.length === 0) {
         diffEls.body.innerHTML = '<p>No saved sessions yet. Save JSON or HTML first to create local snapshots.</p>';
         return;
       }
-      const maxMonthly = Math.max(...sessions.map((session) => session.results?.teamMonthly || 0), 1);
-      const totalMonthly = sessions.reduce((sum, session) => sum + (session.results?.teamMonthly || 0), 0);
-      const maxSession = sessions.reduce((max, session) => (session.results?.teamMonthly || 0) > (max.results?.teamMonthly || 0) ? session : max, sessions[0]);
+      const maxSavedEngineers = Math.max(...sessions.map((session) => Number(session.values?.engineers) || 0), 1);
+      const sliderMax = Math.max(10, Math.ceil(maxSavedEngineers * 2));
+      const selectedEngineers = Math.min(Math.max(engineerOverride ?? maxSavedEngineers, 1), sliderMax);
+      const adjusted = sessions.map((session) => ({
+        session,
+        metrics: adjustedSessionResults(session, selectedEngineers),
+        task: session.task || scenarioMeta[session.scenarioKey] || scenarioMeta.custom,
+        className: toolClass(session)
+      }));
+      const maxMonthly = Math.max(...adjusted.map((entry) => entry.metrics.teamMonthly), 1);
+      const totalMonthly = adjusted.reduce((sum, entry) => sum + entry.metrics.teamMonthly, 0);
+      const maxEntry = adjusted.reduce((max, entry) => entry.metrics.teamMonthly > max.metrics.teamMonthly ? entry : max, adjusted[0]);
       const histogram = sessions.map((session) => {
-        const monthly = session.results?.teamMonthly || 0;
+        const entry = adjusted.find((item) => item.session === session);
+        const monthly = entry.metrics.teamMonthly;
         const width = Math.max(1, monthly / maxMonthly * 100);
-        const task = session.task || scenarioMeta[session.scenarioKey] || scenarioMeta.custom;
-        return `<div class="histogram-row">
-          <div class="histogram-label" title="${escapeHtml(task.description)}">${escapeHtml(task.title)} · ${escapeHtml(session.modeTitle || session.modeKey)}</div>
+        return `<div class="histogram-row ${entry.className}">
+          <div class="histogram-label" title="${escapeHtml(entry.task.description)}">${escapeHtml(entry.task.title)} · <span class="tool-chip ${entry.className}">${escapeHtml(session.modeTitle || session.modeKey)}</span></div>
           <div class="histogram-track"><div class="histogram-bar" style="width:${width}%"></div></div>
           <div class="histogram-value">${escapeHtml(compactMoney(monthly))}</div>
         </div>`;
       }).join('');
-      const detailCards = sessions.map((session) => {
-        const task = session.task || scenarioMeta[session.scenarioKey] || scenarioMeta.custom;
-        return `<div class="diff-task-card">
-          <strong>${escapeHtml(task.title)}</strong>
+      const detailCards = adjusted.map(({ session, metrics, task, className }) => `<div class="diff-task-card ${className}">
+          <strong>${escapeHtml(task.title)} <span class="tool-chip ${className}">${escapeHtml(session.modeTitle || session.modeKey)}</span></strong>
           <small><b>Work type:</b> ${escapeHtml(task.workType)}</small>
           <small><b>Agent/model:</b> ${escapeHtml(session.modeTitle || session.modeKey)} / ${escapeHtml(session.model?.label || session.llmKey)}</small>
-          <small><b>Scale:</b> ${escapeHtml(session.values?.engineers ?? '')} engineers, ${escapeHtml(session.values?.adoption ?? '')}% adoption, ${escapeHtml(session.values?.sessions ?? '')} sessions/engineer/day</small>
+          <small><b>What-if scale:</b> ${escapeHtml(metrics.engineers)} engineers, ${escapeHtml(plainNumber(metrics.activeEngineers))} active at ${escapeHtml(session.values?.adoption ?? '')}% adoption, ${escapeHtml(session.values?.sessions ?? '')} sessions/engineer/day</small>
+          <small><b>What-if monthly:</b> ${escapeHtml(compactMoney(metrics.teamMonthly))} (${escapeHtml(compactMoney(metrics.annualCost))} annualized)</small>
           <small><b>Task:</b> ${escapeHtml(task.description)}</small>
-        </div>`;
-      }).join('');
-      const tableRows = sessions.map((session) => `<tr>
+        </div>`).join('');
+      const tableRows = adjusted.map(({ session, metrics, task, className }) => `<tr class="diff-row-tool ${className}">
         <td>${escapeHtml(session.createdAt?.slice(0, 19).replace('T', ' ') || 'Saved session')}</td>
-        <td>${escapeHtml((session.task || scenarioMeta[session.scenarioKey] || scenarioMeta.custom).title)}</td>
-        <td>${escapeHtml(session.modeTitle || session.modeKey)}</td>
+        <td>${escapeHtml(task.title)}</td>
+        <td><span class="tool-chip ${className}">${escapeHtml(session.modeTitle || session.modeKey)}</span></td>
         <td>${escapeHtml(session.model?.label || session.llmKey)}</td>
-        <td>${escapeHtml(session.values?.engineers ?? '')}</td>
+        <td>${escapeHtml(metrics.engineers)} (${escapeHtml(session.values?.engineers ?? '')} saved)</td>
         <td>${escapeHtml(session.values?.sessions ?? '')}</td>
         <td>${escapeHtml(plainNumber(session.values?.inputTokens || 0))} / ${escapeHtml(plainNumber(session.values?.outputTokens || 0))}</td>
         <td>${escapeHtml(session.values?.contextMultiplier ?? '')}× / ${escapeHtml(session.values?.loopMultiplier ?? '')}×</td>
-        <td>${escapeHtml(session.resultText?.sessionCost || money(session.results?.sessionCost || 0))}</td>
-        <td>${escapeHtml(session.resultText?.teamMonthly || compactMoney(session.results?.teamMonthly || 0))}</td>
+        <td>${escapeHtml(money(metrics.sessionCost))}</td>
+        <td>${escapeHtml(compactMoney(metrics.teamMonthly))}</td>
       </tr>`).join('');
-      diffEls.body.innerHTML = `<p>Histogram compares <strong>team monthly cost</strong> across ${sessions.length} browser-saved snapshots. Combined saved monthly run rate: <strong>${escapeHtml(compactMoney(totalMonthly))}</strong>. Highest saved scenario: <strong>${escapeHtml((maxSession.task || scenarioMeta[maxSession.scenarioKey] || scenarioMeta.custom).title)}</strong> at <strong>${escapeHtml(compactMoney(maxSession.results?.teamMonthly || 0))}</strong>.</p>
+      diffEls.body.innerHTML = `<p>Histogram compares <strong>team monthly cost</strong> across ${sessions.length} browser-saved snapshots. What-if combined monthly run rate: <strong>${escapeHtml(compactMoney(totalMonthly))}</strong>. Highest shown scenario: <strong>${escapeHtml(maxEntry.task.title)}</strong> at <strong>${escapeHtml(compactMoney(maxEntry.metrics.teamMonthly))}</strong>.</p>
+        <div class="diff-controls">
+          <label for="diffEngineerSlider"><strong>What-if engineers for every saved session:</strong> <span class="diff-controls-output" id="diffEngineerValue">${escapeHtml(selectedEngineers)}</span></label>
+          <input id="diffEngineerSlider" type="range" min="1" max="${escapeHtml(sliderMax)}" step="1" value="${escapeHtml(selectedEngineers)}">
+          <small>Moves every saved scenario to the same engineer count while preserving each scenario's adoption %, sessions/day, token profile, tool/model, and multipliers.</small>
+        </div>
         <div class="histogram">${histogram}</div>
         <h3>Task details in this diff</h3>
         <div class="diff-task-grid">${detailCards}</div>
@@ -1832,6 +1949,8 @@
           <thead><tr><th>Saved</th><th>Task</th><th>Agent</th><th>Model</th><th>Engineers</th><th>Sessions/day</th><th>Tokens in/out</th><th>Ctx/loop</th><th>Session</th><th>Monthly</th></tr></thead>
           <tbody>${tableRows}</tbody>
         </table>`;
+      const slider = document.getElementById('diffEngineerSlider');
+      slider.addEventListener('input', () => renderDiff(Number(slider.value)));
     }
 
     inputs.mode.addEventListener('change', () => applyMode(inputs.mode.value));
