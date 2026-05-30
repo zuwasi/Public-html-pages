@@ -739,32 +739,6 @@
           <div class="mode-assumptions" id="modeAssumptions">
             Manual-backed assumption: Amp has deep, smart, and rush modes; can use subagents, Oracle, and Librarian; and charges pass-through provider/API costs for individual and non-enterprise workspaces. Mode rows below are planning proxies, not invoices.
           </div>
-
-          <div class="scenario-row" aria-label="Scenario presets">
-            <button type="button" data-scenario="light" title="Lower-adoption, lower-token scenario for cautious pilots.">Light use</button>
-            <button type="button" data-scenario="article" title="Recreates the article-style example: 1,000 engineers, high adoption, token-metered usage.">Article example</button>
-            <button type="button" data-scenario="heavy" title="Stress test with high adoption, frequent sessions, larger context, and more agent loops.">Heavy enterprise</button>
-            <button type="button" data-scenario="uberish" title="Large-organization scenario inspired by the article's 5,000-engineer example claim.">5,000 engineers</button>
-            <button type="button" data-scenario="freertosLoongson" title="Safety-critical RTOS porting preset: 50 engineers, tight schedule, high validation loops, ISO 26262 and MISRA C compliance pressure.">FreeRTOS → Loongson safety RTOS</button>
-          </div>
-          <div class="use-case-note">
-            <strong>Specific use case:</strong>
-            converting <a href="https://www.freertos.org/" target="_blank" rel="noopener noreferrer">FreeRTOS</a>
-            to Chinese <a href="https://www.loongson.cn/" target="_blank" rel="noopener noreferrer">Loongson CPUs</a>
-            as an <a href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener noreferrer">ISO 26262</a>-compliant RTOS where all code is
-            <a href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">MISRA C</a> 2025 compliant. The preset assumes 50 engineers, a tight schedule,
-            heavy codebase context, porting/debug sessions, safety-case evidence, static-analysis remediation, and repeated verification loops.
-          </div>
-          <div class="session-actions" aria-label="Saved session actions">
-            <button type="button" id="saveJson">Save JSON</button>
-            <button type="button" id="saveHtml">Save HTML</button>
-            <button type="button" id="loadSession">Load saved session</button>
-            <button type="button" id="showDiff">Diff saved sessions</button>
-            <input id="sessionFile" type="file" accept="application/json,.json" hidden>
-          </div>
-          <p class="session-hint">
-            Save JSON stores the current run in this browser and downloads a reusable file. Save HTML downloads a standalone report. Load saved session imports a JSON file. Diff compares all browser-saved JSON snapshots.
-          </p>
         </div>
       </div>
 
@@ -810,6 +784,32 @@
             <div><code>session cost = effective_input_tokens / 1,000,000 × input_price + effective_output_tokens / 1,000,000 × output_price</code></div>
             <div><code>monthly cost = active_engineers × sessions_per_day × workdays × session_cost</code></div>
           </div>
+
+          <div class="scenario-row" aria-label="Scenario presets">
+            <button type="button" data-scenario="light" title="Lower-adoption, lower-token scenario for cautious pilots.">Light use</button>
+            <button type="button" data-scenario="article" title="Recreates the article-style example: 1,000 engineers, high adoption, token-metered usage.">Article example</button>
+            <button type="button" data-scenario="heavy" title="Stress test with high adoption, frequent sessions, larger context, and more agent loops.">Heavy enterprise</button>
+            <button type="button" data-scenario="uberish" title="Large-organization scenario inspired by the article's 5,000-engineer example claim.">5,000 engineers</button>
+            <button type="button" data-scenario="freertosLoongson" title="Safety-critical RTOS porting preset: 50 engineers, tight schedule, high validation loops, ISO 26262 and MISRA C compliance pressure.">FreeRTOS → Loongson safety RTOS</button>
+          </div>
+          <div class="use-case-note">
+            <strong>Specific use case:</strong>
+            converting <a href="https://www.freertos.org/" target="_blank" rel="noopener noreferrer">FreeRTOS</a>
+            to Chinese <a href="https://www.loongson.cn/" target="_blank" rel="noopener noreferrer">Loongson CPUs</a>
+            as an <a href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener noreferrer">ISO 26262</a>-compliant RTOS where all code is
+            <a href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">MISRA C</a> 2025 compliant. The preset assumes 50 engineers, a tight schedule,
+            heavy codebase context, porting/debug sessions, safety-case evidence, static-analysis remediation, and repeated verification loops.
+          </div>
+          <div class="session-actions" aria-label="Saved session actions">
+            <button type="button" id="saveJson">Save JSON</button>
+            <button type="button" id="saveHtml">Save HTML</button>
+            <button type="button" id="loadSession">Load saved session</button>
+            <button type="button" id="showDiff">Diff saved sessions</button>
+            <input id="sessionFile" type="file" accept="application/json,.json" hidden>
+          </div>
+          <p class="session-hint">
+            Save JSON stores the current run in this browser and downloads a reusable file. Save HTML downloads a standalone report. Load saved session imports a JSON file. Diff compares all browser-saved JSON snapshots.
+          </p>
         </div>
       </div>
     </section>
