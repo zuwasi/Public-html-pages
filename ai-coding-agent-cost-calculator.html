@@ -607,6 +607,31 @@
       color: var(--text);
     }
 
+    .use-case-note h2 {
+      margin: 0 0 12px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .use-case-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .use-case-panel {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.64);
+      padding: 12px;
+    }
+
+    .use-case-panel p {
+      margin: 0;
+    }
+
     .session-actions {
       display: flex;
       flex-wrap: wrap;
@@ -654,7 +679,8 @@
       }
 
       .grid,
-      .results {
+      .results,
+      .use-case-grid {
         grid-template-columns: 1fr;
       }
     }
@@ -858,18 +884,29 @@
             <button type="button" data-scenario="enterpriseSaas" title="Large SaaS build preset: multi-tenant cloud app, 90 engineers, product pressure, security, observability, and integration work.">Enterprise SaaS platform</button>
           </div>
           <div class="use-case-note">
-            <strong>Specific use case:</strong>
-            converting <a href="https://www.freertos.org/" target="_blank" rel="noopener noreferrer">FreeRTOS</a>
-            to Chinese <a href="https://www.loongson.cn/" target="_blank" rel="noopener noreferrer">Loongson CPUs</a>
-            as an <a href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener noreferrer">ISO 26262</a>-compliant RTOS where all code is
-            <a href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">MISRA C</a> 2025 compliant. The preset assumes 50 engineers, a tight schedule,
-            heavy codebase context, porting/debug sessions, safety-case evidence, static-analysis remediation, and repeated verification loops.
-            <button type="button" id="openFreertosFlow">Open flowgraph diagram</button>
-            <br><br>
-            <strong>Suggested second use case:</strong>
-            building a large <a href="https://en.wikipedia.org/wiki/Software_as_a_service" target="_blank" rel="noopener noreferrer">SaaS</a>
-            platform: multi-tenant backend, web UI, billing, identity, audit logs, observability, CI/CD, data migration, security reviews, and integrations.
-            The preset models 90 engineers working under product-delivery pressure with many cross-team agent sessions.
+            <h2>Typical use cases</h2>
+            <div class="use-case-grid">
+              <div class="use-case-panel">
+                <p>
+                  <strong>Safety-critical RTOS migration:</strong>
+                  converting <a href="https://www.freertos.org/" target="_blank" rel="noopener noreferrer">FreeRTOS</a>
+                  to Chinese <a href="https://www.loongson.cn/" target="_blank" rel="noopener noreferrer">Loongson CPUs</a>
+                  as an <a href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener noreferrer">ISO 26262</a>-compliant RTOS where all code is
+                  <a href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">MISRA C</a> 2025 compliant. The preset assumes 50 engineers, a tight schedule,
+                  heavy codebase context, safety-case evidence, static-analysis remediation, and repeated verification loops.
+                </p>
+                <button type="button" id="openFreertosFlow">Open RTOS flowgraph</button>
+              </div>
+              <div class="use-case-panel">
+                <p>
+                  <strong>Enterprise SaaS platform:</strong>
+                  building a large <a href="https://en.wikipedia.org/wiki/Software_as_a_service" target="_blank" rel="noopener noreferrer">SaaS</a>
+                  platform: multi-tenant backend, web UI, billing, identity, audit logs, observability, CI/CD, data migration, security reviews, and integrations.
+                  The preset models 90 engineers working under product-delivery pressure with many cross-team agent sessions.
+                </p>
+                <button type="button" id="openSaasFlow">Open SaaS flowgraph</button>
+              </div>
+            </div>
           </div>
           <div class="session-actions" aria-label="Saved session actions">
             <button type="button" id="saveJson">Save JSON</button>
@@ -981,6 +1018,42 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="saasFlowModal" role="dialog" aria-modal="true" aria-labelledby="saasFlowTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="saasFlowTitle">Enterprise SaaS platform flowgraph</h2>
+        <button type="button" id="closeSaasFlow" aria-label="Close SaaS flowgraph">Close</button>
+      </div>
+      <div class="modal-body">
+        <p>
+          This use case is a large product-engineering program: build a multi-tenant SaaS platform from architecture through launch. The AI-agent cost risk comes from broad product context, many cross-team decisions, security reviews, integration work, and repeated quality gates across frontend, backend, data, DevOps, and compliance tracks.
+        </p>
+        <div class="flow-diagram" aria-label="Enterprise SaaS platform delivery flowgraph">
+          <div class="flow-row">
+            <div class="flow-node"><strong>1. Product discovery</strong>Personas, pricing model, tenants, roles, workflows, SLAs, roadmap, acceptance criteria.</div>
+            <div class="flow-node"><strong>2. Platform architecture</strong>Multi-tenant boundaries, API design, data model, eventing, auth, billing, audit, observability.</div>
+            <div class="flow-node"><strong>3. Delivery backlog</strong>Split epics across frontend, backend, integrations, data migration, DevOps, QA, and security.</div>
+          </div>
+          <div class="flow-arrow">↓ parallel product streams ↓</div>
+          <div class="flow-row">
+            <div class="flow-node"><strong>4. Core implementation</strong>UI, APIs, services, background jobs, tenant isolation, workflows, admin console.</div>
+            <div class="flow-node"><strong>5. Trust & operations</strong>SSO, RBAC, audit logs, monitoring, alerts, backups, rate limits, incident runbooks.</div>
+            <div class="flow-node"><strong>6. Integrations & data</strong>CRM/payment/email/webhooks, migration tools, import/export, data quality validation.</div>
+          </div>
+          <div class="flow-arrow">↓ launch readiness gates ↓</div>
+          <div class="flow-row">
+            <div class="flow-node"><strong>7. Quality gates</strong>Automated tests, performance, security review, privacy review, accessibility, release checklist.</div>
+            <div class="flow-node"><strong>8. Go-to-market release</strong>Feature flags, docs, onboarding, support playbooks, customer pilots, rollback plan.</div>
+            <div class="flow-node"><strong>9. Scale & iterate</strong>Usage analytics, reliability fixes, customer feedback, cost optimization, roadmap expansion.</div>
+          </div>
+        </div>
+        <p>
+          Why this matters for the calculator: this is not a single coding task. Teams repeatedly ask agents to reason across architecture, product requirements, security, tests, deployments, and customer-facing behavior. That creates high context usage and many looped sessions even without safety-certification overhead.
+        </p>
+      </div>
+    </div>
+  </div>
+
   <script>
     const inputs = {
       mode: document.getElementById('mode'),
@@ -1030,6 +1103,12 @@
       open: document.getElementById('openFreertosFlow'),
       close: document.getElementById('closeFreertosFlow'),
       modal: document.getElementById('freertosFlowModal')
+    };
+
+    const saasFlowEls = {
+      open: document.getElementById('openSaasFlow'),
+      close: document.getElementById('closeSaasFlow'),
+      modal: document.getElementById('saasFlowModal')
     };
 
     const savedSessionStorageKey = 'ai-agent-cost-calculator-sessions-v1';
@@ -1779,6 +1858,28 @@
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && freertosFlowEls.modal.classList.contains('open')) {
         setFreertosFlowOpen(false);
+      }
+    });
+
+    function setSaasFlowOpen(isOpen) {
+      saasFlowEls.modal.classList.toggle('open', isOpen);
+      if (isOpen) {
+        saasFlowEls.close.focus();
+      } else {
+        saasFlowEls.open.focus();
+      }
+    }
+
+    saasFlowEls.open.addEventListener('click', () => setSaasFlowOpen(true));
+    saasFlowEls.close.addEventListener('click', () => setSaasFlowOpen(false));
+    saasFlowEls.modal.addEventListener('click', (event) => {
+      if (event.target === saasFlowEls.modal) {
+        setSaasFlowOpen(false);
+      }
+    });
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && saasFlowEls.modal.classList.contains('open')) {
+        setSaasFlowOpen(false);
       }
     });
 
