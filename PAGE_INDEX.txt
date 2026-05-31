@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-05-30
+Last updated: 2026-05-31
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -85,34 +85,37 @@ Last updated: 2026-05-30
 25. ampcode-vs-claudecode-presentation.html
    https://zuwasi.github.io/Public-html-pages/ampcode-vs-claudecode-presentation.html
 
-26. comparison-presentation-detailed.html
+26. asn1c-workbench-amp-presentation.html
+   https://zuwasi.github.io/Public-html-pages/asn1c-workbench-amp-presentation.html
+
+27. comparison-presentation-detailed.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-detailed.html
 
-27. comparison-presentation-executive.html
+28. comparison-presentation-executive.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-executive.html
 
-28. comparison-report.html
+29. comparison-report.html
    https://zuwasi.github.io/Public-html-pages/comparison-report.html
 
-29. cpp26-embedded-mavlink.html
+30. cpp26-embedded-mavlink.html
    https://zuwasi.github.io/Public-html-pages/cpp26-embedded-mavlink.html
 
-30. cuda-to-axelera-migration.html
+31. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-31. nesher2gm-pentest-operator-guide.html
+32. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-32. nono-ampcode-presentation.html
+33. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-33. static-code-analysis-2026.html
+34. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-34. why-amp-doesnt-need-node9-proxy.html
+35. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-35. wolfram-engine-gpu-demo-presentation.html
+36. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
