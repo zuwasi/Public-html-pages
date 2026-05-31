@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>ASN1C Workbench + Amp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #07111f;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-strong: rgba(255, 255, 255, 0.14);
+      --text: #eef6ff;
+      --muted: #a9bdd7;
+      --cyan: #58e6ff;
+      --blue: #7aa7ff;
+      --green: #8bf7bf;
+      --amber: #ffd166;
+      --pink: #ff7ab6;
+      --shadow: rgba(0, 0, 0, 0.35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(88,230,255,.25), transparent 30%),
+        radial-gradient(circle at 82% 28%, rgba(255,122,182,.18), transparent 32%),
+        radial-gradient(circle at 45% 80%, rgba(122,167,255,.20), transparent 34%);
+      filter: blur(10px);
+      z-index: 0;
+    }
+
+    .deck { position: relative; z-index: 1; height: 100vh; display: flex; transition: transform .55s cubic-bezier(.22,.9,.27,1); }
+    .slide { flex: 0 0 100vw; height: 100vh; padding: clamp(2rem, 5vw, 5rem); display: grid; place-items: center; }
+    .content { width: min(1180px, 100%); }
+    .eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: .18em; font-weight: 800; font-size: clamp(.76rem, 1.3vw, .95rem); }
+    h1 { font-size: clamp(3rem, 8vw, 7.5rem); line-height: .92; letter-spacing: -.07em; margin: .2em 0; }
+    h2 { font-size: clamp(2.3rem, 5vw, 5rem); line-height: .98; letter-spacing: -.05em; margin: .15em 0 .35em; }
+    h3 { font-size: clamp(1.15rem, 2.2vw, 1.65rem); margin: 0 0 .6rem; }
+    p, li { font-size: clamp(1rem, 1.6vw, 1.25rem); line-height: 1.58; color: var(--muted); }
+    strong { color: var(--text); }
+    code { color: var(--green); background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.12); border-radius: .45rem; padding: .12rem .35rem; }
+    pre { background: rgba(0,0,0,.32); border: 1px solid rgba(255,255,255,.13); border-radius: 1.2rem; padding: 1.25rem; overflow: auto; box-shadow: 0 18px 55px var(--shadow); }
+    pre code { background: none; border: 0; padding: 0; white-space: pre; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2.5vw, 1.5rem); align-items: stretch; }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { background: var(--card); border: 1px solid rgba(255,255,255,.13); border-radius: 1.35rem; padding: clamp(1.1rem, 2.2vw, 1.8rem); box-shadow: 0 18px 55px var(--shadow); backdrop-filter: blur(16px); }
+    .card.accent { background: linear-gradient(135deg, rgba(88,230,255,.18), rgba(122,167,255,.10)); }
+    .pill { display: inline-flex; align-items: center; gap: .5rem; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; padding: .55rem .85rem; color: var(--text); background: rgba(255,255,255,.08); margin: .25rem; font-weight: 700; }
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: .8rem; align-items: center; }
+    .node { min-height: 110px; display: grid; place-items: center; text-align: center; border-radius: 1rem; padding: 1rem; background: var(--card-strong); border: 1px solid rgba(255,255,255,.15); font-weight: 800; }
+    .arrow { text-align: center; color: var(--cyan); font-size: 2rem; font-weight: 900; }
+    .hero-sub { max-width: 820px; font-size: clamp(1.15rem, 2vw, 1.55rem); }
+    .big-number { font-size: clamp(3.2rem, 7vw, 6.2rem); font-weight: 900; color: var(--cyan); line-height: .9; }
+    .nav { position: fixed; z-index: 10; top: 50%; transform: translateY(-50%); width: 3.4rem; height: 3.4rem; border-radius: 50%; border: 1px solid rgba(255,255,255,.22); background: rgba(7,17,31,.78); color: white; font-size: 2.1rem; cursor: pointer; display: grid; place-items: center; backdrop-filter: blur(12px); }
+    .nav:hover { background: rgba(88,230,255,.18); }
+    .nav.left { left: 1rem; }
+    .nav.right { right: 1rem; }
+    .nav[hidden] { display: none; }
+    .progress { position: fixed; z-index: 10; left: 0; right: 0; bottom: 0; height: .45rem; background: rgba(255,255,255,.11); }
+    .bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--cyan), var(--blue), var(--pink)); transition: width .35s ease; }
+    .counter { position: fixed; z-index: 10; right: 1.1rem; bottom: 1rem; color: var(--muted); font-weight: 800; background: rgba(7,17,31,.7); border: 1px solid rgba(255,255,255,.12); border-radius: 999px; padding: .45rem .75rem; }
+    .hint { position: fixed; left: 50%; bottom: 2rem; transform: translateX(-50%); z-index: 10; color: var(--cyan); font-weight: 800; animation: pulse 1.4s infinite; }
+    .hint.hidden { display: none; }
+    @keyframes pulse { 0%,100% { opacity: .45; transform: translateX(-50%) translateY(0); } 50% { opacity: 1; transform: translateX(-50%) translateY(-4px); } }
+    @media (max-width: 760px) {
+      .slide { padding: 2rem 1.25rem 4rem; }
+      .grid, .grid.three, .flow { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); }
+      .nav { width: 2.8rem; height: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Objective Systems ASN1C + Amp</div>
+        <h1>From ASN.1 pain to repeatable workflow.</h1>
+        <p class="hero-sub">We built an Amp skill and an early ASN1C Workbench app to make schema review, compiler runs, wrapper generation, test vectors, and reports easier to repeat.</p>
+        <span class="pill">Skill</span><span class="pill">CLI App</span><span class="pill">Harness Templates</span><span class="pill">Public Docs</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">The problem</div>
+        <h2>ASN.1 projects fail at the seams.</h2>
+        <div class="grid three">
+          <div class="card"><h3>Schema ambiguity</h3><p>Tagging, constraints, extension markers, and choices create subtle interoperability failures.</p></div>
+          <div class="card"><h3>Compiler friction</h3><p>Flags, generated directories, runtime context handling, and build integration are easy to drift.</p></div>
+          <div class="card"><h3>Debugging gaps</h3><p>Teams need reproducible evidence: logs, vectors, expected failures, and reports.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">What we created</div>
+        <h2>Four concrete deliverables.</h2>
+        <div class="grid">
+          <div class="card accent"><div class="big-number">1</div><h3>Amp skill</h3><p><strong>working-with-objective-systems-asn1c</strong> gives Amp a repeatable checklist for ASN1C schema, encoding, generated-code, and vector work.</p></div>
+          <div class="card accent"><div class="big-number">2</div><h3>CLI + local dashboard</h3><p><strong>asn1c-workbench</strong> initializes config, runs ASN1C, captures logs, runs vector commands, writes reports, and serves a local static dashboard.</p></div>
+          <div class="card accent"><div class="big-number">3</div><h3>Wrapper templates</h3><p>C/C++ starter wrappers isolate Objective Systems generated code behind stable encode/decode APIs.</p></div>
+          <div class="card accent"><div class="big-number">4</div><h3>Public presentation</h3><p>This page documents the workflow, the legal boundary, and how Amp accelerates the engineering loop.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Workflow</div>
+        <h2>One loop, repeatable evidence.</h2>
+        <div class="flow">
+          <div class="node">ASN.1 files</div><div class="arrow">→</div><div class="node">ASN1C Workbench</div><div class="arrow">→</div><div class="node">Logs + reports</div>
+        </div>
+        <div class="grid" style="margin-top:1.5rem">
+          <div class="card"><h3>Compile</h3><p>Run the configured local ASN1C executable and store structured output in <code>reports/last-compile.json</code>.</p></div>
+          <div class="card"><h3>Test</h3><p>Run user-provided decoder/encoder commands against vectors and store <code>reports/last-test.json</code>.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">CLI</div>
+        <h2>Small commands instead of tribal memory.</h2>
+        <pre><code>python -m asn1c_workbench init
+python -m asn1c_workbench compile asn1c-workbench.json
+python -m asn1c_workbench wrapper asn1c-workbench.json --language c
+python -m asn1c_workbench test asn1c-workbench.json
+python -m asn1c_workbench report asn1c-workbench.json
+python -m asn1c_workbench serve asn1c-workbench.json</code></pre>
+        <p>The MVP stays honest: if no decoder command is configured, vector tests are marked skipped instead of inventing a generic decoder.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Config</div>
+        <h2>Project intent lives in one file.</h2>
+        <pre><code>{
+  "asn1c_path": "asn1c",
+  "encoding": "uper",
+  "asn_files": ["asn/protocol.asn"],
+  "compiler_flags": ["-c", "-uper"],
+  "primary_type": "MyMessage",
+  "decode_command": "build/decoder --type {type} --hex {hex}"
+}</code></pre>
+        <p>This makes compiler flags, schema inputs, output paths, and test hooks explicit and reviewable.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Amp's role</div>
+        <h2>Amp adds engineering memory and execution.</h2>
+        <div class="grid three">
+          <div class="card"><h3>Skill memory</h3><p>The ASN1C skill captures checklists for tagging, PER alignment, DER canonical rules, wrappers, and reports.</p></div>
+          <div class="card"><h3>Code changes</h3><p>Amp can create scripts, templates, tests, and docs while respecting repo constraints and local style.</p></div>
+          <div class="card"><h3>Verification loop</h3><p>Amp runs focused checks, reports what passed, and clearly marks what is blocked by missing proprietary tooling.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">License boundary</div>
+        <h2>We automate around ASN1C, not instead of ASN1C.</h2>
+        <div class="grid">
+          <div class="card"><h3>Allowed</h3><p>Call the user's licensed compiler, analyze logs, generate wrapper templates, manage vectors, and produce reports.</p></div>
+          <div class="card"><h3>Not included</h3><p>No proprietary compiler, no Objective Systems runtime redistribution, and no claim to replace the vendor toolchain.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Next steps</div>
+        <h2>Where this can go next.</h2>
+        <div class="grid">
+          <div class="card"><h3>Protocol-specific harnesses</h3><p>Fill the generated wrappers with the exact C/C++ calls for your encoding rule and generated type names.</p></div>
+          <div class="card"><h3>Richer diagnostics</h3><p>Add BER/DER TLV views, PER bit maps, schema diff reports, and vendor compatibility profiles.</p></div>
+          <div class="card"><h3>Richer web UI</h3><p>The MVP has a static local dashboard; next add upload, decode, vector browser, and live report pages.</p></div>
+          <div class="card"><h3>CI integration</h3><p>Run compile and vectors on every schema change to catch drift early.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <button class="nav left" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav right" id="next" aria-label="Next slide">›</button>
+  <div class="hint" id="hint">← Swipe to navigate →</div>
+  <div class="counter" id="counter">1 / 9</div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const bar = document.getElementById('bar');
+    const hint = document.getElementById('hint');
+    let index = 0;
+    let startX = null;
+    let usedNavigation = false;
+
+    function update() {
+      deck.style.transform = `translateX(${-index * 100}vw)`;
+      prev.hidden = index === 0;
+      next.hidden = index === slides.length - 1;
+      counter.textContent = `${index + 1} / ${slides.length}`;
+      bar.style.width = `${((index + 1) / slides.length) * 100}%`;
+      if (usedNavigation || index > 0) hint.classList.add('hidden');
+    }
+
+    function go(delta) {
+      const nextIndex = Math.max(0, Math.min(slides.length - 1, index + delta));
+      if (nextIndex !== index) {
+        usedNavigation = true;
+        index = nextIndex;
+        update();
+      }
+    }
+
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    window.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight' || event.key === ' ') go(1);
+      if (event.key === 'ArrowLeft') go(-1);
+    });
+    window.addEventListener('touchstart', event => { startX = event.changedTouches[0].screenX; }, { passive: true });
+    window.addEventListener('touchend', event => {
+      if (startX === null) return;
+      const dx = event.changedTouches[0].screenX - startX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+      startX = null;
+    }, { passive: true });
+    window.addEventListener('mousedown', event => { startX = event.screenX; });
+    window.addEventListener('mouseup', event => {
+      if (startX === null) return;
+      const dx = event.screenX - startX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+      startX = null;
+    });
+    update();
+  </script>
+</body>
+</html>
