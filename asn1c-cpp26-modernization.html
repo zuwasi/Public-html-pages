@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>ASN1C to Modern C++26</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050816;
+      --panel: rgba(255,255,255,.08);
+      --panel2: rgba(255,255,255,.13);
+      --line: rgba(255,255,255,.16);
+      --text: #f3f7ff;
+      --muted: #a9b7d0;
+      --blue: #70d6ff;
+      --violet: #a78bfa;
+      --green: #8bf7bf;
+      --amber: #ffd166;
+      --red: #ff7a90;
+      --shadow: rgba(0,0,0,.38);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -20%;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(112,214,255,.25), transparent 30%),
+        radial-gradient(circle at 88% 16%, rgba(167,139,250,.22), transparent 30%),
+        radial-gradient(circle at 55% 88%, rgba(139,247,191,.12), transparent 34%),
+        linear-gradient(135deg, #050816, #0a1028 50%, #07091b);
+      z-index: 0;
+    }
+
+    .deck {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      height: 100vh;
+      transition: transform .55s cubic-bezier(.22,.9,.25,1);
+      will-change: transform;
+    }
+    .slide {
+      flex: 0 0 100vw;
+      height: 100vh;
+      padding: clamp(2rem, 5vw, 5rem);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+    .content { width: min(1200px, 100%); }
+    .eyebrow {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: clamp(.75rem, 1.3vw, .95rem);
+      font-weight: 900;
+      margin-bottom: .8rem;
+    }
+    h1, h2, h3 { margin: 0; letter-spacing: -.04em; }
+    h1 { font-size: clamp(3rem, 8.5vw, 8rem); line-height: .9; max-width: 1050px; }
+    h2 { font-size: clamp(2.35rem, 5.6vw, 5.6rem); line-height: .96; margin-bottom: 1.2rem; }
+    h3 { font-size: clamp(1.05rem, 2vw, 1.55rem); margin-bottom: .55rem; }
+    p, li { color: var(--muted); font-size: clamp(1rem, 1.55vw, 1.22rem); line-height: 1.58; }
+    strong { color: var(--text); }
+    .subtitle { max-width: 860px; font-size: clamp(1.15rem, 2.1vw, 1.55rem); }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1rem, 2vw, 1.4rem); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 1.3rem;
+      padding: clamp(1.1rem, 2.2vw, 1.75rem);
+      box-shadow: 0 20px 70px var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    .card.glow { background: linear-gradient(135deg, rgba(112,214,255,.16), rgba(167,139,250,.13)); }
+    .pill { display: inline-flex; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: .5rem .8rem; margin: .25rem; font-weight: 800; color: var(--text); }
+    .diagram { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: .8rem; align-items: center; margin-top: 1.4rem; }
+    .node { min-height: 125px; display: grid; place-items: center; text-align: center; background: var(--panel2); border: 1px solid var(--line); border-radius: 1.1rem; padding: 1rem; font-weight: 900; }
+    .arrow { color: var(--blue); font-size: 2.1rem; font-weight: 900; }
+    pre {
+      margin: 0;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 1.1rem;
+      padding: 1.05rem;
+      overflow: auto;
+      max-height: 58vh;
+      box-shadow: 0 20px 70px var(--shadow);
+    }
+    code { font-family: "Cascadia Code", "Consolas", monospace; color: var(--green); font-size: clamp(.78rem, 1.15vw, 1rem); line-height: 1.45; }
+    .inline-code { color: var(--green); background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.12); border-radius: .45rem; padding: .1rem .35rem; font-family: "Cascadia Code", Consolas, monospace; }
+    .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .label { display: inline-block; margin-bottom: .6rem; color: var(--amber); font-weight: 900; text-transform: uppercase; letter-spacing: .08em; font-size: .78rem; }
+    .ok { color: var(--green); } .warn { color: var(--amber); } .bad { color: var(--red); }
+    .metric { font-size: clamp(2.6rem, 5vw, 4.8rem); color: var(--blue); font-weight: 900; line-height: 1; letter-spacing: -.06em; }
+
+    .nav {
+      position: fixed;
+      z-index: 10;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3.4rem;
+      height: 3.4rem;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(5,8,22,.76);
+      color: white;
+      font-size: 2.15rem;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+    }
+    .nav:hover { background: rgba(112,214,255,.17); }
+    .nav.left { left: 1rem; }
+    .nav.right { right: 1rem; }
+    .nav[hidden] { display: none; }
+    .progress { position: fixed; left: 0; right: 0; bottom: 0; height: .45rem; z-index: 10; background: rgba(255,255,255,.1); }
+    .bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--blue), var(--violet), var(--green)); transition: width .35s ease; }
+    .counter { position: fixed; right: 1.1rem; bottom: 1rem; z-index: 10; color: var(--muted); font-weight: 900; background: rgba(5,8,22,.75); border: 1px solid var(--line); border-radius: 999px; padding: .45rem .75rem; }
+    .hint { position: fixed; z-index: 10; left: 50%; bottom: 2rem; transform: translateX(-50%); color: var(--blue); font-weight: 900; animation: pulse 1.4s infinite; }
+    .hint.hidden { display: none; }
+    @keyframes pulse { 0%,100%{opacity:.45; transform:translateX(-50%) translateY(0)} 50%{opacity:1; transform:translateX(-50%) translateY(-4px)} }
+
+    @media (max-width: 820px) {
+      .slide { padding: 2rem 1.2rem 4.2rem; overflow-y: auto; place-items: start center; }
+      .grid, .grid.three, .compare, .diagram { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); text-align: center; }
+      pre { max-height: 44vh; }
+      .nav { width: 2.8rem; height: 2.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Modernization project</div>
+        <h1>ASN1C generated code, modern C++26 experience.</h1>
+        <p class="subtitle">A safe modernization path: keep Objective Systems generated code regeneratable, then expose it through a C++26-style facade with RAII, spans, expected results, tests, and benchmarks.</p>
+        <span class="pill">RAII</span><span class="pill">std::span</span><span class="pill">std::expected</span><span class="pill">golden vectors</span>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Why not rewrite generated files?</div>
+        <h2>The generated code is a boundary, not the product API.</h2>
+        <div class="grid three">
+          <div class="card"><h3 class="bad">Risk</h3><p>Manual edits vanish on regeneration and can break vendor support or ASN.1 interoperability.</p></div>
+          <div class="card"><h3 class="warn">Reality</h3><p>Generated code often uses runtime-specific ownership and context patterns that should remain stable.</p></div>
+          <div class="card"><h3 class="ok">Solution</h3><p>Modernize around it: wrappers, adapters, tests, build flags, and diagnostics.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Target architecture</div>
+        <h2>A modern facade over a vendor core.</h2>
+        <div class="diagram">
+          <div class="node">ASN.1 schema<br><span class="inline-code">.asn</span></div>
+          <div class="arrow">→</div>
+          <div class="node">Objective Systems<br>ASN1C output</div>
+          <div class="arrow">→</div>
+          <div class="node">C++26 facade<br>app-safe API</div>
+        </div>
+        <p>The application depends on the facade, not directly on generated internals.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Before</div>
+        <h2>Typical generated-code integration leaks details everywhere.</h2>
+        <pre><code>OSCTXT ctxt;
+int ret = rtInitContext(&ctxt);
+if (ret != 0) {
+    return ret;
+}
+
+MyMessage msg;
+asn1Init_MyMessage(&msg);
+
+ret = xd_setp(&ctxt, buffer, bufferLen, 0, 0);
+if (ret == 0) {
+    ret = asn1PD_MyMessage(&ctxt, &msg);
+}
+
+if (ret != 0) {
+    rtxErrPrint(&ctxt);
+}
+
+rtFreeContext(&ctxt);
+return ret;</code></pre>
+        <p>Manual cleanup, raw status codes, runtime details, and error reporting are repeated in every caller.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">After</div>
+        <h2>The application sees a small, modern contract.</h2>
+        <pre><code>#include &lt;expected&gt;
+#include &lt;span&gt;
+#include &lt;vector&gt;
+
+namespace asn1c_modern {
+
+enum class ErrorCode {
+    invalid_argument,
+    decode_failed,
+    encode_failed,
+    buffer_too_small
+};
+
+struct Error {
+    ErrorCode code;
+    std::string message;
+};
+
+template &lt;class T&gt;
+using Result = std::expected&lt;T, Error&gt;;
+
+class MyMessageCodec final {
+public:
+    [[nodiscard]] Result&lt;MyMessage&gt;
+    decode(std::span&lt;const std::byte&gt; input) const;
+
+    [[nodiscard]] Result&lt;std::vector&lt;std::byte&gt;&gt;
+    encode(const MyMessage&amp; message) const;
+};
+
+}</code></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">RAII</div>
+        <h2>Context lifetime becomes automatic.</h2>
+        <pre><code>class Context final {
+public:
+    Context() {
+        if (rtInitContext(&ctx_) != 0) {
+            throw ContextInitError{};
+        }
+    }
+
+    ~Context() noexcept {
+        rtFreeContext(&ctx_);
+    }
+
+    Context(const Context&amp;) = delete;
+    Context&amp; operator=(const Context&amp;) = delete;
+
+    [[nodiscard]] OSCTXT* get() noexcept { return &ctx_; }
+    [[nodiscard]] std::string error_string() const;
+
+private:
+    OSCTXT ctx_{};
+};</code></pre>
+        <p>Every early return is safe. Cleanup is no longer a caller responsibility.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Implementation sample</div>
+        <h2>Modern API, vendor calls inside.</h2>
+        <pre><code>Result&lt;MyMessage&gt; MyMessageCodec::decode(
+    std::span&lt;const std::byte&gt; input) const
+{
+    if (input.empty()) {
+        return std::unexpected(Error{
+            ErrorCode::invalid_argument,
+            "empty input buffer"
+        });
+    }
+
+    Context ctx;
+    MyMessage message{};
+    asn1Init_MyMessage(&message);
+
+    auto* bytes = reinterpret_cast&lt;const OSOCTET*&gt;(input.data());
+    if (xd_setp(ctx.get(), bytes, input.size(), 0, 0) != 0) {
+        return std::unexpected(Error{ErrorCode::decode_failed, ctx.error_string()});
+    }
+
+    if (asn1PD_MyMessage(ctx.get(), &message) != 0) {
+        return std::unexpected(Error{ErrorCode::decode_failed, ctx.error_string()});
+    }
+
+    return message;
+}</code></pre>
+        <p>Exact Objective Systems function names vary by encoding rule and compiler options.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Type modernization</div>
+        <h2>ASN.1 concepts map cleanly to modern C++.</h2>
+        <div class="grid">
+          <div class="card glow"><h3>Generated boundary</h3><p><span class="inline-code">OPTIONAL</span>, <span class="inline-code">CHOICE</span>, <span class="inline-code">SEQUENCE OF</span>, <span class="inline-code">OCTET STRING</span>, generated lists, runtime buffers.</p></div>
+          <div class="card glow"><h3>Application boundary</h3><p><span class="inline-code">std::optional</span>, <span class="inline-code">std::variant</span>, <span class="inline-code">std::vector</span>, <span class="inline-code">std::span&lt;std::byte&gt;</span>, strong enums.</p></div>
+        </div>
+        <pre style="margin-top:1rem"><code>struct AppMessage {
+    std::uint16_t version;
+    std::array&lt;std::byte, 16&gt; transaction_id;
+    std::variant&lt;Request, Response, ErrorPayload&gt; payload;
+    std::optional&lt;Extensions&gt; extensions;
+};
+
+Result&lt;AppMessage&gt; from_generated(const MyMessage&amp; generated);
+Result&lt;MyMessage&gt; to_generated(const AppMessage&amp; app);</code></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Build modernization</div>
+        <h2>Compile generated code conservatively, facade aggressively.</h2>
+        <pre><code>add_library(asn1c_generated STATIC
+    generated/MyMessage.c
+    generated/MyMessageDec.c
+    generated/MyMessageEnc.c
+)
+
+# Vendor code: stable, conservative warning policy.
+target_compile_options(asn1c_generated PRIVATE
+    $<$&lt;CXX_COMPILER_ID:MSVC&gt;:/W0&gt;
+    $<$&lt;NOT:$&lt;CXX_COMPILER_ID:MSVC&gt;&gt;:-w&gt;
+)
+
+add_library(asn1c_cpp26_facade STATIC
+    src/Context.cpp
+    src/MyMessageCodec.cpp
+    src/MyMessageAdapters.cpp
+)
+
+target_compile_features(asn1c_cpp26_facade PUBLIC cxx_std_26)
+target_link_libraries(asn1c_cpp26_facade PRIVATE asn1c_generated)</code></pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Verification</div>
+        <h2>Modernization is only done when vectors still match.</h2>
+        <div class="grid three">
+          <div class="card"><div class="metric">1</div><h3>Golden vectors</h3><p>Encoded bytes before and after must be identical for canonical cases.</p></div>
+          <div class="card"><div class="metric">2</div><h3>Negative tests</h3><p>Malformed length, invalid choices, and PER bitmap failures must remain rejected.</p></div>
+          <div class="card"><div class="metric">3</div><h3>Benchmarks</h3><p>Track decode latency, allocations, encoded size, and p95/p99 behavior.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Why use Amp?</div>
+        <h2>Amp turns modernization into a repeatable engineering loop.</h2>
+        <div class="grid">
+          <div class="card"><h3>Understands both sides</h3><p>Amp can read ASN.1 schemas, generated C/C++, build files, and app code together.</p></div>
+          <div class="card"><h3>Changes the safe layer first</h3><p>It can build facades, adapters, tests, and benchmarks without mutating generated vendor code.</p></div>
+          <div class="card"><h3>Verifies behavior</h3><p>It can run focused unit tests, vector checks, compilers, and report what remains blocked.</p></div>
+          <div class="card"><h3>Documents decisions</h3><p>It leaves behind reports and code samples so future regeneration stays controlled.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="content">
+        <div class="eyebrow">Deliverables</div>
+        <h2>What the project produces.</h2>
+        <pre><code>modernization/
+  include/asn1c_modern/Context.hpp
+  include/asn1c_modern/MyMessageCodec.hpp
+  src/Context.cpp
+  src/MyMessageCodec.cpp
+  src/MyMessageAdapters.cpp
+  tests/golden_vectors.cpp
+  benchmarks/decode_benchmark.cpp
+  cmake/asn1c_cpp26.cmake
+  reports/modernization-report.html</code></pre>
+        <p>The result is safer, easier to test, and still compatible with Objective Systems ASN1C regeneration.</p>
+      </div>
+    </section>
+  </main>
+
+  <button class="nav left" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav right" id="next" aria-label="Next slide">›</button>
+  <div class="hint" id="hint">← Swipe to navigate →</div>
+  <div class="counter" id="counter">1 / 12</div>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+  <script>
+    const deck = document.getElementById('deck');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const counter = document.getElementById('counter');
+    const bar = document.getElementById('bar');
+    const hint = document.getElementById('hint');
+    let index = 0;
+    let startX = null;
+    let usedNavigation = false;
+
+    function update() {
+      deck.style.transform = `translateX(${-index * 100}vw)`;
+      prev.hidden = index === 0;
+      next.hidden = index === slides.length - 1;
+      counter.textContent = `${index + 1} / ${slides.length}`;
+      bar.style.width = `${((index + 1) / slides.length) * 100}%`;
+      if (usedNavigation || index > 0) hint.classList.add('hidden');
+    }
+
+    function go(delta) {
+      const nextIndex = Math.max(0, Math.min(slides.length - 1, index + delta));
+      if (nextIndex !== index) {
+        usedNavigation = true;
+        index = nextIndex;
+        update();
+      }
+    }
+
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    window.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight' || event.key === ' ') go(1);
+      if (event.key === 'ArrowLeft') go(-1);
+    });
+    window.addEventListener('touchstart', event => { startX = event.changedTouches[0].screenX; }, { passive: true });
+    window.addEventListener('touchend', event => {
+      if (startX === null) return;
+      const dx = event.changedTouches[0].screenX - startX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+      startX = null;
+    }, { passive: true });
+    window.addEventListener('mousedown', event => { startX = event.screenX; });
+    window.addEventListener('mouseup', event => {
+      if (startX === null) return;
+      const dx = event.screenX - startX;
+      if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+      startX = null;
+    });
+    update();
+  </script>
+</body>
+</html>
