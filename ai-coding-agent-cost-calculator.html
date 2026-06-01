@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://abacus.jasoncameron.dev; font-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
   <title>AI Coding Agent Cost Calculator</title>
   <style>
     :root {
@@ -833,6 +833,28 @@
           </a>
         </div>
       </div>
+      <div style="display:flex;justify-content:center;margin:12px 0 18px;">
+        <div style="display:inline-block;padding:10px 22px;border:1px solid #0ea5e9;border-radius:999px;background:#0b1220;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:1.05rem;font-weight:600;letter-spacing:0.04em;color:#e2e8f0;white-space:nowrap;">
+          <span style="color:#94a3b8;">Hits on this page:</span>
+          <span id="hitCount" style="color:#0ea5e9;font-size:1.35rem;margin-left:8px;">loading</span>
+        </div>
+      </div>
+      <script>
+        (function () {
+          var el = document.getElementById('hitCount');
+          if (!el) return;
+          fetch('https://abacus.jasoncameron.dev/hit/zuwasi-cost-calc/page')
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+              if (d && typeof d.value === 'number') {
+                el.textContent = d.value.toLocaleString();
+              } else {
+                el.textContent = 'n/a';
+              }
+            })
+            .catch(function () { el.textContent = 'n/a'; });
+        })();
+      </script>
       <h1>AI Coding Agent Cost Calculator</h1>
       <p class="lede">
         Compare Amp, Claude Code, Cursor, and Factory Droid modes. Each mode applies explicit assumptions about
