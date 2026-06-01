@@ -1050,10 +1050,11 @@
             <button type="button" id="saveHtml">Save HTML</button>
             <button type="button" id="loadSession">Load saved session</button>
             <button type="button" id="showDiff">Diff saved sessions</button>
+            <button type="button" id="clearSessions">Clean old data</button>
             <input id="sessionFile" type="file" accept="application/json,.json" hidden>
           </div>
           <p class="session-hint">
-            Save JSON stores the current run in this browser and downloads a reusable file. Save HTML downloads a standalone report. Load saved session imports a JSON file. Diff compares all browser-saved JSON snapshots.
+            Save JSON stores the current run in this browser and downloads a reusable file. Save HTML downloads a standalone report. Load saved session imports a JSON file. Diff compares all browser-saved JSON snapshots. Clean old data wipes browser-saved snapshots so the next diff session starts fresh.
           </p>
         </div>
       </div>
@@ -1227,7 +1228,8 @@
       saveHtml: document.getElementById('saveHtml'),
       load: document.getElementById('loadSession'),
       file: document.getElementById('sessionFile'),
-      showDiff: document.getElementById('showDiff')
+      showDiff: document.getElementById('showDiff'),
+      clearSessions: document.getElementById('clearSessions')
     };
 
     const diffEls = {
@@ -2068,6 +2070,25 @@
     sessionEls.showDiff.addEventListener('click', () => {
       renderDiff();
       setDiffOpen(true);
+    });
+
+    sessionEls.clearSessions.addEventListener('click', () => {
+      const sessions = loadStoredSessions();
+      if (sessions.length === 0) {
+        alert('No saved sessions to clear. You are already starting fresh.');
+        return;
+      }
+      const ok = confirm(`Delete all ${sessions.length} browser-saved session(s)? This starts a new diff session and cannot be undone.`);
+      if (!ok) return;
+      try {
+        localStorage.removeItem(savedSessionStorageKey);
+      } catch {
+        alert('Could not clear browser storage.');
+        return;
+      }
+      if (diffEls.modal.classList.contains('open')) {
+        renderDiff();
+      }
     });
     diffEls.close.addEventListener('click', () => setDiffOpen(false));
     diffEls.modal.addEventListener('click', (event) => {
