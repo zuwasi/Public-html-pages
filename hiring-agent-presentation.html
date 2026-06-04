@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Hiring Agent — Concept & Process</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0f1117; --bg2: #141826; --panel: #171a23; --panel2: #1e2230; --line: #2a2f3d;
+    --txt: #e6e9ef; --muted: #9aa3b2; --accent: #5b8cff; --accent2: #9b6bff;
+    --good: #3ecf8e; --warn: #ffb020; --bad: #ff5c5c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--bg); color: var(--txt); -webkit-font-smoothing: antialiased;
+  }
+  #deck { display: flex; height: 100vh; width: 100vw; transition: transform .55s cubic-bezier(.22,.61,.36,1); }
+  .slide {
+    min-width: 100vw; height: 100vh; padding: clamp(28px, 6vw, 90px);
+    display: flex; flex-direction: column; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .slide::before {
+    content: ''; position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(91,140,255,.16), transparent 60%),
+      radial-gradient(700px 500px at -10% 110%, rgba(155,107,255,.14), transparent 60%);
+  }
+  .slide > * { position: relative; z-index: 1; }
+  .kicker { color: var(--accent); font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+    font-size: clamp(11px, 1.3vw, 14px); margin-bottom: 14px; }
+  h1 { font-size: clamp(34px, 6.6vw, 84px); font-weight: 800; line-height: 1.03; letter-spacing: -.02em; }
+  h2 { font-size: clamp(26px, 4.2vw, 50px); font-weight: 700; letter-spacing: -.02em; margin-bottom: 22px; }
+  h3 { font-size: clamp(16px, 1.9vw, 22px); font-weight: 600; }
+  p, li { font-size: clamp(14px, 1.7vw, 21px); line-height: 1.6; color: var(--muted); }
+  .lead { font-size: clamp(16px, 2.1vw, 26px); color: var(--txt); max-width: 60ch; margin-top: 18px; }
+  .grad { background: linear-gradient(100deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .grid { display: grid; gap: clamp(14px, 1.8vw, 22px); }
+  .cols-2 { grid-template-columns: 1fr 1fr; }
+  .cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .card {
+    background: linear-gradient(180deg, var(--panel), var(--bg2));
+    border: 1px solid var(--line); border-radius: 18px; padding: clamp(16px, 2vw, 26px);
+  }
+  .card h3 { margin-bottom: 8px; }
+  .card .ic { font-size: clamp(22px, 3vw, 34px); margin-bottom: 8px; }
+  .tag { display: inline-block; font-size: clamp(11px,1.3vw,14px); font-weight: 600; padding: 5px 12px;
+    border-radius: 20px; border: 1px solid var(--line); color: var(--muted); }
+  .tag.good { color: var(--good); border-color: rgba(62,207,142,.4); background: rgba(62,207,142,.08); }
+  .tag.bad { color: var(--bad); border-color: rgba(255,92,92,.4); background: rgba(255,92,92,.08); }
+  .tag.warn { color: var(--warn); border-color: rgba(255,176,32,.4); background: rgba(255,176,32,.08); }
+  .tag.acc { color: var(--accent); border-color: rgba(91,140,255,.4); background: rgba(91,140,255,.08); }
+  ul.clean { list-style: none; } ul.clean li { padding: 7px 0 7px 30px; position: relative; }
+  ul.clean li::before { content: '▸'; position: absolute; left: 4px; color: var(--accent); }
+  .mono { font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace; }
+  pre.diagram {
+    font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--txt);
+    background: #0b0d14; border: 1px solid var(--line); border-radius: 14px;
+    padding: clamp(14px, 2vw, 26px); font-size: clamp(10px, 1.35vw, 16px); line-height: 1.45;
+    white-space: pre; overflow: auto;
+  }
+  .flow { display: flex; align-items: stretch; gap: 12px; flex-wrap: wrap; }
+  .step { flex: 1; min-width: 150px; background: var(--panel); border: 1px solid var(--line);
+    border-radius: 16px; padding: clamp(14px,1.8vw,22px); }
+  .step .n { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
+    border-radius: 9px; background: rgba(91,140,255,.15); color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+  .arrow { align-self: center; color: var(--muted); font-size: 22px; }
+  .bar { height: 12px; background: var(--panel2); border-radius: 8px; overflow: hidden; margin: 6px 0; }
+  .bar > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .bar.r > span { background: linear-gradient(90deg, var(--warn), var(--bad)); }
+  table.t { width: 100%; border-collapse: collapse; }
+  table.t th, table.t td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line);
+    font-size: clamp(13px, 1.5vw, 19px); }
+  table.t th { color: var(--accent); font-weight: 600; }
+  table.t td { color: var(--muted); }
+  table.t td strong { color: var(--txt); }
+
+  /* nav + chrome */
+  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px;
+    border-radius: 50%; background: rgba(30,34,48,.7); border: 1px solid var(--line); color: var(--txt);
+    font-size: 24px; cursor: pointer; z-index: 50; display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(8px); transition: opacity .2s, background .2s; }
+  .nav:hover { background: var(--accent); }
+  #prev { left: 22px; } #next { right: 22px; }
+  .nav.hidden { opacity: 0; pointer-events: none; }
+  #progress { position: fixed; bottom: 0; left: 0; height: 4px; z-index: 50;
+    background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .4s ease; }
+  #counter { position: fixed; bottom: 16px; right: 22px; z-index: 50; color: var(--muted);
+    font-size: 13px; font-weight: 500; letter-spacing: .05em; }
+  #hint { position: fixed; bottom: 38px; left: 50%; transform: translateX(-50%); z-index: 50;
+    color: var(--muted); font-size: 14px; animation: pulse 1.8s infinite; }
+  @keyframes pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+  .disc { font-size: clamp(11px,1.3vw,15px); color: var(--muted); font-style: italic; margin-top: 14px; }
+
+  @media (max-width: 760px) {
+    .cols-2, .cols-3, .cols-4 { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; } .arrow { transform: rotate(90deg); }
+    .nav { width: 42px; height: 42px; font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="deck">
+
+  <!-- 1 — Title -->
+  <section class="slide">
+    <div class="kicker">Local-first · Fair · Explainable</div>
+    <h1>Hiring&nbsp;Agent</h1>
+    <p class="lead">An AI-powered <span class="grad">resume-to-score</span> pipeline that runs on your own hardware — enriches candidates with real code-host evidence, and flags projects that were <strong style="color:var(--txt)">vibe-coded by an AI</strong> rather than engineered by a human.</p>
+    <div style="display:flex; gap:10px; margin-top:30px; flex-wrap:wrap;">
+      <span class="tag acc">🔒 PII never leaves the machine</span>
+      <span class="tag good">⚖️ GDPR-aware</span>
+      <span class="tag warn">🤖 Vibe-coding detector</span>
+    </div>
+  </section>
+
+  <!-- 2 — The problem -->
+  <section class="slide">
+    <div class="kicker">Why now</div>
+    <h2>Screening is broken — twice over</h2>
+    <div class="grid cols-3">
+      <div class="card"><div class="ic">⏳</div><h3>Volume</h3><p>Hundreds of resumes per role. Manual review is slow, inconsistent, and biased.</p></div>
+      <div class="card"><div class="ic">🔐</div><h3>Privacy</h3><p>Resumes are dense PII. SaaS screeners ship that data to third-party clouds.</p></div>
+      <div class="card"><div class="ic">🤖</div><h3>The new problem</h3><p>Anyone can prompt an agent to ship a polished "full-stack platform" — with <strong style="color:var(--txt)">zero real coding skill</strong>.</p></div>
+    </div>
+    <p class="lead">We solve all three — locally, fairly, and with a signal nobody else has.</p>
+  </section>
+
+  <!-- 3 — What it does -->
+  <section class="slide">
+    <div class="kicker">The concept</div>
+    <h2>Resume in → explainable score out</h2>
+    <div class="flow">
+      <div class="step"><span class="n">1</span><h3>Extract</h3><p>PDF → structured JSON (basics, work, projects, skills) via a local LLM.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><span class="n">2</span><h3>Enrich</h3><p>Pull <strong style="color:var(--txt)">public</strong> signals from GitHub &amp; Codeberg — repos, commits, contributions.</p></div>
+      <div class="arrow">→</div>
+      <div class="step"><span class="n">3</span><h3>Score</h3><p>Rubric-based evaluation with per-category <strong style="color:var(--txt)">evidence</strong> + an authorship flag.</p></div>
+    </div>
+    <p class="lead">Every score carries its reasoning — a recommendation for a human, never an automatic verdict.</p>
+  </section>
+
+  <!-- 4 — Scoring model -->
+  <section class="slide">
+    <div class="kicker">The rubric</div>
+    <h2>Four categories, capped at 120</h2>
+    <div class="grid cols-2">
+      <div>
+        <h3 style="margin-bottom:6px">🌐 Open Source <span class="tag">35</span></h3>
+        <div class="bar"><span style="width:100%"></span></div>
+        <h3 style="margin:14px 0 6px">🚀 Self Projects <span class="tag">30</span></h3>
+        <div class="bar"><span style="width:86%"></span></div>
+        <h3 style="margin:14px 0 6px">🏢 Production <span class="tag">25</span></h3>
+        <div class="bar"><span style="width:71%"></span></div>
+        <h3 style="margin:14px 0 6px">💻 Technical Skills <span class="tag">10</span></h3>
+        <div class="bar"><span style="width:28%"></span></div>
+      </div>
+      <div class="card">
+        <h3>Fairness is built in</h3>
+        <p>Scoring is <strong style="color:var(--txt)">forbidden</strong> from using:</p>
+        <ul class="clean">
+          <li>Name, gender, demographics</li>
+          <li>University or institution</li>
+          <li>GPA / academic grades</li>
+          <li>City or location</li>
+        </ul>
+        <p style="margin-top:10px">+20 bonus (GSoC, blogs, portfolio) · deductions for tutorial-only / link-less projects.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 — Architecture -->
+  <section class="slide">
+    <div class="kicker">Architecture</div>
+    <h2>Layered &amp; local-first</h2>
+    <pre class="diagram">╭──────────────────────────────────────────────────────────╮
+│ Presentation     Web demo / sealed desktop GUI            │
+├──────────────────────────────────────────────────────────┤
+│ Governance       consent · retention · erasure · audit ·  │
+│                  human-in-the-loop gate (GDPR Art. 22)     │
+├──────────────────────────────────────────────────────────┤
+│ Orchestration    pipeline service                         │
+├──────────────────────────────────────────────────────────┤
+│ Providers   resume-parser │ code-hosts      │ LLMs         │
+│             PDF/PyMuPDF   │ GitHub·Codeberg │ LM Studio    │
+├──────────────────────────────────────────────────────────┤
+│ Storage          encrypted local vault (PII) +            │
+│                  pseudonymous evaluations + cache          │
+╰──────────────────────────────────────────────────────────╯</pre>
+  </section>
+
+  <!-- 6 — Privacy insight -->
+  <section class="slide">
+    <div class="kicker">The privacy insight</div>
+    <h2>Only a <span class="grad">public username</span> ever leaves</h2>
+    <pre class="diagram">╭───────────── Recruiter's machine (trust boundary) ─────────────╮
+│  resume.pdf ─▶ parse ─▶ PII vault (encrypted, local)           │
+│                  │                                             │
+│                  ▼                                             │
+│            LOCAL LLM ──── extraction + scoring                 │
+│                  │        (PII never leaves)                   │
+│                  ▼                                             │
+│      extract public handle only ──┐                           │
+╰───────────────────────────────────┼───────────────────────────╯
+                                     │  ONLY "github.com/jdoe"
+                                     ▼  (no resume data)
+                          ╭───────────────────────╮
+                          │ GitHub / Codeberg API │  public data
+                          ╰───────────────────────╯</pre>
+    <p class="disc">Resume PII and code-host queries are two separate flows. The cloud LLM option is the only thing that breaks this — so it is off by default, warned, and audited.</p>
+  </section>
+
+  <!-- 7 — Multi-platform -->
+  <section class="slide">
+    <div class="kicker">Evidence sources</div>
+    <h2>Beyond GitHub</h2>
+    <div class="grid cols-3">
+      <div class="card"><div class="ic">🐙</div><h3>GitHub <span class="tag good">supported</span></h3><p>Rich REST API: repos, contributors, commits. The primary source.</p></div>
+      <div class="card"><div class="ic">🦊</div><h3>Codeberg <span class="tag good">added</span></h3><p>Forgejo/Gitea API. Classification adapted (no <span class="mono">/contributors</span>); co-author trailers still parsed.</p></div>
+      <div class="card" style="opacity:.6"><div class="ic">🗄️</div><h3>SourceForge <span class="tag bad">dropped</span></h3><p>No reliable per-user / per-author commit API — would produce misleading scores.</p></div>
+    </div>
+    <p class="lead">Same project shape from every provider, so selection &amp; scoring stay platform-agnostic.</p>
+  </section>
+
+  <!-- 8 — Vibe-coding concept -->
+  <section class="slide">
+    <div class="kicker">The differentiator</div>
+    <h2>Did a <span class="grad">human</span> build it — or an agent?</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 style="color:var(--good)">✓ AI-assisted (fine)</h3>
+        <p>Many independent human commits, real iteration &amp; debugging, AI co-authors <em>some</em> work. Normal in 2026.</p>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--bad)">⚠ Vibe-coded (flag)</h3>
+        <p>AI authored ~everything, one-day dump, no iteration, the candidate has almost no independent commits anywhere.</p>
+      </div>
+    </div>
+    <p class="lead">We don't claim "AI wrote this." We surface a <strong style="color:var(--txt)">low-real-coding-confidence</strong> review flag — and recommend a live interview.</p>
+  </section>
+
+  <!-- 9 — The algorithm -->
+  <section class="slide">
+    <div class="kicker">How the detector works</div>
+    <h2>Weighted authorship-risk (0–100)</h2>
+    <div class="grid cols-2">
+      <div>
+        <p><strong style="color:var(--txt)">AI co-author ratio</strong> <span class="tag bad">Tier 1</span></p>
+        <div class="bar r"><span style="width:100%"></span></div><p style="font-size:14px">up to +40 — bot logins &amp; <span class="mono">Co-Authored-By: Claude</span></p>
+        <p style="margin-top:8px"><strong style="color:var(--txt)">Low human commits</strong></p>
+        <div class="bar r"><span style="width:50%"></span></div><p style="font-size:14px">up to +20</p>
+        <p style="margin-top:8px"><strong style="color:var(--txt)">Temporal compression</strong></p>
+        <div class="bar r"><span style="width:37%"></span></div><p style="font-size:14px">up to +15 — built in one window</p>
+      </div>
+      <div>
+        <p><strong style="color:var(--txt)">History poverty</strong></p>
+        <div class="bar r"><span style="width:25%"></span></div><p style="font-size:14px">up to +10 — single "Initial commit" dump</p>
+        <p style="margin-top:8px"><strong style="color:var(--txt)">No issues / forks / scaffolding</strong></p>
+        <div class="bar r"><span style="width:12%"></span></div><p style="font-size:14px">up to +5</p>
+        <p style="margin-top:8px"><strong style="color:var(--txt)">Generic messages · AI-marker files</strong></p>
+        <div class="bar r"><span style="width:12%"></span></div><p style="font-size:14px">up to +5 each (tie-breakers)</p>
+        <p style="margin-top:14px"><span class="tag good">&lt;30 ok</span> <span class="tag warn">30–60 review</span> <span class="tag bad">&gt;60 flag</span></p>
+      </div>
+    </div>
+    <p class="disc">Maintenance bots (dependabot, renovate, CI) are explicitly excluded — they never trigger the flag.</p>
+  </section>
+
+  <!-- 10 — Demo candidates -->
+  <section class="slide">
+    <div class="kicker">The demo · what HR sees</div>
+    <h2>Three candidates, one revealing moment</h2>
+    <table class="t">
+      <tr><th>Candidate</th><th>Platform</th><th>Score</th><th>Authorship</th></tr>
+      <tr><td><strong>A — real engineer</strong><br>upstream OSS, multi-year history</td><td>GitHub</td><td><strong>88</strong>/120</td><td><span class="tag good">✓ ok · 9 human commits</span></td></tr>
+      <tr><td><strong>B — vibe-coder</strong><br>"AI startup platform", one-day build</td><td>GitHub</td><td><strong>71</strong>/120</td><td><span class="tag bad">⚠ flag · 95/100 risk</span></td></tr>
+      <tr><td><strong>C — contributor</strong><br>genuine Codeberg work</td><td>Codeberg</td><td><strong>79</strong>/120</td><td><span class="tag good">✓ ok</span></td></tr>
+    </table>
+    <p class="lead">Candidate&nbsp;B looks impressive on the surface — every commit is <span class="mono">Co-Authored-By: Claude</span>. That's the <strong style="color:var(--txt)">"wow, it caught that"</strong> moment.</p>
+  </section>
+
+  <!-- 11 — Deployment -->
+  <section class="slide">
+    <div class="kicker">Deployment</div>
+    <h2>One model. Identical scores. No HR GPUs.</h2>
+    <pre class="diagram">  HR PC (8GB, no GPU)  ╮
+  HR PC (16GB)         ├──LAN──▶ ╭──────────────────────────╮
+  HR PC (64GB)         ╯         │ Inference server (on-prem)│
+                                 │ Qwen2.5-32B · pinned ver. │
+                                 ╰──────────────────────────╯</pre>
+    <div class="grid cols-3" style="margin-top:18px">
+      <div class="card"><h3>⚖️ Consistent</h3><p>Every candidate judged by the <em>same</em> pinned model — fair &amp; auditable.</p></div>
+      <div class="card"><h3>💻 No GPUs</h3><p>HR PCs are thin clients; only one machine needs the GPU.</p></div>
+      <div class="card"><h3>🏠 On-prem</h3><p>Traffic stays on the company LAN — never the internet.</p></div>
+    </div>
+  </section>
+
+  <!-- 12 — Demo == Prod -->
+  <section class="slide">
+    <div class="kicker">The selling point</div>
+    <h2>The laptop demo <span class="grad">is</span> the product</h2>
+    <pre class="diagram">  DEMO (your laptop)                  PRODUCTION (HR dept)
+  ╭─────────────────────╮            ╭─────────────────────╮
+  │ App ──▶ LM Studio   │            │ HR PCs ──LAN──▶ GPU │
+  │     localhost:1234  │  one env   │       inference srv  │
+  ╰─────────────────────╯  var ───▶  ╰─────────────────────╯
+       same code path · identical behavior</pre>
+    <p class="lead">Ship to a real HR department by changing <strong style="color:var(--txt)">one variable</strong>: <span class="mono">INFERENCE_BASE_URL</span>.</p>
+  </section>
+
+  <!-- 13 — GDPR -->
+  <section class="slide">
+    <div class="kicker">Compliance</div>
+    <h2>Every concern maps to a feature</h2>
+    <table class="t">
+      <tr><th>GDPR concern</th><th>How we handle it</th></tr>
+      <tr><td><strong>Data residency</strong></td><td>Local LLM by default — PII never leaves the device</td></tr>
+      <tr><td><strong>Automated decisions (Art. 22)</strong></td><td>Recommendation + evidence; human-in-the-loop required</td></tr>
+      <tr><td><strong>Right to erasure / access</strong></td><td>Delete &amp; export a candidate by pseudonymous ID</td></tr>
+      <tr><td><strong>Data minimization</strong></td><td>PII vault separate from evaluations</td></tr>
+      <tr><td><strong>Security (Art. 32)</strong></td><td>Encryption at rest; no plaintext resume cache</td></tr>
+      <tr><td><strong>Accountability</strong></td><td>Append-only audit log (model, mode, time)</td></tr>
+    </table>
+    <p class="disc">Engineering guidance, not legal advice — a formal DPIA + counsel sign-off is required before production use.</p>
+  </section>
+
+  <!-- 14 — Roadmap / close -->
+  <section class="slide">
+    <div class="kicker">Where we are</div>
+    <h2>Built today → production path</h2>
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 style="color:var(--good)">✅ Done</h3>
+        <ul class="clean">
+          <li>Vibe-coding analyzer (tested)</li>
+          <li>LM Studio / OpenAI-compatible provider</li>
+          <li>FastAPI web demonstrator (offline-safe)</li>
+          <li>Architecture + GDPR checklist docs</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--accent)">🛣️ Next</h3>
+        <ul class="clean">
+          <li>Live Codeberg + GitHub providers</li>
+          <li>Encrypted storage &amp; governance layer</li>
+          <li>Central on-prem inference deployment</li>
+          <li>Sealed desktop build</li>
+        </ul>
+      </div>
+    </div>
+    <p class="lead">Local-first. Fair. Explainable. And it catches what every other screener misses. <span class="grad">Let's deploy it.</span></p>
+  </section>
+
+</div>
+
+<button id="prev" class="nav hidden" aria-label="Previous">‹</button>
+<button id="next" class="nav" aria-label="Next">›</button>
+<div id="progress"></div>
+<div id="counter">1 / 14</div>
+<div id="hint">← Swipe to navigate →</div>
+
+<script>
+  const deck = document.getElementById('deck');
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const progress = document.getElementById('progress');
+  const counter = document.getElementById('counter');
+  const hint = document.getElementById('hint');
+  let i = 0, hintShown = true;
+
+  function render() {
+    deck.style.transform = `translateX(-${i * 100}vw)`;
+    progress.style.width = `${((i + 1) / total) * 100}%`;
+    counter.textContent = `${i + 1} / ${total}`;
+    prev.classList.toggle('hidden', i === 0);
+    next.classList.toggle('hidden', i === total - 1);
+    if (hintShown && i > 0) { hint.style.display = 'none'; hintShown = false; }
+  }
+  function go(n) { i = Math.max(0, Math.min(total - 1, n)); render(); }
+
+  next.addEventListener('click', () => go(i + 1));
+  prev.addEventListener('click', () => go(i - 1));
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(i + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(i - 1); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(total - 1);
+  });
+
+  // Touch swipe
+  let tsx = 0;
+  window.addEventListener('touchstart', (e) => { tsx = e.changedTouches[0].screenX; }, { passive: true });
+  window.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].screenX - tsx;
+    if (Math.abs(dx) > 50) go(dx < 0 ? i + 1 : i - 1);
+  }, { passive: true });
+
+  // Mouse drag
+  let dsx = null;
+  window.addEventListener('mousedown', (e) => { dsx = e.screenX; });
+  window.addEventListener('mouseup', (e) => {
+    if (dsx === null) return;
+    const dx = e.screenX - dsx; dsx = null;
+    if (Math.abs(dx) > 50) go(dx < 0 ? i + 1 : i - 1);
+  });
+
+  render();
+</script>
+</body>
+</html>
