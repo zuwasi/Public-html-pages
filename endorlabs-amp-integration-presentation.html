@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>Endor Labs + Amp Integration</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+    :root {
+      --bg: #07120d;
+      --bg-2: #0d1f17;
+      --card: rgba(255, 255, 255, 0.08);
+      --card-strong: rgba(255, 255, 255, 0.13);
+      --line: rgba(255, 255, 255, 0.16);
+      --text: #f3fff8;
+      --muted: rgba(243, 255, 248, 0.72);
+      --muted-2: rgba(243, 255, 248, 0.56);
+      --green: #26d07c;
+      --green-2: #7df7b7;
+      --cyan: #5eead4;
+      --yellow: #facc15;
+      --orange: #fb923c;
+      --red: #fb7185;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(38, 208, 124, 0.24), transparent 31%),
+        radial-gradient(circle at 85% 10%, rgba(94, 234, 212, 0.14), transparent 30%),
+        linear-gradient(135deg, var(--bg), #050807 55%, #10251a);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .deck {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slides {
+      height: 100%;
+      display: flex;
+      transform: translateX(0);
+      transition: transform 420ms cubic-bezier(.2, .75, .18, 1);
+      will-change: transform;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      flex: 0 0 100vw;
+      padding: clamp(32px, 5vw, 72px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: clamp(16px, 2vw, 30px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 30px;
+      pointer-events: none;
+    }
+
+    .content {
+      width: min(1180px, 100%);
+      max-height: calc(100vh - 120px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--green-2);
+      font-size: clamp(12px, 1.3vw, 15px);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 11px;
+      height: 11px;
+      border-radius: 999px;
+      background: var(--green);
+      box-shadow: 0 0 24px rgba(38, 208, 124, 0.9);
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 1020px;
+      font-size: clamp(46px, 7.6vw, 92px);
+      line-height: 0.94;
+      letter-spacing: -0.065em;
+      font-weight: 800;
+    }
+
+    h2 {
+      max-width: 1000px;
+      font-size: clamp(34px, 5.2vw, 66px);
+      line-height: 1;
+      letter-spacing: -0.045em;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+
+    h3 {
+      font-size: clamp(18px, 2vw, 25px);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+    }
+
+    .lead {
+      max-width: 880px;
+      color: var(--muted);
+      font-size: clamp(18px, 2.2vw, 28px);
+      line-height: 1.35;
+      margin-top: 26px;
+    }
+
+    .small {
+      color: var(--muted-2);
+      font-size: clamp(12px, 1.25vw, 15px);
+      line-height: 1.45;
+    }
+
+    .highlight { color: var(--green-2); }
+    .cyan { color: var(--cyan); }
+    .yellow { color: var(--yellow); }
+    .orange { color: var(--orange); }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      gap: clamp(24px, 4vw, 56px);
+      align-items: center;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, var(--card-strong), rgba(255,255,255,0.055));
+      border: 1px solid var(--line);
+      border-radius: 26px;
+      padding: clamp(22px, 3vw, 36px);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      min-height: 160px;
+    }
+
+    .card .num {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: rgba(38, 208, 124, 0.16);
+      color: var(--green-2);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .card p, li {
+      color: var(--muted);
+      font-size: clamp(14px, 1.55vw, 18px);
+      line-height: 1.42;
+    }
+
+    ul {
+      margin: 12px 0 0 0;
+      padding-left: 20px;
+    }
+
+    li { margin: 9px 0; }
+
+    .diagram {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .node {
+      border: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.16);
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .node strong {
+      font-size: clamp(16px, 1.8vw, 22px);
+    }
+
+    .node span {
+      color: var(--muted-2);
+      text-align: right;
+      font-size: clamp(12px, 1.2vw, 14px);
+    }
+
+    .arrow {
+      color: var(--green-2);
+      text-align: center;
+      font-size: 24px;
+      line-height: 0.8;
+    }
+
+    .table {
+      display: grid;
+      grid-template-columns: 0.75fr 1.35fr 1.15fr;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      overflow: hidden;
+      margin-top: 28px;
+      background: rgba(0,0,0,0.16);
+    }
+
+    .cell {
+      padding: 18px 20px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: clamp(13px, 1.45vw, 17px);
+      line-height: 1.35;
+    }
+
+    .cell:nth-child(3n) { border-right: 0; }
+    .cell.header {
+      color: var(--text);
+      font-weight: 800;
+      background: rgba(38, 208, 124, 0.13);
+    }
+    .cell.tool {
+      color: var(--green-2);
+      font-weight: 800;
+    }
+
+    .code {
+      font-family: "Cascadia Code", "Fira Code", Consolas, monospace;
+      background: rgba(0,0,0,0.32);
+      border: 1px solid rgba(125, 247, 183, 0.24);
+      border-radius: 18px;
+      color: #d8ffe9;
+      padding: 18px 20px;
+      font-size: clamp(13px, 1.6vw, 18px);
+      line-height: 1.5;
+      overflow: auto;
+      white-space: pre-wrap;
+      margin-top: 20px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 26px;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .badge {
+      border: 1px solid rgba(125, 247, 183, 0.26);
+      background: rgba(38, 208, 124, 0.12);
+      color: var(--green-2);
+      border-radius: 999px;
+      padding: 9px 13px;
+      font-size: clamp(12px, 1.2vw, 14px);
+      font-weight: 700;
+    }
+
+    .metric {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 28px;
+    }
+
+    .metric-card {
+      border-radius: 24px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      background: rgba(0,0,0,0.14);
+    }
+
+    .metric-card strong {
+      display: block;
+      font-size: clamp(32px, 4vw, 54px);
+      line-height: 1;
+      letter-spacing: -0.055em;
+      color: var(--green-2);
+      margin-bottom: 12px;
+    }
+
+    .nav {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .nav button {
+      pointer-events: auto;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(8, 18, 13, 0.72);
+      color: var(--text);
+      font-size: 34px;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      transition: opacity 180ms ease, transform 180ms ease, background 180ms ease;
+    }
+
+    .nav button:hover {
+      background: rgba(38, 208, 124, 0.2);
+      transform: translateY(-50%) scale(1.04);
+    }
+
+    #prevBtn { left: 18px; }
+    #nextBtn { right: 18px; }
+    .nav button.hidden { opacity: 0; pointer-events: none; }
+
+    .progress-track {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 8px;
+      background: rgba(255,255,255,0.08);
+      z-index: 30;
+    }
+
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--cyan), var(--green-2));
+      transition: width 300ms ease;
+    }
+
+    .counter {
+      position: fixed;
+      right: 20px;
+      bottom: 18px;
+      z-index: 31;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+      background: rgba(0,0,0,0.28);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 12px;
+      backdrop-filter: blur(12px);
+    }
+
+    .swipe-hint {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      z-index: 31;
+      color: rgba(243,255,248,0.66);
+      font-size: 13px;
+      font-weight: 700;
+      animation: pulse 1.5s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .swipe-hint.hidden { display: none; }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.38; transform: translateX(-50%) translateY(0); }
+      50% { opacity: 0.96; transform: translateX(-50%) translateY(-4px); }
+    }
+
+    @media (max-width: 860px) {
+      .slide { padding: 28px 24px 56px; align-items: flex-start; overflow-y: auto; }
+      .slide::before { display: none; }
+      .content { max-height: none; padding-top: 18px; }
+      .hero-grid, .split { grid-template-columns: 1fr; }
+      .cards, .metric { grid-template-columns: 1fr; }
+      .table { grid-template-columns: 1fr; }
+      .cell, .cell:nth-child(3n) { border-right: 0; }
+      .cell.header:nth-child(n+2) { display: none; }
+      .nav button { width: 44px; height: 44px; font-size: 28px; }
+      #prevBtn { left: 8px; }
+      #nextBtn { right: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <div class="slides" id="slides">
+      <section class="slide">
+        <div class="content hero-grid">
+          <div>
+            <div class="eyebrow">Amp security integration</div>
+            <h1>Endor Labs inside Amp</h1>
+            <p class="lead">We connected Amp to Endor Labs through MCP, giving the coding agent live vulnerability intelligence, dependency risk checks, repo scans, and security-review tooling while it works.</p>
+            <div class="badge-row">
+              <span class="badge">MCP server</span>
+              <span class="badge">endorctl ai-tools</span>
+              <span class="badge">Agent-native guardrails</span>
+              <span class="badge">Works across MCP-capable agents</span>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Integration result</h3>
+            <div class="code">endor-cli-tools
+  command: C:\Users\danie\AppData\Roaming\npm\bin\endorctl.exe
+  args:    ai-tools mcp-server</div>
+            <p class="small" style="margin-top:18px">Validated with a real vulnerability lookup: lodash 4.17.20 returned 3 known vulnerabilities and a recommended safe upgrade.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content">
+          <div class="eyebrow">Why this matters</div>
+          <h2>Security feedback moves into the coding loop</h2>
+          <p class="lead">Instead of waiting for CI, a client scan, or a release SBOM, Amp can ask Endor questions at the exact point where dependency and code decisions are made.</p>
+          <div class="cards">
+            <div class="card"><div class="num">1</div><h3>Before adding dependencies</h3><p>Check package, ecosystem, and version for known vulnerabilities, malware risk, and recommended safe versions.</p></div>
+            <div class="card"><div class="num">2</div><h3>Before finishing changes</h3><p>Run targeted scans for vulnerabilities, secrets, SAST, AI-SAST, or GitHub Actions risks where appropriate.</p></div>
+            <div class="card"><div class="num">3</div><h3>During triage</h3><p>Query CVE/GHSA records and Endor resources directly from the agent workflow.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content hero-grid">
+          <div>
+            <div class="eyebrow">Architecture</div>
+            <h2>Amp talks MCP; Endor does the security work</h2>
+            <p class="lead">The integration is lightweight: Amp launches a local Endor MCP server over stdio, then calls its tools when security context is needed.</p>
+          </div>
+          <div class="panel">
+            <div class="diagram">
+              <div class="node"><strong>Amp</strong><span>coding agent<br/>tool caller</span></div>
+              <div class="arrow">↓</div>
+              <div class="node"><strong>MCP stdio</strong><span>local protocol<br/>standard interface</span></div>
+              <div class="arrow">↓</div>
+              <div class="node"><strong>endorctl ai-tools mcp-server</strong><span>local Endor server<br/>exposes tools</span></div>
+              <div class="arrow">↓</div>
+              <div class="node"><strong>Endor Labs</strong><span>vuln DB, scans,<br/>policy context</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content">
+          <div class="eyebrow">What Amp can call now</div>
+          <h2>Available Endor tools</h2>
+          <div class="cards">
+            <div class="card"><h3>Dependency checks</h3><p><span class="highlight">check_dependency_for_vulnerabilities</span><br/>Check a specific dependency version for known vulnerabilities.</p></div>
+            <div class="card"><h3>Risk checks</h3><p><span class="highlight">check_dependency_for_risks</span><br/>Check vulnerabilities plus broader package risk signals, including malware.</p></div>
+            <div class="card"><h3>Vulnerability details</h3><p><span class="highlight">get_endor_vulnerability</span><br/>Retrieve CVE/GHSA details from Endor’s vulnerability database.</p></div>
+            <div class="card"><h3>Repo scans</h3><p><span class="highlight">scan</span><br/>Scan repositories for dependencies, vulnerabilities, secrets, SAST, AI-SAST, and GitHub Actions risks.</p></div>
+            <div class="card"><h3>Diff review</h3><p><span class="highlight">security_review</span><br/>Analyze local changes or main-vs-last-commit diffs when Enterprise features are enabled.</p></div>
+            <div class="card"><h3>Endor resources</h3><p><span class="highlight">get_resource</span><br/>Retrieve projects, package versions, findings, metrics, policies, and scan results.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content">
+          <div class="eyebrow">Validated smoke test</div>
+          <h2>The integration returned real vulnerability intelligence</h2>
+          <div class="split">
+            <div class="panel">
+              <h3>Prompt</h3>
+              <div class="code">Check if the npm package lodash version 4.17.20 has any vulnerabilities.</div>
+            </div>
+            <div class="panel">
+              <h3>Endor result</h3>
+              <div class="metric">
+                <div class="metric-card"><strong>3</strong><p class="small">known vulnerabilities</p></div>
+                <div class="metric-card"><strong>Yes</strong><p class="small">version is vulnerable</p></div>
+                <div class="metric-card"><strong>4.18.1</strong><p class="small">recommended version</p></div>
+              </div>
+              <p class="small" style="margin-top:18px">Returned vulnerability IDs included GHSA advisories, proving Amp can call Endor’s MCP tool successfully.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content">
+          <div class="eyebrow">Positioning</div>
+          <h2>Endor complements SBOMator and SkillSpector</h2>
+          <div class="table">
+            <div class="cell header">Tool</div><div class="cell header">Best at</div><div class="cell header">Not best at</div>
+            <div class="cell tool">Endor Labs in Amp</div><div class="cell">Agent-native dependency risk, vulnerability lookup, secrets/SAST scans, and security checks while coding.</div><div class="cell">Formal SBOM/VEX deliverables, embedded firmware component recovery, or AI-skill-specific threat modeling.</div>
+            <div class="cell tool">SBOMator</div><div class="cell">Professional SBOM generation, CycloneDX/VEX, FDA/client reports, embedded SDKs, firmware, binary analysis, supplier/license enrichment.</div><div class="cell">Live agent guardrails and cloud-backed security-policy context during coding.</div>
+            <div class="cell tool">SkillSpector</div><div class="cell">AI agent skill security: prompt injection, exfiltration, tool poisoning, excessive agency, MCP least privilege, malicious triggers.</div><div class="cell">General-purpose SBOM generation or full software dependency-management workflows.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content hero-grid">
+          <div>
+            <div class="eyebrow">Cross-agent portability</div>
+            <h2>The same Endor server works wherever MCP works</h2>
+            <p class="lead">Claude Code, Codex, Cursor, Gemini CLI, Amp, and other MCP-capable agents can all launch the same Endor MCP server. What differs is the client-specific config and instruction file.</p>
+          </div>
+          <div class="panel">
+            <h3>Reusable core</h3>
+            <div class="code">endorctl ai-tools mcp-server</div>
+            <div class="badge-row">
+              <span class="badge">Claude Code: CLAUDE.md</span>
+              <span class="badge">Amp: AGENTS.md</span>
+              <span class="badge">Cursor: rules</span>
+              <span class="badge">Gemini: GEMINI.md</span>
+              <span class="badge">Codex: project instructions</span>
+            </div>
+            <p class="small" style="margin-top:18px">The tools are similar across agents; behavior depends on when each agent chooses to call them.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content">
+          <div class="eyebrow">Windows implementation note</div>
+          <h2>We used the direct binary because npx was unreliable here</h2>
+          <p class="lead">Endor’s docs commonly use <span class="highlight">npx -y endorctl</span>. On this Windows machine, npx downloaded the package but failed to expose the executable reliably, so Amp now calls <span class="highlight">endorctl.exe</span> directly.</p>
+          <div class="split">
+            <div class="panel">
+              <h3>Documented pattern</h3>
+              <div class="code">npx -y endorctl ai-tools mcp-server</div>
+              <p class="small" style="margin-top:14px">Good default when npx and PATH behavior are clean.</p>
+            </div>
+            <div class="panel">
+              <h3>Configured pattern</h3>
+              <div class="code">C:\Users\danie\AppData\Roaming\npm\bin\endorctl.exe
+ai-tools mcp-server</div>
+              <p class="small" style="margin-top:14px">More deterministic for this workstation.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content">
+          <div class="eyebrow">How we should use it</div>
+          <h2>Recommended operating model</h2>
+          <div class="cards">
+            <div class="card"><div class="num">A</div><h3>Dependency change</h3><p>When adding or upgrading a dependency, ask Endor to check the exact ecosystem, package, and version before committing.</p></div>
+            <div class="card"><div class="num">B</div><h3>Security-sensitive code</h3><p>Run Endor scans or diff review before finishing work that touches auth, parsing, networking, secrets, build pipelines, or manifests.</p></div>
+            <div class="card"><div class="num">C</div><h3>Release/client package</h3><p>Use SBOMator for formal deliverables, then use Endor as extra validation where cloud policy or quick triage helps.</p></div>
+          </div>
+          <div class="panel" style="margin-top:24px">
+            <h3>Optional next step</h3>
+            <p class="lead" style="margin-top:0;font-size:clamp(16px,1.8vw,22px)">Add lightweight AGENTS.md rules so Amp automatically checks Endor when dependency manifests change, without forcing a full security scan on every normal edit.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide">
+        <div class="content hero-grid">
+          <div>
+            <div class="eyebrow">Bottom line</div>
+            <h2>Endor makes Amp a safer coding partner</h2>
+            <p class="lead">SBOMator remains the formal SBOM/compliance engine. SkillSpector remains the AI-skill security scanner. Endor fills the coding-loop gap: fast, agent-native security intelligence while changes are being designed and implemented.</p>
+          </div>
+          <div class="panel">
+            <h3>Message to stakeholders</h3>
+            <p class="lead" style="margin-top:0;font-size:clamp(18px,2vw,26px)">“We integrated Endor Labs into Amp so security checks happen before risky dependencies and code changes reach CI, release packaging, or customer deliverables.”</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="nav" aria-label="Slide navigation">
+    <button id="prevBtn" type="button" aria-label="Previous slide">‹</button>
+    <button id="nextBtn" type="button" aria-label="Next slide">›</button>
+  </div>
+  <div class="progress-track" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="counter" id="counter">1 / 10</div>
+  <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+
+  <script>
+    const slides = document.getElementById('slides');
+    const slideEls = Array.from(document.querySelectorAll('.slide'));
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const progressBar = document.getElementById('progressBar');
+    const counter = document.getElementById('counter');
+    const swipeHint = document.getElementById('swipeHint');
+
+    let current = 0;
+    let touchStartX = null;
+    let mouseStartX = null;
+    let hasNavigated = false;
+    const total = slideEls.length;
+    const threshold = 50;
+
+    function update() {
+      slides.style.transform = `translateX(-${current * 100}vw)`;
+      prevBtn.classList.toggle('hidden', current === 0);
+      nextBtn.classList.toggle('hidden', current === total - 1);
+      progressBar.style.width = `${((current + 1) / total) * 100}%`;
+      counter.textContent = `${current + 1} / ${total}`;
+      if (hasNavigated) swipeHint.classList.add('hidden');
+    }
+
+    function goTo(index) {
+      const next = Math.max(0, Math.min(total - 1, index));
+      if (next !== current) hasNavigated = true;
+      current = next;
+      update();
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', next);
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ') {
+        event.preventDefault();
+        next();
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        prev();
+      }
+    });
+
+    window.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+
+    window.addEventListener('touchend', (event) => {
+      if (touchStartX === null) return;
+      const delta = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(delta) > threshold) delta < 0 ? next() : prev();
+      touchStartX = null;
+    }, { passive: true });
+
+    window.addEventListener('mousedown', (event) => {
+      mouseStartX = event.clientX;
+    });
+
+    window.addEventListener('mouseup', (event) => {
+      if (mouseStartX === null) return;
+      const delta = event.clientX - mouseStartX;
+      if (Math.abs(delta) > threshold) delta < 0 ? next() : prev();
+      mouseStartX = null;
+    });
+
+    update();
+  </script>
+</body>
+</html>
