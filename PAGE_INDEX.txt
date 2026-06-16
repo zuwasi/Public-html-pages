@@ -109,22 +109,25 @@ Last updated: 2026-06-16
 33. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-34. hiring-agent-presentation.html
+34. endorlabs-amp-integration-presentation.html
+   https://zuwasi.github.io/Public-html-pages/endorlabs-amp-integration-presentation.html
+
+35. hiring-agent-presentation.html
    https://zuwasi.github.io/Public-html-pages/hiring-agent-presentation.html
 
-35. nesher2gm-pentest-operator-guide.html
+36. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-36. nono-ampcode-presentation.html
+37. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-37. static-code-analysis-2026.html
+38. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-38. why-amp-doesnt-need-node9-proxy.html
+39. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-39. wolfram-engine-gpu-demo-presentation.html
+40. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
