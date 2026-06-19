@@ -594,6 +594,65 @@
     .verdict.medium { background: var(--amp-yellow); }
     .verdict.high { background: var(--amp-red); color: #fff; }
 
+    .action-list {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
+      margin-top: 22px;
+    }
+
+    .action-item {
+      display: grid;
+      grid-template-columns: 38px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.13);
+      background: rgba(255,255,255,0.07);
+      backdrop-filter: blur(18px);
+    }
+
+    .action-num {
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 11px;
+      background: rgba(255,255,255,0.1);
+      color: var(--amp-blue);
+      font-weight: 900;
+    }
+
+    .action-link {
+      color: #fff;
+      font-size: clamp(14px, 1.25vw, 17px);
+      font-weight: 850;
+      line-height: 1.15;
+      text-decoration: none;
+    }
+
+    .action-link:hover { color: var(--amp-blue); }
+
+    .guide-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 72px;
+      padding: 7px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(34,211,238,0.25);
+      color: var(--amp-blue);
+      background: rgba(34,211,238,0.08);
+      font-size: 12px;
+      font-weight: 900;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .guide-link:hover { background: rgba(34,211,238,0.16); }
+
     @media (max-height: 760px) and (min-width: 901px) {
       .slide { padding-top: 24px; padding-bottom: 34px; justify-content: flex-start; }
       h1 { font-size: clamp(34px, 5.4vw, 74px); }
@@ -617,6 +676,9 @@
       .table-card { margin-top: 14px; }
       .table-scroll { max-height: 54vh; }
       th, td { padding: 9px 11px; font-size: 12px; }
+      .action-list { margin-top: 14px; gap: 9px 12px; }
+      .action-item { padding: 9px 11px; }
+      .action-link { font-size: 13px; }
     }
 
     @media (max-width: 900px) {
@@ -649,6 +711,9 @@
       .table-scroll { max-height: 62vh; }
       table { min-width: 720px; }
       th, td { padding: 10px 11px; font-size: 12px; }
+      .action-list { grid-template-columns: 1fr; gap: 10px; margin-top: 16px; }
+      .action-item { grid-template-columns: 34px 1fr; }
+      .guide-link { grid-column: 2; width: fit-content; }
     }
   </style>
 </head>
@@ -725,6 +790,24 @@
         <div class="agenda-item"><span>08</span><span>Policy plugins for smarter decisions</span></div>
         <div class="agenda-item"><span>09</span><span>Choose profiles by risk level</span></div>
         <div class="agenda-item"><span>10</span><span>Run the quick checklist and verify “you want” results</span></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span> Hardening actions — linked summary</div>
+      <h2>Click each headline for the supplement slide; open “Amp guide” for the source guidance</h2>
+      <p class="lead">These actions map Amp’s user-guide controls to the paper’s attack classes: MCP tool poisoning, hidden file reads, phishing/tool-output abuse, and remote script execution.</p>
+      <div class="action-list">
+        <div class="action-item"><span class="action-num">01</span><a class="action-link" href="#" data-goto="5">MCP deny-by-default</a><a class="guide-link" href="https://ampcode.com/manual" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">02</span><a class="action-link" href="#" data-goto="6">Ask before MCP tool calls</a><a class="guide-link" href="https://ampcode.com/news/tool-level-permissions" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">03</span><a class="action-link" href="#" data-goto="7">Protect secrets and dotfiles</a><a class="guide-link" href="https://ampcode.com/notes/permissions" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">04</span><a class="action-link" href="#" data-goto="8">Gate dangerous shell commands</a><a class="guide-link" href="https://ampcode.com/notes/permissions" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">05</span><a class="action-link" href="#" data-goto="9">Use a hardened baseline</a><a class="guide-link" href="https://ampcode.com/news/tool-level-permissions" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">06</span><a class="action-link" href="#" data-goto="10">Strict mode for untrusted repos</a><a class="guide-link" href="https://ampcode.com/security" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">07</span><a class="action-link" href="#" data-goto="11">Disable tools when unnecessary</a><a class="guide-link" href="https://ampcode.com/manual" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">08</span><a class="action-link" href="#" data-goto="11">Policy plugins for smarter decisions</a><a class="guide-link" href="https://ampcode.com/manual" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">09</span><a class="action-link" href="#" data-goto="12">Choose profiles by risk level</a><a class="guide-link" href="https://ampcode.com/security" target="_blank" rel="noopener">Amp guide</a></div>
+        <div class="action-item"><span class="action-num">10</span><a class="action-link" href="#" data-goto="13">Run the quick checklist</a><a class="guide-link" href="https://ampcode.com/notes/permissions" target="_blank" rel="noopener">Amp guide</a></div>
       </div>
     </section>
 
@@ -1024,7 +1107,7 @@ amp permissions test Bash \
   <button class="nav-btn prev" id="prev" aria-label="Previous slide">‹</button>
   <button class="nav-btn next" id="next" aria-label="Next slide">›</button>
   <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
-  <div class="counter" id="counter">1 / 18</div>
+  <div class="counter" id="counter">1 / 19</div>
   <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
 
   <script>
@@ -1058,8 +1141,24 @@ amp permissions test Bash \
       }
     }
 
+    function goToSlide(targetIndex) {
+      const target = Math.max(0, Math.min(slides.length - 1, targetIndex));
+      if (target !== index) {
+        index = target;
+        hasNavigated = true;
+        update();
+      }
+    }
+
     prev.addEventListener('click', () => go(-1));
     next.addEventListener('click', () => go(1));
+
+    document.querySelectorAll('[data-goto]').forEach((link) => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        goToSlide(Number(link.dataset.goto));
+      });
+    });
 
     window.addEventListener('keydown', (event) => {
       if (event.key === 'ArrowRight' || event.key === ' ') {
