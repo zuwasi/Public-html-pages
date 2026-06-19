@@ -524,6 +524,76 @@
     .risk-med { color: var(--amp-yellow); }
     .risk-high { color: var(--amp-red); }
 
+    .table-card {
+      margin-top: 22px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(5,5,10,0.68);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .table-scroll {
+      overflow: auto;
+      max-height: min(58vh, 560px);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th, td {
+      padding: 13px 15px;
+      text-align: left;
+      vertical-align: top;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: clamp(12px, 1.12vw, 15px);
+      line-height: 1.34;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      background: rgba(18,18,28,0.96);
+      color: #fff;
+      font-size: clamp(11px, 1vw, 13px);
+      letter-spacing: .055em;
+      text-transform: uppercase;
+    }
+
+    td { color: var(--muted); }
+    td strong { color: #fff; }
+    tr:last-child td { border-bottom: 0; }
+
+    .rank {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      color: #050509;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--amp-pink), var(--amp-blue));
+    }
+
+    .verdict {
+      display: inline-flex;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #050509;
+      background: var(--amp-green);
+      white-space: nowrap;
+    }
+
+    .verdict.medium { background: var(--amp-yellow); }
+    .verdict.high { background: var(--amp-red); color: #fff; }
+
     @media (max-height: 760px) and (min-width: 901px) {
       .slide { padding-top: 24px; padding-bottom: 34px; justify-content: flex-start; }
       h1 { font-size: clamp(34px, 5.4vw, 74px); }
@@ -544,6 +614,9 @@
       .want { padding: 13px; }
       .code-wrap { margin-top: 12px; border-radius: 18px; }
       pre { max-height: 42vh; font-size: clamp(10px, .86vw, 12px); line-height: 1.36; }
+      .table-card { margin-top: 14px; }
+      .table-scroll { max-height: 54vh; }
+      th, td { padding: 9px 11px; font-size: 12px; }
     }
 
     @media (max-width: 900px) {
@@ -572,6 +645,10 @@
       pre { max-height: 46vh; font-size: 11px; line-height: 1.36; white-space: pre-wrap; overflow-wrap: anywhere; }
       .code-title { font-size: 11px; padding: 10px 12px; }
       .caption { position: static; border-radius: 0; }
+      .table-card { margin-top: 16px; border-radius: 18px; }
+      .table-scroll { max-height: 62vh; }
+      table { min-width: 720px; }
+      th, td { padding: 10px 11px; font-size: 12px; }
     }
   </style>
 </head>
@@ -841,6 +918,93 @@ amp permissions test Bash \
     </section>
 
     <section class="slide">
+      <div class="kicker"><span class="dot"></span> Hardened comparison</div>
+      <h2>If every agent is hardened, Amp ranks near the top</h2>
+      <p class="lead">This is an analytical ranking, not a paper result. The paper did not test Amp. The comparison assumes best-practice hardening: MCP allowlists, no auto-run for risky actions, guarded secrets, shell gates, sandboxing, and audit review.</p>
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Rank</th><th>Agent / Tool</th><th>Hardened risk</th><th>Why it lands there</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="rank">1</span></td><td><strong>Hardened Amp</strong></td><td><span class="verdict">Low–Medium</span></td><td>Best configurable defense-in-depth: tool permissions, MCP permissions, plugins/policy helpers, tool disabling, secret redaction, audit trail, and external sandboxing.</td></tr>
+              <tr><td><span class="rank">2</span></td><td><strong>Claude Desktop</strong></td><td><span class="verdict">Low–Medium</span></td><td>Strong built-in guardrails, model refusals, permission-gated UX, and role separation; less org-policy programmable than Amp.</td></tr>
+              <tr><td><span class="rank">3</span></td><td><strong>Cline hardened</strong></td><td><span class="verdict">Low–Medium</span></td><td>Good warnings and pattern detection when auto-approval is off; still high-authority inside VS Code.</td></tr>
+              <tr><td><span class="rank">4</span></td><td><strong>Claude Code hardened</strong></td><td><span class="verdict medium">Medium-Low</span></td><td>Transparent terminal workflow and sandboxable; residual repo-injection and shell-authority risk.</td></tr>
+              <tr><td><span class="rank">5</span></td><td><strong>Gemini CLI hardened</strong></td><td><span class="verdict medium">Medium-Low / Medium</span></td><td>CLI visibility and sandboxing help; CI/CD secrets and shell workflows remain sensitive.</td></tr>
+              <tr><td><span class="rank">6</span></td><td><strong>Continue hardened</strong></td><td><span class="verdict medium">Medium</span></td><td>Safer as assistive coding with strict VS Code Workspace Trust and restricted MCP; weaker autonomous security surface.</td></tr>
+              <tr><td><span class="rank">7</span></td><td><strong>Langflow hardened</strong></td><td><span class="verdict medium">Medium</span></td><td>Can isolate/sanitize nodes, but visual flows make trust boundaries easy to misconfigure.</td></tr>
+              <tr><td><span class="rank">8</span></td><td><strong>Cursor hardened</strong></td><td><span class="verdict high">Medium–High</span></td><td>Can be improved, but the paper observed all four tested attacks succeeding in the evaluated config; residual click-fatigue and hidden-context risk remain.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span> Amp-specific hardening</div>
+      <h2>Amp’s rank depends on mode: default autonomy vs explicit policy</h2>
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Attack class from paper</th><th>Amp default / high-autonomy</th><th>Amp hardened</th><th>Primary hardening control</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Sensitive file read</strong></td><td><span class="verdict high">Partial / Unsafe</span><br />Amp can read files; secret redaction helps but is not a full access-control boundary.</td><td><span class="verdict">Safe</span><br />Guard or reject `.ssh`, `.env`, kubeconfig, cloud credentials, tokens, and Amp settings.</td><td><code>amp.permissions</code> on <code>Read</code> paths.</td></tr>
+              <tr><td><strong>Tool-usage logging</strong></td><td><span class="verdict medium">Partial</span><br />A poisoned MCP logging tool may still be invoked if available.</td><td><span class="verdict">Safe</span><br />Unknown MCP rejected; MCP tool calls ask unless explicitly trusted.</td><td><code>amp.mcpPermissions</code> + <code>mcp__*</code> ask/reject.</td></tr>
+              <tr><td><strong>Phishing links</strong></td><td><span class="verdict medium">Partial</span><br />CLI/text visibility helps, but deceptive Markdown output can still appear.</td><td><span class="verdict medium">Partial / Safe</span><br />Ask on link-producing tools; plugin can warn on external URLs.</td><td>Policy plugin or MCP tool approval.</td></tr>
+              <tr><td><strong>Remote script execution</strong></td><td><span class="verdict high">Partial / Unsafe</span><br />Bash is powerful and default Amp does not ask before every tool call.</td><td><span class="verdict">Safe</span><br />Reject or ask on <code>curl|bash</code>, <code>wget|sh</code>, PowerShell <code>iex</code>, destructive infra commands.</td><td><code>amp.permissions</code> on <code>Bash.cmd</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="big-quote">Default Amp: middle risk. Hardened Amp: top-tier defensive posture.</div>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span> If Amp were in Table 1</div>
+      <h2>Comparative risk row for Amp</h2>
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Tool</th><th>Vulnerabilities and attack vectors</th><th>Mitigation and defense strategies</th><th>Risk level</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Amp</strong></td>
+                <td>Agentic CLI/IDE workflow with file read/write, shell execution, web context, MCP tools, skills, and plugins. Injection vectors include poisoned repositories, README/docs/code comments, web/PDF content, MCP tool descriptions, tool outputs, and workspace MCP settings. Default autonomy can run tools without per-call approval.</td>
+                <td>MCP server permissions, workspace MCP approval, tool-level permissions, policy plugins/delegation, automatic secret redaction, thread audit trail, web-context defenses, enterprise controls, tool disabling, and external VM/container isolation.</td>
+                <td><span class="verdict high">Default: Medium–High</span><br /><br /><span class="verdict">Hardened: Low–Medium</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="lead">Amp’s key differentiator is not that it is “immune”; it is that the operator can turn agent authority into explicit policy.</p>
+    </section>
+
+    <section class="slide">
+      <div class="kicker"><span class="dot"></span> If Amp were in Table 4</div>
+      <h2>Security-feature coverage: default vs hardened Amp</h2>
+      <div class="table-card">
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Mode</th><th>Static validation</th><th>Parameter visibility</th><th>Injection detection</th><th>User warnings</th><th>Sandboxing</th><th>Audit logging</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Amp default</strong></td><td>Partial: MCP allow/reject rules exist, but not full tool-description scanning.</td><td>Partial: tool calls are visible/auditable, but approval is not default.</td><td>Model + partial platform controls: frontier models, web-context defenses, secret redaction.</td><td>Partial: workspace MCP approval exists; ordinary tool calls can proceed automatically.</td><td>No / external: use VM/container for untrusted work.</td><td>Partial / Yes: thread trail records prompts, tool calls, and results.</td></tr>
+              <tr><td><strong>Amp hardened</strong></td><td>Partial / Yes: MCP allowlists plus custom plugin or delegated policy helper.</td><td>High: ask rules force review of sensitive tool calls and parameters.</td><td>Model + policy: pattern rules and plugins catch suspicious paths/commands/MCP calls.</td><td>Yes: risky reads, Bash commands, and MCP tools ask or reject.</td><td>Possible external: VM/container/throwaway user limits blast radius.</td><td>Yes: thread audit trail plus enterprise review workflows.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
       <div class="hero-grid">
         <div>
           <div class="kicker"><span class="dot"></span> Closing message</div>
@@ -860,7 +1024,7 @@ amp permissions test Bash \
   <button class="nav-btn prev" id="prev" aria-label="Previous slide">‹</button>
   <button class="nav-btn next" id="next" aria-label="Next slide">›</button>
   <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
-  <div class="counter" id="counter">1 / 14</div>
+  <div class="counter" id="counter">1 / 18</div>
   <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
 
   <script>
