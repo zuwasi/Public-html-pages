@@ -7,117 +7,8 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-  /* Password Gate */
-  .password-gate {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 99999;
-    background: #050B18;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
-
-  .password-gate.hidden { display: none; }
-
-  .password-gate .gate-box {
-    background: #111D33;
-    border: 1px solid #1A2D48;
-    border-radius: 16px;
-    padding: 48px;
-    text-align: center;
-    max-width: 440px;
-    width: 90%;
-    box-shadow: 0 0 80px rgba(0, 191, 255, 0.08);
-  }
-
-  .password-gate .gate-box img {
-    height: 80px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-    box-shadow: 0 0 40px rgba(226, 30, 38, 0.25);
-  }
-
-  .password-gate .gate-box h2 {
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 8px;
-    color: #FFFFFF;
-  }
-
-  .password-gate .gate-box p {
-    font-size: 13px;
-    color: #5A7A9A;
-    margin-bottom: 28px;
-  }
-
-  .password-gate .gate-input {
-    width: 100%;
-    padding: 14px 18px;
-    border-radius: 10px;
-    border: 1px solid #1A2D48;
-    background: #0A1628;
-    color: #FFFFFF;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-    margin-bottom: 16px;
-  }
-
-  .password-gate .gate-input:focus {
-    border-color: rgba(0, 191, 255, 0.5);
-    box-shadow: 0 0 16px rgba(0, 191, 255, 0.1);
-  }
-
-  .password-gate .gate-input.error {
-    border-color: rgba(226, 30, 38, 0.6);
-    box-shadow: 0 0 16px rgba(226, 30, 38, 0.1);
-  }
-
-  .password-gate .gate-btn {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #00BFFF, #0080FF);
-    color: #FFFFFF;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .password-gate .gate-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(0, 191, 255, 0.3);
-  }
-
-  .password-gate .gate-error {
-    color: #FF6B6B;
-    font-size: 12px;
-    margin-top: 12px;
-    min-height: 18px;
-  }
-
-  .password-gate .gate-badge {
-    display: inline-block;
-    padding: 4px 14px;
-    background: rgba(226, 30, 38, 0.15);
-    border: 1px solid rgba(226, 30, 38, 0.3);
-    border-radius: 16px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #FF6B6B;
-    margin-bottom: 24px;
-  }
-
-  .app-content { display: none; }
-  .app-content.visible { display: contents; }
+  /* Public page: no password gate. */
+  .app-content { display: contents; }
 
   :root {
     --bg-primary: #050B18;
@@ -1014,20 +905,8 @@
 </head>
 <body>
 
-<!-- Password Gate -->
-<div class="password-gate" id="passwordGate">
-  <div class="gate-box">
-    <img src="Ampcode.png" alt="Ampcode">
-    <div class="gate-badge">Confidential Document</div>
-    <h2>Authentication Required</h2>
-    <p>This CISO security assessment is restricted.<br>Enter the access password to continue.</p>
-    <input type="password" class="gate-input" id="gatePassword" placeholder="Enter password" autocomplete="off">
-    <button class="gate-btn" id="gateSubmit">Access Document</button>
-    <div class="gate-error" id="gateError"></div>
-  </div>
-</div>
+<!-- App Content -->
 
-<!-- App Content (hidden until authenticated) -->
 <div class="app-content" id="appContent">
 
 <!-- Navigation -->
@@ -1080,11 +959,11 @@
     <div style="font-size:16px; color:var(--text-secondary); margin-bottom:8px;">Ampcode vs Cursor vs Claude Code vs OpenAI Codex</div>
     <p class="meta">
       Prepared for: Chief Information Security Officer<br>
-      Assessment Date: March 19, 2026<br>
-      Classification: Internal — Restricted Distribution<br>
+      Assessment Date: June 22, 2026<br>
+      Classification: Public — Point-in-Time Assessment<br>
       Scope: Comparative Security Analysis of Four AI Coding Agents
     </p>
-    <div class="classification-badge">Confidential — Internal Use Only</div>
+    <div class="classification-badge">Public — Point-in-Time Assessment</div>
   </div>
   <div class="slide-footer">
     <span>AI Coding Tools CISO Security Comparison 2026</span>
@@ -1107,8 +986,8 @@
         <div class="card-icon green">🛡️</div>
         <h4>Ampcode <span style="color:var(--text-muted);font-weight:400;font-size:13px">Sourcegraph</span></h4>
         <ul>
-          <li>SOC 2 + ISO 27001 + GDPR + CCPA + EU AI Act</li>
-          <li>Zero data retention on ALL LLMs (Enterprise)</li>
+          <li>SOC 2 Type II + annual third-party pentesting</li>
+          <li>Enterprise zero LLM data retention; provider cache up to 24h may apply</li>
           <li>Automatic secret redaction engine</li>
           <li>SSO/SCIM with exclusive SSO mode</li>
         </ul>
@@ -1118,10 +997,10 @@
         <div class="card-icon red">⚠️</div>
         <h4>Cursor <span style="color:var(--text-muted);font-weight:400;font-size:13px">Anysphere</span></h4>
         <ul>
-          <li class="negative">SOC 2 only — no ISO 27001</li>
-          <li class="negative">4 critical CVEs including CVSS 9.8 RCE</li>
+          <li class="negative">SOC 2 Type II; additional controls documented for Enterprise</li>
+          <li class="negative">Multiple Cursor CVEs, including prompt-injection and sandbox-escape RCE paths</li>
           <li class="negative">No built-in secret redaction engine</li>
-          <li class="negative">Extension sigs &amp; Workspace Trust off by default</li>
+          <li class="negative">CMEK, Privacy Mode, SSO/SCIM available on Enterprise; validate defaults</li>
         </ul>
         <br><span class="badge badge-red">CONDITIONAL — 27/45</span>
       </div>
@@ -1130,7 +1009,7 @@
         <h4>Claude Code <span style="color:var(--text-muted);font-weight:400;font-size:13px">Anthropic</span></h4>
         <ul>
           <li>Most certifications: SOC2+ISO27001+ISO42001+HIPAA</li>
-          <li>FedRAMP High + NIST 800-171 + CSA STAR</li>
+          <li>HIPAA, NIST 800-171, CSA STAR; FedRAMP High for Claude government/partner-hosted offerings</li>
           <li>CLI-local execution, sandboxed bash</li>
           <li>Command blocklist + injection detection</li>
         </ul>
@@ -1142,7 +1021,7 @@
         <ul>
           <li>SOC 2 + ISO 27001/27017/27018/27701 + PCI DSS</li>
           <li>Cloud-sandboxed environments, 3 execution modes</li>
-          <li>Data residency in 10+ countries</li>
+          <li>OpenAI Trust Center documents broad enterprise controls; verify Codex-specific data residency during procurement</li>
           <li>Enterprise SSO/SCIM via ChatGPT Enterprise</li>
         </ul>
         <br><span class="badge badge-green">APPROVED — 40/45</span>
@@ -1162,7 +1041,7 @@
     <div class="section-label">Compliance &amp; Certifications</div>
     <h2>Certification Comparison Matrix</h2>
     <p class="slide-intro">
-      Claude Code (Anthropic) holds the broadest compliance portfolio. Cursor holds only SOC 2 and acknowledges its security posture is still maturing.
+      Claude Code (Anthropic) holds the broadest compliance portfolio. Cursor publicly documents SOC 2 Type II, Privacy Mode, SSO/SCIM, audit logging, and Enterprise controls; ISO 27001 was not verified in public sources.
     </p>
 
     <table class="data-table">
@@ -1266,7 +1145,7 @@
     <div class="callout callout-warn" style="margin-top:20px">
       <div class="callout-icon">⚠️</div>
       <div class="callout-text">
-        <strong>Cursor Note:</strong> Anysphere's own documentation states they are <em>"still in the journey of growing our security posture."</em> This is reflected in their single SOC 2 certification with no additional compliance frameworks.
+        <strong>Cursor Note:</strong> Cursor publishes SOC 2 Type II and Enterprise controls. ISO 27001 was not verified in public sources; review trust portal artifacts directly before enterprise approval.
       </div>
     </div>
   </div>
@@ -1291,10 +1170,10 @@
         <div class="card-icon green">🟢</div>
         <h4>Ampcode — Zero Retention</h4>
         <ul>
-          <li>Enterprise: zero retention on ALL LLM providers</li>
+          <li>Enterprise: zero LLM input/output retention; provider cache up to 24h may apply</li>
           <li>Training permanently disabled, cannot be re-enabled</li>
-          <li>Thread data deleted within 30 days of request</li>
-          <li>Images: limited retention for compliance only</li>
+          <li>Deleted thread data removed within 30 days</li>
+          <li>Severe policy-violation safety exceptions may apply per provider terms</li>
         </ul>
         <br><span class="badge badge-green">Best-in-Class</span>
       </div>
@@ -1302,10 +1181,10 @@
         <div class="card-icon red">🔴</div>
         <h4>Cursor — Mixed Modes</h4>
         <ul>
-          <li>Privacy Mode: zero retention (must be enforced)</li>
-          <li class="negative">Share Data mode: data MAY be used for training</li>
+          <li>Privacy Mode: no training; Enterprise/team admins can enforce org-wide</li>
+          <li class="negative">If Privacy Mode is off, data may be used according to Cursor data-use terms</li>
           <li class="negative">Already-trained models NOT retrained after deletion</li>
-          <li class="negative">Training data persists permanently in models</li>
+          <li class="negative">Already-trained models may not be practically untrained</li>
         </ul>
         <br><span class="badge badge-orange">Caution Required</span>
       </div>
@@ -1383,7 +1262,7 @@
         </tr>
         <tr>
           <td><strong>Sub-processors</strong></td>
-          <td>All US-based</td>
+          <td>US-based documented providers</td>
           <td>Fireworks (US/EU/JP), Baseten (US/CA)</td>
           <td>Anthropic API only</td>
           <td>Azure-managed</td>
@@ -1456,7 +1335,7 @@
         <tr>
           <td><strong>SCIM Directory Sync</strong></td>
           <td><span class="badge badge-green">✓ Yes</span></td>
-          <td><span class="badge badge-red">✗ No</span></td>
+          <td><span class="badge badge-green">✓ Enterprise</span></td>
           <td><span class="badge badge-red">✗ No</span></td>
           <td><span class="badge badge-green">✓ Yes</span></td>
         </tr>
@@ -1501,7 +1380,7 @@
       <div class="callout callout-warn" style="margin:0">
         <div class="callout-icon">⚠️</div>
         <div class="callout-text">
-          <strong>Cursor Gap:</strong> No SCIM means manual user lifecycle management, increasing risk of orphaned accounts and unauthorized access after offboarding.
+          <strong>Cursor Update:</strong> Cursor now documents SSO and SCIM for Enterprise; validate plan availability, enforcement, and IdP behavior during procurement.
         </div>
       </div>
     </div>
@@ -1688,21 +1567,21 @@
     <div class="section-label">🚨 Critical Security Finding</div>
     <h2>Known Vulnerabilities &amp; CVE History</h2>
     <p class="slide-intro">
-      Cursor is the <strong style="color:#FF6B6B">only tool with publicly disclosed critical CVEs</strong>. All four vulnerabilities enable Remote Code Execution.
+      Cursor has <strong style="color:#FF6B6B">multiple publicly disclosed CVEs</strong>; several enable or contribute to command execution / RCE paths and require strict patch validation.
     </p>
 
     <div class="callout callout-danger">
       <div class="callout-icon">🔴</div>
       <div class="callout-text">
-        <strong style="font-size:15px">CURSOR — Four Critical RCE Vulnerabilities</strong><br><br>
-        <strong>CVE-2025-54135 — CVSS 9.8 (CRITICAL)</strong><br>
+        <strong style="font-size:15px">CURSOR — Public CVEs Requiring Patch Validation</strong><br><br>
+        <strong>CVE-2025-54135 — prompt-injection RCE path; fixed in Cursor 1.3.9</strong><br>
         Remote Code Execution via prompt injection combined with dotfile creation. Attacker can execute arbitrary code on developer machines via crafted prompts. Highest practical severity.<br><br>
-        <strong>CVE-2026-26268 — Sandbox Escape RCE</strong><br>
+        <strong>CVE-2026-26268 — Sandbox Escape RCE; fixed in Cursor 2.5</strong><br>
         Escape from Cursor's sandbox environment leading to full system access from sandboxed context.<br><br>
-        <strong>CVE-2025-59944 — Remote Code Execution</strong><br>
-        Arbitrary code execution vulnerability on target systems.<br><br>
-        <strong>CVE-2025-54133 — Remote Code Execution</strong><br>
-        Arbitrary code execution vulnerability on target systems.
+        <strong>CVE-2025-59944 — prompt-injection RCE path on case-insensitive filesystems; fixed in Cursor 1.7</strong><br>
+        Command execution via social-engineering / UI disclosure path; fixed in Cursor 1.3.<br><br>
+        <strong>CVE-2025-54133 — MCP deeplink command execution (CNA CVSS 5.3 Medium)</strong><br>
+        Command execution via social-engineering / UI disclosure path; fixed in Cursor 1.3.
       </div>
     </div>
 
@@ -1728,7 +1607,7 @@
     </div>
   </div>
   <div class="slide-footer">
-    <span>Sources: NVD (nvd.nist.gov), MITRE CVE database — verified March 2026</span>
+    <span>Sources: NVD (nvd.nist.gov), MITRE CVE database — verified June 22, 2026</span>
     <span>Slide 9 of 13</span>
   </div>
 </section>
@@ -1973,7 +1852,7 @@
     </div>
   </div>
   <div class="slide-footer">
-    <span>Scoring based on publicly available documentation verified March 2026</span>
+    <span>Scoring based on publicly available documentation verified June 22, 2026</span>
     <span>Slide 12 of 13</span>
   </div>
 </section>
@@ -2004,7 +1883,7 @@
           <span class="badge badge-red" style="font-size:13px;padding:6px 16px;">27/45 — SIGNIFICANT CONCERNS</span>
         </p>
         <p>
-          4 critical RCE CVEs, SOC 2 only, no secret redaction, training data risk. <strong style="color:var(--accent-yellow)">Requires:</strong> Privacy Mode enforcement, .cursorignore policy, version pinning, CVE monitoring, restrict to non-sensitive codebases.
+          multiple Cursor CVEs with RCE-relevant paths, SOC 2 only, no secret redaction, training data risk. <strong style="color:var(--accent-yellow)">Requires:</strong> Privacy Mode enforcement, .cursorignore policy, version pinning, CVE monitoring, restrict to non-sensitive codebases.
         </p>
       </div>
 
@@ -2015,7 +1894,7 @@
           <span class="badge badge-green" style="font-size:13px;padding:6px 16px;">38/45 — STRONGEST COMPLIANCE</span>
         </p>
         <p>
-          Broadest certification portfolio (HIPAA, FedRAMP High, NIST). CLI-local execution with sandboxed bash. <strong style="color:var(--accent-yellow)">Ideal for:</strong> regulated industries, government, healthcare. API key management required.
+          Broadest certification portfolio; FedRAMP High is specific to Claude government/partner-hosted offerings. CLI-local execution with sandboxed bash. <strong style="color:var(--accent-yellow)">Ideal for:</strong> regulated industries, government, healthcare. API key management required.
         </p>
       </div>
 
@@ -2026,7 +1905,7 @@
           <span class="badge badge-green" style="font-size:13px;padding:6px 16px;">40/45 — ENTERPRISE READY</span>
         </p>
         <p>
-          Strong compliance, cloud-sandboxed environments, broadest data residency (10+ countries). <strong style="color:var(--accent-yellow)">Note:</strong> ZDR requires approval process. Best for ChatGPT Enterprise organizations.
+          Strong compliance, cloud-sandboxed environments, broad OpenAI enterprise controls; verify Codex-specific residency. <strong style="color:var(--accent-yellow)">Note:</strong> ZDR requires approval process. Best for ChatGPT Enterprise organizations.
         </p>
       </div>
     </div>
@@ -2043,7 +1922,7 @@
     </div>
   </div>
   <div class="slide-footer">
-    <span>AI Coding Tools CISO Security Comparison — March 2026 — All sources verified as of assessment date</span>
+    <span>AI Coding Tools CISO Security Comparison — June 2026 — Sources re-verified June 22, 2026</span>
     <span>Slide 13 of 13</span>
   </div>
 </section>
@@ -2090,39 +1969,7 @@
 
 </div><!-- end app-content -->
 
-<script>
-// Password gate — SHA-256 hash comparison
-(function() {
-  var HASH = '2c26b0e27f4a3e3a7e8c9a5d6b1f0e4d8c7a2b9e3f5d1a6c8b4e7f0a2d9c3b5e';
 
-  async function sha256(str) {
-    var buf = new TextEncoder().encode(str);
-    var hash = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(hash)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
-  }
-
-  function unlock() {
-    document.getElementById('passwordGate').classList.add('hidden');
-    document.getElementById('appContent').classList.add('visible');
-  }
-
-  function attempt() {
-    var pw = document.getElementById('gatePassword').value;
-    if (pw === 'bashar776@') {
-      unlock();
-    } else {
-      document.getElementById('gateError').textContent = 'Incorrect password. Access denied.';
-      document.getElementById('gatePassword').classList.add('error');
-      setTimeout(function() { document.getElementById('gatePassword').classList.remove('error'); }, 1500);
-    }
-  }
-
-  document.getElementById('gateSubmit').addEventListener('click', attempt);
-  document.getElementById('gatePassword').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') attempt();
-  });
-})();
-</script>
 
 <script>
 (function() {

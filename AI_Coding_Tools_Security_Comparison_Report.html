@@ -16,205 +16,9 @@
     min-height: 100vh;
   }
 
-  /* Password Gate */
-  .password-gate {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 99999;
-    background: #050B18;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  }
+  /* Public page: no password gate. */
 
-  .password-gate.hidden { display: none; }
-
-  .gate-box {
-    background: #111D33;
-    border: 1px solid #1A2D48;
-    border-radius: 16px;
-    padding: 48px;
-    text-align: center;
-    max-width: 440px;
-    width: 90%;
-    box-shadow: 0 0 80px rgba(0, 191, 255, 0.08);
-  }
-
-  .gate-box img {
-    height: 80px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-    box-shadow: 0 0 40px rgba(226, 30, 38, 0.25);
-  }
-
-  .gate-box h2 {
-    font-size: 22px;
-    font-weight: 800;
-    margin-bottom: 8px;
-    color: #FFFFFF;
-  }
-
-  .gate-box p {
-    font-size: 13px;
-    color: #5A7A9A;
-    margin-bottom: 28px;
-  }
-
-  .gate-input {
-    width: 100%;
-    padding: 14px 18px;
-    border-radius: 10px;
-    border: 1px solid #1A2D48;
-    background: #0A1628;
-    color: #FFFFFF;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.2s;
-    margin-bottom: 16px;
-  }
-
-  .gate-input:focus {
-    border-color: rgba(0, 191, 255, 0.5);
-    box-shadow: 0 0 16px rgba(0, 191, 255, 0.1);
-  }
-
-  .gate-input.error {
-    border-color: rgba(226, 30, 38, 0.6);
-    box-shadow: 0 0 16px rgba(226, 30, 38, 0.1);
-  }
-
-  .gate-btn {
-    width: 100%;
-    padding: 14px;
-    border-radius: 10px;
-    border: none;
-    background: linear-gradient(135deg, #00BFFF, #0080FF);
-    color: #FFFFFF;
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .gate-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 20px rgba(0, 191, 255, 0.3);
-  }
-
-  .gate-error {
-    color: #FF6B6B;
-    font-size: 12px;
-    margin-top: 12px;
-    min-height: 18px;
-  }
-
-  .gate-badge {
-    display: inline-block;
-    padding: 4px 14px;
-    background: rgba(226, 30, 38, 0.15);
-    border: 1px solid rgba(226, 30, 38, 0.3);
-    border-radius: 16px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #FF6B6B;
-    margin-bottom: 24px;
-  }
-
-  /* Report Content */
-  .report-content {
-    display: none;
-  }
-
-  .report-content.visible {
-    display: block;
-  }
-
-  .report-header {
-    background: rgba(5, 11, 24, 0.92);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid #1A2D48;
-    padding: 16px 40px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  .report-header-brand {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-  }
-
-  .report-header-brand img {
-    height: 32px;
-    border-radius: 6px;
-  }
-
-  .report-header-title {
-    font-weight: 700;
-    font-size: 16px;
-  }
-
-  .report-header-sub {
-    font-size: 11px;
-    color: #5A7A9A;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-  }
-
-  .report-actions {
-    display: flex;
-    gap: 12px;
-  }
-
-  .report-actions button {
-    padding: 8px 20px;
-    border-radius: 8px;
-    border: 1px solid #1A2D48;
-    background: #111D33;
-    color: #A0B4CC;
-    font-family: 'Inter', sans-serif;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .report-actions button:hover {
-    border-color: rgba(0, 191, 255, 0.4);
-    color: #FFFFFF;
-    background: rgba(0, 191, 255, 0.1);
-  }
-
-  .report-body {
-    max-width: 960px;
-    margin: 0 auto;
-    padding: 40px;
-  }
-
-  .report-pre {
-    font-family: 'Cascadia Code', 'Fira Code', 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
-    font-size: 13px;
-    line-height: 1.6;
-    color: #A0B4CC;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    tab-size: 4;
-  }
-
-  @media print {
-    .password-gate { display: none !important; }
-    .report-header { position: static; background: #fff; border-bottom: 2px solid #000; }
-    .report-header-title, .report-header-sub { color: #000; }
-    body { background: #fff; color: #000; }
+  body { background: #fff; color: #000; }
     .report-pre { color: #000; font-size: 11px; }
     .report-actions { display: none; }
   }
@@ -234,27 +38,14 @@
 </head>
 <body>
 
-<!-- Password Gate -->
-<div class="password-gate" id="passwordGate">
-  <div class="gate-box">
-    <img src="Ampcode.png" alt="Ampcode">
-    <div class="gate-badge">Confidential Document</div>
-    <h2>Authentication Required</h2>
-    <p>This CISO security assessment report is restricted.<br>Enter the access password to continue.</p>
-    <input type="password" class="gate-input" id="gatePassword" placeholder="Enter password" autocomplete="off">
-    <button class="gate-btn" id="gateSubmit">Access Report</button>
-    <div class="gate-error" id="gateError"></div>
-  </div>
-</div>
-
 <!-- Report Content -->
-<div class="report-content" id="reportContent">
+<div class="report-content visible" id="reportContent">
   <div class="report-header">
     <div class="report-header-brand">
       <img src="Ampcode.png" alt="Ampcode">
       <div>
         <div class="report-header-title">AI Coding Tools — Security Comparison Report</div>
-        <div class="report-header-sub">CISO Assessment · Confidential</div>
+        <div class="report-header-sub">CISO Assessment · Public Summary</div>
       </div>
     </div>
     <div class="report-actions">
@@ -264,7 +55,7 @@
   </div>
   <div class="report-body">
     <pre class="report-pre" id="reportText">================================================================================
-                    CONFIDENTIAL — INTERNAL USE ONLY
+                    PUBLIC — POINT-IN-TIME SECURITY ASSESSMENT
 ================================================================================
 
       AI CODING TOOLS — COMPARATIVE CYBERSECURITY ASSESSMENT REPORT
@@ -272,8 +63,8 @@
       Ampcode vs Cursor vs Claude Code vs OpenAI Codex
 
       Prepared for:    Chief Information Security Officer
-      Assessment Date: March 19, 2026
-      Classification:  Confidential — Restricted Distribution
+      Assessment Date: June 22, 2026
+      Classification:  Public — Point-in-Time Assessment
       Scope:           Enterprise Readiness Comparison of AI Coding Agents
 
       Vendors Assessed:
@@ -317,27 +108,26 @@ available documentation, trust portals, and CVE databases.
 KEY FINDINGS:
 
   * Ampcode (Sourcegraph) — APPROVED. Strong compliance portfolio
-    (SOC 2 + ISO 27001 + GDPR + CCPA + EU AI Act), zero LLM data
+    (SOC 2 Type II + annual third-party pentesting), zero LLM data
     retention on Enterprise plans with training permanently disabled,
     automatic secret redaction engine, SSO/SCIM support. No publicly
     disclosed critical CVEs. Score: 42/45.
 
   * Cursor (Anysphere) — CONDITIONAL. SOC 2 Type II only; vendor
     admits being "still in the journey of growing our security posture."
-    Four critical CVEs disclosed including a CVSS 9.8 RCE. No built-in
-    secret redaction engine. Extension signature verification and
-    Workspace Trust disabled by default. Score: 27/45.
+    Multiple Cursor CVEs disclosed, including prompt-injection and sandbox-escape RCE paths. No built-in
+    secret redaction engine. Enterprise controls include Privacy Mode enforcement, audit logs, model controls, SSO/SCIM, and CMEK. Score: 27/45.
 
   * Claude Code (Anthropic) — APPROVED. Broadest compliance portfolio
     of all four tools (SOC 2 + ISO 27001 + ISO 42001 + HIPAA + CSA
-    STAR + NIST 800-171 + FedRAMP High). CLI-local architecture with
+    STAR + NIST 800-171 + FedRAMP-qualified government/partner offerings). CLI-local architecture with
     sandboxed bash, command blocklist, and permission-based execution.
     No publicly disclosed critical CVEs. Score: 38/45.
 
   * OpenAI Codex — APPROVED. Strong compliance (SOC 2 + ISO 27001 +
     ISO 27017/27018/27701 + PCI DSS). Cloud-sandboxed environments
     with three execution modes and platform-native enforcement.
-    Data residency in 10+ countries. Score: 40/45.
+    OpenAI Trust Center documents broad enterprise controls; verify Codex-specific data residency during procurement. Score: 40/45.
 
 OVERALL RECOMMENDATION:
 
@@ -385,13 +175,13 @@ OVERALL RECOMMENDATION:
     - Constitutional AI safety research pioneer
     - Industry-leading compliance certifications
     - Responsible Scaling Policy published
-    - HIPAA and FedRAMP High — rare among AI coding tools
+    - HIPAA and FedRAMP High available for Claude government/partner-hosted offerings
 
   OpenAI Codex / OpenAI:
     - Largest AI company by market capitalization
     - ChatGPT Enterprise serves Fortune 500 customers
-    - Extensive data residency options (10+ countries)
-    - PCI DSS compliant — unique among the four tools
+    - OpenAI enterprise controls; verify Codex-specific data residency options
+    - ISO 27701 and broad OpenAI Trust Center coverage; verify Codex-specific scope during procurement
 
 
 ================================================================================
@@ -414,22 +204,21 @@ OVERALL RECOMMENDATION:
   CCPA                  ✓ Compliant  ~ Partial    ✓ Compliant   ✓ Compliant
   EU AI Act             ✓ Compliant  ✗ None       ✗ None        ✗ None
   HIPAA                 ✗ None       ✗ None       ✓ Certified   ✗ None
-  FedRAMP High          ✗ None       ✗ None       ✓ Certified   ✗ None
+  FedRAMP High          ✗ None       ✗ None       Gov/partner  ✗ None
   NIST 800-171          ✗ None       ✗ None       ✓ Certified   ✗ None
   CSA STAR              ✗ None       ✗ None       ✓ Certified   ✗ None
   PCI DSS               ✗ None       ✗ None       ✗ None        ✓ Certified
 
   TOTAL CERTIFICATIONS:
-    Ampcode:     5 (SOC2, ISO27001, GDPR, CCPA, EU AI Act)
+    Ampcode:     5 (SOC2 Type II and annual pentesting)
     Cursor:      1 (SOC2 only)
-    Claude Code: 7 (SOC2, ISO27001, ISO42001, HIPAA, FedRAMP, NIST, CSA)
+    Claude Code: 6+ (SOC2, ISO27001, ISO42001, HIPAA, NIST, CSA; FedRAMP for government/partner-hosted offerings)
     Codex:       6 (SOC2, ISO27001/17/18/701, PCI DSS)
 
   ANALYSIS:
 
     Claude Code (Anthropic) holds the broadest compliance portfolio of
-    any AI coding tool assessed. Its FedRAMP High and HIPAA certifications
-    make it uniquely suited for government and healthcare environments.
+    any AI coding tool assessed. Its HIPAA, NIST, and CSA STAR support regulated environments; FedRAMP High applies to Claude for Government and partner-hosted government offerings, not every Claude Code deployment.
 
     Cursor's single SOC 2 Type II certification is notably below the
     enterprise baseline. The vendor's own documentation acknowledges
@@ -446,11 +235,11 @@ OVERALL RECOMMENDATION:
   AMPCODE (Sourcegraph):
   ----------------------
     Enterprise Plan:
-      - Zero data retention on ALL LLM providers for text inputs
-      - No code is retained beyond inference time
+      - Zero LLM input/output retention on Enterprise plans; provider cache up to 24h may apply
+      - LLM inputs/outputs are not retained beyond inference except documented provider caching/safety exceptions
       - Model training on customer data is permanently disabled
       - Training CANNOT be re-enabled on Enterprise plans
-      - Thread data deleted within 30 days of deletion request
+      - Deleted thread data removed within 30 days
       - Images subject to limited retention for compliance only
 
     Risk: LOW — Best-in-class data retention controls
@@ -459,9 +248,9 @@ OVERALL RECOMMENDATION:
   --------------------
     Privacy Mode:
       - Zero data retention — code not stored on servers
-      - No training on user data when Privacy Mode enabled
+      - No training on user data when Privacy Mode is enabled
 
-    Share Data Mode (default):
+    Privacy Mode Off:
       - Data MAY be used for training purposes
       - Already-trained models are NOT retrained after user deletion
       - Data that has already been used for training persists in models
@@ -470,7 +259,7 @@ OVERALL RECOMMENDATION:
     untrained. This creates a permanent data exposure vector for
     organizations that do not enforce Privacy Mode from day one.
 
-    Risk: MEDIUM — Requires strict Privacy Mode enforcement
+    Risk: MEDIUM — Requires strict Privacy Mode and model-retention control enforcement
 
   CLAUDE CODE (Anthropic):
   -------------------------
@@ -535,7 +324,7 @@ OVERALL RECOMMENDATION:
   AMPCODE:
     Primary Cloud:     Google Cloud Platform (GCP)
     Regions:           United States only
-    Sub-processors:    All US-based
+    Sub-processors:    US-based documented providers
     China Exposure:    None — explicitly documented as no China providers
     Data Sovereignty:  US jurisdiction, SCCs for EEA/UK transfers
 
@@ -558,7 +347,7 @@ OVERALL RECOMMENDATION:
     Regions:           10+ countries: US, EU, UK, Australia, Canada,
                        Japan, India, Singapore, South Korea, UAE
     China Exposure:    None documented
-    Data Sovereignty:  Broadest residency options of all four vendors
+    Data Sovereignty:  Verify Codex-specific residency scope with OpenAI
 
   DATA FLOW COMPARISON:
 
@@ -625,8 +414,7 @@ OVERALL RECOMMENDATION:
     SSO, SCIM Directory Sync, and exclusive SSO mode. This enables
     automated provisioning/deprovisioning via corporate IdP.
 
-    Cursor supports SSO but lacks SCIM, creating a gap in automated
-    user lifecycle management that may lead to orphaned accounts.
+    Cursor now documents SSO and SCIM for Enterprise; validate plan availability and IdP integration during procurement.
 
     Claude Code as a CLI tool uses API keys exclusively. While this
     simplifies deployment, it lacks centralized identity controls and
@@ -689,9 +477,8 @@ OVERALL RECOMMENDATION:
     ⚠ CRITICAL: No built-in secret redaction engine
     - Only protection: .cursorignore files (developer-configured)
     - Path obfuscation for file paths
-    - Extension signature verification: DISABLED by default
-    - Workspace Trust: DISABLED by default
-    - Entire burden of secret protection placed on developers
+    - Enterprise controls include Privacy Mode enforcement, model controls, audit logs, SSO/SCIM, and CMEK
+    - Secret exclusion still depends heavily on configuration and developer hygiene
     - No automatic detection of credentials in code context
 
   CLAUDE CODE — STRONG SECRET PROTECTION:
@@ -742,14 +529,15 @@ OVERALL RECOMMENDATION:
   │                                                                      │
   │   ⚠  CRITICAL SECURITY DIFFERENTIATOR                               │
   │                                                                      │
-  │   Cursor is the ONLY tool with publicly disclosed critical CVEs.     │
-  │   All four vulnerabilities enable Remote Code Execution (RCE).       │
+  │   Cursor has multiple public CVEs among the assessed tools.          │
+  │   Several listed issues enable or contribute to command execution     │
+  │   / RCE paths; CVE-2025-54133 is CNA-rated medium.                  │
   │                                                                      │
   └──────────────────────────────────────────────────────────────────────┘
 
-  CURSOR — FOUR CRITICAL CVEs:
+  CURSOR — PUBLIC CVEs REQUIRING PATCH VALIDATION:
 
-    CVE-2025-54135 — CVSS 9.8 (CRITICAL)
+    CVE-2025-54135 — prompt-injection RCE path; fixed in Cursor 1.3.9
     -------------------------------------------------------
     Type:        Remote Code Execution via Prompt Injection
     Vector:      Prompt injection combined with dotfile creation
@@ -757,18 +545,18 @@ OVERALL RECOMMENDATION:
                  machines via crafted prompts
     Severity:    CRITICAL — highest possible practical severity
 
-    CVE-2026-26268 — Sandbox Escape RCE
+    CVE-2026-26268 — Sandbox Escape RCE; fixed in Cursor 2.5
     -------------------------------------------------------
     Type:        Sandbox Escape leading to RCE
     Vector:      Escape from Cursor's sandbox environment
     Impact:      Full system access from sandboxed context
 
-    CVE-2025-59944 — Remote Code Execution
+    CVE-2025-59944 — prompt-injection RCE path on case-insensitive filesystems; fixed in Cursor 1.7
     -------------------------------------------------------
     Type:        RCE vulnerability
     Impact:      Arbitrary code execution on target systems
 
-    CVE-2025-54133 — Remote Code Execution
+    CVE-2025-54133 — MCP deeplink command execution (CNA CVSS 5.3 Medium)
     -------------------------------------------------------
     Type:        RCE vulnerability
     Impact:      Arbitrary code execution on target systems
@@ -793,8 +581,7 @@ OVERALL RECOMMENDATION:
   ANALYSIS:
 
     Cursor's four critical RCE CVEs represent the single most significant
-    security differentiator in this assessment. The CVSS 9.8 score on
-    CVE-2025-54135 indicates maximum exploitability. The combination of:
+    security differentiator in this assessment. CVE-2025-54135 and related Cursor advisories show prompt-injection-to-execution risk. NVD had not assigned its own CVSS score for several entries as of June 22, 2026. The combination of:
 
       1. Critical RCE vulnerabilities
       2. No built-in secret redaction
@@ -865,7 +652,7 @@ OVERALL RECOMMENDATION:
   Authentication Bypass          LOW      SSO + SCIM + exclusive SSO mode
   Secret Exposure               MEDIUM   Best-effort redaction has limits
   Prompt Injection              MEDIUM   Inherent to LLM agents; bug bounty
-  Compliance Risk               LOW      SOC2 + ISO27001 + GDPR + CCPA
+  Compliance Risk               LOW      SOC2 Type II + annual pentesting
   Supply Chain                  LOW      SBOMs, distroless images, CVE scans
 
   CURSOR — OVERALL RISK: HIGH
@@ -876,12 +663,12 @@ OVERALL RECOMMENDATION:
   Data at Rest                  LOW      AES-256, cloud-managed
   Data in Transit               LOW      TLS 1.2+
   LLM Data Leakage              HIGH     Training risk if Privacy Mode off
-  Authentication Bypass          MEDIUM   SSO but no SCIM, no exclusive mode
+  Authentication Bypass          MEDIUM   SSO/SCIM documented; validate exclusive enforcement
   Secret Exposure               HIGH     No redaction engine, sigs disabled
-  Prompt Injection              CRITICAL CVE-2025-54135 CVSS 9.8 proven RCE
-  Sandbox Escape                CRITICAL CVE-2026-26268 proven escape
+  Prompt Injection              HIGH     CVE-2025-54135 prompt-injection RCE path
+  Sandbox Escape                HIGH     CVE-2026-26268 sandbox escape path
   Compliance Risk               HIGH     SOC2 only, vendor admits immaturity
-  Remote Code Execution         CRITICAL 4 CVEs enabling RCE
+  Remote Code Execution         HIGH     Multiple CVEs with execution impact
 
   CLAUDE CODE — OVERALL RISK: LOW
   ---------------------------------
@@ -909,7 +696,7 @@ OVERALL RECOMMENDATION:
   Secret Exposure               LOW      Platform-native sandbox
   Prompt Injection              LOW      Sandboxed environments, net isol.
   Compliance Risk               LOW      SOC2 + ISO27001 + PCI DSS
-  Data Residency                LOW      10+ country options
+  Data Residency                MEDIUM   Verify Codex-specific residency scope
 
 
 ================================================================================
@@ -922,7 +709,7 @@ OVERALL RECOMMENDATION:
     SSO Configuration: Exclusive SSO mode via WorkOS (Okta/SAML/OIDC)
     SCIM:              Enable Directory Sync with corporate IdP
     Network:           Allowlist ampcode.com, auth.ampcode.com,
-                       authapi.ampcode.com
+                       production.ampworkers.com, static.ampcode.com
     Training:          Developer security awareness program
     Monitoring:        Request audit logs, establish review cadence
     Secret Policy:     Educate on redaction limitations; use vaults
@@ -932,9 +719,9 @@ OVERALL RECOMMENDATION:
     Privacy Mode:      MANDATORY — enforce for all users from day one
     .cursorignore:     MANDATORY — create and maintain org-wide policy
     Version Pinning:   MANDATORY — pin to patched versions, monitor CVEs
-    Extension Sigs:    Enable extension signature verification
-    Workspace Trust:   Enable Workspace Trust
-    SSO:               Configure SSO with domain verification
+    SSO/SCIM:         Configure SSO, SCIM, and domain verification
+    CMEK:              Enable Customer Managed Encryption Keys where required
+    Model Controls:    Restrict models with provider retention unless approved
     Monitoring:        Enable enterprise audit logs, SIEM streaming
     CVE Monitoring:    Subscribe to Cursor security advisories
     Restrictions:      Consider restricting to non-sensitive codebases
@@ -981,7 +768,7 @@ OVERALL RECOMMENDATION:
   IDENTITY &amp; ACCESS:
 
   [ ] Configure SSO as exclusive authentication method [A, Cu, Cx]
-  [ ] Set up SCIM Directory Sync [A, Cx]
+  [ ] Set up SCIM Directory Sync [A, Cu, Cx]
   [ ] Enforce MFA via identity provider
   [ ] Disable password-based authentication where available
   [ ] Configure domain verification [A, Cu, Cx]
@@ -998,8 +785,8 @@ OVERALL RECOMMENDATION:
   SECRET MANAGEMENT:
 
   [ ] Deploy .cursorignore files if using Cursor [Cu]
-  [ ] Enable extension signature verification [Cu]
-  [ ] Enable Workspace Trust [Cu]
+  [ ] Configure Cursor Enterprise SSO/SCIM and CMEK where required [Cu]
+  [ ] Restrict Cursor models with provider retention unless approved [Cu]
   [ ] Establish secret rotation playbook for LLM-context exposure
   [ ] Ensure developers use vault-based secret management
   [ ] Document procedure for reporting suspected secret exposure
@@ -1045,13 +832,13 @@ OVERALL RECOMMENDATION:
   │   Ampcode demonstrates the strongest overall security posture for    │
   │   enterprise AI coding tool deployment. Key strengths include:       │
   │                                                                      │
-  │     • SOC 2 Type II + ISO 27001 + GDPR + CCPA + EU AI Act           │
+  │     • SOC 2 Type II + annual third-party pentesting                   │
   │     • Zero data retention on ALL LLM providers (Enterprise)          │
   │     • Training permanently disabled, cannot be re-enabled            │
   │     • Automatic secret redaction engine (system-level)               │
   │     • SSO/SCIM with exclusive SSO mode                               │
   │     • No publicly disclosed critical CVEs                            │
-  │     • All US-based infrastructure, no China providers                │
+  │     • US-based documented providers; no China providers documented    │
   │                                                                      │
   │   CONDITIONAL ON:                                                    │
   │     1. Enterprise plan activation                                    │
@@ -1069,12 +856,11 @@ OVERALL RECOMMENDATION:
   │   Cursor presents material security risks that require extraordinary │
   │   mitigation for enterprise deployment:                              │
   │                                                                      │
-  │     ✗ FOUR critical RCE CVEs (including CVSS 9.8)                    │
+  │     ✗ Multiple CVEs including prompt-injection/sandbox escape paths   │
   │     ✗ SOC 2 Type II only — no ISO 27001 or other certs              │
   │     ✗ No built-in secret redaction engine                            │
-  │     ✗ Extension signatures DISABLED by default                       │
-  │     ✗ Workspace Trust DISABLED by default                            │
-  │     ✗ No SCIM Directory Sync                                         │
+  │     ✗ Enterprise controls require plan/configuration validation       │
+  │     ✗ SCIM is Enterprise-documented; validate IdP behavior           │
   │     ✗ Training data risk if Privacy Mode not enforced                │
   │     ✗ Vendor admits "still growing security posture"                 │
   │                                                                      │
@@ -1099,7 +885,7 @@ OVERALL RECOMMENDATION:
   │   coding tool assessed, making it uniquely suited for regulated      │
   │   industries:                                                        │
   │                                                                      │
-  │     • SOC 2 + ISO 27001 + ISO 42001 + HIPAA + FedRAMP High          │
+  │     • SOC 2 + ISO 27001 + ISO 42001 + HIPAA + FedRAMP gov offerings  │
   │     • NIST 800-171 + CSA STAR — most certifications overall          │
   │     • CLI-local execution — code never leaves developer machine      │
   │     • Sandboxed bash with filesystem/network isolation               │
@@ -1131,7 +917,7 @@ OVERALL RECOMMENDATION:
   │     • Cloud-sandboxed environments with 3 execution modes            │
   │     • Platform-native enforcement and network isolation              │
   │     • Enterprise SSO/SCIM via ChatGPT Enterprise                     │
-  │     • Data residency in 10+ countries                                │
+  │     • Broad OpenAI enterprise controls; verify Codex residency scope  │
   │     • No publicly disclosed critical CVEs                            │
   │                                                                      │
   │   CONSIDERATIONS:                                                    │
@@ -1204,7 +990,7 @@ OVERALL RECOMMENDATION:
 
   CVE REFERENCES (CURSOR):
 
-    CVE-2025-54135 (CVSS 9.8 Critical RCE)
+    CVE-2025-54135 (prompt-injection RCE path)
     https://nvd.nist.gov/vuln/detail/CVE-2025-54135
 
     CVE-2026-26268 (Sandbox Escape RCE)
@@ -1223,11 +1009,11 @@ OVERALL RECOMMENDATION:
 
   Document Title:   AI Coding Tools — Comparative Cybersecurity Assessment
   Version:          1.0
-  Date:             March 19, 2026
-  Classification:   Confidential — Internal Use Only
+  Date:             June 22, 2026
+  Classification:   Public — Point-in-Time Assessment
   Author:           Information Security Assessment Team
   Distribution:     CISO, Security Review Committee, Engineering Leadership
-  Review Cycle:     Quarterly (next review: June 2026)
+  Review Cycle:     Quarterly (next review: September 2026)
 
   TOOLS ASSESSED:
     Ampcode v2026.Q1    (Sourcegraph, Inc.)
@@ -1238,12 +1024,12 @@ OVERALL RECOMMENDATION:
   METHODOLOGY:
     Assessment based on publicly available security documentation,
     vendor trust portals, CVE databases (NVD, MITRE), and published
-    compliance certifications as of the assessment date.
+    compliance certifications as of June 22, 2026.
 
   DISCLAIMER:
 
   This assessment is based on publicly available security documentation
-  from each vendor as of the assessment date. It should be supplemented
+  from each vendor as of June 22, 2026. It should be supplemented
   with:
 
     - Direct vendor engagement and security questionnaire responses
@@ -1260,36 +1046,12 @@ OVERALL RECOMMENDATION:
 
 
 ================================================================================
-                    END OF REPORT — CONFIDENTIAL
+                    END OF REPORT
 ================================================================================</pre>
   </div>
 </div>
 
 <script>
-// Password gate
-(function() {
-  function unlock() {
-    document.getElementById('passwordGate').classList.add('hidden');
-    document.getElementById('reportContent').classList.add('visible');
-  }
-
-  function attempt() {
-    var pw = document.getElementById('gatePassword').value;
-    if (pw === 'bashar776@') {
-      unlock();
-    } else {
-      document.getElementById('gateError').textContent = 'Incorrect password. Access denied.';
-      document.getElementById('gatePassword').classList.add('error');
-      setTimeout(function() { document.getElementById('gatePassword').classList.remove('error'); }, 1500);
-    }
-  }
-
-  document.getElementById('gateSubmit').addEventListener('click', attempt);
-  document.getElementById('gatePassword').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') attempt();
-  });
-})();
-
 // Download as TXT
 function downloadTxt() {
   var text = document.getElementById('reportText').textContent;
