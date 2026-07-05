@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-06-22
+Last updated: 2026-07-05
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -184,6 +184,9 @@ Last updated: 2026-06-22
 
 • og-how-i-use-amp.jpg
   https://zuwasi.github.io/Public-html-pages/og-how-i-use-amp.jpg
+
+• terratest-ampcode-esl-presentation
+  https://zuwasi.github.io/Public-html-pages/terratest-ampcode-esl-presentation
 
 • wolfram-engine-gpu-demo-assets
   https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-assets
