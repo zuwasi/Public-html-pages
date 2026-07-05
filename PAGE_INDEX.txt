@@ -188,6 +188,9 @@ Last updated: 2026-07-05
 • terratest-ampcode-esl-presentation
   https://zuwasi.github.io/Public-html-pages/terratest-ampcode-esl-presentation
 
+• terratest-diff-esl-presentation
+  https://zuwasi.github.io/Public-html-pages/terratest-diff-esl-presentation
+
 • wolfram-engine-gpu-demo-assets
   https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-assets
 
