@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Ampcode × Terratest — ESL Engineering Software Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#080b16; --bg2:#0f1630; --bg3:#141d3d;
+    --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07); --brd:rgba(255,255,255,.11);
+    --ink:#eaeefb; --muted:#9fabcc; --faint:#6b7794;
+    --green:#1BA860; --blue:#4F7DF0; --purple:#8B5CF6; --red:#e8443a; --yellow:#f6c945; --cyan:#3fc9c0;
+    --grad:linear-gradient(135deg,#1BA860 0%,#4F7DF0 52%,#8B5CF6 100%);
+    --grad-soft:linear-gradient(135deg,rgba(27,168,96,.18),rgba(79,125,240,.18),rgba(139,92,246,.18));
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;overflow:hidden}
+  body{
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    background:radial-gradient(1200px 800px at 78% -8%,rgba(139,92,246,.16),transparent 60%),
+               radial-gradient(1100px 760px at 12% 108%,rgba(27,168,96,.14),transparent 60%),
+               linear-gradient(160deg,var(--bg),var(--bg2) 60%,#0a1024);
+    color:var(--ink);-webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+
+  /* ---------- deck mechanics ---------- */
+  .viewport{width:100vw;height:100vh;overflow:hidden}
+  #track{display:flex;height:100%;transition:transform .55s cubic-bezier(.22,.61,.36,1);will-change:transform}
+  .slide{
+    min-width:100vw;max-width:100vw;height:100vh;overflow-y:auto;overflow-x:hidden;
+    padding:clamp(28px,5vw,90px) clamp(22px,6vw,120px);
+    display:flex;flex-direction:column;justify-content:center;gap:clamp(14px,2vh,26px);
+  }
+  .slide::-webkit-scrollbar{width:8px}
+  .slide::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
+
+  /* ---------- brand chip + chrome ---------- */
+  .brand-chip{position:fixed;top:16px;left:18px;z-index:40;display:flex;align-items:center;gap:9px;
+    background:#fff;border-radius:11px;padding:6px 11px 6px 8px;box-shadow:0 8px 26px rgba(0,0,0,.4)}
+  .brand-chip img{height:22px;display:block}
+  .brand-chip span{color:#1b2233;font-weight:800;font-size:12.5px;letter-spacing:.4px}
+  .nav{position:fixed;top:50%;transform:translateY(-50%);z-index:40;width:52px;height:52px;border-radius:50%;
+    border:1px solid var(--brd);background:rgba(16,22,48,.72);backdrop-filter:blur(8px);color:var(--ink);
+    font-size:26px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    transition:transform .2s,background .2s,opacity .25s}
+  .nav:hover{background:var(--blue);transform:translateY(-50%) scale(1.08)}
+  #prev{left:20px}#next{right:20px}
+  .nav.hidden{opacity:0;pointer-events:none}
+  .progress{position:fixed;left:0;bottom:0;height:5px;width:100%;background:rgba(255,255,255,.06);z-index:40}
+  #progFill{height:100%;width:0;background:var(--grad);transition:width .45s ease;box-shadow:0 0 14px rgba(79,125,240,.6)}
+  #counter{position:fixed;right:16px;bottom:15px;z-index:40;font-size:12.5px;color:var(--muted);
+    font-variant-numeric:tabular-nums;background:rgba(10,14,30,.6);padding:4px 10px;border-radius:20px;border:1px solid var(--brd)}
+  #hint{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:40;color:var(--muted);font-size:13px;
+    letter-spacing:.5px;animation:pulse 1.9s ease-in-out infinite;transition:opacity .4s}
+  #hint.gone{opacity:0;pointer-events:none}
+  @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+  /* ---------- typography ---------- */
+  .eyebrow{font-size:clamp(11px,1.1vw,13px);font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--blue)}
+  h1{font-size:clamp(30px,5.4vw,66px);font-weight:900;line-height:1.02;letter-spacing:-.02em}
+  h2{font-size:clamp(23px,3.5vw,44px);font-weight:800;line-height:1.08;letter-spacing:-.015em}
+  h3{font-size:clamp(16px,1.7vw,22px);font-weight:700}
+  p,li{font-size:clamp(14px,1.35vw,18px);line-height:1.6;color:var(--muted)}
+  h1,h2,h3,h4,p,li,a,.lead,.eyebrow,.quote{overflow-wrap:break-word;word-break:break-word;max-width:100%}
+  .lead{font-size:clamp(15px,1.55vw,20px);color:var(--ink)}
+  .grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  strong{color:var(--ink);font-weight:700}
+  .mono{font-family:ui-monospace,'Cascadia Code',Consolas,monospace}
+
+  /* ---------- layout helpers ---------- */
+  .wrap{max-width:1180px;width:100%;margin:0 auto}
+  .grid{display:grid;gap:clamp(12px,1.5vw,20px)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .card{background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:clamp(16px,1.9vw,26px)}
+  .card.soft{background:var(--grad-soft)}
+  .chip{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--brd);
+    border-radius:999px;padding:7px 14px;font-size:13px;color:var(--ink);font-weight:600}
+  .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.03em}
+  .pill.crit{background:rgba(232,68,58,.18);color:#ff8b82;border:1px solid rgba(232,68,58,.4)}
+  .pill.high{background:rgba(246,201,69,.16);color:#ffd873;border:1px solid rgba(246,201,69,.35)}
+  .pill.ok{background:rgba(27,168,96,.18);color:#5fe0a0;border:1px solid rgba(27,168,96,.4)}
+  .pill.info{background:rgba(79,125,240,.16);color:#9ab7ff;border:1px solid rgba(79,125,240,.35)}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  ul.clean{list-style:none;display:flex;flex-direction:column;gap:10px}
+  ul.clean li{position:relative;padding-left:26px}
+  ul.clean li::before{content:"";position:absolute;left:0;top:9px;width:11px;height:11px;border-radius:3px;background:var(--grad)}
+  .stat{background:var(--panel);border:1px solid var(--brd);border-radius:16px;padding:clamp(14px,1.8vw,24px);text-align:center}
+  .stat .num{font-size:clamp(26px,3.6vw,46px);font-weight:900;line-height:1}
+  .stat .lbl{font-size:12.5px;color:var(--muted);margin-top:7px;font-weight:600;letter-spacing:.02em}
+
+  /* ---------- bar charts ---------- */
+  .chart{display:flex;flex-direction:column;gap:clamp(10px,1.5vh,16px)}
+  .brow{display:grid;grid-template-columns:190px 1fr;gap:14px;align-items:center}
+  .brow .rl{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .brow .rl small{display:block;color:var(--faint);font-weight:500;font-size:11.5px}
+  .track2{background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden;position:relative;height:26px;display:flex;align-items:center}
+  .fill{height:100%;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:flex-end;
+    padding-right:9px;font-size:12px;font-weight:800;color:#fff;min-width:2px}
+  .fill.g{background:linear-gradient(90deg,#1BA860,#2fd07f)}
+  .fill.b{background:linear-gradient(90deg,#3a63d6,#5f8bff)}
+  .fill.p{background:linear-gradient(90deg,#7a45e0,#a06bff)}
+  .fill.grey{background:linear-gradient(90deg,#3a4260,#59637f)}
+  .fill.red{background:linear-gradient(90deg,#c93b32,#ff6a5f)}
+  .fill.yellow{background:linear-gradient(90deg,#d9ad2e,#ffd257);color:#3a2f00}
+  .valout{font-size:12.5px;font-weight:800;color:var(--ink);white-space:nowrap}
+  .pair{display:grid;grid-template-columns:200px 1fr;gap:14px;align-items:center}
+  .pairbars{display:flex;flex-direction:column;gap:6px}
+  .barline{display:flex;align-items:center;gap:9px}
+  .barline .tag{font-size:10.5px;color:var(--faint);width:42px;font-weight:700;text-transform:uppercase}
+  .legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+  .legend b{color:var(--ink)}
+
+  /* ---------- flow diagrams ---------- */
+  .flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;justify-content:center}
+  .fbox{flex:1 1 130px;min-width:120px;max-width:190px;background:var(--panel);border:1px solid var(--brd);
+    border-radius:14px;padding:14px 12px;text-align:center;position:relative}
+  .fbox .n{width:26px;height:26px;border-radius:8px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;
+    display:flex;align-items:center;justify-content:center;margin:0 auto 9px}
+  .fbox h4{font-size:14px;font-weight:700;margin-bottom:3px}
+  .fbox p{font-size:11.5px;line-height:1.4}
+  .farrow{display:flex;align-items:center;color:var(--blue);font-size:20px;font-weight:800}
+  @media(max-width:820px){.farrow{transform:rotate(90deg)}}
+
+  .rc{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .rc .step{background:var(--panel);border:1px solid var(--brd);border-radius:12px;padding:11px 15px;font-size:13.5px;font-weight:600}
+  .rc .step.bad{border-color:rgba(232,68,58,.45);background:rgba(232,68,58,.08)}
+  .rc .step.good{border-color:rgba(27,168,96,.5);background:rgba(27,168,96,.1)}
+  .rc .ar{color:var(--faint);font-size:17px}
+
+  /* ---------- table ---------- */
+  table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.15vw,14.5px)}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--brd)}
+  th{color:var(--faint);font-weight:700;font-size:11.5px;letter-spacing:.05em;text-transform:uppercase}
+  td{color:var(--muted)}td strong{color:var(--ink)}
+  tr:last-child td{border-bottom:none}
+  .arrowto{color:var(--green);font-weight:800}
+
+  /* ---------- title + closing ---------- */
+  .title-slide{align-items:center;text-align:center}
+  .logo-card{background:#fff;border-radius:20px;padding:22px 30px;box-shadow:0 24px 70px rgba(0,0,0,.5);display:inline-block}
+  .logo-card img{height:clamp(58px,8vw,96px);display:block}
+  .author{display:flex;align-items:center;gap:16px;justify-content:center;flex-wrap:wrap}
+  .author img{width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid var(--blue);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .divider{height:1px;width:min(560px,80%);background:linear-gradient(90deg,transparent,var(--brd),transparent);margin:6px auto}
+  .kbd{font-family:ui-monospace,monospace;background:var(--panel2);border:1px solid var(--brd);border-bottom-width:2px;
+    border-radius:6px;padding:2px 8px;font-size:12px;color:var(--ink)}
+  .quote{border-left:3px solid;border-image:var(--grad) 1;padding:6px 0 6px 20px;font-size:clamp(16px,2vw,24px);
+    color:var(--ink);font-weight:500;line-height:1.5;font-style:italic}
+
+  @media(max-width:820px){
+    .g2,.g3,.g4{grid-template-columns:1fr}
+    .brow,.pair{grid-template-columns:1fr;gap:6px}
+    .brand-chip span{display:none}
+    .nav{width:42px;height:42px;font-size:22px}
+    #prev{left:8px}#next{right:8px}
+    .slide{justify-content:flex-start;padding-top:64px;padding-bottom:56px}
+    .tscroll table{min-width:460px}
+    .flow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .farrow{display:none}
+    .fbox{max-width:none}
+    h1{font-size:clamp(28px,8vw,44px)}
+    h2{font-size:clamp(21px,6vw,34px)}
+    .valout{font-size:11px}
+    .brow .rl,.pair .rl{font-size:12.5px}
+  }
+  .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .tscroll::-webkit-scrollbar{height:7px}
+  .tscroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:7px}
+</style>
+</head>
+<body>
+
+<div class="brand-chip"><img src="esl_logo.png" alt="ESL"/><span>Engineering Software Lab</span></div>
+
+<div class="viewport">
+<div id="track">
+
+  <!-- 1 · TITLE -->
+  <section class="slide title-slide">
+    <div class="wrap" style="display:flex;flex-direction:column;gap:clamp(16px,2.6vh,30px);align-items:center">
+      <div class="logo-card"><img src="esl_logo.png" alt="ESL — Engineering Software Lab"/></div>
+      <div class="eyebrow">AI-Assisted Software Engineering · Case Study</div>
+      <h1>Ampcode <span class="grad-text">×</span> Terratest</h1>
+      <p class="lead" style="max-width:900px">Cloning, <strong>hardening</strong>, <strong>optimizing</strong>, <strong>testing</strong> &amp; <strong>documenting</strong> a real public Terraform testing library — with rigorous, <strong>hallucination-free</strong> verification of every change.</p>
+      <div class="divider"></div>
+      <div class="grid g2" style="max-width:760px;width:100%">
+        <div class="card" style="text-align:center">
+          <div class="eyebrow" style="color:var(--muted)">Prepared by</div>
+          <h3 style="margin:6px 0 4px">ESL — Engineering Software Lab</h3>
+          <p style="font-size:13.5px">Software Engineering Consultants</p>
+          <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">eswlab.com/contact-us →</a>
+        </div>
+        <div class="card author" style="justify-content:center">
+          <img src="daniel.jpg" alt="Daniel Liezrowice"/>
+          <div style="text-align:left">
+            <div class="eyebrow" style="color:var(--muted)">Author</div>
+            <h3 style="margin:4px 0">Daniel Liezrowice</h3>
+            <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">LinkedIn →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2 · THE BRIEF -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">How it started</div>
+      <h2>A question to ChatGPT</h2>
+      <div class="card soft" style="margin:18px 0">
+        <p class="quote">“I need a <strong>public Terraform demo project</strong> that will be used to show the capabilities of Ampcode to <strong>improve the performance</strong> of a Terraform project and <strong>test the improved code</strong> — with rigorous testing to make sure the conversion was done right: <strong>no bugs, no AI hallucinations</strong>.”</p>
+      </div>
+      <div class="grid g3">
+        <div class="chip">🌐 Public repository</div>
+        <div class="chip">🏗️ Real Terraform relevance</div>
+        <div class="chip">⚡ Refactor &amp; performance</div>
+        <div class="chip">🧪 Regression &amp; verification</div>
+        <div class="chip">🔒 Security hardening</div>
+        <div class="chip">🚫 Zero hallucinations</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · RECOMMENDATION -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">ChatGPT · <span class="mono">thought for 11s</span></div>
+      <h2>Recommendation: <span class="grad-text">Gruntwork Terratest</span></h2>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <h3 style="margin-bottom:10px">Why it fits the demo</h3>
+          <ul class="clean">
+            <li>Purpose-built for <strong>automated infrastructure testing</strong></li>
+            <li><strong>First-class Terraform</strong> support &amp; examples</li>
+            <li>Covers AWS, GCP, Azure, Docker &amp; Kubernetes</li>
+            <li>Large, real-world Go codebase — ideal for refactor + regression testing</li>
+          </ul>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;justify-content:center;gap:12px">
+          <div class="eyebrow" style="color:var(--muted)">Source</div>
+          <a class="mono" style="font-size:15px" href="https://github.com/gruntwork-io/terratest" target="_blank" rel="noopener">github.com/gruntwork-io/terratest →</a>
+          <a href="https://terratest.gruntwork.io" target="_blank" rel="noopener">terratest.gruntwork.io (docs) →</a>
+          <p style="font-size:13px">Apache-2.0 · maintained by Gruntwork.io</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · WHAT IS TERRATEST / SIZE -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">The target · size &amp; complexity</div>
+      <h2>A large, mature Go library</h2>
+      <p class="lead" style="max-width:920px;margin:8px 0 18px">Terratest is a <strong>library</strong> imported by your <span class="mono">_test.go</span> files: it deploys real infrastructure, asserts against it, then tears it down. Scale measured from the clone:</p>
+      <div class="grid g4">
+        <div class="stat"><div class="num grad-text">443</div><div class="lbl">Go source files</div></div>
+        <div class="stat"><div class="num grad-text">59,188</div><div class="lbl">Lines of Go</div></div>
+        <div class="stat"><div class="num grad-text">22</div><div class="lbl">Modules</div></div>
+        <div class="stat"><div class="num grad-text">244</div><div class="lbl">Test files</div></div>
+      </div>
+      <div class="grid g3" style="margin-top:16px">
+        <div class="card"><h3>Go 1.26</h3><p>Required toolchain (auto-upgraded during the work).</p></div>
+        <div class="card"><h3>Apache 2.0</h3><p>Permissive OSS license · maintained by Gruntwork.</p></div>
+        <div class="card"><h3>v1.x — maintenance</h3><p>The v1 line receives <strong>security fixes only</strong>; v2 is in development. This shaped our PR choices.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · ARCHITECTURE -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Architecture</div>
+      <h2>22 focused modules under <span class="mono">modules/</span></h2>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <h3 style="color:var(--green);margin-bottom:10px">IaC &amp; container tooling</h3>
+          <div class="rc">
+            <span class="chip">terraform</span><span class="chip">terragrunt</span><span class="chip">packer</span>
+            <span class="chip">docker</span><span class="chip">helm</span><span class="chip">k8s</span><span class="chip">opa</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--blue);margin-bottom:10px">Cloud providers</h3>
+          <div class="rc"><span class="chip">aws</span><span class="chip">azure</span><span class="chip">gcp</span></div>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--purple);margin-bottom:10px">Connectivity &amp; execution</h3>
+          <div class="rc">
+            <span class="chip">ssh</span><span class="chip">httphelper</span><span class="chip">dnshelper</span>
+            <span class="chip">database</span><span class="chip">shell</span>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--yellow);margin-bottom:10px">Utilities</h3>
+          <div class="rc">
+            <span class="chip">random</span><span class="chip">retry</span><span class="chip">files</span>
+            <span class="chip">logger</span><span class="chip">testing</span><span class="chip">teststructure</span>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:14px;font-size:13px">Supporting trees: <span class="mono">examples/</span> (sample infra) · <span class="mono">test/</span> (integration) · <span class="mono">cmd/</span> (CLI) · <span class="mono">internal/</span></p>
+    </div>
+  </section>
+
+  <!-- 6 · THE PROMPT / MISSION -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">The Ampcode mission</div>
+      <h2>One prompt, seven mandates</h2>
+      <div class="grid g2" style="margin-top:14px">
+        <ul class="clean">
+          <li><strong>Clone</strong> the Terratest repository</li>
+          <li><strong>Explain</strong> the project &amp; architecture</li>
+          <li><strong>Security review</strong> using the <em>Claude Mythos</em> skill</li>
+          <li><strong>Improve performance</strong> of the code</li>
+        </ul>
+        <ul class="clean">
+          <li><strong>Optimize</strong> the code (surgical, minimal)</li>
+          <li><strong>Perform every possible test</strong> to verify the solution</li>
+          <li><strong>Document</strong> with a table, scores &amp; explanations</li>
+          <li style="list-style:none"><span class="pill info">Follow-up</span> &nbsp;Find the <strong>2 most important issues</strong> → open PRs</li>
+        </ul>
+      </div>
+      <div class="card soft" style="margin-top:16px">
+        <p style="color:var(--ink)"><strong>Guardrail:</strong> every claim must be backed by a reproducible command — no unverified assertions, no hallucinated fixes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · WORKFLOW DIAGRAM -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">End-to-end workflow</div>
+      <h2>What Amp actually did</h2>
+      <div class="flow" style="margin-top:22px">
+        <div class="fbox"><div class="n">1</div><h4>Clone</h4><p>Shallow clone of Terratest</p></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="n">2</div><h4>Explain</h4><p>443 files · 22 modules mapped</p></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="n">3</div><h4>Scan</h4><p>Grype + Trivy · Claude Mythos</p></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="n">4</div><h4>Optimize</h4><p>Regexp hoisting · global rand</p></div>
+      </div>
+      <div class="flow" style="margin-top:14px">
+        <div class="fbox"><div class="n">5</div><h4>Fix bug</h4><p>UniqueID collisions</p></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="n">6</div><h4>Verify</h4><p>build · vet · test · bench · re-scan</p></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="n">7</div><h4>Document</h4><p>Report + scorecard</p></div>
+        <div class="farrow">→</div>
+        <div class="fbox"><div class="n">8</div><h4>2 PRs</h4><p>Submitted upstream</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · SECURITY METHOD -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Security assessment · method</div>
+      <h2>Claude Mythos, evidence-based</h2>
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card">
+          <h3 style="margin-bottom:10px">Tooling</h3>
+          <ul class="clean">
+            <li><strong>Grype</strong> — dependency &amp; vuln database scan</li>
+            <li><strong>Trivy</strong> — filesystem vuln + secret scan</li>
+            <li>Static pattern review across <span class="mono">modules/</span></li>
+            <li>Authoritative sources: <strong>NVD</strong>, <strong>GHSA</strong>, <strong>Go vuln DB</strong></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:10px">Principles</h3>
+          <ul class="clean">
+            <li>Local, <strong>safe &amp; non-destructive</strong> validation</li>
+            <li>Confidence rated: confirmed / plausible / theoretical</li>
+            <li>No inflated severity, no fabricated findings</li>
+            <li>Separate <em>accepted design</em> from real remediations</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · CVEs FOUND -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Findings</div>
+      <h2><span style="color:var(--red)">23</span> known CVEs in Go dependencies</h2>
+      <p class="lead" style="margin:6px 0 16px">Severity distribution (Trivy, <span class="mono">go.mod</span>) — with <span class="pill crit">3 rated CRITICAL by Grype</span> among the <span class="mono">x/crypto</span> set.</p>
+      <div class="card">
+        <div class="chart">
+          <div class="brow"><div class="rl">High</div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill red" style="width:100%">14</div></div></div></div>
+          <div class="brow"><div class="rl">Medium</div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill yellow" style="width:50%">7</div></div></div></div>
+          <div class="brow"><div class="rl">Low</div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill grey" style="width:7.1%">1</div></div></div></div>
+          <div class="brow"><div class="rl">Unknown</div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill grey" style="width:7.1%">1</div></div></div></div>
+        </div>
+      </div>
+      <p style="margin-top:12px;font-size:13px">Also flagged: <span class="mono">actions/download-artifact@v4</span> (CI supply chain, High) and docs-site Ruby gems (out of product scope).</p>
+    </div>
+  </section>
+
+  <!-- 10 · x/crypto STORY -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">The headline risk</div>
+      <h2>The <span class="mono">golang.org/x/crypto</span> SSH story</h2>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card" style="border-color:rgba(232,68,58,.4)">
+          <div class="pill crit">CRITICAL</div>
+          <h3 style="margin:10px 0">14 <span class="mono">x/crypto/ssh</span> advisories</h3>
+          <ul class="clean">
+            <li>Denial of service (multiple vectors)</li>
+            <li>Authorization / authentication bypass</li>
+            <li><strong>Unauthorized command execution</strong></li>
+          </ul>
+        </div>
+        <div class="card soft" style="display:flex;flex-direction:column;justify-content:center">
+          <h3 style="margin-bottom:8px">Why it matters <em>here</em></h3>
+          <p style="color:var(--ink)">Terratest's <span class="mono">modules/ssh</span> imports <span class="mono">x/crypto/ssh</span> <strong>directly</strong> — this isn't a dormant transitive dependency, it's on the library's real attack surface.</p>
+          <div style="margin-top:14px" class="rc">
+            <span class="step bad">v0.49.0 — vulnerable</span><span class="ar">→</span><span class="step good">v0.52.0 — fixed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 11 · CVEs FIXED -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Remediation</div>
+      <h2>Dependencies bumped · re-scan <span style="color:var(--green)">clean</span></h2>
+      <div class="card tscroll" style="margin-top:12px;padding:6px 10px">
+        <table>
+          <thead><tr><th>Dependency</th><th>From</th><th></th><th>To</th><th>Resolves</th></tr></thead>
+          <tbody>
+            <tr><td><strong>golang.org/x/crypto</strong></td><td class="mono">0.49.0</td><td class="arrowto">→</td><td class="mono">0.52.0</td><td>14 SSH CVEs (Critical/High)</td></tr>
+            <tr><td><strong>golang.org/x/net</strong></td><td class="mono">0.52.0</td><td class="arrowto">→</td><td class="mono">0.55.0</td><td>HTML/HTTP2 XSS &amp; DoS</td></tr>
+            <tr><td><strong>jackc/pgx/v5</strong></td><td class="mono">5.9.0</td><td class="arrowto">→</td><td class="mono">5.9.2</td><td>SQL injection (database)</td></tr>
+            <tr><td><strong>ulikunitz/xz</strong></td><td class="mono">0.5.10</td><td class="arrowto">→</td><td class="mono">0.5.15</td><td>Memory-leak DoS</td></tr>
+            <tr><td><strong>golang.org/x/sys</strong></td><td class="mono">0.42.0</td><td class="arrowto">→</td><td class="mono">0.45.0</td><td>Overflow + required by x/crypto</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="stat"><div class="num" style="color:var(--red)">23</div><div class="lbl">CVEs before</div></div>
+        <div class="stat"><div class="num grad-text">→</div><div class="lbl">go get + go mod tidy</div></div>
+        <div class="stat"><div class="num" style="color:var(--green)">0</div><div class="lbl">CVEs after (Trivy &amp; Grype)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12 · CODE SECURITY POSTURE -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Code-level review</div>
+      <h2>Posture: already strong</h2>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="card">
+          <h3 style="color:var(--green);margin-bottom:10px">✓ Positives</h3>
+          <ul class="clean">
+            <li>No <span class="mono">InsecureSkipVerify</span> (TLS)</li>
+            <li>No <span class="mono">InsecureIgnoreHostKey</span></li>
+            <li>No weak crypto (md5/sha1/des/rc4)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--yellow);margin-bottom:10px">◐ Accepted by design</h3>
+          <ul class="clean">
+            <li>SSH <span class="mono">NoOpHostKeyCallback</span> — ephemeral test hosts</li>
+            <li><span class="mono">math/rand</span> for resource names (non-security)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--blue);margin-bottom:10px">✓ CI hardening</h3>
+          <ul class="clean">
+            <li><span class="mono">download-artifact@v4</span> → <span class="mono">@v4.1.3</span></li>
+            <li>(kept out of PRs — see later)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 · BUG FOUND -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Found by testing · a real bug</div>
+      <h2><span class="mono">UniqueID()</span> could return duplicates</h2>
+      <p class="lead" style="margin:6px 0 14px">Discovered when <span class="mono">TestUniqueID</span> failed — <strong>not</strong> caused by our edits.</p>
+      <div class="card" style="margin-bottom:14px">
+        <h3 style="margin-bottom:12px;color:var(--red)">Root cause</h3>
+        <div class="rc">
+          <span class="step">fast / parallel calls</span><span class="ar">→</span>
+          <span class="step bad">new PRNG seeded with <span class="mono">time.Now().UnixNano()</span> every call</span><span class="ar">→</span>
+          <span class="step bad">same tick → same seed</span><span class="ar">→</span>
+          <span class="step bad">identical “unique” IDs</span>
+        </div>
+        <p style="margin-top:10px;font-size:13px">Coarse Windows timer resolution makes the collision reliable; finer Linux CI timers hid it.</p>
+      </div>
+      <div class="card soft">
+        <h3 style="margin-bottom:12px;color:var(--green)">The fix</h3>
+        <div class="rc">
+          <span class="step good">Use Go 1.20+ auto-seeded, concurrency-safe global <span class="mono">math/rand</span></span><span class="ar">→</span>
+          <span class="step good">no collisions</span><span class="ar">→</span>
+          <span class="step good">verified 5/5 repeats · also 106× faster</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 14 · PERF OPTIMIZATIONS + SPEEDUP -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Performance · what &amp; how</div>
+      <h2>Speedups per optimization</h2>
+      <p class="lead" style="margin:4px 0 14px"><strong>Technique:</strong> hoist constant <span class="mono">regexp.MustCompile</span> out of per-call scope into package-level vars (compile once); replace per-call PRNG allocation with the global source. Log scale ↓</p>
+      <div class="card">
+        <div class="chart">
+          <div class="brow"><div class="rl">ExtractArtifactID<small>packer · regexp</small></div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill b" style="width:32%"></div></div><span class="valout">4.8×</span></div></div>
+          <div class="brow"><div class="rl">GetIndent<small>logger/parser · regexp</small></div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill b" style="width:42%"></div></div><span class="valout">7.8×</span></div></div>
+          <div class="brow"><div class="rl">TrimPackerVersion<small>packer · regexp</small></div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill p" style="width:66%"></div></div><span class="valout">24.6×</span></div></div>
+          <div class="brow"><div class="rl">UniqueID<small>random · global rand</small></div><div style="display:flex;align-items:center;gap:12px"><div class="track2"><div class="fill g" style="width:96%"></div></div><span class="valout">106×</span></div></div>
+        </div>
+        <div class="legend" style="margin-top:14px"><span>Axis (log): <b>1×</b> · <b>10×</b> · <b>100×</b></span><span>+ Docker project-name regexp → <b>compile-once</b></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 15 · LATENCY -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Performance · latency</div>
+      <h2>Nanoseconds per operation</h2>
+      <div class="legend" style="margin:6px 0 14px"><span><span class="dot" style="background:#59637f"></span> before</span><span><span class="dot" style="background:#4F7DF0"></span> after</span><span>lower is better · scaled to max (9,025 ns)</span></div>
+      <div class="card">
+        <div class="chart">
+          <div class="pair"><div class="rl" style="font-weight:600">GetIndent</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:10.2%"></div></div><span class="valout">921.5</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill b" style="width:1.3%"></div></div><span class="valout">118.3</span></div>
+          </div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">ExtractArtifactID</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:62.2%"></div></div><span class="valout">5,610</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill b" style="width:13%"></div></div><span class="valout">1,172</span></div>
+          </div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">TrimPackerVersion</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:50.8%"></div></div><span class="valout">4,581</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill b" style="width:2.1%"></div></div><span class="valout">185.9</span></div>
+          </div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">UniqueID</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:100%"></div></div><span class="valout">9,025</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill g" style="width:0.9%"></div></div><span class="valout">85.1</span></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 16 · ALLOCATIONS -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Performance · memory</div>
+      <h2>Allocations per operation</h2>
+      <div class="legend" style="margin:6px 0 14px"><span><span class="dot" style="background:#59637f"></span> before</span><span><span class="dot" style="background:#1BA860"></span> after</span><span>lower is better · scaled to max (42)</span></div>
+      <div class="card">
+        <div class="chart">
+          <div class="pair"><div class="rl" style="font-weight:600">GetIndent</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:40.5%"></div></div><span class="valout">17</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill g" style="width:2%">0</div></div><span class="valout" style="color:var(--green)">0 allocs 🎉</span></div>
+          </div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">ExtractArtifactID</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:100%"></div></div><span class="valout">42</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill g" style="width:2.4%"></div></div><span class="valout">1</span></div>
+          </div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">TrimPackerVersion</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:100%"></div></div><span class="valout">42</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill g" style="width:2.4%"></div></div><span class="valout">1</span></div>
+          </div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">UniqueID (bytes)</div><div class="pairbars">
+            <div class="barline"><span class="tag">before</span><div class="track2" style="flex:1"><div class="fill grey" style="width:100%">5,448 B</div></div><span class="valout">3</span></div>
+            <div class="barline"><span class="tag">after</span><div class="track2" style="flex:1"><div class="fill g" style="width:1.3%"></div></div><span class="valout">72 B · 2</span></div>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 17 · TESTING & VERIFICATION -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Verification · the core of the demo</div>
+      <h2>Every change was proven</h2>
+      <div class="grid g2" style="margin-top:12px">
+        <div class="card">
+          <ul class="clean">
+            <li><span class="mono">go build ./...</span> — <span class="pill ok">PASS</span> full dependency tree</li>
+            <li><span class="mono">go vet ./...</span> — <span class="pill ok">PASS</span> whole library</li>
+            <li>Changed-package unit tests — <span class="pill ok">PASS</span></li>
+            <li><span class="mono">go test -bench</span> — before/after measured</li>
+          </ul>
+        </div>
+        <div class="card">
+          <ul class="clean">
+            <li>CVE re-scan (Trivy + Grype) — <span class="pill ok">0</span></li>
+            <li>Bug repro fixed — <span class="pill ok">5/5</span> repeats</li>
+            <li><span class="mono">go mod tidy</span> stable — CI check green</li>
+            <li>Surgical diff verified via <span class="mono">git diff</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card soft" style="margin-top:14px">
+        <h3 style="margin-bottom:6px">Honest reporting</h3>
+        <p style="color:var(--ink)">Pre-existing <strong>Windows-only</strong> test failures (needing Unix <span class="mono">cat</span> / <span class="mono">diff</span>) were identified and clearly labelled as <strong>not</strong> caused by our changes — no green-washing.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 18 · ANTI-HALLUCINATION -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">No AI hallucinations</div>
+      <h2>Claim → Evidence matrix</h2>
+      <div class="card tscroll" style="margin-top:12px;padding:6px 10px">
+        <table>
+          <thead><tr><th>Claim</th><th>Reproducible evidence</th></tr></thead>
+          <tbody>
+            <tr><td><strong>“CVEs are fixed”</strong></td><td class="mono">trivy fs go.mod → 0 · grype dir:. → 0</td></tr>
+            <tr><td><strong>“It's faster”</strong></td><td class="mono">go test -bench -benchmem (before vs after)</td></tr>
+            <tr><td><strong>“The bug is fixed”</strong></td><td class="mono">go test -count=5 -run TestUniqueID → PASS</td></tr>
+            <tr><td><strong>“Nothing broke”</strong></td><td class="mono">go build ./... &amp; go vet ./... → PASS</td></tr>
+            <tr><td><strong>“Changes are minimal”</strong></td><td class="mono">git diff — 7 files, isolated per PR</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lead" style="margin-top:14px">If it couldn't be shown with a command, it wasn't claimed.</p>
+    </div>
+  </section>
+
+  <!-- 19 · SCORECARD -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Assessment scorecard</div>
+      <h2>Before <span class="grad-text">→</span> After</h2>
+      <div class="legend" style="margin:6px 0 12px"><span><span class="dot" style="background:#59637f"></span> before</span><span><span class="dot" style="background:#4F7DF0"></span> after</span><span>score out of 10</span></div>
+      <div class="card">
+        <div class="chart">
+          <div class="pair"><div class="rl" style="font-weight:600">Dependency security</div><div class="pairbars">
+            <div class="barline"><span class="tag">4</span><div class="track2" style="flex:1"><div class="fill grey" style="width:40%"></div></div></div>
+            <div class="barline"><span class="tag">9</span><div class="track2" style="flex:1"><div class="fill b" style="width:90%"></div></div></div></div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">Correctness / reliability</div><div class="pairbars">
+            <div class="barline"><span class="tag">5</span><div class="track2" style="flex:1"><div class="fill grey" style="width:50%"></div></div></div>
+            <div class="barline"><span class="tag">9</span><div class="track2" style="flex:1"><div class="fill b" style="width:90%"></div></div></div></div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">Performance (hot paths)</div><div class="pairbars">
+            <div class="barline"><span class="tag">6</span><div class="track2" style="flex:1"><div class="fill grey" style="width:60%"></div></div></div>
+            <div class="barline"><span class="tag">9</span><div class="track2" style="flex:1"><div class="fill b" style="width:90%"></div></div></div></div></div>
+          <div class="pair"><div class="rl" style="font-weight:600">Verifiability</div><div class="pairbars">
+            <div class="barline"><span class="tag">7</span><div class="track2" style="flex:1"><div class="fill grey" style="width:70%"></div></div></div>
+            <div class="barline"><span class="tag">9</span><div class="track2" style="flex:1"><div class="fill b" style="width:90%"></div></div></div></div></div>
+        </div>
+      </div>
+      <div class="grid g3" style="margin-top:14px">
+        <div class="stat"><div class="num" style="color:#8894b3">6.0</div><div class="lbl">Overall before</div></div>
+        <div class="stat"><div class="num grad-text">→</div><div class="lbl">hardened &amp; optimized</div></div>
+        <div class="stat"><div class="num grad-text">8.8</div><div class="lbl">Overall after</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 20 · WHY THESE 2 PRs -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Respecting maintainers</div>
+      <h2>Why only <span class="grad-text">two</span> PRs</h2>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card">
+          <h3 style="color:var(--green);margin-bottom:10px">✓ Selected</h3>
+          <ul class="clean">
+            <li><strong>The UniqueID bug fix</strong> — a real, non-obvious defect that no scanner detects</li>
+            <li><strong>The dependency CVE bumps</strong> — high impact, and the repo has <strong>no Dependabot</strong>, so it's genuinely needed &amp; on-policy for the security-only v1 line</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="color:var(--faint);margin-bottom:10px">✕ Deliberately left out</h3>
+          <ul class="clean">
+            <li>Regexp micro-optimizations — lower impact; likely out-of-scope for a security-only line</li>
+            <li>CI action pin — minor supply-chain nicety</li>
+          </ul>
+          <p style="margin-top:10px;font-size:13px"><strong>Quality &gt; quantity</strong> — don't flood the maintainers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 21 · THE PRs -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Contributions submitted upstream</div>
+      <h2>Two focused pull requests</h2>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card">
+          <div class="rc" style="margin-bottom:10px"><span class="pill ok">OPEN</span><span class="pill info">MERGEABLE</span></div>
+          <h3 class="mono">PR #1860</h3>
+          <p style="color:var(--ink);margin:6px 0"><strong>fix(random): prevent UniqueID collisions from per-call time seeding</strong></p>
+          <p>Correctness bug fix · isolated to <span class="mono">modules/random</span>.</p>
+          <a href="https://github.com/gruntwork-io/terratest/pull/1860" target="_blank" rel="noopener">github.com/gruntwork-io/terratest/pull/1860 →</a>
+        </div>
+        <div class="card">
+          <div class="rc" style="margin-bottom:10px"><span class="pill ok">OPEN</span><span class="pill info">MERGEABLE</span></div>
+          <h3 class="mono">PR #1861</h3>
+          <p style="color:var(--ink);margin:6px 0"><strong>fix(deps): bump dependencies to resolve known CVEs</strong></p>
+          <p>Security · <span class="mono">go.mod</span>/<span class="mono">go.sum</span> only · <span class="mono">go mod tidy</span>-clean.</p>
+          <a href="https://github.com/gruntwork-io/terratest/pull/1861" target="_blank" rel="noopener">github.com/gruntwork-io/terratest/pull/1861 →</a>
+        </div>
+      </div>
+      <p style="margin-top:12px;font-size:13px">Submitted from fork <span class="mono">zuwasi/terratest</span> against <span class="mono">gruntwork-io/terratest:main</span>. A CLA signature may be required before merge.</p>
+    </div>
+  </section>
+
+  <!-- 22 · DELIVERABLES & REFERENCES -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">Deliverables &amp; references</div>
+      <h2>Cloned · hardened · optimized · tested · documented</h2>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card">
+          <h3 style="margin-bottom:10px">Artifacts</h3>
+          <ul class="clean">
+            <li>Full assessment report — <span class="mono">AMP_ASSESSMENT_REPORT.md</span></li>
+            <li>Working tree — <span class="mono">C:\projects\terratest-BMC</span></li>
+            <li>Two upstream pull requests (#1860, #1861)</li>
+            <li>This presentation</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3 style="margin-bottom:10px">References</h3>
+          <ul class="clean">
+            <li><a href="https://github.com/gruntwork-io/terratest" target="_blank" rel="noopener">Terratest repository</a> · <a href="https://terratest.gruntwork.io" target="_blank" rel="noopener">docs</a></li>
+            <li><a href="https://pkg.go.dev/math/rand" target="_blank" rel="noopener">Go <span class="mono">math/rand</span> (auto-seeding)</a></li>
+            <li><a href="https://nvd.nist.gov" target="_blank" rel="noopener">NVD</a> · <a href="https://github.com/advisories" target="_blank" rel="noopener">GitHub Advisories</a></li>
+            <li><a href="https://github.com/anchore/grype" target="_blank" rel="noopener">Grype</a> · <a href="https://github.com/aquasecurity/trivy" target="_blank" rel="noopener">Trivy</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 23 · THANK YOU -->
+  <section class="slide title-slide">
+    <div class="wrap" style="display:flex;flex-direction:column;gap:clamp(16px,2.6vh,30px);align-items:center">
+      <div class="logo-card"><img src="esl_logo.png" alt="ESL — Engineering Software Lab"/></div>
+      <h1>Thank you</h1>
+      <p class="lead" style="max-width:820px">AI-assisted engineering, done responsibly: <strong>measured</strong>, <strong>verified</strong>, and contributed back — with zero hallucinations.</p>
+      <div class="divider"></div>
+      <div class="author">
+        <img src="daniel.jpg" alt="Daniel Liezrowice"/>
+        <div style="text-align:left">
+          <div class="eyebrow" style="color:var(--muted)">Prepared by</div>
+          <h3 style="margin:4px 0">Daniel Liezrowice · ESL</h3>
+          <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">LinkedIn</a> &nbsp;·&nbsp;
+          <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">eswlab.com/contact-us</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /track -->
+</div><!-- /viewport -->
+
+<button class="nav hidden" id="prev" aria-label="Previous">‹</button>
+<button class="nav" id="next" aria-label="Next">›</button>
+<div class="progress"><div id="progFill"></div></div>
+<div id="counter">1 / 23</div>
+<div id="hint">← Swipe to navigate →</div>
+
+<script>
+(function(){
+  var track=document.getElementById('track');
+  var slides=Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var total=slides.length;
+  var idx=0;
+  var progFill=document.getElementById('progFill');
+  var counter=document.getElementById('counter');
+  var prevBtn=document.getElementById('prev');
+  var nextBtn=document.getElementById('next');
+  var hint=document.getElementById('hint');
+
+  function render(){
+    track.style.transform='translateX('+(-idx*100)+'vw)';
+    progFill.style.width=((idx+1)/total*100)+'%';
+    counter.textContent=(idx+1)+' / '+total;
+    prevBtn.classList.toggle('hidden', idx===0);
+    nextBtn.classList.toggle('hidden', idx===total-1);
+  }
+  function go(n){
+    idx=Math.max(0,Math.min(total-1,n));
+    if(hint && idx>0) hint.classList.add('gone');
+    if(history.replaceState) history.replaceState(null,'','#'+(idx+1));
+    render();
+  }
+  function next(){go(idx+1);}
+  function prev(){go(idx-1);}
+
+  prevBtn.addEventListener('click',prev);
+  nextBtn.addEventListener('click',next);
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();prev();}
+    else if(e.key==='Home'){go(0);} else if(e.key==='End'){go(total-1);}
+  });
+
+  // touch swipe
+  var sx=null;
+  document.addEventListener('touchstart',function(e){sx=e.changedTouches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(sx===null)return;
+    var dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){ dx<0?next():prev(); }
+    sx=null;
+  },{passive:true});
+
+  // mouse drag
+  var mx=null,down=false;
+  document.addEventListener('mousedown',function(e){mx=e.clientX;down=true;});
+  document.addEventListener('mouseup',function(e){
+    if(!down)return;
+    var dx=e.clientX-mx;
+    if(Math.abs(dx)>50){ dx<0?next():prev(); }
+    down=false;mx=null;
+  });
+
+  var startH=parseInt((location.hash||'').replace('#',''),10);
+  if(!isNaN(startH)){ idx=Math.max(0,Math.min(total-1,startH-1)); if(idx>0 && hint) hint.classList.add('gone'); }
+  render();
+})();
+</script>
+</body>
+</html>
