@@ -174,6 +174,17 @@
   .tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
   .tscroll::-webkit-scrollbar{height:7px}
   .tscroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:7px}
+
+  /* ---------- table of contents ---------- */
+  .toc-hd{display:flex;align-items:center;gap:10px;margin:2px 0 11px}
+  .toc-hd h3{font-size:clamp(14.5px,1.45vw,18px)}
+  .trng{flex:0 0 auto;font:800 11.5px/1 ui-monospace,'Cascadia Code',Consolas,monospace;color:#fff;
+    background:var(--grad);padding:5px 9px;border-radius:8px;letter-spacing:.02em}
+  .toclist{list-style:none;display:flex;flex-direction:column;gap:6px}
+  .toclist a{display:flex;align-items:baseline;gap:9px;color:var(--muted);font-size:13.5px;line-height:1.35}
+  .toclist a:hover{color:var(--ink);text-decoration:none}
+  .toclist .tn{flex:0 0 auto;color:var(--blue);font-weight:700;font-size:12px;
+    font-family:ui-monospace,'Cascadia Code',Consolas,monospace}
 </style>
 </head>
 <body>
@@ -210,7 +221,77 @@
     </div>
   </section>
 
-  <!-- 2 · THE BRIEF -->
+  <!-- 2 · TABLE OF CONTENTS -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="eyebrow">What's inside</div>
+      <h2>Table of contents</h2>
+      <p class="lead" style="max-width:940px;margin:6px 0 14px">Twenty-four slides across six chapters — from the initial ChatGPT brief through security hardening, a real bug fix, measured performance gains, rigorous verification, and the two upstream PRs. <span style="color:var(--faint)">Tap any line to jump to that slide.</span></p>
+      <div class="grid g3">
+
+        <div class="card">
+          <div class="toc-hd"><span class="trng">03–06</span><h3>Background &amp; Target</h3></div>
+          <ul class="toclist">
+            <li><a href="#3"><span class="tn">03</span> A question to ChatGPT</a></li>
+            <li><a href="#4"><span class="tn">04</span> Why Gruntwork Terratest</a></li>
+            <li><a href="#5"><span class="tn">05</span> Size &amp; complexity</a></li>
+            <li><a href="#6"><span class="tn">06</span> 22-module architecture</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="toc-hd"><span class="trng">07–08</span><h3>Mission &amp; Workflow</h3></div>
+          <ul class="toclist">
+            <li><a href="#7"><span class="tn">07</span> One prompt, seven mandates</a></li>
+            <li><a href="#8"><span class="tn">08</span> What Amp actually did</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="toc-hd"><span class="trng">09–13</span><h3>Security Hardening</h3></div>
+          <ul class="toclist">
+            <li><a href="#9"><span class="tn">09</span> Claude Mythos method</a></li>
+            <li><a href="#10"><span class="tn">10</span> 23 CVEs found</a></li>
+            <li><a href="#11"><span class="tn">11</span> The x/crypto SSH story</a></li>
+            <li><a href="#12"><span class="tn">12</span> Dependencies bumped · clean</a></li>
+            <li><a href="#13"><span class="tn">13</span> Code security posture</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="toc-hd"><span class="trng">14–17</span><h3>Bug Fix &amp; Performance</h3></div>
+          <ul class="toclist">
+            <li><a href="#14"><span class="tn">14</span> UniqueID() duplicate bug</a></li>
+            <li><a href="#15"><span class="tn">15</span> Speedups per optimization</a></li>
+            <li><a href="#16"><span class="tn">16</span> Latency — ns per op</a></li>
+            <li><a href="#17"><span class="tn">17</span> Allocations per op</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="toc-hd"><span class="trng">18–20</span><h3>Verification &amp; Trust</h3></div>
+          <ul class="toclist">
+            <li><a href="#18"><span class="tn">18</span> Every change proven</a></li>
+            <li><a href="#19"><span class="tn">19</span> Claim → Evidence matrix</a></li>
+            <li><a href="#20"><span class="tn">20</span> Scorecard: before → after</a></li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="toc-hd"><span class="trng">21–24</span><h3>PRs &amp; Wrap-up</h3></div>
+          <ul class="toclist">
+            <li><a href="#21"><span class="tn">21</span> Why only two PRs</a></li>
+            <li><a href="#22"><span class="tn">22</span> The two pull requests</a></li>
+            <li><a href="#23"><span class="tn">23</span> Deliverables &amp; references</a></li>
+            <li><a href="#24"><span class="tn">24</span> Thank you</a></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 3 · THE BRIEF -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">How it started</div>
@@ -229,7 +310,7 @@
     </div>
   </section>
 
-  <!-- 3 · RECOMMENDATION -->
+  <!-- 4 · RECOMMENDATION -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">ChatGPT · <span class="mono">thought for 11s</span></div>
@@ -254,7 +335,7 @@
     </div>
   </section>
 
-  <!-- 4 · WHAT IS TERRATEST / SIZE -->
+  <!-- 5 · WHAT IS TERRATEST / SIZE -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">The target · size &amp; complexity</div>
@@ -274,7 +355,7 @@
     </div>
   </section>
 
-  <!-- 5 · ARCHITECTURE -->
+  <!-- 6 · ARCHITECTURE -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Architecture</div>
@@ -310,7 +391,7 @@
     </div>
   </section>
 
-  <!-- 6 · THE PROMPT / MISSION -->
+  <!-- 7 · THE PROMPT / MISSION -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">The Ampcode mission</div>
@@ -335,7 +416,7 @@
     </div>
   </section>
 
-  <!-- 7 · WORKFLOW DIAGRAM -->
+  <!-- 8 · WORKFLOW DIAGRAM -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">End-to-end workflow</div>
@@ -361,7 +442,7 @@
     </div>
   </section>
 
-  <!-- 8 · SECURITY METHOD -->
+  <!-- 9 · SECURITY METHOD -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Security assessment · method</div>
@@ -389,7 +470,7 @@
     </div>
   </section>
 
-  <!-- 9 · CVEs FOUND -->
+  <!-- 10 · CVEs FOUND -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Findings</div>
@@ -407,7 +488,7 @@
     </div>
   </section>
 
-  <!-- 10 · x/crypto STORY -->
+  <!-- 11 · x/crypto STORY -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">The headline risk</div>
@@ -433,7 +514,7 @@
     </div>
   </section>
 
-  <!-- 11 · CVEs FIXED -->
+  <!-- 12 · CVEs FIXED -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Remediation</div>
@@ -458,7 +539,7 @@
     </div>
   </section>
 
-  <!-- 12 · CODE SECURITY POSTURE -->
+  <!-- 13 · CODE SECURITY POSTURE -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Code-level review</div>
@@ -490,7 +571,7 @@
     </div>
   </section>
 
-  <!-- 13 · BUG FOUND -->
+  <!-- 14 · BUG FOUND -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Found by testing · a real bug</div>
@@ -517,7 +598,7 @@
     </div>
   </section>
 
-  <!-- 14 · PERF OPTIMIZATIONS + SPEEDUP -->
+  <!-- 15 · PERF OPTIMIZATIONS + SPEEDUP -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Performance · what &amp; how</div>
@@ -535,7 +616,7 @@
     </div>
   </section>
 
-  <!-- 15 · LATENCY -->
+  <!-- 16 · LATENCY -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Performance · latency</div>
@@ -564,7 +645,7 @@
     </div>
   </section>
 
-  <!-- 16 · ALLOCATIONS -->
+  <!-- 17 · ALLOCATIONS -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Performance · memory</div>
@@ -593,7 +674,7 @@
     </div>
   </section>
 
-  <!-- 17 · TESTING & VERIFICATION -->
+  <!-- 18 · TESTING & VERIFICATION -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Verification · the core of the demo</div>
@@ -623,7 +704,7 @@
     </div>
   </section>
 
-  <!-- 18 · ANTI-HALLUCINATION -->
+  <!-- 19 · ANTI-HALLUCINATION -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">No AI hallucinations</div>
@@ -644,7 +725,7 @@
     </div>
   </section>
 
-  <!-- 19 · SCORECARD -->
+  <!-- 20 · SCORECARD -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Assessment scorecard</div>
@@ -674,7 +755,7 @@
     </div>
   </section>
 
-  <!-- 20 · WHY THESE 2 PRs -->
+  <!-- 21 · WHY THESE 2 PRs -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Respecting maintainers</div>
@@ -699,7 +780,7 @@
     </div>
   </section>
 
-  <!-- 21 · THE PRs -->
+  <!-- 22 · THE PRs -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Contributions submitted upstream</div>
@@ -724,7 +805,7 @@
     </div>
   </section>
 
-  <!-- 22 · DELIVERABLES & REFERENCES -->
+  <!-- 23 · DELIVERABLES & REFERENCES -->
   <section class="slide">
     <div class="wrap">
       <div class="eyebrow">Deliverables &amp; references</div>
@@ -752,7 +833,7 @@
     </div>
   </section>
 
-  <!-- 23 · THANK YOU -->
+  <!-- 24 · THANK YOU -->
   <section class="slide title-slide">
     <div class="wrap" style="display:flex;flex-direction:column;gap:clamp(16px,2.6vh,30px);align-items:center">
       <div class="logo-card"><img src="esl_logo.png" alt="ESL — Engineering Software Lab"/></div>
@@ -777,7 +858,7 @@
 <button class="nav hidden" id="prev" aria-label="Previous">‹</button>
 <button class="nav" id="next" aria-label="Next">›</button>
 <div class="progress"><div id="progFill"></div></div>
-<div id="counter">1 / 23</div>
+<div id="counter">1 / 24</div>
 <div id="hint">← Swipe to navigate →</div>
 
 <script>
@@ -810,6 +891,12 @@
 
   prevBtn.addEventListener('click',prev);
   nextBtn.addEventListener('click',next);
+
+  // TOC / deep-link clicks: hash changes navigate the deck (go() uses replaceState, so no recursion)
+  window.addEventListener('hashchange',function(){
+    var h=parseInt((location.hash||'').replace('#',''),10);
+    if(!isNaN(h)) go(h-1);
+  });
 
   document.addEventListener('keydown',function(e){
     if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();next();}
