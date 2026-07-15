@@ -179,6 +179,9 @@ Last updated: 2026-07-15
 • cardiotwin-tr-product-demo
   https://zuwasi.github.io/Public-html-pages/cardiotwin-tr-product-demo
 
+• claude-code-skills-vs-amp
+  https://zuwasi.github.io/Public-html-pages/claude-code-skills-vs-amp
+
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
 
