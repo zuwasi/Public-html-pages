@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-13
+Last updated: 2026-07-15
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -127,13 +127,16 @@ Last updated: 2026-07-13
 39. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-40. static-code-analysis-2026.html
+40. optical-ai-network-comparison-presentation.html
+   https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
+
+41. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-41. why-amp-doesnt-need-node9-proxy.html
+42. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-42. wolfram-engine-gpu-demo-presentation.html
+43. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
@@ -178,6 +181,9 @@ Last updated: 2026-07-13
 
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
+
+• esl_logo_for_pres.png
+  https://zuwasi.github.io/Public-html-pages/esl_logo_for_pres.png
 
 • nono-logo.png
   https://zuwasi.github.io/Public-html-pages/nono-logo.png
