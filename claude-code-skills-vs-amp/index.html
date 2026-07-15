@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Claude Code Skills vs Amp Built-in Capabilities — an ESL presentation">
+  <title>Claude Code Skills vs Amp Built-in Capabilities</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #f7f8fc;
+      --muted: #aeb8ce;
+      --bg: #080b14;
+      --panel: rgba(255,255,255,.06);
+      --line: rgba(255,255,255,.13);
+      --amp: #6ea8ff;
+      --amp-2: #8b5cf6;
+      --claude: #d97757;
+      --claude-2: #f0a078;
+      --good: #68d391;
+      --warn: #f6c85f;
+      --danger: #ff7788;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: Inter, system-ui, sans-serif; }
+    body { overscroll-behavior: none; }
+    a { color: inherit; }
+    .deck { display: flex; width: 1400vw; height: 100vh; transition: transform .62s cubic-bezier(.22,.8,.24,1); }
+    .slide {
+      width: 100vw; height: 100vh; flex: 0 0 100vw; position: relative; overflow: hidden;
+      padding: clamp(4.25rem, 8vh, 6.5rem) clamp(1.25rem, 6vw, 6rem) clamp(4.5rem, 8vh, 6rem);
+      display: flex; flex-direction: column; justify-content: center;
+      background:
+        radial-gradient(circle at 90% 8%, rgba(110,168,255,.12), transparent 32%),
+        radial-gradient(circle at 4% 94%, rgba(217,119,87,.10), transparent 30%),
+        linear-gradient(145deg, #0c101d 0%, #080b14 62%);
+    }
+    .slide::after { content:""; position:absolute; inset:0; pointer-events:none; background-image: linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px); background-size: 42px 42px; mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent); }
+    .slide > * { position: relative; z-index: 1; }
+    .eyebrow { display:flex; align-items:center; gap:.7rem; color:var(--amp); font-size:clamp(.68rem,1vw,.85rem); font-weight:800; letter-spacing:.18em; text-transform:uppercase; margin-bottom:clamp(.8rem,2vh,1.4rem); }
+    .eyebrow::before { content:""; width:2.2rem; height:2px; background:linear-gradient(90deg,var(--amp),var(--amp-2)); }
+    h1 { margin:0; max-width:1100px; font-size:clamp(2.7rem,6.8vw,6.7rem); line-height:.94; letter-spacing:-.06em; font-weight:900; }
+    h2 { margin:0 0 clamp(1.2rem,3vh,2.2rem); max-width:1050px; font-size:clamp(2rem,4.6vw,4.8rem); line-height:1; letter-spacing:-.045em; font-weight:850; }
+    h3 { margin:.2rem 0 .65rem; font-size:clamp(1rem,1.45vw,1.35rem); }
+    p { color:var(--muted); font-size:clamp(.9rem,1.35vw,1.2rem); line-height:1.6; margin:.4rem 0; }
+    .lead { max-width:900px; font-size:clamp(1.05rem,1.8vw,1.55rem); line-height:1.5; }
+    .accent { color:var(--amp); }
+    .claude-text { color:var(--claude-2); }
+    .gradient-text { background:linear-gradient(90deg,#fff 10%,var(--amp) 58%,var(--claude-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .grid-2 { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(.8rem,2vw,1.5rem); width:100%; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(.7rem,1.5vw,1.15rem); width:100%; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:1.25rem; padding:clamp(1rem,2vw,1.6rem); backdrop-filter:blur(14px); }
+    .card p { font-size:clamp(.78rem,1.15vw,1rem); }
+    .icon { display:grid; place-items:center; width:2.6rem; height:2.6rem; border-radius:.8rem; background:rgba(110,168,255,.13); color:var(--amp); font-size:1.2rem; font-weight:900; margin-bottom:.7rem; }
+    .icon.claude { background:rgba(217,119,87,.14); color:var(--claude-2); }
+    .brand-row { display:flex; align-items:center; gap:1rem; flex-wrap:wrap; }
+    .brand { display:inline-flex; align-items:center; gap:.65rem; font-weight:800; letter-spacing:-.03em; }
+    .mark { width:2.15rem; height:2.15rem; display:grid; place-items:center; border-radius:.7rem; color:#fff; font-weight:900; box-shadow:0 12px 30px rgba(0,0,0,.28); }
+    .mark.amp { background:linear-gradient(135deg,var(--amp),var(--amp-2)); }
+    .mark.claude { background:var(--claude); font-size:1.25rem; }
+    .vs { color:var(--muted); font-size:.8rem; font-weight:800; letter-spacing:.18em; }
+    .title-slide { justify-content:space-between; }
+    .title-top { display:flex; justify-content:space-between; align-items:center; gap:1rem; }
+    .esl-logo-link { display:inline-flex; padding:.28rem .5rem; border-radius:.7rem; background:#fff; border:1px solid rgba(255,255,255,.2); }
+    .esl-logo { display:block; width:clamp(7rem,10vw,9rem); height:auto; }
+    .title-copy { margin:auto 0; }
+    .title-copy .lead { margin-top:1.5rem; }
+    .byline { display:grid; grid-template-columns:repeat(2,minmax(0,330px)); gap:1rem; }
+    .profile-card { display:grid; grid-template-columns:3.5rem 1fr; gap:.8rem; align-items:center; padding:.65rem; border:1px solid var(--line); border-radius:1rem; background:rgba(255,255,255,.04); text-decoration:none; text-align:left; transition:.2s; }
+    .profile-card:hover { border-color:var(--amp); transform:translateY(-2px); background:rgba(110,168,255,.07); }
+    .profile-image { display:block; width:3.5rem; height:3.5rem; border-radius:.75rem; object-fit:cover; }
+    .profile-image.logo { object-fit:contain; background:#fff; padding:.2rem; }
+    .byline small { color:var(--muted); display:block; text-transform:uppercase; letter-spacing:.12em; margin-bottom:.28rem; }
+    .byline strong { display:block; font-size:.82rem; }
+    .byline em { display:block; margin-top:.28rem; color:var(--amp); font-size:.67rem; font-style:normal; }
+    .question { font-size:clamp(1.4rem,3vw,2.7rem); line-height:1.25; font-weight:700; max-width:1000px; margin-bottom:1.5rem; }
+    .number { font-size:clamp(5rem,12vw,10rem); font-weight:900; line-height:.8; letter-spacing:-.08em; background:linear-gradient(135deg,var(--claude-2),var(--amp)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .risk-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:.7rem; margin-top:1.2rem; }
+    .risk-strip span { padding:.8rem; border:1px solid var(--line); border-radius:999px; text-align:center; font-size:clamp(.68rem,1vw,.9rem); color:#dbe3f3; background:rgba(255,255,255,.035); }
+    .pipeline { display:flex; align-items:stretch; gap:.55rem; width:100%; }
+    .stage { flex:1; min-width:0; padding:1.1rem .8rem; border:1px solid var(--line); border-radius:1rem; background:var(--panel); text-align:center; }
+    .stage b { display:block; color:#fff; font-size:clamp(.8rem,1.2vw,1.05rem); margin-bottom:.35rem; }
+    .stage small { color:var(--muted); line-height:1.4; }
+    .arrow { align-self:center; color:var(--amp); font-size:1.6rem; }
+    .meter { margin:.75rem 0; }
+    .meter-label { display:flex; justify-content:space-between; color:#dfe6f5; font-size:clamp(.72rem,1vw,.88rem); margin-bottom:.35rem; }
+    .track { height:.65rem; border-radius:1rem; background:rgba(255,255,255,.08); overflow:hidden; }
+    .fill { height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--amp),var(--amp-2)); }
+    .fill.claude { background:linear-gradient(90deg,var(--claude),var(--claude-2)); }
+    .callout { border-left:3px solid var(--amp); padding:.35rem 0 .35rem 1rem; margin-top:1rem; color:#e6ebf6; font-size:clamp(.85rem,1.25vw,1.08rem); line-height:1.5; }
+    .matrix { display:grid; grid-template-columns:1.1fr repeat(2,1fr); border:1px solid var(--line); border-radius:1rem; overflow:hidden; background:rgba(255,255,255,.025); }
+    .matrix > div { padding:clamp(.65rem,1.35vw,1rem); border-right:1px solid var(--line); border-bottom:1px solid var(--line); font-size:clamp(.7rem,1vw,.9rem); }
+    .matrix > div:nth-child(3n) { border-right:0; }
+    .matrix .head { color:#fff; font-weight:800; background:rgba(255,255,255,.055); }
+    .matrix .low { color:var(--good); font-weight:700; }
+    .matrix .high { color:var(--warn); font-weight:700; }
+    .checklist { list-style:none; margin:0; padding:0; display:grid; gap:.75rem; }
+    .checklist li { display:flex; align-items:flex-start; gap:.7rem; color:#dfe5f3; font-size:clamp(.78rem,1.15vw,1rem); line-height:1.45; }
+    .checklist li::before { content:"✓"; flex:none; width:1.45rem; height:1.45rem; display:grid; place-items:center; border-radius:50%; background:rgba(104,211,145,.12); color:var(--good); font-weight:900; }
+    .architecture { display:grid; grid-template-columns:.7fr auto 2fr; gap:1.1rem; align-items:center; }
+    .integrated { display:grid; grid-template-columns:190px 1fr; gap:1rem; align-items:center; }
+    .core { position:relative; padding:2rem; border:1px solid rgba(110,168,255,.4); border-radius:50%; aspect-ratio:1; display:grid; place-items:center; text-align:center; background:radial-gradient(circle,rgba(110,168,255,.22),rgba(139,92,246,.06) 65%,transparent 66%); box-shadow:0 0 60px rgba(110,168,255,.12); }
+    .cap-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:.65rem; }
+    .cap { padding:.75rem; border-radius:.8rem; background:var(--panel); border:1px solid var(--line); color:#dfe6f5; font-size:clamp(.68rem,1vw,.88rem); }
+    .compare-bars { display:grid; grid-template-columns:minmax(130px,.8fr) repeat(2,1fr); gap:.65rem 1rem; align-items:center; }
+    .compare-bars .head { font-weight:800; color:#fff; }
+    .bar-bg { height:.75rem; background:rgba(255,255,255,.08); border-radius:1rem; overflow:hidden; }
+    .bar { height:100%; border-radius:inherit; }
+    .bar.amp { background:linear-gradient(90deg,var(--amp),var(--amp-2)); }
+    .bar.claude { background:linear-gradient(90deg,var(--claude),var(--claude-2)); }
+    .bar-label { font-size:clamp(.7rem,1vw,.9rem); color:#d8dfed; }
+    .workflow { display:flex; align-items:center; gap:.45rem; margin-top:1.2rem; }
+    .workflow .node { flex:1; min-width:0; text-align:center; padding:.9rem .4rem; border:1px solid rgba(217,119,87,.35); background:rgba(217,119,87,.08); border-radius:.85rem; font-size:clamp(.65rem,.9vw,.8rem); color:#f5d9ce; }
+    .decision { display:grid; grid-template-columns:1fr 1.2fr 1fr; gap:1rem; align-items:center; }
+    .choice { min-height:230px; display:flex; flex-direction:column; justify-content:center; text-align:center; }
+    .choice.amp { border-color:rgba(110,168,255,.4); background:rgba(110,168,255,.08); }
+    .choice.claude { border-color:rgba(217,119,87,.4); background:rgba(217,119,87,.08); }
+    .or { width:7rem; height:7rem; margin:auto; border-radius:50%; display:grid; place-items:center; background:linear-gradient(135deg,rgba(110,168,255,.16),rgba(217,119,87,.16)); border:1px solid var(--line); font-weight:900; color:#fff; }
+    .big-quote { font-size:clamp(2rem,5vw,5.2rem); line-height:1.05; letter-spacing:-.05em; font-weight:850; max-width:1100px; }
+    .references { display:flex; flex-wrap:wrap; gap:.6rem; margin-top:1.2rem; }
+    .references a { text-decoration:none; padding:.55rem .8rem; border:1px solid var(--line); border-radius:999px; color:var(--muted); font-size:.72rem; }
+    .summary-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .summary-card { padding:clamp(.9rem,1.5vw,1.25rem); }
+    .summary-card h3 { display:flex; align-items:center; gap:.6rem; margin-bottom:.8rem; }
+    .summary-list { margin:0; padding-left:1.15rem; display:grid; gap:.46rem; }
+    .summary-list li { padding-left:.2rem; color:#dce4f3; font-size:clamp(.72rem,1vw,.9rem); line-height:1.38; }
+    .summary-card.claude-side { border-color:rgba(217,119,87,.32); }
+    .summary-card.amp-side { border-color:rgba(110,168,255,.35); }
+    .summary-takeaway { margin-top:1rem; padding:1rem 1.2rem; border:1px solid rgba(104,211,145,.3); border-radius:1rem; background:linear-gradient(90deg,rgba(104,211,145,.08),rgba(110,168,255,.07)); }
+    .summary-takeaway h3 { color:var(--good); margin:0 0 .35rem; }
+    .summary-takeaway p { color:#e5ebf6; font-size:clamp(.78rem,1.08vw,.98rem); line-height:1.48; margin:0; }
+    .final-slide { align-items:center; text-align:center; background:radial-gradient(circle at 50% 45%,rgba(110,168,255,.25),transparent 38%), linear-gradient(145deg,#0b1020,#070912); }
+    .final-slide h1 { font-size:clamp(3.5rem,10vw,9rem); }
+    .final-slide .brand { margin:1.5rem 0; font-size:1.15rem; }
+    .footer-note { position:absolute; left:clamp(1.25rem,6vw,6rem); bottom:1.5rem; color:#68738b; font-size:.62rem; letter-spacing:.06em; }
+    .controls { position:fixed; z-index:20; inset:auto 1rem 1rem auto; display:flex; gap:.55rem; align-items:center; }
+    .nav-btn { width:2.8rem; height:2.8rem; border-radius:50%; border:1px solid var(--line); background:rgba(13,17,30,.78); backdrop-filter:blur(10px); color:#fff; font-size:1.4rem; cursor:pointer; transition:.2s; }
+    .nav-btn:hover { transform:translateY(-2px); border-color:var(--amp); }
+    .nav-btn:disabled { opacity:0; pointer-events:none; }
+    .counter { min-width:4rem; text-align:center; color:var(--muted); font-size:.75rem; font-variant-numeric:tabular-nums; }
+    .progress { position:fixed; z-index:25; left:0; bottom:0; width:100%; height:4px; background:rgba(255,255,255,.06); }
+    .progress-fill { width:7.1429%; height:100%; background:linear-gradient(90deg,var(--amp),var(--amp-2),var(--claude)); transition:width .62s cubic-bezier(.22,.8,.24,1); }
+    .swipe-hint { position:fixed; z-index:21; left:50%; bottom:1.45rem; transform:translateX(-50%); color:var(--muted); font-size:.72rem; animation:pulse 1.8s infinite; transition:.3s; white-space:nowrap; }
+    .swipe-hint.hidden { opacity:0; pointer-events:none; }
+    @keyframes pulse { 50% { opacity:.42; transform:translateX(-50%) translateY(-3px); } }
+    @media (max-width: 760px) {
+      .slide { justify-content:flex-start; overflow-y:auto; padding-top:4rem; }
+      .title-slide { justify-content:space-between; }
+      .grid-2, .grid-3 { grid-template-columns:1fr; }
+      .summary-grid { grid-template-columns:1fr; }
+      .grid-3 { gap:.55rem; }
+      .card { border-radius:1rem; padding:.9rem; }
+      .risk-strip { grid-template-columns:repeat(2,1fr); }
+      .pipeline { display:grid; grid-template-columns:1fr; }
+      .pipeline .arrow { transform:rotate(90deg); justify-self:center; line-height:.8; }
+      .architecture { grid-template-columns:1fr; }
+      .architecture > .arrow { transform:rotate(90deg); justify-self:center; }
+      .integrated { grid-template-columns:1fr; }
+      .core { width:145px; margin:auto; padding:1rem; }
+      .compare-bars { grid-template-columns:105px repeat(2,1fr); gap:.5rem; }
+      .decision { grid-template-columns:1fr; }
+      .choice { min-height:auto; }
+      .or { width:3.3rem; height:3.3rem; }
+      .workflow { display:grid; grid-template-columns:1fr; }
+      .workflow .arrow { transform:rotate(90deg); justify-self:center; line-height:.65; }
+      .byline { grid-template-columns:1fr; }
+      .swipe-hint { bottom:4.2rem; }
+      .footer-note { display:none; }
+    }
+    @media (max-height: 680px) and (min-width: 761px) {
+      .slide { padding-top:3rem; padding-bottom:3.8rem; }
+      h2 { margin-bottom:1rem; }
+      .card { padding:.85rem; }
+      .card p { margin:.2rem 0; line-height:1.4; }
+    }
+    @media (prefers-reduced-motion: reduce) { .deck, .progress-fill { transition:none; } .swipe-hint { animation:none; } }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide title-slide" aria-label="Title slide">
+      <div class="title-top">
+        <a class="esl-logo-link" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener" aria-label="Visit ESL Engineering Software Lab">
+          <img class="esl-logo" src="esl_logo.png" alt="ESL — Engineering Software Lab">
+        </a>
+        <div class="brand-row">
+          <div class="brand"><span class="mark amp">›_</span>Amp</div><span class="vs">VS</span>
+          <div class="brand"><span class="mark claude">✳</span>Claude Code</div>
+        </div>
+      </div>
+      <div class="title-copy">
+        <div class="eyebrow">01 — The subject</div>
+        <h1>Claude Code Skills<br><span class="gradient-text">vs. Amp Built-ins</span></h1>
+        <p class="lead">What happens when a useful skill library becomes a 200-skill operating system—and why an integrated engineering workflow changes the equation.</p>
+      </div>
+      <div class="byline">
+        <a class="profile-card" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">
+          <img class="profile-image logo" src="esl_logo.png" alt="ESL logo">
+          <span><small>Prepared by</small><strong>ESL — Engineering Software Lab</strong><em>eswlab.com/contact-us →</em></span>
+        </a>
+        <a class="profile-card" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">
+          <img class="profile-image" src="daniel.jpg" alt="Daniel Liezrowice">
+          <span><small>Author</small><strong>Daniel Liezrowice</strong><em>LinkedIn →</em></span>
+        </a>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">02 — The question</div>
+      <div class="grid-2" style="align-items:center">
+        <div>
+          <div class="number">200</div>
+          <p class="lead">Claude Code skills collected “just in case”</p>
+        </div>
+        <div>
+          <div class="question">Can a giant skill library make the agent <span class="claude-text">less effective</span>?</div>
+          <div class="risk-strip"><span>Confusion</span><span>Latency</span><span>Tokens</span><span>Security</span></div>
+          <div class="callout">Short answer: <strong>yes</strong>—not because every skill is loaded every time, but because selection, overlap, trust, and maintenance all scale with the catalog.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">03 — Selection pressure</div>
+      <h2>More choices create more ways<br>to choose <span class="claude-text">wrong</span></h2>
+      <div class="pipeline">
+        <div class="stage"><b>Large catalog</b><small>Overlapping names and triggers</small></div><div class="arrow">→</div>
+        <div class="stage"><b>Relevance decision</b><small>Which skill fits this task?</small></div><div class="arrow">→</div>
+        <div class="stage"><b>Skill loading</b><small>One, several, or none</small></div><div class="arrow">→</div>
+        <div class="stage"><b>Execution</b><small>Instructions shape the workflow</small></div>
+      </div>
+      <div class="grid-3" style="margin-top:1.1rem">
+        <div class="card"><div class="icon claude">1</div><h3>Wrong skill</h3><p>A plausible but mismatched workflow wins selection.</p></div>
+        <div class="card"><div class="icon claude">2</div><h3>Missed skill</h3><p>The best specialist guidance never enters context.</p></div>
+        <div class="card"><div class="icon claude">3</div><h3>Skill pile-up</h3><p>Multiple candidates add noise and competing rules.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">04 — Context economics</div>
+      <h2>Loading a skill has a <span class="accent">context cost</span></h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>What grows after loading</h3>
+          <div class="meter"><div class="meter-label"><span>Token consumption</span><span>↑</span></div><div class="track"><div class="fill claude" style="width:84%"></div></div></div>
+          <div class="meter"><div class="meter-label"><span>Context pressure</span><span>↑</span></div><div class="track"><div class="fill claude" style="width:72%"></div></div></div>
+          <div class="meter"><div class="meter-label"><span>Potential latency</span><span>↑</span></div><div class="track"><div class="fill claude" style="width:60%"></div></div></div>
+          <p style="margin-top:1rem">Illustrative direction—not measured benchmark values.</p>
+        </div>
+        <div class="card">
+          <h3>The compounding effect</h3>
+          <div class="pipeline" style="margin-top:1rem">
+            <div class="stage"><b>Skill</b><small>Instructions</small></div><div class="arrow">+</div>
+            <div class="stage"><b>Task</b><small>Code + files</small></div><div class="arrow">+</div>
+            <div class="stage"><b>History</b><small>Conversation</small></div>
+          </div>
+          <div class="callout">A skill that remains useful is valuable. A loaded skill that does not influence the result is pure overhead.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">05 — Hidden risk</div>
+      <h2>Instructions can conflict.<br>Extensions can <span class="claude-text">execute</span>.</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Conflict surface</h3>
+          <div class="matrix">
+            <div class="head">Area</div><div class="head">Skill A</div><div class="head">Skill B</div>
+            <div>Testing</div><div>Fast unit tests</div><div>Full suite first</div>
+            <div>Language</div><div>Latest version</div><div>Legacy target</div>
+            <div>Workflow</div><div>Auto-fix</div><div>Review only</div>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Treat downloaded skills like extensions</h3>
+          <ul class="checklist">
+            <li>Review shell commands and hooks.</li>
+            <li>Audit MCP servers and network access.</li>
+            <li>Limit credential and filesystem permissions.</li>
+            <li>Trust only reviewed, versioned sources.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">06 — Better Claude Code strategy</div>
+      <h2>Archive broadly.<br><span class="claude-text">Activate narrowly.</span></h2>
+      <div class="grid-2">
+        <div class="card">
+          <div class="pipeline">
+            <div class="stage"><b>Reviewed archive</b><small>All approved skills</small></div><div class="arrow">→</div>
+            <div class="stage"><b>Project set</b><small>Only relevant domains</small></div><div class="arrow">→</div>
+            <div class="stage"><b>Manual specialists</b><small>Explicit invocation</small></div>
+          </div>
+        </div>
+        <div class="card">
+          <ul class="checklist">
+            <li>Keep the global set small and curated.</li>
+            <li>Enable project-specific skills only where needed.</li>
+            <li>Disable automatic invocation for narrow workflows.</li>
+            <li>Retire stale or overlapping instructions.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="callout">The goal is not “fewer capabilities.” It is a <strong>smaller active decision surface</strong>.</div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">07 — The Amp difference</div>
+      <h2>Common engineering work lives<br><span class="accent">inside the product</span></h2>
+      <div class="architecture">
+        <div class="brand" style="font-size:clamp(1.4rem,3vw,2.5rem);justify-content:center"><span class="mark amp">›_</span>Amp</div>
+        <div class="arrow">→</div>
+        <div class="integrated">
+          <div class="core"><div><strong style="font-size:1.2rem">Integrated<br>engineering core</strong><p style="font-size:.72rem">One coherent workflow</p></div></div>
+          <div class="cap-grid">
+            <div class="cap">Code navigation</div><div class="cap">Repository awareness</div>
+            <div class="cap">Multi-file editing</div><div class="cap">Symbol analysis</div>
+            <div class="cap">Codebase understanding</div><div class="cap">Tool orchestration</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">08 — Side-by-side</div>
+      <h2>Two architectures,<br>two optimization targets</h2>
+      <div class="compare-bars">
+        <div></div><div class="head accent">Amp</div><div class="head claude-text">Claude Code</div>
+        <div class="bar-label">Built-in workflow</div><div class="bar-bg"><div class="bar amp" style="width:92%"></div></div><div class="bar-bg"><div class="bar claude" style="width:62%"></div></div>
+        <div class="bar-label">Low maintenance</div><div class="bar-bg"><div class="bar amp" style="width:88%"></div></div><div class="bar-bg"><div class="bar claude" style="width:55%"></div></div>
+        <div class="bar-label">Consistency</div><div class="bar-bg"><div class="bar amp" style="width:90%"></div></div><div class="bar-bg"><div class="bar claude" style="width:68%"></div></div>
+        <div class="bar-label">Extensibility</div><div class="bar-bg"><div class="bar amp" style="width:76%"></div></div><div class="bar-bg"><div class="bar claude" style="width:96%"></div></div>
+        <div class="bar-label">Deep customization</div><div class="bar-bg"><div class="bar amp" style="width:70%"></div></div><div class="bar-bg"><div class="bar claude" style="width:98%"></div></div>
+      </div>
+      <p style="margin-top:1.2rem">Qualitative synthesis from the source comparison; bars communicate relative positioning, not measured scores.</p>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">09 — Amp advantage</div>
+      <h2>Fewer moving parts.<br>More time on <span class="accent">engineering</span>.</h2>
+      <div class="grid-3">
+        <div class="card"><div class="icon">↘</div><h3>Less prompt engineering</h3><p>Common tasks do not need a custom instruction layer.</p></div>
+        <div class="card"><div class="icon">◎</div><h3>Consistent workflow</h3><p>Capabilities share product-level context and conventions.</p></div>
+        <div class="card"><div class="icon">⚙</div><h3>Lower maintenance</h3><p>Fewer user-managed extensions to review and update.</p></div>
+        <div class="card"><div class="icon">⌘</div><h3>Repository aware</h3><p>Navigation, understanding, and editing work together.</p></div>
+        <div class="card"><div class="icon">⇄</div><h3>Multi-file execution</h3><p>Changes and verification stay in one engineering loop.</p></div>
+        <div class="card"><div class="icon">✓</div><h3>Reduced complexity</h3><p>A smaller operational surface means fewer failure modes.</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">10 — Where Claude Code wins</div>
+      <h2>Specialized processes are<br><span class="claude-text">first-class differentiators</span></h2>
+      <div class="grid-3">
+        <div class="card"><div class="icon claude">FDA</div><h3>Regulated documentation</h3><p>Encode organization-specific evidence and review flows.</p></div>
+        <div class="card"><div class="icon claude">SB</div><h3>SBOM workflows</h3><p>Capture proprietary scanning, triage, and reporting logic.</p></div>
+        <div class="card"><div class="icon claude">C</div><h3>MISRA / CERT C</h3><p>Apply detailed safety and security compliance procedures.</p></div>
+      </div>
+      <div class="workflow">
+        <div class="node">Internal policy</div><div class="arrow">→</div><div class="node">Custom skill</div><div class="arrow">→</div><div class="node">Repeatable workflow</div><div class="arrow">→</div><div class="node">Auditable output</div>
+      </div>
+      <div class="callout" style="border-color:var(--claude)">Claude Code’s strength is not “more skills.” It is the ability to encode the <strong>right specialized skill</strong>.</div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">11 — Decision guide</div>
+      <h2>Choose for the work<br>you actually do</h2>
+      <div class="decision">
+        <div class="card choice amp">
+          <div class="brand" style="justify-content:center"><span class="mark amp">›_</span>Amp</div>
+          <h3>General software engineering</h3>
+          <p>Choose integrated codebase understanding, editing, and verification with less extension overhead.</p>
+        </div>
+        <div class="or">FIT</div>
+        <div class="card choice claude">
+          <div class="brand" style="justify-content:center"><span class="mark claude">✳</span>Claude Code</div>
+          <h3>Highly specialized operations</h3>
+          <p>Choose maximum extensibility when custom regulatory or internal workflows justify the upkeep.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">12 — The takeaway</div>
+      <div class="big-quote">“The best capability is not the one you <span class="claude-text">could load</span>—it is the one that is <span class="accent">ready when needed</span>.”</div>
+      <div class="grid-2" style="margin-top:2rem">
+        <div class="card"><h3 class="accent">Amp</h3><p>Optimizes for an integrated, lower-maintenance engineering workflow.</p></div>
+        <div class="card"><h3 class="claude-text">Claude Code</h3><p>Optimizes for extensibility and organization-specific customization.</p></div>
+      </div>
+      <div class="references">
+        <a href="https://ampcode.com/manual" target="_blank" rel="noopener">Amp Manual ↗</a>
+        <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" rel="noopener">Claude Code Documentation ↗</a>
+      </div>
+      <div class="footer-note">Source: ClaudeCode_vs_Amp_Comparison.md · Qualitative architectural comparison</div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">13 — Summary</div>
+      <h2>Skills, integration,<br>and the <span class="accent">tradeoff</span></h2>
+      <div class="summary-grid">
+        <div class="card summary-card claude-side">
+          <h3 class="claude-text"><span class="mark claude">✳</span>Why Too Many Claude Code Skills Can Be a Problem</h3>
+          <ul class="summary-list">
+            <li>Harder for the agent to identify the correct skill.</li>
+            <li>Greater chance of loading unnecessary or conflicting instructions.</li>
+            <li>Increases context usage and token consumption once skills are activated.</li>
+            <li>More maintenance as skills become outdated or overlap.</li>
+            <li>Larger attack surface if third-party skills, hooks, or MCP servers are not carefully reviewed.</li>
+            <li>Less predictable behavior due to interactions between independently developed skills.</li>
+          </ul>
+        </div>
+        <div class="card summary-card amp-side">
+          <h3 class="accent"><span class="mark amp">›_</span>Why Amp Has an Advantage</h3>
+          <ul class="summary-list">
+            <li>Core software engineering workflows are built into the product.</li>
+            <li>Requires significantly fewer custom skills and prompts.</li>
+            <li>More consistent behavior with fewer conflicting instructions.</li>
+            <li>Lower operational overhead and maintenance effort.</li>
+            <li>Smaller context footprint, leaving more capacity for code and conversation.</li>
+            <li>Easier to adopt and manage across engineering teams.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="summary-takeaway">
+        <h3>Key Takeaway</h3>
+        <p>Amp's integrated design minimizes the need for a large skill ecosystem, resulting in simpler operation, lower maintenance, and more predictable behavior. Claude Code offers greater extensibility, but that flexibility comes with additional complexity as the number of custom skills grows.</p>
+      </div>
+    </section>
+
+    <section class="slide final-slide">
+      <div class="eyebrow">14 — Thank you</div>
+      <h1><span class="gradient-text">Use Ampcode!</span></h1>
+      <p class="lead">Thank you for listening.</p>
+      <a class="brand" href="https://ampcode.com/" target="_blank" rel="noopener" style="text-decoration:none"><span class="mark amp">›_</span>ampcode.com</a>
+      <div class="byline" style="width:min(680px,100%);margin-top:1.2rem">
+        <a class="profile-card" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">
+          <img class="profile-image logo" src="esl_logo.png" alt="ESL logo">
+          <span><small>Prepared by</small><strong>ESL — Engineering Software Lab</strong><em>eswlab.com/contact-us →</em></span>
+        </a>
+        <a class="profile-card" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">
+          <img class="profile-image" src="daniel.jpg" alt="Daniel Liezrowice">
+          <span><small>Author</small><strong>Daniel Liezrowice</strong><em>LinkedIn →</em></span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div class="swipe-hint" id="swipeHint">← Swipe / arrow keys to navigate →</div>
+  <div class="controls" aria-label="Presentation navigation">
+    <button class="nav-btn" id="prev" aria-label="Previous slide">‹</button>
+    <span class="counter" id="counter">1 / 14</span>
+    <button class="nav-btn" id="next" aria-label="Next slide">›</button>
+  </div>
+  <div class="progress" aria-hidden="true"><div class="progress-fill" id="progress"></div></div>
+
+  <script>
+    (() => {
+      const deck = document.getElementById('deck');
+      const slides = [...document.querySelectorAll('.slide')];
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const counter = document.getElementById('counter');
+      const progress = document.getElementById('progress');
+      const hint = document.getElementById('swipeHint');
+      let current = 0;
+      let pointerStart = null;
+
+      function show(index) {
+        current = Math.max(0, Math.min(index, slides.length - 1));
+        deck.style.transform = `translateX(-${current * 100}vw)`;
+        counter.textContent = `${current + 1} / ${slides.length}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        prev.disabled = current === 0;
+        next.disabled = current === slides.length - 1;
+        if (current > 0) hint.classList.add('hidden');
+      }
+
+      prev.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      document.addEventListener('keydown', event => {
+        if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); show(current + 1); }
+        if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); show(current - 1); }
+        if (event.key === 'Home') show(0);
+        if (event.key === 'End') show(slides.length - 1);
+      });
+      deck.addEventListener('pointerdown', event => { pointerStart = event.clientX; });
+      deck.addEventListener('pointerup', event => {
+        if (pointerStart === null) return;
+        const delta = event.clientX - pointerStart;
+        if (Math.abs(delta) >= 50) show(current + (delta < 0 ? 1 : -1));
+        pointerStart = null;
+      });
+      deck.addEventListener('pointercancel', () => { pointerStart = null; });
+      show(0);
+    })();
+  </script>
+</body>
+</html>
