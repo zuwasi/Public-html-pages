@@ -182,9 +182,6 @@ Last updated: 2026-07-15
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
 
-• esl_logo_for_pres.png
-  https://zuwasi.github.io/Public-html-pages/esl_logo_for_pres.png
-
 • nono-logo.png
   https://zuwasi.github.io/Public-html-pages/nono-logo.png
 
