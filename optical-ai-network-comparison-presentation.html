@@ -16,7 +16,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg-dark);font-
 
 /* ESL LOGO HEADER */
 .esl-header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 24px;z-index:100;background:linear-gradient(180deg,rgba(13,17,23,0.95) 0%,rgba(13,17,23,0) 100%);pointer-events:none}
-.esl-header img{height:36px;pointer-events:auto}
+.esl-header img{height:56px;pointer-events:auto;max-width:none;object-fit:contain}
 .esl-header .author{font-size:11px;color:var(--text-dim);text-align:right;line-height:1.5;pointer-events:auto}
 .esl-header .author a{color:var(--esl-green);text-decoration:none}
 .esl-header .author .company{color:var(--text-dim)}
@@ -149,7 +149,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:var(--bg-dark);font-
 /* RESPONSIVE */
 @media(max-width:768px){
  .slide{padding:50px 16px 70px}
- .esl-header img{height:28px}
+ .esl-header img{height:42px}
  .esl-header .author{font-size:9px}
  .timeline{flex-direction:column;gap:16px}
  .timeline-item::before{display:none}
