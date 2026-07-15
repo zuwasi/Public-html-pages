@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Optical AI Networks: China vs. Nvidia Israel</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--esl-green:#00A86B;--esl-dark:#0a1a14;--nvidia-green:#76B900;--china-red:#DE2910;--bg-dark:#0d1117;--card-bg:rgba(255,255,255,0.06);--border:rgba(255,255,255,0.12);--text:#e6edf3;--text-dim:#8b949e;--accent-cyan:#00d9ff;--accent-purple:#a371f7;--accent-orange:#f0883e;--accent-pink:#f778ba}
+html,body{width:100%;height:100%;overflow:hidden;background:var(--bg-dark);font-family:'Inter',system-ui,-apple-system,sans-serif;color:var(--text);user-select:none}
+
+/* SLIDES CONTAINER */
+#slides{display:flex;width:100vw;height:100vh;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1)}
+.slide{min-width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px 80px;position:relative;overflow:hidden}
+
+/* ESL LOGO HEADER */
+.esl-header{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;padding:10px 24px;z-index:100;background:linear-gradient(180deg,rgba(13,17,23,0.95) 0%,rgba(13,17,23,0) 100%);pointer-events:none}
+.esl-header img{height:36px;pointer-events:auto}
+.esl-header .author{font-size:11px;color:var(--text-dim);text-align:right;line-height:1.5;pointer-events:auto}
+.esl-header .author a{color:var(--esl-green);text-decoration:none}
+.esl-header .author .company{color:var(--text-dim)}
+.esl-header .author .website{color:var(--accent-cyan);text-decoration:none}
+
+/* NAV ARROWS */
+.nav-arrow{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid var(--border);color:var(--text);font-size:22px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:200;transition:all 0.3s;backdrop-filter:blur(10px);user-select:none}
+.nav-arrow:hover{background:rgba(255,255,255,0.2);border-color:var(--esl-green)}
+.nav-arrow.hidden{opacity:0;pointer-events:none}
+#prevArrow{left:20px}
+#nextArrow{right:20px}
+
+/* PROGRESS BAR */
+#progressBar{position:fixed;bottom:0;left:0;right:0;height:4px;background:rgba(255,255,255,0.08);z-index:100}
+#progressFill{height:100%;width:0%;background:linear-gradient(90deg,var(--esl-green),var(--accent-cyan));transition:width 0.6s cubic-bezier(0.4,0,0.2,1)}
+
+/* SLIDE COUNTER */
+#slideCounter{position:fixed;bottom:12px;right:24px;font-size:13px;color:var(--text-dim);z-index:100;font-weight:500}
+
+/* SWIPE HINT */
+#swipeHint{position:fixed;bottom:50%;left:50%;transform:translate(-50%,100px);font-size:14px;color:var(--text-dim);animation:swipePulse 2s ease-in-out infinite;z-index:50;transition:opacity 0.5s;pointer-events:none}
+@keyframes swipePulse{0%,100%{opacity:0.3;transform:translate(-50%,100px)}50%{opacity:0.8;transform:translate(-50%,110px)}}
+#swipeHint.hidden{opacity:0;pointer-events:none}
+
+/* TYPOGRAPHY */
+.slide-title{font-size:clamp(22px,4vw,42px);font-weight:800;margin-bottom:16px;text-align:center;line-height:1.2}
+.slide-subtitle{font-size:clamp(13px,2vw,18px);color:var(--text-dim);text-align:center;margin-bottom:30px;font-weight:400}
+.section-label{font-size:clamp(10px,1.5vw,13px);text-transform:uppercase;letter-spacing:3px;color:var(--esl-green);font-weight:600;margin-bottom:8px}
+
+/* CARDS */
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:16px;padding:20px 24px;backdrop-filter:blur(10px)}
+.card-grid{display:grid;gap:16px;width:100%;max-width:1100px}
+.card-grid.cols-2{grid-template-columns:repeat(2,1fr)}
+.card-grid.cols-3{grid-template-columns:repeat(3,1fr)}
+.card-grid.cols-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:768px){.card-grid.cols-2,.card-grid.cols-3,.card-grid.cols-4{grid-template-columns:1fr}}
+
+/* STAT BOXES */
+.stat-box{text-align:center;padding:20px 16px}
+.stat-number{font-size:clamp(28px,5vw,48px);font-weight:900;line-height:1;margin-bottom:6px}
+.stat-label{font-size:clamp(10px,1.5vw,13px);color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
+
+/* COMPARISON TABLE */
+.comp-table{width:100%;max-width:1100px;border-collapse:collapse;font-size:clamp(10px,1.5vw,14px)}
+.comp-table th,.comp-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--border)}
+.comp-table th{background:rgba(255,255,255,0.04);font-weight:600;font-size:clamp(9px,1.3vw,12px);text-transform:uppercase;letter-spacing:1px;color:var(--text-dim)}
+.comp-table td:first-child{font-weight:600;color:var(--esl-green);width:22%}
+.comp-table .col-china{color:var(--china-red)}
+.comp-table .col-nvidia{color:var(--nvidia-green)}
+.comp-table tr:hover{background:rgba(255,255,255,0.03)}
+
+/* DIAGRAM STYLES */
+.diagram-container{width:100%;max-width:900px;display:flex;justify-content:center;align-items:center;margin:10px 0}
+
+/* CHIP NODE */
+.chip-node{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;width:80px;height:80px;border-radius:12px;font-size:10px;font-weight:600;text-align:center;border:2px solid;position:relative}
+.chip-node.china{background:rgba(222,41,16,0.12);border-color:var(--china-red);color:var(--china-red)}
+.chip-node.nvidia{background:rgba(118,185,0,0.12);border-color:var(--nvidia-green);color:var(--nvidia-green)}
+.chip-node.neutral{background:rgba(255,255,255,0.06);border-color:var(--text-dim);color:var(--text-dim)}
+
+/* OPTICAL LINK SVG */
+.optical-link{stroke:var(--accent-cyan);stroke-width:2;fill:none;stroke-dasharray:5,3;animation:flow 1.5s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-16}}
+
+/* TIMELINE */
+.timeline{display:flex;align-items:stretch;gap:0;width:100%;max-width:1000px;flex-wrap:wrap;justify-content:center}
+.timeline-item{flex:1;min-width:140px;text-align:center;position:relative;padding:0 8px}
+.timeline-dot{width:16px;height:16px;border-radius:50%;background:var(--esl-green);margin:0 auto 12px;position:relative;z-index:2}
+.timeline-dot::before{content:'';position:absolute;top:8px;left:100%;width:100%;height:2px;background:var(--border);z-index:1}
+.timeline-item:last-child .timeline-dot::before{display:none}
+.timeline-year{font-size:clamp(14px,2vw,20px);font-weight:700;color:var(--esl-green);margin-bottom:4px}
+.timeline-text{font-size:clamp(9px,1.3vw,12px);color:var(--text-dim);line-height:1.4}
+
+/* BADGE */
+.badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.badge-china{background:rgba(222,41,16,0.15);color:var(--china-red);border:1px solid rgba(222,41,16,0.3)}
+.badge-nvidia{background:rgba(118,185,0,0.15);color:var(--nvidia-green);border:1px solid rgba(118,185,0,0.3)}
+.badge-shared{background:rgba(0,217,255,0.12);color:var(--accent-cyan);border:1px solid rgba(0,217,255,0.3)}
+
+/* BAR CHART */
+.bar-chart{width:100%;max-width:800px;display:flex;flex-direction:column;gap:12px}
+.bar-row{display:flex;align-items:center;gap:12px}
+.bar-label{font-size:clamp(10px,1.4vw,13px);font-weight:600;min-width:120px;text-align:right}
+.bar-track{flex:1;height:28px;background:rgba(255,255,255,0.05);border-radius:8px;overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-size:11px;font-weight:700;color:#fff;transition:width 1s ease}
+
+/* FLOW DIAGRAM */
+.flow-diagram{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;width:100%;max-width:900px}
+.flow-step{padding:12px 16px;border-radius:10px;font-size:clamp(9px,1.2vw,12px);font-weight:600;text-align:center;min-width:80px;border:1px solid}
+.flow-arrow{font-size:20px;color:var(--accent-cyan);animation:arrowPulse 1.5s ease-in-out infinite}
+@keyframes arrowPulse{0%,100%{opacity:0.4}50%{opacity:1}}
+
+/* KEY TAKEAWAY */
+.takeaway-box{max-width:800px;padding:24px 32px;border-radius:16px;border:1px solid var(--esl-green);background:rgba(0,168,107,0.06);text-align:center}
+.takeaway-box h3{font-size:clamp(14px,2vw,18px);font-weight:700;color:var(--esl-green);margin-bottom:8px}
+.takeaway-box p{font-size:clamp(11px,1.6vw,15px);color:var(--text);line-height:1.6}
+
+/* FEATURE LIST */
+.feature-list{list-style:none;padding:0}
+.feature-list li{padding:8px 0;font-size:clamp(10px,1.4vw,13px);line-height:1.5;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:flex-start;gap:8px}
+.feature-list li::before{content:'▸';color:var(--esl-green);font-size:14px;flex-shrink:0;margin-top:1px}
+.feature-list li:last-child{border-bottom:none}
+
+/* PRODUCT CARDS */
+.product-card{padding:16px;border-radius:12px;background:var(--card-bg);border:1px solid var(--border);text-align:left}
+.product-card h4{font-size:clamp(11px,1.5vw,14px);font-weight:700;color:var(--nvidia-green);margin-bottom:6px}
+.product-card p{font-size:clamp(9px,1.2vw,12px);color:var(--text-dim);line-height:1.5}
+.product-card .spec{font-size:clamp(10px,1.3vw,13px);color:var(--accent-cyan);font-weight:600;margin-top:6px}
+
+/* GEOPOLITICAL MAP-LIKE VISUAL */
+.geo-visual{display:flex;gap:20px;align-items:stretch;width:100%;max-width:900px;flex-wrap:wrap;justify-content:center}
+.geo-card{flex:1;min-width:200px;padding:20px;border-radius:14px;text-align:center;border:1px solid}
+.geo-card h4{font-size:clamp(12px,2vw,16px);font-weight:700;margin-bottom:8px}
+.geo-card p{font-size:clamp(9px,1.3vw,12px);color:var(--text-dim);line-height:1.5}
+
+/* SLIDE BG GRADIENTS */
+.slide:nth-child(1){background:radial-gradient(ellipse at 50% 40%,rgba(0,168,107,0.12) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(2){background:radial-gradient(ellipse at 30% 50%,rgba(0,217,255,0.08) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(3){background:radial-gradient(ellipse at 70% 40%,rgba(222,41,16,0.08) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(4){background:radial-gradient(ellipse at 50% 30%,rgba(222,41,16,0.06) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(5){background:radial-gradient(ellipse at 30% 40%,rgba(222,41,16,0.08) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(6){background:radial-gradient(ellipse at 70% 40%,rgba(118,185,0,0.08) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(7){background:radial-gradient(ellipse at 50% 30%,rgba(118,185,0,0.06) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(8){background:radial-gradient(ellipse at 30% 50%,rgba(118,185,0,0.08) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(9){background:radial-gradient(ellipse at 50% 50%,rgba(0,217,255,0.06) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(10){background:radial-gradient(ellipse at 50% 40%,rgba(163,113,247,0.06) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(11){background:radial-gradient(ellipse at 50% 30%,rgba(240,136,62,0.06) 0%,var(--bg-dark) 70%)}
+.slide:nth-child(12){background:radial-gradient(ellipse at 50% 40%,rgba(0,168,107,0.12) 0%,var(--bg-dark) 70%)}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+ .slide{padding:50px 16px 70px}
+ .esl-header img{height:28px}
+ .esl-header .author{font-size:9px}
+ .timeline{flex-direction:column;gap:16px}
+ .timeline-item::before{display:none}
+ .geo-card{min-width:100%}
+ .flow-diagram{flex-direction:column}
+ .flow-arrow{transform:rotate(90deg)}
+}
+
+/* TITLE SLIDE */
+.title-slide-content{text-align:center;max-width:900px}
+.title-slide-content h1{font-size:clamp(26px,5vw,52px);font-weight:900;line-height:1.15;margin-bottom:12px}
+.title-slide-content .subtitle{font-size:clamp(14px,2.5vw,20px);color:var(--text-dim);margin-bottom:32px;font-weight:400}
+.title-slide-content .vs-badge{display:inline-flex;align-items:center;gap:16px;margin:16px 0}
+.vs-side{display:flex;flex-direction:column;align-items:center;gap:6px}
+.vs-side .flag{font-size:clamp(36px,6vw,56px)}
+.vs-side .name{font-size:clamp(11px,2vw,16px);font-weight:700}
+.vs-divider{font-size:clamp(18px,3vw,28px);font-weight:300;color:var(--text-dim)}
+.title-meta{margin-top:32px;font-size:clamp(10px,1.4vw,13px);color:var(--text-dim);line-height:1.8}
+.title-meta a{color:var(--esl-green);text-decoration:none}
+
+/* CONVERGENCE/DIVERGENCE */
+.conv-div{display:grid;grid-template-columns:1fr 1fr;gap:20px;width:100%;max-width:1000px}
+@media(max-width:768px){.conv-div{grid-template-columns:1fr}}
+.conv-div h3{font-size:clamp(13px,2vw,17px);font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.conv-div .icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.conv-div ul{list-style:none;padding:0}
+.conv-div ul li{padding:6px 0;font-size:clamp(10px,1.4vw,13px);line-height:1.5;color:var(--text-dim)}
+.conv-div ul li strong{color:var(--text)}
+</style>
+</head>
+<body>
+
+<!-- ESL HEADER -->
+<div class="esl-header">
+ <img src="esl_logo_for_pres.png" alt="ESL Logo">
+ <div class="author">
+ Prepared by <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">Daniel Liezrowice</a><br>
+ <span class="company">Engineering Software Lab — AI SDLC Consultants</span><br>
+ <a href="https://www.eswlab.com" class="website" target="_blank">www.eswlab.com</a>
+ </div>
+</div>
+
+<!-- NAV ARROWS -->
+<div class="nav-arrow hidden" id="prevArrow" onclick="navigate(-1)">‹</div>
+<div class="nav-arrow" id="nextArrow" onclick="navigate(1)">›</div>
+
+<!-- SLIDES -->
+<div id="slides">
+
+<!-- SLIDE 1: TITLE -->
+<div class="slide">
+ <div class="title-slide-content">
+ <div class="section-label">Engineering Software Lab — Technical Briefing</div>
+ <h1>Optical AI Networks</h1>
+ <div class="subtitle">100× Faster Inference: A Comparative Analysis</div>
+ <div class="vs-badge">
+ <div class="vs-side">
+ <span class="flag">🇨🇳</span>
+ <span class="name" style="color:var(--china-red)">Peking University</span>
+ </div>
+ <div class="vs-divider">vs</div>
+ <div class="vs-side">
+ <span class="flag">🇮🇱</span>
+ <span class="name" style="color:var(--nvidia-green)">Nvidia Israel / Mellanox</span>
+ </div>
+ </div>
+ <div class="title-meta">
+ <strong>Published:</strong> July 2026 &nbsp;|&nbsp; <strong>Source:</strong> National Science Review & Interesting Engineering<br>
+ <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">Daniel Liezrowice</a> — Engineering Software Lab — <a href="https://www.eswlab.com" target="_blank">www.eswlab.com</a>
+ </div>
+ </div>
+</div>
+
+<!-- SLIDE 2: THE PROBLEM -->
+<div class="slide">
+ <div class="section-label">The Core Challenge</div>
+ <h2 class="slide-title">The Bottleneck Has Moved</h2>
+ <p class="slide-subtitle">AI performance is no longer limited by compute — it's limited by how chips communicate</p>
+
+ <div class="card-grid cols-3" style="margin-bottom:24px">
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--accent-orange)">⚡</div>
+ <div class="stat-label">GPU compute scales<br>with Moore's law end</div>
+ </div>
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--accent-cyan)">🔗</div>
+ <div class="stat-label">Data movement between<br>chips is the new wall</div>
+ </div>
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--accent-pink)">💡</div>
+ <div class="stat-label">Optical interconnects<br>are the solution</div>
+ </div>
+ </div>
+
+ <div class="card" style="max-width:800px;text-align:center">
+ <p style="font-size:clamp(12px,2vw,16px);line-height:1.6">
+ <strong style="color:var(--accent-cyan)">"The interconnect, not the compute, is the bottleneck."</strong><br>
+ Both Peking University and Nvidia Israel have independently reached this conclusion —<br>
+ but from very different angles and at very different scales.
+ </p>
+ </div>
+
+ <div class="diagram-container" style="margin-top:20px">
+ <svg width="90%" height="100" viewBox="0 0 700 100" style="max-width:700px">
+ <!-- GPU nodes -->
+ <rect x="20" y="30" width="70" height="40" rx="8" fill="rgba(118,185,0,0.12)" stroke="var(--nvidia-green)" stroke-width="2"/>
+ <text x="55" y="54" text-anchor="middle" fill="var(--nvidia-green)" font-size="11" font-family="Inter">GPU 1</text>
+ <rect x="20" y="10" width="70" height="16" rx="4" fill="rgba(255,255,255,0.04)"/>
+ <text x="55" y="22" text-anchor="middle" fill="var(--text-dim)" font-size="8" font-family="Inter">MEM</text>
+
+ <rect x="180" y="30" width="70" height="40" rx="8" fill="rgba(118,185,0,0.12)" stroke="var(--nvidia-green)" stroke-width="2"/>
+ <text x="215" y="54" text-anchor="middle" fill="var(--nvidia-green)" font-size="11" font-family="Inter">GPU 2</text>
+ <rect x="180" y="10" width="70" height="16" rx="4" fill="rgba(255,255,255,0.04)"/>
+ <text x="215" y="22" text-anchor="middle" fill="var(--text-dim)" font-size="8" font-family="Inter">MEM</text>
+
+ <rect x="340" y="30" width="70" height="40" rx="8" fill="rgba(118,185,0,0.12)" stroke="var(--nvidia-green)" stroke-width="2"/>
+ <text x="375" y="54" text-anchor="middle" fill="var(--nvidia-green)" font-size="11" font-family="Inter">GPU 3</text>
+ <rect x="340" y="10" width="70" height="16" rx="4" fill="rgba(255,255,255,0.04)"/>
+ <text x="375" y="22" text-anchor="middle" fill="var(--text-dim)" font-size="8" font-family="Inter">MEM</text>
+
+ <!-- Bottleneck arrows (copper) -->
+ <path d="M90 50 L180 50" stroke="var(--accent-orange)" stroke-width="3" fill="none" opacity="0.6"/>
+ <path d="M250 50 L340 50" stroke="var(--accent-orange)" stroke-width="3" fill="none" opacity="0.6"/>
+ <text x="135" y="44" text-anchor="middle" fill="var(--accent-orange)" font-size="9" font-family="Inter">Copper ⚠</text>
+ <text x="295" y="44" text-anchor="middle" fill="var(--accent-orange)" font-size="9" font-family="Inter">Copper ⚠</text>
+
+ <!-- Optical solution arrow -->
+ <path d="M90 80 L375 80" stroke="var(--accent-cyan)" stroke-width="2" fill="none" class="optical-link"/>
+ <text x="230" y="96" text-anchor="middle" fill="var(--accent-cyan)" font-size="10" font-family="Inter">Optical Interconnect — Light replaces copper</text>
+ </svg>
+ </div>
+</div>
+
+<!-- SLIDE 3: PEKING UNIVERSITY OVERVIEW -->
+<div class="slide">
+ <div class="section-label">Peking University — Research Overview</div>
+ <h2 class="slide-title">On-Chip All-Optical Network</h2>
+ <p class="slide-subtitle">Published in <em>National Science Review</em>, July 2026</p>
+
+ <div class="card-grid cols-2">
+ <div class="card">
+ <h3 style="font-size:clamp(13px,2vw,16px);font-weight:700;margin-bottom:12px;color:var(--china-red)">What They Built</h3>
+ <ul class="feature-list">
+ <li>An on-chip <strong>all-optical network</strong> connecting multiple computing chips — no electrical links between nodes</li>
+ <li>A <strong>400 Gbps silicon photonic transceiver</strong> converting electrical ↔ optical signals</li>
+ <li>A custom <strong>16×16 optical switch chip</strong> routing data between compute nodes</li>
+ <li>Aggregate switching bandwidth: <strong>6.4 Tbps</strong></li>
+ <li>Total insertion loss <strong>&lt;5 dB</strong> — no external optical gain needed</li>
+ <li>Spectral response &gt;100 nm (WDM-ready)</li>
+ </ul>
+ </div>
+ <div class="card">
+ <h3 style="font-size:clamp(13px,2vw,16px);font-weight:700;margin-bottom:12px;color:var(--china-red)">How It Works</h3>
+ <div class="diagram-container" style="margin:0">
+ <svg width="100%" height="220" viewBox="0 0 400 220">
+ <!-- Compute nodes -->
+ <rect x="10" y="20" width="60" height="50" rx="8" fill="rgba(222,41,16,0.12)" stroke="var(--china-red)" stroke-width="2"/>
+ <text x="40" y="40" text-anchor="middle" fill="var(--china-red)" font-size="10" font-family="Inter">CNN</text>
+ <text x="40" y="54" text-anchor="middle" fill="var(--china-red)" font-size="10" font-family="Inter">Layer 1</text>
+
+ <rect x="10" y="90" width="60" height="50" rx="8" fill="rgba(222,41,16,0.12)" stroke="var(--china-red)" stroke-width="2"/>
+ <text x="40" y="110" text-anchor="middle" fill="var(--china-red)" font-size="10" font-family="Inter">CNN</text>
+ <text x="40" y="124" text-anchor="middle" fill="var(--china-red)" font-size="10" font-family="Inter">Layer 2</text>
+
+ <rect x="10" y="160" width="60" height="50" rx="8" fill="rgba(222,41,16,0.12)" stroke="var(--china-red)" stroke-width="2"/>
+ <text x="40" y="180" text-anchor="middle" fill="var(--china-red)" font-size="10" font-family="Inter">CNN</text>
+ <text x="40" y="194" text-anchor="middle" fill="var(--china-red)" font-size="10" font-family="Inter">Layer 3</text>
+
+ <!-- Optical switch -->
+ <rect x="140" y="70" width="120" height="90" rx="12" fill="rgba(0,217,255,0.08)" stroke="var(--accent-cyan)" stroke-width="2"/>
+ <text x="200" y="100" text-anchor="middle" fill="var(--accent-cyan)" font-size="12" font-family="Inter" font-weight="600">16×16 Optical</text>
+ <text x="200" y="118" text-anchor="middle" fill="var(--accent-cyan)" font-size="12" font-family="Inter" font-weight="600">Switch</text>
+ <text x="200" y="140" text-anchor="middle" fill="var(--text-dim)" font-size="9" font-family="Inter">6.4 Tbps</text>
+
+ <!-- Transceiver -->
+ <rect x="300" y="70" width="80" height="90" rx="12" fill="rgba(163,113,247,0.08)" stroke="var(--accent-purple)" stroke-width="2"/>
+ <text x="340" y="100" text-anchor="middle" fill="var(--accent-purple)" font-size="10" font-family="Inter" font-weight="600">400G SiPh</text>
+ <text x="340" y="116" text-anchor="middle" fill="var(--accent-purple)" font-size="10" font-family="Inter" font-weight="600">Transceiver</text>
+ <text x="340" y="140" text-anchor="middle" fill="var(--text-dim)" font-size="9" font-family="Inter">E↔O Conv.</text>
+
+ <!-- Optical links -->
+ <path d="M70 45 L140 90" class="optical-link"/>
+ <path d="M70 115 L140 115" class="optical-link"/>
+ <path d="M70 185 L140 160" class="optical-link"/>
+ <path d="M260 115 L300 115" class="optical-link"/>
+
+ <!-- Light indicators -->
+ <circle cx="105" cy="68" r="3" fill="var(--accent-cyan)" opacity="0.6"/>
+ <circle cx="105" cy="115" r="3" fill="var(--accent-cyan)" opacity="0.6"/>
+ <circle cx="105" cy="162" r="3" fill="var(--accent-cyan)" opacity="0.6"/>
+ </svg>
+ </div>
+ </div>
+ </div>
+
+ <div style="margin-top:16px;text-align:center">
+ <span class="badge badge-china">Lab Prototype</span>
+ &nbsp;
+ <span class="badge badge-shared">Co-design: Algorithm + Architecture + Interconnect</span>
+ </div>
+</div>
+
+<!-- SLIDE 4: PEKING UNIVERSITY TECHNICAL SPECS -->
+<div class="slide">
+ <div class="section-label">Peking University — Technical Specifications</div>
+ <h2 class="slide-title">Architecture Deep Dive</h2>
+ <p class="slide-subtitle">Feature maps flow directly through light — no memory round-trips</p>
+
+ <div class="card-grid cols-4" style="margin-bottom:20px">
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--accent-cyan)">400</div>
+ <div class="stat-label">Gbps Transceiver<br>Speed</div>
+ </div>
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--accent-cyan)">6.4</div>
+ <div class="stat-label">Tbps Aggregate<br>Switching BW</div>
+ </div>
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--accent-cyan)">16×16</div>
+ <div class="stat-label">Optical Switch<br>Matrix Size</div>
+ </div>
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--accent-cyan)">&lt;5</div>
+ <div class="stat-label">dB Total Loss<br>(no gain needed)</div>
+ </div>
+ </div>
+
+ <div class="card" style="max-width:900px">
+ <h3 style="font-size:clamp(12px,2vw,15px);font-weight:700;margin-bottom:14px">Inference Pipeline: Image Denoising CNN</h3>
+ <div class="flow-diagram">
+ <div class="flow-step" style="border-color:var(--china-red);background:rgba(222,41,16,0.08);color:var(--china-red)">Input<br>Image</div>
+ <div class="flow-arrow">→</div>
+ <div class="flow-step" style="border-color:var(--accent-cyan);background:rgba(0,217,255,0.08);color:var(--accent-cyan)">CNN<br>Layer 1</div>
+ <div class="flow-arrow">⟶</div>
+ <div class="flow-step" style="border-color:var(--accent-cyan);background:rgba(0,217,255,0.08);color:var(--accent-cyan)">Optical<br>Link</div>
+ <div class="flow-arrow">⟶</div>
+ <div class="flow-step" style="border-color:var(--accent-cyan);background:rgba(0,217,255,0.08);color:var(--accent-cyan)">CNN<br>Layer 2</div>
+ <div class="flow-arrow">⟶</div>
+ <div class="flow-step" style="border-color:var(--accent-cyan);background:rgba(0,217,255,0.08);color:var(--accent-cyan)">Optical<br>Link</div>
+ <div class="flow-arrow">⟶</div>
+ <div class="flow-step" style="border-color:var(--accent-cyan);background:rgba(0,217,255,0.08);color:var(--accent-cyan)">CNN<br>Layer 3-5</div>
+ <div class="flow-arrow">→</div>
+ <div class="flow-step" style="border-color:var(--esl-green);background:rgba(0,168,107,0.08);color:var(--esl-green)">Denoised<br>Output</div>
+ </div>
+ <p style="text-align:center;margin-top:14px;font-size:clamp(10px,1.4vw,13px);color:var(--text-dim)">
+ Feature maps transmitted directly through optical network — <strong style="color:var(--text)">no intermediate memory writes</strong>
+ </p>
+ </div>
+
+ <div class="card" style="max-width:900px;margin-top:16px">
+ <p style="font-size:clamp(10px,1.4vw,13px);color:var(--text-dim);line-height:1.6">
+ <strong style="color:var(--text)">Key innovation:</strong> The optical switch maintains error-free performance across multiple communication paths with a spectral response exceeding 100 nm, making it suitable for future bandwidth expansion through wavelength-division multiplexing (WDM). The design eliminates the need for DSP retimers or external optical amplification.
+ </p>
+ </div>
+</div>
+
+<!-- SLIDE 5: PEKING UNIVERSITY RESULTS -->
+<div class="slide">
+ <div class="section-label">Peking University — Results</div>
+ <h2 class="slide-title">100× Faster, 1/9th the Compute</h2>
+ <p class="slide-subtitle">Compared against a commercial GPU running the same image-denoising task</p>
+
+ <div class="card-grid cols-2" style="margin-bottom:20px">
+ <div class="card stat-box" style="border-color:var(--china-red)">
+ <div class="stat-number" style="color:var(--china-red);font-size:clamp(36px,6vw,56px)">100×</div>
+ <div class="stat-label">Faster Inference<br>vs. commercial GPU</div>
+ </div>
+ <div class="card stat-box" style="border-color:var(--esl-green)">
+ <div class="stat-number" style="color:var(--esl-green);font-size:clamp(36px,6vw,56px)">1/9</div>
+ <div class="stat-label">Computational Resources<br>used vs. GPU</div>
+ </div>
+ </div>
+
+ <div class="card" style="max-width:800px">
+ <h3 style="font-size:clamp(12px,2vw,15px);font-weight:700;margin-bottom:16px">Performance Comparison</h3>
+ <div class="bar-chart">
+ <div class="bar-row">
+ <div class="bar-label">Commercial GPU</div>
+ <div class="bar-track">
+ <div class="bar-fill" style="width:10%;background:linear-gradient(90deg,#555,#777)">1×</div>
+ </div>
+ </div>
+ <div class="bar-row">
+ <div class="bar-label" style="color:var(--china-red)">Optical System</div>
+ <div class="bar-track">
+ <div class="bar-fill" style="width:100%;background:linear-gradient(90deg,var(--china-red),#ff6b4a)">100×</div>
+ </div>
+ </div>
+ <div style="height:12px"></div>
+ <div class="bar-row">
+ <div class="bar-label">Commercial GPU</div>
+ <div class="bar-track">
+ <div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#555,#777)">9 units</div>
+ </div>
+ </div>
+ <div class="bar-row">
+ <div class="bar-label" style="color:var(--esl-green)">Optical System</div>
+ <div class="bar-track">
+ <div class="bar-fill" style="width:11%;background:linear-gradient(90deg,var(--esl-green),#00d97a)">~1 unit</div>
+ </div>
+ </div>
+ </div>
+ <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:10px;color:var(--text-dim)">
+ <span>↑ Inference Speed (higher = better)</span>
+ <span>↑ Compute Used (lower = better)</span>
+ </div>
+ </div>
+
+ <div class="takeaway-box" style="margin-top:16px;max-width:800px">
+ <h3>Researchers' Key Claim</h3>
+ <p>"Specific objectives can be realised under limited computational resources when algorithms, processor micro-architectures and chip-level interconnections are co-designed."</p>
+ </div>
+</div>
+
+<!-- SLIDE 6: NVIDIA ISRAEL / MELLANOX HISTORY -->
+<div class="slide">
+ <div class="section-label">Nvidia Israel / Mellanox — History</div>
+ <h2 class="slide-title">From Yokneam to AI Factory</h2>
+ <p class="slide-subtitle">The $6.9B acquisition that became Nvidia's networking backbone</p>
+
+ <div class="timeline" style="margin-bottom:24px">
+ <div class="timeline-item">
+ <div class="timeline-dot"></div>
+ <div class="timeline-year">1999</div>
+ <div class="timeline-text">Mellanox founded in Yokneam Illit, Israel by Eyal Waldman & team</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot"></div>
+ <div class="timeline-year">2001</div>
+ <div class="timeline-text">Shipped first InfiniBand product (InfiniBridge, 10 Gbit/s)</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot"></div>
+ <div class="timeline-year">2013</div>
+ <div class="timeline-text">Acquired Kotura (silicon photonics) & IPtronics (optical interconnect)</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot"></div>
+ <div class="timeline-year">2019</div>
+ <div class="timeline-text">Nvidia announces $6.9B acquisition; China's SAMR delays approval</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot"></div>
+ <div class="timeline-year">2020</div>
+ <div class="timeline-text">Acquisition closes (April). Mellanox brand retired. Yokneam → Nvidia networking HQ</div>
+ </div>
+ <div class="timeline-item">
+ <div class="timeline-dot"></div>
+ <div class="timeline-year">2026</div>
+ <div class="timeline-text">Networking revenue: $10.98B/quarter (263% YoY). $31B+ full year</div>
+ </div>
+ </div>
+
+ <div class="card-grid cols-3">
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--nvidia-green)">$6.9B</div>
+ <div class="stat-label">Acquisition Price<br>(2019)</div>
+ </div>
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--nvidia-green)">$31B+</div>
+ <div class="stat-label">Annual Networking<br>Revenue (FY2026)</div>
+ </div>
+ <div class="card stat-box">
+ <div class="stat-number" style="color:var(--nvidia-green)">2,800+</div>
+ <div class="stat-label">Employees at<br>Yokneam (2020)</div>
+ </div>
+ </div>
+</div>
+
+<!-- SLIDE 7: NVIDIA ISRAEL PRODUCT PORTFOLIO -->
+<div class="slide">
+ <div class="section-label">Nvidia Israel / Mellanox — Product Portfolio</div>
+ <h2 class="slide-title">Production-Grade Optical Networking</h2>
+ <p class="slide-subtitle">Shipping at hyperscale — adopted by Meta, Microsoft, Oracle, CoreWeave</p>
+
+ <div class="card-grid cols-4" style="margin-bottom:16px">
+ <div class="product-card">
+ <h4>Quantum-X InfiniBand Photonics</h4>
+ <p>Ultra-low-latency scale-out fabric for AI training clusters. InfiniBand with RDMA.</p>
+ <div class="spec">200G SerDes CPO</div>
+ </div>
+ <div class="product-card">
+ <h4>Spectrum-X Ethernet Photonics</h4>
+ <p>Ethernet scale-out for AI inference. 5× better power efficiency than pluggable.</p>
+ <div class="spec">409.6 Tb/s per switch</div>
+ </div>
+ <div class="product-card">
+ <h4>BlueField DPU (3/4)</h4>
+ <p>Offloads networking, storage, security from host CPU/GPU. Line-rate processing.</p>
+ <div class="spec">400 Gb/s line-rate</div>
+ </div>
+ <div class="product-card">
+ <h4>Spectrum-XGS Ethernet</h4>
+ <p>Scale-across: connects AI clusters across data centers and campuses.</p>
+ <div class="spec">1.9× NCCL improvement</div>
+ </div>
+ </div>
+
+ <div class="card-grid cols-3">
+ <div class="product-card">
+ <h4>NVLink</h4>
+ <p>GPU-to-GPU scale-up within rack. Currently copper, optical roadmap in progress.</p>
+ <div class="spec">Revolutionized scale-up</div>
+ </div>
+ <div class="product-card">
+ <h4>Tower Semiconductor Partnership</h4>
+ <p>Israeli foundry scaling 1.6T silicon photonics for Nvidia networking protocols.</p>
+ <div class="spec">$650M+ investment</div>
+ </div>
+ <div class="product-card">
+ <h4>Ayar Labs Collaboration</h4>
+ <p>Chip-to-chip optical I/O for future AI architectures. $500M Series E (2026).</p>
+ <div class="spec">1000× bandwidth density</div>
+ </div>
+ </div>
+</div>
+
+<!-- SLIDE 8: NVIDIA ISRAEL SILICON PHOTONICS -->
+<div class="slide">
+ <div class="section-label">Nvidia Israel / Mellanox — Silicon Photonics & CPO</div>
+ <h2 class="slide-title">Co-Packaged Optics (CPO)</h2>
+ <p class="slide-subtitle">Moving optical engines onto the switch ASIC package</p>
+
+ <div class="card-grid cols-2">
+ <div class="card">
+ <h3 style="font-size:clamp(13px,2vw,16px);font-weight:700;margin-bottom:12px;color:var(--nvidia-green)">How CPO Works</h3>
+ <div class="diagram-container" style="margin:0">
+ <svg width="100%" height="200" viewBox="0 0 400 200">
+ <!-- Traditional pluggable -->
+ <rect x="10" y="15" width="180" height="80" rx="10" fill="rgba(255,255,255,0.03)" stroke="var(--text-dim)" stroke-width="1.5" stroke-dasharray="4,3"/>
+ <text x="100" y="35" text-anchor="middle" fill="var(--text-dim)" font-size="10" font-family="Inter" font-weight="600">Traditional: Pluggable Transceivers</text>
+ <rect x="25" y="50" width="50" height="35" rx="6" fill="rgba(118,185,0,0.1)" stroke="var(--nvidia-green)" stroke-width="1.5"/>
+ <text x="50" y="72" text-anchor="middle" fill="var(--nvidia-green)" font-size="9" font-family="Inter">Switch</text>
+ <rect x="90" y="50" width="40" height="35" rx="6" fill="rgba(255,255,255,0.06)" stroke="var(--text-dim)" stroke-width="1"/>
+ <text x="110" y="72" text-anchor="middle" fill="var(--text-dim)" font-size="8" font-family="Inter">PCB</text>
+ <rect x="145" y="50" width="35" height="35" rx="6" fill="rgba(240,136,62,0.1)" stroke="var(--accent-orange)" stroke-width="1.5"/>
+ <text x="162" y="72" text-anchor="middle" fill="var(--accent-orange)" font-size="8" font-family="Inter">Module</text>
+ <path d="M75 67 L90 67" stroke="var(--accent-orange)" stroke-width="2" fill="none"/>
+ <path d="M130 67 L145 67" stroke="var(--accent-orange)" stroke-width="2" fill="none"/>
+ <text x="100" y="100" text-anchor="middle" fill="var(--accent-orange)" font-size="8" font-family="Inter">Long electrical path = high power</text>
+
+ <!-- CPO -->
+ <rect x="210" y="15" width="180" height="80" rx="10" fill="rgba(0,217,255,0.04)" stroke="var(--accent-cyan)" stroke-width="1.5"/>
+ <text x="300" y="35" text-anchor="middle" fill="var(--accent-cyan)" font-size="10" font-family="Inter" font-weight="600">Nvidia CPO: Co-Packaged Optics</text>
+ <rect x="240" y="50" width="50" height="35" rx="6" fill="rgba(118,185,0,0.1)" stroke="var(--nvidia-green)" stroke-width="1.5"/>
+ <text x="265" y="72" text-anchor="middle" fill="var(--nvidia-green)" font-size="9" font-family="Inter">Switch</text>
+ <rect x="300" y="50" width="65" height="35" rx="6" fill="rgba(0,217,255,0.1)" stroke="var(--accent-cyan)" stroke-width="1.5"/>
+ <text x="332" y="67" text-anchor="middle" fill="var(--accent-cyan)" font-size="8" font-family="Inter">Optical</text>
+ <text x="332" y="78" text-anchor="middle" fill="var(--accent-cyan)" font-size="8" font-family="Inter">Engine</text>
+ <path d="M290 67 L300 67" stroke="var(--accent-cyan)" stroke-width="2" fill="none" class="optical-link"/>
+ <text x="300" y="100" text-anchor="middle" fill="var(--accent-cyan)" font-size="8" font-family="Inter">Short path = 5× less power</text>
+
+ <!-- Benefits -->
+ <text x="200" y="130" text-anchor="middle" fill="var(--nvidia-green)" font-size="11" font-family="Inter" font-weight="600">Built on TSMC COUPE + SoIC-X 3D hybrid bonding</text>
+
+ <rect x="30" y="150" width="100" height="30" rx="8" fill="rgba(118,185,0,0.08)" stroke="var(--nvidia-green)" stroke-width="1"/>
+ <text x="80" y="170" text-anchor="middle" fill="var(--nvidia-green)" font-size="10" font-family="Inter" font-weight="600">5× Power Eff.</text>
+
+ <rect x="150" y="150" width="100" height="30" rx="8" fill="rgba(118,185,0,0.08)" stroke="var(--nvidia-green)" stroke-width="1"/>
+ <text x="200" y="170" text-anchor="middle" fill="var(--nvidia-green)" font-size="10" font-family="Inter" font-weight="600">5× Uptime</text>
+
+ <rect x="270" y="150" width="100" height="30" rx="8" fill="rgba(118,185,0,0.08)" stroke="var(--nvidia-green)" stroke-width="1"/>
+ <text x="320" y="170" text-anchor="middle" fill="var(--nvidia-green)" font-size="10" font-family="Inter" font-weight="600">1.3× Faster TTI</text>
+ </svg>
+ </div>
+ </div>
+ <div class="card">
+ <h3 style="font-size:clamp(13px,2vw,16px);font-weight:700;margin-bottom:12px;color:var(--nvidia-green)">Ecosystem & Manufacturing</h3>
+ <ul class="feature-list">
+ <li><strong>Tower Semiconductor</strong> (Migdal HaEmek, Israel): $650M+ in silicon photonics capacity expansion. 1.6T optical modules for Nvidia</li>
+ <li><strong>TSMC COUPE platform</strong>: 3D hybrid bonding co-integrates electronic + photonic ICs</li>
+ <li><strong>Ayar Labs</strong>: $500M Series E at $3.75B valuation for optical I/O chiplets</li>
+ <li><strong>Full-stack co-design</strong>: GPU + NIC + Switch + Optics + CUDA + NCCL integrated as one platform</li>
+ <li><strong>1.6T modules</strong> began volume shipments in April 2026</li>
+ <li><strong>800G modules</strong> became widely available in 2025</li>
+ </ul>
+ </div>
+ </div>
+</div>
+
+<!-- SLIDE 9: HEAD-TO-HEAD COMPARISON -->
+<div class="slide">
+ <div class="section-label">Head-to-Head Comparison</div>
+ <h2 class="slide-title">Side-by-Side Analysis</h2>
+ <p class="slide-subtitle">Same conclusion, very different approaches and scales</p>
+
+ <div style="width:100%;max-width:1100px;overflow-x:auto">
+ <table class="comp-table">
+ <thead>
+ <tr>
+ <th>Dimension</th>
+ <th class="col-china">🇨🇳 Peking University</th>
+ <th class="col-nvidia">🇮🇱 Nvidia Israel / Mellanox</th>
+ </tr>
+ </thead>
+ <tbody>
+ <tr>
+ <td>Maturity</td>
+ <td class="col-china">Lab prototype, single demo (CNN)</td>
+ <td class="col-nvidia">Shipping at hyperscale; Meta, MS, Oracle</td>
+ </tr>
+ <tr>
+ <td>Scale</td>
+ <td class="col-china">5 compute nodes, 6.4 Tbps</td>
+ <td class="col-nvidia">Million-GPU factories, 409.6 Tb/s/switch</td>
+ </tr>
+ <tr>
+ <td>Optical Approach</td>
+ <td class="col-china">On-chip all-optical network; optical switch routes between nodes</td>
+ <td class="col-nvidia">CPO on switch ASIC; optics replace pluggable transceivers</td>
+ </tr>
+ <tr>
+ <td>Problem Solved</td>
+ <td class="col-china">Inference bottleneck — eliminates memory round-trips</td>
+ <td class="col-nvidia">Training + inference at DC scale — eliminates SerDes loss</td>
+ </tr>
+ <tr>
+ <td>Key Innovation</td>
+ <td class="col-china">Algorithm-architecture-interconnect co-design</td>
+ <td class="col-nvidia">Full-stack co-design: GPU+NIC+Switch+Optics+Software</td>
+ </tr>
+ <tr>
+ <td>Bandwidth</td>
+ <td class="col-china">400 Gbps transceiver, 6.4 Tbps switch</td>
+ <td class="col-nvidia">1.6T modules shipping, 409.6 Tb/s per switch</td>
+ </tr>
+ <tr>
+ <td>Power Efficiency</td>
+ <td class="col-china">1/9th compute of a GPU for same task</td>
+ <td class="col-nvidia">5× better power efficiency vs. pluggable</td>
+ </tr>
+ <tr>
+ <td>Performance Claim</td>
+ <td class="col-china">>100× faster inference (one workload)</td>
+ <td class="col-nvidia">1.6× network perf vs. OTS Ethernet; deterministic latency</td>
+ </tr>
+ <tr>
+ <td>Revenue</td>
+ <td class="col-china">Academic research (no revenue)</td>
+ <td class="col-nvidia">$10.98B/quarter networking revenue</td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+</div>
+
+<!-- SLIDE 10: CONVERGENCE & DIVERGENCE -->
+<div class="slide">
+ <div class="section-label">Key Analysis</div>
+ <h2 class="slide-title">Convergence & Divergence</h2>
+ <p class="slide-subtitle">Both sides reached the same conclusion — from opposite directions</p>
+
+ <div class="conv-div">
+ <div class="card" style="border-color:var(--accent-cyan)">
+ <h3 style="color:var(--accent-cyan)">
+ <span class="icon" style="background:rgba(0,217,255,0.15);color:var(--accent-cyan)">≡</span>
+ Shared Convergence
+ </h3>
+ <ul>
+ <li><strong>Same diagnosis:</strong> The interconnect — not the compute — is the bottleneck in AI scaling</li>
+ <li><strong>Same prescription:</strong> Light must replace copper for chip-to-chip communication</li>
+ <li><strong>Same technology base:</strong> Both use silicon photonics transceivers and optical switching</li>
+ <li><strong>Same philosophy:</strong> Co-design of algorithm, architecture, and interconnect is essential</li>
+ <li><strong>Same goal:</strong> Reduce energy consumption while improving AI inference performance</li>
+ <li><strong>Same trajectory:</strong> Both cite co-packaged optics as the path forward</li>
+ </ul>
+ </div>
+ <div class="card" style="border-color:var(--accent-purple)">
+ <h3 style="color:var(--accent-purple)">
+ <span class="icon" style="background:rgba(163,113,247,0.15);color:var(--accent-purple)">≠</span>
+ Key Divergence
+ </h3>
+ <ul>
+ <li><strong>Peking University:</strong> Attacks inside the compute pipeline — optical switch connects individual processing elements, eliminating memory round-trips. <em>Chip-level, inference-focused, workload-specific.</em></li>
+ <li><strong>Nvidia Israel:</strong> Attacks at the data-center fabric level — CPO connects thousands of GPUs into a single logical machine. <em>System-level, training+inference, workload-agnostic.</em></li>
+ <li><strong>Scale gap:</strong> 5-node CNN demo vs. million-GPU production clusters</li>
+ <li><strong>Integration depth:</strong> Standalone prototype vs. full stack (CUDA, NCCL, BlueField, NVLink, Spectrum-X, Quantum-X)</li>
+ <li><strong>Generalization:</strong> Single workload (image denoising) vs. all AI workloads at hyperscale</li>
+ </ul>
+ </div>
+ </div>
+
+ <div class="card" style="max-width:1000px;margin-top:16px;text-align:center;border-color:var(--esl-green)">
+ <p style="font-size:clamp(11px,1.6vw,15px);line-height:1.6">
+ <strong style="color:var(--esl-green)">Analogy:</strong> Peking University is roughly where Mellanox was circa 2002 — proving the concept exists. Nvidia Israel has already built the factory, the supply chain, and the customer base.
+ </p>
+ </div>
+</div>
+
+<!-- SLIDE 11: GEOPOLITICAL CONTEXT -->
+<div class="slide">
+ <div class="section-label">Geopolitical Context</div>
+ <h2 class="slide-title">The Irony of Optical AI</h2>
+ <p class="slide-subtitle">China is simultaneously constraining and replicating Nvidia's networking dominance</p>
+
+ <div class="geo-visual" style="margin-bottom:20px">
+ <div class="geo-card" style="border-color:var(--china-red);background:rgba(222,41,16,0.06)">
+ <h4 style="color:var(--china-red)">🇨🇳 China's Position</h4>
+ <p>
+ <strong>SAMR Antitrust Probe</strong> (Dec 2024): China launched an antitrust investigation into Nvidia over Mellanox acquisition conditions. The deal was delayed over a year (2019–2020) by Chinese regulators.<br><br>
+ <strong>US Export Curbs:</strong> China faces restrictions on advanced AI chips, pushing domestic innovation in alternative architectures like optical interconnects.<br><br>
+ <strong>Domestic Push:</strong> Peking University's paper explicitly cites co-packaged optics and silicon photonic transceivers — the exact technology Nvidia Israel commercializes.
+ </p>
+ </div>
+ <div class="geo-card" style="border-color:var(--nvidia-green);background:rgba(118,185,0,0.06)">
+ <h4 style="color:var(--nvidia-green)">🇮🇱 Nvidia Israel's Position</h4>
+ <p>
+ <strong>Yokneam R&D Hub:</strong> Nvidia's primary center for networking chips — the glue connecting AI processors into unified systems.<br><br>
+ <strong>Israeli Ecosystem:</strong> Tower Semiconductor (Migdal HaEmek) supplies 1.6T silicon photonics. Ayar Labs, Teramount, and other Israeli startups provide critical components.<br><br>
+ <strong>Strategic Dependency:</strong> Without Mellanox's networking, Nvidia's GPU clusters cannot function at scale — making Israel's R&D essential to global AI infrastructure.
+ </p>
+ </div>
+ <div class="geo-card" style="border-color:var(--accent-orange);background:rgba(240,136,62,0.06)">
+ <h4 style="color:var(--accent-orange)">⚡ The Paradox</h4>
+ <p>
+ <strong>Constrain & Replicate:</strong> China is trying to limit Nvidia's networking dominance through antitrust action while simultaneously trying to replicate it domestically through academic research.<br><br>
+ <strong>Technology Flow:</strong> The Peking University paper validates the same architectural direction Nvidia Israel has been productizing since 2020.<br><br>
+ <strong>Supply Chain Risk:</strong> CPO adoption projected at ~35% of AI DC optical modules by 2030 — the race is on.
+ </p>
+ </div>
+ </div>
+
+ <div class="card" style="max-width:900px;text-align:center">
+ <p style="font-size:clamp(11px,1.6vw,14px);color:var(--text-dim);line-height:1.6">
+ <strong style="color:var(--text)">Hyperscaler CAPEX:</strong> $630B+ expected spend on AI infrastructure in 2026 — much of it on processors and the systems that connect them.
+ </p>
+ </div>
+</div>
+
+<!-- SLIDE 12: CONCLUSION -->
+<div class="slide">
+ <div class="section-label">Bottom Line</div>
+ <h2 class="slide-title">Conclusion</h2>
+ <p class="slide-subtitle">Proof of concept meets production at scale</p>
+
+ <div class="card-grid cols-2" style="margin-bottom:20px">
+ <div class="card" style="border-color:var(--china-red)">
+ <h3 style="font-size:clamp(14px,2.5vw,18px);font-weight:700;margin-bottom:10px;color:var(--china-red)">🇨🇳 Peking University</h3>
+ <p style="font-size:clamp(11px,1.5vw,14px);color:var(--text-dim);line-height:1.6">
+ A <strong style="color:var(--text)">proof of concept</strong> that validates the same architectural direction Nvidia Israel has been productizing. The 100× speedup is impressive but measured on a single 5-layer CNN for image denoising — generalization to LLM-scale workloads is unproven.
+ </p>
+ </div>
+ <div class="card" style="border-color:var(--nvidia-green)">
+ <h3 style="font-size:clamp(14px,2.5vw,18px);font-weight:700;margin-bottom:10px;color:var(--nvidia-green)">🇮🇱 Nvidia Israel / Mellanox</h3>
+ <p style="font-size:clamp(11px,1.5vw,14px);color:var(--text-dim);line-height:1.6">
+ <strong style="color:var(--text)">Production at scale:</strong> Shipping CPO switches at 409.6 Tb/s across million-GPU clusters, generating $11B/quarter. The optical technology is integrated into a full stack rather than demonstrated as a prototype.
+ </p>
+ </div>
+ </div>
+
+ <div class="takeaway-box" style="margin-bottom:20px">
+ <h3>The Shared Future</h3>
+ <p>
+ Both sides prove the same fundamental truth: <strong>AI performance can no longer scale by adding more GPUs.</strong><br>
+ Light must replace copper — the question is whether it happens inside the compute pipeline (Peking) or at the data-center fabric (Nvidia Israel).<br>
+ Both paths will likely converge as optical interconnects penetrate deeper into the chip stack.
+ </p>
+ </div>
+
+ <div style="text-align:center;font-size:clamp(10px,1.4vw,13px);color:var(--text-dim);line-height:1.8">
+ <strong style="color:var(--esl-green)">Prepared by Daniel Liezrowice</strong> — 
+ <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" style="color:var(--accent-cyan);text-decoration:none">LinkedIn</a> | 
+ Engineering Software Lab — AI SDLC Consultants | 
+ <a href="https://www.eswlab.com" target="_blank" style="color:var(--accent-cyan);text-decoration:none">www.eswlab.com</a><br>
+ Sources: National Science Review, Interesting Engineering, Nvidia, Calcalist Tech, IDTechEx, Wikipedia
+ </div>
+</div>
+
+</div><!-- END SLIDES -->
+
+<!-- SWIPE HINT -->
+<div id="swipeHint">← Swipe to navigate →</div>
+
+<!-- PROGRESS BAR -->
+<div id="progressBar"><div id="progressFill"></div></div>
+
+<!-- SLIDE COUNTER -->
+<div id="slideCounter">1 / 12</div>
+
+<script>
+const slides=document.getElementById('slides');
+const totalSlides=slides.children.length;
+let currentSlide=0;
+const prevArrow=document.getElementById('prevArrow');
+const nextArrow=document.getElementById('nextArrow');
+const progressFill=document.getElementById('progressFill');
+const slideCounter=document.getElementById('slideCounter');
+const swipeHint=document.getElementById('swipeHint');
+let hasNavigated=false;
+
+function updateUI(){
+ slides.style.transform='translateX(-'+currentSlide*100+'vw)';
+ prevArrow.classList.toggle('hidden',currentSlide===0);
+ nextArrow.classList.toggle('hidden',currentSlide===totalSlides-1);
+ progressFill.style.width=((currentSlide+1)/totalSlides*100)+'%';
+ slideCounter.textContent=(currentSlide+1)+' / '+totalSlides;
+ if(!hasNavigated){hasNavigated=true;swipeHint.classList.add('hidden');}
+}
+
+function navigate(dir){
+ const newSlide=currentSlide+dir;
+ if(newSlide>=0&&newSlide<totalSlides){currentSlide=newSlide;updateUI();}
+}
+
+// KEYBOARD
+document.addEventListener('keydown',function(e){
+ if(e.key==='ArrowRight'||e.key===' ')navigate(1);
+ if(e.key==='ArrowLeft')navigate(-1);
+});
+
+// TOUCH SWIPE
+let touchStartX=0,touchEndX=0;
+document.addEventListener('touchstart',function(e){touchStartX=e.changedTouches[0].screenX;},{passive:true});
+document.addEventListener('touchend',function(e){
+ touchEndX=e.changedTouches[0].screenX;
+ if(Math.abs(touchStartX-touchEndX)>50){
+ if(touchStartX>touchEndX)navigate(1);else navigate(-1);
+ }
+},{passive:true});
+
+// MOUSE DRAG
+let mouseStartX=0,mouseEndX=0,isDragging=false;
+document.addEventListener('mousedown',function(e){
+ if(e.target.closest('.nav-arrow')||e.target.closest('a'))return;
+ mouseStartX=e.screenX;isDragging=true;
+});
+document.addEventListener('mouseup',function(e){
+ if(!isDragging)return;
+ mouseEndX=e.screenX;isDragging=false;
+ if(Math.abs(mouseStartX-mouseEndX)>50){
+ if(mouseStartX>mouseEndX)navigate(1);else navigate(-1);
+ }
+});
+
+// INIT
+updateUI();
+</script>
+</body>
+</html>
