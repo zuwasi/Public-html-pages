@@ -32,6 +32,8 @@ a:hover{text-decoration:underline}
 .kicker.c{color:var(--claude)}
 h1{font-size:clamp(2.4rem,7vw,5rem);font-weight:900;line-height:1.02;letter-spacing:-.025em}
 h1 .amp{color:var(--amp)} h1 .cl{color:var(--claude)}
+.tagline{font-size:clamp(1.25rem,3.2vw,2.1rem);font-weight:850;letter-spacing:-.01em;margin-top:20px;
+  background:linear-gradient(90deg,var(--amp),var(--claude));-webkit-background-clip:text;background-clip:text;color:transparent}
 .lead{font-size:clamp(1.05rem,2.2vw,1.4rem);color:#c7d0da;max-width:780px;margin-top:22px}
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:700;
