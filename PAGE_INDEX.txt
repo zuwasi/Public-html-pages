@@ -97,58 +97,61 @@ Last updated: 2026-07-17
 29. asn1c-workbench-amp-presentation.html
    https://zuwasi.github.io/Public-html-pages/asn1c-workbench-amp-presentation.html
 
-30. baboons-face-off.html
+30. baboons-benchmark-report.html
+   https://zuwasi.github.io/Public-html-pages/baboons-benchmark-report.html
+
+31. baboons-face-off.html
    https://zuwasi.github.io/Public-html-pages/baboons-face-off.html
 
-31. comparison-presentation-detailed.html
+32. comparison-presentation-detailed.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-detailed.html
 
-32. comparison-presentation-executive.html
+33. comparison-presentation-executive.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-executive.html
 
-33. comparison-report.html
+34. comparison-report.html
    https://zuwasi.github.io/Public-html-pages/comparison-report.html
 
-34. cpp26-embedded-mavlink.html
+35. cpp26-embedded-mavlink.html
    https://zuwasi.github.io/Public-html-pages/cpp26-embedded-mavlink.html
 
-35. cuda-to-axelera-migration.html
+36. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-36. endorlabs-amp-integration-presentation.html
+37. endorlabs-amp-integration-presentation.html
    https://zuwasi.github.io/Public-html-pages/endorlabs-amp-integration-presentation.html
 
-37. final-scores.html
+38. final-scores.html
    https://zuwasi.github.io/Public-html-pages/final-scores.html
 
-38. harness-beats-model.html
+39. harness-beats-model.html
    https://zuwasi.github.io/Public-html-pages/harness-beats-model.html
 
-39. harness-story.html
+40. harness-story.html
    https://zuwasi.github.io/Public-html-pages/harness-story.html
 
-40. hiring-agent-presentation.html
+41. hiring-agent-presentation.html
    https://zuwasi.github.io/Public-html-pages/hiring-agent-presentation.html
 
-41. nesher2gm-pentest-operator-guide.html
+42. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-42. nono-ampcode-presentation.html
+43. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-43. optical-ai-network-comparison-presentation.html
+44. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-44. proof-lean-cbmc.html
+45. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-45. static-code-analysis-2026.html
+46. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-46. why-amp-doesnt-need-node9-proxy.html
+47. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-47. wolfram-engine-gpu-demo-presentation.html
+48. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
