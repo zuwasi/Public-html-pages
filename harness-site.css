@@ -115,3 +115,31 @@ footer a{color:var(--amp)}
 .badge{display:inline-block;padding:4px 10px;border-radius:99px;border:1px solid var(--line);
   font-size:.74rem;font-weight:700;color:#c7d0da;background:var(--card);margin:3px 4px 3px 0}
 .badge.same{border-color:#176c80;color:#a9f3ff;background:rgba(23,108,128,.15)}
+
+/* nav active + cta button inside nav */
+.nav a.link.active{color:var(--ink)}
+.nav a.navcta{color:#04222e;background:linear-gradient(90deg,var(--amp),var(--amp2));
+  padding:8px 14px;border-radius:10px;font-size:.85rem;font-weight:800}
+.nav a.navcta:hover{text-decoration:none;filter:brightness(1.05)}
+
+/* TL;DR banner */
+.tldr{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between;
+  margin-top:30px;padding:16px 22px;border-radius:16px;border:1px solid rgba(52,211,153,.32);
+  background:linear-gradient(90deg,rgba(52,211,153,.12),rgba(56,189,248,.06))}
+.tldr .txt{font-weight:800;font-size:clamp(1rem,2.2vw,1.25rem)}
+.tldr .txt span{color:var(--win)}
+.btn.win{background:linear-gradient(90deg,var(--win),#22d3ee);color:#04231a;border:none}
+
+/* back link */
+.backlink{display:inline-flex;align-items:center;gap:7px;margin:26px 0 4px;font-weight:700;color:var(--muted)}
+.backlink:hover{color:var(--ink);text-decoration:none}
+
+/* winner banner on final scores */
+.winner{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:34px}
+@media(max-width:760px){.winner{grid-template-columns:1fr}}
+.wcard{border:1px solid var(--line);border-radius:18px;padding:26px;background:var(--card);text-align:center}
+.wcard.amp{border-color:rgba(56,189,248,.4);background:linear-gradient(180deg,rgba(56,189,248,.10),rgba(56,189,248,.02))}
+.wcard .crown{font-size:1.9rem}
+.wcard .who{font-weight:900;font-size:clamp(1.3rem,3vw,1.9rem);margin-top:6px}
+.wcard .who.amp{color:var(--amp)} .wcard .who.cl{color:var(--claude)}
+.wcard .sub{color:var(--muted);font-size:.9rem;margin-top:6px}

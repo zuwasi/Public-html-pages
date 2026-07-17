@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Baboons Over London — Amp vs Claude, same model | ESL</title>
+<title>Baboons Over London â€” Amp vs Claude, same model | ESL</title>
 <meta name="description" content="Amp vs Claude Code, both running Claude Fable 5, build the same silly first-person shooter. Same model, pure harness comparison. Play the best run of each and decide.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,21 +13,22 @@
 <body>
 
 <nav class="nav"><div class="wrap">
-  <div class="brand">Baboons Over <span>London</span></div>
-  <a class="link" href="harness-story.html">← Back to the hub</a>
-  <a class="link" href="#play">Play</a>
-  <a class="link" href="#data">Data</a>
-  <a class="link" href="#prompt">The prompt</a>
+  <div class="brand">The <span>harness</span> beats the model</div>
+  <a class="link" href="harness-story.html">Home</a>
+  <a class="link" href="harness-beats-model.html">Quantum</a>
+  <a class="link" href="proof-lean-cbmc.html">Proofs</a>
+  <a class="link active" href="baboons-face-off.html">Baboons</a>
+  <a class="navcta" href="final-scores.html">Final scores &rarr;</a>
 </div></nav>
 
 <!-- HERO -->
 <header class="hero"><div class="wrap">
-  <div class="kicker c">Experiment 03 · same model, pure harness</div>
+  <div class="kicker c">Experiment 03 Â· same model, pure harness</div>
   <h1>Same model.<br>You pick the <span class="cl">better game</span>.</h1>
-  <p class="lead">Both agents were handed the <b>identical</b> prompt and the <b>identical</b> model —
+  <p class="lead">Both agents were handed the <b>identical</b> prompt and the <b>identical</b> model â€”
   <b>Claude&nbsp;Fable&nbsp;5</b>. The only variable is the <b>harness</b>: <b class="amp">Amp Ultra</b>
   (<span class="mono">amp -x --mode ultra</span>) versus <b class="cl">Claude Code</b>
-  (<span class="mono">claude -p --effort high</span>). Amp built it faster and cheaper — but a game is meant to be
+  (<span class="mono">claude -p --effort high</span>). Amp built it faster and cheaper â€” but a game is meant to be
   played, so judge the <i>result</i> yourself.</p>
   <div style="margin-top:22px">
     <span class="badge same">Same model: Claude Fable 5</span>
@@ -42,36 +43,36 @@
   <h2>The face-off</h2>
   <p class="p">We ran <b>three cold runs</b> per agent (benchmark strategy below) and link only the <b>best</b> run of
   each here, so you compare each harness at its strongest. Games open in a new tab.
-  <span class="mut">Controls: WASD move · mouse look · left-click fire · right-click pump · R reload · Esc pause.
+  <span class="mut">Controls: WASD move Â· mouse look Â· left-click fire Â· right-click pump Â· R reload Â· Esc pause.
   Click the game to lock the pointer.</span></p>
 
   <div class="faceoff">
     <div class="gpanel amp">
-      <div class="tag" style="color:var(--amp);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.74rem">Amp Ultra · Fable 5</div>
-      <h3>Amp — best run (Cold 3)</h3>
-      <div class="meta"><span>416.5 s</span><span>$2.42</span><span>1,218 LOC</span><span>clean exit ✓</span></div>
+      <div class="tag" style="color:var(--amp);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.74rem">Amp Ultra Â· Fable 5</div>
+      <h3>Amp â€” best run (Cold 3)</h3>
+      <div class="meta"><span>416.5 s</span><span>$2.42</span><span>1,218 LOC</span><span>clean exit âœ“</span></div>
       <p class="mut" style="font-size:.95rem">Selected as Amp&rsquo;s best: cheapest and largest output of its three runs, delivered in under 7 minutes.</p>
-      <a class="btn amp" href="games/amp-best.html" target="_blank" rel="noopener">▶ Play the Amp game</a>
+      <a class="btn amp" href="games/amp-best.html" target="_blank" rel="noopener">â–¶ Play the Amp game</a>
     </div>
     <div class="gpanel cl">
-      <div class="tag" style="color:var(--claude);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.74rem">Claude Code · Fable 5</div>
-      <h3>Claude — best run (Cold 1)</h3>
+      <div class="tag" style="color:var(--claude);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.74rem">Claude Code Â· Fable 5</div>
+      <h3>Claude â€” best run (Cold 1)</h3>
       <div class="meta"><span>765.4 s</span><span>$4.80</span><span>1,253 LOC</span><span>api_error*</span></div>
       <p class="mut" style="font-size:.95rem">Selected as Claude&rsquo;s best: its fastest and cheapest run with the most code. *All Claude runs ended in an API error, but the game HTML was recoverable.</p>
-      <a class="btn cl" href="games/claude-best.html" target="_blank" rel="noopener">▶ Play the Claude game</a>
+      <a class="btn cl" href="games/claude-best.html" target="_blank" rel="noopener">â–¶ Play the Claude game</a>
     </div>
   </div>
 
   <div class="callout">
     <b>The point:</b> on the coding <b>process</b>, Amp wins decisively (see the numbers below). On the
-    <b>game itself</b>, we deliberately leave the verdict to you — output quantity is not quality.
+    <b>game itself</b>, we deliberately leave the verdict to you â€” output quantity is not quality.
   </div>
 </div></section>
 
 <!-- DATA -->
 <section id="data"><div class="wrap">
   <div class="eyebrow">Measured results</div>
-  <h2>Same model — 2.1× faster, 2.6× cheaper</h2>
+  <h2>Same model â€” 2.1Ã— faster, 2.6Ã— cheaper</h2>
   <p class="p">Both agents used Claude Fable 5, so these gaps reflect the <b>harness</b>, not the model.</p>
 
   <div class="stats">
@@ -88,17 +89,17 @@
       <tr><td>Cold 2</td><td>547.6 s</td><td>$2.60</td><td>1,150</td><td>1,107.9 s</td><td>$8.84</td><td>1,170</td></tr>
       <tr><td>Cold 3</td><td>416.5 s</td><td>$2.42</td><td>1,218</td><td>986.6 s</td><td>$7.20</td><td>1,196</td></tr>
       <tr class="tot"><td>Average</td><td class="amp">453.8 s</td><td class="amp">$2.65</td><td>1,162</td><td class="cl">953.3 s</td><td class="cl">$6.95</td><td>1,206</td></tr>
-      <tr class="tot"><td>3-run total</td><td class="amp" colspan="3">$7.95</td><td class="cl" colspan="3">$20.84 — exhausted the Claude Max monthly limit</td></tr>
+      <tr class="tot"><td>3-run total</td><td class="amp" colspan="3">$7.95</td><td class="cl" colspan="3">$20.84 â€” exhausted the Claude Max monthly limit</td></tr>
     </tbody>
   </table></div>
 
   <p class="p mut" style="font-size:.92rem">Efficiency: Amp 2.56 LOC/s and $2.28 per 1,000 LOC; Claude 1.27 LOC/s and $5.76 per 1,000 LOC.
-  Output size was similar (~1,100–1,200 lines) — more lines is not inherently a better game.
+  Output size was similar (~1,100â€“1,200 lines) â€” more lines is not inherently a better game.
   Amp cost is zero-markup pass-through, read via <span class="mono">amp threads usage</span>.</p>
 
   <div class="cta">
-    <a class="btn" href="https://github.com/zuwasi/Baboons-Over-London/blob/main/benchmark-report.html" target="_blank" rel="noopener">Full benchmark report ↗</a>
-    <a class="btn" href="https://github.com/zuwasi/Baboons-Over-London" target="_blank" rel="noopener">Repo (all 6 runs) ↗</a>
+    <a class="btn" href="https://github.com/zuwasi/Baboons-Over-London/blob/main/benchmark-report.html" target="_blank" rel="noopener">Full benchmark report â†—</a>
+    <a class="btn" href="https://github.com/zuwasi/Baboons-Over-London" target="_blank" rel="noopener">Repo (all 6 runs) â†—</a>
   </div>
 </div></section>
 
@@ -106,19 +107,19 @@
 <section id="strategy"><div class="wrap">
   <div class="eyebrow">Benchmark strategy</div>
   <h2>Why three cold runs?</h2>
-  <p class="p">Agentic coding is <b>stochastic</b> — one run can flatter or flunk either agent. So each agent got
+  <p class="p">Agentic coding is <b>stochastic</b> â€” one run can flatter or flunk either agent. So each agent got
   <b>three independent cold runs</b>: fresh context every time, no reference implementation, no reusing a previous
   attempt (no &ldquo;cold-start&rdquo; carry-over). Averaging across runs measures the harness&rsquo;s <i>typical</i>
   behaviour rather than a lucky sample. On this page we then surface the single <b>best run of each</b> so you can
-  play each harness at its strongest — the full six runs are in the repo.</p>
+  play each harness at its strongest â€” the full six runs are in the repo.</p>
 </div></section>
 
 <!-- PROMPT -->
 <section id="prompt"><div class="wrap">
   <div class="eyebrow">The identical prompt both agents received</div>
   <h2>The prompt</h2>
-  <p class="p">Nothing was tailored per agent. The full specification — weapon ballistics, spread formula, five levels,
-  London environment, HUD, audio — was handed to both, verbatim:</p>
+  <p class="p">Nothing was tailored per agent. The full specification â€” weapon ballistics, spread formula, five levels,
+  London environment, HUD, audio â€” was handed to both, verbatim:</p>
   <div class="codebox">Create a complete first-person shooter game in a single HTML file using Three.js (loaded from CDN). Save the file as game.html. The game must meet ALL of these requirements:
 
 <span class="s">GAME CONCEPT:</span> Player is a human hunter on the streets of London. Enemies are baboons (monkeys). 5 levels of increasing difficulty.
@@ -143,20 +144,20 @@
 
 <span class="s">TECHNICAL:</span> Single self-contained HTML file. Three.js from CDN (use ES modules with importmap). PointerLockControls from Three.js addons. No external dependencies other than Three.js CDN. Must work by opening the HTML file in a browser.</div>
   <div class="cta">
-    <a class="btn amp" href="harness-story.html">← Back to the hub</a>
-    <a class="btn cl" href="#play">Jump to play →</a>
+    <a class="btn amp" href="harness-story.html">â† Back to the hub</a>
+    <a class="btn cl" href="#play">Jump to play â†’</a>
   </div>
 </div></section>
 
 <footer><div class="wrap">
   <div class="row">
     <img class="esl" src="assets/esl-logo.png" alt="ESL logo">
-    <span>Prepared by <b>Daniel Liezrowice</b> · ESL — AI SDLC consultants ·
-    <a href="https://www.eswlab.com">www.eswlab.com</a> ·
+    <span>Prepared by <b>Daniel Liezrowice</b> Â· ESL â€” AI SDLC consultants Â·
+    <a href="https://www.eswlab.com">www.eswlab.com</a> Â·
     <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a></span>
   </div>
   <p style="margin-top:14px;font-size:.8rem">Amp is a product of Sourcegraph; Claude Code and Claude Fable&nbsp;5 are products of Anthropic.
-  Both agents used Claude Fable 5; the comparison isolates the agent harness. Games © their generating runs; bundled here for convenient play.</p>
+  Both agents used Claude Fable 5; the comparison isolates the agent harness. Games Â© their generating runs; bundled here for convenient play.</p>
 </div></footer>
 
 </body>

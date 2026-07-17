@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final scores — Amp vs Claude | ESL</title>
+<meta name="description" content="Final scores: Amp vs Claude across the quantum-compilation benchmark and the Baboons Over London game face-off. Correctness, speed, cost and efficiency.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="harness-site.css">
+</head>
+<body>
+
+<!-- TOP MENU -->
+<nav class="nav"><div class="wrap">
+  <div class="brand">The <span>harness</span> beats the model</div>
+  <a class="link" href="harness-story.html">Home</a>
+  <a class="link" href="harness-beats-model.html">Quantum</a>
+  <a class="link" href="proof-lean-cbmc.html">Proofs</a>
+  <a class="link" href="baboons-face-off.html">Baboons</a>
+  <a class="navcta active" href="final-scores.html">Final scores</a>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="wrap">
+  <a class="backlink" href="harness-story.html">← Back to home</a>
+  <div class="kicker">The scoreboard</div>
+  <h1>Final scores:<br><span class="amp">Amp</span> vs <span class="cl">Claude</span></h1>
+  <p class="lead">Two experiments, one verdict. In the <b>quantum</b> benchmark the harness varies and so does the
+  model; in the <b>baboons</b> game the model is held constant so the gap is <i>pure harness</i>. Either way, the
+  better harness wins on time and cost at equal-or-better quality.</p>
+
+  <div class="winner">
+    <div class="wcard amp">
+      <div class="crown">🏆</div>
+      <div class="who amp">Amp — Quantum</div>
+      <div class="sub">1.000 correctness · $1.93 · ~24× faster · ~39× cheaper</div>
+    </div>
+    <div class="wcard amp">
+      <div class="crown">🏆</div>
+      <div class="who amp">Amp — Baboons (process)</div>
+      <div class="sub">2.1× faster · 2.6× cheaper · you judge the game itself</div>
+    </div>
+  </div>
+</div></header>
+
+<!-- QUANTUM -->
+<section id="quantum"><div class="wrap">
+  <div class="eyebrow">Experiment 01 · quantum-compilation optimization</div>
+  <h2>Quantum benchmark — final scores</h2>
+  <p class="p"><b class="amp">Amp rush</b> (fast mode) vs <b class="cl">Claude Code + Claude Fable&nbsp;5</b> at
+  <b>max effort</b>, on 4 hard C++ tasks both agents completed. Warm iterative, 3 iterations, hidden weighted
+  target tests compiled with g++.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="big amp">1.000</div><div class="lab">Amp correctness</div></div>
+    <div class="stat"><div class="big cl">0.972</div><div class="lab">Claude correctness</div></div>
+    <div class="stat"><div class="big amp">$1.93</div><div class="lab">Amp total cost</div></div>
+    <div class="stat"><div class="big cl">$75.40</div><div class="lab">Claude total (+1 timeout)</div></div>
+  </div>
+
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>Task</th><th>Amp reward</th><th>Amp $tot</th><th>Amp avg s</th><th>Claude reward</th><th>Claude $tot</th><th>Claude avg s</th><th>Cost ratio</th></tr></thead>
+    <tbody>
+      <tr><td>cpp-qmap · qubit routing <span class="mut">(NP-complete)</span></td><td class="amp">1.000</td><td>$0.46</td><td>59</td><td class="cl">0.889</td><td>$28.74</td><td>1,489</td><td>62×</td></tr>
+      <tr><td>cpp-pulse · GRAPE control</td><td class="amp">1.000</td><td>$0.42</td><td>49</td><td class="cl">1.000</td><td>$13.96 +TO</td><td>1,335</td><td>33×</td></tr>
+      <tr><td>cpp-ftsched · magic-state</td><td class="amp">1.000</td><td>$0.57</td><td>40</td><td class="cl">1.000</td><td>$12.53</td><td>887</td><td>22×</td></tr>
+      <tr><td>cpp-jsonmini · JSON parser</td><td class="amp">1.000</td><td>$0.48</td><td>46</td><td class="cl">1.000</td><td>$20.17</td><td>1,013</td><td>42×</td></tr>
+      <tr class="tot"><td>All 4 (mean / total)</td><td class="amp">1.000</td><td class="amp">$1.93</td><td class="amp">49</td><td class="cl">0.972</td><td class="cl">$75.40</td><td class="cl">1,181</td><td>39×</td></tr>
+    </tbody>
+  </table></div>
+  <p class="p mut" style="font-size:.92rem">Across these 4 tasks Amp rush was ~<b>39× cheaper</b> and ~<b>24× faster</b>
+  per iteration at equal-or-better correctness. On the full 8-task suite Claude only completed 4 (a monthly spend
+  limit blocked the rest), giving completion scores of <b class="amp">1.000</b> (Amp) vs <b class="cl">0.486</b> (Claude).
+  No agent used assembly, though both were allowed to.</p>
+  <div class="cta">
+    <a class="btn amp" href="harness-beats-model.html">Full quantum presentation →</a>
+    <a class="btn" href="proof-lean-cbmc.html">Can you prove it? (Lean 4 + CBMC) →</a>
+  </div>
+</div></section>
+
+<!-- BABOONS -->
+<section id="baboons"><div class="wrap">
+  <div class="eyebrow">Experiment 03 · same model, pure harness</div>
+  <h2>Baboons game — final scores</h2>
+  <p class="p">Both agents ran the <b>identical</b> prompt on the <b>identical</b> model (<b>Claude Fable&nbsp;5</b>).
+  The only variable is the harness: <b class="amp">Amp</b> vs <b class="cl">Claude Code</b>. 3 cold runs each.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="big amp">453.8 s</div><div class="lab">Amp avg duration</div></div>
+    <div class="stat"><div class="big cl">953.3 s</div><div class="lab">Claude avg duration</div></div>
+    <div class="stat"><div class="big amp">$2.65</div><div class="lab">Amp avg cost / run</div></div>
+    <div class="stat"><div class="big cl">$6.95</div><div class="lab">Claude avg cost / run</div></div>
+  </div>
+
+  <div class="scroll"><table class="tbl">
+    <thead><tr><th>Run</th><th>Amp duration</th><th>Amp cost</th><th>Amp LOC</th><th>Claude duration</th><th>Claude cost</th><th>Claude LOC</th></tr></thead>
+    <tbody>
+      <tr><td>Cold 1</td><td>397.1 s</td><td>$2.93</td><td>1,118</td><td>765.4 s</td><td>$4.80</td><td>1,253</td></tr>
+      <tr><td>Cold 2</td><td>547.6 s</td><td>$2.60</td><td>1,150</td><td>1,107.9 s</td><td>$8.84</td><td>1,170</td></tr>
+      <tr><td>Cold 3</td><td>416.5 s</td><td>$2.42</td><td>1,218</td><td>986.6 s</td><td>$7.20</td><td>1,196</td></tr>
+      <tr class="tot"><td>Average</td><td class="amp">453.8 s</td><td class="amp">$2.65</td><td>1,162</td><td class="cl">953.3 s</td><td class="cl">$6.95</td><td>1,206</td></tr>
+      <tr class="tot"><td>3-run total</td><td class="amp" colspan="3">$7.95</td><td class="cl" colspan="3">$20.84 — exhausted the Claude Max monthly limit</td></tr>
+    </tbody>
+  </table></div>
+  <p class="p mut" style="font-size:.92rem">Same model → these gaps are <b>pure harness</b>: Amp ~<b>2.1× faster</b>
+  and ~<b>2.6× cheaper</b>. Output size was similar (~1,100–1,200 LOC) — more lines is not a better game, so the
+  <b>game verdict is left to you</b>.</p>
+  <div class="cta">
+    <a class="btn cl" href="baboons-face-off.html">Play both games &amp; decide →</a>
+    <a class="btn" href="https://github.com/zuwasi/Baboons-Over-London" target="_blank" rel="noopener">Game repo ↗</a>
+  </div>
+</div></section>
+
+<!-- BOTTOM LINE -->
+<section><div class="wrap">
+  <div class="eyebrow">Bottom line</div>
+  <h2>The harness carried the outcome.</h2>
+  <p class="p">Whether the model changed (quantum) or stayed fixed (baboons), the better-engineered agent finished
+  faster, cost far less, and matched or beat correctness. The model is the engine — but the harness is the car.</p>
+  <a class="backlink" href="harness-story.html">← Back to home</a>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="row">
+    <img class="esl" src="assets/esl-logo.png" alt="ESL logo">
+    <span>Prepared by <b>Daniel Liezrowice</b> · ESL — AI SDLC consultants ·
+    <a href="https://www.eswlab.com">www.eswlab.com</a> ·
+    <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a></span>
+  </div>
+  <p style="margin-top:14px;font-size:.8rem">Amp is a product of Sourcegraph; Claude Code and Claude Fable&nbsp;5 are
+  products of Anthropic. Quantum: Amp rush vs Claude Fable 5 (max effort). Baboons: both agents on Claude Fable 5.</p>
+</div></footer>
+
+</body>
+</html>
