@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Harness Beats the Model — Amp vs Claude Code | ESL</title>
+<meta name="description" content="Three independent experiments — NP-hard quantum-compilation benchmarks, Lean 4 + CBMC proofs, and a browser-game face-off — showing the agent harness matters more than the LLM. Amp beats Claude Code with Claude Fable 5.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="harness-site.css">
+</head>
+<body>
+
+<nav class="nav"><div class="wrap">
+  <div class="brand">The Harness Beats the <span>Model</span></div>
+  <a class="link" href="#thesis">Thesis</a>
+  <a class="link" href="#quantum">Quantum benchmark</a>
+  <a class="link" href="#proof">Proofs</a>
+  <a class="link" href="#game">Game face-off</a>
+  <a class="link" href="#about">About</a>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="wrap">
+  <div class="kicker">ESL · AI SDLC benchmark</div>
+  <h1>The <span class="amp">harness</span> beats<br>the <span class="cl">model</span>.</h1>
+  <p class="lead">How a coding agent <b>plans, calls tools, and manages context</b> — its <i>harness</i> —
+  matters more than the raw LLM inside it. Across three independent experiments,
+  <b class="amp">Amp</b> beats <b class="cl">Claude Code</b> running <b>Claude&nbsp;Fable&nbsp;5</b> at max effort:
+  faster, cheaper, and just as correct — from NP-hard quantum compilation to a deliberately silly browser game.</p>
+  <div class="cta">
+    <a class="btn amp" href="#quantum">See the quantum benchmark →</a>
+    <a class="btn" href="#proof">Can you prove it? →</a>
+    <a class="btn cl" href="#game">Play the game face-off →</a>
+  </div>
+</div></header>
+
+<!-- THESIS -->
+<section id="thesis"><div class="wrap">
+  <div class="eyebrow">The claim</div>
+  <h2>Same model. Different agent. Very different results.</h2>
+  <p class="p">A frontier model is the <b>engine</b>; the agent harness is the <b>rest of the car</b> —
+  the transmission, steering, and driver. Give two agents the <i>identical</i> model and the <i>identical</i> task,
+  and the better harness wins on wall-clock time and dollars while matching quality. Industry write-ups such as the
+  Kaggle <i>&ldquo;The New SDLC with Vibe Coding&rdquo;</i> whitepaper argue the harness/workflow carries the
+  overwhelming share of real-world outcome — a claim these experiments turn out to be consistent with.</p>
+  <p class="p mut">The three experiments below stress the same thesis from three angles: a hard/technical domain, a
+  formal-correctness challenge, and an accessible/fun domain anyone can judge.</p>
+
+  <div class="pillars">
+    <a class="pcard" href="#quantum">
+      <img class="thumb" src="assets/thumb-harness.png" alt="Quantum benchmark presentation">
+      <div class="body">
+        <div class="tag">01 · Hard problems</div>
+        <h3>The quantum benchmark</h3>
+        <p>NP-hard quantum-compilation tasks solved by Amp basic mode vs Claude + Fable 5 max effort.</p>
+        <div class="go amp">Explore →</div>
+      </div>
+    </a>
+    <a class="pcard" href="#proof">
+      <img class="thumb" src="assets/thumb-proof.png" alt="Lean 4 and CBMC proof presentation">
+      <div class="body">
+        <div class="tag g">02 · Can you prove it?</div>
+        <h3>Lean 4 + CBMC proofs</h3>
+        <p>12 machine-checked theorems (0 <span class="mono">sorry</span>) and a CBMC bounded proof of the C++ checker.</p>
+        <div class="go amp">Explore →</div>
+      </div>
+    </a>
+    <a class="pcard" href="#game">
+      <img class="thumb" src="assets/baboon.jpg" alt="Baboons Over London game">
+      <div class="body">
+        <div class="tag c">03 · Anyone can judge</div>
+        <h3>Baboons Over London</h3>
+        <p>Both agents build the same silly FPS with the <i>same</i> model. You decide which game is better.</p>
+        <div class="go amp">Play the face-off →</div>
+      </div>
+    </a>
+  </div>
+</div></section>
+
+<!-- QUANTUM -->
+<section id="quantum"><div class="wrap">
+  <div class="eyebrow">Experiment 01 · the hard domain</div>
+  <h2>Quantum-compilation optimization</h2>
+  <p class="p">The benchmark asks agents to implement, <b>from zero</b>, the search cores of a fault-tolerant quantum
+  compiler — problems that are genuinely <b>NP-hard / NP-complete</b>, not toy exercises:</p>
+  <div style="margin-top:18px">
+    <span class="badge">Qubit routing / SWAP mapping — NP-complete</span>
+    <span class="badge">Magic-state scheduling — NP-hard</span>
+    <span class="badge">Tensor-network contraction ordering — NP-hard</span>
+    <span class="badge">Pulse control / GRAPE — non-convex optimal control</span>
+  </div>
+
+  <p class="p">Running <b class="amp">Amp</b> in a basic mode against <b class="cl">Claude Code with Claude Fable 5 at
+  max effort</b>, Amp produced correct solutions <b>faster and at a fraction of the cost</b>. On the full run,
+  Amp reached correctness <b>1.000</b> for a total of <b class="amp">$4.59</b>; Claude&rsquo;s max-effort run cost
+  dramatically more, and several of its tasks were cut short by monthly billing limits (see the deck for the careful,
+  same-task breakdown).</p>
+
+  <div class="callout c">
+    <div class="mut" style="font-size:.8rem;text-transform:uppercase;letter-spacing:.12em;font-weight:800">The moment that named this project</div>
+    <div class="quote">&ldquo;If a basic agent in rush mode solved it easily, maybe it wasn&rsquo;t worth using Fable Max?&rdquo;
+    <span class="mut">— Claude Fable 5, on being shown the results.</span></div>
+    <p class="p" style="margin-top:14px">We replied: <i>&ldquo;Are you sure QMAP is a basic problem? Check again.&rdquo;</i>
+    Fable reconsidered and conceded: qubit routing is NP-complete. The &ldquo;basic&rdquo; harness had quietly solved a
+    hard problem — cheaper and faster than the &ldquo;max-effort&rdquo; one.</p>
+  </div>
+
+  <div class="cta">
+    <a class="btn amp" href="harness-beats-model.html">Open the full presentation →</a>
+    <a class="btn" href="https://github.com/zuwasi/agent-harness-bench" target="_blank" rel="noopener">Benchmark repo ↗</a>
+    <a class="btn" href="https://www.linkedin.com/feed/update/urn:li:ugcPost:7482557106496303105/" target="_blank" rel="noopener">Original LinkedIn post ↗</a>
+  </div>
+  <p class="p mut" style="font-size:.9rem;margin-top:18px">Scope &amp; honesty: this is a <b>product/harness</b> comparison, not a raw-model ranking.
+  At the time of testing, Amp&rsquo;s site listed its Rush mode as using GPT-5.5. The deck preserves the shared-task
+  fair comparison and the billing-blocked caveats.</p>
+</div></section>
+
+<!-- PROOF -->
+<section id="proof"><div class="wrap">
+  <div class="eyebrow">Experiment 02 · &ldquo;how do I know the code is good?&rdquo;</div>
+  <h2>Can you prove it? Lean 4 + CBMC.</h2>
+  <p class="p">The benchmark showed <i>which</i> agent won. It did not, by itself, prove the generated code was
+  <i>correct</i>. So we added machine-checked evidence — the strongest honest answer to &ldquo;give me a proof.&rdquo;</p>
+
+  <div class="stats">
+    <div class="stat"><div class="big win">12</div><div class="lab">Lean 4 theorems</div></div>
+    <div class="stat"><div class="big win">0</div><div class="lab">sorry / admitted gaps</div></div>
+    <div class="stat"><div class="big amp">0 / 247</div><div class="lab">CBMC checks failed</div></div>
+    <div class="stat"><div class="big">3</div><div class="lab">quantum tasks formalized</div></div>
+  </div>
+
+  <p class="p"><b>Lean 4</b> proves the task specifications and checker invariants are sound (unbounded), e.g. QMAP
+  routing never lets two logical qubits collide and every physical gate decodes to a unique logical gate; magic-state
+  scheduling respects the critical-path lower bound; tensor contraction needs exactly <span class="mono">n−1</span> steps.
+  <b>CBMC</b> then closes &ldquo;gap A&rdquo; on the real C++ checker: exhaustive bounded model checking finds
+  <b>no undefined behaviour</b> and confirms the certifier is <b>sound</b> — 0 of 247 checks failed.</p>
+
+  <div class="callout">
+    <b>Honest scope:</b> we certify the <b>checker</b> (so every accepted solution is provably valid), not the NP-hard
+    solver; we don&rsquo;t claim optimality; and CBMC is bounded (exhaustive up to a size). That&rsquo;s the point —
+    a small, twice-verified verifier you can actually trust.
+  </div>
+
+  <div class="cta">
+    <a class="btn amp" href="proof-lean-cbmc.html">Open the proof presentation →</a>
+    <a class="btn" href="https://github.com/zuwasi/agent-harness-bench/tree/main/proofs" target="_blank" rel="noopener">Proofs on GitHub ↗</a>
+  </div>
+</div></section>
+
+<!-- GAME -->
+<section id="game"><div class="wrap">
+  <div class="eyebrow">Experiment 03 · the accessible domain</div>
+  <h2>Baboons Over London 🦍</h2>
+  <p class="p">Quantum computing deters some readers. So we ran the <i>same</i> question in a domain anyone can judge:
+  a deliberately silly first-person shooter where you defend London from baboons. This time the <b>model is held
+  constant</b> — <b>both</b> agents run <b>Claude Fable 5</b> — so any difference is <b>pure harness</b>.</p>
+
+  <div class="stats">
+    <div class="stat"><div class="big amp">2.10×</div><div class="lab">Amp faster (avg)</div></div>
+    <div class="stat"><div class="big amp">2.62×</div><div class="lab">Amp cheaper (avg)</div></div>
+    <div class="stat"><div class="big">Fable 5</div><div class="lab">same model, both agents</div></div>
+    <div class="stat"><div class="big">3 + 3</div><div class="lab">cold runs, no cold start reuse</div></div>
+  </div>
+
+  <p class="p">On the coding <b>process</b>, Amp clearly wins. But a benchmark shouldn&rsquo;t tell you what to feel about
+  the <b>result</b> — so play the best run of each and decide for yourself which is the better <i>game</i>.</p>
+
+  <div class="cta">
+    <a class="btn cl" href="baboons-face-off.html">Play the face-off &amp; read the prompt →</a>
+    <a class="btn" href="https://github.com/zuwasi/Baboons-Over-London" target="_blank" rel="noopener">Game repo ↗</a>
+  </div>
+</div></section>
+
+<!-- ABOUT -->
+<section id="about"><div class="wrap">
+  <div class="eyebrow">Who made this</div>
+  <h2>ESL — AI SDLC consultants</h2>
+  <div class="about">
+    <img class="face" src="assets/daniel.jpg" alt="Daniel Liezrowice">
+    <div>
+      <p class="p" style="margin-top:0"><b>Daniel Liezrowice</b> designs and runs independent benchmarks of AI coding
+      agents for engineering teams — measuring what actually moves speed, cost, and correctness in the software
+      development lifecycle, and separating harness effects from model effects.</p>
+      <p class="p"><b>ESL</b> helps organizations adopt agentic AI in their SDLC with evidence, not hype: benchmark
+      design, formal-verification pilots (Lean 4 / CBMC), and tooling strategy.</p>
+      <div class="cta">
+        <a class="btn amp" href="https://www.eswlab.com" target="_blank" rel="noopener">www.eswlab.com ↗</a>
+        <a class="btn" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="row">
+    <img class="esl" src="assets/esl-logo.png" alt="ESL logo">
+    <span>Prepared by <b>Daniel Liezrowice</b> · ESL — AI SDLC consultants ·
+    <a href="https://www.eswlab.com">www.eswlab.com</a> ·
+    <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a></span>
+  </div>
+  <p style="margin-top:14px;font-size:.8rem">Amp is a product of Sourcegraph; Claude Code and Claude Fable&nbsp;5 are products of Anthropic.
+  Model attributions reflect vendor labeling at the time of testing. Comparisons are of agent products/harnesses, not raw models.</p>
+</div></footer>
+
+</body>
+</html>

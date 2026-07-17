@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Can you prove it? &mdash; Lean 4 + CBMC proofs for the quantum benchmark</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#0b0e14; --bg2:#11151f; --ink:#e9eef5; --muted:#98a2b3;
+  --amp:#38bdf8; --amp2:#22d3ee; --claude:#d97757; --claude2:#e0906f;
+  --win:#34d399; --warn:#fbbf24; --line:rgba(255,255,255,.09); --card:rgba(255,255,255,.035);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+body{background:
+  radial-gradient(1200px 700px at 80% -10%, rgba(56,189,248,.10), transparent 60%),
+  radial-gradient(900px 600px at -10% 110%, rgba(217,119,87,.10), transparent 55%),
+  var(--bg);}
+.deck{display:flex;height:100vh;width:100vw;transition:transform .55s cubic-bezier(.6,.02,.2,1);will-change:transform}
+.slide{min-width:100vw;height:100vh;padding:clamp(26px,5.5vw,90px);display:flex;flex-direction:column;
+  justify-content:center;position:relative;overflow:hidden}
+.wrap{max-width:1120px;width:100%;margin:0 auto}
+.kicker{font-size:clamp(.68rem,1.4vw,.86rem);letter-spacing:.2em;text-transform:uppercase;color:var(--amp);font-weight:700;margin-bottom:14px}
+.kicker.c{color:var(--claude)}
+.h1{font-size:clamp(2.4rem,7.2vw,5.6rem);font-weight:900;line-height:1.01;letter-spacing:-.02em}
+.h2{font-size:clamp(1.55rem,4.4vw,3.1rem);font-weight:800;line-height:1.08;letter-spacing:-.01em}
+.h3{font-size:clamp(1.2rem,3vw,1.9rem);font-weight:700}
+.sub{font-size:clamp(1rem,2.3vw,1.5rem);color:var(--muted);margin-top:18px;line-height:1.4}
+.p{font-size:clamp(.95rem,1.85vw,1.22rem);line-height:1.55;color:#c7d0da}
+.mut{color:var(--muted)}
+.amp{color:var(--amp)} .cl{color:var(--claude)} .win{color:var(--win)} .warn{color:var(--warn)}
+.b{font-weight:800}
+.foot{margin-top:22px;font-size:clamp(.78rem,1.5vw,.98rem);color:var(--muted);line-height:1.45}
+.tag{display:inline-block;padding:5px 12px;border:1px solid var(--line);border-radius:999px;font-size:.8rem;color:#c7d0da;margin:4px 6px 4px 0;background:var(--card)}
+ul.p{padding-left:1.1em} ul.p li{margin:.5em 0}
+
+/* logos */
+.amplogo{color:var(--ink);width:clamp(96px,13vw,168px);aspect-ratio:281/144;display:inline-block;vertical-align:middle}
+.claudelogo{width:clamp(60px,9vw,120px);height:auto;border-radius:22%;vertical-align:middle;box-shadow:0 8px 30px rgba(0,0,0,.35)}
+.vs{font-weight:900;font-size:clamp(1.4rem,4vw,2.6rem);color:var(--muted);margin:0 clamp(16px,4vw,40px)}
+.logorow{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:6px;margin:34px 0 8px}
+
+/* cards */
+.cards{display:grid;gap:18px;margin-top:26px}
+.cards.two{grid-template-columns:1fr 1fr}
+.cards.three{grid-template-columns:repeat(3,1fr)}
+.cards.four{grid-template-columns:1fr 1fr}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,2.4vw,26px)}
+.card.amp{border-color:rgba(56,189,248,.32);background:linear-gradient(180deg,rgba(56,189,248,.08),rgba(56,189,248,.02))}
+.card.cl{border-color:rgba(217,119,87,.32);background:linear-gradient(180deg,rgba(217,119,87,.08),rgba(217,119,87,.02))}
+.card .ct{font-size:.76rem;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);margin-bottom:8px}
+.card .cbig{font-size:clamp(1.2rem,2.6vw,1.7rem);font-weight:800}
+.card .cp{margin-top:8px;font-size:clamp(.85rem,1.6vw,1.02rem);color:#c1cbd6;line-height:1.45}
+
+/* stat row */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:clamp(16px,2.6vw,30px);text-align:center}
+.stat .lab{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.stat .big{font-size:clamp(1.9rem,5.2vw,3.4rem);font-weight:900;line-height:1.05;margin:10px 0 4px}
+.stat .note{font-size:.86rem;color:#c1cbd6}
+
+/* bars */
+.barrow{display:grid;grid-template-columns:130px 1fr 118px;gap:14px;align-items:center;margin:13px 0}
+.barrow .name{font-size:clamp(.8rem,1.5vw,.98rem);color:#dbe3ec}
+.bartrack{background:rgba(255,255,255,.06);border-radius:999px;height:clamp(22px,3.4vw,30px);overflow:hidden}
+.barfill{height:100%;border-radius:999px;transition:width .6s ease}
+.barfill.amp{background:linear-gradient(90deg,var(--amp),var(--amp2))}
+.barfill.cl{background:linear-gradient(90deg,var(--claude),var(--claude2))}
+.barrow .val{font-variant-numeric:tabular-nums;font-weight:800;font-size:clamp(.85rem,1.6vw,1.05rem);text-align:right}
+
+/* table */
+table{width:100%;border-collapse:collapse;margin-top:22px;font-size:clamp(.78rem,1.6vw,1.02rem)}
+th,td{padding:11px 12px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+thead th{color:var(--muted);font-weight:700;font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+tbody tr:hover{background:rgba(255,255,255,.02)}
+tr.total td{border-top:2px solid var(--line);font-weight:800}
+
+/* dialogue */
+.bubble{max-width:82%;padding:15px 20px;border-radius:16px;margin:12px 0;line-height:1.45;font-size:clamp(.92rem,1.8vw,1.18rem)}
+.bubble .who{font-size:.7rem;text-transform:uppercase;letter-spacing:.14em;opacity:.75;margin-bottom:5px}
+.bubble.cl{background:rgba(217,119,87,.12);border:1px solid rgba(217,119,87,.34);border-top-left-radius:4px}
+.bubble.you{background:rgba(56,189,248,.12);border:1px solid rgba(56,189,248,.34);margin-left:auto;border-top-right-radius:4px}
+
+/* 90/10 */
+.split{display:flex;height:clamp(90px,16vw,150px);border-radius:16px;overflow:hidden;margin-top:30px;border:1px solid var(--line)}
+.split .seg{display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900}
+.split .model{width:10%;background:linear-gradient(180deg,rgba(56,189,248,.35),rgba(56,189,248,.15));min-width:64px}
+.split .harness{width:90%;background:linear-gradient(180deg,rgba(52,211,153,.3),rgba(52,211,153,.12))}
+.split .pct{font-size:clamp(1.4rem,4vw,2.6rem)}
+.split .nm{font-size:clamp(.68rem,1.5vw,.95rem);text-transform:uppercase;letter-spacing:.1em;opacity:.85;font-weight:700}
+
+/* rings */
+.rings{display:flex;justify-content:center;margin-top:20px}
+.ring{border:1px solid var(--line);border-radius:22px;padding:clamp(12px,1.9vw,22px);text-align:center;background:rgba(255,255,255,.02);width:100%}
+.ring .rlabel{font-size:clamp(.62rem,1.25vw,.78rem);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px;font-weight:700}
+.ring .ritems{font-size:clamp(.58rem,1.15vw,.75rem);color:#aeb8c4;line-height:1.35}
+.ring.core{background:linear-gradient(180deg,rgba(56,189,248,.25),rgba(56,189,248,.08));border-color:rgba(56,189,248,.4);padding:clamp(14px,2.4vw,26px)}
+.ring.core .rlabel{color:var(--amp)}
+.ring.core .big{font-weight:900;font-size:clamp(1.1rem,2.6vw,1.7rem)}
+
+/* pipeline */
+.pipe{display:flex;align-items:stretch;gap:10px;flex-wrap:wrap;margin-top:26px}
+.pnode{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.pnode .pt{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--amp);font-weight:700;margin-bottom:6px}
+.pnode .pd{font-size:clamp(.78rem,1.5vw,.95rem);color:#c7d0da;line-height:1.35}
+.parrow{align-self:center;color:var(--muted);font-size:1.3rem;font-weight:900}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.chip{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;min-width:150px;flex:1}
+.chip .cn{font-weight:900;font-size:clamp(1.05rem,2.4vw,1.5rem)}
+.chip .cl2{font-size:.82rem;color:var(--muted);margin-top:3px;line-height:1.3}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:26px;align-items:center;margin-top:22px}
+
+.callout{margin-top:22px;padding:16px 20px;border-left:3px solid var(--amp);background:rgba(56,189,248,.07);border-radius:0 12px 12px 0;font-size:clamp(.86rem,1.7vw,1.08rem);line-height:1.5;color:#d3dbe4}
+.callout.c{border-left-color:var(--claude);background:rgba(217,119,87,.07)}
+.callout.w{border-left-color:var(--warn);background:rgba(251,191,36,.06)}
+
+.big-quote{font-size:clamp(1.4rem,3.6vw,2.4rem);font-weight:800;line-height:1.2;letter-spacing:-.01em}
+.eqn{font-size:clamp(1.9rem,5.2vw,3.6rem);font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-top:24px}
+.analogy{display:block;margin:16px auto 0;max-width:100%;max-height:80vh;border-radius:14px;border:1px solid var(--line);box-shadow:0 12px 40px rgba(0,0,0,.4)}
+
+/* fixed UI */
+.nav{position:fixed;top:50%;transform:translateY(-50%);width:clamp(44px,6vw,56px);height:clamp(44px,6vw,56px);
+  border-radius:50%;border:1px solid var(--line);background:rgba(20,26,36,.7);backdrop-filter:blur(8px);
+  color:var(--ink);font-size:1.5rem;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:50;
+  transition:opacity .25s,background .2s;user-select:none}
+.nav:hover{background:rgba(40,50,66,.9)}
+.nav.prev{left:clamp(12px,2.5vw,28px)} .nav.next{right:clamp(12px,2.5vw,28px)}
+.nav.hidden{opacity:0;pointer-events:none}
+.progress{position:fixed;left:0;bottom:0;width:100%;height:5px;background:rgba(255,255,255,.06);z-index:40}
+.progress .fill{height:100%;width:4.5%;background:linear-gradient(90deg,var(--amp),var(--amp2),var(--win));transition:width .5s ease}
+.counter{position:fixed;bottom:14px;right:18px;font-size:.82rem;color:var(--muted);z-index:40;font-variant-numeric:tabular-nums}
+.hint{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);font-size:.85rem;color:var(--muted);z-index:40;
+  animation:pulse 1.8s ease-in-out infinite}
+.hint.gone{opacity:0;pointer-events:none;transition:opacity .4s}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.9}}
+
+@media (max-width:760px){
+  .cards.two,.cards.three,.cards.four,.stats,.two-col{grid-template-columns:1fr}
+  .barrow{grid-template-columns:96px 1fr 84px;gap:9px}
+  .bubble{max-width:100%}
+  .logorow{gap:4px}
+  .vs{margin:0 12px}
+  .heatrow{grid-template-columns:46px repeat(8,1fr);gap:3px}
+  .hcell{padding:8px 1px}
+}
+.chart{background:rgba(255,255,255,.02);border:1px solid var(--line);border-radius:16px;padding:clamp(12px,1.8vw,20px);margin-top:16px}
+.chart svg{width:100%;height:auto;display:block}
+.ctitle{font-size:clamp(.66rem,1.3vw,.78rem);text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:700;margin-bottom:8px}
+.heat{display:flex;flex-direction:column;gap:6px}
+.heatrow{display:grid;grid-template-columns:72px repeat(8,1fr);gap:6px;align-items:stretch}
+.heatrow .hlab{font-size:clamp(.72rem,1.3vw,.92rem);color:#dbe3ec;display:flex;align-items:center;justify-content:flex-end;font-weight:700}
+.hhead{font-size:clamp(.48rem,.95vw,.6rem);color:var(--muted);text-align:center;line-height:1.05;display:flex;align-items:center;justify-content:center}
+.hcell{border-radius:7px;padding:clamp(9px,1.5vw,13px) 2px;text-align:center;font-weight:800;font-size:clamp(.66rem,1.3vw,.85rem)}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;background:rgba(255,255,255,.08);padding:1px 5px;border-radius:5px}
+
+/* --- problem deep-dive slides --- */
+.probgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center;margin-top:16px}
+@media(max-width:860px){.probgrid{grid-template-columns:1fr;gap:14px}}
+.badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:.78rem;font-weight:800;border:1px solid;letter-spacing:.02em}
+.badge.hard{color:#fca5a5;border-color:rgba(248,113,113,.5);background:rgba(248,113,113,.08)}
+.badge.mid{color:#fbbf24;border-color:rgba(251,191,36,.5);background:rgba(251,191,36,.08)}
+.deflist{margin-top:14px}
+.deflist .row{display:flex;gap:12px;margin:.4em 0;font-size:clamp(.86rem,1.6vw,1.08rem);color:#c7d0da;line-height:1.38}
+.deflist .k{color:var(--amp);font-weight:800;min-width:82px;flex:none}
+.refs{margin-top:12px;font-size:clamp(.68rem,1.3vw,.84rem);color:var(--muted);line-height:1.5}
+.refs .rt{color:#c7d0da;font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:.72em;display:block;margin-bottom:3px}
+.illo{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px}
+.illo svg{width:100%;height:auto;display:block}
+.illo .cap{margin-top:7px;font-size:.7rem;color:var(--muted);text-align:center;line-height:1.35}
+/* credit footer (all slides) */
+.credit{position:fixed;left:16px;bottom:11px;z-index:41;display:flex;align-items:center;gap:9px;max-width:64vw;
+  font-size:clamp(.58rem,1.05vw,.72rem);color:var(--muted);line-height:1.2;opacity:.92}
+.credit img{height:22px;width:auto;border-radius:4px;background:#fff;padding:2px 5px;flex:none}
+.credit b{color:#c7d0da;font-weight:700}
+.credit a{color:var(--muted);text-decoration:none}
+@media(max-width:640px){.credit{max-width:72vw;font-size:.55rem}.credit img{height:17px}}
+
+
+
+/* ---- proof-deck additions ---- */
+.codebox{background:#080b11;border:1px solid var(--line);border-radius:14px;
+  padding:clamp(14px,2vw,22px);font-family:'SF Mono',Consolas,Menlo,monospace;
+  font-size:clamp(.70rem,1.32vw,.95rem);line-height:1.55;color:#cdd7e2;
+  overflow:auto;white-space:pre;margin-top:18px}
+.codebox .k{color:#c792ea}.codebox .t{color:#82aaff}.codebox .c{color:#6b7a8d;font-style:italic}
+.codebox .s{color:#7ee787}.codebox .w{color:var(--warn)}
+.ok{color:var(--win);font-weight:800}
+.no{color:var(--claude);font-weight:800}
+.tbl{width:100%;border-collapse:collapse;margin-top:20px;font-size:clamp(.78rem,1.55vw,1.02rem)}
+.tbl th,.tbl td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+.tbl th{color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.07em;font-size:.7rem}
+.tbl td .m,.mono{font-family:Consolas,monospace;color:var(--amp)}
+.flow{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+.flow .step{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:13px 18px;line-height:1.4}
+.flow .arr{color:var(--muted);text-align:center;font-size:1.1rem;margin:-4px 0}
+.credit-fixed{position:fixed;left:18px;bottom:20px;display:flex;align-items:center;gap:9px;
+  font-size:.70rem;color:var(--muted);z-index:20;max-width:58vw;line-height:1.3}
+.credit-fixed img{width:26px;height:26px;border-radius:6px;flex:0 0 auto}
+.credit-fixed a{color:var(--amp);text-decoration:none}
+.quote{font-size:clamp(1.5rem,4.2vw,3rem);font-weight:800;line-height:1.18;letter-spacing:-.01em}
+.quote .mut{color:var(--muted)}
+
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+<section class="slide"><div class="wrap"><div class="kicker ">Formal verification &middot; Lean 4 + CBMC</div><h1 class="h1">Can you <span class="amp">prove</span> it?</h1><div class="sub">Machine-checked correctness for the quantum-compilation benchmark solutions &mdash; with <b class="amp">Lean&nbsp;4</b> and <b class="win">CBMC</b>.</div><div class="foot">A follow-up to <i>&ldquo;The Harness Beats the Model&rdquo;</i> &mdash; answering the hardest reviewer question: how do we know the generated code is actually correct?</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">The question we were asked</div><div class="quote">&ldquo;Nice&hellip; but how do I know the solution is <span class="amp">real</span> and <span class="amp">good</span>? <span class="mut">Give me a</span> Lean&nbsp;4 proof.&rdquo;</div><div class="sub">The benchmark showed <b>which agent</b> solved the NP-hard quantum problems faster and cheaper. It did <b>not</b>, by itself, prove the code was <i>correct</i>. This deck closes that gap.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">What &ldquo;proving code&rdquo; actually means</div><h2 class="h2">&ldquo;Prove the C++&rdquo; is really <span class="amp">three</span> gaps</h2><div class="codebox"><span class="c">   proven in Lean        UNPROVEN (gap A)      trusted (gap B)     trusted (gap C)</span>
+  Lean spec / model  ─────────────▶  C++ source  ─────▶  compiler  ─────▶  machine binary
+  <span class="s">(theorems)</span>          source impl?    <span class="w">does it match?</span>     codegen ok?        HW / ABI</div><ul class="p"><li><b>Gap A</b> &mdash; does the C++ <i>source</i> implement the spec? &rarr; attacked here with <b class="win">CBMC</b>.</li><li><b>Gap B</b> &mdash; does the compiler preserve it? (usually trusted; CompCert if paranoid)</li><li><b>Gap C</b> &mdash; hardware / ABI (trusted)</li></ul></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Lean + CBMC are complementary</div><h2 class="h2">Two tools, two jobs</h2><table class="tbl"><tr><th>&nbsp;</th><th>Lean 4</th><th>CBMC</th></tr><tr><td>Proves</td><td>An <b>abstract model</b> of the spec &amp; checker invariants</td><td>The <b>actual C code</b> logic (gap A)</td></tr><tr><td>Coverage</td><td class="ok">Unbounded &mdash; all inputs</td><td>Bounded &mdash; exhaustive up to a size</td></tr><tr><td>Guarantees</td><td>Passing the predicate &rArr; valid solution</td><td>Memory-safety + certifier soundness</td></tr><tr><td>Trust anchor</td><td>Lean kernel + <span class="mono">propext, Quot.sound</span></td><td>SAT/SMT solver, 247 checks</td></tr></table><div class="foot">Together they form a chain neither tool gives alone.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Certifying algorithms</div><h2 class="h2">The key idea: verify the <span class="amp">checker</span>, not the solver</h2><div class="p">These are <b>NP-hard search problems</b> (routing, scheduling, contraction). Proving the clever solver correct is a research program. But <b>checking a solution is easy</b> &mdash; and the checker is tiny, straight-line code.</div><div class="flow"><div class="step"><b class="amp">1.</b> Prove the <b>checker predicate</b> correct in Lean (is_valid, ftsched_valid, tncon_eval).</div><div class="step"><b class="amp">2.</b> Prove the <b>C++ checker implements that predicate</b> soundly &amp; safely (CBMC).</div><div class="step"><b class="amp">3.</b> Run the checker on every output &mdash; a passing <b>witness</b> is trustworthy by the proof.</div></div><div class="foot">This is the classic <i>certifying-algorithm</i> technique (McConnell et&nbsp;al., 2011): the only trusted component is a small, twice-verified verifier.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Spec soundness, unbounded</div><h1 class="h1"><span class="amp">Part 1</span><br>Lean&nbsp;4 proofs</h1><div class="sub">12 machine-checked theorems across the three combinatorial quantum tasks &mdash; zero <span class="mono">sorry</span>.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Task 1 &middot; formalizes checker.hpp is_valid</div><h2 class="h2"><span class="amp">QMAP</span> &mdash; qubit routing <span class="mut">(NP-complete)</span></h2><table class="tbl"><tr><th>Theorem</th><th>Guarantee</th></tr><tr><td class="m">swapPhys_involutive</td><td>A SWAP is its own inverse &mdash; routing loses no state</td></tr><tr><td class="m">swapPhys_injective</td><td><b>No two logical qubits ever collide</b> on one physical qubit</td></tr><tr><td class="m">applySwaps_injective</td><td>The final mapping is a valid placement after any SWAP sequence</td></tr><tr><td class="m">encGate_injective</td><td><b>Faithfulness</b> &mdash; every physical gate decodes to a <i>unique</i> logical gate</td></tr></table></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">proofs/qmap/Qmap.lean</div><h2 class="h2">Real Lean, not pseudocode</h2><div class="codebox"><span class="c">-- KEY INVARIANT: a SWAP preserves injectivity of the placement,</span>
+<span class="c">-- i.e. no two logical qubits are routed onto the same physical qubit.</span>
+<span class="k">theorem</span> <span class="t">swapPhys_injective</span> {a b : Fin np} {m : Placement nl np}
+    (hm : Function.Injective m) :
+    Function.Injective (swapPhys a b m) :=
+  Function.Injective.comp (swapVal_injective a b) hm
+
+<span class="c">-- FAITHFULNESS: distinct logical gates never encode to the same physical gate.</span>
+<span class="k">theorem</span> <span class="t">encGate_injective</span> {m : Placement nl np}
+    (hm : Function.Injective m) : Function.Injective (encGate m) := <span class="k">by</span> &hellip;</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Task 2 &middot; formalizes ftsched_valid</div><h2 class="h2"><span class="amp">Magic-state scheduling</span> <span class="mut">(NP-hard)</span></h2><table class="tbl"><tr><th>Theorem</th><th>Guarantee</th></tr><tr><td class="m">chain_lb</td><td>Along a dependency chain, start cycles strictly increase</td></tr><tr><td class="m">makespan_ge_chain</td><td><b>Critical-path lower bound</b> &mdash; no schedule beats the longest dependency chain</td></tr><tr><td class="m">no_self_cycle</td><td>A valid schedule <b>certifies the graph is a DAG</b></td></tr><tr><td class="m">factory_no_double_book</td><td>Two T-gates never share a factory-cycle (latency L&nbsp;&ge;&nbsp;1)</td></tr></table><div class="foot">The headline: an optimizer <b>cannot cheat the physics of dependencies</b>.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Task 3 &middot; formalizes tncon_eval</div><h2 class="h2"><span class="amp">Tensor-network contraction</span> <span class="mut">(NP-hard)</span></h2><table class="tbl"><tr><th>Theorem</th><th>Guarantee</th></tr><tr><td class="m">mem_contract</td><td><b>Semantic faithfulness</b> &mdash; shared indices are summed out (symmetric difference)</td></tr><tr><td class="m">Reduces_length</td><td>One contraction removes exactly one live tensor</td></tr><tr><td class="m">plan_single_iff</td><td><b>Necessity</b> &mdash; reaching one tensor forces exactly n&minus;1 steps</td></tr><tr><td class="m">plan_len_reaches_single</td><td><b>Sufficiency</b> &mdash; n&minus;1 contractions always reduce to one</td></tr></table><div class="foot">Together: exactly <b>n&minus;1 pairwise contractions</b> are necessary and sufficient &mdash; the validity backbone.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">12 theorems, 0 gaps</div><h2 class="h2">The trust signal: <span class="mono">no sorry</span></h2><div class="p">Lean can admit gaps with <span class="mono">sorry</span>. Ours don&rsquo;t. <span class="mono">#print axioms</span> shows every theorem rests only on Lean&rsquo;s standard foundations:</div><div class="codebox">'QMap.swapPhys_injective'   depends on axioms: [<span class="s">propext</span>]
+'FTSched.makespan_ge_chain' depends on axioms: [<span class="s">propext, Quot.sound</span>]
+'TNCon.plan_single_iff'     depends on axioms: [<span class="s">propext, Quot.sound</span>]
+
+<span class="c">   No sorryAx anywhere == zero admitted proof gaps.</span></div><div class="foot">Verified with Lean <b>v4.32.0</b> / Lake 5.0.0. <span class="mono">lake build</span> exits 0.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Bounded, exhaustive, on real code</div><h1 class="h1"><span class="win">Part 2</span><br>CBMC on the real C++</h1><div class="sub">Closing <b>gap A</b>: does the actual checker code implement the verified spec &mdash; safely and soundly?</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Differential bounded model checking</div><h2 class="h2">How CBMC closes gap A</h2><div class="p"><span class="mono">checker.hpp</span> is STL-heavy (string / vector / set / sstream), which CBMC can&rsquo;t parse. So we verify a <b>faithful C transcription</b> of <span class="mono">is_valid</span>, cross-checked against an <b>independent</b> re-implementation:</div><div class="flow"><div class="step"><b class="amp">check_A</b> &mdash; the checker&rsquo;s own logic (inverse map <span class="mono">log_at_phys</span>), transcribed line-by-line</div><div class="arr">&darr; assume it <b>accepts</b></div><div class="step"><b class="win">check_B</b> &mdash; an <b>independent forward-map</b> simulation (<span class="mono">pos[] + swapVal + decode</span>) &mdash; the Lean model, different data structure</div><div class="arr">&darr; assert</div><div class="step">injective placement &middot; adjacent SWAPs &middot; faithful replay &middot; correct final map</div></div><div class="foot">Different data structures &rArr; a genuine cross-validation, not a tautology.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Exhaustive over all symbolic inputs in-bounds</div><h2 class="h2">Result: <span class="ok">VERIFICATION SUCCESSFUL</span></h2><div class="codebox">** <span class="s">0 of 247 failed</span> (1 iterations)
+<span class="s">VERIFICATION SUCCESSFUL</span></div><table class="tbl"><tr><th>Config (phys, log, gates, routed)</th><th>Meaning</th><th>Result</th><th>Time</th></tr><tr><td class="m">3, 3, 2, 4</td><td>small, fully exhaustive</td><td class="ok">0 / 247</td><td>&lt;5 s</td></tr><tr><td class="m">4, 4, 3, 6</td><td>4 qubits, 3 gates, 6 routed ops</td><td class="ok">0 / 247</td><td>~30 s</td></tr></table><div class="foot">Also proved: <b>no undefined behaviour</b> &mdash; bounds / pointer / conversion checks pass, and <b>unwinding assertions</b> confirm the loop bounds are complete (not truncated).</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Putting it together</div><h2 class="h2">The end-to-end trust chain</h2><div class="codebox"><span class="k">Lean</span>  :  passing the checker predicate  <span class="s">&rArr;</span>  valid, faithful routing
+         <span class="c">(unbounded, machine-checked, no sorry)</span>
+
+<span class="k">CBMC</span>  :  the C++ checker code  <span class="s">&rArr;</span>  implements that predicate soundly &amp; safely
+         <span class="c">(bounded, exhaustive, 0 / 247)</span>
+─────────────────────────────────────────────────────────────
+<span class="s">&rArr;</span>  every accepted solution is <b>provably valid</b> &mdash; trusting only a tiny,
+   twice-verified certifier, <b>not</b> the AI-written NP-hard solver.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Intellectual honesty</div><h2 class="h2">What we <span class="no">do not</span> claim</h2><ul class="p"><li>We did <b>not</b> verify the agents&rsquo; actual solver &mdash; Lean proves theorems about objects in Lean, not C++ binaries.</li><li>We did <b>not</b> prove <b>optimality</b> (min SWAPs / makespan / cost) &mdash; those are NP-hard.</li><li>CBMC is <b>bounded</b> &mdash; exhaustive up to the sizes shown, not for arbitrarily large circuits.</li><li>CBMC verifies a <b>faithful transcription</b> of the checker (STL can&rsquo;t be parsed directly).</li><li><b>Pulse / GRAPE</b> is excluded &mdash; continuous optimal control, not cleanly Lean-provable.</li></ul><div class="foot">Honest scope is the point: we certify the <b>checker</b>, and every solution is checked against it.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Toolchain pinned, exit 0 == verified</div><h2 class="h2">Reproduce it yourself</h2><div class="codebox"><span class="c"># Lean 4 proofs (elan installs Lean v4.32.0 automatically)</span>
+<span class="k">cd</span> proofs/qmap    &amp;&amp; lake build   <span class="c"># QMAP</span>
+<span class="k">cd</span> proofs/ftsched &amp;&amp; lake build   <span class="c"># magic-state scheduling</span>
+<span class="k">cd</span> proofs/tncon   &amp;&amp; lake build   <span class="c"># tensor-network contraction</span>
+
+<span class="c"># CBMC bounded proof (gap A)</span>
+<span class="k">cd</span> proofs/qmap/cbmc &amp;&amp; ./run.ps1</div><div class="foot">All committed to <span class="mono">github.com/zuwasi/agent-harness-bench</span> under <span class="mono">/proofs</span> &mdash; each folder has a README with exact scope.</div></div></section>
+<section class="slide"><div class="wrap"><div class="kicker ">Proof, not vibes</div><h2 class="h2">Takeaways</h2><ul class="p"><li><b>&ldquo;Give me a proof&rdquo; is answerable</b> &mdash; with the right scope, not hand-waving.</li><li>Verify the <b>tiny certifier</b>, require a <b>witness</b> &mdash; you never have to prove the NP-hard solver.</li><li><b>Lean</b> gives unbounded spec soundness; <b>CBMC</b> gives real-code, memory-safe, bounded proof. Use both.</li><li><b>12 Lean theorems, 0 sorry; CBMC 0 / 247.</b> The benchmark&rsquo;s hard problems now carry machine-checked evidence.</li></ul><div class="sub">The harness won the race &mdash; and the winning solutions are now backed by proof.</div></div></section>
+</div><!--deck-->
+
+<div class="credit-fixed"><img src="data:image/jpeg;base64,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" alt="ESL logo"><span>Prepared by <b>Daniel Liezrowice</b> &middot; <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a> &middot; ESL &mdash; AI SDLC consultants &middot; <a href="https://www.eswlab.com">www.eswlab.com</a></span></div>
+
+<div class="nav prev" id="prev" aria-label="Previous">&lsaquo;</div>
+<div class="nav next" id="next" aria-label="Next">&rsaquo;</div>
+<div class="progress"><div class="fill" id="fill"></div></div>
+<div class="counter" id="counter">1 / 18</div>
+<div class="hint" id="hint">&larr; Swipe to navigate &rarr;</div>
+
+<script>
+(function(){
+  var deck=document.getElementById("deck");var slides=deck.children;var total=slides.length;
+  var idx=0;var fill=document.getElementById("fill");var counter=document.getElementById("counter");
+  var prev=document.getElementById("prev");var next=document.getElementById("next");var hint=document.getElementById("hint");
+  function render(){deck.style.transform="translateX("+(-idx*100)+"vw)";fill.style.width=((idx+1)/total*100)+"%";
+    counter.textContent=(idx+1)+" / "+total;prev.classList.toggle("hidden",idx===0);next.classList.toggle("hidden",idx===total-1);}
+  function go(n){idx=Math.max(0,Math.min(total-1,n));if(idx>0&&hint){hint.classList.add("gone");}render();}
+  prev.addEventListener("click",function(){go(idx-1);});next.addEventListener("click",function(){go(idx+1);});
+  window.addEventListener("keydown",function(e){if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();go(idx+1);}else if(e.key==="ArrowLeft"){go(idx-1);}});
+  var sx=null;window.addEventListener("touchstart",function(e){sx=e.changedTouches[0].clientX;},{passive:true});
+  window.addEventListener("touchend",function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50){go(dx<0?idx+1:idx-1);}sx=null;});
+  var mx=null,dragging=false;window.addEventListener("mousedown",function(e){mx=e.clientX;dragging=true;});
+  window.addEventListener("mouseup",function(e){if(!dragging)return;var dx=e.clientX-mx;if(Math.abs(dx)>50){go(dx<0?idx+1:idx-1);}dragging=false;mx=null;});
+  render();
+})();
+</script>
+</body>
+</html>
