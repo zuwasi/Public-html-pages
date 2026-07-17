@@ -32,10 +32,10 @@ a:hover{text-decoration:underline}
 .kicker.c{color:var(--claude)}
 h1{font-size:clamp(2.4rem,7vw,5rem);font-weight:900;line-height:1.02;letter-spacing:-.025em}
 h1 .amp{color:var(--amp)} h1 .cl{color:var(--claude)}
-.tagline{font-size:clamp(1.5rem,3.9vw,2.6rem);font-weight:850;letter-spacing:-.01em;margin-top:20px;line-height:1.5}
+.tagline{font-size:clamp(1.5rem,3.9vw,2.6rem);font-weight:850;letter-spacing:-.01em;margin-top:20px;line-height:2}
 .tagline .txt{background:linear-gradient(90deg,var(--amp),var(--claude));-webkit-background-clip:text;background-clip:text;color:transparent}
-.tag-ico{height:1.05em;width:1.05em;object-fit:cover;border-radius:50%;vertical-align:-.2em;
-  margin:0 .3em 0 .32em;border:2px solid rgba(255,255,255,.22);box-shadow:0 2px 8px rgba(0,0,0,.35)}
+.tag-ico{height:2.1em;width:2.1em;object-fit:cover;border-radius:50%;vertical-align:-.72em;
+  margin:0 .3em 0 .34em;border:2px solid rgba(255,255,255,.28);box-shadow:0 3px 12px rgba(0,0,0,.4)}
 .lead{font-size:clamp(1.05rem,2.2vw,1.4rem);color:#c7d0da;max-width:780px;margin-top:22px}
 .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:12px;font-weight:700;
