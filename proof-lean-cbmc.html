@@ -210,8 +210,24 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;backgroun
 .quote .mut{color:var(--muted)}
 
 </style>
+<style>
+.hbnav{position:fixed;top:0;left:0;width:100%;box-sizing:border-box;height:52px;display:flex;align-items:center;
+  gap:18px;padding:0 22px;z-index:99999;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  background:rgba(11,14,20,.80);border-bottom:1px solid rgba(255,255,255,.10);
+  font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+.hbnav a{text-decoration:none}
+.hbnav .hbnav-brand{font-weight:800;font-size:.98rem;color:#e9eef5;margin-right:auto;letter-spacing:-.01em}
+.hbnav .hbnav-brand span{color:#38bdf8}
+.hbnav .hbnav-link{color:#98a2b3;font-size:.88rem;font-weight:600}
+.hbnav .hbnav-link:hover{color:#e9eef5}
+.hbnav .hbnav-cta{color:#04222e;background:linear-gradient(90deg,#38bdf8,#22d3ee);
+  padding:8px 14px;border-radius:10px;font-size:.85rem;font-weight:800}
+@media(max-width:860px){.hbnav .hbnav-link{display:none}}
+</style>
 </head>
 <body>
+<nav class="hbnav"><a class="hbnav-brand" href="harness-story.html">The <span>harness</span> beats the model</a><a class="hbnav-link" href="harness-story.html">Home</a><a class="hbnav-link" href="harness-beats-model.html">Quantum</a><a class="hbnav-link active" href="proof-lean-cbmc.html">Proofs</a><a class="hbnav-link" href="baboons-face-off.html">Baboons</a><a class="hbnav-link" href="harness-story.html#about">About</a><a class="hbnav-cta" href="final-scores.html">Final scores &rarr;</a></nav>
+
 <div class="deck" id="deck">
 <section class="slide"><div class="wrap"><div class="kicker ">Formal verification &middot; Lean 4 + CBMC</div><h1 class="h1">Can you <span class="amp">prove</span> it?</h1><div class="sub">Machine-checked correctness for the quantum-compilation benchmark solutions &mdash; with <b class="amp">Lean&nbsp;4</b> and <b class="win">CBMC</b>.</div><div class="foot">A follow-up to <i>&ldquo;The Harness Beats the Model&rdquo;</i> &mdash; answering the hardest reviewer question: how do we know the generated code is actually correct?</div></div></section>
 <section class="slide"><div class="wrap"><div class="kicker ">The question we were asked</div><div class="quote">&ldquo;Nice&hellip; but how do I know the solution is <span class="amp">real</span> and <span class="amp">good</span>? <span class="mut">Give me a</span> Lean&nbsp;4 proof.&rdquo;</div><div class="sub">The benchmark showed <b>which agent</b> solved the NP-hard quantum problems faster and cheaper. It did <b>not</b>, by itself, prove the code was <i>correct</i>. This deck closes that gap.</div></div></section>
