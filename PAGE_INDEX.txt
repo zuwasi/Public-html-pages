@@ -118,34 +118,37 @@ Last updated: 2026-07-17
 36. endorlabs-amp-integration-presentation.html
    https://zuwasi.github.io/Public-html-pages/endorlabs-amp-integration-presentation.html
 
-37. harness-beats-model.html
+37. final-scores.html
+   https://zuwasi.github.io/Public-html-pages/final-scores.html
+
+38. harness-beats-model.html
    https://zuwasi.github.io/Public-html-pages/harness-beats-model.html
 
-38. harness-story.html
+39. harness-story.html
    https://zuwasi.github.io/Public-html-pages/harness-story.html
 
-39. hiring-agent-presentation.html
+40. hiring-agent-presentation.html
    https://zuwasi.github.io/Public-html-pages/hiring-agent-presentation.html
 
-40. nesher2gm-pentest-operator-guide.html
+41. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-41. nono-ampcode-presentation.html
+42. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-42. optical-ai-network-comparison-presentation.html
+43. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-43. proof-lean-cbmc.html
+44. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-44. static-code-analysis-2026.html
+45. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-45. why-amp-doesnt-need-node9-proxy.html
+46. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-46. wolfram-engine-gpu-demo-presentation.html
+47. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
