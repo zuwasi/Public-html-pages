@@ -4,11 +4,32 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Harness Beats the Model — Qubits, Baboons &amp; AI Agents | ESL</title>
-<meta name="description" content="Qubits, Baboons & AI Agents: a benchmark that started with NP-complete quantum-compilation problems and ended as a silly baboon-shooting JavaScript game. The agent harness beats the model.">
+<meta name="description" content="Qubits, Baboons & AI Agents: independent benchmarks showing the AI coding agent (the harness) matters more than the model inside it. 39× cheaper, 24× faster, equal-or-better correctness.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="harness-site.css">
+<style>
+/* v2-only additions — kept inline so harness-site.css is untouched */
+.plain{font-size:clamp(1.1rem,2.4vw,1.5rem);color:#dfe7f0;max-width:760px;margin-top:20px;font-weight:600}
+h1 .def{display:inline-block;font-size:clamp(.8rem,1.7vw,1.1rem);font-weight:600;color:var(--muted);
+  letter-spacing:0;vertical-align:baseline;margin-left:.35em;line-height:1.25;white-space:nowrap}
+@media(max-width:700px){h1 .def{display:block;margin:2px 0 6px;white-space:normal}}
+h1 a.hlink{color:var(--amp);text-decoration:none;border-bottom:3px dotted rgba(56,189,248,.55)}
+h1 a.hlink:hover{border-bottom-style:solid;text-decoration:none}
+.tagline.top{margin:0 0 24px;font-size:clamp(1rem,2.2vw,1.5rem)}
+.hero{padding-top:clamp(16px,2.5vw,30px)}
+.hero .stats.hero-stats{margin-top:26px}
+.hero .plain{margin-top:14px}
+.hero .lead{margin-top:16px}
+.plain .amp{color:var(--amp)} .plain .cl{color:var(--claude)}
+.stats.hero-stats{margin-top:38px}
+.stat .src{font-size:.7rem;color:var(--muted);margin-top:4px}
+.pcard .result{font-weight:800;font-size:.95rem;color:var(--win);border-top:1px solid var(--line);padding-top:12px;margin-top:4px}
+.deckhint{font-size:.78rem;color:var(--muted);font-weight:500}
+.steps{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.steps .badge{font-size:.82rem}
+</style>
 </head>
 <body>
 
@@ -27,41 +48,54 @@
   </div>
 </div></nav>
 
-<!-- HERO -->
+<!-- HERO: headline + plain-English claim + verdict numbers up front -->
 <header class="hero"><div class="wrap">
-  <div class="kicker">ESL · AI SDLC benchmark</div>
-  <h1>The <span class="amp">harness</span> beats<br>the <span class="cl">model</span>.</h1>
-  <div class="tagline"><span class="txt">the story of </span><span class="tg"><span class="txt">Qubits,</span><img class="tag-ico" src="assets/img-qbit.png" alt="qubit"></span> <span class="tg"><span class="txt">Baboons</span><img class="tag-ico" src="assets/img-baboons.png" alt="baboon"></span> <span class="tg"><span class="txt">&amp; AI Agents</span><img class="tag-ico" src="assets/img-ai.png" alt="AI agent"></span></div>
-  <p class="lead">The story of a benchmark that started with <b>quantum computing</b> and solving
-  <b>NP-complete optimization</b> problems — and ended up as a gloriously silly first-person
-  <b>baboon-shooting JavaScript game</b>. Same models, different agents, very different results.</p>
+  <div class="tagline top"><span class="txt">the story of </span><span class="tg"><span class="txt">Qubits,</span><img class="tag-ico" src="assets/img-qbit.png" alt="qubit"></span> <span class="tg"><span class="txt">Baboons</span><img class="tag-ico" src="assets/img-baboons.png" alt="baboon"></span> <span class="tg"><span class="txt">&amp; AI Agents</span><img class="tag-ico" src="assets/img-ai.png" alt="AI agent"></span></div>
+  <h1>The <a class="hlink" href="#harness">harness</a><span class="def">(the AI coding agent — Amp, Claude Code)</span><br>
+  beats the <span class="cl">model</span><span class="def">(the LLM inside — Claude, GPT)</span></h1>
 
-  <div class="tldr">
-    <div class="txt"><span>TL;DR</span> — just show me who won.</div>
-    <a class="btn win" href="final-scores.html">Take me to the final scores →</a>
+  <p class="plain">The AI coding <b class="amp">agent</b> you choose matters more than the AI
+  <b class="cl">model</b> inside it. We measured it — three times.</p>
+
+  <p class="lead">Independent benchmarks by ESL: the same tasks were given to two coding agents,
+  <b>Amp</b> and <b>Claude Code</b>. From <b>NP-complete quantum-compilation problems</b> to a deliberately
+  silly <b>baboon-shooting browser game</b>, the better-engineered agent finished faster, cost far less,
+  and matched or beat correctness.</p>
+
+  <!-- Verdict first: the four numbers a prospect must not miss -->
+  <div class="stats hero-stats">
+    <div class="stat"><div class="big amp">39×</div><div class="lab">cheaper</div><div class="src">quantum benchmark</div></div>
+    <div class="stat"><div class="big amp">24×</div><div class="lab">faster</div><div class="src">quantum benchmark</div></div>
+    <div class="stat"><div class="big win">1.000 vs 0.972</div><div class="lab">correctness (Amp vs Claude)</div><div class="src">quantum benchmark</div></div>
+    <div class="stat"><div class="big amp">2.1× / 2.6×</div><div class="lab">faster / cheaper — same model</div><div class="src">baboons game</div></div>
   </div>
 
   <div class="cta">
-    <a class="btn amp" href="harness-beats-model.html">The quantum benchmark →</a>
-    <a class="btn" href="baboons-face-off.html">Play the baboons face-off →</a>
+    <a class="btn win" href="final-scores.html">See the full scoreboard →</a>
+    <a class="btn" href="#experiments">How we tested it ↓</a>
   </div>
 </div></header>
 
-<!-- THESIS -->
-<section><div class="wrap">
-  <div class="eyebrow">The claim</div>
-  <h2>Same model. Different agent.<br>Very different results.</h2>
-  <p class="p">A frontier model is the <b>engine</b>; the agent harness is the <b>rest of the car</b> — the
-  transmission, steering and driver. Give two agents the <i>identical</i> model and task, and the better
-  <b>harness</b> wins on time and dollars while matching quality. The Kaggle
-  <i>&ldquo;New SDLC with Vibe Coding&rdquo;</i> whitepaper argues the harness carries the overwhelming share
-  of the outcome — our results are consistent with that.</p>
+<!-- WHAT IS A HARNESS -->
+<section id="harness"><div class="wrap">
+  <div class="eyebrow">What do we mean by “harness”?</div>
+  <h2>The model is the engine.<br>The agent is the rest of the car.</h2>
+  <p class="p">A frontier model (Claude, GPT, Gemini…) is the <b>engine</b>. The agent that wraps it — the
+  <b>harness</b> — is the transmission, the steering and the driver: how it plans, reads your code, runs tools
+  and checks its own work. Give two agents the <i>identical</i> model and task, and the better harness wins on
+  time and dollars while matching quality. The Kaggle <i>“New SDLC with Vibe Coding”</i> whitepaper argues the
+  harness carries the overwhelming share of the outcome — our results are consistent with that.</p>
 </div></section>
 
-<!-- THREE EXPERIMENTS (with images) -->
-<section><div class="wrap">
+<!-- THREE EXPERIMENTS, each with its result on the card -->
+<section id="experiments"><div class="wrap">
   <div class="eyebrow">Three experiments · one conclusion</div>
   <h2>How we tested it</h2>
+  <div class="steps">
+    <span class="badge">01 — Hard problems: who solves them better?</span>
+    <span class="badge">02 — Prove the checker is trustworthy</span>
+    <span class="badge">03 — Same model on both agents: pure harness</span>
+  </div>
   <div class="pillars">
 
     <article class="pcard">
@@ -69,20 +103,24 @@
       <div class="body">
         <div class="tag">01 · Hard problems</div>
         <h3>Quantum benchmark</h3>
-        <p>NP-hard quantum-compilation tasks. <b>Amp</b> in basic mode vs <b>Claude Code + Fable 5</b> at max
-        effort — cheaper, faster, equal-or-better correctness.</p>
-        <a class="go" href="harness-beats-model.html">See the quantum results →</a>
+        <p>Hard quantum-compilation tasks in C++, including an <b>NP-complete</b> qubit-routing problem.
+        <b>Amp</b> (fast “rush” mode) vs <b>Claude Code</b> (max effort), scored by hidden tests.</p>
+        <p class="result">Result: Amp 39× cheaper, 24× faster, perfect 1.000 correctness.</p>
+        <a class="go" href="harness-beats-model.html">See the quantum results →
+          <span class="deckhint">(slide deck — arrow keys / swipe)</span></a>
       </div>
     </article>
 
     <article class="pcard">
       <img class="thumb" src="assets/img-lean.png" alt="Lean 4 proof">
       <div class="body">
-        <div class="tag g">02 · Can you prove it?</div>
-        <h3>Lean 4 + CBMC</h3>
-        <p>&ldquo;How do I know the code is good?&rdquo; 12 machine-checked theorems, 0 <span class="mono">sorry</span>,
-        247 CBMC checks — the checker is a provably sound certifier.</p>
-        <a class="go" href="proof-lean-cbmc.html">See the proofs →</a>
+        <div class="tag g">02 · Can you trust the scores?</div>
+        <h3>Lean 4 + CBMC proofs</h3>
+        <p>“How do I know the grader is right?” We formally verified the benchmark’s checker:
+        <b>12 machine-checked theorems</b> and <b>247 automated proofs</b> — the scoring is mathematically sound.</p>
+        <p class="result">Result: the scores above are backed by machine-checked proof.</p>
+        <a class="go" href="proof-lean-cbmc.html">See the proofs →
+          <span class="deckhint">(slide deck — arrow keys / swipe)</span></a>
       </div>
     </article>
 
@@ -91,8 +129,9 @@
       <div class="body">
         <div class="tag c">03 · Anyone can judge</div>
         <h3>Baboons Over London</h3>
-        <p>Same model on both agents (Claude Fable 5) build the same silly FPS. Pure harness — you pick the
-        better game.</p>
+        <p>Both agents got the <b>identical prompt</b> and the <b>identical model</b> and built the same silly
+        browser shooter. The only variable left is the harness — and you can play both results.</p>
+        <p class="result">Result: Amp 2.1× faster, 2.6× cheaper. You judge the games.</p>
         <a class="go" href="baboons-face-off.html">Play the face-off →</a>
       </div>
     </article>
@@ -103,16 +142,38 @@
 <!-- THE MOMENT -->
 <section><div class="wrap">
   <div class="eyebrow">The moment that named this project</div>
-  <h2>&ldquo;Maybe it wasn&rsquo;t worth using Fable Max?&rdquo;</h2>
+  <h2>“Maybe it’s not a task for a max model?”</h2>
+  <p class="p">After the quantum benchmark, we asked <b>Claude Code running Fable&nbsp;5 at maximum effort</b>
+  what it thought about its loss on the QMAP (qubit-routing) task — where Amp, running in its fast
+  <b>“rush” mode</b>, scored a perfect 1.000 against Claude’s 0.889, at 62× lower cost. Its answer:</p>
   <div class="callout c">
-    <div class="quote">&ldquo;If a basic agent solved it easily, maybe it wasn&rsquo;t worth using Fable Max?&rdquo;
-    <span class="mut">— Claude Fable 5.</span></div>
+    <div class="quote">“Maybe it is a simple task — if an agent in simple mode solves it easily, it is not a
+    task for a max model like Fable&nbsp;5?” <span class="mut">— Claude Fable 5</span></div>
   </div>
-  <p class="p">We asked: <i>&ldquo;Are you sure QMAP is basic? Check again.&rdquo;</i> It conceded — qubit routing is
-  <b>NP-complete</b>. The &ldquo;basic&rdquo; harness had quietly solved a hard problem, cheaper and faster. That is
-  the whole thesis in one exchange.</p>
+  <p class="p">We replied: <i>“Check again — QMAP is not a simple problem.”</i></p>
+  <div class="callout c">
+    <div class="quote">“You are right — it is an NP-complete problem.” <span class="mut">— Claude Fable 5</span></div>
+  </div>
+  <p class="p">Qubit routing is <b>NP-complete</b> — one of the hardest classes of problems in computer science.
+  The agent in fast mode had quietly solved it, cheaper and faster, while the max-effort setup scored lower and
+  then misjudged the task’s difficulty. That is the whole thesis in one exchange.</p>
   <div class="cta">
     <a class="btn win" href="final-scores.html">Jump to the final scores →</a>
+  </div>
+</div></section>
+
+<!-- WHAT IT MEANS FOR YOU -->
+<section><div class="wrap">
+  <div class="eyebrow">Why this matters to your team</div>
+  <h2>Your agent choice is a budget and delivery decision.</h2>
+  <p class="p">If two agents on the same model differ by <b>2–40×</b> in cost and speed, then picking an AI coding
+  agent by model name alone is leaving money and time on the table. The right way to choose is to <b>benchmark the
+  agents on your own tasks</b> — and verify the results, not just eyeball them.</p>
+  <p class="p">That is what ESL does: independent benchmark design, formal-verification pilots (Lean 4 / CBMC) and
+  agentic-AI tooling strategy — evidence, not hype.</p>
+  <div class="cta">
+    <a class="btn amp" href="https://www.eswlab.com" target="_blank" rel="noopener">Talk to ESL — www.eswlab.com ↗</a>
+    <a class="btn" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">Connect on LinkedIn ↗</a>
   </div>
 </div></section>
 
@@ -128,10 +189,6 @@
       <b>harness</b> effects from <b>model</b> effects.</p>
       <p class="p"><b>ESL</b> helps teams adopt agentic AI with evidence, not hype: benchmark design,
       formal-verification pilots (Lean 4 / CBMC) and tooling strategy.</p>
-      <div class="cta">
-        <a class="btn amp" href="https://www.eswlab.com" target="_blank" rel="noopener">www.eswlab.com ↗</a>
-        <a class="btn" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">LinkedIn ↗</a>
-      </div>
     </div>
   </div>
 </div></section>
@@ -144,7 +201,8 @@
     <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a></span>
   </div>
   <p style="margin-top:14px;font-size:.8rem">Amp is a product of Sourcegraph; Claude Code and Claude Fable&nbsp;5 are
-  products of Anthropic. Benchmarks isolate the agent harness from the underlying model.</p>
+  products of Anthropic. Quantum benchmark: Amp fast “rush” mode vs Claude Code + Fable 5 at max effort (models differ).
+  Baboons game: both agents on Claude Fable 5 (identical model — pure harness comparison).</p>
 </div></footer>
 
 </body>

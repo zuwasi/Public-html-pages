@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Harness Beats the Model — Qubits, Baboons &amp; AI Agents | ESL</title>
+<meta name="description" content="Qubits, Baboons & AI Agents: a benchmark that started with NP-complete quantum-compilation problems and ended as a silly baboon-shooting JavaScript game. The agent harness beats the model.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="harness-site.css">
+</head>
+<body>
+
+<!-- TOP MENU -->
+<nav class="nav"><div class="wrap">
+  <a class="brand" href="harness-story.html">The <span>harness</span> beats the model</a>
+  <input type="checkbox" id="nvt" class="nvt">
+  <label for="nvt" class="burger" aria-label="Toggle menu"><span></span><span></span><span></span></label>
+  <div class="navlinks">
+    <a class="link active" href="harness-story.html">Home</a>
+    <a class="link" href="harness-beats-model.html">Quantum</a>
+    <a class="link" href="proof-lean-cbmc.html">Proofs</a>
+    <a class="link" href="baboons-face-off.html">Baboons</a>
+    <a class="link" href="#about">About</a>
+    <a class="navcta" href="final-scores.html">Final scores →</a>
+  </div>
+</div></nav>
+
+<!-- HERO -->
+<header class="hero"><div class="wrap">
+  <div class="kicker">ESL · AI SDLC benchmark</div>
+  <h1>The <span class="amp">harness</span> beats<br>the <span class="cl">model</span>.</h1>
+  <div class="tagline"><span class="txt">the story of </span><span class="tg"><span class="txt">Qubits,</span><img class="tag-ico" src="assets/img-qbit.png" alt="qubit"></span> <span class="tg"><span class="txt">Baboons</span><img class="tag-ico" src="assets/img-baboons.png" alt="baboon"></span> <span class="tg"><span class="txt">&amp; AI Agents</span><img class="tag-ico" src="assets/img-ai.png" alt="AI agent"></span></div>
+  <p class="lead">The story of a benchmark that started with <b>quantum computing</b> and solving
+  <b>NP-complete optimization</b> problems — and ended up as a gloriously silly first-person
+  <b>baboon-shooting JavaScript game</b>. Same models, different agents, very different results.</p>
+
+  <div class="tldr">
+    <div class="txt"><span>TL;DR</span> — just show me who won.</div>
+    <a class="btn win" href="final-scores.html">Take me to the final scores →</a>
+  </div>
+
+  <div class="cta">
+    <a class="btn amp" href="harness-beats-model.html">The quantum benchmark →</a>
+    <a class="btn" href="baboons-face-off.html">Play the baboons face-off →</a>
+  </div>
+</div></header>
+
+<!-- THESIS -->
+<section><div class="wrap">
+  <div class="eyebrow">The claim</div>
+  <h2>Same model. Different agent.<br>Very different results.</h2>
+  <p class="p">A frontier model is the <b>engine</b>; the agent harness is the <b>rest of the car</b> — the
+  transmission, steering and driver. Give two agents the <i>identical</i> model and task, and the better
+  <b>harness</b> wins on time and dollars while matching quality. The Kaggle
+  <i>&ldquo;New SDLC with Vibe Coding&rdquo;</i> whitepaper argues the harness carries the overwhelming share
+  of the outcome — our results are consistent with that.</p>
+</div></section>
+
+<!-- THREE EXPERIMENTS (with images) -->
+<section><div class="wrap">
+  <div class="eyebrow">Three experiments · one conclusion</div>
+  <h2>How we tested it</h2>
+  <div class="pillars">
+
+    <article class="pcard">
+      <img class="thumb" src="assets/img-qbit.png" alt="Qubit / quantum circuit">
+      <div class="body">
+        <div class="tag">01 · Hard problems</div>
+        <h3>Quantum benchmark</h3>
+        <p>NP-hard quantum-compilation tasks. <b>Amp</b> in basic mode vs <b>Claude Code + Fable 5</b> at max
+        effort — cheaper, faster, equal-or-better correctness.</p>
+        <a class="go" href="harness-beats-model.html">See the quantum results →</a>
+      </div>
+    </article>
+
+    <article class="pcard">
+      <img class="thumb" src="assets/img-lean.png" alt="Lean 4 proof">
+      <div class="body">
+        <div class="tag g">02 · Can you prove it?</div>
+        <h3>Lean 4 + CBMC</h3>
+        <p>&ldquo;How do I know the code is good?&rdquo; 12 machine-checked theorems, 0 <span class="mono">sorry</span>,
+        247 CBMC checks — the checker is a provably sound certifier.</p>
+        <a class="go" href="proof-lean-cbmc.html">See the proofs →</a>
+      </div>
+    </article>
+
+    <article class="pcard">
+      <img class="thumb" src="assets/img-baboons.png" alt="Baboons Over London game">
+      <div class="body">
+        <div class="tag c">03 · Anyone can judge</div>
+        <h3>Baboons Over London</h3>
+        <p>Same model on both agents (Claude Fable 5) build the same silly FPS. Pure harness — you pick the
+        better game.</p>
+        <a class="go" href="baboons-face-off.html">Play the face-off →</a>
+      </div>
+    </article>
+
+  </div>
+</div></section>
+
+<!-- THE MOMENT -->
+<section><div class="wrap">
+  <div class="eyebrow">The moment that named this project</div>
+  <h2>&ldquo;Maybe it wasn&rsquo;t worth using Fable Max?&rdquo;</h2>
+  <div class="callout c">
+    <div class="quote">&ldquo;If a basic agent solved it easily, maybe it wasn&rsquo;t worth using Fable Max?&rdquo;
+    <span class="mut">— Claude Fable 5.</span></div>
+  </div>
+  <p class="p">We asked: <i>&ldquo;Are you sure QMAP is basic? Check again.&rdquo;</i> It conceded — qubit routing is
+  <b>NP-complete</b>. The &ldquo;basic&rdquo; harness had quietly solved a hard problem, cheaper and faster. That is
+  the whole thesis in one exchange.</p>
+  <div class="cta">
+    <a class="btn win" href="final-scores.html">Jump to the final scores →</a>
+  </div>
+</div></section>
+
+<!-- ABOUT -->
+<section id="about"><div class="wrap">
+  <div class="eyebrow">Who made this</div>
+  <h2>ESL — AI SDLC consultants</h2>
+  <div class="about">
+    <img class="face" src="assets/daniel.jpg" alt="Daniel Liezrowice">
+    <div>
+      <p class="p" style="margin-top:0"><b>Daniel Liezrowice</b> designs and runs independent benchmarks of AI
+      coding agents — measuring what actually moves speed, cost and correctness in the SDLC, and separating
+      <b>harness</b> effects from <b>model</b> effects.</p>
+      <p class="p"><b>ESL</b> helps teams adopt agentic AI with evidence, not hype: benchmark design,
+      formal-verification pilots (Lean 4 / CBMC) and tooling strategy.</p>
+      <div class="cta">
+        <a class="btn amp" href="https://www.eswlab.com" target="_blank" rel="noopener">www.eswlab.com ↗</a>
+        <a class="btn" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">LinkedIn ↗</a>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div class="row">
+    <img class="esl" src="assets/esl-logo.png" alt="ESL logo">
+    <span>Prepared by <b>Daniel Liezrowice</b> · ESL — AI SDLC consultants ·
+    <a href="https://www.eswlab.com">www.eswlab.com</a> ·
+    <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a></span>
+  </div>
+  <p style="margin-top:14px;font-size:.8rem">Amp is a product of Sourcegraph; Claude Code and Claude Fable&nbsp;5 are
+  products of Anthropic. Benchmarks isolate the agent harness from the underlying model.</p>
+</div></footer>
+
+</body>
+</html>
