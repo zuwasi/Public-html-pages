@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-17
+Last updated: 2026-07-18
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -127,31 +127,34 @@ Last updated: 2026-07-17
 39. harness-beats-model.html
    https://zuwasi.github.io/Public-html-pages/harness-beats-model.html
 
-40. harness-story.html
+40. harness-story-backup.html
+   https://zuwasi.github.io/Public-html-pages/harness-story-backup.html
+
+41. harness-story.html
    https://zuwasi.github.io/Public-html-pages/harness-story.html
 
-41. hiring-agent-presentation.html
+42. hiring-agent-presentation.html
    https://zuwasi.github.io/Public-html-pages/hiring-agent-presentation.html
 
-42. nesher2gm-pentest-operator-guide.html
+43. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-43. nono-ampcode-presentation.html
+44. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-44. optical-ai-network-comparison-presentation.html
+45. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-45. proof-lean-cbmc.html
+46. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-46. static-code-analysis-2026.html
+47. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-47. why-amp-doesnt-need-node9-proxy.html
+48. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-48. wolfram-engine-gpu-demo-presentation.html
+49. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
