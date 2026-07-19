@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="A visual explanation of what Parasoft C/C++test can and cannot detect in obfuscated C and C++ source code.">
+  <meta name="author" content="ESL">
+  <meta name="license" content="MIT">
+  <title>Parasoft C/C++test and Obfuscation — ESL</title>
+  <!-- SPDX-License-Identifier: MIT -->
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071018;
+      --panel: #0e1c26;
+      --panel-2: #132a37;
+      --line: #294653;
+      --text: #eef9fb;
+      --muted: #a7bbc4;
+      --cyan: #4ce1e6;
+      --green: #69e8a8;
+      --amber: #ffc96b;
+      --red: #ff7f8b;
+      --blue: #84adff;
+      --slide-pad-x: clamp(1.2rem, 6vw, 7rem);
+      --slide-pad-y: clamp(4.5rem, 8vh, 6.5rem);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; }
+    body {
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overscroll-behavior: none;
+    }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cyan); text-underline-offset: 3px; }
+    code, pre { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+
+    .deck {
+      display: flex;
+      width: max-content;
+      height: 100vh;
+      transform: translate3d(0, 0, 0);
+      transition: transform 520ms cubic-bezier(.22, .75, .2, 1);
+      will-change: transform;
+    }
+    .deck.no-transition { transition: none; }
+
+    .slide {
+      position: relative;
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: var(--slide-pad-y) var(--slide-pad-x) 5.5rem;
+      background:
+        radial-gradient(circle at 10% 0%, rgb(76 225 230 / 12%), transparent 29rem),
+        radial-gradient(circle at 95% 15%, rgb(132 173 255 / 10%), transparent 25rem),
+        var(--bg);
+      scrollbar-width: thin;
+      scrollbar-color: var(--line) transparent;
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--cyan), var(--blue), var(--green));
+      opacity: .7;
+    }
+    .slide-inner {
+      width: min(1180px, 100%);
+      min-height: calc(100vh - 11rem);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .brand {
+      position: fixed;
+      z-index: 40;
+      top: 1rem;
+      left: clamp(1rem, 3vw, 2.5rem);
+      display: flex;
+      align-items: center;
+      gap: .7rem;
+      padding: .45rem .65rem;
+      border: 1px solid rgb(255 255 255 / 12%);
+      border-radius: 12px;
+      background: rgb(7 16 24 / 82%);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 12px 35px rgb(0 0 0 / 22%);
+    }
+    .brand img {
+      width: 52px;
+      height: 35px;
+      object-fit: contain;
+      border-radius: 6px;
+      background: white;
+    }
+    .brand span { font-size: .75rem; color: var(--muted); line-height: 1.15; }
+    .brand strong { display: block; color: var(--text); font-size: .9rem; letter-spacing: .04em; }
+
+    .license-pill {
+      position: fixed;
+      z-index: 40;
+      top: 1rem;
+      right: clamp(1rem, 3vw, 2.5rem);
+      padding: .45rem .7rem;
+      border: 1px solid rgb(105 232 168 / 30%);
+      border-radius: 999px;
+      background: rgb(105 232 168 / 8%);
+      color: var(--green);
+      font-size: .72rem;
+      font-weight: 850;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .55rem;
+      align-self: flex-start;
+      margin-bottom: 1rem;
+      padding: .35rem .7rem;
+      border: 1px solid rgb(76 225 230 / 35%);
+      border-radius: 999px;
+      background: rgb(76 225 230 / 8%);
+      color: var(--cyan);
+      font-size: clamp(.7rem, 1vw, .82rem);
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before {
+      content: "";
+      width: .5rem;
+      height: .5rem;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 16px currentColor;
+    }
+
+    h1, h2, h3 { margin-top: 0; line-height: 1.1; text-wrap: balance; }
+    h1 {
+      max-width: 980px;
+      margin-bottom: 1.2rem;
+      font-size: clamp(2.45rem, 6.5vw, 6.2rem);
+      letter-spacing: -.055em;
+    }
+    h1 span, h2 span { color: var(--cyan); }
+    h2 {
+      max-width: 1020px;
+      margin-bottom: 1.1rem;
+      font-size: clamp(2rem, 4.8vw, 4.4rem);
+      letter-spacing: -.045em;
+    }
+    h3 { margin-bottom: .55rem; font-size: clamp(1.05rem, 2vw, 1.35rem); }
+    p { margin-top: 0; }
+    .lede {
+      max-width: 900px;
+      color: var(--muted);
+      font-size: clamp(1.05rem, 2.1vw, 1.5rem);
+    }
+    .small { color: var(--muted); font-size: .86rem; }
+
+    .verdict {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 1rem;
+      max-width: 980px;
+      margin-top: 1.2rem;
+      padding: clamp(1rem, 2vw, 1.4rem);
+      border: 1px solid rgb(105 232 168 / 35%);
+      border-radius: 18px;
+      background: rgb(105 232 168 / 7%);
+    }
+    .verdict b { color: var(--green); white-space: nowrap; }
+
+    .grid { display: grid; gap: clamp(.8rem, 1.5vw, 1.2rem); width: 100%; }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      min-width: 0;
+      padding: clamp(1rem, 2vw, 1.35rem);
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: linear-gradient(145deg, rgb(19 42 55 / 90%), rgb(14 28 38 / 94%));
+      box-shadow: 0 18px 50px rgb(0 0 0 / 20%);
+    }
+    .card p:last-child, .card ul:last-child { margin-bottom: 0; }
+    .card.can h3 { color: var(--green); }
+    .card.limit h3 { color: var(--red); }
+    .step {
+      display: grid;
+      place-items: center;
+      width: 2.15rem;
+      height: 2.15rem;
+      margin-bottom: .8rem;
+      border-radius: 10px;
+      background: rgb(76 225 230 / 13%);
+      color: var(--cyan);
+      font-weight: 900;
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.8rem;
+      width: 100%;
+      margin-top: 1.25rem;
+    }
+    .flow-node {
+      position: relative;
+      min-height: 145px;
+      padding: 1rem;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: var(--panel);
+    }
+    .flow-node b { display: block; margin-bottom: .45rem; color: var(--cyan); }
+    .flow-node small { color: var(--muted); }
+    .flow-node.semantic { border-color: rgb(255 201 107 / 48%); }
+    .flow-node.semantic b { color: var(--amber); }
+    .flow-node:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      right: -1.4rem;
+      transform: translateY(-50%);
+      color: var(--cyan);
+      font-size: 1.35rem;
+      font-weight: 900;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: .22rem .58rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+    .yes { color: #042116; background: var(--green); }
+    .partial { color: #2b1d00; background: var(--amber); }
+    .no { color: #31060a; background: var(--red); }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 1.25fr .8fr 2fr;
+      width: 100%;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: rgb(14 28 38 / 86%);
+      font-size: clamp(.78rem, 1.2vw, .96rem);
+    }
+    .matrix > div { padding: clamp(.65rem, 1.25vw, .95rem); border-bottom: 1px solid var(--line); }
+    .matrix > div:nth-last-child(-n + 3) { border-bottom: 0; }
+    .matrix .head {
+      background: var(--panel-2);
+      color: var(--cyan);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+    }
+    .matrix .tech { font-weight: 800; }
+    .matrix .detail { color: var(--muted); }
+
+    .code-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 17px;
+      background: #071119;
+    }
+    .code-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .8rem;
+      padding: .72rem .9rem;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel-2);
+      font-weight: 800;
+    }
+    pre {
+      overflow-x: auto;
+      margin: 0;
+      padding: clamp(.8rem, 1.5vw, 1.1rem);
+      color: #ddf3f4;
+      font-size: clamp(.68rem, 1.15vw, .88rem);
+      line-height: 1.55;
+      tab-size: 4;
+    }
+    .analysis {
+      padding: .82rem .95rem;
+      border-top: 1px solid var(--line);
+      background: rgb(19 42 55 / 45%);
+      color: var(--muted);
+      font-size: clamp(.78rem, 1.2vw, .92rem);
+    }
+    .analysis strong { color: var(--text); }
+    .kw { color: #d4a5ff; }
+    .str { color: #92e9a9; }
+    .fn { color: #7acbff; }
+    .cm { color: #7895a2; }
+
+    ul { margin: .6rem 0 0; padding-left: 1.2rem; }
+    li { margin: .4rem 0; }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { position: relative; padding-left: 1.65rem; }
+    .checklist li::before { content: "✓"; position: absolute; left: 0; color: var(--green); font-weight: 900; }
+    .xlist { list-style: none; padding: 0; }
+    .xlist li { position: relative; padding-left: 1.65rem; }
+    .xlist li::before { content: "×"; position: absolute; left: 0; color: var(--red); font-weight: 900; }
+
+    .quote {
+      max-width: 1020px;
+      margin-top: 1.25rem;
+      padding: 1.2rem 1.35rem;
+      border: 1px solid rgb(76 225 230 / 36%);
+      border-radius: 17px;
+      background: rgb(76 225 230 / 7%);
+      font-size: clamp(1.05rem, 2vw, 1.4rem);
+      font-weight: 750;
+    }
+    .warning {
+      margin-top: 1rem;
+      padding: .85rem 1rem;
+      border-left: 4px solid var(--amber);
+      border-radius: 0 12px 12px 0;
+      background: rgb(255 201 107 / 8%);
+      color: var(--muted);
+      font-size: clamp(.78rem, 1.2vw, .92rem);
+    }
+    .warning strong { color: var(--amber); }
+
+    .references { display: grid; gap: .7rem; width: 100%; }
+    .reference {
+      padding: .8rem 1rem;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: rgb(14 28 38 / 78%);
+    }
+    .reference strong { display: block; margin-bottom: .15rem; }
+    .reference a { display: block; overflow-wrap: anywhere; font-size: clamp(.68rem, 1vw, .82rem); }
+
+    .nav-button {
+      position: fixed;
+      z-index: 60;
+      top: 50%;
+      display: grid;
+      place-items: center;
+      width: clamp(2.6rem, 4.6vw, 3.7rem);
+      height: clamp(2.6rem, 4.6vw, 3.7rem);
+      border: 1px solid rgb(255 255 255 / 18%);
+      border-radius: 50%;
+      background: rgb(14 28 38 / 88%);
+      color: var(--text);
+      box-shadow: 0 10px 30px rgb(0 0 0 / 30%);
+      backdrop-filter: blur(12px);
+      cursor: pointer;
+      font-size: clamp(1.7rem, 3vw, 2.35rem);
+      line-height: 1;
+      transform: translateY(-50%);
+      transition: opacity 180ms ease, background 180ms ease, transform 180ms ease;
+    }
+    .nav-button:hover { background: var(--panel-2); transform: translateY(-50%) scale(1.05); }
+    .nav-button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+    .nav-button.prev { left: clamp(.55rem, 2vw, 1.5rem); }
+    .nav-button.next { right: clamp(.55rem, 2vw, 1.5rem); }
+    .nav-button.is-hidden { visibility: hidden; opacity: 0; pointer-events: none; }
+
+    .progress-track {
+      position: fixed;
+      z-index: 70;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 5px;
+      background: rgb(255 255 255 / 10%);
+    }
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), var(--blue), var(--green));
+      transition: width 400ms ease;
+    }
+    .slide-counter {
+      position: fixed;
+      z-index: 70;
+      right: clamp(1rem, 3vw, 2.5rem);
+      bottom: 1rem;
+      padding: .35rem .65rem;
+      border: 1px solid rgb(255 255 255 / 12%);
+      border-radius: 999px;
+      background: rgb(7 16 24 / 82%);
+      color: var(--muted);
+      font-size: .78rem;
+      font-variant-numeric: tabular-nums;
+      backdrop-filter: blur(10px);
+    }
+    .swipe-hint {
+      position: fixed;
+      z-index: 55;
+      left: 50%;
+      bottom: 1.1rem;
+      color: var(--muted);
+      font-size: clamp(.72rem, 1vw, .85rem);
+      transform: translateX(-50%);
+      animation: hint 1.7s ease-in-out infinite;
+      transition: opacity 220ms ease;
+    }
+    .swipe-hint.hidden { opacity: 0; pointer-events: none; }
+    @keyframes hint { 50% { transform: translateX(-50%) translateX(8px); color: var(--text); } }
+
+    .final-logo {
+      width: min(320px, 55vw);
+      max-height: 180px;
+      object-fit: contain;
+      margin-bottom: 1.4rem;
+      padding: .7rem;
+      border-radius: 16px;
+      background: white;
+    }
+
+    @media (max-width: 880px) {
+      :root { --slide-pad-x: clamp(1rem, 5vw, 2.4rem); --slide-pad-y: 5.5rem; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .flow { grid-template-columns: 1fr; gap: .75rem; }
+      .flow-node { min-height: auto; }
+      .flow-node:not(:last-child)::after {
+        content: "↓";
+        top: auto;
+        right: 50%;
+        bottom: -.78rem;
+        transform: translateX(50%);
+      }
+      .nav-button { top: auto; bottom: 3.6rem; transform: none; }
+      .nav-button.prev { left: 1rem; }
+      .nav-button.next { right: 1rem; }
+      .nav-button:hover { transform: scale(1.05); }
+    }
+
+    @media (max-width: 660px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .verdict { grid-template-columns: 1fr; }
+      .verdict b { white-space: normal; }
+      .brand span { display: none; }
+      .brand img { width: 44px; height: 30px; }
+      .license-pill { font-size: .62rem; }
+      .matrix { grid-template-columns: 1.2fr .8fr; }
+      .matrix .head:nth-child(3), .matrix .detail { display: none; }
+      .matrix > div:nth-last-child(-n + 3) { border-bottom: 1px solid var(--line); }
+      .matrix > div:nth-last-child(-n + 2) { border-bottom: 0; }
+      .code-head { align-items: flex-start; flex-direction: column; }
+      .swipe-hint { bottom: 1.25rem; }
+    }
+
+    @media (max-height: 700px) and (min-width: 700px) {
+      :root { --slide-pad-y: 4.5rem; }
+      .slide-inner { justify-content: flex-start; }
+      h1 { font-size: clamp(2.35rem, 5vw, 4.6rem); }
+      h2 { font-size: clamp(1.9rem, 4vw, 3.5rem); }
+      .flow-node { min-height: 120px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .deck, .progress-fill { transition: none; }
+      .swipe-hint { animation: none; }
+    }
+
+    @media print {
+      body { overflow: visible; background: white; }
+      .deck { display: block; width: auto; height: auto; transform: none !important; }
+      .slide { width: 100%; height: auto; min-height: 100vh; overflow: visible; break-after: page; }
+      .brand, .license-pill, .nav-button, .progress-track, .slide-counter, .swipe-hint { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="brand" aria-label="Presented by ESL">
+    <img src="assets/esl-logo.jpg" alt="ESL logo">
+    <span><strong>ESL</strong>Technical explainer</span>
+  </div>
+  <div class="license-pill">MIT licensed</div>
+
+  <main class="deck" id="deck">
+    <section class="slide" aria-label="Title slide">
+      <div class="slide-inner">
+        <div class="eyebrow">C and C++ static analysis</div>
+        <h1>Can obfuscation hide code from <span>Parasoft C/C++test?</span></h1>
+        <p class="lede">Usually it cannot hide valid C/C++ syntax from the frontend parser. But parsing the program is not the same as proving every runtime value, resolving every indirect call, or recognizing malicious intent.</p>
+        <div class="verdict">
+          <b>The precise answer</b>
+          <span>Simple source obfuscation mostly confuses humans and text signatures. Advanced obfuscation can reduce semantic precision, conceal runtime values, and move behavior outside the analyzed source artifact.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="The central distinction">
+      <div class="slide-inner">
+        <div class="eyebrow">The central distinction</div>
+        <h2>The parser can read code that the analyzer cannot <span>fully resolve</span></h2>
+        <div class="grid grid-3">
+          <article class="card">
+            <div class="step">1</div>
+            <h3>Parsing</h3>
+            <p>Builds structure from declarations, expressions, statements, types, scopes, templates, and control constructs.</p>
+            <p class="small"><strong>Question:</strong> What code constructs exist?</p>
+          </article>
+          <article class="card">
+            <div class="step">2</div>
+            <h3>Semantic analysis</h3>
+            <p>Reasons about values, aliases, call targets, memory state, control paths, and data flow.</p>
+            <p class="small"><strong>Question:</strong> What can this code do?</p>
+          </article>
+          <article class="card">
+            <div class="step">3</div>
+            <h3>Rule evaluation</h3>
+            <p>Checks the model against enabled Parasoft, CERT, CWE, MISRA, AUTOSAR, or custom rules.</p>
+            <p class="small"><strong>Question:</strong> Is it a configured violation?</p>
+          </article>
+        </div>
+        <p class="quote">Code can parse perfectly while a runtime value or indirect call target remains unknown.</p>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Static analysis pipeline">
+      <div class="slide-inner">
+        <div class="eyebrow">How C/C++test reasons</div>
+        <h2>Obfuscation affects different stages <span>differently</span></h2>
+        <p class="lede">Parasoft describes C/C++test as combining pattern-based analysis, control-flow and data-flow analysis, and abstract interpretation.</p>
+        <div class="flow" role="img" aria-label="Source and build to parser to semantic model to rules to findings">
+          <div class="flow-node"><b>Source + build</b><small>Files, macros, includes, compiler flags, generated code</small></div>
+          <div class="flow-node"><b>Frontend parser</b><small>Syntax tree, types, declarations, expressions</small></div>
+          <div class="flow-node semantic"><b>Semantic model</b><small>Values, aliases, paths, call graph, data flow</small></div>
+          <div class="flow-node"><b>Enabled rules</b><small>Defects, standards, security policy, custom patterns</small></div>
+          <div class="flow-node"><b>Findings</b><small>Evidence for modeled behavior covered by a rule</small></div>
+        </div>
+        <p class="quote">Obfuscation rarely makes C++ invisible to the parser. It can make the semantic model less precise.</p>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Simple obfuscation assessment">
+      <div class="slide-inner">
+        <div class="eyebrow">Technique matrix · 1 of 2</div>
+        <h2>Simple source obfuscation remains <span>highly visible</span></h2>
+        <div class="matrix">
+          <div class="head">Technique</div><div class="head">Visibility</div><div class="head">What remains analyzable</div>
+          <div class="tech">Misleading names and formatting</div><div><span class="badge yes">Fully visible</span></div><div class="detail">Types, operations, calls, memory use, control flow, and data flow</div>
+          <div class="tech">Stack-built strings</div><div><span class="badge yes">Fully visible</span></div><div class="detail">Array writes, bounds, initialization, termination, and later use</div>
+          <div class="tech">XOR/encrypted strings</div><div><span class="badge partial">Decoder visible</span></div><div class="detail">Decoder mechanics and sinks; plaintext may remain unknown</div>
+          <div class="tech">Opaque predicates</div><div><span class="badge yes">Code visible</span></div><div class="detail">Some constants, unreachable paths, redundant operations, and complexity</div>
+          <div class="tech">Control-flow flattening</div><div><span class="badge partial">Graph visible</span></div><div class="detail">Dispatcher and states are parsed; very large graphs can reduce precision</div>
+        </div>
+        <div class="warning"><strong>Key point:</strong> these transformations preserve valid C/C++ syntax. They do not inherently erase an ordinary buffer overflow, invalid cast, leak, or null dereference.</div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Advanced obfuscation assessment">
+      <div class="slide-inner">
+        <div class="eyebrow">Technique matrix · 2 of 2</div>
+        <h2>Advanced techniques hide <span>meaning and runtime artifacts</span></h2>
+        <div class="matrix">
+          <div class="head">Technique</div><div class="head">Visibility</div><div class="head">Important limitation</div>
+          <div class="tech">Dynamic API resolution</div><div><span class="badge partial">Mechanism visible</span></div><div class="detail">Final target may remain unknown when its name is decoded or computed</div>
+          <div class="tech">API hashing</div><div><span class="badge partial">Algorithm visible</span></div><div class="detail">A stored hash may not map automatically back to a dangerous API name</div>
+          <div class="tech">Manual PE loading</div><div><span class="badge partial">Source visible</span></div><div class="detail">Unsafe mechanics may be flagged without classifying malicious intent</div>
+          <div class="tech">Packed executable only</div><div><span class="badge no">Not source</span></div><div class="detail">C/C++test is not a binary unpacker or reverse-engineering platform</div>
+          <div class="tech">Downloaded/generated payload</div><div><span class="badge no">Payload absent</span></div><div class="detail">Static analysis cannot inspect bytes that do not exist until runtime</div>
+        </div>
+        <p class="quote">The mechanism can be visible while the concrete command, API, payload, or intent remains hidden.</p>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Stack strings and runtime decoding examples">
+      <div class="slide-inner">
+        <div class="eyebrow">Code examples · strings</div>
+        <h2>Text obfuscation does not erase <span>program structure</span></h2>
+        <div class="grid grid-2">
+          <article class="code-card">
+            <div class="code-head"><span>Stack-built string</span><span class="badge yes">Mostly analyzable</span></div>
+            <pre><span class="kw">char</span> command[4];
+command[0] = <span class="str">'c'</span>;
+command[1] = <span class="str">'m'</span>;
+command[2] = <span class="str">'d'</span>;
+command[3] = <span class="str">'\0'</span>;
+
+<span class="fn">run_command</span>(command);</pre>
+            <div class="analysis"><strong>Parasoft sees:</strong> each write, the array size, termination, and data passed to the sink. A basic strings extractor does not see a contiguous <code>"cmd"</code>.</div>
+          </article>
+          <article class="code-card">
+            <div class="code-head"><span>Runtime decoding</span><span class="badge partial">Value may be unknown</span></div>
+            <pre><span class="kw">unsigned char</span> encoded[] = {
+    0x39, 0x37, 0x3e, 0x74, 0x3f
+};
+
+<span class="fn">xor_decode</span>(encoded, <span class="kw">sizeof</span> encoded,
+           <span class="fn">runtime_key</span>());
+<span class="fn">run_command</span>(
+    <span class="kw">reinterpret_cast</span>&lt;<span class="kw">char</span> *&gt;(encoded));</pre>
+            <div class="analysis"><strong>Parasoft sees:</strong> decoder, buffers, cast, and sink. <strong>It may not know:</strong> final plaintext when the key is runtime-dependent.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Dynamic calls and flattened control flow examples">
+      <div class="slide-inner">
+        <div class="eyebrow">Code examples · indirection</div>
+        <h2>The call exists, but its <span>target can remain unknown</span></h2>
+        <div class="grid grid-2">
+          <article class="code-card">
+            <div class="code-head"><span>Dynamic API resolution</span><span class="badge partial">Target hidden</span></div>
+            <pre><span class="kw">using</span> Fn = <span class="kw">void</span> (*)(<span class="kw">void</span> *);
+
+HMODULE mod = <span class="fn">LoadLibraryA</span>(
+    <span class="str">"kernel32.dll"</span>);
+FARPROC raw = <span class="fn">GetProcAddress</span>(
+    mod, <span class="fn">decode_api_name</span>());
+
+Fn operation =
+    <span class="kw">reinterpret_cast</span>&lt;Fn&gt;(raw);
+<span class="fn">operation</span>(buffer);</pre>
+            <div class="analysis"><strong>Visible:</strong> loading, lookup, function-pointer cast, failure handling, and indirect call. <strong>Possibly unknown:</strong> the decoded API.</div>
+          </article>
+          <article class="code-card">
+            <div class="code-head"><span>Control-flow flattening</span><span class="badge partial">Graph visible</span></div>
+            <pre><span class="kw">unsigned</span> state = 0x31U;
+<span class="kw">for</span> (;;) {
+  <span class="kw">switch</span> (state) {
+  <span class="kw">case</span> 0x31U:
+    <span class="fn">prepare</span>(); state = 0xA7U; <span class="kw">break</span>;
+  <span class="kw">case</span> 0xA7U:
+    state = <span class="fn">check</span>() ? 0x19U : 0xE2U;
+    <span class="kw">break</span>;
+  <span class="kw">case</span> 0x19U:
+    <span class="fn">perform</span>(); <span class="kw">return</span>;
+  <span class="kw">default</span>:
+    <span class="fn">decoy</span>(); <span class="kw">return</span>;
+  }
+}</pre>
+            <div class="analysis"><strong>Visible:</strong> complete dispatcher and states. <strong>Practical limit:</strong> thousands of transitions, aliases, and branches can cause path explosion.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Detectable defects and unavailable payloads">
+      <div class="slide-inner">
+        <div class="eyebrow">Code examples · boundary</div>
+        <h2>A defect remains detectable; an absent payload <span>does not</span></h2>
+        <div class="grid grid-2">
+          <article class="code-card">
+            <div class="code-head"><span>Unsafe operation</span><span class="badge yes">Defect visible</span></div>
+            <pre><span class="kw">void</span> <span class="fn">decode</span>(<span class="kw">const char</span> *input) {
+    <span class="kw">char</span> local[16];
+    <span class="fn">strcpy</span>(local, input);
+    <span class="cm">// Unbounded copy remains unsafe</span>
+    <span class="fn">transform</span>(local);
+}</pre>
+            <div class="analysis">Renaming functions, removing whitespace, adding dead code, or splitting strings does not remove the underlying overflow risk.</div>
+          </article>
+          <article class="code-card">
+            <div class="code-head"><span>Runtime payload</span><span class="badge no">Payload absent</span></div>
+            <pre><span class="kw">auto</span> bytes = <span class="fn">download</span>(server_url);
+<span class="fn">decrypt_in_place</span>(bytes,
+                 <span class="fn">machine_key</span>());
+
+<span class="kw">void</span> *mem = <span class="fn">allocate_executable</span>(
+    bytes.size());
+<span class="fn">memcpy</span>(mem, bytes.data(), bytes.size());
+<span class="fn">invoke</span>(mem);</pre>
+            <div class="analysis"><strong>Parasoft can inspect:</strong> loader mechanics and memory safety. <strong>It cannot inspect:</strong> remote bytes unavailable during analysis.</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Parasoft capabilities and limitations">
+      <div class="slide-inner">
+        <div class="eyebrow">Capability boundary</div>
+        <h2>What C/C++test can—and <span>cannot</span>—promise</h2>
+        <div class="grid grid-2">
+          <article class="card can">
+            <h3>Parasoft can</h3>
+            <ul class="checklist">
+              <li>Parse valid C/C++ with correct compiler and build context</li>
+              <li>Find memory, resource, concurrency, and data-flow defects that survive obfuscation</li>
+              <li>Apply pattern, control-flow, data-flow, and abstract-interpretation analysis</li>
+              <li>Enforce CERT, CWE, MISRA, AUTOSAR, and custom policies</li>
+              <li>Flag covered dead code, suspicious constructs, and excessive complexity</li>
+              <li>Use RuleWizard for recurring organization-specific source patterns</li>
+            </ul>
+          </article>
+          <article class="card limit">
+            <h3>Parasoft cannot</h3>
+            <ul class="xlist">
+              <li>Resolve every encrypted value, callback, function pointer, or API hash</li>
+              <li>Inspect packed binaries as if original source were present</li>
+              <li>Inspect code downloaded, decrypted, or generated only at runtime</li>
+              <li>Always distinguish malicious intent from legitimate dual-use behavior</li>
+              <li>Eliminate path explosion, unknown state, assembly, or missing-build limits</li>
+              <li>Replace malware sandboxes, EDR, memory forensics, FLOSS, capa, or YARA</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Opaque predicate caveat">
+      <div class="slide-inner">
+        <div class="eyebrow">C and C++ semantics matter</div>
+        <h2>Even “always true” obfuscation examples can be <span>technically wrong</span></h2>
+        <div class="grid grid-2">
+          <article class="code-card">
+            <div class="code-head"><span>Common opaque predicate</span><span class="badge partial">Context dependent</span></div>
+            <pre><span class="kw">if</span> ((x * x) &gt;= 0) {
+    <span class="fn">real_code</span>();
+} <span class="kw">else</span> {
+    <span class="fn">junk_code</span>();
+}</pre>
+            <div class="analysis">For signed integers, multiplication can overflow—and signed overflow is undefined behavior in C and C++. Unsigned arithmetic has different semantics.</div>
+          </article>
+          <article class="card">
+            <h3>What a static analyzer may do</h3>
+            <ul>
+              <li>Report an overflow or undefined-behavior risk</li>
+              <li>Fold the condition only under justified assumptions</li>
+              <li>Retain both branches when the value range is unknown</li>
+              <li>Model unsigned wraparound differently from signed arithmetic</li>
+            </ul>
+            <p class="small">Obfuscation analysis must respect the exact language type and compiler model—not informal mathematics alone.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Recommended analysis workflow">
+      <div class="slide-inner">
+        <div class="eyebrow">Defense in depth</div>
+        <h2>Use source, binary, and runtime analysis <span>together</span></h2>
+        <div class="flow" role="img" aria-label="Provenance to Parasoft to custom policy to binary analysis to runtime analysis">
+          <div class="flow-node"><b>1 · Provenance</b><small>Source origin, dependency changes, generated code, build integrity</small></div>
+          <div class="flow-node"><b>2 · C/C++test</b><small>CERT/CWE, flow analysis, coding policy, complexity</small></div>
+          <div class="flow-node"><b>3 · Custom policy</b><small>Dynamic resolution, API hashing, executable memory, loaders</small></div>
+          <div class="flow-node"><b>4 · Binary analysis</b><small>Source/artifact comparison, YARA, FLOSS, capa, unpacking</small></div>
+          <div class="flow-node"><b>5 · Runtime analysis</b><small>Isolated sandbox, EDR, API, memory, and network telemetry</small></div>
+        </div>
+        <div class="warning"><strong>Do not equate suspicious with malicious:</strong> plugin systems, debuggers, DRM, compatibility layers, and security products can legitimately use dynamic loading or executable memory.</div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Custom policy recommendations">
+      <div class="slide-inner">
+        <div class="eyebrow">RuleWizard and review policy</div>
+        <h2>Flag mechanisms that deserve <span>human investigation</span></h2>
+        <div class="grid grid-2">
+          <article class="card">
+            <h3>Useful custom policy candidates</h3>
+            <ul class="checklist">
+              <li>Executable-memory allocation or permission changes</li>
+              <li>Cross-process writes and remote thread creation</li>
+              <li>Dynamic API resolution and computed function calls</li>
+              <li>Export-table traversal combined with hashing</li>
+              <li>Large encoded arrays flowing into decoders or executable memory</li>
+              <li>Manual PE parsing, mapping, and relocation logic</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>How to use the result</h3>
+            <ol>
+              <li>Trigger focused review rather than automatic malware classification.</li>
+              <li>Confirm whether the mechanism is expected in that component.</li>
+              <li>Trace provenance and compare source with the built artifact.</li>
+              <li>Escalate suspicious binaries to reverse engineering and sandboxing.</li>
+            </ol>
+          </article>
+        </div>
+        <p class="quote">Parasoft can identify unsafe or policy-breaking mechanisms. Intent requires context and corroborating evidence.</p>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Primary references">
+      <div class="slide-inner">
+        <div class="eyebrow">References · 1 of 2</div>
+        <h2>Primary sources</h2>
+        <div class="references">
+          <div class="reference">
+            <strong>Yash Kanzariya — “Day 15/30 Obfuscation: Hiding Malicious Code From Static Analysis”</strong>
+            <a href="https://www.linkedin.com/pulse/day-1530-obfuscation-hiding-malicious-code-from-static-yash-kanzariya-3q7zf/">https://www.linkedin.com/pulse/day-1530-obfuscation-hiding-malicious-code-from-static-yash-kanzariya-3q7zf/</a>
+          </div>
+          <div class="reference">
+            <strong>Parasoft — C/C++ Static Analysis overview</strong>
+            <a href="https://www.parasoft.com/products/parasoft-c-ctest/c-c-static-analysis/">https://www.parasoft.com/products/parasoft-c-ctest/c-c-static-analysis/</a>
+          </div>
+          <div class="reference">
+            <strong>Parasoft Documentation — Built-in Static Analysis Rules and RuleWizard</strong>
+            <a href="https://docs.parasoft.com/display/CPPTESTPROEC20231/Built-in+Static+Analysis+Rules">https://docs.parasoft.com/display/CPPTESTPROEC20231/Built-in+Static+Analysis+Rules</a>
+          </div>
+          <div class="reference">
+            <strong>MITRE ATT&amp;CK — T1027: Obfuscated Files or Information</strong>
+            <a href="https://attack.mitre.org/techniques/T1027/">https://attack.mitre.org/techniques/T1027/</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Complementary tool references">
+      <div class="slide-inner">
+        <div class="eyebrow">References · 2 of 2</div>
+        <h2>Complementary analysis tools</h2>
+        <div class="references">
+          <div class="reference">
+            <strong>FLARE FLOSS — Extract obfuscated strings from malware</strong>
+            <a href="https://github.com/mandiant/flare-floss">https://github.com/mandiant/flare-floss</a>
+          </div>
+          <div class="reference">
+            <strong>FLARE capa — Identify capabilities in executable files</strong>
+            <a href="https://github.com/mandiant/capa">https://github.com/mandiant/capa</a>
+          </div>
+          <div class="reference">
+            <strong>YARA — Pattern matching for malware research and detection</strong>
+            <a href="https://virustotal.github.io/yara/">https://virustotal.github.io/yara/</a>
+          </div>
+          <div class="reference">
+            <strong>SEI CERT C Coding Standard</strong>
+            <a href="https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard">https://wiki.sei.cmu.edu/confluence/display/c/SEI+CERT+C+Coding+Standard</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" aria-label="Conclusion and credits">
+      <div class="slide-inner">
+        <img class="final-logo" src="assets/esl-logo.jpg" alt="ESL logo">
+        <div class="eyebrow">Conclusion</div>
+        <h2>Visible syntax does not guarantee <span>complete semantic detection</span></h2>
+        <p class="lede">Obfuscation normally cannot hide valid C/C++ structure from Parasoft’s frontend parser. It can still conceal concrete values, indirect call targets, runtime payloads, and malicious intent from bounded static analysis.</p>
+        <div class="verdict">
+          <b>Best practice</b>
+          <span>Use Parasoft C/C++test for source-level defects and policy, then combine it with provenance checks, artifact comparison, binary analysis, and isolated runtime telemetry.</span>
+        </div>
+        <p class="small" style="margin-top: 1.3rem">Presented by ESL · © 2026 ESL · Presentation code and content licensed under the MIT License. ESL logo credited to ESL.</p>
+      </div>
+    </section>
+  </main>
+
+  <button class="nav-button prev is-hidden" id="prevButton" type="button" aria-label="Previous slide">‹</button>
+  <button class="nav-button next" id="nextButton" type="button" aria-label="Next slide">›</button>
+  <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+  <div class="slide-counter" id="slideCounter" aria-live="polite">1 / 15</div>
+  <div class="progress-track" aria-hidden="true"><div class="progress-fill" id="progressFill"></div></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const deck = document.getElementById("deck");
+      const slides = Array.from(document.querySelectorAll(".slide"));
+      const previousButton = document.getElementById("prevButton");
+      const nextButton = document.getElementById("nextButton");
+      const counter = document.getElementById("slideCounter");
+      const progress = document.getElementById("progressFill");
+      const hint = document.getElementById("swipeHint");
+      let current = 0;
+      let pointerStartX = null;
+      let pointerStartY = null;
+      let isMouseDrag = false;
+
+      function updateDeck(animate = true) {
+        deck.classList.toggle("no-transition", !animate);
+        deck.style.transform = `translate3d(${-current * window.innerWidth}px, 0, 0)`;
+        counter.textContent = `${current + 1} / ${slides.length}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        previousButton.classList.toggle("is-hidden", current === 0);
+        nextButton.classList.toggle("is-hidden", current === slides.length - 1);
+        previousButton.setAttribute("aria-hidden", String(current === 0));
+        nextButton.setAttribute("aria-hidden", String(current === slides.length - 1));
+        slides.forEach((slide, index) => {
+          slide.setAttribute("aria-hidden", String(index !== current));
+          if (index === current) slide.scrollTop = 0;
+        });
+      }
+
+      function goTo(index) {
+        const next = Math.max(0, Math.min(slides.length - 1, index));
+        if (next === current) return;
+        current = next;
+        hint.classList.add("hidden");
+        updateDeck();
+      }
+
+      function handleSwipe(endX, endY) {
+        if (pointerStartX === null || pointerStartY === null) return;
+        const deltaX = endX - pointerStartX;
+        const deltaY = endY - pointerStartY;
+        if (Math.abs(deltaX) >= 50 && Math.abs(deltaX) > Math.abs(deltaY)) {
+          goTo(current + (deltaX < 0 ? 1 : -1));
+        }
+        pointerStartX = null;
+        pointerStartY = null;
+      }
+
+      previousButton.addEventListener("click", () => goTo(current - 1));
+      nextButton.addEventListener("click", () => goTo(current + 1));
+
+      document.addEventListener("keydown", (event) => {
+        if (event.altKey || event.ctrlKey || event.metaKey) return;
+        const tag = document.activeElement?.tagName;
+        if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+        if (event.key === "ArrowRight" || event.key === " ") {
+          event.preventDefault();
+          goTo(current + 1);
+        } else if (event.key === "ArrowLeft") {
+          event.preventDefault();
+          goTo(current - 1);
+        } else if (event.key === "Home") {
+          event.preventDefault();
+          goTo(0);
+        } else if (event.key === "End") {
+          event.preventDefault();
+          goTo(slides.length - 1);
+        }
+      });
+
+      deck.addEventListener("touchstart", (event) => {
+        pointerStartX = event.changedTouches[0].clientX;
+        pointerStartY = event.changedTouches[0].clientY;
+      }, { passive: true });
+      deck.addEventListener("touchend", (event) => {
+        handleSwipe(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
+      }, { passive: true });
+
+      deck.addEventListener("mousedown", (event) => {
+        if (event.button !== 0 || event.target.closest("a, button")) return;
+        pointerStartX = event.clientX;
+        pointerStartY = event.clientY;
+        isMouseDrag = true;
+        deck.style.cursor = "grabbing";
+      });
+      window.addEventListener("mouseup", (event) => {
+        if (!isMouseDrag) return;
+        isMouseDrag = false;
+        deck.style.cursor = "";
+        handleSwipe(event.clientX, event.clientY);
+      });
+
+      window.addEventListener("resize", () => updateDeck(false));
+      updateDeck(false);
+      requestAnimationFrame(() => deck.classList.remove("no-transition"));
+    })();
+  </script>
+</body>
+</html>
