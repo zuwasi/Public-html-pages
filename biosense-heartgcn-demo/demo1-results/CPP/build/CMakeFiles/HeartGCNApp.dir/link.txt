@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\HeartGCNApp.dir/objects.a
+C:\Qt\Tools\mingw1310_64\bin\ar.exe qc CMakeFiles\HeartGCNApp.dir/objects.a @CMakeFiles\HeartGCNApp.dir\objects1.rsp
+C:\Qt\Tools\mingw1310_64\bin\g++.exe -mwindows -Wl,--whole-archive CMakeFiles\HeartGCNApp.dir/objects.a -Wl,--no-whole-archive -o HeartGCNApp.exe -Wl,--out-implib,libHeartGCNApp.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\HeartGCNApp.dir\linkLibs.rsp

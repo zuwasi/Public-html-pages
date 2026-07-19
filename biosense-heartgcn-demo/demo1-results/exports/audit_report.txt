@@ -1,0 +1,19 @@
+HeartGCN Phase 2 paper-specific audit
+Paper: Meister et al., arXiv:2009.14068v1
+
+PASS: mean aggregation exact
+PASS: vertex update exact
+PASS: weighted LAT MSE
+PASS: QRS duration
+PASS: combined zero loss
+PASS: anisotropy eigenvalues
+PASS: fiber virtual length
+PASS: transverse virtual length
+PASS: travel time
+PASS: scar zero speed blocked
+PASS: grid propagation
+PASS: full-sample demonstrator
+
+Coverage: equations, dimensions, weighted loss, QRS special case, anisotropy, propagation, zero-speed boundary, and full-observation reconstruction.
+Result: 12/12 passed; 0 failed.
+LIMITATION: no clinical data, trained weights, source code, or 20-layer network were available; reported clinical MAEs are not reproduced.

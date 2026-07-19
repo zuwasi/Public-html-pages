@@ -1,0 +1,12 @@
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/heartgcn_core.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/HeartGCNApp.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/test_model.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/test.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/edit_cache.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/rebuild_cache.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/heartgcn_core_autogen_timestamp_deps.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/heartgcn_core_autogen.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/HeartGCNApp_autogen_timestamp_deps.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/HeartGCNApp_autogen.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/test_model_autogen_timestamp_deps.dir
+C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/CMakeFiles/test_model_autogen.dir

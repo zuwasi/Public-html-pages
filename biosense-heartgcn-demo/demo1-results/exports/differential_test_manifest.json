@@ -1,0 +1,33 @@
+{
+	"Phase":2,
+	"CppImplemented":false,
+	"Purpose":"Future C++ interoperability contracts only",
+	"Contracts":[
+		{
+			"Function":"WeightedLATMSE",
+			"Inputs":[
+				"prediction[]",
+				"truth[]",
+				"measuredMask[]"
+			],
+			"Tolerance":1.0e-12
+		},
+		{
+			"Function":"VirtualEdgeLength",
+			"Inputs":[
+				"edge[]",
+				"unitFiber[]",
+				"r"
+			],
+			"Tolerance":1.0e-12
+		},
+		{
+			"Function":"EdgeTravelTime",
+			"Inputs":[
+				"length",
+				"positiveSpeed"
+			],
+			"Tolerance":1.0e-12
+		}
+	]
+}

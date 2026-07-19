@@ -1,0 +1,78 @@
+<mxfile host="app.diagrams.net" modified="2026-07-19T00:00:00.000Z" agent="Amp" version="24.7.17">
+  <diagram id="paper-to-cpp-flow" name="Paper to Verified C++">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0" background="#07111F">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="Research Paper to Verified C++" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#F8FAFC;fontSize=34;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="30" width="1440" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" value="Mathematica verifies computation • Lean 4 proves selected claims • Parasoft verifies production C++" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontColor=#AFC4DB;fontSize=18;" vertex="1" parent="1">
+          <mxGeometry x="180" y="82" width="1240" height="34" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step1" value="&lt;b&gt;1. Paper Intake&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Claims • equations • figures • assumptions&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#233044;strokeColor=#64748B;strokeWidth=2;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="60" y="180" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step2" value="&lt;b&gt;2. Normalized Specification&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Domains • units • pre/postconditions&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#233044;strokeColor=#F59E0B;strokeWidth=2;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="340" y="180" width="250" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step3" value="&lt;b&gt;3. Mathematica Reference&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Symbolic + high-precision numerical oracle&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#45131A;strokeColor=#EF4444;strokeWidth=3;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="135" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step4" value="&lt;b&gt;4. Lean 4 Formal Lane&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Selected exact claims • optional and scoped&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#142A4A;strokeColor=#3B82F6;strokeWidth=3;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="660" y="280" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step5" value="&lt;b&gt;5. Freeze Verified Baseline&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Pinned versions • contracts • reference vectors&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#3D2B10;strokeColor=#F59E0B;strokeWidth=3;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1020" y="205" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="gateA" value="MODEL GATE" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#F59E0B;strokeColor=#FBBF24;fontColor=#111827;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1090" y="335" width="130" height="34" as="geometry" />
+        </mxCell>
+
+        <mxCell id="step6" value="&lt;b&gt;6. C++ Implementation&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Production algorithm • numerical contract&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#123443;strokeColor=#22D3EE;strokeWidth=3;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="1260" y="435" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step7" value="&lt;b&gt;7. Verification Test Assets&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Golden vectors • properties • robustness&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#233044;strokeColor=#A78BFA;strokeWidth=2;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="940" y="600" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step8" value="&lt;b&gt;8. Parasoft C/C++test&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Static analysis • tests • runtime • coverage&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#123C2B;strokeColor=#22C55E;strokeWidth=3;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="620" y="600" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step9" value="&lt;b&gt;9. Cross-Language Audit&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Wolfram ↔ C++ error and invariant checks&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#233044;strokeColor=#38BDF8;strokeWidth=2;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="300" y="600" width="270" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="step10" value="&lt;b&gt;10. Evidence &amp;amp; Release&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:14px&quot;&gt;Traceability • reports • known limitations&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=18;fillColor=#3A1B41;strokeColor=#E879F9;strokeWidth=3;fontColor=#F8FAFC;fontSize=20;spacing=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="220" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="gateB" value="RELEASE GATE" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#22C55E;strokeColor=#4ADE80;fontColor=#052E16;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="85" y="735" width="130" height="34" as="geometry" />
+        </mxCell>
+
+        <mxCell id="note3" value="Executable evidence" style="text;html=1;align=center;verticalAlign=middle;fontColor=#FCA5A5;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="105" width="170" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="note4" value="Formal evidence" style="text;html=1;align=center;verticalAlign=middle;fontColor=#93C5FD;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="710" y="395" width="170" height="24" as="geometry" />
+        </mxCell>
+        <mxCell id="note7a" value="Mathematica vectors" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#45131A;strokeColor=#EF4444;fontColor=#FECACA;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="730" width="145" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="note7b" value="Lean properties" style="rounded=1;whiteSpace=wrap;html=1;arcSize=40;fillColor=#142A4A;strokeColor=#3B82F6;fontColor=#BFDBFE;fontSize=12;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="980" y="768" width="145" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e12" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#94A3B8;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step1" target="step2"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e23" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step2" target="step3"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e24" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3B82F6;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step2" target="step4"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e35" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#EF4444;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step3" target="step5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e45" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#3B82F6;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step4" target="step5"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e56" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#F59E0B;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step5" target="step6"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e67" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#22D3EE;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step6" target="step7"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e78" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#A78BFA;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step7" target="step8"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e89" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#22C55E;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step8" target="step9"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="e910" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#38BDF8;strokeWidth=3;endArrow=block;endFill=1;" edge="1" parent="1" source="step9" target="step10"><mxGeometry relative="1" as="geometry" /></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
