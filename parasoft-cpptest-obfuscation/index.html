@@ -138,6 +138,18 @@
     .parasoft-link:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
     .parasoft-link img { display: block; width: 100%; height: 100%; object-fit: contain; }
 
+    .product-heading {
+      display: grid;
+      grid-template-columns: minmax(9rem, 12rem) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(1rem, 2vw, 1.5rem);
+      width: 100%;
+      margin-bottom: 1.1rem;
+    }
+    .product-heading h2 { margin-bottom: 0; }
+    .product-heading .parasoft-link { width: 100%; height: 3.4rem; }
+    .product-name { white-space: nowrap; }
+
     .license-pill {
       padding: .45rem .7rem;
       border: 1px solid rgb(105 232 168 / 30%);
@@ -485,6 +497,8 @@
       .brand img { width: 44px; height: 30px; }
       .partner-links { gap: .4rem; }
       .parasoft-link { width: 6.8rem; height: 2rem; padding: .4rem .55rem; }
+      .product-heading { grid-template-columns: 1fr; gap: .75rem; }
+      .product-heading .parasoft-link { width: 9rem; height: 2.6rem; }
       .license-pill { font-size: .62rem; }
       .matrix { grid-template-columns: 1.2fr .8fr; }
       .matrix .head:nth-child(3), .matrix .detail { display: none; }
@@ -720,13 +734,18 @@ Fn operation =
       </div>
     </section>
 
-    <section class="slide" aria-label="Parasoft capabilities and limitations">
+    <section class="slide" aria-label="Parasoft C/C++test capabilities and limitations">
       <div class="slide-inner">
         <div class="eyebrow">Capability boundary</div>
-        <h2>What C/C++test can—and <span>cannot</span>—promise</h2>
+        <div class="product-heading">
+          <a class="parasoft-link" href="https://eswlab.com/products/parasoft/static-code-analysis/parasoft-c-ctest/" target="_blank" rel="noopener noreferrer" aria-label="Learn more about Parasoft C/C++test at ESL" title="Parasoft C/C++test product page at ESL">
+            <img src="assets/parasoft.svg" alt="Parasoft">
+          </a>
+          <h2>What <span class="product-name">Parasoft C/C++test</span> can—and cannot—promise</h2>
+        </div>
         <div class="grid grid-2">
           <article class="card can">
-            <h3>Parasoft can</h3>
+            <h3>Parasoft C/C++test can</h3>
             <ul class="checklist">
               <li>Parse valid C/C++ with correct compiler and build context</li>
               <li>Find memory, resource, concurrency, and data-flow defects that survive obfuscation</li>
@@ -737,7 +756,7 @@ Fn operation =
             </ul>
           </article>
           <article class="card limit">
-            <h3>Parasoft cannot</h3>
+            <h3>Parasoft C/C++test cannot</h3>
             <ul class="xlist">
               <li>Resolve every encrypted value, callback, function pointer, or API hash</li>
               <li>Inspect packed binaries as if original source were present</li>
