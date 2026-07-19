@@ -194,6 +194,9 @@ Last updated: 2026-07-19
 • axelera-logo-white.png
   https://zuwasi.github.io/Public-html-pages/axelera-logo-white.png
 
+• biosense-heartgcn-demo
+  https://zuwasi.github.io/Public-html-pages/biosense-heartgcn-demo
+
 • cardioband-tr-wolfram-demo
   https://zuwasi.github.io/Public-html-pages/cardioband-tr-wolfram-demo
 
