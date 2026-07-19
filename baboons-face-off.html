@@ -9,6 +9,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="harness-site.css">
+<style>
+.citebadge{display:inline-block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--win);border:1px solid rgba(52,211,153,.34);background:rgba(52,211,153,.06);border-radius:99px;padding:6px 14px}
+.stat .note{font-size:.86rem;color:#c1cbd6;margin-top:8px;line-height:1.45}
+</style>
 </head>
 <body>
 
@@ -105,6 +109,68 @@
   <div class="cta">
     <a class="btn" href="baboons-benchmark-report.html" target="_blank" rel="noopener">Full benchmark report ↗</a>
     <a class="btn" href="https://github.com/zuwasi/Baboons-Over-London" target="_blank" rel="noopener">Repo (all 6 runs) ↗</a>
+  </div>
+</div></section>
+
+<!-- WHY THIS IS THE CONTROLLED EXPERIMENT -->
+<section id="science"><div class="wrap">
+  <div class="eyebrow">Why this is the cleanest harness test</div>
+  <h2>Same model, same prompt — the paper says<br>that is the only honest harness comparison.</h2>
+  <p class="p">The quantum benchmark on the previous page compares <i>different</i> models in <i>different</i>
+  harnesses, so a skeptic can argue the model is doing the work. This page cannot be argued away: both agents
+  ran <b>Claude Fable 5</b> on the <b>verbatim</b> prompt, so model capability is held constant and the
+  2.1× / 2.6× gap is <b>pure harness</b>.</p>
+
+  <p style="margin-top:16px"><span class="citebadge">matches the 2026 academic definition</span></p>
+  <p class="p" style="font-size:.92rem;color:#aeb8c4;max-width:820px;margin-top:12px">A May 2026 survey,
+  <i>Code as Agent Harness</i> (arXiv:2605.18747, UIUC × Meta × Stanford), names its <b>open problem #1</b> as
+  “harness-level evaluation and oracle adequacy” — the complaint that public benchmarks “conflate the
+  capabilities of the base model, the quality of the harness, the reliability of tools, the informativeness of
+  feedback, and the difficulty of the environment.” This experiment is designed to <b>not</b> conflate: the
+  model and the prompt are pinned, so only the harness can vary.</p>
+
+  <div class="callout">
+    <div class="quote" style="font-size:clamp(1.1rem,2.8vw,1.6rem)">“The state is not what the code looks
+    like but what the code does.” <span class="mut">— §4.3.1, on execution-based representation</span></div>
+  </div>
+
+  <p class="p" style="margin-top:20px">That is why this page asks you to <b>play</b> the games, not read the
+  code. The paper calls this an <i>execution-based</i> harness representation — the verdict is the runtime,
+  not a linguistic judgment. Four of the survey’s six harness-level metric dimensions are directly instantiated
+  here:</p>
+
+  <div class="stats">
+    <div class="stat">
+      <div class="lab">01 · Trajectory efficiency</div>
+      <div class="big amp">2.1× / 2.6×</div>
+      <div class="note">faster / cheaper — same model, so pure harness efficiency</div>
+    </div>
+    <div class="stat">
+      <div class="lab">03 · Recovery ability</div>
+      <div class="big amp">clean exit</div>
+      <div class="note">Amp exits clean; all 3 Claude runs hit an API error mid-build (HTML recoverable)</div>
+    </div>
+    <div class="stat">
+      <div class="lab">04 · State consistency</div>
+      <div class="big amp">controlled</div>
+      <div class="note">identical model + identical prompt — harness is the only independent variable</div>
+    </div>
+    <div class="stat">
+      <div class="lab">05 · Replayability</div>
+      <div class="big amp">playable</div>
+      <div class="note">the trajectory ships as a runnable game — you re-execute it by playing</div>
+    </div>
+  </div>
+
+  <p class="p" style="margin-top:24px">In the paper’s vocabulary, this is the experiment that isolates the
+  <b>harness as the independent variable</b> and uses <b>execution as the oracle</b>. Every other public
+  benchmark the survey cites (SWE-bench, OSWorld, MLE-bench…) varies the model alongside the harness and
+  then reports a single conflated score. The baboons face-off is the controlled-trial version of the same
+  idea — and it is the one a skeptic cannot dismiss as “maybe the other model was just better.”</p>
+
+  <div class="cta">
+    <a class="btn amp" href="#play">Play the games ↑</a>
+    <a class="btn" href="https://arxiv.org/pdf/2605.18747" target="_blank" rel="noopener">Read the survey on arXiv ↗</a>
   </div>
 </div></section>
 
