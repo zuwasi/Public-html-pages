@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-18
+Last updated: 2026-07-19
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -220,6 +220,9 @@ Last updated: 2026-07-18
 
 • og-how-i-use-amp.jpg
   https://zuwasi.github.io/Public-html-pages/og-how-i-use-amp.jpg
+
+• parasoft-cpptest-obfuscation
+  https://zuwasi.github.io/Public-html-pages/parasoft-cpptest-obfuscation
 
 • terratest-ampcode-esl-presentation
   https://zuwasi.github.io/Public-html-pages/terratest-ampcode-esl-presentation
