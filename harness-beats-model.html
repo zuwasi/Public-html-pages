@@ -858,6 +858,69 @@ code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88em;backgroun
   </section>
 
   <!-- 21 CLOSE -->
+  <!-- 20.5 THE RESEARCH AGREES -->
+  <section class="slide">
+    <div class="wrap">
+      <div class="kicker">Now the research agrees - arXiv:2605.18747</div>
+      <div class="h2">A 2026 survey names what this benchmark<br>has been measuring all along.</div>
+      <p class="p" style="margin-top:14px;max-width:980px">
+      A May 2026 UIUC x Meta x Stanford survey, <i>Code as Agent Harness</i>,
+      formalizes the exact thesis of this deck: the <b>harness</b> - not the base
+      model - is the bottleneck of agent autonomy. Its <b>open problem #1</b> is
+      "harness-level evaluation and oracle adequacy": public benchmarks
+      (SWE-bench, OSWorld, MLE-bench) score only final task success and "conflate
+      the capabilities of the base model, the quality of the harness, the
+      reliability of tools, the informativeness of feedback, and the difficulty
+      of the environment." The six dimensions the survey says a real harness
+      benchmark should measure - and the ESL result that already hits each one:
+      </p>
+      <div class="stats">
+        <div class="stat">
+          <div class="lab">01 - Trajectory efficiency</div>
+          <div class="big amp">39x / 24x</div>
+          <div class="note">cheaper &amp; faster - tokens, tool calls, wall-clock</div>
+        </div>
+        <div class="stat">
+          <div class="lab">02 - Verification strength</div>
+          <div class="big" style="color:var(--win)">12 + 247</div>
+          <div class="note">Lean 4 theorems + CBMC proofs behind the grader</div>
+        </div>
+        <div class="stat">
+          <div class="lab">03 - Recovery ability</div>
+          <div class="big amp">1.000 vs 0.889</div>
+          <div class="note">on NP-complete QMAP - self-repair where the other stalls</div>
+        </div>
+        <div class="stat">
+          <div class="lab">04 - State consistency</div>
+          <div class="big amp">controlled</div>
+          <div class="note">baboons: identical model + prompt - only the harness varies</div>
+        </div>
+        <div class="stat">
+          <div class="lab">05 - Replayability</div>
+          <div class="big amp">playable</div>
+          <div class="note">both games ship as the artifact - re-run and judge yourself</div>
+        </div>
+        <div class="stat">
+          <div class="lab">06 - Safety / governance</div>
+          <div class="big" style="color:var(--win)">formal-verify</div>
+          <div class="note">"human-in-the-loop safety as harness state" - auditable</div>
+        </div>
+      </div>
+      <div class="big-quote" style="margin-top:28px;border-left:3px solid var(--amp);padding-left:18px;color:#d7e0ea">
+        "The bottleneck of autonomy is not only the reasoning ability of the base
+        model, but also the reliability of the system that connects model outputs
+        to long-horizon actions and persistent states."
+        <span style="color:var(--muted);font-weight:600">- Sec 1, Code as Agent Harness</span>
+      </div>
+      <div class="foot">
+      Survey: <a href="https://arxiv.org/pdf/2605.18747" target="_blank" rel="noopener">arxiv.org/pdf/2605.18747</a>.
+      Also names the <b>Plan-Execute-Verify loop</b> this deck stress-tests, and the
+      harness-as-distillation-surface trend (Cursor RL, GPT-5.1-Codex-Max) -
+      measuring the harness now is how you avoid locking into a worse flywheel.
+      </div>
+    </div>
+  </section>
+
   <section class="slide">
     <div class="wrap" style="text-align:center">
       <div class="logorow" style="justify-content:center">

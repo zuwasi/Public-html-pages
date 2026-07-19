@@ -29,6 +29,15 @@ h1 a.hlink:hover{border-bottom-style:solid;text-decoration:none}
 .deckhint{font-size:.78rem;color:var(--muted);font-weight:500}
 .steps{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
 .steps .badge{font-size:.82rem}
+.sci-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:34px}
+@media(max-width:860px){.sci-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.sci-grid{grid-template-columns:1fr}}
+.sci{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;text-align:left}
+.sci .dim{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.sci .num{font-size:clamp(1.4rem,3.4vw,2rem);font-weight:900;line-height:1.05;margin-top:10px}
+.sci .num.amp{color:var(--amp)} .sci .num.win{color:var(--win)}
+.sci .desc{font-size:.86rem;color:#c1cbd6;margin-top:10px;line-height:1.5}
+.citebadge{display:inline-block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:var(--win);border:1px solid rgba(52,211,153,.34);background:rgba(52,211,153,.06);border-radius:99px;padding:6px 14px}
 </style>
 </head>
 <body>
@@ -85,6 +94,13 @@ h1 a.hlink:hover{border-bottom-style:solid;text-decoration:none}
   and checks its own work. Give two agents the <i>identical</i> model and task, and the better harness wins on
   time and dollars while matching quality. The Kaggle <i>“New SDLC with Vibe Coding”</i> whitepaper argues the
   harness carries the overwhelming share of the outcome — our results are consistent with that.</p>
+  <p style="margin-top:16px"><span class="citebadge">matches the 2026 academic definition</span></p>
+  <p class="p" style="font-size:.92rem;color:#aeb8c4;max-width:820px;margin-top:12px">A May 2026 survey from
+  UIUC × Meta × Stanford (<i>Code as Agent Harness</i>, arXiv:2605.18747) defines the harness almost
+  word-for-word the same way: “the software layer that surrounds an LLM with tools, APIs, sandboxes, memory,
+  validators, permission boundaries, execution loops, and feedback channels, thereby turning a stateless
+  model into a functional agent.” The car metaphor above is not marketing spin — it is the field’s emerging
+  consensus.</p>
 </div></section>
 
 <!-- THREE EXPERIMENTS, each with its result on the card -->
@@ -136,6 +152,83 @@ h1 a.hlink:hover{border-bottom-style:solid;text-decoration:none}
       </div>
     </article>
 
+  </div>
+</div></section>
+
+<!-- THE SCIENCE IS CATCHING UP -->
+<section id="science"><div class="wrap">
+  <div class="eyebrow">Now the research agrees</div>
+  <h2>A 2026 survey names what ESL<br>has been measuring all along.</h2>
+  <p class="p">In May 2026, a 66-page survey <i>“Code as Agent Harness”</i> (arXiv:2605.18747, UIUC × Meta ×
+  Stanford) formalized the exact thesis of this site: the <b>harness</b> — not the base model — is the
+  bottleneck of agent autonomy. Its <b>open problem #1</b> is “harness-level evaluation and oracle adequacy,”
+  the complaint that almost every public benchmark (SWE-bench, OSWorld, AndroidWorld, MLE-bench…) scores
+  only <b>final task success</b> and thereby “conflates the capabilities of the base model, the quality of the
+  harness, the reliability of tools, the informativeness of feedback, and the difficulty of the environment.”
+  The survey lists the six dimensions a real harness benchmark should measure. Here they are — with the ESL
+  result that already hits each one.</p>
+
+  <div class="callout">
+    <div class="quote">“The bottleneck of autonomy is not only the reasoning ability of the base model, but
+    also the reliability of the system that connects model outputs to long-horizon actions and persistent
+    states.” <span class="mut">— Code as Agent Harness, §1</span></div>
+  </div>
+
+  <div class="sci-grid">
+    <div class="sci">
+      <div class="dim">01 · Trajectory efficiency</div>
+      <div class="num amp">39× / 24×</div>
+      <div class="desc">cheaper &amp; faster on the quantum benchmark — tokens, tool calls, wall-clock time, the survey’s first metric.</div>
+    </div>
+    <div class="sci">
+      <div class="dim">02 · Verification strength</div>
+      <div class="num win">12 + 247</div>
+      <div class="desc">Lean 4 machine-checked theorems + CBMC automated proofs backing the grader — no weak oracle, no false “green test.”</div>
+    </div>
+    <div class="sci">
+      <div class="dim">03 · Recovery ability</div>
+      <div class="num amp">1.000 vs 0.889</div>
+      <div class="desc">on NP-complete QMAP — the better harness self-repairs where the weaker one stalls and misjudges the task.</div>
+    </div>
+    <div class="sci">
+      <div class="dim">04 · State consistency</div>
+      <div class="num amp">controlled</div>
+      <div class="desc">baboons game: identical model + identical prompt — the harness is the only variable, no belief-state drift.</div>
+    </div>
+    <div class="sci">
+      <div class="dim">05 · Replayability</div>
+      <div class="num amp">playable</div>
+      <div class="desc">both games ship as the artifact — “the trajectory is the deliverable,” you can re-run and judge it yourself.</div>
+    </div>
+    <div class="sci">
+      <div class="dim">06 · Safety / governance</div>
+      <div class="num win">formal-verify</div>
+      <div class="desc">Lean 4 / CBMC pilots instantiate the survey’s “human-in-the-loop safety as harness state” — accountability you can audit.</div>
+    </div>
+  </div>
+
+  <p class="p" style="margin-top:30px">The survey also names the <b>Plan–Execute–Verify (PEV) loop</b> as the
+  control structure that separates a good harness from a brittle one: planning forms a contract over the
+  intended change, execution runs inside a sandboxed and permissioned environment, and verification uses
+  deterministic sensors — tests, linters, fuzzers, type checkers — to decide whether to accept, revise, or
+  escalate. That is precisely the loop our two experiments stress-test, and precisely where Amp’s harness beat
+  Claude Code’s on the <i>same</i> model. A harness that skips Verify is a harness that confuses motion with
+  progress.</p>
+
+  <p class="p">One more idea the survey makes explicit and ESL leans into: the harness is no longer just
+  deployment infrastructure — it is becoming a <b>distillation surface</b>. Cursor trains on its own usage
+  traces; OpenAI’s GPT-5.1-Codex-Max is trained on long-horizon coding interactions that mirror the Codex
+  harness loop. The implication for buyers: the agent you pick today is also the data flywheel that shapes
+  the model you get tomorrow. Measuring the harness now is how you avoid locking into a worse flywheel later.</p>
+
+  <div class="callout c">
+    <div class="quote" style="font-size:clamp(1.05rem,2.6vw,1.5rem)">The paper names harness-level
+    evaluation as the field’s #1 open problem. ESL has been shipping it.</div>
+  </div>
+
+  <div class="cta">
+    <a class="btn amp" href="#experiments">See the experiments behind those numbers ↓</a>
+    <a class="btn" href="https://arxiv.org/pdf/2605.18747" target="_blank" rel="noopener">Read the survey on arXiv ↗</a>
   </div>
 </div></section>
 
