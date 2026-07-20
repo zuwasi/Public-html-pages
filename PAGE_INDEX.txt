@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-19
+Last updated: 2026-07-20
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -148,13 +148,16 @@ Last updated: 2026-07-19
 46. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-47. static-code-analysis-2026.html
+47. skillspector-droid-locate-and-judge.html
+   https://zuwasi.github.io/Public-html-pages/skillspector-droid-locate-and-judge.html
+
+48. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-48. why-amp-doesnt-need-node9-proxy.html
+49. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-49. wolfram-engine-gpu-demo-presentation.html
+50. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
