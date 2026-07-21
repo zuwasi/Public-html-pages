@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SBOMator DataBOM — An SBOM for Your AI Training Data</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b1220; --bg2:#101a30; --card:#141f38; --card2:#182544;
+  --accent:#38bdf8; --accent2:#818cf8; --good:#34d399; --warn:#fbbf24; --bad:#f87171;
+  --text:#e6edf7; --muted:#93a4bf; --line:#25355c;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+.deck{display:flex;height:100vh;width:100vw;transition:transform .45s cubic-bezier(.4,0,.2,1);will-change:transform}
+.slide{flex:0 0 100vw;width:100vw;height:100vh;display:flex;flex-direction:column;
+  justify-content:center;align-items:center;padding:clamp(20px,4vw,64px);position:relative;overflow-y:auto}
+.slide::-webkit-scrollbar{display:none}
+.brand{position:absolute;top:clamp(12px,2vh,24px);left:clamp(16px,3vw,40px);display:flex;align-items:center;gap:12px;opacity:.95}
+.brand img{height:clamp(30px,4.5vh,46px);width:auto}
+.brand span{font-weight:700;font-size:clamp(.8rem,1.4vw,1rem);letter-spacing:.06em;color:var(--muted)}
+.kicker{font-size:clamp(.72rem,1.3vw,.95rem);font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);margin-bottom:clamp(10px,2vh,18px)}
+h1{font-size:clamp(1.7rem,4.6vw,3.6rem);font-weight:900;line-height:1.12;text-align:center;max-width:1000px}
+h2{font-size:clamp(1.3rem,3.2vw,2.4rem);font-weight:800;line-height:1.15;margin-bottom:clamp(14px,3vh,28px);text-align:center;max-width:1000px}
+.sub{font-size:clamp(.95rem,1.8vw,1.25rem);color:var(--muted);max-width:820px;text-align:center;line-height:1.55;margin-top:clamp(10px,2vh,20px)}
+.grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(10px,1.6vw,20px);max-width:1120px;width:100%}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:clamp(14px,2vw,24px)}
+.card h3{font-size:clamp(.95rem,1.6vw,1.15rem);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.card p{font-size:clamp(.8rem,1.35vw,.98rem);color:var(--muted);line-height:1.5}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;font-size:clamp(.65rem,1.1vw,.8rem);font-weight:700;letter-spacing:.05em}
+.pill.red{background:rgba(248,113,113,.14);color:var(--bad);border:1px solid rgba(248,113,113,.35)}
+.pill.green{background:rgba(52,211,153,.14);color:var(--good);border:1px solid rgba(52,211,153,.35)}
+.pill.blue{background:rgba(56,189,248,.14);color:var(--accent);border:1px solid rgba(56,189,248,.35)}
+table{border-collapse:collapse;width:100%;max-width:1060px;font-size:clamp(.74rem,1.3vw,.98rem)}
+th,td{padding:clamp(7px,1.2vh,13px) clamp(10px,1.4vw,18px);text-align:left;border-bottom:1px solid var(--line);line-height:1.4}
+th{color:var(--accent);font-weight:700;letter-spacing:.04em;font-size:clamp(.7rem,1.2vw,.9rem);text-transform:uppercase}
+td:first-child{font-weight:600}
+td{color:var(--text)} td .dim{color:var(--muted)}
+.big-num{font-size:clamp(2.2rem,6vw,4.2rem);font-weight:900;line-height:1}
+.stat-row{display:flex;gap:clamp(16px,3vw,48px);flex-wrap:wrap;justify-content:center;margin-top:clamp(16px,3vh,32px)}
+.stat{text-align:center;min-width:150px}
+.stat .lbl{font-size:clamp(.72rem,1.2vw,.9rem);color:var(--muted);margin-top:6px;line-height:1.4}
+.cta-btn{display:inline-block;margin-top:clamp(18px,3.5vh,34px);padding:clamp(12px,2vh,18px) clamp(28px,4vw,52px);
+  background:linear-gradient(90deg,var(--accent),var(--accent2));color:#08101f;font-weight:800;
+  font-size:clamp(.95rem,1.8vw,1.2rem);border-radius:12px;text-decoration:none;letter-spacing:.03em;
+  box-shadow:0 8px 30px rgba(56,189,248,.35);transition:transform .15s}
+.cta-btn:hover{transform:translateY(-2px)}
+.link{color:var(--accent);text-decoration:none;border-bottom:1px dashed rgba(56,189,248,.5)}
+.quote{border-left:4px solid var(--accent);padding:clamp(12px,2vh,20px) clamp(16px,2.5vw,28px);
+  background:var(--card);border-radius:0 12px 12px 0;max-width:900px;font-size:clamp(.95rem,1.9vw,1.3rem);
+  line-height:1.6;font-weight:500;margin-top:clamp(14px,2.5vh,26px)}
+.quote .src{display:block;margin-top:10px;font-size:clamp(.7rem,1.2vw,.85rem);color:var(--muted);font-weight:400}
+.nav{position:fixed;top:50%;transform:translateY(-50%);width:clamp(38px,4.5vw,54px);height:clamp(38px,4.5vw,54px);
+  border-radius:50%;background:rgba(20,31,56,.85);border:1px solid var(--line);color:var(--text);
+  font-size:clamp(1.2rem,2.2vw,1.7rem);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  z-index:50;user-select:none;transition:opacity .25s,background .15s}
+.nav:hover{background:var(--card2)}
+.nav.prev{left:clamp(8px,1.5vw,20px)} .nav.next{right:clamp(8px,1.5vw,20px)}
+.nav.hidden{opacity:0;pointer-events:none}
+.progress{position:fixed;bottom:0;left:0;height:4px;width:100%;background:rgba(255,255,255,.07);z-index:50}
+.progress .fill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .4s}
+.counter{position:fixed;bottom:14px;right:18px;font-size:clamp(.7rem,1.2vw,.85rem);color:var(--muted);z-index:50;font-weight:600}
+.hint{position:absolute;bottom:clamp(40px,8vh,70px);left:50%;transform:translateX(-50%);
+  color:var(--muted);font-size:clamp(.75rem,1.4vw,.95rem);animation:pulse 2s infinite;white-space:nowrap}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:.9}}
+.logo-hero{height:clamp(60px,11vh,110px);width:auto;margin-bottom:clamp(18px,3.5vh,34px)}
+.flow{display:flex;align-items:center;gap:clamp(6px,1vw,14px);flex-wrap:wrap;justify-content:center;margin-top:clamp(14px,2.5vh,26px)}
+.flow .step{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:clamp(10px,1.6vh,16px) clamp(12px,1.8vw,22px);
+  font-size:clamp(.78rem,1.4vw,1rem);font-weight:600;text-align:center}
+.flow .arrow{color:var(--accent);font-size:clamp(1rem,1.8vw,1.4rem);font-weight:800}
+/* Product mockup — mimics the real ESL-SBOMator tkinter UI (clam theme) */
+.mockup{width:100%;max-width:980px;border-radius:10px;overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.55);border:1px solid #3a4a6b;
+  font-family:'Segoe UI',Tahoma,sans-serif;text-align:left}
+.mk-titlebar{background:#1f2b3e;color:#fff;display:flex;justify-content:space-between;align-items:center;
+  padding:7px 12px;font-size:clamp(.7rem,1.2vw,.85rem);font-weight:600}
+.mk-winbtns i{font-style:normal;margin-left:14px;color:#b8c4d6;font-size:.9em}
+.mk-winbtns .mk-x{color:#f87171}
+.mk-tabs{background:#e0e0e0;display:flex;flex-wrap:wrap;border-bottom:1px solid #bdbdbd}
+.mk-tabs span{padding:6px 12px;font-size:clamp(.58rem,1vw,.78rem);color:#333;border-right:1px solid #cfcfcf;background:#e0e0e0;white-space:nowrap}
+.mk-tabs .mk-tab-active{background:#f0f0f0;font-weight:700;color:#000;border-top:3px solid #4a90d9;padding-top:3px}
+.mk-body{background:#f0f0f0;padding:clamp(10px,1.6vw,18px);color:#000}
+.mk-frame{border:1px solid #bdbdbd;border-radius:4px;margin-bottom:clamp(8px,1.4vh,14px);padding:clamp(8px,1.4vw,14px);background:#f0f0f0;position:relative}
+.mk-frame-title{position:absolute;top:-9px;left:10px;background:#f0f0f0;padding:0 6px;font-size:clamp(.6rem,1vw,.78rem);font-weight:700;color:#1f2b3e}
+.mk-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+.mk-row label{font-size:clamp(.62rem,1.05vw,.8rem);font-weight:600}
+.mk-entry{background:#fff;border:1px solid #9a9a9a;padding:4px 8px;font-size:clamp(.6rem,1vw,.78rem);min-width:180px;color:#222}
+.mk-btn{background:#e8e8e8;border:1px solid #9a9a9a;border-radius:3px;padding:4px 10px;font-size:clamp(.6rem,1vw,.78rem);color:#222;white-space:nowrap}
+.mk-btn-primary{background:#4a90d9;color:#fff;border-color:#3a7bc0;font-weight:600}
+.mk-status{margin-left:auto;color:#2e7d32;font-size:clamp(.6rem,1vw,.78rem);font-weight:600}
+.mk-result{font-size:clamp(.6rem,1.05vw,.8rem);padding:3px 0;color:#222;line-height:1.45}
+.mk-ok{color:#2e7d32;font-weight:700;margin-right:6px}
+.mk-warn{color:#e65100;font-weight:700;margin-right:6px}
+.mk-bad{color:#c62828;font-weight:700;margin-right:6px}
+.mk-score{margin-top:8px;font-size:clamp(.62rem,1.1vw,.82rem);font-weight:600;color:#1f2b3e;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.mk-bar{display:inline-block;width:clamp(120px,22vw,260px);height:10px;background:#d0d0d0;border:1px solid #9a9a9a;border-radius:5px;overflow:hidden}
+.mk-bar-fill{display:block;height:100%;background:linear-gradient(90deg,#4a90d9,#2e7d32)}
+.mk-outputs{margin-top:8px;font-size:clamp(.58rem,1vw,.76rem);color:#333;border-top:1px dashed #bdbdbd;padding-top:6px}
+.mk-local{color:#2e7d32;font-weight:700}
+@media (max-width:640px){
+  .cards{grid-template-columns:1fr}
+  table{font-size:.68rem} th,td{padding:6px 8px}
+  .stat-row{gap:14px}
+  .mk-tabs span{font-size:.5rem;padding:4px 6px}
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- Slide 1 — Title -->
+  <section class="slide">
+    <img class="logo-hero" src="images/esl-logo.png" alt="ESL logo">
+    <div class="kicker">ESL &middot; SBOMator</div>
+    <h1>Your AI Training Data<br>Now Needs an <span class="grad">SBOM</span></h1>
+    <p class="sub">Europe's regulators just made dataset provenance a compliance requirement.<br>
+    SBOMator already speaks that language — <b>100% local, air-gap ready, zero data leaves your PC.</b></p>
+    <div class="hint" id="hint">&larr; Swipe to navigate &rarr;</div>
+  </section>
+
+  <!-- Slide 2 — What happened -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Problem &middot; July 7, 2026</div>
+    <h2>The EDPB Adopted Guidelines 03/2026 on<br>Web Scraping for Generative AI</h2>
+    <div class="quote">
+      "Publicly available" is <b>not</b> an exemption. Web scraping for AI training is fully regulated
+      under the GDPR — collection, storage, structuring, and reuse.
+      <span class="src">EDPB Guidelines 03/2026, adopted 7 July 2026 &middot; public consultation until 30 October 2026 &middot; final version expected end of 2026</span>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><div class="big-num grad">Art. 6</div><div class="lbl">Documented legal basis<br>required per source</div></div>
+      <div class="stat"><div class="big-num grad">Art. 9</div><div class="lbl">Sensitive-data safeguards<br>across the full lifecycle</div></div>
+      <div class="stat"><div class="big-num grad">Art. 14</div><div class="lbl">Searchable source list<br>with collection dates</div></div>
+    </div>
+  </section>
+
+  <!-- Slide 3 — What regulators demand -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Problem &middot; The New Checklist</div>
+    <h2>What You Must Now Evidence — For Every Dataset</h2>
+    <div class="cards">
+      <div class="card"><h3><span class="pill red">DEMAND</span> Source inventory</h3>
+        <p>A searchable list of scraped domains and URLs, with collection dates and periods — published, not just filed away.</p></div>
+      <div class="card"><h3><span class="pill red">DEMAND</span> PII minimization</h3>
+        <p>Syntax-based filters for identifiers — emails, ID numbers, financial data — applied and documented before training.</p></div>
+      <div class="card"><h3><span class="pill red">DEMAND</span> Special-category control</h3>
+        <p>Health, political, ethnic, religious content: incidental collection tolerated only with demonstrable lifecycle safeguards.</p></div>
+      <div class="card"><h3><span class="pill red">DEMAND</span> Opt-out respect</h3>
+        <p>robots.txt, ai.txt, CAPTCHAs and login walls now carry weight in the GDPR balancing test. Ignoring them has legal consequences.</p></div>
+      <div class="card"><h3><span class="pill red">DEMAND</span> Supply-chain evidence</h3>
+        <p>Bought a scraped dataset? You must document its sources, exclusion criteria, warranties and the originating controller.</p></div>
+      <div class="card"><h3><span class="pill red">DEMAND</span> Accountability on paper</h3>
+        <p>Legitimate-interest assessments and DPIAs, case by case. The first thing an authority will ask for is your documentation.</p></div>
+    </div>
+  </section>
+
+  <!-- Slide 4 — Why this is hard -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Problem &middot; Why It Hurts</div>
+    <h2>A Trained Model Cannot Be Patched</h2>
+    <p class="sub">Software provenance failures can be fixed after the fact — re-scan, patch, redeploy.<br>
+    Data provenance failures are <b>permanent</b>: the EDPB itself notes that removing personal data from a trained model is close to impossible.</p>
+    <div class="stat-row">
+      <div class="stat"><div class="big-num" style="color:var(--bad)">4%</div><div class="lbl">of global annual turnover —<br>maximum GDPR fine exposure</div></div>
+      <div class="stat"><div class="big-num" style="color:var(--warn)">0</div><div class="lbl">ways to "untrain" personal data<br>out of a shipped model</div></div>
+      <div class="stat"><div class="big-num" style="color:var(--accent)">100%</div><div class="lbl">of the evidence must exist<br><b>before</b> training starts</div></div>
+    </div>
+    <div class="quote" style="margin-top:clamp(18px,3vh,30px)">
+      It is no longer enough to know you <i>have</i> a dataset.<br>You must know its <b>provenance</b>.
+    </div>
+  </section>
+
+  <!-- Slide 5 — The analogy -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Insight</div>
+    <h2>This Is Exactly What SBOMs Did to Software</h2>
+    <table>
+      <tr><th>Software supply chain (SBOM)</th><th>AI training data (EDPB 03/2026)</th></tr>
+      <tr><td>Component inventory — what's in the build</td><td>Source list — domains, URLs, searchable</td></tr>
+      <tr><td>Version &amp; timestamp per component</td><td>Collection date per source</td></tr>
+      <tr><td>Supplier identity</td><td>Originating controller &amp; contact point</td></tr>
+      <tr><td>License compliance per component</td><td>Legal basis per source</td></tr>
+      <tr><td>Vulnerability scan against inventory</td><td>PII &amp; special-category screening</td></tr>
+      <tr><td>Attestations when buying binaries</td><td>Warranties when buying datasets</td></tr>
+    </table>
+    <p class="sub">EO 14028, FDA and the EU CRA made SBOMs mandatory after software learned this lesson the hard way.<br>The EDPB is applying the same principle to data — <b>before</b> the incident that forces it.</p>
+  </section>
+
+  <!-- Slide 6 — The solution -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Solution</div>
+    <h2><span class="grad">SBOMator DataBOM</span> — Dataset Provenance,<br>Scanned Like Firmware</h2>
+    <p class="sub">The same scanner your security team already trusts for firmware SBOMs<br>now generates the provenance evidence regulators expect for AI training data.</p>
+    <div class="flow">
+      <div class="step">Dataset<br><span style="color:var(--muted);font-weight:400">directory &middot; archive &middot; JSONL / CSV / Parquet &middot; crawl logs</span></div>
+      <div class="arrow">&rarr;</div>
+      <div class="step" style="border-color:var(--accent)">SBOMator<br>DataBOM scan</div>
+      <div class="arrow">&rarr;</div>
+      <div class="step">HTML provenance report<br><span style="color:var(--muted);font-weight:400">+ CycloneDX ML-BOM</span></div>
+    </div>
+    <p class="sub" style="margin-top:clamp(16px,3vh,28px)">Runs entirely on your machine. Your dataset never leaves your PC.</p>
+  </section>
+
+  <!-- Slide 7 — Workflow diagram -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Solution &middot; How It Works</div>
+    <h2>Everything Happens Inside <span class="grad">Your</span> Perimeter</h2>
+    <svg viewBox="0 0 1180 520" style="width:100%;max-width:1100px;height:auto" role="img" aria-label="SBOMator DataBOM air-gapped workflow diagram">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#38bdf8"/>
+        </marker>
+        <marker id="arrG" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#34d399"/>
+        </marker>
+        <linearGradient id="engineGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#0e2a4a"/><stop offset="1" stop-color="#123a63"/>
+        </linearGradient>
+      </defs>
+
+      <!-- Outside world -->
+      <rect x="15" y="70" width="230" height="360" rx="14" fill="#141f38" stroke="#25355c"/>
+      <text x="130" y="102" text-anchor="middle" fill="#93a4bf" font-size="17" font-weight="700" font-family="Inter,sans-serif">PUBLIC INTERNET</text>
+      <rect x="40" y="130" width="180" height="62" rx="10" fill="#182544" stroke="#25355c"/>
+      <text x="130" y="156" text-anchor="middle" fill="#e6edf7" font-size="15" font-weight="600" font-family="Inter,sans-serif">NVD / OSV</text>
+      <text x="130" y="176" text-anchor="middle" fill="#93a4bf" font-size="12" font-family="Inter,sans-serif">public databases only</text>
+      <rect x="40" y="212" width="180" height="62" rx="10" fill="#182544" stroke="#25355c"/>
+      <text x="130" y="238" text-anchor="middle" fill="#e6edf7" font-size="15" font-weight="600" font-family="Inter,sans-serif">Offline DB bundle</text>
+      <text x="130" y="258" text-anchor="middle" fill="#93a4bf" font-size="12" font-family="Inter,sans-serif">USB / one-way transfer</text>
+      <text x="130" y="330" text-anchor="middle" fill="#93a4bf" font-size="12.5" font-family="Inter,sans-serif">Contains no customer data.</text>
+      <text x="130" y="350" text-anchor="middle" fill="#93a4bf" font-size="12.5" font-family="Inter,sans-serif">Never sees your dataset.</text>
+
+      <!-- Air gap boundary -->
+      <line x1="290" y1="30" x2="290" y2="490" stroke="#f87171" stroke-width="3" stroke-dasharray="12 8"/>
+      <text x="290" y="20" text-anchor="middle" fill="#f87171" font-size="14" font-weight="800" letter-spacing="2" font-family="Inter,sans-serif">AIR GAP</text>
+      <path d="M245 243 L330 243" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrG)"/>
+      <text x="288" y="232" text-anchor="middle" fill="#34d399" font-size="11.5" font-weight="600" font-family="Inter,sans-serif">inbound only</text>
+
+      <!-- Customer perimeter -->
+      <rect x="330" y="40" width="835" height="440" rx="16" fill="none" stroke="#34d399" stroke-width="2.5"/>
+      <rect x="352" y="28" width="470" height="26" rx="6" fill="#0b1220"/>
+      <text x="365" y="46" fill="#34d399" font-size="15" font-weight="800" letter-spacing="1.5" font-family="Inter,sans-serif">CUSTOMER PC &middot; YOUR SECURITY PERIMETER</text>
+
+      <!-- Dataset inputs -->
+      <rect x="360" y="95" width="200" height="150" rx="12" fill="#141f38" stroke="#25355c"/>
+      <text x="460" y="123" text-anchor="middle" fill="#38bdf8" font-size="14" font-weight="700" letter-spacing="1" font-family="Inter,sans-serif">TRAINING DATASET</text>
+      <text x="460" y="150" text-anchor="middle" fill="#e6edf7" font-size="13" font-family="Inter,sans-serif">JSONL &middot; CSV &middot; Parquet</text>
+      <text x="460" y="172" text-anchor="middle" fill="#e6edf7" font-size="13" font-family="Inter,sans-serif">directories &middot; archives</text>
+      <text x="460" y="194" text-anchor="middle" fill="#e6edf7" font-size="13" font-family="Inter,sans-serif">crawl logs</text>
+      <text x="460" y="224" text-anchor="middle" fill="#93a4bf" font-size="12" font-style="italic" font-family="Inter,sans-serif">stays on disk, in place</text>
+
+      <!-- Engine -->
+      <rect x="620" y="80" width="250" height="185" rx="14" fill="url(#engineGrad)" stroke="#38bdf8" stroke-width="2"/>
+      <text x="745" y="110" text-anchor="middle" fill="#ffffff" font-size="17" font-weight="800" font-family="Inter,sans-serif">SBOMator DataBOM</text>
+      <text x="745" y="130" text-anchor="middle" fill="#7dd3fc" font-size="12.5" font-weight="600" font-family="Inter,sans-serif">local scan engine</text>
+      <text x="745" y="158" text-anchor="middle" fill="#e6edf7" font-size="12.5" font-family="Inter,sans-serif">Source inventory &amp; timestamps</text>
+      <text x="745" y="178" text-anchor="middle" fill="#e6edf7" font-size="12.5" font-family="Inter,sans-serif">PII &amp; secrets detection</text>
+      <text x="745" y="198" text-anchor="middle" fill="#e6edf7" font-size="12.5" font-family="Inter,sans-serif">Art. 9 content flags</text>
+      <text x="745" y="218" text-anchor="middle" fill="#e6edf7" font-size="12.5" font-family="Inter,sans-serif">Opt-out signal audit</text>
+      <text x="745" y="238" text-anchor="middle" fill="#e6edf7" font-size="12.5" font-family="Inter,sans-serif">Provenance scoring</text>
+
+      <path d="M560 170 L615 170" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arr)"/>
+
+      <!-- Outputs -->
+      <rect x="930" y="80" width="215" height="82" rx="12" fill="#141f38" stroke="#34d399"/>
+      <text x="1037" y="112" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" font-family="Inter,sans-serif">HTML Provenance Report</text>
+      <text x="1037" y="136" text-anchor="middle" fill="#93a4bf" font-size="12" font-family="Inter,sans-serif">evidence for DPO / DPIA</text>
+      <rect x="930" y="182" width="215" height="82" rx="12" fill="#141f38" stroke="#34d399"/>
+      <text x="1037" y="214" text-anchor="middle" fill="#34d399" font-size="14" font-weight="700" font-family="Inter,sans-serif">CycloneDX ML-BOM</text>
+      <text x="1037" y="238" text-anchor="middle" fill="#93a4bf" font-size="12" font-family="Inter,sans-serif">machine-readable, standard</text>
+      <path d="M875 121 L925 121" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrG)"/>
+      <path d="M875 223 L925 223" stroke="#34d399" stroke-width="2.5" marker-end="url(#arrG)"/>
+
+      <!-- Local storage note -->
+      <rect x="360" y="300" width="785" height="70" rx="12" fill="#10241c" stroke="#34d399" stroke-dasharray="6 4"/>
+      <text x="752" y="330" text-anchor="middle" fill="#34d399" font-size="15" font-weight="700" font-family="Inter,sans-serif">Dataset, findings and reports never leave this box</text>
+      <text x="752" y="352" text-anchor="middle" fill="#93a4bf" font-size="13" font-family="Inter,sans-serif">No uploads &middot; no telemetry &middot; no cloud processing &middot; no vendor access</text>
+
+      <!-- Blocked outbound -->
+      <path d="M360 430 L270 430" stroke="#f87171" stroke-width="2.5" stroke-dasharray="8 6" marker-end="none"/>
+      <line x1="300" y1="412" x2="330" y2="448" stroke="#f87171" stroke-width="4"/>
+      <line x1="330" y1="412" x2="300" y2="448" stroke="#f87171" stroke-width="4"/>
+      <text x="430" y="422" fill="#f87171" font-size="13.5" font-weight="700" font-family="Inter,sans-serif">Outbound customer data: blocked by design</text>
+      <text x="430" y="444" fill="#93a4bf" font-size="12.5" font-family="Inter,sans-serif">there is nothing to DPA, nothing to transfer, nothing to breach at the vendor</text>
+    </svg>
+  </section>
+
+  <!-- Slide 8 — Report mapped to regulation -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Solution &middot; One Report, Every Requirement</div>
+    <h2>Each Report Section Maps to an EDPB Demand</h2>
+    <table>
+      <tr><th>DataBOM report section</th><th>EDPB requirement it evidences</th></tr>
+      <tr><td>Source inventory <span class="dim">— domains, counts, dates</span></td><td>Art. 14(5)(b) transparency source list</td></tr>
+      <tr><td>PII scan <span class="dim">— emails, IDs, IPs, GPS</span></td><td>Data-minimization filters</td></tr>
+      <tr><td>Special-category flags <span class="dim">— with review samples</span></td><td>Art. 9 lifecycle safeguards</td></tr>
+      <tr><td>Secrets scan</td><td>Security &amp; minimization</td></tr>
+      <tr><td>Opt-out signal status <span class="dim">— robots.txt / ai.txt</span></td><td>Reasonable-expectations balancing</td></tr>
+      <tr><td>Risky-source flags <span class="dim">— minor-directed, sensitive sites</span></td><td>Source-exclusion expectation</td></tr>
+      <tr><td><b>Provenance completeness score</b></td><td>Accountability &middot; DPIA input</td></tr>
+    </table>
+    <p class="sub">An <b>evidence generator</b> for your DPO and legal team — the documented inputs a<br>legitimate-interest assessment and DPIA are built on.</p>
+  </section>
+
+  <!-- Slide 9 — Product mockup -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Solution &middot; In the Product</div>
+    <h2>The DataBOM Tab — Right Next to Your Firmware Scans</h2>
+    <div class="mockup">
+      <div class="mk-titlebar"><span class="mk-title">ESL-SBOMator v1.3.4</span><span class="mk-winbtns"><i>&#8211;</i><i>&#9633;</i><i class="mk-x">&#10005;</i></span></div>
+      <div class="mk-tabs">
+        <span>Databases</span><span>Project Scan</span><span>&#128274; NVD Database</span><span>&#128275; OSV Database</span><span>&#128203; Report Information</span><span>&#129302; AI/ML SBOM Add-on</span><span class="mk-tab-active">&#128194; DataBOM Dataset Scan</span>
+      </div>
+      <div class="mk-body">
+        <div class="mk-frame">
+          <div class="mk-frame-title">Dataset Provenance Scan</div>
+          <div class="mk-row">
+            <label>Dataset:</label>
+            <span class="mk-entry">C:\Datasets\crawl_2026_q2\</span>
+            <span class="mk-btn">Browse&hellip;</span>
+            <span class="mk-btn mk-btn-primary">Start Dataset Scan</span>
+            <span class="mk-btn">&#128202; Generate Provenance Report</span>
+            <span class="mk-status">&#9679; ESL Ready &middot; Offline mode</span>
+          </div>
+        </div>
+        <div class="mk-frame">
+          <div class="mk-frame-title">Last scan &mdash; crawl_2026_q2 &middot; 1,247,880 records</div>
+          <div class="mk-result"><span class="mk-ok">&#10004;</span> Source inventory: <b>4,318 domains</b> &middot; collection timestamps present for 96% of records</div>
+          <div class="mk-result"><span class="mk-warn">&#9888;</span> PII detected: <b>12,407 findings</b> (emails 8,112 &middot; phone numbers 3,051 &middot; national IDs 1,244) &mdash; review list generated</div>
+          <div class="mk-result"><span class="mk-warn">&#9888;</span> Special-category (Art. 9) flags: <b>342 records</b> (health 201 &middot; political 141) &mdash; samples queued for review</div>
+          <div class="mk-result"><span class="mk-bad">&#10008;</span> Secrets: <b>3 findings</b> (API keys) &mdash; exclusion recommended</div>
+          <div class="mk-result"><span class="mk-ok">&#10004;</span> Opt-out signals: 118 source domains publish robots.txt / ai.txt disallow &mdash; exclusion list exported</div>
+          <div class="mk-score">Provenance completeness score: <b>82 / 100</b><span class="mk-bar"><span class="mk-bar-fill" style="width:82%"></span></span></div>
+          <div class="mk-outputs">&#128196; crawl_2026_q2_provenance_Report.html &nbsp;&nbsp; &#128230; crawl_2026_q2_databom.cdx.json &nbsp;&nbsp;<span class="mk-local">saved locally &middot; nothing uploaded</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="sub" style="font-size:clamp(.7rem,1.2vw,.85rem);margin-top:10px">Product mockup &mdash; DataBOM tab in the ESL-SBOMator desktop application (v1.3.x UI)</p>
+  </section>
+
+  <!-- Slide 10 — Air-gapped = GDPR by design -->
+  <section class="slide">
+    <div class="brand"><img src="images/esl-logo.png" alt="ESL logo"><span>ESL &middot; SBOMator</span></div>
+    <div class="kicker">The Solution &middot; Architecture as Compliance</div>
+    <h2><span class="grad">Air-Gapped by Design</span> = GDPR by Design</h2>
+    <p class="sub" style="margin-top:0;margin-bottom:clamp(12px,2.5vh,22px)">Cloud scanning tools create the very GDPR problems they claim to solve.<br>SBOMator's architecture removes them before they exist.</p>
+    <div class="cards">
+      <div class="card"><h3><span class="pill green">Art. 28</span> No processor, no DPA</h3>
+        <p>ESL never touches your data — so there is no data-processing agreement to negotiate, no sub-processor list to audit, no vendor risk assessment for your dataset.</p></div>
+      <div class="card"><h3><span class="pill green">Ch. V</span> No international transfer</h3>
+        <p>Nothing crosses a border because nothing crosses your firewall. No SCCs, no adequacy analysis, no transfer impact assessment.</p></div>
+      <div class="card"><h3><span class="pill green">Art. 5</span> Minimization by architecture</h3>
+        <p>The scanner reads your dataset in place and stores nothing but the report you asked for. Storage limitation is enforced by design, not by policy.</p></div>
+      <div class="card"><h3><span class="pill green">Art. 32</span> Your perimeter, your controls</h3>
+        <p>Security of processing inherits the controls you already certified — disk encryption, access control, physical security. No new attack surface.</p></div>
+      <div class="card"><h3><span class="pill blue">OFFLINE</span> True air-gap operation</h3>
+        <p>Vulnerability and metadata databases install from an offline bundle. Fully disconnected networks are a supported configuration, not an afterthought.</p></div>
+      <div class="card"><h3><span class="pill blue">LICENSE</span> Site license + support</h3>
+        <p>One site license, real engineering support, no per-scan metering — and no usage telemetry phoning home, because there is no home to phone.</p></div>
+    </div>
+  </section>
+
+  <!-- Slide 11 — CTA -->
+  <section class="slide">
+    <img class="logo-hero" src="images/esl-logo.png" alt="ESL logo">
+    <div class="kicker">Get Ahead of October 30, 2026</div>
+    <h2>Know Your Data Like You Know Your Code</h2>
+    <p class="sub">The consultation window closes 30 October 2026. The final guidelines land by year end.<br>
+    Teams that can already produce provenance evidence won't be the ones scrambling.</p>
+    <a class="cta-btn" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact Us &rarr;</a>
+    <p class="sub" style="margin-top:clamp(14px,2.5vh,24px);font-size:clamp(.78rem,1.4vw,.95rem)">
+      <a class="link" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">eswlab.com/contact-us</a>
+      &nbsp;&middot;&nbsp;
+      <a class="link" href="https://eswlab.com/products/esl-ailogiclabs/sbomator/" target="_blank" rel="noopener">SBOMator product page</a>
+    </p>
+  </section>
+
+</div>
+
+<div class="nav prev hidden" id="prevBtn">&lsaquo;</div>
+<div class="nav next" id="nextBtn">&rsaquo;</div>
+<div class="progress"><div class="fill" id="progressFill"></div></div>
+<div class="counter" id="counter">1 / 11</div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck');
+  var slides=deck.querySelectorAll('.slide');
+  var total=slides.length, current=0, navigated=false;
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  if(h>=1&&h<=total){current=h-1;navigated=true;}
+  var prevBtn=document.getElementById('prevBtn'), nextBtn=document.getElementById('nextBtn');
+  var fill=document.getElementById('progressFill'), counter=document.getElementById('counter');
+  var hint=document.getElementById('hint');
+
+  function update(){
+    deck.style.transform='translateX(-'+(current*100)+'vw)';
+    prevBtn.classList.toggle('hidden',current===0);
+    nextBtn.classList.toggle('hidden',current===total-1);
+    fill.style.width=(((current+1)/total)*100)+'%';
+    counter.textContent=(current+1)+' / '+total;
+    if(navigated&&hint){hint.style.display='none';}
+  }
+  function go(n){
+    if(n<0||n>=total)return;
+    current=n; navigated=true; update();
+  }
+  prevBtn.addEventListener('click',function(){go(current-1);});
+  nextBtn.addEventListener('click',function(){go(current+1);});
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(current+1);}
+    else if(e.key==='ArrowLeft'){e.preventDefault();go(current-1);}
+  });
+
+  var startX=null;
+  document.addEventListener('touchstart',function(e){startX=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(startX===null)return;
+    var dx=e.changedTouches[0].clientX-startX;
+    if(Math.abs(dx)>50){ dx<0?go(current+1):go(current-1); }
+    startX=null;
+  },{passive:true});
+
+  var mouseX=null;
+  document.addEventListener('mousedown',function(e){
+    if(e.target.closest('a')||e.target.closest('.nav'))return;
+    mouseX=e.clientX;
+  });
+  document.addEventListener('mouseup',function(e){
+    if(mouseX===null)return;
+    var dx=e.clientX-mouseX;
+    if(Math.abs(dx)>50){ dx<0?go(current+1):go(current-1); }
+    mouseX=null;
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
