@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-20
+Last updated: 2026-07-21
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -229,6 +229,9 @@ Last updated: 2026-07-20
 
 • parasoft-cpptest-obfuscation
   https://zuwasi.github.io/Public-html-pages/parasoft-cpptest-obfuscation
+
+• sbomator-databom-presentation
+  https://zuwasi.github.io/Public-html-pages/sbomator-databom-presentation
 
 • terratest-ampcode-esl-presentation
   https://zuwasi.github.io/Public-html-pages/terratest-ampcode-esl-presentation
