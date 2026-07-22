@@ -145,19 +145,22 @@ Last updated: 2026-07-22
 45. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-46. proof-lean-cbmc.html
+46. presentations-index.html
+   https://zuwasi.github.io/Public-html-pages/presentations-index.html
+
+47. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-47. skillspector-droid-locate-and-judge.html
+48. skillspector-droid-locate-and-judge.html
    https://zuwasi.github.io/Public-html-pages/skillspector-droid-locate-and-judge.html
 
-48. static-code-analysis-2026.html
+49. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-49. why-amp-doesnt-need-node9-proxy.html
+50. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-50. wolfram-engine-gpu-demo-presentation.html
+51. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
