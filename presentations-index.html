@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תוכן עניינים — מצגות ודוחות | ESL Public Pages</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1321; color:#e8ecf4; direction:rtl; text-align:right; line-height:1.6; padding:clamp(16px,4vw,48px); }
+  .wrap { max-width:960px; margin:0 auto; }
+  h1 { font-size:clamp(1.6rem,4.5vw,2.6rem); font-weight:800; margin-bottom:.3em; }
+  .sub { color:#7d8aa5; margin-bottom:2em; font-size:clamp(.85rem,1.6vw,1rem); }
+  h2 { font-size:clamp(1.15rem,2.8vw,1.6rem); font-weight:700; color:#4fc3f7; margin:1.8em 0 .6em; border-bottom:1px solid #263048; padding-bottom:.3em; }
+  ol { list-style:none; counter-reset:item; }
+  li { counter-increment:item; padding:10px 14px; margin-bottom:6px; background:#161d2f; border:1px solid #263048; border-radius:10px; display:flex; gap:12px; align-items:baseline; }
+  li::before { content:counter(item); color:#4fc3f7; font-weight:700; min-width:1.6em; text-align:center; }
+  li a { color:#e8ecf4; font-weight:600; text-decoration:none; }
+  li a:hover { color:#4fc3f7; }
+  li .desc { color:#9aa7c0; font-size:clamp(.8rem,1.5vw,.95rem); }
+  .badge { font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:999px; white-space:nowrap; }
+  .b-new { background:#173a22; color:#66bb6a; }
+  .b-he { background:#123a52; color:#4fc3f7; }
+  footer { margin-top:3em; color:#7d8aa5; font-size:.85rem; border-top:1px solid #263048; padding-top:1em; }
+  footer a { color:#4fc3f7; }
+  @media (max-width:640px){ li { flex-direction:column; gap:2px; } li::before { display:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>תוכן עניינים — מצגות ודוחות</h1>
+<p class="sub">כל הדפים הציבוריים באתר zuwasi.github.io/Public-html-pages, מקובצים לפי נושא · עודכן 22.07.2026</p>
+
+<h2>SBOMator, DataBOM ושרשרת אספקה</h2>
+<ol>
+  <li><span class="badge b-new">חדש</span><a href="edpb-guidelines-databom-risk/">EDPB Guidelines 03/2026 — Risks &amp; the DataBOM Answer</a><span class="desc">הנחיות ה-EDPB החדשות על web scraping, הסיכונים ל-CTO/CISO/משפט, ומה DataBOM פותר ומה לא</span></li>
+  <li><span class="badge b-new">חדש</span><a href="sbomator-databom-presentation/">SBOMator DataBOM — An SBOM for Your AI Training Data</a><span class="desc">מצגת המוצר: סריקת Provenance לדאטהסטים של AI, כולל מסך Mockup והתקנה מקומית air-gapped</span></li>
+  <li><a href="Trivy-Attack-SBOMator-Defense.html">ESL SBOMator — Immune to the Trivy Supply Chain Attack</a><span class="desc">למה SBOMator חסין למתקפת שרשרת האספקה של Trivy</span></li>
+  <li><a href="SBOMator_vs_FiniteState_Decision.html">SBOMator vs Finite State — Tool Comparison</a><span class="desc">השוואת כלים והחלטת רכש</span></li>
+  <li><a href="1goat_Report.html">ESL SBOMator — Professional SBOM Analysis</a><span class="desc">דוגמת דוח סריקה של SBOMator</span></li>
+</ol>
+
+<h2>Amp מול Claude Code — השוואות ובנצ'מרקים</h2>
+<ol>
+  <li><a href="index.html">Amp — Agent Evaluation &amp; Observability</a><span class="desc">דף הבית: הערכת סוכני קוד ותצפיתיות</span></li>
+  <li><a href="ai_agent_eval_presentation.html">AI Coding Agent Evaluation — Ampcode vs Claude Code</a><span class="desc">מתודולוגיית הערכה והשוואה מלאה</span></li>
+  <li><a href="ampcode-vs-claudecode-presentation.html">Ampcode vs Claude Code — Why Ampcode Wins</a><span class="desc">מצגת השוואה תמציתית</span></li>
+  <li><a href="amp-deep3-vs-claude-opus47-benchmark.html">QuickSWE v2 — Amp Deep³ vs Claude Opus 4.7</a><span class="desc">בנצ'מרק ראש-בראש</span></li>
+  <li><a href="baboons-benchmark-report.html">Amp Ultra vs Claude Code — Claude Fable 5 Benchmark</a><span class="desc">דוח בנצ'מרק משחק ה-FPS</span></li>
+  <li><a href="baboons-face-off.html">Baboons Over London — Amp vs Claude, Same Model</a><span class="desc">אותו מודל, harness שונה — עימות ישיר</span></li>
+  <li><a href="final-scores.html">Final Scores — Amp vs Claude</a><span class="desc">טבלת תוצאות מסכמת</span></li>
+  <li><a href="harness-beats-model.html">The Harness Beats the Model — Amp Rush vs Claude Fable 5</a><span class="desc">התזה: ה-harness חשוב מהמודל</span></li>
+  <li><a href="harness-story.html">The Harness Beats the Model — Qubits, Baboons &amp; AI Agents</a><span class="desc">גרסת הסיפור המלא</span></li>
+  <li><a href="NotebookComparison_Presentation.html">Mohammadian 1988 — Claude vs Amp Slide Deck</a><span class="desc">השוואה על שחזור מאמר ב-Mathematica</span></li>
+  <li><a href="amp-vs-token-optimizer-presentation.html">Amp vs Claude Code + Token Optimizer</a><span class="desc">צלילה טכנית לניהול טוקנים</span></li>
+  <li><a href="claude-code-skills-vs-amp/">Claude Code Skills vs Amp Built-in Capabilities</a><span class="desc">השוואת מנגנוני skills</span></li>
+  <li><a href="amp-lost-in-the-middle-presentation.html">How Amp Solves "Lost in the Middle"</a><span class="desc">איך Amp פותר את בעיית אמצע-הקונטקסט</span></li>
+  <li><span class="badge b-he">עברית</span><a href="Claude_HalfLife_Test.html">בדיקת "זמן מחצית חיים" של Claude</a><span class="desc">ניסוי דעיכת ביצועים לאורך שיחה</span></li>
+  <li><a href="agent-halflife-tester.html">Agent Half-Life Tester</a><span class="desc">הכלי שמודד דעיכת ביצועי סוכן</span></li>
+  <li><a href="ai-coding-agent-cost-calculator.html">AI Coding Agent Cost Calculator</a><span class="desc">מחשבון עלויות אינטראקטיבי</span></li>
+  <li><a href="ai-cost-estimation-presentation/">AI Coding Agent Cost Estimation Dashboards</a><span class="desc">דשבורדים להערכת עלויות</span></li>
+  <li><a href="Dive-into-Claude-Code-Presentation.html">Dive into Claude Code</a><span class="desc">סקירת עומק של Claude Code</span></li>
+  <li><a href="Claude-Code-Qwen-Local-Guide.html">Connect Claude Code to Local Qwen 2.5 Coder 14B</a><span class="desc">מדריך חיבור למודל מקומי</span></li>
+</ol>
+
+<h2>אבטחה, CISO ו-AI</h2>
+<ol>
+  <li><a href="AI_Coding_Tools_Security_Comparison.html">AI Coding Tools Security Comparison — CISO Assessment</a><span class="desc">הערכת מוכנות ארגונית של כלי קידוד AI</span></li>
+  <li><a href="AI_Coding_Tools_Security_Comparison_Report.html">AI Coding Tools — CISO Security Comparison Report</a><span class="desc">גרסת הדוח המלא</span></li>
+  <li><a href="Ampcode_CISO_Security_Review.html">CISO Security Review — Ampcode (Sourcegraph)</a><span class="desc">סקירת אבטחה ל-Ampcode</span></li>
+  <li><a href="amp-arupilot-security-benchmark.html">Amp-Optimized Security Prompt — Benchmark on ArduPilot</a><span class="desc">בנצ'מרק פרומפט אבטחה על ArduPilot</span></li>
+  <li><a href="ampcode-mcp-defense-presentation.html">Defending Against MCP Tool Poisoning</a><span class="desc">הגנה מהרעלת כלי MCP</span></li>
+  <li><span class="badge b-he">עברית</span><a href="ampcode-prompt-injection-immunity.html">למה הבאג הזה לא יכול לקרות ב-Ampcode</a><span class="desc">חסינות ל-prompt injection</span></li>
+  <li><a href="nono-ampcode-presentation.html">nono — AI Agent Security for Ampcode</a><span class="desc">שכבת אבטחה לסוכני AI</span></li>
+  <li><a href="nesher2gm-pentest-operator-guide.html">Nesher2GM — Pentest Operator Guide</a><span class="desc">מדריך מפעיל לבדיקות חדירות</span></li>
+  <li><a href="BD-SECURITY-TDSQL-Presentation.html">SQL Injection — Data Flow Analysis</a><span class="desc">ניתוח זרימת נתונים של SQLi</span></li>
+  <li><a href="endorlabs-amp-integration-presentation.html">Endor Labs + Amp Integration</a><span class="desc">שילוב סריקות Endor Labs בתוך Amp</span></li>
+</ol>
+
+<h2>Embedded, C++ וכלי פיתוח</h2>
+<ol>
+  <li><a href="asn1c-cpp26-modernization.html">ASN1C to Modern C++26</a><span class="desc">מודרניזציה של קוד ASN1C</span></li>
+  <li><a href="asn1c-workbench-amp-presentation.html">ASN1C Workbench + Amp</a><span class="desc">סביבת עבודה ל-ASN.1 עם Amp</span></li>
+  <li><a href="cpp26-embedded-mavlink.html">C++26 for Embedded: MAVLink on RP2040</a><span class="desc">C++26 במערכות משובצות</span></li>
+  <li><a href="MLX5-to-Zephyr-MISRA-Journey.html">NVIDIA MLX5 → Zephyr RTOS: The MISRA C Journey</a><span class="desc">מסע הסבה ל-MISRA C</span></li>
+  <li><a href="parasoft-cpptest-obfuscation/">Parasoft C/C++test and Obfuscation</a><span class="desc">ניתוח סטטי וקוד מעורפל</span></li>
+  <li><a href="cuda-to-axelera-migration.html">CUDA → Axelera Migration Guide</a><span class="desc">מדריך הגירה ל-Axelera Metis</span></li>
+  <li><span class="badge b-he">עברית</span><a href="static-code-analysis-2026.html">ניתוח קוד סטטי ובדיקות דינאמיות 2026</a><span class="desc">עידן הבינה המלאכותית בניתוח קוד</span></li>
+  <li><a href="terratest-ampcode-esl-presentation/">Ampcode × Terratest</a><span class="desc">בדיקות תשתית עם Terratest ו-Amp</span></li>
+  <li><a href="terratest-diff-esl-presentation/">Terratest × Ampcode — The Diff</a><span class="desc">גרסת ה-diff של אותו נושא</span></li>
+  <li><a href="why-amp-doesnt-need-node9-proxy.html">Why Amp Doesn't Need node9-proxy</a><span class="desc">ניתוח ארכיטקטורת רשת</span></li>
+  <li><a href="skillspector-droid-locate-and-judge.html">Droid as Locate-and-Judge — SkillSpector</a><span class="desc">שיפוט אוטומטי של skills</span></li>
+</ol>
+
+<h2>Wolfram, מתמטיקה ומחקר</h2>
+<ol>
+  <li><a href="Avraham_Gilo_Lemma1_Presentation.html">Avraham &amp; Gilo — Lemma 1 Verification</a><span class="desc">אימות למה מתמטית עם Ampcode + Wolfram</span></li>
+  <li><a href="proof-lean-cbmc.html">Can You Prove It? — Lean 4 + CBMC</a><span class="desc">הוכחות פורמליות לבנצ'מרק הקוונטי</span></li>
+  <li><a href="Quantum_MathBridge.html">Quantum MathBridge</a><span class="desc">גשר בין סימולציה קוונטית למתמטיקה</span></li>
+  <li><a href="VeriMath_Pitch_Abel_Nazareth.html">VeriMath — Business Proposal for Wolfram Research</a><span class="desc">הצעה עסקית ל-Wolfram</span></li>
+  <li><a href="wolfram-engine-gpu-demo-presentation.html">Wolfram Engine GPU Telemetry Demo</a><span class="desc">טלמטריית GPU ב-Wolfram Engine</span></li>
+  <li><a href="ampcode-classiq-research-orchestrator/">Ampcode + Mathematica + Lean 4 + Classiq</a><span class="desc">אורקסטרציה של מחקר קוונטי</span></li>
+  <li><a href="biosense-heartgcn-demo/paper-suitability-presentation.html">Paper Suitability — Biomedical Conduction Velocity</a><span class="desc">התאמת מאמר לדמו ביו-רפואי</span></li>
+  <li><a href="biosense-heartgcn-demo/paper-to-cpp-verification-presentation.html">HeartGCN — Paper to Mathematica to C++</a><span class="desc">ממאמר לקוד מאומת</span></li>
+  <li><a href="cardioband-tr-wolfram-demo/">AMP + Wolfram Paper-to-Simulation Demo</a><span class="desc">ממאמר לסימולציה</span></li>
+  <li><a href="cardiotwin-tr-product-demo/">CardioTwin TR — Product Concept</a><span class="desc">קונספט מוצר תאום דיגיטלי לבבי</span></li>
+</ol>
+
+<h2>שונות</h2>
+<ol>
+  <li><a href="comparison-presentation-executive.html">Smart Speech Executive Comparison</a><span class="desc">השוואת מנהלים — Smart Speech</span></li>
+  <li><a href="comparison-presentation-detailed.html">Smart Speech Comparison Presentation</a><span class="desc">הגרסה המפורטת</span></li>
+  <li><a href="comparison-report.html">Smart Speech Executive Comparison (Report)</a><span class="desc">גרסת דוח</span></li>
+  <li><a href="hiring-agent-presentation.html">Hiring Agent — Concept &amp; Process</a><span class="desc">סוכן AI לתהליכי גיוס</span></li>
+  <li><a href="optical-ai-network-comparison-presentation.html">Optical AI Networks: China vs. Nvidia Israel</a><span class="desc">השוואת רשתות AI אופטיות</span></li>
+  <li><a href="Unified_Intelligence_Platform_Proposal.html">Unified Enterprise Intelligence Platform</a><span class="desc">הצעה טכנית ל-Sourcegraph</span></li>
+  <li><a href="early-dos-html/">Early DOS Development, IBM PC, AI Tools and Me</a><span class="desc">מסע נוסטלגי — DOS ועד AI</span></li>
+  <li><a href="games/amp-best.html">London Baboon Hunt — FPS (Amp)</a><span class="desc">משחק ה-FPS מהבנצ'מרק — גרסת Amp</span></li>
+  <li><a href="games/claude-best.html">London Baboon Hunter — FPS (Claude)</a><span class="desc">גרסת Claude</span></li>
+</ol>
+
+<footer>
+  ESL — Engineering Software Lab · <a href="https://eswlab.com/contact-us/">צור קשר</a> · רשימה גולמית אוטומטית: <a href="PAGE_INDEX.txt">PAGE_INDEX.txt</a>
+</footer>
+</div>
+</body>
+</html>
