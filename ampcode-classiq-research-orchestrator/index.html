@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <meta name="theme-color" content="#070812">
-  <meta name="description" content="How Ampcode, Wolfram Mathematica, and Lean 4 extend a Classiq user's workflow from research paper to validated quantum implementation.">
+  <meta name="description" content="How Ampcode orchestrates Wolfram Mathematica, Lean 4, and Classiq in a backend-agnostic workflow from research paper to validated quantum implementation.">
   <title>Ampcode + Mathematica + Lean 4 + Classiq</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -170,6 +170,21 @@
       line-height: 1.5;
     }
 
+    .source-note {
+      margin-top: 17px;
+      color: var(--faint);
+      font-size: clamp(10px, 1vw, 12px);
+      line-height: 1.5;
+    }
+
+    .source-note a {
+      color: var(--classiq-soft);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(193, 186, 255, 0.35);
+    }
+
+    .source-note a:hover { color: var(--text); border-bottom-color: var(--text); }
+
     .amp { color: var(--amp); }
     .classiq { color: var(--classiq-soft); }
     .wolfram { color: var(--wolfram); }
@@ -261,6 +276,33 @@
     }
 
     .cards.four { grid-template-columns: repeat(4, 1fr); }
+
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-top: 28px;
+    }
+
+    .agenda-item {
+      min-height: 118px;
+      padding: 19px;
+      border: 1px solid var(--line);
+      border-radius: 19px;
+      background: var(--panel);
+    }
+
+    .agenda-num {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--classiq-soft);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .12em;
+    }
+
+    .agenda-item strong { display: block; margin-bottom: 5px; font-size: 16px; }
+    .agenda-item span { color: var(--muted); font-size: 13px; line-height: 1.4; }
 
     .card {
       min-height: 164px;
@@ -631,6 +673,54 @@
       font-weight: 700;
     }
 
+    .esl-grid {
+      display: grid;
+      grid-template-columns: .82fr 1.18fr;
+      gap: clamp(25px, 5vw, 66px);
+      align-items: center;
+    }
+
+    .logo-card {
+      padding: clamp(18px, 3vw, 34px);
+      border-radius: 28px;
+      background: #fff;
+      box-shadow: var(--shadow);
+    }
+
+    .logo-card img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .link-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 11px;
+      margin-top: 24px;
+    }
+
+    .link-button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      padding: 11px 16px;
+      border: 1px solid rgba(139, 124, 255, 0.45);
+      border-radius: 12px;
+      background: rgba(139, 124, 255, 0.12);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 800;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .link-button:hover {
+      border-color: var(--classiq-soft);
+      background: rgba(139, 124, 255, 0.22);
+      transform: translateY(-2px);
+    }
+
     .nav-button {
       width: 54px;
       height: 54px;
@@ -718,10 +808,11 @@
     }
 
     @media (max-width: 980px) {
-      .hero-grid, .split { grid-template-columns: 1fr; }
+      .hero-grid, .split, .esl-grid { grid-template-columns: 1fr; }
       .hero-orbit { min-height: 280px; }
       .orbit { width: 250px; }
       .cards.four, .metrics { grid-template-columns: repeat(2, 1fr); }
+      .agenda-grid { grid-template-columns: repeat(2, 1fr); }
       .pipeline { grid-template-columns: repeat(4, 1fr); }
       .stage:nth-child(4)::after { display: none; }
       .proof-map { grid-template-columns: 1fr; }
@@ -753,7 +844,7 @@
       .slide::-webkit-scrollbar { display: none; }
       .slide:not(:first-child):not(:last-child) { padding-bottom: 142px; }
 
-      .slide::after { inset: 8px; border-radius: 18px; }
+      .slide::after { display: none; }
       .content { margin: auto 0; }
       h1 { font-size: clamp(39px, 13vw, 62px); }
       h2 { font-size: clamp(29px, 9.6vw, 46px); line-height: 1.06; }
@@ -767,8 +858,9 @@
       .satellite.math { left: -25px; bottom: 28px; }
       .satellite.proof { right: -24px; bottom: 28px; }
       .satellite.quantum { right: -35px; top: 68px; }
-      .cards, .cards.four, .metrics, .next-steps { grid-template-columns: 1fr; }
+      .cards, .cards.four, .metrics, .next-steps, .agenda-grid { grid-template-columns: 1fr; }
       .card, .metric { min-height: 0; }
+      .agenda-item { min-height: 0; }
       .pipeline { grid-template-columns: 1fr; }
       .stage { min-height: 0; }
       .stage:not(:last-child)::after {
@@ -825,6 +917,45 @@
               <div class="satellite quantum">Classiq</div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Agenda">
+        <div class="content">
+          <div class="eyebrow">Agenda</div>
+          <h2>How the pieces become <span class="success">one research system.</span></h2>
+          <div class="agenda-grid">
+            <div class="agenda-item"><span class="agenda-num">01</span><strong>The research gap</strong><span>What remains before and after circuit synthesis.</span></div>
+            <div class="agenda-item"><span class="agenda-num">02</span><strong>Backend-agnostic design</strong><span>Why OpenQASM was a demo choice, not a dependency.</span></div>
+            <div class="agenda-item"><span class="agenda-num">03</span><strong>Mathematica</strong><span>Symbolic, numerical, quantum, and reference computation.</span></div>
+            <div class="agenda-item"><span class="agenda-num">04</span><strong>Lean 4</strong><span>Machine-checked proof with an explicit assurance boundary.</span></div>
+            <div class="agenda-item"><span class="agenda-num">05</span><strong>Classiq</strong><span>High-level quantum design, synthesis, optimization, and execution.</span></div>
+            <div class="agenda-item"><span class="agenda-num">06</span><strong>Ampcode + ESL</strong><span>Orchestration, traceability, validation, and a practical pilot.</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="OpenQASM clarification and backend-agnostic architecture">
+        <div class="content">
+          <div class="eyebrow">A clarification about the first presentation</div>
+          <h2>OpenQASM was the <span class="amp">demonstration bridge</span>&mdash;not the architecture.</h2>
+          <p class="lead">We used OpenQASM because it is openly specified, accessible, inspectable, and easy to exchange across tools. The workflow itself is implementation-backend agnostic.</p>
+          <div class="cards">
+            <article class="card accent-amp">
+              <h3>Why QASM then</h3>
+              <p>An open intermediate representation made the first proof of concept easy to reproduce without requiring commercial infrastructure.</p>
+            </article>
+            <article class="card accent-success">
+              <h3>What stays stable</h3>
+              <p>The paper-linked specification, proof obligations, reference outputs, constraints, and validation gates do not depend on one circuit format.</p>
+            </article>
+            <article class="card accent-classiq">
+              <h3>Why Classiq now</h3>
+              <p>If Classiq is already available, use its high-level QMOD workflow and synthesis engine as the production implementation backend.</p>
+            </article>
+          </div>
+          <div class="boundary"><strong>Design rule:</strong> swap the quantum implementation backend&mdash;Classiq, OpenQASM tooling, Qiskit, or another qualified platform&mdash;without replacing the evidence pipeline.</div>
+          <p class="source-note">Source: <a href="https://openqasm.com/intro.html" target="_blank" rel="noopener">OpenQASM introduction and role as an intermediate representation</a> &middot; <a href="https://github.com/openqasm/openqasm" target="_blank" rel="noopener">official Apache-2.0 repository</a></p>
         </div>
       </section>
 
@@ -967,6 +1098,22 @@
         </div>
       </section>
 
+      <section class="slide" aria-label="Why quantum work needs Mathematica">
+        <div class="content">
+          <div class="eyebrow">Why Mathematica matters to quantum computing</div>
+          <h2>Useful quantum work begins <span class="wolfram">before the circuit.</span></h2>
+          <p class="lead">A circuit encodes an implementation. Research and business teams first need to turn a physical, scientific, or optimization question into a defensible computational model.</p>
+          <div class="cards four">
+            <article class="card accent-amp"><h3>1 &middot; Frame</h3><p>Define the question, data, assumptions, objective, and success measure.</p></article>
+            <article class="card accent-wolfram"><h3>2 &middot; Model</h3><p>Derive equations, operators, tensors, constraints, and classical baselines.</p></article>
+            <article class="card accent-wolfram"><h3>3 &middot; Explore</h3><p>Use symbolics, numerics, visualization, simulation, and optimization to test the idea.</p></article>
+            <article class="card accent-classiq"><h3>4 &middot; Implement</h3><p>Translate the validated quantum formulation into Classiq for synthesis and execution.</p></article>
+          </div>
+          <div class="boundary"><strong>Division of labor:</strong> Mathematica is the computational research workbench; Classiq is the high-level quantum implementation and synthesis environment.</div>
+          <p class="source-note">Based on Wolfram's 2026 overview: <a href="https://blog.wolfram.com/2026/03/25/quantum-computation-for-research-and-business/" target="_blank" rel="noopener">Quantum Computation for Research and Business</a></p>
+        </div>
+      </section>
+
       <section class="slide" aria-label="Mathematica role">
         <div class="content">
           <div class="eyebrow">Wolfram Mathematica</div>
@@ -979,6 +1126,69 @@
             <article class="card accent-wolfram"><h3>Reference</h3><p>Export expected states, observables, and distributions for circuit comparison.</p></article>
           </div>
           <div class="boundary"><strong>Benefit to the Classiq user:</strong> the synthesized circuit is tested against an independent scientific model—not only against itself.</div>
+          <p class="source-note">The Wolfram stack combines symbolic and numerical computation, visualization, optimization, circuit construction, and hardware analysis in a notebook-centered research environment. <a href="https://blog.wolfram.com/2026/03/25/quantum-computation-for-research-and-business/" target="_blank" rel="noopener">Read the Wolfram overview</a></p>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Wolfram Quantum Framework capabilities">
+        <div class="content">
+          <div class="eyebrow">Wolfram Quantum Framework</div>
+          <h2>One environment for <span class="wolfram">theory, simulation, and experiment.</span></h2>
+          <p class="lead">Wolfram's framework puts finite-dimensional quantum systems inside the same language used for symbolics, optimized numerics, data, and visualization.</p>
+          <div class="cards four">
+            <article class="card accent-wolfram"><h3>Represent</h3><p>States, gates, operators, channels, measurements, and parameterized circuits.</p></article>
+            <article class="card accent-wolfram"><h3>Compute</h3><p>Symbolic or numerical evolution, distances, entanglement, and quantum optimization.</p></article>
+            <article class="card accent-wolfram"><h3>Visualize</h3><p>Circuit diagrams, state views, Bloch spheres, measurement results, and research plots.</p></article>
+            <article class="card accent-success"><h3>Connect</h3><p>Interoperate with external quantum platforms, simulators, and quantum processing units.</p></article>
+          </div>
+          <div class="orchestration">Design circuits, simulate behavior, compare theory with data, and connect to hardware&mdash;while preserving the notebook as an executable research record.</div>
+          <p class="source-note">Official sources: <a href="https://www.wolfram.com/quantum-computation-framework/" target="_blank" rel="noopener">Wolfram Quantum Framework</a> &middot; <a href="https://resources.wolframcloud.com/PacletRepository/resources/Wolfram/QuantumFramework/guide/WolframQuantumComputationFramework.html" target="_blank" rel="noopener">framework guide</a></p>
+        </div>
+      </section>
+
+      <section class="slide" aria-label="Mathematica and Classiq integration">
+        <div class="content">
+          <div class="eyebrow">The tools are complementary by design</div>
+          <h2><span class="wolfram">Mathematica</span> + <span class="classiq">Classiq</span> is already an official direction.</h2>
+          <p class="lead">Wolfram and Classiq announced an integration that brings Classiq's engine into Mathematica, combining classical algorithm development with QMOD-based quantum algorithm development in one environment.</p>
+          <div class="pipeline" aria-label="Mathematica and Classiq integrated flow">
+            <div class="stage">
+              <span class="stage-num wolfram">01</span>
+              <strong class="wolfram">Develop</strong>
+              <span>Build the mathematical and classical algorithm in Mathematica.</span>
+            </div>
+            <div class="stage">
+              <span class="stage-num wolfram">02</span>
+              <strong class="wolfram">Analyze</strong>
+              <span>Explore models, parameters, baselines, and expected outputs.</span>
+            </div>
+            <div class="stage">
+              <span class="stage-num classiq">03</span>
+              <strong class="classiq">Describe</strong>
+              <span>Express the quantum algorithm at a high level with QMOD.</span>
+            </div>
+            <div class="stage">
+              <span class="stage-num classiq">04</span>
+              <strong class="classiq">Synthesize</strong>
+              <span>Compile under hardware, depth, width, and gate constraints.</span>
+            </div>
+            <div class="stage">
+              <span class="stage-num success">05</span>
+              <strong class="success">Execute</strong>
+              <span>Run across supported simulators and quantum backends.</span>
+            </div>
+            <div class="stage">
+              <span class="stage-num amp">06</span>
+              <strong class="amp">Assess</strong>
+              <span>Bring results back for analysis and evidence capture.</span>
+            </div>
+            <div class="stage">
+              <span class="stage-num amp">07</span>
+              <strong class="amp">Orchestrate</strong>
+              <span>Ampcode keeps artifacts, proofs, tests, and provenance aligned.</span>
+            </div>
+          </div>
+          <p class="source-note">Official announcement, 23 April 2024: <a href="https://www.classiq.io/insights/wolfram-and-classiq-integrate-advanced-quantum-software-tools-into-mathematica" target="_blank" rel="noopener">Wolfram and Classiq integrate advanced quantum software tools into Mathematica</a></p>
         </div>
       </section>
 
@@ -1103,6 +1313,29 @@
         </div>
       </section>
 
+      <section class="slide" aria-label="ESL AI SDLC consultants">
+        <div class="content esl-grid">
+          <div class="logo-card">
+            <img src="../terratest-ampcode-esl-presentation/esl_logo.png" alt="ESL Engineering Software Lab logo">
+          </div>
+          <div>
+            <div class="eyebrow">Engineering Software Lab</div>
+            <h2>ESL&mdash;<span class="success">AI SDLC consultants.</span></h2>
+            <p class="lead">We design and integrate agentic engineering workflows across research, formal methods, computational modeling, quantum platforms, testing, security, and delivery.</p>
+            <div class="check-list">
+              <div class="check"><div class="check-mark">1</div><div><strong>Workflow architecture</strong><span>Turn disconnected tools into one governed, traceable engineering process.</span></div></div>
+              <div class="check"><div class="check-mark">2</div><div><strong>Assurance by design</strong><span>Combine executable models, formal proof, tests, security checks, and review evidence.</span></div></div>
+              <div class="check"><div class="check-mark">3</div><div><strong>Integration without replacement</strong><span>Extend the platforms you already trust&mdash;including Classiq, Mathematica, Lean 4, and Ampcode.</span></div></div>
+            </div>
+            <div class="link-row">
+              <a class="link-button" href="https://eswlab.com/" target="_blank" rel="noopener">Visit ESL &nearr;</a>
+              <a class="link-button" href="https://eswlab.com/products/amp/amp/" target="_blank" rel="noopener">Explore Amp &nearr;</a>
+              <a class="link-button" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL &nearr;</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="slide" aria-label="Closing slide">
         <div class="content closing">
           <div class="eyebrow">The combined proposition</div>
@@ -1122,7 +1355,7 @@
 
     <button class="nav-button prev hidden" id="prevButton" type="button" aria-label="Previous slide"><span aria-hidden="true">‹</span></button>
     <button class="nav-button next" id="nextButton" type="button" aria-label="Next slide"><span aria-hidden="true">›</span></button>
-    <div class="counter" id="counter" aria-live="polite">1 / 13</div>
+    <div class="counter" id="counter" aria-live="polite">1 / 19</div>
     <div class="progress-shell" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
   </main>
 
