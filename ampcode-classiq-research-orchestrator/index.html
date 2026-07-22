@@ -749,8 +749,12 @@
     .nav-button:active { transform: translateY(-50%) scale(.95); }
     .nav-button.prev { left: 14px; }
     .nav-button.next { right: 14px; }
+    .nav-button.home { top: 22px; right: 22px; transform: none; }
+    .nav-button.home:hover { transform: scale(1.05); }
+    .nav-button.home:active { transform: scale(.95); }
     .nav-button.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
     .nav-button span { font-size: 34px; line-height: 1; margin-top: -3px; }
+    .nav-button svg { width: 22px; height: 22px; }
 
     .progress-shell {
       height: 5px;
@@ -877,6 +881,7 @@
       .nav-button:hover { transform: scale(1.04); }
       .nav-button:active { transform: scale(.95); }
       .nav-button.prev { left: 15px; }
+      .nav-button.home { top: auto; left: 72px; right: auto; }
       .nav-button.next { right: 72px; }
       .nav-button span { font-size: 28px; }
       .counter { right: 21px; bottom: 30px; transform: translateY(50%); }
@@ -1354,6 +1359,9 @@
     </div>
 
     <button class="nav-button prev hidden" id="prevButton" type="button" aria-label="Previous slide"><span aria-hidden="true">‹</span></button>
+    <button class="nav-button home" id="homeButton" type="button" aria-label="Return to slide 1" title="Home">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 3l9 8"/><path d="M5 10v10h14V10"/><path d="M9 20v-6h6v6"/></svg>
+    </button>
     <button class="nav-button next" id="nextButton" type="button" aria-label="Next slide"><span aria-hidden="true">›</span></button>
     <div class="counter" id="counter" aria-live="polite">1 / 19</div>
     <div class="progress-shell" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
@@ -1364,6 +1372,7 @@
       const track = document.getElementById('track');
       const slides = Array.from(document.querySelectorAll('.slide'));
       const prevButton = document.getElementById('prevButton');
+      const homeButton = document.getElementById('homeButton');
       const nextButton = document.getElementById('nextButton');
       const counter = document.getElementById('counter');
       const progressBar = document.getElementById('progressBar');
@@ -1425,6 +1434,7 @@
       }
 
       prevButton.addEventListener('click', () => goTo(current - 1));
+      homeButton.addEventListener('click', () => goTo(0));
       nextButton.addEventListener('click', () => goTo(current + 1));
 
       document.addEventListener('keydown', event => {
