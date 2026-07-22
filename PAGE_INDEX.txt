@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-21
+Last updated: 2026-07-22
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -190,6 +190,9 @@ Last updated: 2026-07-21
 
 • amp-workflow.png
   https://zuwasi.github.io/Public-html-pages/amp-workflow.png
+
+• ampcode-classiq-research-orchestrator
+  https://zuwasi.github.io/Public-html-pages/ampcode-classiq-research-orchestrator
 
 • assets
   https://zuwasi.github.io/Public-html-pages/assets
