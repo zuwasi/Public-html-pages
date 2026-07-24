@@ -95,6 +95,7 @@
     <h1>Transcript-Length SVD,<br>now formally verified</h1>
     <p class="sub">Modernizing Orly Alter&rsquo;s two legacy Mathematica notebooks into a reusable Wolfram project &mdash; and adding an independent Lean 4 formal-proof lane for the exact mathematical claims.</p>
     <p class="muted mono">Alter &amp; Golub, PNAS 2006 &nbsp;&bull;&nbsp; Bertagnolli, Drake, Tennessen &amp; Alter, PLoS ONE 2013</p>
+    <p class="muted mono"><a href="https://github.com/zuwasi/transcript-length-svd-v2" style="color:var(--accent)">github.com/zuwasi/transcript-length-svd-v2</a> &nbsp;&bull;&nbsp; MIT</p>
     <div id="hint">&larr; Swipe to navigate &rarr;</div>
   </section>
 
@@ -303,7 +304,39 @@ lake build           # kernel-checks all proofs</pre>
     <p class="muted">Outputs land in <span class="mono">V2/exports/</span>, including <span class="mono">lean_build_report.txt</span>.</p>
   </section>
 
-  <!-- 12 closing -->
+  <!-- 12 repository structure -->
+  <section class="slide">
+    <span class="tag">The repository</span>
+    <h2>What&rsquo;s in the public repo</h2>
+    <div class="grid g2" style="align-items:start">
+      <pre>transcript-length-svd-v2/
+  README.md
+  LICENSE                          MIT
+  src/AlterLengthSVD.wl            reusable Wolfram package
+  build_project.wls                regenerate figures + reports
+  proof_audit.wls                  numeric sanity checks
+  my_version_mRNA_Lengths.nb       modern notebook (2006)
+  my_version_Oscillator.nb         modern notebook (2013)
+  lean/
+    AlterProofs/Definitions.lean   exact objects
+    AlterProofs/MainTheorems.lean  10 theorems
+    lakefile.toml
+    lean-toolchain                 v4.32.0
+  docs/
+    formalization_map.md           paper -&gt; Wolfram -&gt; Lean
+    plain_english_proof.md
+  exports/                         figures, CSVs, reports
+  data/                            drop real measured tables here</pre>
+      <div class="grid" style="gap:clamp(10px,1.6vw,16px)">
+        <div class="card"><h3>Clone it</h3><pre>git clone https://github.com/
+  zuwasi/transcript-length-svd-v2</pre></div>
+        <div class="card"><h3>Mathlib not committed</h3><p>The Lean <span class="mono">.lake/</span> cache (~7&nbsp;GB of Mathlib) is excluded; <span class="mono">lake exe cache get</span> restores the exact pinned build.</p></div>
+        <div class="card"><h3>License</h3><p><b>MIT</b> &mdash; reuse freely with attribution. Data are calibrated simulations, not measured tables.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13 closing -->
   <section class="slide">
     <span class="tag">V2 &middot; done</span>
     <h1>From simulation to proof</h1>
@@ -313,7 +346,8 @@ lake build           # kernel-checks all proofs</pre>
       <div class="card"><div class="kpi v2">2</div><p>independent lanes</p></div>
       <div class="card"><div class="kpi v2">100%</div><p>build passing</p></div>
     </div>
-    <p class="muted" style="margin-top:.6em">&copy; 2026 ESL &mdash; Engineering Software Lab &nbsp;&bull;&nbsp; Released under the <a href="https://opensource.org/licenses/MIT" style="color:var(--accent)">MIT License</a></p>
+    <p class="muted mono" style="margin-top:.6em"><a href="https://github.com/zuwasi/transcript-length-svd-v2" style="color:var(--accent)">github.com/zuwasi/transcript-length-svd-v2</a></p>
+    <p class="muted" style="margin-top:.2em">&copy; 2026 ESL &mdash; Engineering Software Lab &nbsp;&bull;&nbsp; Released under the <a href="https://opensource.org/licenses/MIT" style="color:var(--accent)">MIT License</a></p>
   </section>
 
 </div>
@@ -321,7 +355,7 @@ lake build           # kernel-checks all proofs</pre>
 <div id="prev" class="nav">&#8249;</div>
 <div id="next" class="nav">&#8250;</div>
 <div id="bar"><div id="fill"></div></div>
-<div id="count">1 / 12</div>
+<div id="count">1 / 13</div>
 
 <script>
   var deck=document.getElementById("deck");
