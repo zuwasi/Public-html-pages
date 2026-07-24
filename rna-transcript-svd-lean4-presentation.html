@@ -308,31 +308,17 @@ lake build           # kernel-checks all proofs</pre>
   <section class="slide">
     <span class="tag">The repository</span>
     <h2>What&rsquo;s in the public repo</h2>
-    <div class="grid g2" style="align-items:start">
-      <pre>transcript-length-svd-v2/
-  README.md
-  LICENSE                          MIT
-  src/AlterLengthSVD.wl            reusable Wolfram package
-  build_project.wls                regenerate figures + reports
-  proof_audit.wls                  numeric sanity checks
-  my_version_mRNA_Lengths.nb       modern notebook (2006)
-  my_version_Oscillator.nb         modern notebook (2013)
-  lean/
-    AlterProofs/Definitions.lean   exact objects
-    AlterProofs/MainTheorems.lean  10 theorems
-    lakefile.toml
-    lean-toolchain                 v4.32.0
-  docs/
-    formalization_map.md           paper -&gt; Wolfram -&gt; Lean
-    plain_english_proof.md
-  exports/                         figures, CSVs, reports
-  data/                            drop real measured tables here</pre>
-      <div class="grid" style="gap:clamp(10px,1.6vw,16px)">
-        <div class="card"><h3>Clone it</h3><pre>git clone https://github.com/
-  zuwasi/transcript-length-svd-v2</pre></div>
-        <div class="card"><h3>Mathlib not committed</h3><p>The Lean <span class="mono">.lake/</span> cache (~7&nbsp;GB of Mathlib) is excluded; <span class="mono">lake exe cache get</span> restores the exact pinned build.</p></div>
-        <div class="card"><h3>License</h3><p><b>MIT</b> &mdash; reuse freely with attribution. Data are calibrated simulations, not measured tables.</p></div>
-      </div>
+    <pre style="font-size:clamp(9px,1.05vw,12.5px);line-height:1.4;max-width:720px;margin:0 auto;width:100%">transcript-length-svd-v2/
+  README.md                         proof_audit.wls           numeric checks
+  LICENSE                    MIT    my_version_mRNA_Lengths.nb notebook 2006
+  src/AlterLengthSVD.wl      pkg    my_version_Oscillator.nb   notebook 2013
+  build_project.wls          build  lean/AlterProofs/*.lean    10 theorems
+  docs/formalization_map.md  trace  lean/lean-toolchain        v4.32.0
+  exports/                   PNG/CSV  data/                    real tables here</pre>
+    <div class="grid g3" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+      <div class="card"><h3>Clone it</h3><p class="mono" style="word-break:break-all">git clone https://github.com/zuwasi/transcript-length-svd-v2</p></div>
+      <div class="card"><h3>Mathlib not committed</h3><p>The Lean <span class="mono">.lake/</span> cache (~7&nbsp;GB) is excluded; <span class="mono">lake exe cache get</span> restores the exact pinned build.</p></div>
+      <div class="card"><h3>License</h3><p><b>MIT</b> &mdash; reuse freely with attribution. Data are calibrated simulations, not measured tables.</p></div>
     </div>
   </section>
 
