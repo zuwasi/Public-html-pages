@@ -317,7 +317,7 @@ lake build           # kernel-checks all proofs</pre>
   exports/                   PNG/CSV  data/                    real tables here</pre>
     <div class="grid g3" style="grid-template-columns:repeat(3,minmax(0,1fr))">
       <div class="card"><h3>Clone it</h3><p class="mono" style="word-break:break-all">git clone https://github.com/zuwasi/transcript-length-svd-v2</p></div>
-      <div class="card"><h3>Mathlib not committed</h3><p>The Lean <span class="mono">.lake/</span> cache (~7&nbsp;GB) is excluded; <span class="mono">lake exe cache get</span> restores the exact pinned build.</p></div>
+      <div class="card"><h3>Why no Mathlib in the repo?</h3><p><span class="mono">lean/.lake/</span> is Lean&rsquo;s dependency cache &mdash; like <span class="mono">node_modules</span>. It holds the full Mathlib library (~7&nbsp;GB) the proofs import. It&rsquo;s derived state, so it&rsquo;s excluded; <span class="mono">lake exe cache get</span> rebuilds it from the pinned manifest.</p></div>
       <div class="card"><h3>License</h3><p><b>MIT</b> &mdash; reuse freely with attribution. Data are calibrated simulations, not measured tables.</p></div>
     </div>
   </section>
