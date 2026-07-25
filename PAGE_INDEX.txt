@@ -227,6 +227,9 @@ Last updated: 2026-07-25
 • games
   https://zuwasi.github.io/Public-html-pages/games
 
+• github-trends-watch-presentation
+  https://zuwasi.github.io/Public-html-pages/github-trends-watch-presentation
+
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
 
