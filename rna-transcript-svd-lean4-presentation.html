@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <!-- SPDX-License-Identifier: MIT -->
-<!-- Transcript-Length SVD V2 (Wolfram + Lean 4). Copyright (c) 2026 ESL - Engineering Software Lab. Released under the MIT License. -->
+<!-- Transcript-Length SVD (Wolfram + Lean 4). Copyright (c) 2026 ESL - Engineering Software Lab. Released under the MIT License. -->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Transcript-Length SVD V2 â€” Wolfram + Lean 4</title>
+<title>Transcript-Length SVD â€” Wolfram + Lean 4</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
@@ -37,7 +37,7 @@
   .card p,.card li{font-size:clamp(13px,1.6vw,17px);color:var(--muted)}
   ul{padding-left:1.1em}li{margin:.28em 0}
   .kpi{font-size:clamp(24px,4vw,44px);font-weight:800;color:var(--accent)}
-  .kpi.v2{color:var(--accent2)}
+  .kpi.alt{color:var(--accent2)}
   .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
   code,pre{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
   pre{background:#0a0f22;border:1px solid var(--line);border-radius:12px;padding:clamp(12px,1.6vw,18px);
@@ -56,7 +56,7 @@
   .node.wolf{border-color:#3b6ea5;box-shadow:inset 0 0 0 1px rgba(110,231,255,.15)}
   .node.lean{border-color:#7c5cd6;box-shadow:inset 0 0 0 1px rgba(167,139,250,.22)}
   .node.new{position:relative}
-  .node.new::after{content:"NEW in V2";position:absolute;top:-10px;right:-8px;background:var(--accent2);
+  .node.new::after{content:"Lean 4";position:absolute;top:-10px;right:-8px;background:var(--accent2);
     color:#160f2e;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;letter-spacing:.04em}
   .arrow{align-self:center;color:var(--accent);font-size:clamp(16px,2vw,24px);font-weight:800}
   .lanelabel{font-size:clamp(11px,1.4vw,14px);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
@@ -91,72 +91,18 @@
 
   <!-- 1 title -->
   <section class="slide">
-    <span class="tag">V2 &middot; Wolfram + Lean 4</span>
+    <span class="tag">Wolfram + Lean 4</span>
     <h1>Transcript-Length SVD,<br>now formally verified</h1>
     <p class="sub">Modernizing Orly Alter&rsquo;s two legacy Mathematica notebooks into a reusable Wolfram project &mdash; and adding an independent Lean 4 formal-proof lane for the exact mathematical claims.</p>
     <p class="muted mono">Alter &amp; Golub, PNAS 2006 &nbsp;&bull;&nbsp; Bertagnolli, Drake, Tennessen &amp; Alter, PLoS ONE 2013</p>
-    <p class="muted mono"><a href="https://github.com/zuwasi/transcript-length-svd-v2" style="color:var(--accent)">github.com/zuwasi/transcript-length-svd-v2</a> &nbsp;&bull;&nbsp; MIT</p>
+    <p class="muted mono"><a href="https://github.com/zuwasi/transcript-length-svd" style="color:var(--accent)">github.com/zuwasi/transcript-length-svd</a> &nbsp;&bull;&nbsp; MIT</p>
     <div id="hint">&larr; Swipe to navigate &rarr;</div>
   </section>
 
-  <!-- 2 the papers -->
+  <!-- 2 workflow overview -->
   <section class="slide">
-    <span class="tag">The science</span>
-    <h2>Two papers, one idea: SVD of mRNA length distributions</h2>
-    <div class="grid g2">
-      <div class="card">
-        <h3>PNAS 2006 &mdash; mRNA lengths</h3>
-        <p>SVD of a genome-scale mRNA-length distribution reveals an <b>asymmetry</b> in RNA gel-electrophoresis band broadening: transcripts spread more on one side of the peak than the other.</p>
-      </div>
-      <div class="card">
-        <h3>PLoS ONE 2013 &mdash; GBM oscillator</h3>
-        <p>SVD identifies transcript-length distribution functions from microarray data and reveals <b>evolutionary forces</b> pulling transcript length toward an equilibrium, shifting in glioblastoma metabolism.</p>
-      </div>
-    </div>
-    <p class="muted">The math backbone: asymmetric Gaussian profiles, asymmetric Hermite-like modes, an SVD spectrum, and an asymmetric restoring force toward a length equilibrium.</p>
-  </section>
-
-  <!-- 3 the original work -->
-  <section class="slide">
-    <span class="tag">One month ago</span>
-    <h2>The original <span class="mono">my_version</span> project</h2>
-    <div class="grid g2">
-      <div class="card">
-        <h3>What it delivered</h3>
-        <ul>
-          <li>Reusable package <span class="mono">src/AlterLengthSVD.wl</span></li>
-          <li>Two modern text notebooks (no legacy blobs)</li>
-          <li>Build + audit scripts, 10 exported artifacts</li>
-          <li>Figures, CSVs, JSON validation report</li>
-        </ul>
-      </div>
-      <div class="card">
-        <h3>How claims were checked</h3>
-        <ul>
-          <li><b>Numerically only</b> &mdash; Wolfram <span class="mono">RunValidationSuite</span></li>
-          <li>SVD reconstruction error, fraction sum, entropy, mode correlation, geometric decay</li>
-          <li>All passed, but nothing was <i>proved</i></li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- 4 verdict -->
-  <section class="slide">
-    <span class="tag">The review</span>
-    <h2>Verdict: worth a V2 &mdash; add formal proof</h2>
-    <div class="grid g3">
-      <div class="card"><h3>What changed</h3><p>The Wolfram skill gained an <b>optional Lean 4 formal-verification lane</b> that did not exist a month ago.</p></div>
-      <div class="card"><h3>Why it fits</h3><p>Several claims are <b>exact</b>, not empirical &mdash; ideal for machine-checked proof rather than numerics.</p></div>
-      <div class="card"><h3>What we did</h3><p>Copied the project to <span class="mono">V2/</span> (baseline preserved), added a Lean lane that builds clean.</p></div>
-    </div>
-    <p class="muted">Non-destructive: the month-old <span class="mono">my_version</span> stays intact for comparison. V2 is the new home.</p>
-  </section>
-
-  <!-- 5 workflow diagram -->
-  <section class="slide">
-    <span class="tag">The V2 workflow</span>
-    <h2>Two independent lanes from one claim ledger</h2>
+    <span class="tag">How it works</span>
+    <h2>The workflow, end to end</h2>
     <div class="flow">
       <div class="row">
         <div class="node">Read papers<small>2006 + 2013</small></div>
@@ -196,7 +142,47 @@
     </div>
   </section>
 
-  <!-- 6 the model -->
+  <!-- 3 the papers -->
+  <section class="slide">
+    <span class="tag">The science</span>
+    <h2>Two papers, one idea: SVD of mRNA length distributions</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>PNAS 2006 &mdash; mRNA lengths</h3>
+        <p>SVD of a genome-scale mRNA-length distribution reveals an <b>asymmetry</b> in RNA gel-electrophoresis band broadening: transcripts spread more on one side of the peak than the other.</p>
+      </div>
+      <div class="card">
+        <h3>PLoS ONE 2013 &mdash; GBM oscillator</h3>
+        <p>SVD identifies transcript-length distribution functions from microarray data and reveals <b>evolutionary forces</b> pulling transcript length toward an equilibrium, shifting in glioblastoma metabolism.</p>
+      </div>
+    </div>
+    <p class="muted">The math backbone: asymmetric Gaussian profiles, asymmetric Hermite-like modes, an SVD spectrum, and an asymmetric restoring force toward a length equilibrium.</p>
+  </section>
+
+  <!-- 4 why formal proofs -->
+  <section class="slide">
+    <span class="tag">The motivation</span>
+    <h2>Why add machine-checked proofs?</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>Numerics can pass and still not prove</h3>
+        <ul>
+          <li>The Wolfram lane checks SVD reconstruction error, fraction sum, entropy, mode correlation, and geometric decay</li>
+          <li>Every check passes &mdash; but a passing numeric check is <i>evidence</i>, not a <i>proof</i></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Several claims are exact</h3>
+        <ul>
+          <li>Positivity, unique peak, unique equilibrium, restoring sign, probability-simplex fractions, entropy nonnegativity</li>
+          <li>Exact statements &mdash; ideal for a kernel-checked Lean 4 proof rather than sampling</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted">So the project runs two independent lanes from one shared claim ledger: Wolfram computes and simulates; Lean 4 proves the exact math.</p>
+  </section>
+
+  <!-- 5 the model -->
   <section class="slide">
     <span class="tag">The model</span>
     <h2>Four objects, mirrored in both lanes</h2>
@@ -290,33 +276,32 @@
     <div class="grid g2">
       <div>
         <h3 class="muted">Wolfram</h3>
-        <pre>cd V2
-wolframscript -file .\build_project.wls
+        <pre>wolframscript -file .\build_project.wls
 wolframscript -file .\proof_audit.wls</pre>
       </div>
       <div>
         <h3 class="muted">Lean 4</h3>
-        <pre>cd V2\lean
+        <pre>cd lean
 lake exe cache get   # first time only
 lake build           # kernel-checks all proofs</pre>
       </div>
     </div>
-    <p class="muted">Outputs land in <span class="mono">V2/exports/</span>, including <span class="mono">lean_build_report.txt</span>.</p>
+    <p class="muted">Outputs land in <span class="mono">exports/</span>, including <span class="mono">lean_build_report.txt</span>.</p>
   </section>
 
   <!-- 12 repository structure -->
   <section class="slide">
     <span class="tag">The repository</span>
     <h2>What&rsquo;s in the public repo</h2>
-    <pre style="font-size:clamp(9px,1.05vw,12.5px);line-height:1.4;max-width:720px;margin:0 auto;width:100%">transcript-length-svd-v2/
+    <pre style="font-size:clamp(9px,1.05vw,12.5px);line-height:1.4;max-width:720px;margin:0 auto;width:100%">transcript-length-svd/
   README.md                         proof_audit.wls           numeric checks
-  LICENSE                    MIT    my_version_mRNA_Lengths.nb notebook 2006
-  src/AlterLengthSVD.wl      pkg    my_version_Oscillator.nb   notebook 2013
+  LICENSE                    MIT    mRNA_Lengths_SVD.nb        notebook 2006
+  src/AlterLengthSVD.wl      pkg    Oscillator_GBM.nb          notebook 2013
   build_project.wls          build  lean/AlterProofs/*.lean    10 theorems
   docs/formalization_map.md  trace  lean/lean-toolchain        v4.32.0
   exports/                   PNG/CSV  data/                    real tables here</pre>
     <div class="grid g3" style="grid-template-columns:repeat(3,minmax(0,1fr))">
-      <div class="card"><h3>Clone it</h3><p class="mono" style="word-break:break-all">git clone https://github.com/zuwasi/transcript-length-svd-v2</p></div>
+      <div class="card"><h3>Clone it</h3><p class="mono" style="word-break:break-all">git clone https://github.com/zuwasi/transcript-length-svd</p></div>
       <div class="card"><h3>Why no Mathlib in the repo?</h3><p><span class="mono">lean/.lake/</span> is Lean&rsquo;s dependency cache &mdash; like <span class="mono">node_modules</span>. It holds the full Mathlib library (~7&nbsp;GB) the proofs import. It&rsquo;s derived state, so it&rsquo;s excluded; <span class="mono">lake exe cache get</span> rebuilds it from the pinned manifest.</p></div>
       <div class="card"><h3>License</h3><p><b>MIT</b> &mdash; reuse freely with attribution. Data are calibrated simulations, not measured tables.</p></div>
     </div>
@@ -324,15 +309,15 @@ lake build           # kernel-checks all proofs</pre>
 
   <!-- 13 closing -->
   <section class="slide">
-    <span class="tag">V2 &middot; done</span>
+    <span class="tag">Wolfram + Lean 4</span>
     <h1>From simulation to proof</h1>
-    <p class="sub">V2 keeps the full Wolfram reproduction and adds an independent Lean 4 lane that machine-checks the exact claims &mdash; with a formalization map that never overstates what is proved.</p>
+    <p class="sub">The project keeps the full Wolfram reproduction and adds an independent Lean 4 lane that machine-checks the exact claims &mdash; with a formalization map that never overstates what is proved.</p>
     <div class="grid g3">
-      <div class="card"><div class="kpi v2">10</div><p>Lean theorems, 0 sorry</p></div>
-      <div class="card"><div class="kpi v2">2</div><p>independent lanes</p></div>
-      <div class="card"><div class="kpi v2">100%</div><p>build passing</p></div>
+      <div class="card"><div class="kpi alt">10</div><p>Lean theorems, 0 sorry</p></div>
+      <div class="card"><div class="kpi alt">2</div><p>independent lanes</p></div>
+      <div class="card"><div class="kpi alt">100%</div><p>build passing</p></div>
     </div>
-    <p class="muted mono" style="margin-top:.6em"><a href="https://github.com/zuwasi/transcript-length-svd-v2" style="color:var(--accent)">github.com/zuwasi/transcript-length-svd-v2</a></p>
+    <p class="muted mono" style="margin-top:.6em"><a href="https://github.com/zuwasi/transcript-length-svd" style="color:var(--accent)">github.com/zuwasi/transcript-length-svd</a></p>
     <p class="muted" style="margin-top:.2em">&copy; 2026 ESL &mdash; Engineering Software Lab &nbsp;&bull;&nbsp; Released under the <a href="https://opensource.org/licenses/MIT" style="color:var(--accent)">MIT License</a></p>
   </section>
 
@@ -341,7 +326,7 @@ lake build           # kernel-checks all proofs</pre>
 <div id="prev" class="nav">&#8249;</div>
 <div id="next" class="nav">&#8250;</div>
 <div id="bar"><div id="fill"></div></div>
-<div id="count">1 / 13</div>
+<div id="count">1 / 12</div>
 
 <script>
   var deck=document.getElementById("deck");
