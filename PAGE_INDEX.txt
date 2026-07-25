@@ -230,6 +230,9 @@ Last updated: 2026-07-25
 • github-trends-watch-presentation
   https://zuwasi.github.io/Public-html-pages/github-trends-watch-presentation
 
+• hallusquatting-protection
+  https://zuwasi.github.io/Public-html-pages/hallusquatting-protection
+
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
 
