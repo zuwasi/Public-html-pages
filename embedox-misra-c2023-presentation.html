@@ -203,15 +203,190 @@
     </section>
 
     <section class="slide">
-      <div class="eyebrow">13 · Final assessment</div><h2>Conclusion</h2>
+      <div class="eyebrow">13 · Baseline assessment</div><h2>Original Code <span>Conclusion</span></h2>
       <div class="grid">
         <div class="card conclusion"><ul><li>Functionally correct: <b class="green">48/48 tests pass</b>, but <b class="red">NOT MISRA C:2023 compliant</b>.</li><li><b>83 Required</b> findings block safety-critical certification.</li><li>Three functions have <b class="red">HIGH complexity (&gt;10)</b> and need refactoring.</li><li>Unit tests exposed a genuine async sensor report TX logic bug.</li><li>Security review found <b class="red">1 HIGH</b> authorization design gap and <b class="amber">3 MEDIUM</b> issues.</li><li>Violation density is <b>27.9 per 100 code lines</b> — systematic remediation is needed.</li></ul></div>
         <div class="card accent"><span class="kicker">RECOMMENDED SEQUENCE</span><h3 style="font-size:clamp(1.3rem,2.3vw,2rem)">Mechanical identifiers<br><span class="muted">↓</span><br><span class="blue">Type safety</span><br><span class="muted">↓</span><br>Advisory cleanup</h3><p class="muted">Resolve identifier lengths first, then conversion and essential-type defects, followed by portability and maintainability items.</p><div class="verdict" style="background:rgba(34,197,94,.1);border-color:var(--green);color:#86efac;font-size:1rem;letter-spacing:.03em">With remediation, this codebase can achieve MISRA C:2023 compliance.</div></div>
       </div>
     </section>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!-- V2-FIXED SECTION                                         -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+
+    <section class="slide">
+      <div class="eyebrow">14 · V2 remediation</div><h2>V2-Fixed <span>Overview</span></h2>
+      <p class="subtitle">A complete MISRA C:2023 remediation pass was applied to all four production files without changing external functionality.</p>
+      <div class="grid four" style="margin-top:24px">
+        <div class="card stat success"><strong class="green">135</strong><span>findings FIXED<br>out of 174</span></div>
+        <div class="card stat warn"><strong class="amber">39</strong><span>formal deviations<br>documented</span></div>
+        <div class="card stat accent"><strong class="green">48/48</strong><span>unit tests still pass<br>0 regressions</span></div>
+        <div class="card stat success"><strong class="green">0</strong><span>build errors<br>clean compile</span></div>
+      </div>
+      <div class="card accent" style="margin-top:18px">
+        <h3>What V2 means</h3>
+        <p>Every baseline finding was either <b class="green">fixed in code</b> with an inline annotation (<code>/*fixed by Liezrowice 26-7-2026*/</code>) or formally <b class="amber">deviated</b> with a structured deviation record including rationale, risk, and compensating controls. No finding was ignored or silently dismissed.</p>
+        <p class="muted" style="margin-bottom:0">Fixes preserve the original command-handler logic, dispatch flow, and protobuf message contract. The async TX bug discovered during unit testing was also corrected.</p>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">15 · What was fixed</div><h2>Fixes Applied <span>by Rule Group</span></h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Rule</th><th>Count</th><th>Fix Applied</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td><b>Dir 4.6-b</b></td><td>43</td><td>Replaced <code>int</code>/<code>unsigned int</code> with <code>int32_t</code>/<code>uint32_t</code> in all handlers and stubs</td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 10.3-b</b></td><td>46</td><td>Added explicit essential-type conversions for enums, signed/unsigned values, and callback results</td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 15.5-a</b></td><td>23</td><td>Reworked early exits into result variables with single function exit point</td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 1.1-a</b></td><td>21</td><td>Shortened overlength <i>internal</i> helpers (e.g. <code>handle_fetch_imu_accel_sample_command</code> → <code>handle_fetch_imu_cmd</code>)</td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 10.4-a</b></td><td>4</td><td>Matched operand essential types using unsigned constants and explicit <code>uint32_t</code> conversions</td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 1.1-b</b></td><td>7</td><td>External API names retained — see deviation DEV-001</td><td><span class="badge medium">Deviation</span></td></tr>
+          <tr><td><b>Rule 11.5-a</b></td><td>23</td><td>Void-pointer casts at protobuf boundary — see deviation DEV-004</td><td><span class="badge medium">Deviation</span></td></tr>
+          <tr><td><b>Dir 4.6-d</b></td><td>2</td><td>Replaced <code>float</code> with <code>float32_t</code></td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 21.10-c</b></td><td>2</td><td>Replaced reserved <code>struct tm</code> with project-specific <code>embedox_rtc_time_t</code></td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 17.7-a</b></td><td>1</td><td>Explicitly discarded intentional <code>reset_update()</code> return with <code>(void)</code> cast</td><td><span class="badge low">Fixed</span></td></tr>
+          <tr><td><b>Rule 5.1-a</b></td><td>1</td><td>Public sensor async names share first 31 chars — see deviation DEV-002</td><td><span class="badge medium">Deviation</span></td></tr>
+          <tr><td><b>Rule 8.6-b</b></td><td>1</td><td>External definition owned by Embedox client module — see deviation DEV-003</td><td><span class="badge medium">Deviation</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">16 · Fix details</div><h2>Key <span>Technical Changes</span></h2>
+      <div class="grid">
+        <div class="card accent"><h3>Fixed-width integer types</h3><ul>
+          <li>All <code>int</code> → <code>int32_t</code>, <code>unsigned int</code> → <code>uint32_t</code></li>
+          <li><code>float</code> → <code>float32_t</code> via <code>misra_types.h</code></li>
+          <li>Ensures consistent sizing across ARM Cortex-M4 and host builds</li>
+        </ul></div>
+        <div class="card accent"><h3>Essential-type safety</h3><ul>
+          <li>Enum-to-uint32_t conversions made explicit at every assignment</li>
+          <li>Callback Boolean returns compared with <code>== true</code></li>
+          <li>Signed/unsigned operand mismatches resolved with typed constants</li>
+        </ul></div>
+        <div class="card accent"><h3>Single-exit control flow</h3><ul>
+          <li>Early returns replaced with <code>result</code> state variables</li>
+          <li>Each function has exactly one <code>return</code> statement</li>
+          <li>Easier to verify error paths and resource cleanup</li>
+        </ul></div>
+        <div class="card success"><h3>Bug fix: async TX check</h3><ul>
+          <li><code>mngmt_client_tx_packe()</code> returns <code>cmdId</code> (int)</li>
+          <li>Was checked <code>== false</code> (zero = valid ID!)</li>
+          <li>Fixed to <code>&lt; 0</code> — only negative means failure</li>
+          <li>Prevents silent loss of async sensor reports</li>
+        </ul></div>
+      </div>
+      <div class="card warn" style="margin-top:14px"><h3>Reserved type removal</h3><p>Replaced standard library <code>struct tm</code> and <code>tm_*</code> members with <code>embedox_rtc_time_t</code> containing <code>rtc_year</code>, <code>rtc_month</code>, <code>rtc_day</code>, <code>rtc_hour</code>, <code>rtc_min</code>, <code>rtc_sec</code> — eliminating Rule 21.10 dependency on implementation-defined time library.</p></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">17 · What was not fixed</div><h2>Why Some Issues <span>Remain</span></h2>
+      <p class="subtitle">39 findings could not be fixed in code without breaking externally controlled interfaces. Each is documented as a formal deviation.</p>
+      <div class="grid" style="margin-top:20px">
+        <div class="card warn"><h3>DEV-001 · External identifiers >31 chars (14)</h3><ul>
+          <li>Public API names like <code>sensors_commands_handler_send_async_imu_accel_sample</code> are established Embedox entry points</li>
+          <li>Renaming would break headers, callers, and generated protobuf integration</li>
+          <li>Modern GNU/Zephyr toolchains preserve full symbol names</li>
+        </ul></div>
+        <div class="card warn"><h3>DEV-002 · First-31-char collision (1)</h3><ul>
+          <li>Two public async sensor functions share their first 31 characters</li>
+          <li>Names are distinct in full; collision only on legacy linkers</li>
+          <li>Both paths independently tested — 48/48 pass</li>
+        </ul></div>
+        <div class="card warn"><h3>DEV-003 · External definition (1)</h3><ul>
+          <li><code>mngmt_client_tx_packe</code> is defined in the Embedox client module</li>
+          <li>Adding a definition here would cause multiple-definition errors</li>
+          <li>Host stub provides matching signature for unit testing</li>
+        </ul></div>
+        <div class="card warn"><h3>DEV-004 · Void-pointer dispatch (23)</h3><ul>
+          <li>Protobuf handler interface uses <code>const void *</code> for all alternatives</li>
+          <li>Cannot change to concrete type without breaking shared ABI</li>
+          <li>V2 makes every cast explicit and local to its tag-selected switch case</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">18 · Deviation process</div><h2>Formal <span>Deviation Framework</span></h2>
+      <div class="card accent"><h3>Each deviation record includes:</h3></div>
+      <div class="grid three" style="margin-top:16px">
+        <div class="card"><h3>Identification</h3><ul><li>Unique deviation ID</li><li>MISRA guideline reference</li><li>File and line numbers</li><li>Exact tool message</li><li>Baseline findings covered</li></ul></div>
+        <div class="card"><h3>Justification</h3><ul><li>Technical rationale</li><li>Why a code fix would alter functionality or API</li><li>Safety / reliability / security impact assessment</li><li>Residual risk classification</li></ul></div>
+        <div class="card"><h3>Controls &amp; approval</h3><ul><li>Compensating controls listed</li><li>Verification evidence cited</li><li>Approval status: <b class="amber">Pending</b></li><li>Approver &amp; date placeholders</li></ul></div>
+      </div>
+      <div class="card" style="margin-top:16px"><h3>Deviation summary</h3>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Guideline</th><th>Findings</th><th>Risk</th><th>Status</th></tr></thead><tbody>
+          <tr><td>DEV-001</td><td>RULE_1_1-a/b</td><td>14</td><td><span class="badge low">Low</span></td><td><span class="badge medium">Pending</span></td></tr>
+          <tr><td>DEV-002</td><td>RULE_5_1-a</td><td>1</td><td><span class="badge low">Low</span></td><td><span class="badge medium">Pending</span></td></tr>
+          <tr><td>DEV-003</td><td>RULE_8_6-b</td><td>1</td><td><span class="badge low">Low</span></td><td><span class="badge medium">Pending</span></td></tr>
+          <tr><td>DEV-004</td><td>RULE_11_5-a</td><td>23</td><td><span class="badge medium">Low–Med</span></td><td><span class="badge medium">Pending</span></td></tr>
+          <tr><td><b>Total</b></td><td></td><td><b>39</b></td><td></td><td></td></tr>
+        </tbody></table></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">19 · V2 verification</div><h2>Validation <span>Results</span></h2>
+      <div class="grid">
+        <div class="card success"><h3 class="green">Build verification</h3><ul>
+          <li><b>0 errors</b>, clean compile</li>
+          <li>2 <code>-Wmissing-braces</code> warnings (protobuf aggregate initializers — externally generated code pattern)</li>
+          <li>CMake + GCC 13.3.0, WSL Ubuntu 24.04</li>
+          <li><code>-Wall -Wextra -std=c11 -ffreestanding</code></li>
+        </ul></div>
+        <div class="card success"><h3 class="green">Unit test verification</h3><ul>
+          <li><b>48/48 assertions PASS</b></li>
+          <li>24 test cases across all 4 handlers</li>
+          <li>0 regressions from V1 → V2</li>
+          <li>Async TX bug fix verified by dedicated tests</li>
+        </ul></div>
+      </div>
+      <div class="card danger" style="margin-top:16px"><h3 class="amber">Parasoft re-scan status</h3><p>A fresh Parasoft C/C++test re-scan was attempted with a traced BDF (<code>cpptestscan_v2_orig_only.bdf</code>). The license server was unavailable during this session. The V2 fixed report is therefore a <b>baseline-to-change mapping</b>: each of the 174 original findings is traced to its V2 resolution (fixed or deviation) with implementation evidence. A Parasoft re-scan should be performed when the license server is restored to confirm zero remaining non-deviated findings.</p></div>
+      <div class="card accent" style="margin-top:14px"><h3>Inline code annotations</h3><p>Every fix is annotated in the source with: <code>/*fixed by Liezrowice 26-7-2026: &lt;rule&gt; - &lt;description&gt;*/</code></p><p class="muted">The explanation text in each comment matches the corresponding entry in the fixed report, as required.</p></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">20 · V2 evidence package</div><h2>V2 <span>Deliverables</span></h2>
+      <div class="paths">
+        <div class="path"><b>Fixed Report</b>V2-fixed/MISRA_C_2023_V2_Fixed_Report.md</div>
+        <div class="path"><b>Deviation Report</b>V2-fixed/MISRA_C_2023_V2_Deviation_Report.md</div>
+        <div class="path"><b>Findings CSV</b>V2-fixed/MISRA_C_2023_V2_Findings.csv — all 174 traced</div>
+        <div class="path"><b>V2 README</b>V2-fixed/README.md</div>
+        <div class="path"><b>Fixed source</b>V2-fixed/*.c — 4 files with inline fix comments</div>
+        <div class="path"><b>Unit tests</b>V2-fixed/stubs/test_unit.c — 48 assertions</div>
+        <div class="path"><b>GitHub repo</b>github.com/zuwasi/Embedox-Management-Command-Handlers</div>
+        <div class="path"><b>Commit</b>8e13dde — V2 fixes, deviations, and validation</div>
+      </div>
+      <div class="card accent" style="margin-top:16px"><h3>Compliance statement</h3><p>The V2-fixed production files are <b class="green">compliant subject to the 39 listed deviations pending approval</b>. If the deviations are approved by the project safety/compliance authority, the four production C files achieve MISRA C:2023 compliance. A Parasoft re-scan is recommended once the license server is restored to obtain tool-verified confirmation.</p></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">21 · Final assessment</div><h2>Updated <span>Conclusion</span></h2>
+      <div class="grid">
+        <div class="card conclusion"><ul>
+          <li><b class="green">135 of 174</b> findings fixed in code without functional changes.</li>
+          <li><b class="amber">39 findings</b> formally deviated with full rationale and controls.</li>
+          <li><b class="green">48/48 unit tests pass</b> — zero regressions.</li>
+          <li><b class="green">0 build errors</b> — clean compile with <code>-Wall -Wextra</code>.</li>
+          <li>Async sensor TX bug <b class="green">corrected</b> (<code>== false</code> → <code>&lt; 0</code>).</li>
+          <li>Every fix annotated with <code>/*fixed by Liezrowice 26-7-2026*/</code>.</li>
+          <li>Deviation approval is the remaining gate to compliance.</li>
+        </ul></div>
+        <div class="card accent">
+          <span class="kicker">COMPLIANCE STATUS</span>
+          <h3 style="font-size:clamp(1.3rem,2.3vw,2rem)">V2-Fixed: <span class="green">Compliant</span><br><span class="muted">subject to approved deviations</span></h3>
+          <div class="grid three" style="margin-top:18px">
+            <div class="stat" style="min-height:80px"><strong class="green">77.6%</strong><span>findings fixed</span></div>
+            <div class="stat" style="min-height:80px"><strong class="amber">22.4%</strong><span>formal deviations</span></div>
+            <div class="stat" style="min-height:80px"><strong class="green">100%</strong><span>findings accounted for</span></div>
+          </div>
+          <div class="verdict" style="background:rgba(34,197,94,.1);border-color:var(--green);color:#86efac;font-size:1rem;letter-spacing:.03em;margin-top:20px">Upon deviation approval, this codebase achieves MISRA C:2023 compliance.</div>
+        </div>
+      </div>
+    </section>
   </main>
   <button class="nav prev" id="prev" aria-label="Previous slide">‹</button><button class="nav next" id="next" aria-label="Next slide">›</button>
-  <div class="counter" id="counter">1 / 14</div><div class="progress"><div class="progress-fill" id="progress"></div></div>
+  <div class="counter" id="counter">1 / 22</div><div class="progress"><div class="progress-fill" id="progress"></div></div>
   <script>
     (() => {
       const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],prev=document.getElementById('prev'),next=document.getElementById('next'),counter=document.getElementById('counter'),progress=document.getElementById('progress'),hint=document.getElementById('hint');
