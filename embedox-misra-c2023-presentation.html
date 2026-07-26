@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>MISRA C:2023 Compliance Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f172a;--card:#1e293b;--card2:#172033;--blue:#3b82f6;--amber:#f59e0b;--red:#ef4444;--green:#22c55e;--text:#f8fafc;--muted:#94a3b8;--line:#334155}
+    *{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+    body{background:radial-gradient(circle at 85% 10%,#172554 0,transparent 30%),var(--bg)}
+    .deck{height:100vh;display:flex;transition:transform .55s cubic-bezier(.22,.75,.28,1);will-change:transform}
+    .slide{position:relative;flex:0 0 100vw;width:100vw;height:100vh;padding:clamp(34px,5vh,68px) clamp(40px,6vw,96px) 64px;overflow-y:auto;display:flex;flex-direction:column;justify-content:center}
+    .slide::before{content:"";position:absolute;left:0;top:8%;height:84%;width:3px;background:linear-gradient(transparent,var(--blue),transparent);opacity:.7}
+    h1,h2,h3,p{margin-top:0} h1{font-size:clamp(2.5rem,5.8vw,5.4rem);line-height:1.02;letter-spacing:-.055em;max-width:1000px}
+    h2{font-size:clamp(1.8rem,3.3vw,3.1rem);letter-spacing:-.035em;margin-bottom:clamp(18px,3vh,34px)} h2 span{color:var(--blue)}
+    h3{font-size:clamp(.95rem,1.4vw,1.25rem);margin-bottom:10px} p,li,td,th{font-size:clamp(.72rem,1.15vw,1.03rem);line-height:1.45}
+    .eyebrow{text-transform:uppercase;letter-spacing:.18em;font-weight:700;color:#60a5fa;font-size:clamp(.7rem,1vw,.9rem);margin-bottom:18px}
+    .subtitle{font-size:clamp(1.1rem,2vw,1.7rem);color:#cbd5e1;max-width:900px;line-height:1.5}.date{color:var(--muted);margin-top:28px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.7vw,22px)} .grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+    .card{background:linear-gradient(145deg,rgba(30,41,59,.97),rgba(23,32,51,.97));border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:clamp(14px,1.8vw,24px);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+    .card.accent{border-top:3px solid var(--blue)} .card.warn{border-top:3px solid var(--amber)} .card.danger{border-top:3px solid var(--red)} .card.success{border-top:3px solid var(--green)}
+    .stat{text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:145px}.stat strong{display:block;font-size:clamp(2.3rem,5vw,4.8rem);line-height:1;font-weight:800}.stat span{color:var(--muted);margin-top:10px;font-size:clamp(.75rem,1.1vw,1rem)}
+    .red{color:var(--red)}.amber{color:var(--amber)}.green{color:var(--green)}.blue{color:#60a5fa}.muted{color:var(--muted)}
+    .verdict{margin-top:20px;border-radius:14px;padding:16px;text-align:center;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.5);color:#fca5a5;font-size:clamp(1.2rem,2vw,1.8rem);font-weight:800;letter-spacing:.12em}
+    ul{padding-left:1.15em;margin:0} li{margin:.38em 0;color:#dbe5f1} li::marker{color:var(--blue)}
+    .file-list{display:grid;gap:10px}.file{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;background:#111b2d;border-radius:10px;border-left:3px solid var(--blue)}
+    table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(.68rem,1vw,.92rem);overflow:hidden;border-radius:12px} th{text-align:left;color:#93c5fd;background:#172033;font-weight:600}th,td{padding:clamp(7px,1vh,12px) clamp(7px,1vw,14px);border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:rgba(30,41,59,.48)}
+    .bar-cell{min-width:150px}.bar-bg{height:9px;background:#0b1220;border-radius:9px;overflow:hidden;margin-top:5px}.bar{height:100%;border-radius:9px;background:linear-gradient(90deg,var(--blue),#60a5fa)}.bar.req{background:linear-gradient(90deg,#b91c1c,var(--red))}.bar.adv{background:linear-gradient(90deg,#b45309,var(--amber))}
+    .badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.72rem;font-weight:700}.required{color:#fecaca;background:rgba(239,68,68,.18)}.advisory{color:#fde68a;background:rgba(245,158,11,.18)}.high{color:#fecaca;background:rgba(239,68,68,.18)}.medium{color:#fde68a;background:rgba(245,158,11,.18)}.low{color:#bbf7d0;background:rgba(34,197,94,.18)}
+    .rule-chart{display:grid;grid-template-columns:112px 1fr 78px;gap:7px 12px;align-items:center}.rule-chart .label{font-size:clamp(.67rem,.95vw,.87rem);font-weight:600}.rule-chart .count{text-align:right;color:var(--muted);font-size:.8rem}.rule-chart .track{height:14px;background:#111827;border-radius:8px;overflow:hidden}.rule-chart .fill{height:100%;background:linear-gradient(90deg,#b91c1c,var(--red));border-radius:8px}.rule-chart .fill.adv{background:linear-gradient(90deg,#b45309,var(--amber))}
+    .impact-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.impact{padding:12px 14px;background:rgba(30,41,59,.75);border:1px solid var(--line);border-radius:11px;font-size:clamp(.68rem,1vw,.91rem);line-height:1.38}.impact b{color:#93c5fd}
+    .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.metric strong{font-size:clamp(1.35rem,2.6vw,2.4rem);display:block}.metric small{color:var(--muted)}
+    .quality{display:grid;gap:13px}.qrow{display:grid;grid-template-columns:145px 1fr 75px;gap:12px;align-items:center}.qtrack{height:14px;background:#111827;border-radius:10px;overflow:hidden}.qfill{height:100%;border-radius:10px}.qrow span{font-size:.85rem}
+    .security-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-item{padding:10px 12px;border-radius:10px;background:rgba(30,41,59,.75);border-left:3px solid var(--amber);font-size:clamp(.65rem,.92vw,.85rem);line-height:1.35}.security-item.high-risk{border-left-color:var(--red)}
+    .roadmap{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px}.roadmap ol,.roadmap ul{padding-left:1.15em}.roadmap li{font-size:clamp(.67rem,.95vw,.88rem)}
+    .paths{display:grid;gap:8px}.path{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#111827;border:1px solid var(--line);padding:10px 13px;border-radius:9px;font-size:clamp(.62rem,.9vw,.83rem);overflow-wrap:anywhere}.path b{color:#93c5fd;font-family:Inter,system-ui,sans-serif;margin-right:8px}
+    .nav{position:fixed;z-index:10;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid #475569;background:rgba(30,41,59,.9);color:white;font-size:31px;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 24px #0008;transition:.2s}.nav:hover{background:var(--blue);transform:translateY(-50%) scale(1.06)}.prev{left:18px}.next{right:18px}.nav[hidden]{display:none}
+    .progress{position:fixed;z-index:12;left:0;bottom:0;width:100%;height:5px;background:#1e293b}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),#8b5cf6,var(--green));transition:width .5s ease}
+    .counter{position:fixed;z-index:12;right:22px;bottom:16px;color:#cbd5e1;background:rgba(15,23,42,.8);padding:6px 11px;border-radius:999px;font-size:.78rem;border:1px solid var(--line)}
+    .hint{position:absolute;bottom:11%;left:50%;transform:translateX(-50%);color:#93c5fd;font-size:.9rem;animation:pulse 1.8s infinite;white-space:nowrap}.hint.hidden{opacity:0;pointer-events:none}@keyframes pulse{50%{opacity:.38;transform:translateX(-50%) translateY(5px)}}
+    .kicker{display:inline-block;border:1px solid #3b82f6;color:#93c5fd;padding:6px 10px;border-radius:8px;font-size:.8rem;margin-bottom:18px}.conclusion{font-size:clamp(.86rem,1.25vw,1.08rem)}
+    @media(max-width:760px){.slide{padding:54px 28px 70px;justify-content:flex-start}.grid,.grid.three,.grid.four,.impact-list,.security-list,.roadmap,.metrics{grid-template-columns:1fr}.slide{overflow-y:auto}.nav{width:40px;height:40px;font-size:25px;opacity:.75}.prev{left:7px}.next{right:7px}.rule-chart{grid-template-columns:78px 1fr 45px}.qrow{grid-template-columns:100px 1fr 55px}.stat{min-height:100px}.grid.four{grid-template-columns:repeat(2,1fr)}table{min-width:670px}.table-wrap{overflow-x:auto}.impact-list,.security-list{padding-bottom:15px}}
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="eyebrow">Static analysis · Embedded systems</div>
+      <h1>MISRA C:2023<br><span class="blue">Compliance Analysis</span></h1>
+      <p class="subtitle">Embedox Management Command Handlers — Parasoft C/C++test Professional</p>
+      <p class="date">July 2026</p>
+      <div class="hint" id="hint">← Swipe to navigate →</div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">01 · Scope</div><h2>Project <span>Overview</span></h2>
+      <div class="grid">
+        <div class="card accent"><h3>Codebase</h3><div class="file-list">
+          <div class="file"><span>device_commands_handler.c</span><b>315 lines</b></div><div class="file"><span>dfu_commands_handler.c</span><b>142 lines</b></div>
+          <div class="file"><span>mngmt_server.c</span><b>129 lines</b></div><div class="file"><span>sensors_commands_handler.c</span><b>249 lines</b></div>
+        </div></div>
+        <div class="card"><h3>At a glance</h3><div class="grid three">
+          <div class="stat"><strong class="blue">835</strong><span>total lines</span></div><div class="stat"><strong>623</strong><span>code lines</span></div><div class="stat"><strong>29</strong><span>functions</span></div>
+        </div></div>
+      </div>
+      <div class="card" style="margin-top:18px"><p><b>Protocol coverage:</b> device serial, software version, RTC, LED, BLE MAC, power, DFU firmware updates, IMU sensors, temperature, and ADC.</p><p class="muted" style="margin-bottom:0">Four original C source files from an Embedox/Zephyr embedded management protocol. Built with CMake, ARM GCC cross-compiler, and Zephyr RTOS.</p></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">02 · Analysis environment</div><h2>Tool <span>Configuration</span></h2>
+      <div class="grid">
+        <div class="card accent"><h3>Parasoft C/C++test Professional</h3><ul><li>Version <b>2025.2.0</b></li><li>Build <b>10.7.3.20251120B5330</b></li><li>Config: <b>builtin://MISRA C 2023 (MISRA C 2012)</b></li><li>Compiler profile: <b>gcc_13-64</b></li><li>All MISRA C:2023 rules enabled; max-depth analysis</li></ul></div>
+        <div class="card"><h3>Build &amp; license</h3><ul><li>Network compliance edition license — restored</li><li>BDF: <b>cpptestscan_orig_only.bdf</b></li><li>Filtered to four original compilation units</li><li>Host build: CMake + Unix Makefiles</li><li>GCC <b>13.3.0</b></li></ul></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">03 · Compliance result</div><h2>Violation <span>Summary</span></h2>
+      <div class="grid four">
+        <div class="card stat accent"><strong>174</strong><span>Total unique findings<br>original files only</span></div>
+        <div class="card stat danger"><strong class="red">83</strong><span>Required<br>must fix for compliance</span></div>
+        <div class="card stat warn"><strong class="amber">91</strong><span>Advisory<br>recommended fixes</span></div>
+        <div class="card stat success"><strong class="green">0</strong><span>Mandatory</span></div>
+      </div><div class="verdict">NON-COMPLIANT</div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">04 · Hotspot analysis</div><h2>Violation Density <span>Per Line of Code</span></h2>
+      <div class="table-wrap"><table><thead><tr><th>File</th><th>Lines</th><th>Code Lines</th><th>Findings</th><th>Density / 100 code lines</th></tr></thead><tbody>
+        <tr><td>device_commands_handler.c</td><td>315</td><td>253</td><td>76</td><td class="bar-cell"><b>30.0</b><div class="bar-bg"><div class="bar" style="width:100%"></div></div></td></tr>
+        <tr><td>dfu_commands_handler.c</td><td>142</td><td>97</td><td>21</td><td><b>21.6</b><div class="bar-bg"><div class="bar" style="width:72%"></div></div></td></tr>
+        <tr><td>mngmt_server.c</td><td>129</td><td>79</td><td>19</td><td><b>24.1</b><div class="bar-bg"><div class="bar" style="width:80.3%"></div></div></td></tr>
+        <tr><td>sensors_commands_handler.c</td><td>249</td><td>194</td><td>58</td><td><b>29.9</b><div class="bar-bg"><div class="bar" style="width:99.7%"></div></div></td></tr>
+        <tr><td><b>TOTAL</b></td><td><b>835</b></td><td><b>623</b></td><td><b>174</b></td><td><b>27.9</b><div class="bar-bg"><div class="bar req" style="width:93%"></div></div></td></tr>
+      </tbody></table></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">05 · Rule distribution</div><h2>Violations by <span>MISRA Rule</span></h2>
+      <div class="card"><div class="rule-chart">
+        <div class="label">Rule 10.3</div><div class="track"><div class="fill" style="width:100%"></div></div><div class="count">46 · Req.</div>
+        <div class="label">Dir 4.6 (int)</div><div class="track"><div class="fill adv" style="width:93.5%"></div></div><div class="count">43 · Adv.</div>
+        <div class="label">Rule 1.1</div><div class="track"><div class="fill" style="width:60.9%"></div></div><div class="count">28 · Req.</div>
+        <div class="label">Rule 11.5</div><div class="track"><div class="fill adv" style="width:50%"></div></div><div class="count">23 · Adv.</div>
+        <div class="label">Rule 15.5</div><div class="track"><div class="fill adv" style="width:50%"></div></div><div class="count">23 · Adv.</div>
+        <div class="label">Rule 10.4</div><div class="track"><div class="fill" style="width:8.7%"></div></div><div class="count">4 · Req.</div>
+        <div class="label">Rule 21.10</div><div class="track"><div class="fill" style="width:4.35%"></div></div><div class="count">2 · Req.</div>
+        <div class="label">Dir 4.6 (float)</div><div class="track"><div class="fill adv" style="width:4.35%"></div></div><div class="count">2 · Adv.</div>
+        <div class="label">Rule 8.6</div><div class="track"><div class="fill" style="width:2.2%"></div></div><div class="count">1 · Req.</div>
+        <div class="label">Rule 5.1</div><div class="track"><div class="fill" style="width:2.2%"></div></div><div class="count">1 · Req.</div>
+        <div class="label">Rule 17.7</div><div class="track"><div class="fill" style="width:2.2%"></div></div><div class="count">1 · Req.</div>
+      </div></div>
+      <p class="muted" style="margin-top:13px"><span class="badge required">Required</span> type safety, identifier/linker, reserved name, definition, and return-value risks &nbsp; <span class="badge advisory">Advisory</span> portability, pointer-cast, and maintainability risks.</p>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">06 · Operational consequences</div><h2>Reliability <span>Impact Analysis</span></h2>
+      <div class="impact-list">
+        <div class="impact"><b>Rule 10.3 · 46</b> — Enum and integer mismatches can misroute switches and commands, corrupting RTC, LED, or BLE fields.</div>
+        <div class="impact"><b>Rule 1.1 · 28</b> — Identifiers beyond 31 characters may collide in limited symbol tables, causing wrong function binding.</div>
+        <div class="impact"><b>Rule 11.5 · 23</b> — <code>void*</code> casts bypass type safety; protobuf structure changes can silently corrupt memory.</div>
+        <div class="impact"><b>Rule 10.4 · 4</b> — Signed/unsigned comparisons can select the wrong branch, including DFU command comparisons with signed char.</div>
+        <div class="impact"><b>Rule 21.10 · 2</b> — Reserved <code>tm</code> usage is implementation-defined and may break after compiler changes.</div>
+        <div class="impact"><b>Rule 15.5 · 23</b> — Multiple exits complicate error-path verification and increase maintenance risk.</div>
+        <div class="impact"><b>Directive 4.6 · 45</b> — Basic <code>int</code>/<code>float</code> sizes are implementation-defined, reducing ARM Cortex-M4 portability.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">07 · Structural risk</div><h2>McCabe Cyclomatic <span>Complexity</span></h2>
+      <div class="table-wrap"><table><thead><tr><th>Function</th><th>File</th><th>CC</th><th>Lines</th><th>Rating</th></tr></thead><tbody>
+        <tr><td>mngmt_server_dispatch_report</td><td>mngmt_server.c</td><td>15</td><td>69</td><td><span class="badge high">HIGH</span></td></tr><tr><td>device_commands_handler_process_message</td><td>device_commands_handler.c</td><td>13</td><td>61</td><td><span class="badge high">HIGH</span></td></tr>
+        <tr><td>handle_dfu_operation_command</td><td>dfu_commands_handler.c</td><td>12</td><td>85</td><td><span class="badge high">HIGH</span></td></tr><tr><td>handle_set_rtc_date_time_command</td><td>device_commands_handler.c</td><td>11</td><td>29</td><td><span class="badge medium">MEDIUM</span></td></tr>
+        <tr><td>dfu_commands_register_ops</td><td>dfu_commands_handler.c</td><td>8</td><td>19</td><td><span class="badge medium">MEDIUM</span></td></tr><tr><td>sensors_commands_handler_process_message</td><td>sensors_commands_handler.c</td><td>8</td><td>41</td><td><span class="badge medium">MEDIUM</span></td></tr>
+        <tr><td>mngmt_server_tx_packe</td><td>mngmt_server.c</td><td>5</td><td>32</td><td><span class="badge low">LOW</span></td></tr><tr><td>handle_set_led_color_command</td><td>device_commands_handler.c</td><td>4</td><td>18</td><td><span class="badge low">LOW</span></td></tr>
+        <tr><td>handle_start_imu_stream</td><td>sensors_commands_handler.c</td><td>4</td><td>16</td><td><span class="badge low">LOW</span></td></tr><tr><td>handle_stop_imu_stream</td><td>sensors_commands_handler.c</td><td>4</td><td>16</td><td><span class="badge low">LOW</span></td></tr>
+      </tbody></table></div>
+      <p class="muted" style="margin-top:10px">Remaining 19 functions: CC 1–3, all LOW. Scale: <span class="green">Low 1–5</span> · <span class="amber">Medium 6–10</span> · <span class="red">High &gt;10</span></p>
+      <div class="grid four"><div class="card"><b>Total CC</b><br><span class="blue">128</span></div><div class="card"><b>Average</b><br>4.41</div><div class="card danger"><b>Maximum</b><br><span class="red">15</span></div><div class="card warn"><b>CC &gt;10 / &gt;6</b><br>3 / 5 functions</div></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">08 · Maintainability</div><h2>General <span>Complexity Index</span></h2>
+      <div class="grid">
+        <div><div class="metrics">
+          <div class="card metric"><strong>4.41</strong><small>avg CC / function<br>moderate</small></div><div class="card metric"><strong>28.8</strong><small>lines / function<br>835 ÷ 29</small></div><div class="card metric"><strong class="amber">0.205</strong><small>decisions / line<br>128 ÷ 623 · high</small></div>
+          <div class="card metric danger"><strong class="red">0.279</strong><small>findings / code line<br>174 ÷ 623 · very high</small></div><div class="card metric warn"><strong class="amber">HIGH</strong><small>Halstead difficulty<br>dispatch-heavy estimate</small></div><div class="card metric danger"><strong class="red">LOW</strong><small>Maintainability Index<br>estimated</small></div>
+        </div></div>
+        <div class="card"><h3>Quality profile</h3><div class="quality">
+          <div class="qrow"><span>Complexity</span><div class="qtrack"><div class="qfill" style="width:58%;background:var(--amber)"></div></div><b class="amber">Moderate</b></div>
+          <div class="qrow"><span>MISRA Compliance</span><div class="qtrack"><div class="qfill" style="width:20%;background:var(--red)"></div></div><b class="red">Low</b></div>
+          <div class="qrow"><span>Testability</span><div class="qtrack"><div class="qfill" style="width:78%;background:var(--green)"></div></div><b class="green">Good</b></div>
+          <div class="qrow"><span>Portability</span><div class="qtrack"><div class="qfill" style="width:28%;background:var(--red)"></div></div><b class="red">Low</b></div>
+        </div><div class="verdict" style="font-size:1rem;letter-spacing:.05em;margin-top:22px">OVERALL: MODERATE–LOW<br><small>Functionally correct; significant MISRA remediation required</small></div></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">09 · Dynamic verification</div><h2>Unit Testing <span>Results</span></h2>
+      <div class="grid">
+        <div><div class="grid"><div class="card stat success"><strong class="green">48 / 48</strong><span>assertions passed · 0 failed</span></div><div class="card stat accent"><strong>24</strong><span>test cases</span></div></div>
+          <div class="card" style="margin-top:14px"><h3>Coverage areas</h3><ul><li>Device commands: 8 tests — serial, version, RTC, power, restart, unknown/no-ops</li><li>DFU: 5 — registration, upload, OOB index, ops preservation</li><li>Sensors: 8 — IMU, stream, temperature, ADC, unknown, async send</li><li>Management server: 2 — TX callback and invalid dispatch</li></ul></div>
+        </div>
+        <div class="card danger"><h3 class="red">Genuine logic defect found</h3><p><code>mngmt_client_tx_packe</code> was checked as <code>== false</code> (zero), but returns an integer <code>cmdId</code> where zero is valid.</p><p>This causes async sensor reports to fail whenever the command ID wraps to zero.</p><p class="muted">Fix: compare failure as <code>&lt; 0</code>.</p><hr style="border:0;border-top:1px solid var(--line)"><p><b>Test:</b> stubs/test_unit.c<br><b>Build:</b> CMake + GCC 13.3.0<br><b>Host:</b> WSL Ubuntu 24.04</p></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">10 · Threat-oriented review</div><h2>Security <span>Issues</span></h2>
+      <div class="security-list">
+        <div class="security-item"><b>1 · Type confusion — CWE-843 · MEDIUM</b><br>23 <code>void*</code> casts could misinterpret attacker-controlled protobuf payloads and corrupt memory.</div>
+        <div class="security-item"><b>2 · Input validation — CWE-20 · MEDIUM</b><br><code>mngmt_server_dispatch_report</code> accepts arbitrary data/length before <code>pb_decode</code>.</div>
+        <div class="security-item"><b>3 · Fixed TX buffer — CWE-120 · LOW</b><br>Static 256-byte buffer; encode failure is handled internally by bounded <code>pb_encode</code>, limiting risk.</div>
+        <div class="security-item"><b>4 · Integer truncation — CWE-197 · MEDIUM</b><br>46 signed/unsigned assignment mismatches may truncate or sign-extend values.</div>
+        <div class="security-item"><b>5 · Unchecked return — CWE-252 · LOW</b><br>A DFU <code>verify_image</code> return value is ignored in one path.</div>
+        <div class="security-item high-risk"><b>6 · Missing authorization — CWE-862 · HIGH</b><br>Any connected client can issue power-off, restart, and firmware-update commands. Design issue, not code defect.</div>
+        <div class="security-item"><b>7 · Race condition — CWE-362 · MEDIUM</b><br>File-level mutable <code>device_commands_ops</code> and <code>dfu_commands_ops</code> are not thread-safe.</div>
+      </div>
+      <div class="verdict" style="font-size:1rem;letter-spacing:.03em">Security verdict: 1 HIGH design issue · 3 MEDIUM · 3 LOW — production security review required</div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">11 · Path to compliance</div><h2>Remediation <span>Roadmap</span></h2>
+      <div class="roadmap">
+        <div class="card danger"><h3><span class="badge required">Priority 1 · Required</span></h3><ul><li>Rename identifiers over 31 chars — 28</li><li>Use consistent enum types / explicit safe casts — 46</li><li>Normalize mixed signed/unsigned operations — 4</li><li>Replace reserved <code>tm</code> with wrapper — 2</li><li>Define <code>mngmt_client_tx_packe</code> — 1</li><li>Rename colliding sensor async identifiers — 1</li><li>Check unused return value — 1</li></ul></div>
+        <div class="card warn"><h3><span class="badge advisory">Priority 2 · Advisory</span></h3><ul><li><code>int</code> → <code>uint32_t</code>/<code>int32_t</code> — 43</li><li>Typed message pointers / validated union — 23</li><li>Consolidate function exit points — 23</li><li><code>float</code> → <code>float32_t</code> — 2</li></ul></div>
+        <div class="card accent"><h3><span class="badge low">Priority 3 · Bugs &amp; hardening</span></h3><ul><li>Change TX comparison from <code>== false</code> to <code>&lt; 0</code></li><li>Validate input length before <code>pb_decode</code></li><li>Add authorization for power and DFU commands</li></ul></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">12 · Evidence package</div><h2>Artifacts &amp; <span>Deliverables</span></h2>
+      <div class="paths">
+        <div class="path"><b>MISRA report</b>C:\Amp_demos\Uri_yossef_MISRA\MISRA_C_2023_Original_Files_Report.md</div><div class="path"><b>Findings CSV</b>C:\Amp_demos\Uri_yossef_MISRA\MISRA_C_2023_Original_Files_Findings.csv</div>
+        <div class="path"><b>Presentation</b>C:\Amp_demos\Uri_yossef_MISRA\MISRA_C_2023_Presentation.html</div><div class="path"><b>Raw XML</b>C:\Amp_demos\Uri_yossef_MISRA\reports_orig\report.xml</div>
+        <div class="path"><b>Parasoft HTML</b>C:\Amp_demos\Uri_yossef_MISRA\reports_orig\report.html</div><div class="path"><b>Filtered BDF</b>C:\Amp_demos\Uri_yossef_MISRA\cpptestscan_orig_only.bdf</div>
+        <div class="path"><b>Unit tests</b>C:\Amp_demos\Uri_yossef_MISRA\stubs\test_unit.c</div><div class="path"><b>Complexity</b>C:\Amp_demos\Uri_yossef_MISRA\complexity.json</div>
+        <div class="path"><b>CMake build</b>C:\Amp_demos\Uri_yossef_MISRA\build-host\</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">13 · Final assessment</div><h2>Conclusion</h2>
+      <div class="grid">
+        <div class="card conclusion"><ul><li>Functionally correct: <b class="green">48/48 tests pass</b>, but <b class="red">NOT MISRA C:2023 compliant</b>.</li><li><b>83 Required</b> findings block safety-critical certification.</li><li>Three functions have <b class="red">HIGH complexity (&gt;10)</b> and need refactoring.</li><li>Unit tests exposed a genuine async sensor report TX logic bug.</li><li>Security review found <b class="red">1 HIGH</b> authorization design gap and <b class="amber">3 MEDIUM</b> issues.</li><li>Violation density is <b>27.9 per 100 code lines</b> — systematic remediation is needed.</li></ul></div>
+        <div class="card accent"><span class="kicker">RECOMMENDED SEQUENCE</span><h3 style="font-size:clamp(1.3rem,2.3vw,2rem)">Mechanical identifiers<br><span class="muted">↓</span><br><span class="blue">Type safety</span><br><span class="muted">↓</span><br>Advisory cleanup</h3><p class="muted">Resolve identifier lengths first, then conversion and essential-type defects, followed by portability and maintainability items.</p><div class="verdict" style="background:rgba(34,197,94,.1);border-color:var(--green);color:#86efac;font-size:1rem;letter-spacing:.03em">With remediation, this codebase can achieve MISRA C:2023 compliance.</div></div>
+      </div>
+    </section>
+  </main>
+  <button class="nav prev" id="prev" aria-label="Previous slide">‹</button><button class="nav next" id="next" aria-label="Next slide">›</button>
+  <div class="counter" id="counter">1 / 14</div><div class="progress"><div class="progress-fill" id="progress"></div></div>
+  <script>
+    (() => {
+      const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],prev=document.getElementById('prev'),next=document.getElementById('next'),counter=document.getElementById('counter'),progress=document.getElementById('progress'),hint=document.getElementById('hint');
+      let current=0,touchX=null,mouseX=null;
+      function show(index){current=Math.max(0,Math.min(slides.length-1,index));deck.style.transform=`translateX(-${current*100}vw)`;prev.hidden=current===0;next.hidden=current===slides.length-1;counter.textContent=`${current+1} / ${slides.length}`;progress.style.width=`${((current+1)/slides.length)*100}%`;if(current>0)hint.classList.add('hidden');}
+      prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
+      document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();show(current+1)}else if(e.key==='ArrowLeft'){e.preventDefault();show(current-1)}});
+      document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX},{passive:true});document.addEventListener('touchend',e=>{if(touchX===null)return;const d=e.changedTouches[0].screenX-touchX;if(Math.abs(d)>=50)show(current+(d<0?1:-1));touchX=null},{passive:true});
+      document.addEventListener('mousedown',e=>{if(!e.target.closest('button'))mouseX=e.screenX});document.addEventListener('mouseup',e=>{if(mouseX===null)return;const d=e.screenX-mouseX;if(Math.abs(d)>=50)show(current+(d<0?1:-1));mouseX=null});
+      window.addEventListener('resize',()=>show(current));show(0);
+    })();
+  </script>
+</body>
+</html>
