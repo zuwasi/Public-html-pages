@@ -860,6 +860,16 @@
         Compare Amp, Claude Code, Cursor, and Factory Droid modes. Each mode applies explicit assumptions about
         context size, autonomy loops, model choice, and retry behavior on top of the same token-cost formula.
       </p>
+      <details style="margin-top:14px;border:1px solid var(--warn);border-radius:12px;background:rgba(245,158,11,0.10);padding:12px 16px;color:var(--text);">
+        <summary style="cursor:pointer;font-weight:700;color:var(--warn);">Updated July 27, 2026 — model catalog refresh (click to expand what changed)</summary>
+        <ul style="margin:10px 0 0 18px;line-height:1.6;color:var(--muted);">
+          <li><strong>Amp:</strong> Replaced the deprecated <em>smart/deep/rush</em> mode rows with the current <em>low/medium/high/ultra</em> dial (ampcode.com/news/the-dial, July 9, 2026). New writer models: GLM-5.2 (low), GPT-5.6 Sol (medium/high), Claude Fable 5 (ultra), each paired with an oracle. Default selection changed from <code>amp-smart-opus47</code> to <code>amp-medium-gpt56sol</code>. Legacy smart/deep/rush rows kept and labeled <em>(classic, deprecated)</em> for historical comparison.</li>
+          <li><strong>Claude:</strong> Added Claude Opus 5, Sonnet 5 (new Claude Code default, $2/$10 intro through Aug 31 2026), and Fable 5. Default selection changed from <code>claude-sonnet-46</code> to <code>claude-sonnet-5</code>. Opus 4.8/4.7 and Sonnet 4.6/4.5 rows relabeled <em>(legacy)</em> — still selectable in the API but superseded. Updated <code>claude-default</code> note: <em>opus</em> alias now resolves to Opus 5, <em>sonnet</em> to Sonnet 5.</li>
+          <li><strong>Pricing sources:</strong> Anthropic pricing docs (Fable 5 $10/$50, Opus 5 $5/$25, Sonnet 5 $2/$10 intro, Haiku 4.5 $1/$5); OpenAI GPT-5.6 launch (Sol $5/$30, Terra $2.50/$15, Luna $1/$6). GLM-5.2 per-token price is a labeled planning proxy — Amp hosts it and has not published public per-token dollars.</li>
+          <li><strong>Note on Fable 5:</strong> Claude Fable 5/Mythos 5 access was suspended June 12, 2026 under a U.S. export-control directive. The ultra tier and Fable rows remain in the catalog but may not be reachable for all orgs; Amp may fall back to Opus-class models.</li>
+          <li><strong>Not changed:</strong> The underlying cost formula, UI, Cursor and Factory Droid catalogs, and all default team-size/usage assumptions are unchanged. Factory Droid still references GPT-5.5/Opus 4.7-class multipliers because Factory's published model list has not been re-verified for GPT-5.6.</li>
+        </ul>
+      </details>
     </header>
 
     <section class="grid" aria-label="Calculator">
@@ -1286,28 +1296,38 @@
 
     const modelCatalog = {
       amp: [
-        model('amp-deep-gpt55', 'Amp Deep · GPT-5.5', 5, 30, 'Amp manual: deep uses GPT-5.5 with extended thinking for complex problems.'),
-        model('amp-smart-opus47', 'Amp Smart · state-of-the-art model mix', 5, 25, 'Amp manual: smart uses state-of-the-art models without constraints; Amp is multi-model across GPT-5.5, Opus 4.7, and fast models. This row uses an Opus-class price as a planning proxy.'),
-        model('amp-rush-gpt55', 'Amp Rush · GPT-5.5', 5, 30, 'Amp manual: rush is fast, low-token GPT-5.5 with no reasoning for small, well-defined tasks.'),
-        model('amp-review-gemini31', 'Amp Review proxy · Gemini 3.1 Pro', 2, 12, 'Planning proxy: the current manual documents subagents generally, mostly in smart mode, but does not specify a fixed Review model.'),
+        // Current dial modes (ampcode.com/news/the-dial, July 9, 2026). Smart/Deep/Rush/Large are deprecated.
+        model('amp-ultra-fable5', 'Amp Ultra · Claude Fable 5', 10, 50, 'Amp Dial (July 2026): ultra writes with Claude Fable 5 ($10/$50 MTok, Anthropic pricing) and uses GPT-5.6 Sol as oracle. Note: Fable 5 access was suspended June 12, 2026 under a U.S. export-control directive; Amp may fall back to Opus-class models when Fable is unavailable.'),
+        model('amp-high-gpt56sol', 'Amp High · GPT-5.6 Sol (xhigh)', 5, 30, 'Amp Dial (July 2026): high writes with GPT-5.6 Sol at xhigh reasoning effort ($5/$30 MTok, OpenAI pricing) and uses Claude Fable 5 as oracle. Reasoning effort is part of the tier now.'),
+        model('amp-medium-gpt56sol', 'Amp Medium · GPT-5.6 Sol', 5, 30, 'Amp Dial (July 2026): medium writes with GPT-5.6 Sol at medium reasoning effort and uses GPT-5.6 Sol at high effort as oracle. Same per-token price as high; the tier differs in reasoning effort and oracle, not headline rate.'),
+        model('amp-low-glm52', 'Amp Low · GLM-5.2 (open-weight)', 1, 6, 'Amp Dial (July 2026): low writes with GLM-5.2, Z.ai open-weight model, the strongest open model on agentic coding per Amp. Per-token price is a planning proxy (Amp hosts it; the dial post describes it as "cheap tokens" without publishing public per-token dollars). GPT-5.6 Sol is the oracle.'),
+        // Legacy deprecated modes kept for reference; installable via @amp/*-classic plugins.
+        model('amp-smart-classic', 'Amp Smart (classic, deprecated) · Opus 4.8', 5, 25, 'Amp classic plugin: the deprecated Smart mode used Claude Opus 4.8 with high reasoning. Replaced by medium/high on the dial. Kept for historical comparison only.'),
+        model('amp-deep-classic', 'Amp Deep (classic, deprecated) · GPT-5.5', 5, 30, 'Amp classic plugin: the deprecated Deep mode used GPT-5.5 with medium reasoning. Replaced by medium on the dial.'),
+        model('amp-rush-classic', 'Amp Rush (classic, deprecated) · GPT-5.5', 5, 30, 'Amp classic plugin: the deprecated Rush mode used GPT-5.5 with no reasoning. Replaced by low on the dial.'),
+        // Subagent / tool proxies. The manual does not pin fixed models for most helpers; these are clearly-labeled planning estimates.
+        model('amp-oracle-gpt56sol', 'Amp Oracle proxy · GPT-5.6 Sol', 5, 30, 'Planning proxy: every dial tier pairs with an oracle for second opinions (GPT-5.6 Sol or Claude Fable 5, per the Dial post). Oracle calls add token cost on top of the writer model.'),
+        model('amp-librarian-gpt55', 'Amp Librarian proxy · GPT-5.5', 5, 30, 'Planning proxy: Amp reported (June 19, 2026) the Librarian now runs on GPT-5.5 with no reasoning, ~3x faster and 43% cheaper than the prior Sonnet 4.6 version. Per-token rate shown is GPT-5.5 list pricing.'),
         model('amp-search-gemini3flash', 'Amp Search/tool proxy · Gemini 3 Flash', 0.5, 3, 'Planning proxy: the manual says Amp charges for certain tools such as web search; this row estimates a low-cost fast-model/tool surface.'),
-        model('amp-oracle-gpt55', 'Amp Oracle · GPT-5.5', 5, 30, 'Amp manual: Oracle currently uses GPT-5.5 with high reasoning and is slower/more expensive than day-to-day editing.'),
-        model('amp-librarian-sonnet46', 'Amp Librarian proxy · Claude Sonnet 4.6', 3, 15, 'Planning proxy: the manual documents Librarian as a remote-codebase research subagent, but does not specify its current model.'),
         model('amp-viewmedia-gemini3flash', 'Amp View Media proxy · Gemini 3 Flash', 0.5, 3, 'Planning proxy: this calculator estimates a low-cost vision/media helper surface; the current manual excerpt does not specify a View Media model.'),
         model('amp-handoff-gemini3flash', 'Amp Handoff proxy · Gemini 3 Flash', 0.5, 3, 'Planning proxy: this estimates a lightweight handoff/summarization helper; the current manual excerpt does not specify a Handoff model.'),
         model('amp-titling-haiku45', 'Amp Titling proxy · Claude Haiku 4.5', 1, 5, 'Planning proxy: this estimates a low-cost title/summarization helper; the current manual excerpt does not specify a Titling model.')
       ],
       claude: [
-        model('claude-default', 'Claude Code default', 5, 25, 'Claude Code docs: default resolves by account type; Max, Team Premium, Enterprise pay-as-you-go, and Anthropic API default to Opus 4.8, while Pro/Team Standard/Enterprise subscription seats default to Sonnet 4.6.'),
-        model('claude-opus-48', 'Claude Opus 4.8 / opus alias', 5, 25, 'Claude Code model docs: on Anthropic API, opus resolves to Opus 4.8; use the full model name to pin a version.'),
-        model('claude-opus-48-fast', 'Claude Opus 4.8 Fast', 10, 50, 'Claude Code fast-mode docs: fast mode is Opus with a speed-prioritized API configuration, not a different model; Opus 4.8 fast pricing is $10/$50 MTok.'),
-        model('claude-sonnet-46', 'Claude Sonnet 4.6 / sonnet alias', 3, 15, 'Claude Code model docs: on Anthropic API and Claude Platform on AWS, sonnet resolves to Sonnet 4.6; use the full model name to pin a version.'),
-        model('claude-haiku', 'Claude Haiku / haiku alias', 1, 5, 'Claude Code model docs: haiku is the fast and efficient alias for simple tasks; the exact version can be controlled with ANTHROPIC_DEFAULT_HAIKU_MODEL.'),
+        model('claude-default', 'Claude Code default', 5, 25, 'Claude Code docs (July 2026): default resolves by account type; Max, Team Premium, Enterprise pay-as-you-go, and Anthropic API now default to Opus 5, while Pro/Team Standard/Enterprise subscription seats default to Sonnet 5. This row uses the Opus 5 rate.'),
+        model('claude-opus-5', 'Claude Opus 5 / opus alias', 5, 25, 'Claude Code model docs (July 2026): on Anthropic API, opus resolves to Opus 5; $5/$25 MTok, 1M context, 128K output, adaptive thinking by default. Use the full model name to pin a version.'),
+        model('claude-sonnet-5', 'Claude Sonnet 5 / sonnet alias', 2, 10, 'Claude pricing docs (June 30, 2026): sonnet resolves to Sonnet 5, the new Free/Pro/Claude Code default. Intro pricing $2/$10 MTok through Aug 31, 2026, then $3/$15. This row uses the intro rate.'),
+        model('claude-fable-5', 'Claude Fable 5 / fable alias', 10, 50, 'Claude Code model docs (June 9, 2026): fable uses Claude Fable 5, the most capable model, $10/$50 MTok. Note: Fable 5 access was suspended June 12, 2026 under a U.S. export-control directive; select only if available to your org.'),
+        model('claude-haiku', 'Claude Haiku 4.5 / haiku alias', 1, 5, 'Claude Code model docs: haiku is the fast and efficient alias for simple tasks ($1/$5 MTok); the exact version can be controlled with ANTHROPIC_DEFAULT_HAIKU_MODEL.'),
         model('claude-opusplan', 'Claude opusplan hybrid', 4, 20, 'Claude Code model docs: opusplan uses opus during plan mode and sonnet for execution. This row is a blended planning proxy, not a published single-model price.'),
-        model('claude-sonnet-1m', 'Claude Sonnet 1M context', 6, 22.5, 'Claude Code model docs: sonnet[1m] uses Sonnet with a 1M-token context window when the account/model supports it.'),
-        model('claude-opus-47', 'Claude Opus 4.7 provider-dependent', 5, 25, 'Claude Code model docs: Claude Platform on AWS maps opus to Opus 4.7; Bedrock, Vertex, and Foundry may require explicit full model names for newer models.'),
-        model('claude-opus-47-fast', 'Claude Opus 4.7 Fast', 30, 150, 'Claude Code fast-mode docs: Opus 4.7 fast mode is priced at $30/$150 MTok.'),
-        model('claude-sonnet-45', 'Claude Sonnet 4.5 provider-dependent', 3, 15, 'Claude Code model docs: Bedrock, Vertex, and Foundry map sonnet to Sonnet 4.5 unless a newer full model name or default environment variable is configured.')
+        model('claude-sonnet-1m', 'Claude Sonnet 5 · 1M context', 2, 10, 'Claude Code model docs: Sonnet 5 ships with a 1M-token context window at standard pricing (no long-context surcharge). Same per-token rate as the Sonnet 5 row.'),
+        // Legacy models still selectable in the API but superseded by the 5-generation frontline above.
+        model('claude-opus-48', 'Claude Opus 4.8 (legacy)', 5, 25, 'Claude pricing docs: Opus 4.8 remains available at $5/$25 MTok. Superseded by Opus 5 as the opus alias target on the Anthropic API.'),
+        model('claude-opus-48-fast', 'Claude Opus 4.8 Fast (legacy)', 10, 50, 'Claude Code fast-mode docs: fast mode is Opus with a speed-prioritized API configuration; Opus 4.8 fast pricing is $10/$50 MTok.'),
+        model('claude-sonnet-46', 'Claude Sonnet 4.6 (legacy)', 3, 15, 'Claude pricing docs: Sonnet 4.6 remains available at $3/$15 MTok. Superseded by Sonnet 5 as the sonnet alias target and the Free/Pro/Claude Code default.'),
+        model('claude-opus-47', 'Claude Opus 4.7 (legacy)', 5, 25, 'Claude pricing docs: Opus 4.7 remains available at $5/$25 MTok. Legacy; some cloud providers still map opus here.'),
+        model('claude-opus-47-fast', 'Claude Opus 4.7 Fast (legacy)', 30, 150, 'Claude Code fast-mode docs: Opus 4.7 fast mode is priced at $30/$150 MTok.'),
+        model('claude-sonnet-45', 'Claude Sonnet 4.5 (legacy)', 3, 15, 'Claude pricing docs: Sonnet 4.5 remains available at $3/$15 MTok. Bedrock, Vertex, and Foundry may still map sonnet here unless a newer full model name is configured.')
       ],
       cursor: [
         model('cursor-auto', 'Cursor Auto', 1.25, 6, 'Cursor docs: Auto + Composer pool pricing; Auto lets Cursor balance intelligence, cost efficiency, and reliability.'),
@@ -1375,10 +1395,10 @@
         homeUrl: 'https://ampcode.com',
         mark: 'A',
         logoClass: 'amp-logo',
-        llm: 'amp-smart-opus47',
+        llm: 'amp-medium-gpt56sol',
         lockLlm: false,
         note: 'Governed agent workflow with context discipline and observability overhead.',
-        assumptions: 'Manual-backed assumption: Amp has deep, smart, and rush modes; can spawn subagents for suitable complex tasks; exposes Oracle and Librarian tools; and uses pass-through provider/API pricing for individual/non-enterprise workspaces. Specific helper-model rows are planning proxies when the manual does not name a fixed model.',
+        assumptions: 'Manual-backed assumption (July 2026): Amp replaced smart/deep/rush/large with a low/medium/high/ultra mode dial. Each tier pairs a writer model (GLM-5.2, GPT-5.6 Sol, or Claude Fable 5) with an oracle (GPT-5.6 Sol or Fable 5); reasoning effort is part of the tier. Amp uses pass-through provider/API pricing for individual/non-enterprise workspaces. Specific helper-model rows (Librarian, Oracle, search, view-media) are planning proxies when the manual does not name a fixed model.',
         values: {
           engineers: 1000,
           adoption: 80,
@@ -1397,10 +1417,10 @@
         homeUrl: 'https://code.claude.com',
         mark: 'C',
         logoClass: 'claude-logo',
-        llm: 'claude-sonnet-46',
+        llm: 'claude-sonnet-5',
         lockLlm: false,
         note: 'CLI coding agent with deep repo context, shell loops, and strong autonomous editing.',
-        assumptions: 'Docs-backed assumption: Claude Code is an agentic coding tool for terminal, IDE, desktop, and web that reads code, edits files, runs commands, and can run parallel agents. API users are charged by token consumption; Pro/Max/Team/Enterprise subscribers have included plan usage, so local dollar estimates are not authoritative billing. Costs vary with model alias/provider mapping, context size, prompt caching, auto-compaction, extended thinking, subagents, and agent teams.',
+        assumptions: 'Docs-backed assumption (July 2026): Claude Code is an agentic coding tool for terminal, IDE, desktop, and web that reads code, edits files, runs commands, and can run parallel agents. The sonnet alias now resolves to Sonnet 5 (new Free/Pro/Claude Code default, $2/$10 intro through Aug 31 2026); opus resolves to Opus 5; fable selects Claude Fable 5. API users are charged by token consumption; Pro/Max/Team/Enterprise subscribers have included plan usage, so local dollar estimates are not authoritative billing. Costs vary with model alias/provider mapping, context size, prompt caching, auto-compaction, adaptive thinking, subagents, and agent teams.',
         values: {
           engineers: 1000,
           adoption: 80,

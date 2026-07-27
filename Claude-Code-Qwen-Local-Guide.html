@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Connect Claude Code to Local Qwen 2.5 Coder 14B</title>
+<title>Connect Claude Code to Local Qwen3-Coder / Qwen 2.5 Coder</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:#f0f2f5}
@@ -73,15 +73,27 @@
   <div class="card center">
     <div class="accent-bar accent-purple"></div>
     <div class="badge">Step-by-Step Guide</div>
-    <h1>Connect Claude Code<br>to a Local Qwen 2.5 Coder 14B</h1>
+    <h1>Connect Claude Code<br>to a Local Qwen Coder Model</h1>
     <p class="subtitle" style="margin-top:12px">Run a powerful coding LLM on your own machine — then use it from Claude Code (Amp CLI)</p>
     <div style="margin-top:22px">
-      <span class="tag">Qwen 2.5 Coder</span>
+      <span class="tag">Qwen3-Coder (current) / Qwen 2.5 Coder (fallback)</span>
       <span class="tag">Ollama / LM Studio</span>
       <span class="tag">Claude Code / Amp</span>
       <span class="tag">100 % Local</span>
     </div>
-    <p style="margin-top:28px;color:#888;font-size:.85rem">Use <b>← →</b> arrow keys or swipe to navigate&nbsp;&nbsp;•&nbsp;&nbsp;12 slides</p>
+    <details style="margin-top:22px;text-align:left;border:1px solid #f59e0b;border-radius:12px;background:rgba(245,158,11,0.10);padding:12px 16px;color:#333;">
+      <summary style="cursor:pointer;font-weight:700;color:#b45309;">Updated July 27, 2026 — setup method rewritten (click to expand what changed)</summary>
+      <ul style="margin:10px 0 0 18px;line-height:1.6;font-size:.9rem;color:#555;">
+        <li><strong>Model:</strong> Recommend <code>qwen3-coder</code> (Qwen3-Coder 30B-class MoE, ~3B active params) as the current local coding model; Qwen 2.5 Coder 14B remains a valid lighter fallback.</li>
+        <li><strong>API protocol (important fix):</strong> Both Ollama and LM Studio now expose a native <strong>Anthropic-compatible <code>/v1/messages</code></strong> endpoint (Ollama since Jan 2026, LM Studio since 0.4.1). Claude Code talks to it directly — no <code>custom-openai</code> provider or translation proxy is needed anymore.</li>
+        <li><strong>Base URL fix:</strong> <code>ANTHROPIC_BASE_URL</code> must be the <em>bare</em> host:port (e.g. <code>http://localhost:11434</code>), <strong>not</strong> <code>.../v1</code>. Claude Code appends the path itself. The previous guide's <code>http://localhost:11434</code> (root; + /v1/messages) was wrong.</li>
+        <li><strong>Auth + tier mapping:</strong> Use <code>ANTHROPIC_AUTH_TOKEN</code> (not just <code>ANTHROPIC_API_KEY</code>) and map Claude Code's internal sonnet/haiku/opus tiers to your local model with <code>ANTHROPIC_DEFAULT_SONNET_MODEL</code> / <code>ANTHROPIC_DEFAULT_HAIKU_MODEL</code> / <code>ANTHROPIC_DEFAULT_OPUS_MODEL</code>. Without these, Claude Code requests <code>claude-sonnet-...</code> and the local server rejects it.</li>
+        <li><strong>Beta-header fix:</strong> Set <code>CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1</code> to strip Anthropic-specific beta headers that local servers reject.</li>
+        <li><strong>settings.json:</strong> Replaced the obsolete <code>apiProvider: "custom-openai"</code> / <code>customApiBaseUrl</code> schema with the current <code>{"env": {...}}</code> block.</li>
+        <li><strong>Not changed:</strong> Prerequisites (Node.js 18+, GPU/RAM guidance), Ollama/LM Studio install steps, performance tuning, and troubleshooting structure. Hardware numbers are vendor guidance, not independently benchmarked here.</li>
+      </ul>
+    </details>
+    <p style="margin-top:28px;color:#888;font-size:.85rem">Use <b>← →</b> arrow keys or swipe to navigate&nbsp;&nbsp;•&nbsp;&nbsp;13 slides</p>
   </div>
 </div>
 
@@ -92,10 +104,10 @@
     <h2><span class="step-num">1</span> Prerequisites</h2>
     <p>Before you start, make sure you have:</p>
     <ul>
-      <li><b>16 GB+ RAM</b> (the 14B model needs ~10 GB VRAM or ~12 GB system RAM with CPU offload)</li>
+      <li><b>16 GB+ RAM</b> (the 14B model needs ~10 GB VRAM or ~12 GB system RAM (varies by model size/quant; vendor guidance) with CPU offload)</li>
       <li><b>NVIDIA GPU</b> with ≥ 12 GB VRAM <i>recommended</i> (RTX 3060 12 GB+, RTX 4060 Ti 16 GB, etc.) — CPU-only works but is slower</li>
       <li><b>~15 GB free disk space</b> for model weights</li>
-      <li><b>Node.js 18+</b> — <a href="https://nodejs.org/" target="_blank">nodejs.org</a></li>
+      <li><b>Node.js 18+</b> — <a href="https://nodejs.org/" target="_blank">nodejs.org</a> (or use Claude Code's native installer; Node is only needed for the npm install path)</li>
       <li><b>Claude Code (or Amp CLI)</b> installed — <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">Claude Code docs</a></li>
     </ul>
     <div class="tip">💡 Don't have a beefy GPU? Use the <b>Q4_K_M</b> quantised variant — it runs well on 8 GB VRAM.</div>
@@ -107,7 +119,7 @@
   <div class="card">
     <div class="accent-bar accent-green"></div>
     <h2><span class="step-num">2</span> Choose a Local Model Server</h2>
-    <p>You need software that hosts Qwen locally and exposes an <b>OpenAI-compatible API</b>. Two popular options:</p>
+    <p>You need software that hosts Qwen locally and exposes an <b>Anthropic-compatible <code>/v1/messages</code> API</b> (the native protocol Claude Code speaks). Both options below now support it natively — no translation proxy needed:</p>
     <div class="cols" style="margin-top:16px">
       <div style="background:#f5f7ff;padding:18px;border-radius:12px">
         <h2 style="font-size:1.1rem">🦙 Ollama</h2>
@@ -131,20 +143,22 @@
     <h2><span class="step-num">3a</span> Path A — Install &amp; Run with Ollama</h2>
     <ol>
       <li>Download &amp; install from <a href="https://ollama.com/download" target="_blank">ollama.com/download</a></li>
-      <li>Open a terminal and pull the model:</li>
+      <li>Open a terminal and pull the model. <b>Qwen3-Coder</b> is the current recommendation (30B-class MoE, ~3B active params, strong on agentic coding):</li>
     </ol>
+    <pre>ollama pull qwen3-coder</pre>
+    <p>Prefer the lighter, older <b>Qwen 2.5 Coder 14B</b> (smaller VRAM footprint)?</p>
     <pre>ollama pull qwen2.5-coder:14b</pre>
     <p>This downloads the <b>Q4_K_M</b> quantised weights (~9 GB). For the full-precision variant:</p>
     <pre>ollama pull qwen2.5-coder:14b-instruct-fp16</pre>
     <ol start="3">
-      <li>Verify it works — run a quick chat:</li>
+      <li>Verify it works — run a quick chat (use whichever tag you pulled):</li>
     </ol>
-    <pre>ollama run qwen2.5-coder:14b "Write hello world in Python"</pre>
+    <pre>ollama run qwen3-coder "Write hello world in Python"</pre>
     <ol start="4">
       <li>Start the Ollama server (it usually auto-starts, but to be sure):</li>
     </ol>
     <pre>ollama serve</pre>
-    <div class="tip">✅ Ollama's API is live at <code>http://localhost:11434</code> — it is already OpenAI-compatible at <code>/v1/chat/completions</code>.</div>
+    <div class="tip">✅ Ollama's API is live at <code>http://localhost:11434</code> — it now exposes a native <b>Anthropic-compatible <code>/v1/messages</code></b> endpoint (added Jan 2026), so Claude Code talks to it directly.</div>
   </div>
 </div>
 
@@ -155,88 +169,106 @@
     <h2><span class="step-num">3b</span> Path B — Install &amp; Run with LM Studio</h2>
     <ol>
       <li>Download &amp; install from <a href="https://lmstudio.ai/" target="_blank">lmstudio.ai</a></li>
-      <li>Open LM Studio → click <b>Search</b> → type <code>Qwen2.5-Coder-14B-Instruct</code></li>
+      <li>Open LM Studio → click <b>Search</b> → type <code>qwen3-coder</code> (or <code>Qwen2.5-Coder-14B-Instruct</code> for the lighter fallback)</li>
       <li>Pick a quantisation (recommended: <b>Q4_K_M</b> for balanced speed/quality)</li>
       <li>Click <b>Download</b>, wait for it to finish</li>
       <li>Go to the <b>Local Server</b> tab (left sidebar, server icon)</li>
       <li>Select the downloaded Qwen model from the dropdown</li>
       <li>Click <b>Start Server</b></li>
     </ol>
-    <div class="tip">✅ LM Studio's API is live at <code>http://localhost:1234</code> — fully OpenAI-compatible at <code>/v1/chat/completions</code>.</div>
+    <div class="tip">✅ LM Studio's API is live at <code>http://localhost:1234</code> — since v0.4.1 it exposes a native <b>Anthropic-compatible <code>/v1/messages</code></b> endpoint, so Claude Code connects with no proxy. Set context size to <b>≥ 25K tokens</b> (LM Studio's recommendation) for best results.</div>
   </div>
 </div>
-
-<!-- SLIDE 5 – Verify the API -->
+<!-- SLIDE 5 - Verify the API -->
 <div class="slide">
   <div class="card">
     <div class="accent-bar accent-blue"></div>
     <h2><span class="step-num">4</span> Verify the Local API Works</h2>
-    <p>Before connecting Claude Code, confirm the API responds. Open a new terminal:</p>
+    <p>Claude Code talks to local servers using the <b>Anthropic Messages API</b> (<code>/v1/messages</code>), not the OpenAI chat endpoint. Confirm your server exposes it:</p>
     <p><b>For Ollama (port 11434):</b></p>
-    <pre>curl http://localhost:11434/v1/chat/completions \
+    <pre>curl http://localhost:11434/v1/messages \
   -H "Content-Type: application/json" \
+  -H "anthropic-version: 2023-06-01" \
   -d '{
-    "model": "qwen2.5-coder:14b",
+    "model": "qwen3-coder",
+    "max_tokens": 256,
     "messages": [{"role":"user","content":"Say hello"}]
   }'</pre>
     <p><b>For LM Studio (port 1234):</b></p>
-    <pre>curl http://localhost:1234/v1/chat/completions \
+    <pre>curl http://localhost:1234/v1/messages \
   -H "Content-Type: application/json" \
+  -H "anthropic-version: 2023-06-01" \
   -d '{
-    "model": "qwen2.5-coder-14b-instruct",
+    "model": "qwen3-coder",
+    "max_tokens": 256,
     "messages": [{"role":"user","content":"Say hello"}]
   }'</pre>
     <p>On <b>Windows PowerShell</b>, use <code>Invoke-RestMethod</code> or install <code>curl</code> via <a href="https://curl.se/windows/" target="_blank">curl.se</a>.</p>
-    <div class="tip">✅ If you get a JSON response with a <code>"choices"</code> array — you're good!</div>
+    <div class="tip">? If you get a JSON response with a <code>"content"</code> array (Anthropic shape) - you're good! A <code>"choices"</code> array means you hit the OpenAI endpoint by mistake.</div>
   </div>
 </div>
 
-<!-- SLIDE 6 – Configure Claude Code -->
+<!-- SLIDE 6 - Configure Claude Code -->
 <div class="slide">
   <div class="card">
     <div class="accent-bar accent-purple"></div>
     <h2><span class="step-num">5</span> Configure Claude Code to Use Your Local Model</h2>
-    <p>Claude Code supports custom API providers via environment variables. Set these before launching:</p>
-    <p><b>Linux / macOS (bash/zsh):</b></p>
+    <p>Point Claude Code at your local server's <b>root</b> URL (do <b>not</b> append <code>/v1</code> - Claude Code adds the path itself). Set these before launching:</p>
+    <p><b>Linux / macOS (bash/zsh) - Ollama:</b></p>
     <pre><span class="cmt"># For Ollama</span>
-export CLAUDE_CODE_USE_BEDROCK=0
-export ANTHROPIC_BASE_URL=http://localhost:11434/v1
-export ANTHROPIC_API_KEY=ollama  <span class="cmt"># any non-empty string</span>
-export ANTHROPIC_MODEL=qwen2.5-coder:14b
-
-<span class="cmt"># For LM Studio</span>
-export ANTHROPIC_BASE_URL=http://localhost:1234/v1
-export ANTHROPIC_API_KEY=lm-studio
-export ANTHROPIC_MODEL=qwen2.5-coder-14b-instruct</pre>
-    <p><b>Windows PowerShell:</b></p>
-    <pre>$env:ANTHROPIC_BASE_URL = "http://localhost:11434/v1"
-$env:ANTHROPIC_API_KEY = "ollama"
-$env:ANTHROPIC_MODEL = "qwen2.5-coder:14b"</pre>
-    <div class="warn">⚠️ The API key can be any non-empty string — local servers don't validate it, but Claude Code requires it to be set.</div>
+export ANTHROPIC_BASE_URL=http://localhost:11434
+export ANTHROPIC_AUTH_TOKEN=ollama
+export ANTHROPIC_MODEL=qwen3-coder
+export ANTHROPIC_DEFAULT_SONNET_MODEL=qwen3-coder
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=qwen3-coder
+export ANTHROPIC_DEFAULT_OPUS_MODEL=qwen3-coder
+export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
+claude</pre>
+    <p><b>Linux / macOS - LM Studio:</b></p>
+    <pre><span class="cmt"># For LM Studio</span>
+export ANTHROPIC_BASE_URL=http://localhost:1234
+export ANTHROPIC_AUTH_TOKEN=lm-studio
+export ANTHROPIC_MODEL=qwen3-coder
+export ANTHROPIC_DEFAULT_SONNET_MODEL=qwen3-coder
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=qwen3-coder
+export ANTHROPIC_DEFAULT_OPUS_MODEL=qwen3-coder
+export CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1
+claude</pre>
+    <p><b>Windows PowerShell - Ollama:</b></p>
+    <pre>$env:ANTHROPIC_BASE_URL = "http://localhost:11434"
+$env:ANTHROPIC_AUTH_TOKEN = "ollama"
+$env:ANTHROPIC_MODEL = "qwen3-coder"
+$env:ANTHROPIC_DEFAULT_SONNET_MODEL = "qwen3-coder"
+$env:ANTHROPIC_DEFAULT_HAIKU_MODEL = "qwen3-coder"
+$env:ANTHROPIC_DEFAULT_OPUS_MODEL = "qwen3-coder"
+$env:CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS = "1"
+claude</pre>
+    <p style="font-size:.88rem;margin-top:8px"><b>Qwen 2.5 fallback:</b> set <code>ANTHROPIC_MODEL=qwen2.5-coder:14b</code> (Ollama) or <code>qwen2.5-coder-14b-instruct</code> (LM Studio).</p>
+    <p style="font-size:.88rem;margin-top:6px"><b>Why the tier vars?</b> Claude Code internally requests <code>claude-sonnet-...</code> / <code>claude-haiku-...</code> / <code>claude-opus-...</code>. Mapping all three to your local tag prevents "model not found" rejections. <code>CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS=1</code> strips Anthropic beta headers local servers do not understand.</p>
+    <div class="warn">?? The auth token can be any non-empty string - local servers don't validate it, but Claude Code requires it. Some builds accept <code>ANTHROPIC_API_KEY</code> as an alias; <code>ANTHROPIC_AUTH_TOKEN</code> is the documented name for custom endpoints.</div>
   </div>
 </div>
 
-<!-- SLIDE 7 – Alternative: settings.json -->
+<!-- SLIDE 7 - Persist the configuration -->
 <div class="slide">
   <div class="card">
     <div class="accent-bar accent-orange"></div>
-    <h2><span class="step-num">6</span> Alternative: Use a <code>settings.json</code></h2>
-    <p>Instead of env vars, you can create/edit Claude Code's settings file:</p>
-    <pre><span class="cmt">// ~/.claude/settings.json  (create if missing)</span>
-{
-  "apiProvider": "custom-openai",
-  "customApiBaseUrl": "http://localhost:11434/v1",
-  "customApiKey": "ollama",
-  "customModelId": "qwen2.5-coder:14b"
-}</pre>
-    <p>Or run the built-in config command:</p>
-    <pre>claude config set apiProvider custom-openai
-claude config set customApiBaseUrl http://localhost:11434/v1
-claude config set customModelId "qwen2.5-coder:14b"</pre>
-    <div class="tip">💡 The settings file approach persists across sessions — no need to re-export env vars each time.</div>
-    <p style="margin-top:10px;font-size:.9rem">📖 <a href="https://docs.anthropic.com/en/docs/claude-code/settings" target="_blank">Full Claude Code settings reference</a></p>
+    <h2><span class="step-num">6</span> Make the Configuration Persistent</h2>
+    <p>Environment variables reset when you close the terminal. Persist them so you don't re-export every session:</p>
+    <p><b>Linux / macOS</b> - add to <code>~/.bashrc</code> or <code>~/.zshrc</code>:</p>
+    <pre>export ANTHROPIC_BASE_URL=http://localhost:11434
+export ANTHROPIC_AUTH_TOKEN=ollama
+export ANTHROPIC_MODEL=qwen3-coder</pre>
+    <p><b>Windows PowerShell</b> - set user-level variables (survives new shells):</p>
+    <pre>[Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL","http://localhost:11434","User")
+[Environment]::SetEnvironmentVariable("ANTHROPIC_AUTH_TOKEN","ollama","User")
+[Environment]::SetEnvironmentVariable("ANTHROPIC_MODEL","qwen3-coder","User")</pre>
+    <p style="margin-top:8px"><b>To switch back to Anthropic's cloud</b>, just unset the variables (<code>Remove-Item Env:ANTHROPIC_BASE_URL</code> on PowerShell, or <code>unset ANTHROPIC_BASE_URL</code> on bash) and relaunch <code>claude</code>.</p>
+    <div class="tip">?? Avoid the old <code>"apiProvider": "custom-openai"</code> settings.json schema - it targeted the OpenAI chat endpoint and is not the native path for current Claude Code. Use environment variables with the Anthropic-compatible endpoint instead.</div>
+    <p style="margin-top:10px;font-size:.9rem">?? <a href="https://docs.anthropic.com/en/docs/claude-code/settings" target="_blank">Full Claude Code settings reference</a></p>
   </div>
 </div>
+
 
 <!-- SLIDE 8 – Launch -->
 <div class="slide">
@@ -249,7 +281,7 @@ claude config set customModelId "qwen2.5-coder:14b"</pre>
     <pre style="background:#f5f7ff;color:#333;border:1px solid #ddd">
 <span style="color:#6b21a8;font-weight:700">You:</span> Explain what a decorator is in Python, with an example.
 
-<span style="color:#0969da;font-weight:700">Qwen 2.5 Coder:</span> A decorator is a function that takes another
+<span style="color:#0969da;font-weight:700">Qwen3-Coder:</span> A decorator is a function that takes another
 function as an argument and extends its behavior without
 modifying it...
     </pre>
@@ -264,11 +296,11 @@ modifying it...
     <h2><span class="step-num">8</span> Performance Tuning Tips</h2>
     <ul>
       <li><b>GPU layers:</b> In Ollama, set <code>OLLAMA_NUM_GPU=999</code> to offload all layers to GPU</li>
-      <li><b>Context window:</b> Default is 2048 tokens. Increase for code tasks:
-        <pre>ollama run qwen2.5-coder:14b --num-ctx 8192</pre>
+      <li><b>Context window:</b> Default is small. Raise it for code tasks (Qwen3-Coder supports a long context):
+        <pre>ollama run qwen3-coder --num-ctx 32768</pre>
         Or in LM Studio: Settings → Context Length → 8192
       </li>
-      <li><b>Quantisation trade-offs:</b>
+      <li><b>Quantisation trade-offs</b> (vendor guidance; not independently benchmarked here):
         <ul>
           <li><code>Q4_K_M</code> — best balance (speed + quality)</li>
           <li><code>Q5_K_M</code> — slightly better quality, needs more VRAM</li>
@@ -277,7 +309,7 @@ modifying it...
       </li>
       <li><b>Batch size:</b> If using CPU, increase batch size for faster prompt processing</li>
     </ul>
-    <p style="margin-top:10px;font-size:.9rem">📖 <a href="https://github.com/ollama/ollama/blob/main/docs/modelfile.md" target="_blank">Ollama Modelfile options</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen 2.5 Coder GitHub</a></p>
+    <p style="margin-top:10px;font-size:.9rem">📖 <a href="https://github.com/ollama/ollama/blob/main/docs/modelfile.md" target="_blank">Ollama Modelfile options</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="https://github.com/QwenLM/Qwen2.5-Coder" target="_blank">Qwen Coder GitHub</a></p>
   </div>
 </div>
 
@@ -292,9 +324,10 @@ modifying it...
       <tr><td style="padding:10px;border-bottom:1px solid #eee"><code>Model not found</code></td><td style="padding:10px;border-bottom:1px solid #eee">Check model name matches exactly — run <code>ollama list</code></td></tr>
       <tr><td style="padding:10px;border-bottom:1px solid #eee">Very slow responses</td><td style="padding:10px;border-bottom:1px solid #eee">Ensure GPU offload is enabled; reduce context length</td></tr>
       <tr><td style="padding:10px;border-bottom:1px solid #eee">Out of memory</td><td style="padding:10px;border-bottom:1px solid #eee">Use a smaller quant (<code>Q4_K_M</code>) or reduce <code>num_ctx</code></td></tr>
-      <tr><td style="padding:10px">API key error</td><td style="padding:10px">Set <code>ANTHROPIC_API_KEY</code> to any non-empty string</td></tr>
+      <tr><td style="padding:10px;border-bottom:1px solid #eee"><code>404 / not found</code></td><td style="padding:10px;border-bottom:1px solid #eee">You appended <code>/v1</code> to <code>ANTHROPIC_BASE_URL</code>. Use the server <b>root</b> (e.g. <code>http://localhost:11434</code>); Claude Code adds <code>/v1/messages</code> itself.</td></tr>
+      <tr><td style="padding:10px">Auth / API key error</td><td style="padding:10px">Set <code>ANTHROPIC_AUTH_TOKEN</code> (or <code>ANTHROPIC_API_KEY</code>) to any non-empty string</td></tr>
     </table>
-    <div class="warn">⚠️ Qwen 2.5 Coder 14B is excellent at code, but may not support all Claude-specific features (tool use, artifacts, etc.).</div>
+    <div class="warn">⚠️ Qwen3-Coder / Qwen 2.5 Coder are strong at code, but local models may not support all Claude-specific features (agentic tool use, long agentic loops, artifacts). Tool-call reliability varies by server and quant.</div>
   </div>
 </div>
 
@@ -306,8 +339,8 @@ modifying it...
     <table style="width:100%;border-collapse:collapse;font-size:.88rem">
       <tr style="background:#fce4ec"><td style="padding:8px 10px;font-weight:600;width:40%">Item</td><td style="padding:8px 10px;font-weight:600">Value</td></tr>
       <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">Ollama API URL</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>http://localhost:11434/v1</code></td></tr>
-      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">LM Studio API URL</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>http://localhost:1234/v1</code></td></tr>
-      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">Model name (Ollama)</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>qwen2.5-coder:14b</code></td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">LM Studio API URL</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>http://localhost:1234</code> (root; + /v1/messages)</td></tr>
+      <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">Model name (Ollama)</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>qwen3-coder</code> (fallback: <code>qwen2.5-coder:14b</code>)</td></tr>
       <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">Model name (LM Studio)</td><td style="padding:8px 10px;border-bottom:1px solid #eee"><code>qwen2.5-coder-14b-instruct</code></td></tr>
       <tr><td style="padding:8px 10px;border-bottom:1px solid #eee">RAM needed</td><td style="padding:8px 10px;border-bottom:1px solid #eee">~10 GB VRAM or ~12 GB system RAM</td></tr>
       <tr><td style="padding:8px 10px">Disk space</td><td style="padding:8px 10px">~9 GB (Q4_K_M)</td></tr>
@@ -330,9 +363,9 @@ modifying it...
     <p style="margin-top:14px;font-size:1.05rem">Recap — the 4 key steps:</p>
     <ol style="text-align:left;max-width:420px;margin:18px auto">
       <li><b>Install</b> Ollama or LM Studio</li>
-      <li><b>Download</b> Qwen 2.5 Coder 14B</li>
+      <li><b>Download</b> Qwen3-Coder (or Qwen 2.5 Coder 14B)</li>
       <li><b>Start</b> the local API server</li>
-      <li><b>Configure</b> Claude Code via env vars or settings.json</li>
+      <li><b>Configure</b> Claude Code via env vars (root URL + auth token)</li>
     </ol>
     <p style="margin-top:22px;color:#888;font-size:.9rem">Now you have a fully local, private, zero-cost coding AI running through the Claude Code interface.</p>
     <div style="margin-top:24px">

@@ -959,11 +959,12 @@
     <div style="font-size:16px; color:var(--text-secondary); margin-bottom:8px;">Ampcode vs Cursor vs Claude Code vs OpenAI Codex</div>
     <p class="meta">
       Prepared for: Chief Information Security Officer<br>
-      Assessment Date: June 22, 2026<br>
+      Assessment Date: June 22, 2026 &mdash; <span style="color:#fbbf24">Re-verified July 27, 2026</span><br>
       Classification: Public — Point-in-Time Assessment<br>
       Scope: Comparative Security Analysis of Four AI Coding Agents
     </p>
     <div class="classification-badge">Public — Point-in-Time Assessment</div>
+    <details style="margin-top:18px;text-align:left;border:1px solid #f59e0b;border-radius:12px;background:rgba(245,158,11,0.10);padding:12px 16px;color:var(--text-primary);max-width:680px;"><summary style="cursor:pointer;font-weight:700;color:#fbbf24;">Updated July 27, 2026 &mdash; re-verification &amp; new capability notes (click to expand)</summary><ul style="margin:10px 0 0 18px;line-height:1.6;font-size:.9rem;color:var(--text-secondary);"><li><strong>No scorecard conclusions changed.</strong> All scores and verdicts stand as assessed June 22, 2026; no new CVE or policy evidence warranted a change.</li><li><strong>Claude Code &mdash; new surfaces, same governance:</strong> Since the June assessment, Claude Code added <em>background subagents</em>, <em>agent teams</em>, and <em>web/desktop</em> surfaces, plus expanded <em>managed policy</em> and <em>permission modes</em>. These expand the operational attack surface but inherit the existing permission-gated, sandboxed-bash, fs/net-isolation model already scored 5/5 on Slide 8. Enterprises should confirm managed-policy enforcement covers background/agent-team execution before broad rollout.</li><li><strong>Amp &mdash; mode rename only:</strong> Amp retired the <em>Smart/Deep/Rush</em> mode names in favour of <em>Low/Medium/High/Ultra</em>. The security controls assessed here (user approval for destructive actions, automatic secret redaction, bug-bounty prompt-injection coverage) are unchanged by the rename.</li><li><strong>Re-verification:</strong> CVE sources, vendor trust portals, and data-retention claims were re-checked July 27, 2026; no new qualifying CVEs found against Amp, Claude Code, or Codex in the review window.</li><li><strong>Not changed:</strong> All compliance, data-retention, auth, audit, architecture, shared-responsibility, scoring, and verdict slides remain as originally assessed.</li></ul></details>
   </div>
   <div class="slide-footer">
     <span>AI Coding Tools CISO Security Comparison 2026</span>
@@ -1029,7 +1030,7 @@
     </div>
   </div>
   <div class="slide-footer">
-    <span>Assessment based on publicly available security documentation as of March 2026</span>
+    <span>Assessment based on publicly available security documentation as of March 2026; re-verified July 27, 2026</span>
     <span>Slide 2 of 13</span>
   </div>
 </section>
@@ -1545,7 +1546,8 @@
           </tbody>
         </table>
 
-        <div class="callout callout-danger" style="margin-top:16px">
+        <div style="margin-top:10px;background:rgba(59,130,246,0.10);border-left:3px solid #3b82f6;padding:8px 12px;border-radius:0 8px 8px 0;font-size:.8rem;color:var(--text-secondary);line-height:1.45">  <strong style="color:#60a5fa">July 27, 2026 update &mdash; new surfaces, unchanged scores:</strong>   Claude Code's <em>background agents</em>, <em>agent teams</em>, and <em>web/desktop</em> run under the same permission-gated sandbox model scored above (no score change).   Amp's <em>Low/Medium/High/Ultra</em> mode rename does not alter approval-gate or redaction controls. No new qualifying CVEs in the re-check window.</div>
+          <div class="callout callout-danger" style="margin-top:16px">
           <div class="callout-icon">🚨</div>
           <div class="callout-text">
             <strong>Cursor's sandbox has been breached:</strong> CVE-2026-26268 demonstrates a proven sandbox escape leading to RCE. This undermines the 3/5 sandboxing score — the effective isolation is lower than architectural design suggests.
@@ -1607,7 +1609,7 @@
     </div>
   </div>
   <div class="slide-footer">
-    <span>Sources: NVD (nvd.nist.gov), MITRE CVE database — verified June 22, 2026</span>
+    <span>Sources: NVD (nvd.nist.gov), MITRE CVE database — verified June 22, 2026; re-checked July 27, 2026</span>
     <span>Slide 9 of 13</span>
   </div>
 </section>
@@ -1922,7 +1924,7 @@
     </div>
   </div>
   <div class="slide-footer">
-    <span>AI Coding Tools CISO Security Comparison — June 2026 — Sources re-verified June 22, 2026</span>
+    <span>AI Coding Tools CISO Security Comparison — June 2026 — Sources re-verified June 22, 2026; update July 27, 2026</span>
     <span>Slide 13 of 13</span>
   </div>
 </section>
