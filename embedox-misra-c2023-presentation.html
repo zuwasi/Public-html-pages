@@ -64,54 +64,63 @@
 
     <section class="slide">
       <div class="eyebrow">Executive summary · V1 → V2</div><h2>Before → <span class="green">After</span></h2>
-      <p class="subtitle" style="margin-bottom:18px">We went from 174 violations and a hidden logic bug to 135 fixes, 39 formal deviations, and a corrected security posture.</p>
+      <p class="subtitle" style="margin-bottom:18px">We went from 174 violations and a hidden logic bug to a Parasoft-verified V2 scan: 135 code fixes applied, 132 remaining (65 production · 67 stubs), 48/48 tests pass.</p>
 
       <!-- Diff table -->
       <div class="table-wrap" style="margin-bottom:16px"><table>
-        <thead><tr><th>Metric</th><th class="red">V1 Baseline</th><th class="green">V2 Fixed</th><th>Δ Change</th></tr></thead>
+        <thead><tr><th>Metric</th><th class="red">V1 Baseline</th><th class="green">V2 Parasoft Scan</th><th>Δ Change</th></tr></thead>
         <tbody>
-          <tr><td><b>MISRA findings</b></td><td class="red">174</td><td class="green">39 (deviations only)</td><td><b class="green">−135 fixed (77.6%)</b></td></tr>
-          <tr><td><b>Required violations</b></td><td class="red">83</td><td class="green">14 (deviated)</td><td><b class="green">−69 fixed (83.1%)</b></td></tr>
-          <tr><td><b>Advisory violations</b></td><td class="amber">91</td><td class="green">25 (deviated)</td><td><b class="green">−66 fixed (72.5%)</b></td></tr>
-          <tr><td><b>Density / 100 code lines</b></td><td class="red">27.9</td><td class="green">4.85</td><td><b class="green">−82.6% reduction</b></td></tr>
+          <tr><td><b>Total findings (all scope)</b></td><td class="red">174</td><td class="amber">132</td><td><b class="green">−42 (24.1%)</b></td></tr>
+          <tr><td><b>Production .c files only</b></td><td class="red">174</td><td class="green">65</td><td><b class="green">−109 (62.6%)</b></td></tr>
+          <tr><td><b>Required violations</b></td><td class="red">83</td><td class="amber">91</td><td><b class="amber">+8 (new from V2 fixes)</b></td></tr>
+          <tr><td><b>Advisory violations</b></td><td class="amber">91</td><td class="green">41</td><td><b class="green">−50 (54.9%)</b></td></tr>
+          <tr><td><b>Density / 100 code lines (prod)</b></td><td class="red">27.9</td><td class="green">10.4</td><td><b class="green">−62.6% reduction</b></td></tr>
           <tr><td><b>Logic bug (async TX)</b></td><td class="red">Present — <code>== false</code></td><td class="green">Fixed — <code>&lt; 0</code></td><td><b class="green">Eliminated</b></td></tr>
           <tr><td><b>Security issues fixed</b></td><td class="red">0 of 7</td><td class="green">2 fixed · 1 mitigated</td><td><b class="amber">4 remain (design-level)</b></td></tr>
           <tr><td><b>Unit tests</b></td><td>48/48 pass</td><td class="green">48/48 pass</td><td><b>0 regressions</b></td></tr>
           <tr><td><b>Build errors</b></td><td>0</td><td class="green">0</td><td><b>Clean compile</b></td></tr>
           <tr><td><b>Early returns (Rule 15.5)</b></td><td class="amber">23 multiple exits</td><td class="green">0 — single exit</td><td><b class="green">All consolidated</b></td></tr>
-          <tr><td><b>Compliance status</b></td><td class="red">NON-COMPLIANT</td><td class="green">Compliant*</td><td><b class="green">*subject to deviation approval</b></td></tr>
+          <tr><td><b>Parasoft re-scan</b></td><td class="muted">Not done</td><td class="green">Completed Jul 27</td><td><b class="green">Tool-verified</b></td></tr>
+          <tr><td><b>Compliance status</b></td><td class="red">NON-COMPLIANT</td><td class="amber">Partially compliant*</td><td><b class="amber">*deviations + new findings pending</b></td></tr>
         </tbody>
       </table></div>
 
       <!-- Histogram: CSS bar comparison -->
       <div class="card" style="margin-bottom:14px">
-        <h3>Findings Histogram — V1 vs V2</h3>
+        <h3>Findings Histogram — V1 vs V2 (Parasoft-verified)</h3>
         <div style="display:grid;gap:10px">
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
-            <span style="font-weight:600">Total findings</span>
+            <span style="font-weight:600">Total (all scope)</span>
             <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">174</b></div>
-            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:22.4%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">39</b></div>
-            <b class="green" style="font-size:.78rem;text-align:right">−77.6%</b>
+            <div style="display:flex;align-items:center;gap:6px"><span class="amber" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:75.9%;background:linear-gradient(90deg,#b45309,#f59e0b)"></div></div><b class="amber" style="font-size:.78rem">132</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−24.1%</b>
+          </div>
+          <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
+            <span style="font-weight:600">Prod .c only</span>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">174</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:37.4%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">65</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−62.6%</b>
           </div>
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
             <span style="font-weight:600">Required</span>
             <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">83</b></div>
-            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:16.9%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">14</b></div>
-            <b class="green" style="font-size:.78rem;text-align:right">−83.1%</b>
+            <div style="display:flex;align-items:center;gap:6px"><span class="amber" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b45309,#f59e0b)"></div></div><b class="amber" style="font-size:.78rem">91</b></div>
+            <b class="amber" style="font-size:.78rem;text-align:right">+8 new</b>
           </div>
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
             <span style="font-weight:600">Advisory</span>
             <div style="display:flex;align-items:center;gap:6px"><span class="amber" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b45309,#f59e0b)"></div></div><b class="amber" style="font-size:.78rem">91</b></div>
-            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:27.5%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">25</b></div>
-            <b class="green" style="font-size:.78rem;text-align:right">−72.5%</b>
+            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:45.1%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">41</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−54.9%</b>
           </div>
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
             <span style="font-weight:600">Density/100 LOC</span>
             <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">27.9</b></div>
-            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:17.4%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">4.85</b></div>
-            <b class="green" style="font-size:.78rem;text-align:right">−82.6%</b>
+            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:37.3%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">10.4</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−62.6%</b>
           </div>
         </div>
+        <p class="muted" style="margin-top:8px;font-size:.72rem">V2 total includes 67 stub/header findings (protobuf-generated, Zephyr macros) not in V1 scope. Production .c files: 174 → 65 (−62.6%). Required increased (+8) because V2's fixed-width type changes introduced RULE_11_3 pointer casts and RULE_15_1 goto statements.</p>
       </div>
 
       <!-- Complexity + Bug + Security -->
@@ -439,13 +448,17 @@
           <li>Async TX bug fix verified by dedicated tests</li>
         </ul></div>
       </div>
-      <div class="card danger" style="margin-top:16px"><h3 class="amber">Parasoft re-scan status</h3><p>A fresh Parasoft C/C++test re-scan was attempted with a traced BDF (<code>cpptestscan_v2_orig_only.bdf</code>). The license server was unavailable during this session. The V2 fixed report is therefore a <b>baseline-to-change mapping</b>: each of the 174 original findings is traced to its V2 resolution (fixed or deviation) with implementation evidence. A Parasoft re-scan should be performed when the license server is restored to confirm zero remaining non-deviated findings.</p></div>
+      <div class="card success" style="margin-top:16px"><h3 class="green">Parasoft re-scan — COMPLETED</h3><p>A fresh Parasoft C/C++test re-scan was performed on July 27, 2026 with a freshly traced BDF (<code>cpptestscan_v2_orig_fresh.bdf</code>). License: Automation Compliance Edition via network server <code>172.25.144.1:8443</code>.</p><p><b>Result: 132 violations</b> (91 Required, 41 Advisory, 0 Mandatory) — down from 174 baseline. <b class="green">65 in production .c files</b> (−62.6%), 67 in stub/headers (protobuf-generated, Zephyr macros). Full XML/HTML reports generated in <code>reports_v2/</code>.</p><p class="muted">New findings introduced by V2 fixes: RULE_11_3 pointer casts (9), RULE_15_1 goto (4), RULE_5_2 protobuf enum collisions (25 in stubs). These require additional deviations or V3 fixes.</p></div>
       <div class="card accent" style="margin-top:14px"><h3>Inline code annotations</h3><p>Every fix is annotated in the source with: <code>/*fixed by Liezrowice 26-7-2026: &lt;rule&gt; - &lt;description&gt;*/</code></p><p class="muted">The explanation text in each comment matches the corresponding entry in the fixed report, as required.</p></div>
     </section>
 
     <section class="slide">
       <div class="eyebrow">20 · V2 evidence package</div><h2>V2 <span>Deliverables</span></h2>
       <div class="paths">
+        <div class="path"><b>Parasoft V2 Report</b>V2-fixed/reports_v2/MISRA_C_2023_V2_Parasoft_Report.md</div>
+        <div class="path"><b>Parasoft V2 XML</b>V2-fixed/reports_v2/report.xml — 132 findings</div>
+        <div class="path"><b>Parasoft V2 HTML</b>V2-fixed/reports_v2/report.html</div>
+        <div class="path"><b>V2 Findings CSV</b>V2-fixed/reports_v2/MISRA_C_2023_V2_Parasoft_Findings.csv</div>
         <div class="path"><b>Fixed Report</b>V2-fixed/MISRA_C_2023_V2_Fixed_Report.md</div>
         <div class="path"><b>Deviation Report</b>V2-fixed/MISRA_C_2023_V2_Deviation_Report.md</div>
         <div class="path"><b>Findings CSV</b>V2-fixed/MISRA_C_2023_V2_Findings.csv — all 174 traced</div>
@@ -462,13 +475,15 @@
       <div class="eyebrow">21 · Final assessment</div><h2>Updated <span>Conclusion</span></h2>
       <div class="grid">
         <div class="card conclusion"><ul>
-          <li><b class="green">135 of 174</b> findings fixed in code without functional changes.</li>
-          <li><b class="amber">39 findings</b> formally deviated with full rationale and controls.</li>
+          <li><b class="green">135 of 174</b> baseline findings fixed in code without functional changes.</li>
+          <li><b class="amber">39 baseline findings</b> formally deviated with full rationale and controls.</li>
+          <li><b class="green">Parasoft V2 re-scan completed:</b> 132 total (65 production, 67 stubs) — 62.6% production reduction.</li>
+          <li><b class="amber">V2 introduced new findings:</b> RULE_11_3 casts (9), RULE_15_1 goto (4), RULE_5_2 enum collisions (25 in stubs).</li>
           <li><b class="green">48/48 unit tests pass</b> — zero regressions.</li>
           <li><b class="green">0 build errors</b> — clean compile with <code>-Wall -Wextra</code>.</li>
           <li>Async sensor TX bug <b class="green">corrected</b> (<code>== false</code> → <code>&lt; 0</code>).</li>
           <li>Every fix annotated with <code>/*fixed by Liezrowice 26-7-2026*/</code>.</li>
-          <li>Deviation approval is the remaining gate to compliance.</li>
+          <li>Additional deviations needed for V2-introduced findings + deviation approval is the remaining gate.</li>
         </ul></div>
         <div class="card accent">
           <span class="kicker">COMPLIANCE STATUS</span>
