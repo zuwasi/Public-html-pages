@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Evidence for the EDPB Web-Scraping Guidelines — A Briefing for Privacy &amp; AI Counsel | ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; overflow:hidden; font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif; background:#0d1321; color:#e8ecf4; }
+  .deck { display:flex; height:100vh; width:100vw; transition:transform .45s cubic-bezier(.4,0,.2,1); }
+  .slide { flex:0 0 100vw; height:100vh; padding:clamp(20px,4vw,64px); display:flex; flex-direction:column; justify-content:center; align-items:center; overflow-y:auto; }
+  .slide-inner { max-width:1100px; width:100%; }
+  h1 { font-size:clamp(1.6rem,4.2vw,3rem); font-weight:800; line-height:1.15; margin-bottom:.6em; }
+  h2 { font-size:clamp(1.25rem,3vw,2.1rem); font-weight:700; margin-bottom:.7em; }
+  h3 { font-size:clamp(.95rem,1.9vw,1.2rem); font-weight:700; margin-bottom:.4em; }
+  p, li { font-size:clamp(.88rem,1.65vw,1.1rem); line-height:1.55; color:#c3cbdc; }
+  .accent { color:#4fc3f7; } .warn { color:#ffb74d; } .bad { color:#ef5350; } .good { color:#66bb6a; }
+  .kicker { text-transform:uppercase; letter-spacing:.18em; font-size:clamp(.68rem,1.3vw,.85rem); font-weight:600; color:#4fc3f7; margin-bottom:1em; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:clamp(10px,1.5vw,20px); margin-top:1.1em; }
+  .card { background:#161d2f; border:1px solid #263048; border-radius:14px; padding:clamp(12px,1.8vw,22px); }
+  .card h3 { color:#e8ecf4; }
+  .card .tag { display:inline-block; font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:3px 10px; border-radius:999px; margin-bottom:10px; }
+  .tag-demand { background:#123a52; color:#4fc3f7; }
+  .tag-solved { background:#173a22; color:#66bb6a; }
+  .tag-partial { background:#42320f; color:#ffb74d; }
+  .tag-not { background:#451b1b; color:#ef5350; }
+  ul { list-style:none; margin-top:.4em; }
+  ul li { padding-left:1.3em; position:relative; margin-bottom:.5em; }
+  ul li::before { content:"▸"; position:absolute; left:0; color:#4fc3f7; }
+  .quote { border-left:4px solid #4fc3f7; padding:12px 20px; background:#161d2f; border-radius:0 12px 12px 0; margin:.9em 0; font-style:italic; }
+  .quote .ref { display:block; margin-top:8px; font-style:normal; font-size:.78rem; color:#7d8aa5; }
+  table { width:100%; border-collapse:collapse; margin-top:.9em; }
+  th, td { text-align:left; padding:clamp(7px,1.1vw,13px); border-bottom:1px solid #263048; font-size:clamp(.78rem,1.45vw,.98rem); vertical-align:top; }
+  th { color:#4fc3f7; text-transform:uppercase; font-size:clamp(.68rem,1.15vw,.78rem); letter-spacing:.1em; }
+  td { color:#c3cbdc; }
+  .flow { display:flex; align-items:stretch; justify-content:center; gap:clamp(6px,1.2vw,14px); flex-wrap:wrap; margin:1.2em 0; }
+  .flow .node { background:#161d2f; border:1px solid #2e64a8; border-radius:12px; padding:clamp(9px,1.4vw,16px) clamp(12px,1.8vw,22px); text-align:center; display:flex; flex-direction:column; justify-content:center; }
+  .flow .node.hl { border-color:#4fc3f7; box-shadow:0 0 18px rgba(79,195,247,.18); }
+  .flow .node b { display:block; color:#e8ecf4; font-size:clamp(.8rem,1.5vw,1rem); }
+  .flow .node span { font-size:clamp(.65rem,1.2vw,.82rem); color:#7d8aa5; }
+  .flow .arrow { color:#4fc3f7; font-size:clamp(1.1rem,2.4vw,1.7rem); font-weight:700; align-self:center; }
+  .clients { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:clamp(8px,1.3vw,16px); margin-top:1.2em; }
+  .client { display:flex; align-items:center; gap:12px; background:#f4f6fa; border-radius:12px; padding:clamp(10px,1.5vw,16px); }
+  .client img { width:52px; height:34px; object-fit:contain; flex-shrink:0; background:#fff; border-radius:6px; padding:2px; }
+  .client span { color:#1a2233; font-weight:700; font-size:clamp(.78rem,1.5vw,.95rem); line-height:1.25; }
+  .client span i { display:block; font-style:normal; font-weight:400; font-size:.72em; color:#5a6680; }
+  .logo { height:clamp(34px,5vw,54px); }
+  .logo-corner { position:fixed; top:16px; right:20px; z-index:40; height:30px; opacity:.85; }
+  .disclaimer { margin-top:1.2em; padding:11px 16px; background:#1b2233; border:1px solid #3a4560; border-radius:10px; font-size:clamp(.72rem,1.35vw,.9rem); color:#9aa7c0; }
+  .cta { display:inline-block; margin-top:1.3em; background:linear-gradient(135deg,#1976d2,#4fc3f7); color:#fff; font-weight:700; text-decoration:none; padding:14px 34px; border-radius:999px; font-size:clamp(.95rem,1.8vw,1.15rem); }
+  a { color:#4fc3f7; }
+  /* mockup */
+  .mockup{width:100%;max-width:980px;margin:0 auto;border-radius:10px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.5);text-align:left}
+  .mk-titlebar{background:#1f2b3e;color:#fff;display:flex;justify-content:space-between;align-items:center;padding:6px 12px;font-size:clamp(.62rem,1.1vw,.8rem);font-weight:600}
+  .mk-winbtns i{font-style:normal;margin-left:14px;color:#b8c4d6;font-size:.9em}
+  .mk-winbtns .mk-x{color:#f87171}
+  .mk-tabs{background:#e0e0e0;display:flex;flex-wrap:wrap;border-bottom:1px solid #bdbdbd}
+  .mk-tabs span{padding:5px 10px;font-size:clamp(.55rem,1vw,.75rem);color:#333;border-right:1px solid #cfcfcf;background:#e0e0e0;white-space:nowrap}
+  .mk-tabs .mk-tab-active{background:#f0f0f0;font-weight:700;color:#000;border-top:3px solid #4a90d9;padding-top:2px}
+  .mk-body{background:#f0f0f0;padding:clamp(10px,1.6vw,18px);color:#000}
+  .mk-frame{border:1px solid #bdbdbd;border-radius:4px;margin-bottom:clamp(8px,1.4vh,14px);padding:clamp(10px,1.4vw,14px);background:#f0f0f0;position:relative}
+  .mk-frame-title{position:absolute;top:-9px;left:10px;background:#f0f0f0;padding:0 6px;font-size:clamp(.58rem,1vw,.76rem);font-weight:700;color:#1f2b3e}
+  .mk-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px}
+  .mk-row label{font-size:clamp(.6rem,1.05vw,.78rem);font-weight:600;color:#222}
+  .mk-entry{background:#fff;border:1px solid #9a9a9a;padding:4px 8px;font-size:clamp(.58rem,1vw,.76rem);min-width:180px;color:#222}
+  .mk-btn{background:#e8e8e8;border:1px solid #9a9a9a;border-radius:3px;padding:4px 10px;font-size:clamp(.58rem,1vw,.76rem);color:#222;white-space:nowrap}
+  .mk-btn-primary{background:#4a90d9;color:#fff;border-color:#3a7bc0;font-weight:600}
+  .mk-status{margin-left:auto;color:#2e7d32;font-size:clamp(.58rem,1vw,.76rem);font-weight:600}
+  .mk-result{font-size:clamp(.58rem,1.05vw,.78rem);padding:3px 0;color:#222;line-height:1.45}
+  .mk-ok{color:#2e7d32;font-weight:700;margin-right:6px}
+  .mk-warn{color:#e65100;font-weight:700;margin-right:6px}
+  .mk-bad{color:#c62828;font-weight:700;margin-right:6px}
+  .mk-score{margin-top:8px;font-size:clamp(.6rem,1.1vw,.8rem);font-weight:600;color:#1f2b3e;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .mk-bar{display:inline-block;width:clamp(120px,22vw,260px);height:10px;background:#d0d0d0;border:1px solid #9a9a9a;border-radius:5px;overflow:hidden}
+  .mk-bar-fill{display:block;height:100%;background:linear-gradient(90deg,#4a90d9,#2e7d32)}
+  .mk-outputs{margin-top:8px;font-size:clamp(.55rem,1vw,.74rem);color:#333;border-top:1px dashed #bdbdbd;padding-top:6px}
+  .mk-local{color:#2e7d32;font-weight:700}
+  /* ambient background */
+  body::before { content:''; position:fixed; inset:-10%; z-index:0; pointer-events:none;
+    background:radial-gradient(600px 420px at 18% 22%, rgba(25,118,210,.20), transparent 70%),
+               radial-gradient(720px 520px at 84% 78%, rgba(79,195,247,.13), transparent 70%);
+    animation:drift 18s ease-in-out infinite alternate; }
+  body::after { content:''; position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:linear-gradient(rgba(79,195,247,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(79,195,247,.05) 1px,transparent 1px);
+    background-size:48px 48px;
+    -webkit-mask-image:radial-gradient(ellipse at center, black 35%, transparent 78%);
+    mask-image:radial-gradient(ellipse at center, black 35%, transparent 78%); }
+  @keyframes drift { to { transform:translate(-34px,-24px) scale(1.06); } }
+  .deck, .nav, .progress, .counter, .logo-corner { position:relative; z-index:1; }
+  .nav, .progress, .counter, .logo-corner { position:fixed; }
+  /* entrance animations */
+  .slide :is(.slide-inner > *, .card, .client, .slide-inner > ul > li, .flow > *) { opacity:0; }
+  .slide.active :is(.slide-inner > *, .card, .client, .slide-inner > ul > li, .flow > *) { animation:rise .55s cubic-bezier(.2,.7,.3,1) both; }
+  @keyframes rise { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:none; } }
+  .slide.active .slide-inner > :nth-child(1){animation-delay:.03s}
+  .slide.active .slide-inner > :nth-child(2){animation-delay:.11s}
+  .slide.active .slide-inner > :nth-child(3){animation-delay:.19s}
+  .slide.active .slide-inner > :nth-child(4){animation-delay:.27s}
+  .slide.active .slide-inner > :nth-child(5){animation-delay:.35s}
+  .slide.active .slide-inner > :nth-child(6){animation-delay:.43s}
+  .slide.active .slide-inner > :nth-child(7){animation-delay:.51s}
+  .slide.active .slide-inner > ul > li:nth-child(1){animation-delay:.30s}
+  .slide.active .slide-inner > ul > li:nth-child(2){animation-delay:.40s}
+  .slide.active .slide-inner > ul > li:nth-child(3){animation-delay:.50s}
+  .slide.active .slide-inner > ul > li:nth-child(4){animation-delay:.60s}
+  .slide.active .slide-inner > ul > li:nth-child(5){animation-delay:.70s}
+  .slide.active .card:nth-child(1){animation-delay:.30s}
+  .slide.active .card:nth-child(2){animation-delay:.38s}
+  .slide.active .card:nth-child(3){animation-delay:.46s}
+  .slide.active .card:nth-child(4){animation-delay:.54s}
+  .slide.active .card:nth-child(5){animation-delay:.62s}
+  .slide.active .card:nth-child(6){animation-delay:.70s}
+  .slide.active .client:nth-child(1){animation-delay:.22s}
+  .slide.active .client:nth-child(2){animation-delay:.27s}
+  .slide.active .client:nth-child(3){animation-delay:.32s}
+  .slide.active .client:nth-child(4){animation-delay:.37s}
+  .slide.active .client:nth-child(5){animation-delay:.42s}
+  .slide.active .client:nth-child(6){animation-delay:.47s}
+  .slide.active .client:nth-child(7){animation-delay:.52s}
+  .slide.active .client:nth-child(8){animation-delay:.57s}
+  .slide.active .client:nth-child(9){animation-delay:.62s}
+  .slide.active .client:nth-child(10){animation-delay:.67s}
+  .slide.active .client:nth-child(11){animation-delay:.72s}
+  .slide.active .client:nth-child(12){animation-delay:.77s}
+  .slide.active .flow > :nth-child(1){animation-delay:.30s}
+  .slide.active .flow > :nth-child(2){animation-delay:.38s}
+  .slide.active .flow > :nth-child(3){animation-delay:.46s}
+  .slide.active .flow > :nth-child(4){animation-delay:.54s}
+  .slide.active .flow > :nth-child(5){animation-delay:.62s}
+  .slide.active .flow > :nth-child(6){animation-delay:.70s}
+  .slide.active .flow > :nth-child(7){animation-delay:.78s}
+  .slide.active .flow > :nth-child(8){animation-delay:.86s}
+  .slide.active .flow > :nth-child(9){animation-delay:.94s}
+  .slide.active .hint { animation:pulse 2s infinite; }
+  /* graphics & polish */
+  .kicker::before { content:''; display:inline-block; width:26px; height:2px; background:linear-gradient(90deg,#1976d2,#4fc3f7); vertical-align:middle; margin-right:10px; border-radius:2px; }
+  .ic { font-size:1.25rem; width:42px; height:42px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:linear-gradient(135deg,#12304a,#1b2b45); border:1px solid #2e64a8; margin-bottom:10px; }
+  .card { transition:transform .25s, border-color .25s, box-shadow .25s; }
+  .card:hover { transform:translateY(-4px); border-color:#4fc3f7; box-shadow:0 10px 28px rgba(0,0,0,.35); }
+  .client { transition:transform .25s, box-shadow .25s; }
+  .client:hover { transform:translateY(-3px); box-shadow:0 8px 22px rgba(0,0,0,.35); }
+  .quote { position:relative; padding-left:58px; }
+  .quote::before { content:'\201C'; position:absolute; left:14px; top:2px; font-size:3.4em; line-height:1; color:#4fc3f7; opacity:.45; font-family:Georgia,serif; }
+  .cta { transition:transform .25s, box-shadow .25s; box-shadow:0 4px 18px rgba(25,118,210,.35); }
+  .cta:hover { transform:translateY(-3px) scale(1.03); box-shadow:0 10px 34px rgba(79,195,247,.45); }
+  .stats { display:flex; gap:clamp(10px,2vw,22px); flex-wrap:wrap; margin:.4em 0 1em; }
+  .stat { flex:1; min-width:150px; background:#161d2f; border:1px solid #263048; border-radius:14px; padding:14px 18px; text-align:center; }
+  .stat b { display:block; font-size:clamp(1.4rem,3.2vw,2.2rem); color:#4fc3f7; font-weight:800; }
+  .stat span { font-size:clamp(.68rem,1.2vw,.85rem); color:#7d8aa5; line-height:1.35; display:block; margin-top:2px; }
+  .hero-art { width:min(680px,94%); margin:1.7em auto 0; display:block; }
+  .hero-art .dash { stroke-dasharray:7 7; animation:dashmove 1.3s linear infinite; }
+  @keyframes dashmove { to { stroke-dashoffset:-14; } }
+  /* nav chrome */
+  .nav { position:fixed; top:50%; transform:translateY(-50%); z-index:50; width:48px; height:48px; border-radius:50%; border:1px solid #3a4560; background:rgba(22,29,47,.85); color:#e8ecf4; font-size:1.5rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:opacity .3s; user-select:none; }
+  .nav:hover { background:#1976d2; }
+  .nav.hidden { opacity:0; pointer-events:none; }
+  #prev { left:14px; } #next { right:14px; }
+  .progress { position:fixed; bottom:0; left:0; height:4px; width:100%; background:#161d2f; z-index:50; }
+  .progress .fill { height:100%; width:0; background:linear-gradient(90deg,#1976d2,#4fc3f7); transition:width .4s; }
+  .counter { position:fixed; bottom:14px; right:18px; z-index:50; font-size:.8rem; color:#7d8aa5; background:rgba(22,29,47,.85); padding:4px 12px; border-radius:999px; border:1px solid #263048; }
+  .hint { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:50; color:#7d8aa5; font-size:.85rem; animation:pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+  @media (max-width:640px){
+    .cards, .clients { grid-template-columns:1fr; }
+    .flow { flex-direction:column; }
+    .flow .arrow { transform:rotate(90deg); }
+    .nav { width:38px; height:38px; font-size:1.2rem; }
+  }
+</style>
+</head>
+<body>
+<img class="logo-corner" src="images/esl-logo.png" alt="ESL">
+<div class="deck" id="deck">
+
+  <!-- 1 · Title -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center">
+      <img class="logo" src="images/esl-logo.png" alt="ESL logo" style="margin-bottom:1.4em">
+      <p class="kicker">A Briefing for Privacy, AI &amp; Cyber Counsel · EDPB Guidelines 03/2026</p>
+      <h1>Your Clients Now Need <span class="accent">Dataset Evidence</span>.<br>We Generate It — On Their Premises.</h1>
+      <p style="max-width:740px;margin:0 auto">The EDPB's web-scraping guidelines turn AI training data into an audit target. Legal advice tells clients <i>what</i> to demonstrate; SBOMator DataBOM produces the technical artifacts they demonstrate it <i>with</i>.</p>
+      <svg class="hero-art" viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g stroke="#4fc3f7" stroke-width="1.5" fill="none" opacity=".5">
+          <path class="dash" d="M124 45 C 200 45, 220 75, 284 75"/>
+          <path class="dash" d="M124 75 L 284 75"/>
+          <path class="dash" d="M124 105 C 200 105, 220 75, 284 75"/>
+          <path class="dash" d="M372 75 L 458 75"/>
+          <path class="dash" d="M546 75 L 602 75"/>
+        </g>
+        <g fill="#161d2f" stroke="#2e64a8" stroke-width="1.5">
+          <rect x="64" y="32" width="60" height="26" rx="7"/>
+          <rect x="64" y="62" width="60" height="26" rx="7"/>
+          <rect x="64" y="92" width="60" height="26" rx="7"/>
+          <circle cx="328" cy="75" r="42" stroke="#4fc3f7"/>
+          <circle cx="502" cy="75" r="42"/>
+          <rect x="602" y="47" width="82" height="56" rx="10" stroke="#66bb6a"/>
+        </g>
+        <g font-family="Inter,sans-serif" font-size="11" fill="#9db2d6" text-anchor="middle">
+          <text x="94" y="49">HTML</text>
+          <text x="94" y="79">JSONL</text>
+          <text x="94" y="109">CSV</text>
+          <text x="328" y="70" font-size="20">&#128269;</text>
+          <text x="328" y="90" font-size="10" fill="#4fc3f7">DataBOM scan</text>
+          <text x="502" y="70" font-size="20">&#127991;&#65039;</text>
+          <text x="502" y="90" font-size="10">PII &middot; sources &middot; Art. 9</text>
+          <text x="643" y="71" font-size="18" fill="#66bb6a">&#10004;</text>
+          <text x="643" y="91" font-size="10" fill="#66bb6a">evidence</text>
+          <text x="328" y="139" font-size="10" fill="#5a6680">runs on the client's premises &mdash; nothing is uploaded</text>
+        </g>
+      </svg>
+      <div class="hint" id="hint">← Swipe to navigate →</div>
+    </div>
+  </section>
+
+  <!-- 2 · About ESL -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Who We Are</p>
+      <h2>ESL — Verification Tooling for Regulated, Safety-Critical Software</h2>
+      <ul>
+        <li><b>Engineering Software Lab (ESL)</b> builds and delivers verification and compliance tooling for industries where software failure is not an option — and where regulators already demand evidence, not assurances.</li>
+        <li><b>Medical / FDA:</b> premarket cybersecurity submissions already require an SBOM. We generate and validate them for medical-device manufacturers.</li>
+        <li><b>Automotive:</b> ISO 26262, ISO 21434, MISRA / CERT, ASPICE — static analysis, certified unit testing, and audit-ready compliance reporting.</li>
+        <li><b>Aerospace &amp; defence:</b> DO-178C avionics workflows and tooling deployed on disconnected, classified networks.</li>
+        <li><b>Partner tooling:</b> we are <b>Parasoft's presence in Israel in practice</b>, and deliver Sonatype and Perforce solutions — the same TÜV-certified toolchains used across automotive and medical.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3 · Clients -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Track Record</p>
+      <h2>Trusted Where the Stakes Are Highest</h2>
+      <div class="clients">
+        <div class="client"><img src="images/logo-iai.png" alt="IAI"><span>Israel Aerospace Industries<i>defence &amp; aerospace</i></span></div>
+        <div class="client"><img src="images/logo-elbit.jpg" alt="Elbit"><span>Elbit Systems<i>defence electronics</i></span></div>
+        <div class="client"><img src="images/logo-rafael.png" alt="Rafael"><span>Rafael<i>advanced defence systems</i></span></div>
+        <div class="client"><img src="images/logo-medtronic.png" alt="Medtronic"><span>Medtronic<i>medical devices · FDA</i></span></div>
+        <div class="client"><img src="images/logo-philips.png" alt="Philips"><span>Philips Medical<i>medical imaging · FDA</i></span></div>
+        <div class="client"><img src="images/logo-neuroderm.png" alt="NeuroDerm"><span>NeuroDerm (Mitsubishi Tanabe)<i>drug-device combination</i></span></div>
+        <div class="client"><img src="images/logo-mobileye.png" alt="Mobileye"><span>Mobileye<i>ADAS / autonomous driving</i></span></div>
+        <div class="client"><img src="images/logo-innoviz.png" alt="Innoviz"><span>Innoviz<i>automotive LiDAR</i></span></div>
+        <div class="client"><img src="images/logo-elmo.png" alt="Elmo"><span>Elmo Motion Control (Bosch)<i>motion control · servo drives</i></span></div>
+        <div class="client"><img src="images/logo-pathkeeper.png" alt="PathKeeper"><span>PathKeeper Surgical<i>surgical navigation · FDA</i></span></div>
+        <div class="client"><img src="images/logo-scd.png" alt="SCD"><span>SCD SemiConductor Devices<i>infrared detectors &amp; lasers</i></span></div>
+        <div class="client"><img src="images/logo-kla.png" alt="KLA"><span>KLA-Tencor<i>semiconductor process control</i></span></div>
+      </div>
+      <p style="margin-top:1em;color:#7d8aa5;font-size:clamp(.78rem,1.4vw,.95rem)">…and many more across defence, medical, automotive and industrial. These organisations run our tooling inside networks that never touch the internet.</p>
+    </div>
+  </section>
+
+  <!-- 4 · Tool family -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">The ESL Tool Family</p>
+      <h2>One Discipline: Bills of Materials + Independent Verification</h2>
+      <div class="cards">
+        <div class="card"><div class="ic">&#128230;</div><h3 class="accent">SBOMator — SBOM</h3><p>Software bill of materials for firmware and applications: components, licenses, CVE matching against NVD/OSV. Fully offline.</p></div>
+        <div class="card"><div class="ic">&#128268;</div><h3 class="accent">HBOM</h3><p>Hardware bill of materials for FPGA/MPSoC platforms (Xilinx Zynq UltraScale+) — the hardware side of supply-chain transparency.</p></div>
+        <div class="card"><div class="ic">&#129504;</div><h3 class="accent">AI SBOM · CISA + G7</h3><p>AI/ML bill of materials aligned with CISA's <a href="https://www.cisa.gov/resources-tools/resources/software-bill-materials-ai-minimum-elements" target="_blank" rel="noopener">SBOM for AI minimum elements</a> and G7 supply-chain expectations.</p></div>
+        <div class="card"><div class="ic">&#128269;</div><h3 class="accent">SkillSpector</h3><p>Audits AI-agent skills and plugins before they run in your environment — supply-chain scrutiny for the agent era.</p></div>
+        <div class="card"><div class="ic">&#128123;</div><h3 class="accent">HalluSquatting AI</h3><p>Detects hallucinated / squatted package names that AI coding assistants invent — before they become a supply-chain attack.</p></div>
+        <div class="card"><div class="ic">&#128451;&#65039;</div><h3 class="accent">DataBOM <span style="font-size:.7em;color:#66bb6a">NEW</span></h3><p>Dataset provenance scanning for AI training data — the subject of this briefing.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Who verifies the verifier -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Methodology · Who Verifies the Verifier?</p>
+      <h2>No Single AI Verdict Is Ever Load-Bearing</h2>
+      <p>Counsel should ask any AI-tooling vendor this question. Our answer is public: the <a href="https://zuwasi.github.io/SPDF-Control-Mapping/" target="_blank" rel="noopener">SPDF Control Mapping</a> — 13 audit-ready controls, 9 threat models, 5 verification layers, built for FDA premarket cybersecurity submissions.</p>
+      <ul>
+        <li><b>Full control of Amp</b> — our evidence-generation and orchestration layer — lets us use it as the <b>independent verifier that audits the output of other AI tools</b>, including Claude Code.</li>
+        <li>Verification stack L0–L4: deterministic checks → cross-vendor oracle → named human judge → immutable evidence trail.</li>
+        <li>Every compliance claim is backed by a <b>deterministic, re-checkable artifact</b> — the same philosophy DataBOM applies to datasets.</li>
+        <li>Grounded in algorithmic-auditing literature on auditor independence (FAccT '22) — directly relevant to how regulators will assess AI-assisted compliance work.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 6 · What the EDPB changed -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">The Regulatory Shift</p>
+      <h2>Guidelines 03/2026: Public Data ≠ Free Training Data</h2>
+      <ul>
+        <li>Adopted <b>7 July 2026</b>; public consultation until <b>30 October 2026</b>. Draft interpretive guidance on existing GDPR — the enforcement direction, even before final adoption.</li>
+        <li>Public accessibility of personal data is <b>not, by itself, a legal basis</b> for AI training use.</li>
+        <li>Scope covers organisations that scrape, that instruct scrapers, <b>and that acquire already-scraped datasets</b> — your clients inherit the burden with the data.</li>
+        <li>Untargeted crawling without collection criteria and demonstrable minimisation is now <b>much harder to defend</b>.</li>
+      </ul>
+      <div class="quote">"It might be challenging … to determine exactly what personal data … are included in the data set. It is thus not obvious how to meet the principle of accountability."<span class="ref">— Guidelines 03/2026, on Art. 5(2) GDPR — the paragraph that makes dataset evidence unavoidable</span></div>
+    </div>
+  </section>
+
+  <!-- 7 · What counsel must advise -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">The Advisory Pattern</p>
+      <h2>What Privacy Practices Are Already Telling Clients</h2>
+      <div class="cards">
+        <div class="card"><div class="ic">&#128506;&#65039;</div><span class="tag tag-demand">Step 1</span><h3>Map every training dataset</h3><p>Inventory scraped and third-party datasets; assess by sensitivity, anti-scraping signals, and controller/processor roles.</p></div>
+        <div class="card"><div class="ic">&#9200;</div><span class="tag tag-demand">Step 2</span><h3>Validate sources &amp; timestamps</h3><p>Establish where each record came from, when it was collected, and whether the source is legitimate.</p></div>
+        <div class="card"><div class="ic">&#9878;&#65039;</div><span class="tag tag-demand">Step 3</span><h3>Run legitimate-interest assessments</h3><p>Necessity, reasonable expectations, minors' data, website restrictions — for existing and planned collection.</p></div>
+        <div class="card"><div class="ic">&#128226;</div><span class="tag tag-demand">Step 4</span><h3>Update privacy notices</h3><p>AI training purposes, data categories, <b>precise source indication</b>, legal basis, objection channels (Art. 14).</p></div>
+      </div>
+      <p style="margin-top:1em">Steps 1 and 2 are <b>technical work at terabyte scale</b>. Steps 3 and 4 are legal work — <b>that consumes the output of steps 1 and 2</b>. That dependency is the gap.</p>
+    </div>
+  </section>
+
+  <!-- 8 · The gap -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">The Gap</p>
+      <h2>An LIA Without Dataset Evidence Is an Opinion</h2>
+      <div class="stats">
+        <div class="stat"><b>1,247,880</b><span>records in one crawl export<br>(illustrative scan)</span></div>
+        <div class="stat"><b>12,407</b><span>PII findings one regex pass surfaces</span></div>
+        <div class="stat"><b>100%</b><span>of the scan stays on the client's premises</span></div>
+      </div>
+      <ul>
+        <li>Nobody manually audits <b>1.2 million crawled records</b>. Not the client's engineers, and not outside counsel billing by the hour.</li>
+        <li>Cloud "data compliance" scanners solve it by <b>uploading the dataset to a third party</b> — creating a new Art. 28 processor, a Chapter V transfer question, and a breach surface, for the exact data you're trying to de-risk.</li>
+        <li>In an investigation, <i>"we believe the dataset is clean"</i> is not a defence. <b>A dated, itemised, machine-generated provenance report is.</b></li>
+        <li>What's missing is the artifact between your advice and the client's compliance file: a <b>bill of materials for the dataset</b>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 9 · Solution + workflow -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center">
+      <p class="kicker">The Solution</p>
+      <h2>SBOMator DataBOM — Dataset Provenance, Scanned Like Firmware</h2>
+      <p style="max-width:780px;margin:0 auto">The scanner architecture our defence and medical clients already trust, pointed at AI training data. <b>Runs 100% on the client's machine — the dataset never leaves their network.</b></p>
+      <div class="flow">
+        <div class="node"><b>Client dataset</b><span>directory · JSONL / CSV · crawl exports</span></div>
+        <div class="arrow">→</div>
+        <div class="node hl"><b>DataBOM scan</b><span>local · offline · no upload</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>Detectors</b><span>sources · timestamps · PII · Art. 9 flags</span></div>
+        <div class="arrow">→</div>
+        <div class="node hl"><b>Evidence</b><span>HTML report + CycloneDX ML-BOM</span></div>
+        <div class="arrow">→</div>
+        <div class="node"><b>Legal work product</b><span>LIA · DPIA · Art. 14 notice · compliance file</span></div>
+      </div>
+      <ul style="max-width:720px;margin:0 auto;text-align:left">
+        <li>Source inventory: every domain, record counts, first/last collection dates — searchable, as the guidelines recommend</li>
+        <li>Syntax-based PII screening (the guidelines' own words: "e.g. regular expressions") — emails, phones, IPs, card numbers</li>
+        <li>Art. 9 special-category indicators with sanitized review excerpts — never full records</li>
+        <li>Provenance completeness score for prioritising remediation</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 10 · Product mockup -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center">
+      <p class="kicker">In the Product</p>
+      <h2>The DataBOM Tab — Next to the Firmware Scans Their Engineers Already Run</h2>
+      <div class="mockup">
+        <div class="mk-titlebar"><span>ESL-SBOMator v1.3.4</span><span class="mk-winbtns"><i>&#8211;</i><i>&#9633;</i><i class="mk-x">&#10005;</i></span></div>
+        <div class="mk-tabs">
+          <span>Databases</span><span>Project Scan</span><span>&#128274; NVD Database</span><span>&#128275; OSV Database</span><span>&#128203; Report Information</span><span>&#129302; AI/ML SBOM Add-on</span><span class="mk-tab-active">&#128194; DataBOM Dataset Scan</span>
+        </div>
+        <div class="mk-body">
+          <div class="mk-frame">
+            <div class="mk-frame-title">Dataset Provenance Scan</div>
+            <div class="mk-row">
+              <label>Dataset:</label>
+              <span class="mk-entry">C:\Datasets\crawl_2026_q2\</span>
+              <span class="mk-btn">Browse&hellip;</span>
+              <span class="mk-btn mk-btn-primary">Start Dataset Scan</span>
+              <span class="mk-btn">&#128202; Generate Provenance Report</span>
+              <span class="mk-status">&#9679; ESL Ready &middot; Offline mode</span>
+            </div>
+          </div>
+          <div class="mk-frame">
+            <div class="mk-frame-title">Last scan &mdash; crawl_2026_q2 &middot; 1,247,880 records</div>
+            <div class="mk-result"><span class="mk-ok">&#10004;</span> Source inventory: <b>4,318 domains</b> &middot; collection timestamps present for 96% of records</div>
+            <div class="mk-result"><span class="mk-warn">&#9888;</span> PII detected: <b>12,407 findings</b> (emails 8,112 &middot; phone numbers 3,051 &middot; national IDs 1,244) &mdash; review list generated</div>
+            <div class="mk-result"><span class="mk-warn">&#9888;</span> Special-category (Art. 9) flags: <b>342 records</b> (health 201 &middot; political 141) &mdash; samples queued for review</div>
+            <div class="mk-result"><span class="mk-bad">&#10008;</span> Secrets: <b>3 findings</b> (API keys) &mdash; exclusion recommended</div>
+            <div class="mk-result"><span class="mk-ok">&#10004;</span> Opt-out signals: 118 source domains publish robots.txt / ai.txt disallow &mdash; exclusion list exported</div>
+            <div class="mk-score">Provenance completeness score: <b>82 / 100</b><span class="mk-bar"><span class="mk-bar-fill" style="width:82%"></span></span></div>
+            <div class="mk-outputs">&#128196; crawl_2026_q2_provenance_Report.html &nbsp;&nbsp; &#128230; crawl_2026_q2_databom.cdx.json &nbsp;&nbsp;<span class="mk-local">saved locally &middot; nothing uploaded</span></div>
+          </div>
+        </div>
+      </div>
+      <p style="margin-top:10px;font-size:clamp(.7rem,1.2vw,.85rem);color:#7d8aa5">Product mockup — DataBOM tab in the ESL-SBOMator desktop application (v1.3.x UI)</p>
+    </div>
+  </section>
+
+  <!-- 11 · Mapping table -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Traceability for Your Compliance File</p>
+      <h2>Each Report Section Maps to a Guideline Demand</h2>
+      <table>
+        <tr><th>DataBOM report section</th><th>Guideline expectation it evidences</th></tr>
+        <tr><td>Source inventory — domains, counts, dates, searchable</td><td>Art. 14(5)(b) published source list (paras 30–31)</td></tr>
+        <tr><td>Regex PII scan — emails, phones, IPs, cards</td><td>"Syntax-based filtering mechanisms (e.g. regular expressions)" (para 38)</td></tr>
+        <tr><td>Art. 9 keyword indicators with sanitized excerpts</td><td>Post-collection detection of special-category data (para 68)</td></tr>
+        <tr><td>Timestamp coverage metric</td><td>Accuracy — "timestamp the data" (para 42)</td></tr>
+        <tr><td>Full report + CycloneDX ML-BOM</td><td>Art. 5(2) accountability record for the dataset (para 16)</td></tr>
+      </table>
+      <p class="disclaimer">DataBOM output is <b>evidence for the compliance file your firm builds</b> — it is not legal advice and not a compliance certification. The legal judgment stays with counsel.</p>
+    </div>
+  </section>
+
+  <!-- 12 · Honest scope -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Honest Scope — Ask Any Vendor for This Slide</p>
+      <h2>What We Solve, What We Share, What Stays With You</h2>
+      <div class="cards">
+        <div class="card"><span class="tag tag-solved">We solve</span><h3 class="good">The evidence layer</h3><ul>
+          <li>Source list generation (Art. 14(5)(b))</li>
+          <li>Syntax-based PII screening (para 38)</li>
+          <li>Dataset accountability record (Art. 5(2))</li>
+        </ul></div>
+        <div class="card"><span class="tag tag-partial">Shared</span><h3 class="warn">Detection, not judgment</h3><ul>
+          <li>Art. 9 indicators are keyword screens — legal classification is counsel's</li>
+          <li>Timestamps measured; source reliability assessed by the client</li>
+          <li>Remediation (deletion / anonymisation) stays in the client's workflow</li>
+        </ul></div>
+        <div class="card"><span class="tag tag-not">Yours</span><h3 class="bad">Lawyer-shaped problems</h3><ul>
+          <li>Legitimate-interest balancing (Art. 6(1)(f))</li>
+          <li>Privacy notices, DPIAs, role allocation, vendor agreements</li>
+          <li>robots.txt / ai.txt checks — roadmap, as an optional online step</li>
+        </ul></div>
+      </div>
+      <p class="disclaimer">Our positioning is deliberate: <b>DataBOM makes the dataset provable; counsel makes it lawful.</b> We are the technical half of your advisory, not a competitor to it.</p>
+    </div>
+  </section>
+
+  <!-- 13 · Air gap -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Why Local Matters</p>
+      <h2>Built for Defence Contractors. Accidentally Perfect for GDPR.</h2>
+      <p style="margin-bottom:.6em">SBOMator was engineered for classified, disconnected networks — IAI, Elbit, Rafael-grade environments where <b>no data may ever leave the premises</b>. That same architecture eliminates GDPR exposure by construction:</p>
+      <div class="cards">
+        <div class="card"><div class="ic">&#129309;</div><h3><span class="good">Art. 28</span> — No processor, no DPA</h3><p>ESL never touches the client's data. Nothing to negotiate, no sub-processors to audit, no vendor risk assessment for the dataset.</p></div>
+        <div class="card"><div class="ic">&#127757;</div><h3><span class="good">Ch. V</span> — No transfer</h3><p>Nothing crosses a border because nothing crosses the firewall. No SCCs, no adequacy analysis, no TIA.</p></div>
+        <div class="card"><div class="ic">&#128272;</div><h3><span class="good">Art. 32</span> — Inherited controls</h3><p>Security of processing inherits the controls the client already certified: disk encryption, access control, physical security.</p></div>
+        <div class="card"><div class="ic">&#9992;&#65039;</div><h3><span class="good">Offline</span> — True air-gap support</h3><p>Vulnerability and metadata databases install from offline bundles. Disconnected networks are a supported configuration, not an afterthought.</p></div>
+      </div>
+      <p class="disclaimer">Site license + support agreement. No per-scan metering, no usage telemetry — there is no "home" for the software to phone.</p>
+    </div>
+  </section>
+
+  <!-- 14 · For law firms -->
+  <section class="slide">
+    <div class="slide-inner">
+      <p class="kicker">Working With Counsel</p>
+      <h2>What This Looks Like in Your Practice</h2>
+      <ul>
+        <li><b>Your client engagement:</b> you advise the mapping / LIA / notice workflow. DataBOM produces the dataset inventory and screening evidence your workflow consumes — in days, not months.</li>
+        <li><b>Your deliverable improves:</b> LIAs and DPIAs cite a dated, itemised, machine-generated provenance report instead of client self-attestations.</li>
+        <li><b>Privileged-friendly:</b> because the scan runs on the client's own machines, the raw dataset is never disclosed to us or anyone else — only the report enters the file.</li>
+        <li><b>You shape the roadmap:</b> detectors and report sections are extensible. If your practice needs minors-data indicators, opt-out signal audits, or specific Art. 9 categories — that is prospect-driven engineering we do with you.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 15 · CTA -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center">
+      <img class="logo" src="images/esl-logo.png" alt="ESL logo" style="margin-bottom:1.2em">
+      <p class="kicker">Consultation Closes 30 October 2026</p>
+      <h1 style="font-size:clamp(1.5rem,3.8vw,2.6rem)">Help Your Clients Know Their Data<br>Like They Know Their Code</h1>
+      <p style="max-width:640px;margin:0 auto">Talk to us about dataset provenance evidence for your clients — or a joint briefing for your privacy &amp; AI practice.</p>
+      <a class="cta" href="https://eswlab.com/contact-us/">Contact ESL</a>
+      <p style="margin-top:1.2em"><a href="https://eswlab.com/contact-us/">eswlab.com/contact-us</a> · <a href="https://eswlab.com/products/esl-ailogiclabs/sbomator/">SBOMator product page</a> · <a href="https://zuwasi.github.io/SPDF-Control-Mapping/">SPDF Control Mapping</a></p>
+    </div>
+  </section>
+
+</div>
+
+<button class="nav hidden" id="prev">‹</button>
+<button class="nav" id="next">›</button>
+<div class="progress"><div class="fill" id="fill"></div></div>
+<div class="counter" id="counter">1 / 15</div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck'), slides=deck.children.length, i=0, navigated=false;
+  var prev=document.getElementById('prev'), next=document.getElementById('next');
+  var fill=document.getElementById('fill'), counter=document.getElementById('counter'), hint=document.getElementById('hint');
+  function go(n){
+    i=Math.max(0,Math.min(slides-1,n));
+    deck.style.transform='translateX(-'+(i*100)+'vw)';
+    for(var k=0;k<slides;k++)deck.children[k].classList.toggle('active',k===i);
+    prev.classList.toggle('hidden',i===0);
+    next.classList.toggle('hidden',i===slides-1);
+    fill.style.width=((i+1)/slides*100)+'%';
+    counter.textContent=(i+1)+' / '+slides;
+    if(!navigated && n>0){navigated=true; if(hint)hint.style.display='none';}
+    if(history.replaceState)history.replaceState(null,'','#'+(i+1));
+  }
+  prev.addEventListener('click',function(){go(i-1);});
+  next.addEventListener('click',function(){go(i+1);});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1);}
+    else if(e.key==='ArrowLeft'){e.preventDefault();go(i-1);}
+  });
+  var sx=null;
+  document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(sx===null)return;
+    var dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){dx<0?go(i+1):go(i-1);}
+    sx=null;
+  },{passive:true});
+  var mx=null;
+  document.addEventListener('mousedown',function(e){mx=e.clientX;});
+  document.addEventListener('mouseup',function(e){
+    if(mx===null)return;
+    var dx=e.clientX-mx;
+    if(Math.abs(dx)>50){dx<0?go(i+1):go(i-1);}
+    mx=null;
+  });
+  var h=parseInt((location.hash||'').replace('#',''),10);
+  go(!isNaN(h)&&h>=1&&h<=slides?h-1:0);
+})();
+</script>
+</body>
+</html>
