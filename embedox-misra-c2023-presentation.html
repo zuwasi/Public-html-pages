@@ -123,7 +123,11 @@
         <p class="muted" style="margin-top:8px;font-size:.72rem">V2 total includes 67 stub/header findings (protobuf-generated, Zephyr macros) not in V1 scope. Production .c files: 174 → 65 (−62.6%). Required increased (+8) because V2's fixed-width type changes introduced RULE_11_3 pointer casts and RULE_15_1 goto statements.</p>
       </div>
 
-      <!-- Complexity + Bug + Security -->
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">V1 → V2 · Complexity, bug & security</div><h2>What Else <span class="green">Changed</span></h2>
+
       <div class="grid">
         <div class="card accent">
           <h3>McCabe Complexity</h3>
@@ -143,7 +147,6 @@
         </div>
       </div>
 
-      <!-- Security status table -->
       <div class="card" style="margin-top:14px">
         <h3>Security Issues — Fix Status</h3>
         <div class="table-wrap"><table>
@@ -499,7 +502,7 @@
     </section>
   </main>
   <button class="nav prev" id="prev" aria-label="Previous slide">‹</button><button class="nav next" id="next" aria-label="Next slide">›</button>
-  <div class="counter" id="counter">1 / 23</div><div class="progress"><div class="progress-fill" id="progress"></div></div>
+  <div class="counter" id="counter">1 / 24</div><div class="progress"><div class="progress-fill" id="progress"></div></div>
   <script>
     (() => {
       const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],prev=document.getElementById('prev'),next=document.getElementById('next'),counter=document.getElementById('counter'),progress=document.getElementById('progress'),hint=document.getElementById('hint');
