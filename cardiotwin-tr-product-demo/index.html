@@ -54,5 +54,11 @@
 <script>
 const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],prev=document.getElementById('prev'),next=document.getElementById('next'),progressFill=document.getElementById('progressFill'),counter=document.getElementById('counter'),swipeHint=document.getElementById('swipeHint');let current=0,touchStartX=0,mouseStartX=0,mouseDown=false;function update(){deck.style.transform=`translateX(${-current*100}vw)`;prev.classList.toggle('hidden',current===0);next.classList.toggle('hidden',current===slides.length-1);progressFill.style.width=`${((current+1)/slides.length)*100}%`;counter.textContent=`${current+1} / ${slides.length}`;if(current>0)swipeHint.classList.add('hidden')}function go(d){const n=Math.max(0,Math.min(slides.length-1,current+d));if(n!==current){current=n;update()}}prev.addEventListener('click',()=>go(-1));next.addEventListener('click',()=>go(1));document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(1);if(e.key==='ArrowLeft')go(-1)});document.addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].screenX},{passive:true});document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].screenX-touchStartX;if(Math.abs(dx)>50)go(dx<0?1:-1)},{passive:true});document.addEventListener('mousedown',e=>{mouseDown=true;mouseStartX=e.screenX});document.addEventListener('mouseup',e=>{if(!mouseDown)return;mouseDown=false;const dx=e.screenX-mouseStartX;if(Math.abs(dx)>50)go(dx<0?1:-1)});update();
 </script>
+
+<!-- esl-home-btn -->
+<a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
+</a>
 </body>
 </html>
