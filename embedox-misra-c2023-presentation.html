@@ -63,6 +63,97 @@
     </section>
 
     <section class="slide">
+      <div class="eyebrow">Executive summary · V1 → V2</div><h2>Before → <span class="green">After</span></h2>
+      <p class="subtitle" style="margin-bottom:18px">We went from 174 violations and a hidden logic bug to 135 fixes, 39 formal deviations, and a corrected security posture.</p>
+
+      <!-- Diff table -->
+      <div class="table-wrap" style="margin-bottom:16px"><table>
+        <thead><tr><th>Metric</th><th class="red">V1 Baseline</th><th class="green">V2 Fixed</th><th>Δ Change</th></tr></thead>
+        <tbody>
+          <tr><td><b>MISRA findings</b></td><td class="red">174</td><td class="green">39 (deviations only)</td><td><b class="green">−135 fixed (77.6%)</b></td></tr>
+          <tr><td><b>Required violations</b></td><td class="red">83</td><td class="green">14 (deviated)</td><td><b class="green">−69 fixed (83.1%)</b></td></tr>
+          <tr><td><b>Advisory violations</b></td><td class="amber">91</td><td class="green">25 (deviated)</td><td><b class="green">−66 fixed (72.5%)</b></td></tr>
+          <tr><td><b>Density / 100 code lines</b></td><td class="red">27.9</td><td class="green">4.85</td><td><b class="green">−82.6% reduction</b></td></tr>
+          <tr><td><b>Logic bug (async TX)</b></td><td class="red">Present — <code>== false</code></td><td class="green">Fixed — <code>&lt; 0</code></td><td><b class="green">Eliminated</b></td></tr>
+          <tr><td><b>Security issues fixed</b></td><td class="red">0 of 7</td><td class="green">2 fixed · 1 mitigated</td><td><b class="amber">4 remain (design-level)</b></td></tr>
+          <tr><td><b>Unit tests</b></td><td>48/48 pass</td><td class="green">48/48 pass</td><td><b>0 regressions</b></td></tr>
+          <tr><td><b>Build errors</b></td><td>0</td><td class="green">0</td><td><b>Clean compile</b></td></tr>
+          <tr><td><b>Early returns (Rule 15.5)</b></td><td class="amber">23 multiple exits</td><td class="green">0 — single exit</td><td><b class="green">All consolidated</b></td></tr>
+          <tr><td><b>Compliance status</b></td><td class="red">NON-COMPLIANT</td><td class="green">Compliant*</td><td><b class="green">*subject to deviation approval</b></td></tr>
+        </tbody>
+      </table></div>
+
+      <!-- Histogram: CSS bar comparison -->
+      <div class="card" style="margin-bottom:14px">
+        <h3>Findings Histogram — V1 vs V2</h3>
+        <div style="display:grid;gap:10px">
+          <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
+            <span style="font-weight:600">Total findings</span>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">174</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:22.4%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">39</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−77.6%</b>
+          </div>
+          <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
+            <span style="font-weight:600">Required</span>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">83</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:16.9%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">14</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−83.1%</b>
+          </div>
+          <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
+            <span style="font-weight:600">Advisory</span>
+            <div style="display:flex;align-items:center;gap:6px"><span class="amber" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b45309,#f59e0b)"></div></div><b class="amber" style="font-size:.78rem">91</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:27.5%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">25</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−72.5%</b>
+          </div>
+          <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
+            <span style="font-weight:600">Density/100 LOC</span>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">27.9</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:17.4%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">4.85</b></div>
+            <b class="green" style="font-size:.78rem;text-align:right">−82.6%</b>
+          </div>
+        </div>
+      </div>
+
+      <!-- Complexity + Bug + Security -->
+      <div class="grid">
+        <div class="card accent">
+          <h3>McCabe Complexity</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:.82rem">
+            <div><span class="muted">Total CC</span><br><b>128 → 128</b> <span class="muted">(preserved)</span></div>
+            <div><span class="muted">Avg CC</span><br><b>4.41 → 4.41</b></div>
+            <div><span class="muted">Max CC</span><br><b class="amber">15 → 15</b></div>
+            <div><span class="muted">Funcs &gt;10</span><br><b class="amber">3 → 3</b></div>
+          </div>
+          <p style="margin-top:8px;font-size:.78rem" class="muted">CC unchanged — V2 fixes type safety and exit structure, not algorithmic logic. <b class="green">23 early returns eliminated</b> (single-exit), improving path coverage and testability without altering decisions.</p>
+        </div>
+        <div class="card danger">
+          <h3 class="red">Logic Bug — FIXED</h3>
+          <p style="font-size:.8rem"><b class="red">Before:</b> <code>mngmt_client_tx_packe() == false</code> treated <code>cmdId = 0</code> as failure — but zero is a valid command ID.</p>
+          <p style="font-size:.8rem"><b class="green">After:</b> <code>mngmt_client_tx_packe() &lt; 0</code> — only negative values mean failure.</p>
+          <p style="font-size:.78rem" class="muted">Impact: async sensor reports silently dropped whenever cmdId wrapped to zero. Now correctly sent.</p>
+        </div>
+      </div>
+
+      <!-- Security status table -->
+      <div class="card" style="margin-top:14px">
+        <h3>Security Issues — Fix Status</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>CWE</th><th>Severity</th><th>Issue</th><th>V1</th><th>V2 Status</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>CWE-843</td><td><span class="badge medium">MED</span></td><td>Type confusion — 23 <code>void*</code> casts</td><td class="red">Open</td><td><span class="badge medium">Mitigated</span> DEV-004 — casts made explicit</td></tr>
+            <tr><td>2</td><td>CWE-20</td><td><span class="badge medium">MED</span></td><td>Input validation before <code>pb_decode</code></td><td class="red">Open</td><td><span class="badge medium">Open</span> Design issue — needs protocol layer</td></tr>
+            <tr><td>3</td><td>CWE-120</td><td><span class="badge low">LOW</span></td><td>Fixed 256-byte TX buffer</td><td class="muted">Bounded</td><td><span class="badge low">No action</span> Bounded by <code>pb_encode</code></td></tr>
+            <tr><td>4</td><td>CWE-197</td><td><span class="badge medium">MED</span></td><td>Integer truncation — 46 mismatches</td><td class="red">Open</td><td><span class="badge low">Fixed</span> Rule 10.3 — typed conversions</td></tr>
+            <tr><td>5</td><td>CWE-252</td><td><span class="badge low">LOW</span></td><td>Unchecked <code>verify_image</code> return</td><td class="red">Open</td><td><span class="badge low">Fixed</span> Rule 17.7 — <code>(void)</code> cast</td></tr>
+            <tr><td>6</td><td>CWE-862</td><td><span class="badge high">HIGH</span></td><td>Missing authorization — power/DFU</td><td class="red">Open</td><td><span class="badge medium">Open</span> Design issue — needs auth layer</td></tr>
+            <tr><td>7</td><td>CWE-362</td><td><span class="badge medium">MED</span></td><td>Race condition — mutable ops structs</td><td class="red">Open</td><td><span class="badge medium">Open</span> Design issue — needs sync</td></tr>
+          </tbody>
+        </table></div>
+        <p class="muted" style="margin-top:8px;font-size:.78rem"><b class="green">2 fixed in code</b> · <b class="amber">1 mitigated (deviation)</b> · <b>1 no action needed</b> · <b class="red">3 remain as design-level issues</b> requiring architectural changes beyond MISRA scope.</p>
+      </div>
+    </section>
+
+    <section class="slide">
       <div class="eyebrow">01 · Scope</div><h2>Project <span>Overview</span></h2>
       <div class="grid">
         <div class="card accent"><h3>Codebase</h3><div class="file-list">
@@ -393,7 +484,7 @@
     </section>
   </main>
   <button class="nav prev" id="prev" aria-label="Previous slide">‹</button><button class="nav next" id="next" aria-label="Next slide">›</button>
-  <div class="counter" id="counter">1 / 22</div><div class="progress"><div class="progress-fill" id="progress"></div></div>
+  <div class="counter" id="counter">1 / 23</div><div class="progress"><div class="progress-fill" id="progress"></div></div>
   <script>
     (() => {
       const deck=document.getElementById('deck'),slides=[...document.querySelectorAll('.slide')],prev=document.getElementById('prev'),next=document.getElementById('next'),counter=document.getElementById('counter'),progress=document.getElementById('progress'),hint=document.getElementById('hint');
