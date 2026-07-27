@@ -1,479 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>Amp — Agent Evaluation &amp; Observability</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תוכן עניינים — מצגות ודוחות | ESL Public Pages</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --red:#E63946;--red-dark:#B71C2B;
-  --blue:#00D4FF;--blue-dark:#0077B6;
-  --bg:#00050A;--bg-card:rgba(255,255,255,0.05);
-  --text:#FFFFFF;--text-dim:rgba(255,255,255,0.6);
-  --glow-blue:0 0 40px rgba(0,212,255,0.25);
-  --glow-red:0 0 40px rgba(230,57,70,0.25);
-  --nav-h:56px;
-}
-html,body{height:100%;overflow:hidden;font-size:16px}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
-[dir="rtl"],[dir="rtl"] *{font-family:Arial,'Inter',system-ui,sans-serif}
-
-/* ── Background ── */
-body::before{content:'';position:fixed;inset:0;
-  background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(0,212,255,0.06),transparent 60%),
-              radial-gradient(ellipse 60% 40% at 50% 100%,rgba(230,57,70,0.04),transparent);
-  pointer-events:none;z-index:0}
-
-/* ── Nav ── */
-nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav-h);
-  background:rgba(0,5,10,0.9);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,212,255,0.1)}
-.nav-inner{max-width:1200px;height:100%;margin:0 auto;padding:0 1rem;display:flex;align-items:center;justify-content:space-between}
-.logo{display:flex;align-items:center;gap:0.5rem;text-decoration:none}
-.logo-mark{width:28px;height:28px;position:relative}
-.logo-mark span{display:block;position:absolute;width:0;height:0;
-  border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:15px solid var(--red)}
-.logo-mark span:nth-child(1){top:0;left:6px}
-.logo-mark span:nth-child(2){top:3px;left:2px;opacity:0.7;transform:scale(0.85)}
-.logo-mark span:nth-child(3){top:6px;left:-1px;opacity:0.4;transform:scale(0.7)}
-.logo-text{font-size:1.15rem;font-weight:800;color:var(--text);letter-spacing:-0.02em}
-.nav-right{display:flex;gap:0.5rem;align-items:center}
-.lang-btn{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);
-  color:var(--text);padding:0.35rem 0.8rem;border-radius:6px;cursor:pointer;font-size:0.8rem;
-  font-weight:600;transition:all 0.2s}
-.lang-btn:hover,.lang-btn.active{background:var(--red);border-color:var(--red)}
-.slide-counter{font-size:0.75rem;color:var(--text-dim);font-weight:600;min-width:3rem;text-align:center}
-
-/* ── Slide Viewport ── */
-.deck{position:fixed;top:var(--nav-h);left:0;right:0;bottom:0;overflow:hidden}
-.track{display:flex;height:100%;transition:transform 0.45s cubic-bezier(0.4,0,0.2,1);will-change:transform}
-.slide{flex:0 0 100%;width:100%;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  display:flex;align-items:center;justify-content:center;padding:2rem 4.5rem;position:relative}
-@media(max-width:768px){.slide{padding:1.5rem 1rem}}
-
-/* ── Arrows ── */
-.arrow-btn{position:fixed;top:50%;z-index:150;transform:translateY(-50%);
-  width:64px;height:64px;border-radius:50%;border:2px solid rgba(0,212,255,0.3);
-  background:rgba(0,5,10,0.7);backdrop-filter:blur(10px);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:all 0.25s;color:var(--blue)}
-.arrow-btn:hover{background:rgba(0,212,255,0.12);border-color:var(--blue);box-shadow:var(--glow-blue)}
-.arrow-btn:active{transform:translateY(-50%) scale(0.92)}
-.arrow-btn.disabled{opacity:0.15;pointer-events:none}
-.arrow-btn svg{width:28px;height:28px;stroke:currentColor;stroke-width:2.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-.arrow-prev{left:12px}
-.arrow-next{right:12px}
-@media(max-width:768px){
-  .arrow-btn{width:48px;height:48px}
-  .arrow-btn svg{width:22px;height:22px}
-  .arrow-prev{left:6px}
-  .arrow-next{right:6px}
-}
-
-/* ── Dots ── */
-.dots{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);z-index:150;
-  display:flex;gap:0.5rem;align-items:center}
-.dot{width:10px;height:10px;border-radius:50%;border:2px solid rgba(255,255,255,0.2);
-  background:transparent;cursor:pointer;transition:all 0.25s}
-.dot.active{background:var(--red);border-color:var(--red);box-shadow:var(--glow-red)}
-@media(max-width:768px){.dot{width:8px;height:8px}}
-
-/* ── Slide Content ── */
-.slide-inner{max-width:900px;width:100%;position:relative;z-index:1}
-
-/* Hero */
-.hero-slide{text-align:center}
-.hero-ring{position:absolute;width:420px;height:420px;border-radius:50%;
-  border:1px solid rgba(0,212,255,0.1);top:50%;left:50%;transform:translate(-50%,-50%);
-  box-shadow:var(--glow-blue);pointer-events:none}
-.hero-ring::after{content:'';position:absolute;inset:-50px;border-radius:50%;
-  border:1px solid rgba(0,212,255,0.04)}
-@media(max-width:768px){.hero-ring{width:260px;height:260px}.hero-ring::after{inset:-30px}}
-.hero-slide h1{font-size:clamp(1.8rem,5vw,3.6rem);font-weight:900;line-height:1.1;margin-bottom:1rem}
-.hero-slide .accent{color:var(--red);font-style:italic}
-.hero-slide .subtitle{font-size:clamp(0.9rem,2vw,1.2rem);color:var(--text-dim);max-width:600px;margin:0 auto 1.5rem}
-.hero-slide .badge{display:inline-block;padding:0.45rem 1.3rem;border:1px solid var(--red);border-radius:99px;
-  font-size:0.8rem;font-weight:600;color:var(--red);letter-spacing:0.05em;text-transform:uppercase;box-shadow:var(--glow-red)}
-.swipe-hint{margin-top:2rem;color:var(--text-dim);font-size:0.75rem;display:flex;align-items:center;
-  justify-content:center;gap:0.4rem;animation:pulse 2.5s infinite}
-.swipe-hint svg{width:20px;height:20px;stroke:var(--blue);fill:none;stroke-width:2}
-@keyframes pulse{0%,100%{opacity:0.4}50%{opacity:1}}
-
-/* Card slide */
-.card-slide{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.card-slide .card-icon-lg{width:72px;height:72px;border-radius:18px;display:flex;align-items:center;justify-content:center;
-  margin-bottom:1.5rem;font-size:2rem;border:1px solid rgba(0,212,255,0.2);background:rgba(0,212,255,0.06);color:var(--blue)}
-.card-slide h2{font-size:clamp(1.3rem,3.5vw,2rem);font-weight:800;margin-bottom:0.8rem}
-.card-slide p{color:var(--text-dim);font-size:clamp(0.85rem,2vw,1.05rem);line-height:1.7;max-width:680px;margin:0 auto}
-.card-slide .tag{display:inline-block;margin-top:1.2rem;padding:0.3rem 1rem;border-radius:99px;
-  font-size:0.75rem;font-weight:600;background:rgba(230,57,70,0.12);color:var(--red);border:1px solid rgba(230,57,70,0.2)}
-
-/* Table slide */
-.table-slide{display:flex;flex-direction:column;align-items:center}
-.table-slide .section-label{font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;
-  color:var(--blue);margin-bottom:0.4rem}
-.table-slide h2{font-size:clamp(1.3rem,3.5vw,2rem);font-weight:800;margin-bottom:0.5rem}
-.table-slide .section-desc{color:var(--text-dim);font-size:0.95rem;margin-bottom:2rem;text-align:center}
-.map-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:12px;overflow:hidden;
-  border:1px solid rgba(255,255,255,0.06)}
-.map-table th{background:rgba(230,57,70,0.1);padding:0.8rem 1.2rem;text-align:left;font-weight:700;
-  font-size:0.75rem;text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid rgba(255,255,255,0.08)}
-.map-table td{padding:0.8rem 1.2rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem}
-.map-table tr:last-child td{border-bottom:none}
-.map-table .concept{color:var(--blue);font-weight:600}
-.map-table .amp{color:var(--red);font-weight:600}
-@media(max-width:600px){
-  .map-table th,.map-table td{padding:0.6rem 0.7rem;font-size:0.75rem}
-}
-
-/* Summary slide */
-.summary-slide{text-align:center}
-.summary-box{background:linear-gradient(135deg,rgba(230,57,70,0.08),rgba(0,212,255,0.06));
-  border:1px solid rgba(255,255,255,0.08);border-radius:20px;padding:clamp(1.5rem,4vw,3rem);max-width:750px;margin:0 auto}
-.summary-box h2{font-size:clamp(1.3rem,3vw,1.8rem);font-weight:800;margin-bottom:1rem}
-.summary-box p{color:var(--text-dim);font-size:clamp(0.85rem,2vw,1rem);line-height:1.7}
-.summary-box .footer-links{margin-top:1.5rem;font-size:0.8rem;color:var(--text-dim)}
-.summary-box .footer-links a{color:var(--blue);text-decoration:none}
-
-/* RTL */
-[dir="rtl"] .card-slide,[dir="rtl"] .table-slide,[dir="rtl"] .summary-slide{text-align:center}
-[dir="rtl"] .map-table th,[dir="rtl"] .map-table td{text-align:right}
-
-/* Slide enter animation */
-.slide-inner{opacity:0;transform:translateY(15px);transition:opacity 0.4s 0.15s,transform 0.4s 0.15s}
-.slide.active .slide-inner{opacity:1;transform:translateY(0)}
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1321; color:#e8ecf4; direction:rtl; text-align:right; line-height:1.6; padding:clamp(16px,4vw,48px); }
+  .wrap { max-width:960px; margin:0 auto; }
+  h1 { font-size:clamp(1.6rem,4.5vw,2.6rem); font-weight:800; margin-bottom:.3em; }
+  .sub { color:#7d8aa5; margin-bottom:2em; font-size:clamp(.85rem,1.6vw,1rem); }
+  h2 { font-size:clamp(1.15rem,2.8vw,1.6rem); font-weight:700; color:#4fc3f7; margin:1.8em 0 .6em; border-bottom:1px solid #263048; padding-bottom:.3em; }
+  ol { list-style:none; counter-reset:item; }
+  li { counter-increment:item; padding:10px 14px; margin-bottom:6px; background:#161d2f; border:1px solid #263048; border-radius:10px; display:flex; gap:12px; align-items:baseline; }
+  li::before { content:counter(item); color:#4fc3f7; font-weight:700; min-width:1.6em; text-align:center; }
+  li a { color:#e8ecf4; font-weight:600; text-decoration:none; }
+  li a:hover { color:#4fc3f7; }
+  li .dates { color:#5f86c9; font-size:clamp(.7rem,1.3vw,.82rem); white-space:nowrap; direction:ltr; unicode-bidi:embed; }
+  li .desc { color:#9aa7c0; font-size:clamp(.8rem,1.5vw,.95rem); }
+  .badge { font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:999px; white-space:nowrap; }
+  .b-new { background:#173a22; color:#66bb6a; }
+  .b-he { background:#123a52; color:#4fc3f7; }
+  /* ---- NEW JUST CAME IN ---- */
+  .new-section { background:linear-gradient(135deg,#13243a 0%,#1a3050 100%); border:1px solid #2f4a6e; border-radius:16px; padding:clamp(16px,4vw,28px); margin-bottom:2.5em; box-shadow:0 0 24px rgba(79,195,247,.12); }
+  .new-header { display:flex; align-items:center; gap:10px; margin-bottom:.8em; flex-wrap:wrap; }
+  .new-title { font-size:clamp(1.3rem,3.5vw,2rem); font-weight:800; color:#ffd54f; letter-spacing:.5px; text-shadow:0 0 12px rgba(255,213,79,.3); }
+  .new-stars { font-size:clamp(1.2rem,3vw,1.7rem); color:#ffd54f; letter-spacing:2px; animation:twinkle 1.8s ease-in-out infinite alternate; }
+  @keyframes twinkle { from{opacity:.55;} to{opacity:1;} }
+  .new-sub { color:#9fb3d1; font-size:clamp(.78rem,1.4vw,.92rem); margin-bottom:1em; }
+  .new-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
+  .new-card { background:#111a2e; border:1px solid #2a3a58; border-radius:12px; padding:14px 16px; transition:border-color .2s,transform .2s; }
+  .new-card:hover { border-color:#4fc3f7; transform:translateY(-2px); }
+  .new-card a { color:#e8ecf4; font-weight:700; text-decoration:none; font-size:clamp(.92rem,1.7vw,1.05rem); }
+  .new-card a:hover { color:#4fc3f7; }
+  .new-card .nc-dates { color:#5f86c9; font-size:.78rem; direction:ltr; unicode-bidi:embed; display:block; margin-top:4px; }
+  .new-card .nc-desc { color:#9aa7c0; font-size:.85rem; margin-top:6px; }
+  .new-card .nc-tag { display:inline-block; background:#2a4a2a; color:#66bb6a; font-size:.66rem; font-weight:700; padding:2px 7px; border-radius:999px; margin-bottom:6px; }
+  @media (max-width:640px){ .new-grid{ grid-template-columns:1fr; } }
+  footer { margin-top:3em; color:#7d8aa5; font-size:.85rem; border-top:1px solid #263048; padding-top:1em; }
+  footer a { color:#4fc3f7; }
+  @media (max-width:640px){ li { flex-direction:column; gap:2px; } li::before { display:none; } }
 </style>
 </head>
 <body>
+<div class="wrap">
+<h1>תוכן עניינים — מצגות ודוחות</h1>
+<p class="sub">כל הדפים הציבוריים באתר zuwasi.github.io/Public-html-pages, מקובצים לפי נושא, עם תאריך פרסום ראשוני ותאריך עדכון אחרון מתוך היסטוריית git · עודכן 27.07.2026</p>
 
-<!-- Nav -->
-<nav>
-  <div class="nav-inner">
-    <a href="#" class="logo">
-      <div class="logo-mark"><span></span><span></span><span></span></div>
-      <span class="logo-text">Ampcode</span>
-    </a>
-    <div class="nav-right">
-      <span class="slide-counter" id="slideCounter">1 / 9</span>
-      <button class="lang-btn active" id="btnEn" onclick="setLang('en')">EN</button>
-      <button class="lang-btn" id="btnHe" onclick="setLang('he')">עב</button>
+<div class="new-section">
+  <div class="new-header">
+    <span class="new-stars">★★★</span>
+    <span class="new-title">NEW — JUST CAME IN</span>
+    <span class="new-stars">★★★</span>
+  </div>
+  <p class="new-sub">שלוש המצגות החדשות ביותר — הוסרו לכאן לגישה מהירה</p>
+  <div class="new-grid">
+    <div class="new-card">
+      <span class="nc-tag">חדש · 27.07.2026</span>
+      <a href="embedox-misra-c2023-presentation.html">Embedox Management Command Handlers — MISRA C:2023 Compliance Analysis</a>
+      <span class="nc-dates">פורסם: 2026-07-26 · עודכן: 2026-07-27</span>
+      <div class="nc-desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional — V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות</div>
+    </div>
+    <div class="new-card">
+      <span class="nc-tag">חדש · 25.07.2026</span>
+      <a href="github-trends-watch-presentation/">GitHub Trends Watch</a>
+      <span class="nc-dates">פורסם: 2026-07-25</span>
+      <div class="nc-desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</div>
+    </div>
+    <div class="new-card">
+      <span class="nc-tag">חדש · 24.07.2026</span>
+      <a href="rna-transcript-svd-lean4-presentation.html">Transcript-Length SVD — Wolfram + Lean 4</a>
+      <span class="nc-dates">פורסם: 2026-07-24</span>
+      <div class="nc-desc">מודרניזציה של מחברות Mathematica ישנות: נתיב Wolfram לסימולציה ולוולידציה נומרית, ונתיב Lean 4 + Mathlib להוכחות פורמליות</div>
     </div>
   </div>
-</nav>
-
-<!-- Arrows -->
-<button class="arrow-btn arrow-prev disabled" id="prevBtn" onclick="go(-1)" aria-label="Previous">
-  <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-</button>
-<button class="arrow-btn arrow-next" id="nextBtn" onclick="go(1)" aria-label="Next">
-  <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
-</button>
-
-<!-- Dots -->
-<div class="dots" id="dots"></div>
-
-<!-- ═══════ DECK ═══════ -->
-<div class="deck">
-
-<!-- ── ENGLISH ── -->
-<div class="track" id="track-en">
-
-  <!-- Slide 1: Hero -->
-  <div class="slide active">
-    <div class="hero-ring"></div>
-    <div class="slide-inner hero-slide">
-      <h1>Why Your <span class="accent">AI</span> Agent Fails<br>&amp; How Amp Fixes It</h1>
-      <p class="subtitle">Evaluation-Driven Development for AI agents — observability, behavioral control, and operational standardization.</p>
-      <span class="badge">Agent Evaluation Infrastructure</span>
-      <div class="swipe-hint">
-        <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
-        Swipe or use arrows
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 2 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">👁️</div>
-      <h2>1. Agent Execution Observability</h2>
-      <p>Amp provides full traceability of agent executions through its Thread mechanism. Each run is recorded as a sequence of actions including context, decisions, and tool usage. This allows engineers to analyze the execution path after the fact and understand how a specific result was produced.</p>
-      <span class="tag">Threads</span>
-    </div>
-  </div>
-
-  <!-- Slide 3 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">🔍</div>
-      <h2>2. Debugging &amp; Root Cause Analysis</h2>
-      <p>Persisted and shareable Threads allow systematic investigation of problematic runs. Engineering teams can inspect the sequence of steps, detect routing errors, incorrect tool usage, or context issues, and isolate the exact stage where the failure occurred.</p>
-      <span class="tag">Shareable Threads</span>
-    </div>
-  </div>
-
-  <!-- Slide 4 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">🎛️</div>
-      <h2>3. Behavioral Control via System Guidance</h2>
-      <p>Configuration files such as AGENTS.md provide a mechanism to define operational constraints, preferred workflows, data sources, and validation rules. This acts as a control layer that constrains agent behavior and reduces variability between runs.</p>
-      <span class="tag">AGENTS.md</span>
-    </div>
-  </div>
-
-  <!-- Slide 5 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">⚙️</div>
-      <h2>4. Standardization Through Skills</h2>
-      <p>Skills allow complex tasks to be encapsulated as reusable operational units. Each skill defines scope, instructions, and context. This enables teams to convert operational knowledge into repeatable procedures and reduces variability in task execution.</p>
-      <span class="tag">Skills</span>
-    </div>
-  </div>
-
-  <!-- Slide 6 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">✅</div>
-      <h2>5. Built-in Verification</h2>
-      <p>Amp supports integrating checks and review steps directly into the execution workflow. These mechanisms allow outputs or intermediate results to be validated as part of the execution pipeline rather than only after the task has completed.</p>
-      <span class="tag">Checks &amp; Review</span>
-    </div>
-  </div>
-
-  <!-- Slide 7 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">🔄</div>
-      <h2>6. Rapid Iterative Development</h2>
-      <p>The combination of Threads, Skills, and system guidance enables an efficient development loop: run → analyze → adjust → rerun. This allows teams to iteratively refine agent behavior and improve output quality across multiple iterations.</p>
-      <span class="tag">Run → Analyze → Adjust</span>
-    </div>
-  </div>
-
-  <!-- Slide 8: Table -->
-  <div class="slide">
-    <div class="slide-inner table-slide">
-      <div class="section-label">Concept Mapping</div>
-      <h2>Article Concepts → Amp Equivalents</h2>
-      <p class="section-desc">How Amp's architecture maps to the evaluation stack recommended by Keren Koshman.</p>
-      <table class="map-table">
-        <thead><tr><th>Article Concept</th><th>Amp Equivalent</th></tr></thead>
-        <tbody>
-          <tr><td class="concept">Traces / Observability</td><td class="amp">Threads — shareable, inspectable logs</td></tr>
-          <tr><td class="concept">Routing Guardrails</td><td class="amp">AGENTS.md — guidance for tool selection</td></tr>
-          <tr><td class="concept">LLM-as-a-Judge</td><td class="amp">Oracle — GPT-5.4 second opinion</td></tr>
-          <tr><td class="concept">Code-Based Evals</td><td class="amp">Checks — review criteria per directory</td></tr>
-          <tr><td class="concept">Controlled Functions</td><td class="amp">Skills — versioned packages + MCP</td></tr>
-          <tr><td class="concept">Human Annotations</td><td class="amp">Thread Sharing — team review</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Slide 9: Summary -->
-  <div class="slide">
-    <div class="slide-inner summary-slide">
-      <div class="summary-box">
-        <h2>Executive Technical Summary</h2>
-        <p>Amp provides infrastructure focused on agent observability, behavioral control, and operational standardization. These capabilities significantly improve the ability to analyze agent executions, debug failures, and integrate repeatable workflows and validation mechanisms into the development process.</p>
-        <div class="footer-links">Based on <a href="https://www.linkedin.com/pulse/%D7%AA%D7%A2%D7%9E%D7%93%D7%95-%D7%91%D7%A4%D7%99%D7%A0%D7%94-%D7%9C%D7%9E%D7%94-%D7%94%D7%90%D7%99%D7%99%D7%92%D7%A0%D7%98-%D7%A9%D7%9C%D7%9B%D7%9D-%D7%A0%D7%9B%D7%A9%D7%9C-%D7%95%D7%A1%D7%A4%D7%95%D7%99%D7%9C%D7%A8-%D7%96%D7%94-%D7%91%D7%92%D7%9C%D7%9C-keren-koshman-vmryf/" target="_blank">Keren Koshman's article</a> &bull; Powered by <a href="https://ampcode.com" target="_blank">Amp</a></div>
-      </div>
-    </div>
-  </div>
-
 </div>
 
-<!-- ── HEBREW ── -->
-<div class="track" id="track-he" dir="rtl" style="display:none">
+<h2>SBOMator, DataBOM ושרשרת אספקה</h2>
+<ol>
+  <li><span class="badge b-new">חדש</span><a href="edpb-guidelines-databom-risk/">EDPB Guidelines 03/2026 — Risks &amp; the DataBOM Answer</a><span class="dates">פורסם: 2026-07-21</span><span class="desc">הנחיות ה-EDPB החדשות על web scraping, הסיכונים ל-CTO/CISO/משפט, ומה DataBOM פותר ומה לא</span></li>
+  <li><span class="badge b-new">חדש</span><a href="sbomator-databom-presentation/">SBOMator DataBOM — An SBOM for Your AI Training Data</a><span class="dates">פורסם: 2026-07-21</span><span class="desc">מצגת המוצר: סריקת Provenance לדאטהסטים של AI, כולל מסך Mockup והתקנה מקומית air-gapped</span></li>
+  <li><a href="Trivy-Attack-SBOMator-Defense.html">ESL SBOMator — Immune to the Trivy Supply Chain Attack</a><span class="dates">פורסם: 2026-03-29</span><span class="desc">למה SBOMator חסין למתקפת שרשרת האספקה של Trivy</span></li>
+  <li><a href="SBOMator_vs_FiniteState_Decision.html">SBOMator vs Finite State — Tool Comparison</a><span class="dates">פורסם: 2026-04-16</span><span class="desc">השוואת כלים והחלטת רכש</span></li>
+  <li><a href="1goat_Report.html">ESL SBOMator — Professional SBOM Analysis</a><span class="dates">פורסם: 2026-03-18</span><span class="desc">דוגמת דוח סריקה של SBOMator</span></li>
+</ol>
 
-  <!-- Slide 1: Hero -->
-  <div class="slide active">
-    <div class="hero-ring"></div>
-    <div class="slide-inner hero-slide">
-      <h1>למה האייג׳נט של <span class="accent">AI</span> שלכם נכשל<br>ואיך Amp מתקן את זה</h1>
-      <p class="subtitle">פיתוח מונחה אבלואציה לאייג׳נטים — Observability, שליטה התנהגותית וסטנדרטיזציה של פעולות.</p>
-      <span class="badge">תשתית אבלואציה לאייג׳נטים</span>
-      <div class="swipe-hint">
-        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        החליקו או השתמשו בחצים
-      </div>
-    </div>
-  </div>
+<h2>Amp מול Claude Code — השוואות ובנצ'מרקים</h2>
+<ol>
+  <li><a href="ai_agent_eval_presentation.html">AI Coding Agent Evaluation — Ampcode vs Claude Code</a><span class="dates">פורסם: 2026-04-04</span><span class="desc">מתודולוגיית הערכה והשוואה מלאה</span></li>
+  <li><a href="ampcode-vs-claudecode-presentation.html">Ampcode vs Claude Code — Why Ampcode Wins</a><span class="dates">פורסם: 2026-04-15 · עודכן: 2026-07-27</span><span class="desc">מצגת השוואה תמציתית</span></li>
+  <li><a href="amp-deep3-vs-claude-opus47-benchmark.html">QuickSWE v2 — Amp Deep³ vs Claude Opus 4.7</a><span class="dates">פורסם: 2026-04-17 · עודכן: 2026-07-27</span><span class="desc">בנצ'מרק ראש-בראש</span></li>
+  <li><a href="baboons-benchmark-report.html">Amp Ultra vs Claude Code — Claude Fable 5 Benchmark</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</span><span class="desc">דוח בנצ'מרק משחק ה-FPS</span></li>
+  <li><a href="baboons-face-off.html">Baboons Over London — Amp vs Claude, Same Model</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-19</span><span class="desc">אותו מודל, harness שונה — עימות ישיר</span></li>
+  <li><a href="final-scores.html">Final Scores — Amp vs Claude</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</span><span class="desc">טבלת תוצאות מסכמת</span></li>
+  <li><a href="harness-beats-model.html">The Harness Beats the Model — Amp Rush vs Claude Fable 5</a><span class="dates">פורסם: 2026-07-13 · עודכן: 2026-07-19</span><span class="desc">התזה: ה-harness חשוב מהמודל</span></li>
+  <li><a href="harness-story.html">The Harness Beats the Model — Qubits, Baboons &amp; AI Agents</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-19</span><span class="desc">גרסת הסיפור המלא</span></li>
+  <li><a href="NotebookComparison_Presentation.html">Mohammadian 1988 — Claude vs Amp Slide Deck</a><span class="dates">פורסם: 2026-05-13</span><span class="desc">השוואה על שחזור מאמר ב-Mathematica</span></li>
+  <li><a href="claude-code-skills-vs-amp/">Claude Code Skills vs Amp Built-in Capabilities</a><span class="dates">פורסם: 2026-07-15</span><span class="desc">השוואת מנגנוני skills</span></li>
+  <li><a href="amp-lost-in-the-middle-presentation.html">How Amp Solves "Lost in the Middle"</a><span class="dates">פורסם: 2026-04-26</span><span class="desc">איך Amp פותר את בעיית אמצע-הקונטקסט</span></li>
+  <li><span class="badge b-he">עברית</span><a href="Claude_HalfLife_Test.html">בדיקת "זמן מחצית חיים" של Claude</a><span class="dates">פורסם: 2026-04-07</span><span class="desc">ניסוי דעיכת ביצועים לאורך שיחה</span></li>
+  <li><a href="agent-halflife-tester.html">Agent Half-Life Tester</a><span class="dates">פורסם: 2026-04-06</span><span class="desc">הכלי שמודד דעיכת ביצועי סוכן</span></li>
+  <li><a href="ai-coding-agent-cost-calculator.html">AI Coding Agent Cost Calculator</a><span class="dates">פורסם: 2026-05-29 · עודכן: 2026-07-27</span><span class="desc">מחשבון עלויות אינטראקטיבי — קטלוג מודלים רוענן</span></li>
+  <li><a href="ai-cost-estimation-presentation/">AI Coding Agent Cost Estimation Dashboards</a><span class="dates">פורסם: 2026-05-09</span><span class="desc">דשבורדים להערכת עלויות</span></li>
+  <li><a href="Dive-into-Claude-Code-Presentation.html">Dive into Claude Code</a><span class="dates">פורסם: 2026-06-16 · עודכן: 2026-07-27</span><span class="desc">סקירת עומק של Claude Code</span></li>
+  <li><a href="Claude-Code-Qwen-Local-Guide.html">Connect Claude Code to Local Qwen3-Coder / Qwen 2.5 Coder</a><span class="dates">פורסם: 2026-04-06 · עודכן: 2026-07-27</span><span class="desc">מדריך חיבור למודל מקומי — שוכתב ל-Anthropic /v1/messages</span></li>
+</ol>
 
-  <!-- Slide 2 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">👁️</div>
-      <h2>1. Observability של ריצות האייג׳נט</h2>
-      <p>Amp מספק תיעוד מלא של ריצות האייג׳נט באמצעות Threads. כל ריצה מתועדת כשרשרת פעולות הכוללת את ההקשר, ההחלטות והפעולות שבוצעו. יכולת זו מאפשרת ניתוח בדיעבד של התהליך, איתור נקודות כשל והבנה של התנהגות האייג׳נט ברמת execution path.</p>
-      <span class="tag">Threads</span>
-    </div>
-  </div>
+<h2>אבטחה, CISO ו-AI</h2>
+<ol>
+  <li><a href="AI_Coding_Tools_Security_Comparison.html">AI Coding Tools Security Comparison — CISO Assessment</a><span class="dates">פורסם: 2026-03-19 · עודכן: 2026-07-27</span><span class="desc">הערכת מוכנות ארגונית של כלי קידוד AI — בדיקה מחדש + הערות יכולות חדשות</span></li>
+  <li><a href="AI_Coding_Tools_Security_Comparison_Report.html">AI Coding Tools — CISO Security Comparison Report</a><span class="dates">פורסם: 2026-03-19 · עודכן: 2026-06-22</span><span class="desc">גרסת הדוח המלא</span></li>
+  <li><a href="Ampcode_CISO_Security_Review.html">CISO Security Review — Ampcode (Sourcegraph)</a><span class="dates">פורסם: 2026-03-19</span><span class="desc">סקירת אבטחה ל-Ampcode</span></li>
+  <li><a href="amp-arupilot-security-benchmark.html">Amp-Optimized Security Prompt — Benchmark on ArduPilot</a><span class="dates">פורסם: 2026-05-21</span><span class="desc">בנצ'מרק פרומפט אבטחה על ArduPilot</span></li>
+  <li><a href="ampcode-mcp-defense-presentation.html">Defending Against MCP Tool Poisoning</a><span class="dates">פורסם: 2026-06-18 · עודכן: 2026-06-19</span><span class="desc">הגנה מהרעלת כלי MCP</span></li>
+  <li><span class="badge b-he">עברית</span><a href="ampcode-prompt-injection-immunity.html">למה הבאג הזה לא יכול לקרות ב-Ampcode</a><span class="dates">פורסם: 2026-04-15</span><span class="desc">חסינות ל-prompt injection</span></li>
+  <li><a href="nono-ampcode-presentation.html">nono — AI Agent Security for Ampcode</a><span class="dates">פורסם: 2026-04-03</span><span class="desc">שכבת אבטחה לסוכני AI</span></li>
+  <li><a href="nesher2gm-pentest-operator-guide.html">Nesher2GM — Pentest Operator Guide</a><span class="dates">פורסם: 2026-05-01</span><span class="desc">מדריך מפעיל לבדיקות חדירות</span></li>
+  <li><a href="BD-SECURITY-TDSQL-Presentation.html">SQL Injection — Data Flow Analysis</a><span class="dates">פורסם: 2026-04-02</span><span class="desc">ניתוח זרימת נתונים של SQLi</span></li>
+  <li><a href="endorlabs-amp-integration-presentation.html">Endor Labs + Amp Integration</a><span class="dates">פורסם: 2026-06-16</span><span class="desc">שילוב סריקות Endor Labs בתוך Amp</span></li>
+</ol>
 
-  <!-- Slide 3 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">🔍</div>
-      <h2>2. Debugging ו-Root Cause Analysis של כשלי אייג׳נט</h2>
-      <p>היכולת לשמור ולשתף Threads מאפשרת לבצע ניתוח שיטתי של ריצות בעייתיות. צוותים יכולים לבחון את רצף הפעולות, לזהות טעויות routing, שימוש שגוי בכלים או בעיות בהקשר שניתן למודל, ולבודד את מקור התקלה.</p>
-      <span class="tag">Threads שיתופיים</span>
-    </div>
-  </div>
+<h2>Embedded, C++ וכלי פיתוח</h2>
+<ol>
+  <li><a href="asn1c-cpp26-modernization.html">ASN1C to Modern C++26</a><span class="dates">פורסם: 2026-05-31</span><span class="desc">מודרניזציה של קוד ASN1C</span></li>
+  <li><a href="asn1c-workbench-amp-presentation.html">ASN1C Workbench + Amp</a><span class="dates">פורסם: 2026-05-31</span><span class="desc">סביבת עבודה ל-ASN.1 עם Amp</span></li>
+  <li><a href="cpp26-embedded-mavlink.html">C++26 for Embedded: MAVLink on RP2040</a><span class="dates">פורסם: 2026-04-22</span><span class="desc">C++26 במערכות משובצות</span></li>
+  <li><a href="MLX5-to-Zephyr-MISRA-Journey.html">NVIDIA MLX5 → Zephyr RTOS: The MISRA C Journey</a><span class="dates">פורסם: 2026-04-06</span><span class="desc">מסע הסבה ל-MISRA C</span></li>
+  <li><a href="parasoft-cpptest-obfuscation/">Parasoft C/C++test and Obfuscation</a><span class="dates">פורסם: 2026-07-19</span><span class="desc">ניתוח סטטי וקוד מעורפל</span></li>
+  <li><a href="cuda-to-axelera-migration.html">CUDA → Axelera Migration Guide</a><span class="dates">פורסם: 2026-04-15</span><span class="desc">מדריך הגירה ל-Axelera Metis</span></li>
+  <li><span class="badge b-he">עברית</span><a href="static-code-analysis-2026.html">ניתוח קוד סטטי ובדיקות דינאמיות 2026</a><span class="dates">פורסם: 2026-04-06</span><span class="desc">עידן הבינה המלאכותית בניתוח קוד</span></li>
+  <li><a href="terratest-ampcode-esl-presentation/">Ampcode × Terratest</a><span class="dates">פורסם: 2026-07-05</span><span class="desc">בדיקות תשתית עם Terratest ו-Amp</span></li>
+  <li><a href="terratest-diff-esl-presentation/">Terratest × Ampcode — The Diff</a><span class="dates">פורסם: 2026-07-05</span><span class="desc">גרסת ה-diff של אותו נושא</span></li>
+  <li><span class="badge b-new">חדש</span><a href="embedox-misra-c2023-presentation.html">Embedox Management Command Handlers — MISRA C:2023 Compliance Analysis</a><span class="dates">פורסם: 2026-07-26 · עודכן: 2026-07-27</span><span class="desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional, כולל V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות, דוח תיקון ודוח סטיות</span></li>
+  <li><span class="badge b-new">חדש</span><a href="github-trends-watch-presentation/">GitHub Trends Watch</a><span class="dates">פורסם: 2026-07-25</span><span class="desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</span></li>
+  <li><a href="why-amp-doesnt-need-node9-proxy.html">Why Amp Doesn't Need node9-proxy</a><span class="dates">פורסם: 2026-03-28</span><span class="desc">ניתוח ארכיטקטורת רשת</span></li>
+  <li><a href="skillspector-droid-locate-and-judge.html">Droid as Locate-and-Judge — SkillSpector</a><span class="dates">פורסם: 2026-07-20</span><span class="desc">שיפוט אוטומטי של skills</span></li>
+</ol>
 
-  <!-- Slide 4 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">🎛️</div>
-      <h2>3. שליטה התנהגותית באמצעות הנחיות מערכת</h2>
-      <p>קובצי AGENTS.md מאפשרים להגדיר כללי עבודה, מגבלות, מקורות מידע רלוונטיים ונהלי אימות. מנגנון זה משמש כ-control layer המכוון את פעולת האייג׳נט ומקטין שונות התנהגותית בין ריצות.</p>
-      <span class="tag">AGENTS.md</span>
-    </div>
-  </div>
+<h2>Wolfram, מתמטיקה ומחקר</h2>
+<ol>
+  <li><span class="badge b-new">חדש</span><a href="rna-transcript-svd-lean4-presentation.html">Transcript-Length SVD — Wolfram + Lean 4</a><span class="dates">פורסם: 2026-07-24</span><span class="desc">מודרניזציה של מחברות Mathematica ישנות לניתוח התפלגות אורכי transcript עם SVD: נתיב Wolfram מחדש לסימולציה ולוולידציה נומרית, ולצדו נתיב חדש של הוכחות פורמליות מדויקות ב-Lean 4 + Mathlib. המצגת מבחינה בבירור בין טענות שהוכחו פורמלית לבין טענות שאומתו נומרית, ומציינת שהנתונים הם סימולציות מכוילות בהיעדר הטבלאות הנמדדות המקוריות</span></li>
+  <li><a href="Avraham_Gilo_Lemma1_Presentation.html">Avraham &amp; Gilo — Lemma 1 Verification</a><span class="dates">פורסם: 2026-03-31</span><span class="desc">אימות למה מתמטית עם Ampcode + Wolfram</span></li>
+  <li><a href="proof-lean-cbmc.html">Can You Prove It? — Lean 4 + CBMC</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</span><span class="desc">הוכחות פורמליות לבנצ'מרק הקוונטי</span></li>
+  <li><a href="Quantum_MathBridge.html">Quantum MathBridge</a><span class="dates">פורסם: 2026-04-08</span><span class="desc">גשר בין סימולציה קוונטית למתמטיקה</span></li>
+  <li><a href="VeriMath_Pitch_Abel_Nazareth.html">VeriMath — Business Proposal for Wolfram Research</a><span class="dates">פורסם: 2026-04-13</span><span class="desc">הצעה עסקית ל-Wolfram</span></li>
+  <li><a href="wolfram-engine-gpu-demo-presentation.html">Wolfram Engine GPU Telemetry Demo</a><span class="dates">פורסם: 2026-05-14 · עודכן: 2026-05-19</span><span class="desc">טלמטריית GPU ב-Wolfram Engine</span></li>
+  <li><a href="ampcode-classiq-research-orchestrator/">Ampcode + Mathematica + Lean 4 + Classiq</a><span class="dates">פורסם: 2026-07-22</span><span class="desc">אורקסטרציה של מחקר קוונטי</span></li>
+  <li><a href="biosense-heartgcn-demo/paper-suitability-presentation.html">Paper Suitability — Biomedical Conduction Velocity</a><span class="dates">פורסם: 2026-07-19</span><span class="desc">התאמת מאמר לדמו ביו-רפואי</span></li>
+  <li><a href="biosense-heartgcn-demo/paper-to-cpp-verification-presentation.html">HeartGCN — Paper to Mathematica to C++</a><span class="dates">פורסם: 2026-07-19</span><span class="desc">ממאמר לקוד מאומת</span></li>
+  <li><a href="cardioband-tr-wolfram-demo/">AMP + Wolfram Paper-to-Simulation Demo</a><span class="dates">פורסם: 2026-05-23</span><span class="desc">ממאמר לסימולציה</span></li>
+  <li><a href="cardiotwin-tr-product-demo/">CardioTwin TR — Product Concept</a><span class="dates">פורסם: 2026-05-24</span><span class="desc">קונספט מוצר תאום דיגיטלי לבבי</span></li>
+</ol>
 
-  <!-- Slide 5 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">⚙️</div>
-      <h2>4. סטנדרטיזציה של פעולות באמצעות Skills</h2>
-      <p>Skills מאפשרים להגדיר פעולות מורכבות כיחידות עבודה מוגדרות הניתנות לשימוש חוזר. כל Skill כולל הנחיות, הקשר ותחום פעולה מוגדר. בכך ניתן להפוך ידע תפעולי לתהליכים מוגדרים ולהקטין שונות בביצוע משימות.</p>
-      <span class="tag">Skills</span>
-    </div>
-  </div>
+<h2>שונות</h2>
+<ol>
+  <li><a href="comparison-presentation-executive.html">Smart Speech Executive Comparison</a><span class="dates">פורסם: 2026-04-23</span><span class="desc">השוואת מנהלים — Smart Speech</span></li>
+  <li><a href="comparison-presentation-detailed.html">Smart Speech Comparison Presentation</a><span class="dates">פורסם: 2026-04-23</span><span class="desc">הגרסה המפורטת</span></li>
+  <li><a href="comparison-report.html">Smart Speech Executive Comparison (Report)</a><span class="dates">פורסם: 2026-04-23</span><span class="desc">גרסת דוח</span></li>
+  <li><a href="hiring-agent-presentation.html">Hiring Agent — Concept &amp; Process</a><span class="dates">פורסם: 2026-06-04</span><span class="desc">סוכן AI לתהליכי גיוס</span></li>
+  <li><a href="optical-ai-network-comparison-presentation.html">Optical AI Networks: China vs. Nvidia Israel</a><span class="dates">פורסם: 2026-07-15</span><span class="desc">השוואת רשתות AI אופטיות</span></li>
+  <li><a href="Unified_Intelligence_Platform_Proposal.html">Unified Enterprise Intelligence Platform</a><span class="dates">פורסם: 2026-03-30</span><span class="desc">הצעה טכנית ל-Sourcegraph</span></li>
+  <li><a href="early-dos-html/">Early DOS Development, IBM PC, AI Tools and Me</a><span class="dates">פורסם: 2026-05-06 · עודכן: 2026-05-07</span><span class="desc">מסע נוסטלגי — DOS ועד AI</span></li>
+  <li><a href="games/amp-best.html">London Baboon Hunt — FPS (Amp)</a><span class="dates">פורסם: 2026-07-17</span><span class="desc">משחק ה-FPS מהבנצ'מרק — גרסת Amp</span></li>
+  <li><a href="games/claude-best.html">London Baboon Hunter — FPS (Claude)</a><span class="dates">פורסם: 2026-07-17</span><span class="desc">גרסת Claude</span></li>
+</ol>
 
-  <!-- Slide 6 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">✅</div>
-      <h2>5. שילוב מנגנוני בדיקה בתוך ה-workflow</h2>
-      <p>Amp מאפשר להוסיף Checks או Review כחלק מהתהליך. מנגנונים אלו מאפשרים לבצע אימות של תוצרים או שלבי עבודה כחלק אינטגרלי מה-execution pipeline ולא רק לאחר סיום המשימה.</p>
-      <span class="tag">Checks &amp; Review</span>
-    </div>
-  </div>
-
-  <!-- Slide 7 -->
-  <div class="slide">
-    <div class="slide-inner card-slide">
-      <div class="card-icon-lg">🔄</div>
-      <h2>6. תמיכה במחזור פיתוח איטרטיבי מהיר</h2>
-      <p>השילוב של Threads, Skills והנחיות מערכת מאפשר מחזור עבודה של run → analyze → adjust → rerun. הדבר מאפשר שיפור מהיר של התנהגות האייג׳נט ושל איכות התוצרים לאורך מספר איטרציות.</p>
-      <span class="tag">Run → Analyze → Adjust</span>
-    </div>
-  </div>
-
-  <!-- Slide 8: Table -->
-  <div class="slide">
-    <div class="slide-inner table-slide">
-      <div class="section-label">מיפוי קונספטים</div>
-      <h2>קונספטים מהמאמר → המקבילה ב-Amp</h2>
-      <p class="section-desc">איך הארכיטקטורה של Amp ממפה לסטאק האבלואציה שקרן קושמן ממליצה עליו.</p>
-      <table class="map-table">
-        <thead><tr><th>קונספט מהמאמר</th><th>המקבילה ב-Amp</th></tr></thead>
-        <tbody>
-          <tr><td class="concept">Traces / Observability</td><td class="amp">Threads — לוגים שיתופיים וניתנים לבחינה</td></tr>
-          <tr><td class="concept">Routing Guardrails</td><td class="amp">AGENTS.md — קבצי הנחיות לבחירת כלים ופרמטרים</td></tr>
-          <tr><td class="concept">LLM-as-a-Judge</td><td class="amp">Oracle — חוות דעת שנייה מ-GPT-5.4</td></tr>
-          <tr><td class="concept">Code-Based Evals</td><td class="amp">Checks — קריטריוני בדיקה מותאמים לכל תיקייה</td></tr>
-          <tr><td class="concept">Controlled Functions</td><td class="amp">Skills — חבילות הוראות מנוהלות עם כלי MCP</td></tr>
-          <tr><td class="concept">Human Annotations</td><td class="amp">Thread Sharing — סקירת צוות של החלטות האייג׳נט</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Slide 9: Summary -->
-  <div class="slide">
-    <div class="slide-inner summary-slide">
-      <div class="summary-box">
-        <h2>סיכום טכני</h2>
-        <p>Amp מספק שכבת תשתית הממוקדת ב-observability, שליטה התנהגותית וסטנדרטיזציה של פעולות אייג׳נט. הוא משפר משמעותית את יכולת הניתוח והדיבוג של ריצות אייג׳נט ומאפשר להטמיע תהליכי עבודה חוזרים ובקרה כחלק מתהליך הפיתוח.</p>
-        <div class="footer-links">מבוסס על <a href="https://www.linkedin.com/pulse/%D7%AA%D7%A2%D7%9E%D7%93%D7%95-%D7%91%D7%A4%D7%99%D7%A0%D7%94-%D7%9C%D7%9E%D7%94-%D7%94%D7%90%D7%99%D7%99%D7%92%D7%A0%D7%98-%D7%A9%D7%9C%D7%9B%D7%9D-%D7%A0%D7%9B%D7%A9%D7%9C-%D7%95%D7%A1%D7%A4%D7%95%D7%99%D7%9C%D7%A8-%D7%96%D7%94-%D7%91%D7%92%D7%9C%D7%9C-keren-koshman-vmryf/" target="_blank">המאמר של קרן קושמן</a> &bull; מונע ע״י <a href="https://ampcode.com" target="_blank">Amp</a></div>
-      </div>
-    </div>
-  </div>
-
+<footer>
+  ESL — Engineering Software Lab · <a href="https://eswlab.com/contact-us/">צור קשר</a> · רשימה גולמית אוטומטית: <a href="PAGE_INDEX.txt">PAGE_INDEX.txt</a><span class="dates">פורסם: 2026-03-28 · עודכן: 2026-07-22</span>
+</footer>
 </div>
-</div>
-
-<script>
-let cur = 0, lang = 'en';
-const total = 9;
-
-function getTrack() { return document.getElementById('track-' + lang); }
-function getSlides() { return getTrack().querySelectorAll('.slide'); }
-
-function render() {
-  const track = getTrack();
-  const isRtl = lang === 'he';
-  const offset = isRtl ? cur * 100 : -cur * 100;
-  track.style.transform = 'translateX(' + offset + '%)';
-
-  // Active class
-  getSlides().forEach((s, i) => s.classList.toggle('active', i === cur));
-
-  // Counter
-  document.getElementById('slideCounter').textContent = (cur + 1) + ' / ' + total;
-
-  // Arrows
-  document.getElementById('prevBtn').classList.toggle('disabled', cur === 0);
-  document.getElementById('nextBtn').classList.toggle('disabled', cur === total - 1);
-
-  // Dots
-  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === cur));
-}
-
-function go(dir) {
-  const next = cur + dir;
-  if (next < 0 || next >= total) return;
-  cur = next;
-  render();
-}
-
-function goTo(i) { cur = i; render(); }
-
-function setLang(l) {
-  document.getElementById('track-' + lang).style.display = 'none';
-  lang = l;
-  cur = 0;
-  document.getElementById('track-' + lang).style.display = 'flex';
-  document.getElementById('btnEn').classList.toggle('active', l === 'en');
-  document.getElementById('btnHe').classList.toggle('active', l === 'he');
-  render();
-}
-
-// Build dots
-(function() {
-  const dots = document.getElementById('dots');
-  for (let i = 0; i < total; i++) {
-    const d = document.createElement('button');
-    d.className = 'dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', 'Slide ' + (i + 1));
-    d.onclick = () => goTo(i);
-    dots.appendChild(d);
-  }
-})();
-
-// Keyboard
-document.addEventListener('keydown', e => {
-  if (e.key === 'ArrowRight') go(lang === 'he' ? -1 : 1);
-  if (e.key === 'ArrowLeft') go(lang === 'he' ? 1 : -1);
-});
-
-// Touch / Swipe
-let tx = 0, ty = 0, swiping = false;
-document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; swiping = true; }, { passive: true });
-document.addEventListener('touchend', e => {
-  if (!swiping) return;
-  swiping = false;
-  const dx = e.changedTouches[0].clientX - tx;
-  const dy = e.changedTouches[0].clientY - ty;
-  if (Math.abs(dx) < 50 || Math.abs(dy) > Math.abs(dx)) return;
-  if (lang === 'he') { go(dx > 0 ? 1 : -1); }
-  else { go(dx < 0 ? 1 : -1); }
-}, { passive: true });
-
-render();
-</script>
 </body>
 </html>

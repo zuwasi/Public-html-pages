@@ -10,8 +10,6 @@ Last updated: 2026-07-27
   PAGE LINKS
 ──────────────────────────────────────────────────────────────
 
-1. index.html
-   https://zuwasi.github.io/Public-html-pages/index.html
 
 2. 1goat_Report.html
    https://zuwasi.github.io/Public-html-pages/1goat_Report.html
@@ -145,8 +143,7 @@ Last updated: 2026-07-27
 45. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-46. presentations-index.html
-   https://zuwasi.github.io/Public-html-pages/presentations-index.html
+46. index.html (was presentations-index.html)`r`n   https://zuwasi.github.io/Public-html-pages/
 
 47. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
