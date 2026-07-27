@@ -218,6 +218,9 @@ Last updated: 2026-07-27
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
 
+• edpb-databom-legal-edition
+  https://zuwasi.github.io/Public-html-pages/edpb-databom-legal-edition
+
 • edpb-guidelines-databom-risk
   https://zuwasi.github.io/Public-html-pages/edpb-guidelines-databom-risk
 
