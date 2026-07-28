@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>The Euclidean Remainder Fallacy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a1a;--card:#111128;--code:#0d1117;--cyan:#00d9ff;--purple:#7b6cf6;--red:#ff6b6b;--green:#51cf66;--text:#e0e0f0;--dim:#8888aa;--bright:#fff;--border:#222244}
+    *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
+    .deck{display:flex;width:1200vw;height:100vh;transition:transform .55s cubic-bezier(.22,.8,.3,1);will-change:transform}
+    .slide{position:relative;width:100vw;height:100vh;flex:0 0 100vw;display:flex;justify-content:center;align-items:center;padding:clamp(3.8rem,7vh,6rem) clamp(1.2rem,5vw,5.5rem) clamp(3rem,6vh,5rem);overflow:hidden}
+    .slide::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 12%,rgba(0,217,255,.09),transparent 32%),radial-gradient(circle at 82% 85%,rgba(123,108,246,.10),transparent 36%);pointer-events:none}
+    .content{position:relative;z-index:1;width:min(100%,1400px);max-height:100%;display:flex;flex-direction:column;gap:clamp(.65rem,1.5vh,1.3rem)}
+    .slide-tag,.slide-number{position:absolute;z-index:2;top:clamp(1rem,2.5vh,1.8rem);font-size:clamp(.66rem,.9vw,.82rem);font-weight:700;letter-spacing:.13em;text-transform:uppercase}
+    .slide-tag{left:clamp(1.2rem,4vw,4rem);padding:clamp(.35rem,.6vw,.48rem) clamp(.65rem,1vw,.95rem);border:1px solid rgba(0,217,255,.35);border-radius:999px;color:var(--cyan);background:rgba(0,217,255,.06)}
+    .slide-number{right:clamp(1.2rem,4vw,4rem);color:var(--dim)}
+    h1,h2,h3,p{margin:0}h1,h2{font-size:clamp(2rem,4.3vw,4.7rem);line-height:1.03;letter-spacing:-.045em;color:var(--bright)}
+    h1,.gradient{background:linear-gradient(100deg,#fff 20%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+    h3{font-size:clamp(.92rem,1.45vw,1.35rem);color:var(--bright)}
+    p,li,td,th{font-size:clamp(.68rem,1.12vw,1.05rem);line-height:1.45}.subtitle{font-size:clamp(.85rem,1.55vw,1.35rem);color:var(--dim);max-width:1100px}.intro{color:var(--dim)}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.65rem,1.3vw,1.2rem)}.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .card{background:rgba(17,17,40,.94);border:1px solid var(--border);border-left:clamp(3px,.35vw,5px) solid var(--cyan);border-radius:clamp(.55rem,.9vw,.9rem);padding:clamp(.7rem,1.4vw,1.3rem);display:flex;flex-direction:column;gap:clamp(.35rem,.7vh,.65rem)}
+    .card.red{border-left-color:var(--red)}.card.green{border-left-color:var(--green)}.card.purple{border-left-color:var(--purple)}.card.cyan{border-left-color:var(--cyan)}
+    .badge{align-self:flex-start;border-radius:999px;padding:clamp(.2rem,.35vw,.3rem) clamp(.45rem,.7vw,.7rem);font-size:clamp(.55rem,.72vw,.7rem);font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,217,255,.12);color:var(--cyan)}
+    .badge.bug{background:rgba(255,107,107,.14);color:var(--red)}.badge.fix{background:rgba(81,207,102,.14);color:var(--green)}.badge.rule{background:rgba(123,108,246,.16);color:#a99eff}
+    .big{font-size:clamp(1.45rem,3vw,2.8rem);font-weight:800;color:var(--bright)}.redtext{color:var(--red)}.greentext{color:var(--green)}.cyantext{color:var(--cyan)}
+    pre{margin:0;background:var(--code);border:1px solid #20283a;border-radius:clamp(.45rem,.7vw,.7rem);padding:clamp(.65rem,1.25vw,1.15rem);overflow:auto;font:clamp(.58rem,1vw,.95rem)/1.45 "JetBrains Mono",monospace;color:#f8f8f2;white-space:pre-wrap}code,.inline{font-family:"JetBrains Mono",monospace}.kw{color:#ff79c6}.fn{color:#50fa7b}.num{color:#bd93f9}.str{color:#f1fa8c}.cm{color:#6272a4}.type{color:#8be9fd}.inline{padding:.08em .3em;background:var(--code);border-radius:.25em;font-style:normal}
+    table{width:100%;border-collapse:collapse;background:rgba(17,17,40,.9);border:1px solid var(--border);border-radius:.7rem;overflow:hidden}th,td{padding:clamp(.4rem,.85vw,.8rem);text-align:left;border-bottom:1px solid var(--border);vertical-align:top}th{color:var(--cyan);background:rgba(0,217,255,.06)}tr:last-child td{border-bottom:0}.wrong{color:var(--red)}.right{color:var(--green)}
+    .highlight{padding:clamp(.75rem,1.5vw,1.35rem);border:1px solid rgba(0,217,255,.4);border-radius:.8rem;background:linear-gradient(110deg,rgba(0,217,255,.08),rgba(123,108,246,.09));text-align:center;font-size:clamp(.85rem,1.5vw,1.35rem);font-weight:700}
+    blockquote{margin:0;border-left:clamp(4px,.5vw,7px) solid var(--purple);padding:clamp(1rem,2.4vw,2.2rem);background:rgba(17,17,40,.72);font-size:clamp(1.1rem,2.3vw,2.25rem);line-height:1.55;font-style:italic;color:#f2f2ff;border-radius:0 1rem 1rem 0}
+    ul{margin:0;padding-left:clamp(1rem,1.7vw,1.5rem)}li{margin:clamp(.12rem,.3vh,.3rem) 0}li::marker{color:var(--cyan)}
+    .flow{display:flex;align-items:stretch;gap:clamp(.35rem,.8vw,.8rem)}.step{flex:1;position:relative}.circle{width:clamp(1.7rem,2.5vw,2.5rem);height:clamp(1.7rem,2.5vw,2.5rem);display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#080814;font-weight:800}.arrow{align-self:center;color:var(--purple);font-size:clamp(1rem,2vw,2rem)}
+    .nav{position:fixed;z-index:10;top:50%;transform:translateY(-50%);width:clamp(2.5rem,4vw,3.7rem);height:clamp(2.5rem,4vw,3.7rem);border:1px solid var(--border);border-radius:50%;background:rgba(17,17,40,.88);color:white;font-size:clamp(1.7rem,2.8vw,2.7rem);cursor:pointer;display:grid;place-items:center;line-height:1;transition:.2s}.nav:hover{border-color:var(--cyan);color:var(--cyan)}#prev{left:clamp(.5rem,1.4vw,1.3rem)}#next{right:clamp(.5rem,1.4vw,1.3rem)}.nav.hidden{opacity:0;pointer-events:none}
+    .progress{position:fixed;z-index:12;bottom:0;left:0;height:clamp(3px,.45vh,5px);background:linear-gradient(90deg,var(--cyan),var(--purple),var(--red));transition:width .4s}.counter{position:fixed;z-index:11;right:clamp(1rem,2vw,2rem);bottom:clamp(.75rem,1.5vh,1.2rem);font-size:clamp(.65rem,.85vw,.8rem);color:var(--dim)}
+    .swipe{position:fixed;z-index:11;bottom:clamp(1.5rem,3vh,2.3rem);left:50%;transform:translateX(-50%);color:var(--dim);font-size:clamp(.68rem,1vw,.9rem);animation:pulse 1.8s infinite}.swipe.hidden{display:none}@keyframes pulse{50%{opacity:.35;transform:translateX(-50%) translateY(-4px)}}
+    .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.5rem,1vw,1rem)}.meta strong{color:var(--cyan)}
+    @media(max-width:760px){.slide{overflow-y:auto;align-items:flex-start}.content{margin:auto 0}.grid,.grid.four{grid-template-columns:1fr}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}.meta{grid-template-columns:1fr}.nav{top:auto;bottom:1.2rem}.four .card{padding:.55rem}table{display:block;overflow-x:auto}blockquote{font-size:clamp(.9rem,3.3vw,1.25rem)}}
+    @media(max-height:700px){.slide{padding-top:3.4rem;padding-bottom:2.5rem}.content{gap:.5rem}.card{padding:.6rem}p,li,td,th{line-height:1.3}h1,h2{font-size:clamp(1.7rem,3.5vw,3rem)}}
+  </style>
+</head>
+<body>
+<main class="deck" id="deck">
+  <section class="slide"><span class="slide-tag">MSVC v19.51 · Regression</span><span class="slide-number">01</span><div class="content"><h1>The Euclidean Remainder Fallacy</h1><p class="subtitle">How MSVC's /O1–/O2 optimizer confused C++ truncated modulo with math-class modulo — and how Parasoft C/C++test would have caught it before a single optimized binary was built.</p><div class="card red"><span class="badge bug">Compiler regression</span><div class="meta"><p><strong>Bug</strong><br>MSVC /O1–/O2 miscompiles <span class="inline">6U &lt; (v % 5)</span> when v is negative</p><p><strong>Regression</strong><br>MSVC v19.51</p><p><strong>Reporter</strong><br>Ofek Shilon</p></div></div></div></section>
+
+  <section class="slide"><span class="slide-tag">The Bug</span><span class="slide-number">02</span><div class="content"><h2>The Code That Breaks</h2><div class="grid"><pre><span class="kw">#include</span> <span class="str">&lt;cstdio&gt;</span>
+<span class="type">int</span> <span class="fn">test</span>(<span class="type">int</span> v) {
+    <span class="kw">return</span> <span class="num">6U</span> &lt; (v % <span class="num">5</span>) ? <span class="num">1111</span> : <span class="num">2</span>;
+}
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">int</span> res = <span class="fn">test</span>(-<span class="num">1</span>);
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, res);
+    <span class="kw">return</span> <span class="num">0</span>;
+}</pre><div class="content"><div class="card red"><span class="badge bug">BUG /O1 · /O2</span><p class="big redtext">→ prints 2</p><p>Optimizer assumes v % 5 ∈ [0, 4], concludes 6U &lt; [0,4] is always false, constant-folds to 2.</p></div><div class="card green"><span class="badge fix">CORRECT /Od · GCC · Clang</span><p class="big greentext">→ prints 1111</p><p>-1 % 5 == -1 (C++ truncated modulo). -1 promotes to UINT_MAX. 6U &lt; UINT_MAX → true.</p></div></div></div></div></section>
+
+  <section class="slide"><span class="slide-tag">Root Cause</span><span class="slide-number">03</span><div class="content"><h2>Truncated vs. Euclidean Modulo</h2><p class="intro">The optimizer's range analysis assigned v % 5 the wrong range.</p><table><thead><tr><th>Property</th><th class="wrong">Euclidean Modulo (what optimizer assumed)</th><th class="right">C++ Truncated Modulo (what standard requires)</th></tr></thead><tbody><tr><td>Range of v % 5</td><td class="wrong">[0, 4] (wrong)</td><td class="right">[-4, 4] (right)</td></tr><tr><td>-1 % 5</td><td class="wrong">4 (wrong)</td><td class="right">-1 (right)</td></tr><tr><td>Sign of remainder</td><td class="wrong">Always non-negative (wrong)</td><td class="right">Follows dividend (right)</td></tr><tr><td>Standard reference</td><td class="wrong">Math class (wrong)</td><td class="right">[expr.mul]/4 (right)</td></tr><tr><td>Effect on 6U &lt; (v % 5)</td><td class="wrong">“Always false” → fold to 2</td><td class="right">Must evaluate at runtime</td></tr></tbody></table><div class="card red"><strong>The trap:</strong><p>When the signed remainder -1 meets the unsigned literal 6U, the usual arithmetic conversions promote it to unsigned int → UINT_MAX (4,294,967,295). The comparison 6U &lt; UINT_MAX is trivially true. But the optimizer never gets there — it already folded the expression using the wrong range.</p></div></div></section>
+
+  <section class="slide"><span class="slide-tag">The Story</span><span class="slide-number">04</span><div class="content"><blockquote>“MSVC's optimizer discovered Euclidean modulo and decided the C++ standard was simply wrong. <span class="inline greentext">-1 % 5</span> is <span class="inline greentext">-1</span> in C++, not <span class="inline redtext">4</span> — and once that -1 meets <span class="inline greentext">6U</span>, it becomes <span class="inline greentext">UINT_MAX</span>, making the comparison trivially true. The optimizer ‘helpfully’ replaced truncated modulo with math-class modulo, concluded <span class="inline redtext">6U &lt; [0,4]</span> is always false, and folded to <span class="inline redtext">2</span>. A textbook example of why ‘obviously always false’ is the most dangerous phrase in compiler optimization.”</blockquote></div></section>
+
+  <section class="slide"><span class="slide-tag">The Fix</span><span class="slide-number">05</span><div class="content"><h2>Workarounds — Today</h2><div class="grid four"><div class="card green"><span class="badge fix">Option 1 — Most Surgical</span><h3>#pragma optimize</h3><pre><span class="kw">#pragma optimize</span>(<span class="str">""</span>, off)
+<span class="type">int</span> <span class="fn">test</span>(<span class="type">int</span> v) {
+  <span class="kw">return</span> <span class="num">6U</span> &lt; (v % <span class="num">5</span>) ? <span class="num">1111</span> : <span class="num">2</span>;
+}
+<span class="kw">#pragma optimize</span>(<span class="str">""</span>, on)</pre><p>Kills the bug without changing semantics or affecting the rest of the translation unit.</p></div><div class="card cyan"><span class="badge">Option 2 — Explicit Conversion</span><h3>Break the fold pattern</h3><pre><span class="type">int</span> <span class="fn">test</span>(<span class="type">int</span> v) {
+  <span class="type">int</span> rem = v % <span class="num">5</span>;
+  <span class="type">unsigned</span> urem = (<span class="type">unsigned</span>)rem;
+  <span class="kw">return</span> <span class="num">6U</span> &lt; urem ? <span class="num">1111</span> : <span class="num">2</span>;
+}</pre><p>Makes the signed→unsigned conversion visible so the optimizer can't skip it.</p></div><div class="card purple"><span class="badge rule">Option 3 — Change Semantics</span><h3>Unsigned domain (if intended)</h3><pre><span class="type">int</span> <span class="fn">test</span>(<span class="type">int</span> v) {
+  <span class="type">unsigned</span> uv = (<span class="type">unsigned</span>)v;
+  <span class="kw">return</span> <span class="num">6U</span> &lt; (uv % <span class="num">5u</span>) ? <span class="num">1111</span> : <span class="num">2</span>;
+}</pre><p class="wrong">⚠️ This changes the result: UINT_MAX % 5 == 0, not -1. Only use if you genuinely want unsigned modular arithmetic.</p></div><div class="card red"><span class="badge bug">Option 4 — Brute Force</span><h3>Compile affected TU with /Od</h3><p>Guaranteed correct, but disables all optimizations for the file. Use only if the bug is widespread in a single translation unit.</p></div></div></div></section>
+
+  <section class="slide"><span class="slide-tag">Enter Parasoft C/C++test</span><span class="slide-number">06</span><div class="content"><h2>Would Parasoft Have Caught This?</h2><p class="subtitle">Yes — through two independent mechanisms that form a closed loop.</p><div class="grid"><div class="card cyan"><h3>① Static Analysis</h3><p>Flags the signed/unsigned comparison pattern before the code ever reaches the optimizer. The exact coding error the optimizer made is literally what CERT-C and MISRA-C rules exist to prevent.</p></div><div class="card purple"><h3>② Unit Testing</h3><p>A C++test unit test with a negative-input boundary case passes under /Od and fails under /O2 — catching the miscompilation at CI build time, not in production.</p></div></div><div class="highlight">Static analysis tells you where to write tests. Unit tests tell you whether the code — or the compiler — is actually correct.</div></div></section>
+
+  <section class="slide"><span class="slide-tag">Static Analysis · CERT-C</span><span class="slide-number">07</span><div class="content"><h2>CERT-C INT10-C: The Exact Rule</h2><div class="card red"><span class="badge bug">CERT-C · INT10-C</span><h3 class="redtext">Do not assume a non-negative remainder</h3><p>This rule exists precisely to catch the assumption that v % d ∈ [0, d-1]. This is literally the exact error the MSVC optimizer made. The static analysis tool designed to catch programmer errors would have caught the compiler's error — because the optimizer fell for the same fallacy the rule exists to prevent.</p></div><div class="grid"><div class="card cyan"><span class="badge">CERT-C INT02-C</span><h3>Integer Conversion Rules</h3><p>Flags implicit signed→unsigned conversions — the -1 → UINT_MAX promotion the optimizer missed.</p></div><div class="card cyan"><span class="badge">CWE-681</span><h3>Incorrect Conversion Between Numeric Types</h3><p>The broader CWE category covering the signed→unsigned implicit promotion chain.</p></div></div><div class="card green"><p>If Parasoft C/C++test had been run on this code before the /O1 build: INT10-C would have flagged 6U &lt; (v % 5), a developer would have reviewed the finding and either made the conversion explicit, cast v to unsigned first, or added a runtime guard — preventing the vulnerable code from ever reaching the miscompiling optimizer.</p></div></div></section>
+
+  <section class="slide"><span class="slide-tag">Static Analysis · MISRA-C 2012</span><span class="slide-number">08</span><div class="content"><h2>MISRA-C 2012: Three Rules Fire</h2><table><thead><tr><th>Rule</th><th>Category</th><th>What It Flags</th><th>Relevance</th></tr></thead><tbody><tr><td>Rule 10.4</td><td>Required</td><td>Both operands of an operator should not be of different essential type categories</td><td>6U (unsigned) vs v % 5 (signed) — mixed-type comparison</td></tr><tr><td>Rule 10.6</td><td>Required</td><td>Value of unsigned expression should not be implicitly converted to greater width</td><td>The promotion chain that turns -1 into UINT_MAX</td></tr><tr><td>Rule 12.4</td><td>Advisory</td><td>Comparison should not be made against a constant outside the operand's range</td><td>6U constant vs v % 5 signed range</td></tr></tbody></table><div class="card purple"><p>Three MISRA-C findings on a single expression. In any MISRA-compliant project, this code would never have reached code review — let alone the optimizer. The signed/unsigned mismatch is flagged at the essential-type level, before any optimization pass runs.</p></div></div></section>
+
+  <section class="slide"><span class="slide-tag">Parasoft · Unit Testing</span><span class="slide-number">09</span><div class="content"><h2>The Unit Test That Catches the Compiler</h2><div class="grid"><div class="content"><pre><span class="fn">TEST</span>(ModuloSuite, NegativeInput) {
+  <span class="cm">// -1 % 5 == -1 (C++ truncated)</span>
+  <span class="cm">// -1 → UINT_MAX on unsigned promotion</span>
+  <span class="cm">// 6U &lt; UINT_MAX → true → 1111</span>
+  <span class="type">int</span> result = <span class="fn">test</span>(-<span class="num">1</span>);
+  <span class="fn">ASSERT_EQUAL</span>(<span class="num">1111</span>, result);
+}</pre><div class="card green"><span class="badge fix">PASSES under /Od</span><p>Correct codegen: -1 % 5 = -1 → UINT_MAX → 6U &lt; UINT_MAX = true → 1111</p></div></div><div class="content"><div class="card red"><span class="badge bug">FAILS under /O2</span><p>Miscompiled: optimizer folds to 2 instead of 1111</p></div><div class="highlight">The test doesn't need to know why the optimizer is wrong. It just needs to test the boundary input that static analysis flagged.</div><div class="card cyan"><h3>Why negative input?</h3><ul><li>Positive v: v % 5 ∈ [0,4] — optimizer is correct, test passes</li><li>Negative v: v % 5 ∈ [-4,-1] — optimizer's range is wrong, test catches it</li><li>Static analysis told us to test this</li></ul></div></div></div></div></section>
+
+  <section class="slide"><span class="slide-tag">The CI/CD Pipeline</span><span class="slide-number">10</span><div class="content"><h2>Defense in Depth</h2><div class="flow"><div class="card cyan step"><span class="circle">1</span><h3>Parasoft C/C++test Static Analysis</h3><p>CERT-C INT10-C + MISRA-C 10.4 fire on 6U &lt; (v % 5). Developer reviews finding, makes conversion explicit or adds guard.</p></div><span class="arrow">→</span><div class="card purple step"><span class="circle">2</span><h3>Build with /O2</h3><p>The miscompiling optimizer runs, but the code has already been hardened by step 1.</p></div><span class="arrow">→</span><div class="card green step"><span class="circle">3</span><h3>Parasoft C/C++test Unit Tests</h3><p>test(-1) expects 1111. If the optimizer still miscompiles, the test FAILS and the build is blocked.</p></div><span class="arrow">→</span><div class="card red step"><span class="circle">4</span><h3>Runtime Error Detection</h3><p>(Optional) Instrumented run catches unexpected unsigned wraparound at the comparison site.</p></div></div><div class="highlight greentext">✓ Merge blocked if any step fails. The miscompilation never reaches production.</div></div></section>
+
+  <section class="slide"><span class="slide-tag">The Irony</span><span class="slide-number">11</span><div class="content"><h2>The Tool Caught the Compiler</h2><div class="highlight"><p class="big">The static analysis tool designed to catch <span class="cyantext">programmer</span> errors would have caught the <span class="redtext">compiler's</span> error</p><p class="subtitle" style="margin:clamp(.4rem,1vh,.8rem) auto 0">because the optimizer made the exact same mistake that CERT-C INT10-C exists to prevent.</p></div><div class="grid"><div class="card red"><h3>The Optimizer's Mistake</h3><p>Assumed v % 5 ∈ [0, 4] — Euclidean range. Ignored negative remainders. Folded the comparison.</p></div><div class="card green"><h3>What INT10-C Prevents</h3><p>Assuming v % 5 ∈ [0, 4] — Euclidean range. Ignoring negative remainders. The exact same fallacy.</p></div></div></div></section>
+
+  <section class="slide"><span class="slide-tag">Takeaways</span><span class="slide-number">12</span><div class="content"><h2>Key Takeaways</h2><div class="grid four"><div class="card cyan"><h3>The Bug</h3><ul><li>MSVC /O1–/O2 assumes v % d ∈ [0, d-1] (Euclidean)</li><li>C++ requires v % d ∈ [-(d-1), d-1] (truncated)</li><li>Negative remainder + unsigned comparison = silent miscompilation</li><li>Regression since MSVC v19.51</li></ul></div><div class="card green"><h3>The Fix</h3><ul><li>#pragma optimize("", off) — most surgical</li><li>Explicit (unsigned) cast — breaks the fold</li><li>Unsigned domain — if Euclidean is intended</li><li>Compiler team: fix % range inference for signed dividends</li></ul></div><div class="card purple"><h3>Parasoft: Static Analysis</h3><ul><li>CERT-C INT10-C — “non-negative remainder assumption”</li><li>MISRA-C 10.4 — signed/unsigned essential type mismatch</li><li>MISRA-C 10.6, 12.4 — conversion + constant range</li><li><strong class="gradient">Flags the pattern before it reaches the optimizer</strong></li></ul></div><div class="card cyan"><h3>Parasoft: Unit Testing</h3><ul><li>Boundary test: test(-1) expects 1111</li><li>Passes under /Od, fails under /O2</li><li>Static analysis tells you what to test</li><li>Unit tests tell you if the compiler is correct</li></ul></div></div><div class="highlight">Static analysis + unit testing = closed loop. The tool catches what the compiler misses. The test proves it.</div></div></section>
+</main>
+<button class="nav hidden" id="prev" aria-label="Previous slide">‹</button><button class="nav" id="next" aria-label="Next slide">›</button>
+<div class="swipe" id="swipe">← Swipe to navigate →</div><div class="progress" id="progress"></div><div class="counter" id="counter">1 / 12</div>
+<script>
+  (() => {
+    const deck = document.getElementById('deck');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const progress = document.getElementById('progress');
+    const counter = document.getElementById('counter');
+    const swipe = document.getElementById('swipe');
+    const total = 12;
+    let current = 0;
+    let startX = null;
+    let navigated = false;
+    function render() {
+      deck.style.transform = `translateX(-${current * 100}vw)`;
+      prev.classList.toggle('hidden', current === 0);
+      next.classList.toggle('hidden', current === total - 1);
+      progress.style.width = `${((current + 1) / total) * 100}%`;
+      counter.textContent = `${current + 1} / ${total}`;
+      if (navigated) swipe.classList.add('hidden');
+    }
+    function go(delta) {
+      const target = Math.max(0, Math.min(total - 1, current + delta));
+      if (target !== current) { current = target; navigated = true; render(); }
+    }
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight' || event.key === ' ') { event.preventDefault(); go(1); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); go(-1); }
+    });
+    document.addEventListener('touchstart', event => { startX = event.changedTouches[0].clientX; }, {passive:true});
+    document.addEventListener('touchend', event => { if (startX === null) return; const dx = event.changedTouches[0].clientX - startX; if (Math.abs(dx) >= 50) go(dx < 0 ? 1 : -1); startX = null; }, {passive:true});
+    document.addEventListener('mousedown', event => { if (!event.target.closest('button')) startX = event.clientX; });
+    document.addEventListener('mouseup', event => { if (startX === null) return; const dx = event.clientX - startX; if (Math.abs(dx) >= 50) go(dx < 0 ? 1 : -1); startX = null; });
+    render();
+  })();
+</script>
+</body>
+</html>
