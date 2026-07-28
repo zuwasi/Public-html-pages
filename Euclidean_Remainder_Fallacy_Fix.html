@@ -148,6 +148,15 @@
           <div class="card cyan"><strong class="summary-title">volatile</strong>Breaks range tracking for one variable. Minimal performance impact. Most surgical.</div>
           <div class="card cyan"><strong class="summary-title">#pragma optimize</strong>Disables all optimizations for one function. Larger performance impact. Most reliable.</div>
         </div>
+        <div style="margin-top:clamp(.8rem,2vh,1.5rem);padding-top:clamp(.8rem,2vh,1.2rem);border-top:1px solid var(--border);">
+          <p style="font-size:clamp(.7rem,1vw,.9rem);color:var(--dim);margin-bottom:clamp(.4rem,.8vh,.6rem);font-weight:600;letter-spacing:.08em;text-transform:uppercase;">Verify on Compiler Explorer ↗</p>
+          <div style="display:flex;flex-wrap:wrap;gap:clamp(.4rem,.8vw,.7rem);">
+            <a href="https://compiler-explorer.com/z/4sz3bThMh" target="_blank" rel="noopener" style="display:inline-block;padding:clamp(.25rem,.5vw,.4rem) clamp(.6rem,1.2vw,.9rem);border-radius:8px;background:rgba(0,217,255,0.08);border:1px solid rgba(0,217,255,0.2);color:#4fc3f7;font-size:clamp(.65rem,.9vw,.8rem);font-weight:600;text-decoration:none;font-family:'JetBrains Mono',monospace;">/Od working ✅ — z/4sz3bThMh</a>
+            <a href="https://compiler-explorer.com/z/d85nfE6x3" target="_blank" rel="noopener" style="display:inline-block;padding:clamp(.25rem,.5vw,.4rem) clamp(.6rem,1.2vw,.9rem);border-radius:8px;background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.2);color:var(--red);font-size:clamp(.65rem,.9vw,.8rem);font-weight:600;text-decoration:none;font-family:'JetBrains Mono',monospace;">Cast fix failed ❌ — z/d85nfE6x3</a>
+            <a href="https://compiler-explorer.com/z/v5131dWfq" target="_blank" rel="noopener" style="display:inline-block;padding:clamp(.25rem,.5vw,.4rem) clamp(.6rem,1.2vw,.9rem);border-radius:8px;background:rgba(123,108,246,0.08);border:1px solid rgba(123,108,246,0.2);color:var(--purple);font-size:clamp(.65rem,.9vw,.8rem);font-weight:600;text-decoration:none;font-family:'JetBrains Mono',monospace;">Regression v19.51 — z/v5131dWfq</a>
+            <a href="https://developercommunity.visualstudio.com/t/MSVC-O1-and-O2-miscompiles-signed-modu/11125055" target="_blank" rel="noopener" style="display:inline-block;padding:clamp(.25rem,.5vw,.4rem) clamp(.6rem,1.2vw,.9rem);border-radius:8px;background:rgba(255,213,79,0.08);border:1px solid rgba(255,213,79,0.2);color:#ffd54f;font-size:clamp(.65rem,.9vw,.8rem);font-weight:600;text-decoration:none;font-family:'JetBrains Mono',monospace;">Bug report ↗</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
