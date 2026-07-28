@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Euclidean Remainder Fallacy — Working Fixes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0a0a1a; --card:#111128; --code:#0d1117; --cyan:#00d9ff; --purple:#7b6cf6; --red:#ff6b6b; --green:#51cf66; --text:#e0e0f0; --dim:#8888aa; --bright:#fff; --border:#222244; }
+    * { box-sizing:border-box; }
+    html, body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--bg); color:var(--text); font-family:Inter,system-ui,sans-serif; }
+    body { user-select:none; }
+    #deck { display:flex; width:400vw; height:100vh; transition:transform .55s cubic-bezier(.22,.8,.26,1); will-change:transform; }
+    .slide { width:100vw; height:100vh; flex:0 0 100vw; position:relative; overflow:auto; padding:clamp(58px,7vh,88px) clamp(24px,7vw,112px) clamp(54px,7vh,82px); }
+    .slide::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 82% 18%,rgba(123,108,246,.15),transparent 36%),radial-gradient(circle at 12% 85%,rgba(0,217,255,.08),transparent 34%); pointer-events:none; }
+    .content { position:relative; z-index:1; width:min(1180px,100%); min-height:100%; margin:0 auto; display:flex; flex-direction:column; justify-content:center; gap:clamp(10px,1.5vh,20px); }
+    .slide-tag,.slide-number { position:absolute; z-index:2; top:clamp(20px,3vh,34px); font-size:clamp(10px,1vw,13px); font-weight:700; letter-spacing:clamp(1.5px,.22vw,3px); text-transform:uppercase; }
+    .slide-tag { left:clamp(24px,4vw,64px); color:var(--cyan); }
+    .slide-number { right:clamp(24px,4vw,64px); color:var(--dim); }
+    .heading-row { display:flex; align-items:center; flex-wrap:wrap; gap:clamp(10px,1.3vw,18px); }
+    h1 { margin:0; font-size:clamp(30px,4vw,58px); line-height:1.05; letter-spacing:clamp(-2px,-.1vw,-1px); background:linear-gradient(100deg,var(--bright) 22%,var(--cyan)); color:transparent; background-clip:text; -webkit-background-clip:text; }
+    .subtitle { margin:0; color:var(--dim); font-size:clamp(14px,1.55vw,21px); line-height:1.45; }
+    .badge { display:inline-flex; align-items:center; border-radius:clamp(14px,2vw,24px); padding:clamp(5px,.6vw,8px) clamp(10px,1vw,15px); font-size:clamp(10px,1vw,13px); font-weight:800; letter-spacing:clamp(.5px,.08vw,1px); white-space:nowrap; }
+    .badge.red { color:var(--red); background:rgba(255,107,107,.12); border:1px solid rgba(255,107,107,.4); }
+    .badge.green { color:var(--green); background:rgba(81,207,102,.12); border:1px solid rgba(81,207,102,.4); }
+    pre { margin:0; padding:clamp(14px,2vw,25px); border:1px solid var(--border); border-radius:clamp(10px,1vw,14px); background:var(--code); overflow:auto; box-shadow:0 clamp(8px,1vw,14px) clamp(24px,3vw,42px) rgba(0,0,0,.25); }
+    code { font-family:"JetBrains Mono",Consolas,monospace; font-size:clamp(11px,1.4vw,18px); line-height:1.55; color:var(--text); user-select:text; }
+    .kw,.pre,.op { color:#ff79c6; font-weight:700; } .type { color:#8be9fd; } .fn { color:#50fa7b; } .num { color:#bd93f9; } .str,.lib { color:#f1fa8c; } .cmt { color:#6272a4; font-style:italic; }
+    .cards { display:grid; grid-template-columns:1fr; gap:clamp(8px,1.2vh,14px); }
+    .card { background:var(--card); border:1px solid var(--border); border-left:clamp(3px,.35vw,5px) solid var(--cyan); border-radius:clamp(8px,1vw,12px); padding:clamp(11px,1.3vw,17px) clamp(14px,1.7vw,22px); font-size:clamp(12px,1.2vw,16px); line-height:1.5; }
+    .card.red { border-left-color:var(--red); } .card.green { border-left-color:var(--green); } .card.cyan { border-left-color:var(--cyan); }
+    .card strong { color:var(--bright); } .red-text { color:var(--red); } .green-text { color:var(--green); } .cyan-text { color:var(--cyan); }
+    .flow { display:flex; flex-direction:column; align-items:center; gap:clamp(3px,.5vh,7px); }
+    .flow-card { width:min(820px,100%); display:grid; grid-template-columns:minmax(120px,.7fr) 1.8fr; align-items:center; background:var(--card); border:1px solid var(--border); border-left:clamp(3px,.35vw,5px) solid var(--purple); border-radius:clamp(8px,1vw,12px); padding:clamp(7px,.8vw,11px) clamp(12px,1.5vw,18px); font-size:clamp(11px,1.15vw,16px); }
+    .flow-card.wrong { border-left-color:var(--red); }
+    .flow-code { color:var(--bright); font-family:"JetBrains Mono",monospace; font-weight:700; }
+    .arrow { color:var(--cyan); font-size:clamp(16px,1.7vw,24px); line-height:1; }
+    .summary { display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,1.2vw,16px); }
+    .summary .card { height:100%; }
+    .summary-title { display:block; margin-bottom:clamp(3px,.4vw,6px); color:var(--cyan); font-size:clamp(14px,1.4vw,19px); }
+    .slide:nth-child(4) .content { gap:clamp(7px,1vh,12px); }
+    .slide:nth-child(4) h1 { font-size:clamp(28px,3.4vw,48px); }
+    .slide:nth-child(4) pre { padding:clamp(10px,1.3vw,17px); }
+    .slide:nth-child(4) pre code { font-size:clamp(11px,1.15vw,15px); line-height:1.3; }
+    .slide:nth-child(4) .card { padding:clamp(8px,.9vw,12px) clamp(12px,1.3vw,17px); font-size:clamp(11px,1.05vw,14px); line-height:1.3; }
+    .nav { position:fixed; z-index:10; top:50%; transform:translateY(-50%); width:clamp(40px,4vw,54px); height:clamp(40px,4vw,54px); border-radius:50%; border:1px solid var(--border); background:rgba(17,17,40,.9); color:var(--bright); font-size:clamp(26px,2.5vw,38px); cursor:pointer; display:grid; place-items:center; transition:opacity .2s,transform .2s,border-color .2s; }
+    .nav:hover { border-color:var(--cyan); transform:translateY(-50%) scale(1.06); } .nav:disabled { opacity:0; pointer-events:none; }
+    #prev { left:clamp(8px,1.5vw,22px); } #next { right:clamp(8px,1.5vw,22px); }
+    .progress-track { position:fixed; z-index:12; left:0; bottom:0; width:100%; height:clamp(3px,.4vh,5px); background:var(--border); }
+    #progress { height:100%; width:25%; background:linear-gradient(90deg,var(--purple),var(--cyan)); transition:width .55s ease; }
+    #counter { position:fixed; z-index:11; right:clamp(18px,3vw,44px); bottom:clamp(14px,2.5vh,28px); color:var(--dim); font-size:clamp(11px,1vw,14px); font-weight:600; }
+    #swipeHint { position:fixed; z-index:11; left:50%; bottom:clamp(16px,2.5vh,30px); transform:translateX(-50%); color:var(--dim); font-size:clamp(10px,1vw,13px); animation:pulse 1.8s ease-in-out infinite; transition:opacity .3s; }
+    #swipeHint.hidden { opacity:0; pointer-events:none; animation:none; }
+    @keyframes pulse { 0%,100%{opacity:.45;transform:translateX(-50%)} 50%{opacity:1;transform:translateX(-50%) translateY(clamp(-3px,-.3vh,-1px))} }
+    @media (max-width:700px) { .slide{padding:clamp(52px,7vh,66px) clamp(18px,5vw,30px) clamp(48px,7vh,64px)} .summary{grid-template-columns:1fr}.flow-card{grid-template-columns:1fr;gap:clamp(2px,.4vh,4px)} .nav{top:auto;bottom:clamp(10px,1.5vh,16px);transform:none}.nav:hover{transform:scale(1.04)} .content{justify-content:flex-start}.slide-tag,.slide-number{top:clamp(17px,2.5vh,25px)} }
+    @media (max-height:760px) and (min-width:701px) { .content{justify-content:flex-start}.slide{padding-top:clamp(48px,7vh,62px)} }
+  </style>
+</head>
+<body>
+  <main id="deck">
+    <section class="slide">
+      <div class="slide-tag">Correction</div><div class="slide-number">01</div>
+      <div class="content">
+        <div class="heading-row"><h1>The Fix That Didn't Work</h1><span class="badge red">FAILED ❌</span></div>
+        <p class="subtitle">The explicit cast workaround — and why the optimizer still miscompiles it</p>
+        <pre><code><span class="cmt">// Attempted fix: make the conversion explicit</span>
+<span class="type">int</span> <span class="fn">test</span>(<span class="type">int</span> v) {
+    <span class="type">int</span> rem <span class="op">=</span> v <span class="op">%</span> <span class="num">5</span>;
+    <span class="type">unsigned</span> urem <span class="op">=</span> (<span class="type">unsigned</span>)rem;
+    <span class="kw">return</span> <span class="num">6U</span> <span class="op">&lt;</span> urem <span class="op">?</span> <span class="num">1111</span> <span class="op">:</span> <span class="num">2</span>;
+}</code></pre>
+        <div class="cards">
+          <div class="card red"><strong class="red-text">Result:</strong> Still prints <strong>2</strong> under <strong>/O1</strong>. The explicit cast doesn't help.</div>
+          <div class="card red"><strong>Why?</strong> Because the optimizer's range analysis is broken at the source — it assigns <code>v % 5</code> the range <strong>[0, 4]</strong> (wrong), then tracks that wrong range through every variable and cast.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-tag">Root Cause</div><div class="slide-number">02</div>
+      <div class="content">
+        <h1>How the Optimizer Tracks the Wrong Range</h1>
+        <p class="subtitle">The broken range analysis propagates through every intermediate variable</p>
+        <div class="flow">
+          <div class="flow-card wrong"><span class="flow-code">v % 5</span><span>→ range <strong class="red-text">[0, 4]</strong> &nbsp;(WRONG — <span class="green-text">should be [-4, 4]</span>)</span></div>
+          <div class="arrow">↓</div>
+          <div class="flow-card"><span class="flow-code">rem</span><span>→ range <strong>[0, 4]</strong> &nbsp;(tracked through assignment)</span></div>
+          <div class="arrow">↓</div>
+          <div class="flow-card"><span class="flow-code">urem</span><span>→ range <strong>[0, 4]</strong> &nbsp;(tracked through cast — [0,4] as unsigned is still [0,4])</span></div>
+          <div class="arrow">↓</div>
+          <div class="flow-card wrong"><span class="flow-code">6U &lt; urem</span><span>→ “always false” → constant-fold to <strong class="red-text">2 ❌</strong></span></div>
+        </div>
+        <div class="card cyan"><strong class="cyan-text">Key insight:</strong> No amount of intermediate variables or explicit casts fixes this. The optimizer propagates the wrong range through all of them. The cast from [0,4] to unsigned is still [0,4] — the damage was done before the cast.</div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-tag">Working Fix</div><div class="slide-number">03</div>
+      <div class="content">
+        <div class="heading-row"><h1>The Fix That Works — volatile</h1><span class="badge green">WORKS ✅</span></div>
+        <p class="subtitle"><code><span class="kw">volatile</span></code> forces a memory read — the optimizer cannot track the range</p>
+        <pre><code><span class="pre">#include</span> <span class="op">&lt;</span><span class="lib">cstdio</span><span class="op">&gt;</span>
+
+<span class="cmt">// Fix: volatile breaks the optimizer's range tracking</span>
+<span class="type">int</span> <span class="fn">test</span>(<span class="type">int</span> v) {
+    <span class="kw">volatile</span> <span class="type">int</span> rem <span class="op">=</span> v <span class="op">%</span> <span class="num">5</span>;
+    <span class="kw">return</span> <span class="num">6U</span> <span class="op">&lt;</span> (<span class="type">unsigned</span>)rem <span class="op">?</span> <span class="num">1111</span> <span class="op">:</span> <span class="num">2</span>;
+}
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">int</span> res <span class="op">=</span> <span class="fn">test</span>(<span class="num">-1</span>);
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, res);  <span class="cmt">// prints 1111 under /O1 ✅</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre>
+        <div class="cards">
+          <div class="card green"><strong class="green-text">Result:</strong> prints <strong>1111</strong> under <strong>/O1</strong>. The <code><span class="kw">volatile</span></code> keyword forces the compiler to read <code>rem</code> from memory on every use, so it cannot propagate the (wrong) range [0,4] through to the comparison. The comparison must be evaluated at runtime.</div>
+          <div class="card cyan"><strong class="cyan-text">How it works:</strong> <code><span class="kw">volatile</span></code> tells the compiler the value may change externally, so it disables all range tracking and constant folding through that variable. The comparison <code>6U &lt; (unsigned)rem</code> is preserved in the generated code.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="slide-tag">Working Fix</div><div class="slide-number">04</div>
+      <div class="content">
+        <div class="heading-row"><h1>The Fix That Works — #pragma optimize</h1><span class="badge green">WORKS ✅</span></div>
+        <p class="subtitle">Disable the optimization pass for the affected function only</p>
+        <pre><code><span class="pre">#include</span> <span class="op">&lt;</span><span class="lib">cstdio</span><span class="op">&gt;</span>
+
+<span class="cmt">// Pragma MUST be outside the function — before and after</span>
+<span class="pre">#pragma optimize</span>(<span class="str">""</span>, off)
+<span class="type">int</span> <span class="fn">test</span>(<span class="type">int</span> v) {
+    <span class="kw">return</span> <span class="num">6U</span> <span class="op">&lt;</span> (v <span class="op">%</span> <span class="num">5</span>) <span class="op">?</span> <span class="num">1111</span> <span class="op">:</span> <span class="num">2</span>;
+}
+<span class="pre">#pragma optimize</span>(<span class="str">""</span>, on)
+
+<span class="type">int</span> <span class="fn">main</span>() {
+    <span class="type">int</span> res <span class="op">=</span> <span class="fn">test</span>(<span class="num">-1</span>);
+    <span class="fn">printf</span>(<span class="str">"%d\n"</span>, res);  <span class="cmt">// prints 1111 under /O1 ✅</span>
+    <span class="kw">return</span> <span class="num">0</span>;
+}</code></pre>
+        <div class="cards">
+          <div class="card green"><strong class="green-text">Result:</strong> prints <strong>1111</strong> under <strong>/O1</strong>. The <code>#pragma optimize("", off)</code> disables all optimizations for the next function definition. The comparison is preserved and evaluated correctly.</div>
+          <div class="card red"><strong class="red-text">Important:</strong> The pragma must appear BEFORE the function — not inside it. Placing it after the function body has no effect. The matching <code>#pragma optimize("", on)</code> restores optimization for subsequent code.</div>
+        </div>
+        <div class="summary">
+          <div class="card cyan"><strong class="summary-title">volatile</strong>Breaks range tracking for one variable. Minimal performance impact. Most surgical.</div>
+          <div class="card cyan"><strong class="summary-title">#pragma optimize</strong>Disables all optimizations for one function. Larger performance impact. Most reliable.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <button class="nav" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav" id="next" aria-label="Next slide">›</button>
+  <div id="swipeHint">← Swipe to navigate →</div>
+  <div id="counter" aria-live="polite">1 / 4</div>
+  <div class="progress-track"><div id="progress"></div></div>
+  <script>
+    (() => {
+      const total = 4;
+      let current = 0, touchStart = null, mouseStart = null;
+      const deck = document.getElementById('deck');
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const progress = document.getElementById('progress');
+      const counter = document.getElementById('counter');
+      const hint = document.getElementById('swipeHint');
+      function show(index) {
+        current = Math.max(0, Math.min(total - 1, index));
+        deck.style.transform = `translateX(-${current * 100}vw)`;
+        prev.disabled = current === 0;
+        next.disabled = current === total - 1;
+        progress.style.width = `${((current + 1) / total) * 100}%`;
+        counter.textContent = `${current + 1} / ${total}`;
+        if (current > 0) hint.classList.add('hidden');
+      }
+      prev.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(current + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); show(current - 1); }
+      });
+      document.addEventListener('touchstart', e => { touchStart = e.changedTouches[0].clientX; }, {passive:true});
+      document.addEventListener('touchend', e => { if (touchStart === null) return; const d = e.changedTouches[0].clientX - touchStart; if (Math.abs(d) >= 50) show(current + (d < 0 ? 1 : -1)); touchStart = null; }, {passive:true});
+      document.addEventListener('mousedown', e => { if (!e.target.closest('button')) mouseStart = e.clientX; });
+      document.addEventListener('mouseup', e => { if (mouseStart === null) return; const d = e.clientX - mouseStart; if (Math.abs(d) >= 50) show(current + (d < 0 ? 1 : -1)); mouseStart = null; });
+      show(0);
+    })();
+  </script>
+</body>
+</html>
