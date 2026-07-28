@@ -10,7 +10,7 @@
   <style>
     :root{--bg:#0a0a1a;--card:#111128;--code:#0d1117;--cyan:#00d9ff;--purple:#7b6cf6;--red:#ff6b6b;--green:#51cf66;--text:#e0e0f0;--dim:#8888aa;--bright:#fff;--border:#222244}
     *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
-    .deck{display:flex;width:1200vw;height:100vh;transition:transform .55s cubic-bezier(.22,.8,.3,1);will-change:transform}
+    .deck{display:flex;width:1300vw;height:100vh;transition:transform .55s cubic-bezier(.22,.8,.3,1);will-change:transform}
     .slide{position:relative;width:100vw;height:100vh;flex:0 0 100vw;display:flex;justify-content:center;align-items:center;padding:clamp(3.8rem,7vh,6rem) clamp(1.2rem,5vw,5.5rem) clamp(3rem,6vh,5rem);overflow:hidden}
     .slide::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 12%,rgba(0,217,255,.09),transparent 32%),radial-gradient(circle at 82% 85%,rgba(123,108,246,.10),transparent 36%);pointer-events:none}
     .content{position:relative;z-index:1;width:min(100%,1400px);max-height:100%;display:flex;flex-direction:column;gap:clamp(.65rem,1.5vh,1.3rem)}
@@ -91,9 +91,35 @@
   <section class="slide"><span class="slide-tag">The Irony</span><span class="slide-number">11</span><div class="content"><h2>The Tool Caught the Compiler</h2><div class="highlight"><p class="big">The static analysis tool designed to catch <span class="cyantext">programmer</span> errors would have caught the <span class="redtext">compiler's</span> error</p><p class="subtitle" style="margin:clamp(.4rem,1vh,.8rem) auto 0">because the optimizer made the exact same mistake that CERT-C INT10-C exists to prevent.</p></div><div class="grid"><div class="card red"><h3>The Optimizer's Mistake</h3><p>Assumed v % 5 ∈ [0, 4] — Euclidean range. Ignored negative remainders. Folded the comparison.</p></div><div class="card green"><h3>What INT10-C Prevents</h3><p>Assuming v % 5 ∈ [0, 4] — Euclidean range. Ignoring negative remainders. The exact same fallacy.</p></div></div></div></section>
 
   <section class="slide"><span class="slide-tag">Takeaways</span><span class="slide-number">12</span><div class="content"><h2>Key Takeaways</h2><div class="grid four"><div class="card cyan"><h3>The Bug</h3><ul><li>MSVC /O1–/O2 assumes v % d ∈ [0, d-1] (Euclidean)</li><li>C++ requires v % d ∈ [-(d-1), d-1] (truncated)</li><li>Negative remainder + unsigned comparison = silent miscompilation</li><li>Regression since MSVC v19.51</li></ul></div><div class="card green"><h3>The Fix</h3><ul><li>#pragma optimize("", off) — most surgical</li><li>Explicit (unsigned) cast — breaks the fold</li><li>Unsigned domain — if Euclidean is intended</li><li>Compiler team: fix % range inference for signed dividends</li></ul></div><div class="card purple"><h3>Parasoft: Static Analysis</h3><ul><li>CERT-C INT10-C — “non-negative remainder assumption”</li><li>MISRA-C 10.4 — signed/unsigned essential type mismatch</li><li>MISRA-C 10.6, 12.4 — conversion + constant range</li><li><strong class="gradient">Flags the pattern before it reaches the optimizer</strong></li></ul></div><div class="card cyan"><h3>Parasoft: Unit Testing</h3><ul><li>Boundary test: test(-1) expects 1111</li><li>Passes under /Od, fails under /O2</li><li>Static analysis tells you what to test</li><li>Unit tests tell you if the compiler is correct</li></ul></div></div><div class="highlight">Static analysis + unit testing = closed loop. The tool catches what the compiler misses. The test proves it.</div></div></section>
+
+  <section class="slide"><span class="slide-tag">Credits & Tools</span><span class="slide-number">13</span><div class="content"><h2>Powered By</h2><div class="grid" style="grid-template-columns:1fr 1fr;gap:clamp(1rem,3vw,2.5rem);align-items:center;">
+    <div style="text-align:center;">
+      <a href="https://www.parasoft.com" target="_blank" rel="noopener" style="display:inline-block;">
+        <img src="assets/parasoft-logo-white.svg" alt="Parasoft" style="width:clamp(180px,30vw,360px);height:auto;filter:drop-shadow(0 0 12px rgba(0,99,166,0.4));">
+      </a>
+      <p style="margin-top:clamp(.6rem,1.5vw,1rem);font-size:clamp(.72rem,1.1vw,1rem);color:var(--dim);">Automated Software Testing — Static Analysis, Unit Testing &amp; Compliance</p>
+      <a href="https://www.linkedin.com/company/parasoft" target="_blank" rel="noopener" style="display:inline-block;margin-top:clamp(.4rem,1vw,.7rem);padding:clamp(.3rem,.6vw,.45rem) clamp(.8rem,1.5vw,1.2rem);border-radius:999px;background:rgba(0,99,166,0.15);border:1px solid rgba(0,99,166,0.3);color:#4fc3f7;font-size:clamp(.68rem,1vw,.85rem);font-weight:600;text-decoration:none;">in/Parasoft ↗</a>
+    </div>
+    <div style="text-align:center;">
+      <a href="https://www.eswlab.com" target="_blank" rel="noopener" style="display:inline-block;">
+        <img src="assets/esl-logo.png" alt="ESL — Engineering Software Lab" style="width:clamp(180px,30vw,360px);height:auto;border-radius:clamp(.5rem,1vw,.8rem);">
+      </a>
+      <p style="margin-top:clamp(.6rem,1.5vw,1rem);font-size:clamp(.72rem,1.1vw,1rem);color:var(--dim);">The Israeli Center for Static Code Analysis — Parasoft Distribution &amp; Integration</p>
+      <a href="https://www.linkedin.com/company/engineering-software-lab-esl-" target="_blank" rel="noopener" style="display:inline-block;margin-top:clamp(.4rem,1vw,.7rem);padding:clamp(.3rem,.6vw,.45rem) clamp(.8rem,1.5vw,1.2rem);border-radius:999px;background:rgba(79,195,247,0.12);border:1px solid rgba(79,195,247,0.25);color:#4fc3f7;font-size:clamp(.68rem,1vw,.85rem);font-weight:600;text-decoration:none;">in/Engineering-Software-Lab-ESL ↗</a>
+    </div>
+  </div><div style="margin-top:clamp(1.5rem,3vw,2.5rem);text-align:center;padding-top:clamp(1rem,2vw,1.5rem);border-top:1px solid var(--border);">
+    <p style="font-size:clamp(.78rem,1.3vw,1.1rem);color:var(--dim);margin-bottom:clamp(.5rem,1vw,.8rem);">Analysis &amp; Presentation by</p>
+    <a href="https://www.linkedin.com/in/liezrowice" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:clamp(.5rem,1vw,.8rem);text-decoration:none;">
+      <span style="font-size:clamp(1rem,2vw,1.6rem);font-weight:800;color:var(--bright);">Daniel (Dani) Liezrowice</span>
+      <span style="display:inline-block;padding:clamp(.2rem,.5vw,.35rem) clamp(.5rem,1vw,.7rem);border-radius:999px;background:rgba(0,119,181,0.2);border:1px solid rgba(0,119,181,0.3);color:#4fc3f7;font-size:clamp(.65rem,.9vw,.8rem);font-weight:700;">in/liezrowice ↗</span>
+    </a>
+    <p style="font-size:clamp(.72rem,1.1vw,.9rem);color:var(--dim);margin-top:clamp(.4rem,.8vw,.6rem);">CEO &amp; Co-Founder, ESL — Engineering Software Lab</p>
+  </div><div style="margin-top:clamp(1rem,2vw,1.5rem);text-align:center;">
+    <a href="https://zuwasi.github.io/Public-html-pages/Euclidean_Remainder_Fallacy_Presentation.html" style="font-size:clamp(.68rem,1vw,.82rem);color:var(--dim);text-decoration:none;">zuwasi.github.io/Public-html-pages/Euclidean_Remainder_Fallacy_Presentation.html</a>
+  </div></div></section>
 </main>
 <button class="nav hidden" id="prev" aria-label="Previous slide">‹</button><button class="nav" id="next" aria-label="Next slide">›</button>
-<div class="swipe" id="swipe">← Swipe to navigate →</div><div class="progress" id="progress"></div><div class="counter" id="counter">1 / 12</div>
+<div class="swipe" id="swipe">← Swipe to navigate →</div><div class="progress" id="progress"></div><div class="counter" id="counter">1 / 13</div>
 <script>
   (() => {
     const deck = document.getElementById('deck');
@@ -102,7 +128,7 @@
     const progress = document.getElementById('progress');
     const counter = document.getElementById('counter');
     const swipe = document.getElementById('swipe');
-    const total = 12;
+    const total = 13;
     let current = 0;
     let startX = null;
     let navigated = false;
