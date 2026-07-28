@@ -200,6 +200,9 @@ Last updated: 2026-07-28
 • amp-paper-to-nb.png
   https://zuwasi.github.io/Public-html-pages/amp-paper-to-nb.png
 
+• amp-vs-langgraph
+  https://zuwasi.github.io/Public-html-pages/amp-vs-langgraph
+
 • amp-workflow.png
   https://zuwasi.github.io/Public-html-pages/amp-workflow.png
 
