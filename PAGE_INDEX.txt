@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-27
+Last updated: 2026-07-28
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -175,6 +175,9 @@ Last updated: 2026-07-27
 
 • ESL-AI-LOGOS.png
   https://zuwasi.github.io/Public-html-pages/ESL-AI-LOGOS.png
+
+• adaptive-visual-context
+  https://zuwasi.github.io/Public-html-pages/adaptive-visual-context
 
 • agent-halflife-tester-guide.md
   https://zuwasi.github.io/Public-html-pages/agent-halflife-tester-guide.md
