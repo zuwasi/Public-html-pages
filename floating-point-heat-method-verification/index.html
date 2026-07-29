@@ -17,7 +17,7 @@
     body { cursor: default; }
     #field { position: fixed; inset: 0; z-index: 0; opacity: .48; }
     .noise { position: fixed; inset: 0; z-index: 1; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,.07) .6px, transparent .6px); background-size: 8px 8px; opacity: .12; }
-    .deck { position: relative; z-index: 2; display: flex; width: 1200vw; height: 100vh; transition: transform .75s cubic-bezier(.22,.8,.2,1); }
+    .deck { position: relative; z-index: 2; display: flex; width: 1300vw; height: 100vh; transition: transform .75s cubic-bezier(.22,.8,.2,1); }
     .slide { width: 100vw; height: 100vh; flex: 0 0 100vw; padding: clamp(3.5rem,7vh,6rem) clamp(2rem,7vw,8rem) clamp(4.2rem,8vh,6.5rem); display: flex; align-items: center; position: relative; overflow: hidden; }
     .slide::before { content: attr(data-num); position: absolute; right: 5vw; top: 3vh; font-weight: 800; font-size: clamp(5rem,14vw,13rem); line-height: 1; color: rgba(255,255,255,.025); }
     .content { width: min(1180px, 100%); margin: auto; position: relative; }
@@ -68,7 +68,7 @@
     .nav.prev { left: 1.2rem; } .nav.next { right: 1.2rem; }
     .nav[hidden] { display: none; }
     .progress-track { position: fixed; z-index: 30; left: 0; bottom: 0; width: 100%; height: 5px; background: rgba(255,255,255,.08); }
-    .progress { height: 100%; width: 8.333%; background: linear-gradient(90deg,var(--red),var(--orange),var(--cyan)); transition: width .65s ease; box-shadow: 0 0 20px var(--cyan); }
+    .progress { height: 100%; width: 7.692%; background: linear-gradient(90deg,var(--red),var(--orange),var(--cyan)); transition: width .65s ease; box-shadow: 0 0 20px var(--cyan); }
     .counter { position: fixed; z-index: 30; right: 1.4rem; bottom: 1.1rem; color: var(--muted); font: 600 .8rem ui-monospace,monospace; }
     .hint { position: fixed; z-index: 25; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--muted); font-size: .75rem; animation: hint 1.8s infinite; }
     .hint.off { display: none; }
@@ -201,6 +201,25 @@
     </div></section>
 
     <section class="slide" data-num="10"><div class="content">
+      <div class="eyebrow">Corrected Python implementation</div><h2>The audit became executable, independently checked evidence.</h2>
+      <div class="grid">
+        <div class="code"><span class="kw">field = solve_explicit_q1(</span>
+  n=71,
+  diffusion_factor=Fraction(1, 100_000_000),
+  steps=70,
+  backend=<span class="good">"decimal"</span>,
+  precision=<span class="good">500</span>,
+  fixed_values={(2, 3): Decimal("7")}
+)
+
+assert isinstance(min_positive, Decimal)
+assert unexpected_zeros == <span class="good">0</span></div>
+        <div class="card cool"><h3>Fixes implemented</h3><ul><li>Q1 matrices constructed directly in float, Decimal, or mpmath—never converted from float64.</li><li>Boundary and fixed values imposed after every substep.</li><li>CFL violation fails loudly outside <strong>0 ≤ r ≤ 3/8</strong>.</li><li>Finite-front diagnostics distinguish algorithmic zeros from underflow.</li><li>Arbitrary-precision fields remain arbitrary precision through output.</li></ul></div>
+      </div>
+      <div class="grid three" style="margin-top:1rem"><div class="card"><div class="metric green">9 / 9</div><div class="metric-label">Python tests passed</div></div><div class="card"><div class="metric cyan" style="font-size:clamp(1.8rem,3.2vw,3.6rem)">3.469×10⁻¹⁸</div><div class="metric-label">max |Python − Wolfram|</div></div><div class="card"><div class="metric">60 → 0</div><div class="metric-label">stress-case underflow zeros</div></div></div>
+    </div></section>
+
+    <section class="slide" data-num="11"><div class="content">
       <div class="eyebrow">Real-life implications</div><h2>Tiny fields drive large decisions.</h2>
       <div class="grid three">
         <div class="card"><h3>Geometry & robotics</h3><p>Geodesic distance, path planning, mesh parameterization, collision envelopes, and navigation around narrow passages.</p></div>
@@ -210,7 +229,7 @@
       <p>Failure is not limited to a blank plot. A zero gradient can change a direction field, reroute an optimizer, break a normalizer, or silently bias a downstream Poisson solve.</p>
     </div></section>
 
-    <section class="slide" data-num="11"><div class="content">
+    <section class="slide" data-num="12"><div class="content">
       <div class="eyebrow">Commercial usage</div><h2>From research artifact to numerical assurance pipeline.</h2>
       <div class="grid">
         <div class="card cool"><h3>Product engineering</h3><ul><li>Precision policies selected from mesh and tolerance.</li><li>Regression gates for positivity, residuals, and unexpected zeros.</li><li>Golden arbitrary-precision references for optimized C++/GPU solvers.</li><li>Lean contracts for safety-critical numerical kernels.</li></ul></div>
@@ -219,11 +238,11 @@
       <div class="ribbon"><span>digital twins</span><span>CAE/FEM platforms</span><span>robotics SDKs</span><span>medical imaging</span><span>simulation certification</span><span>solver QA</span></div>
     </div></section>
 
-    <section class="slide" data-num="12"><div class="content">
+    <section class="slide" data-num="13"><div class="content">
       <div class="eyebrow">Deliverable</div><h2>Executable. Audited. Formally scoped.</h2>
       <div class="grid">
         <div><div class="metric green">13 / 13</div><div class="metric-label">Wolfram audit checks passed</div><br><div class="metric cyan">8,656</div><div class="metric-label">Lean build jobs completed</div></div>
-        <div class="card"><h3>Repository contents</h3><ul><li>Reusable Wolfram package and Mathematica notebook</li><li>Build, audit, CSV, JSON, and visual evidence</li><li>Pinned Lean 4 + Mathlib proof project</li><li>Claim-to-proof formalization map</li><li>MIT license for reuse and extension</li></ul></div>
+        <div class="card"><h3>Repository contents</h3><ul><li>Reusable Wolfram package and Mathematica notebook</li><li>Corrected Python solver with 9 regression/property tests</li><li>Build, audit, CSV, JSON, and visual evidence</li><li>Pinned Lean 4 + Mathlib proof project</li><li>Claim-to-proof formalization map and MIT license</li></ul></div>
       </div>
       <div class="attribution"><span class="esl">ESL · Israel</span><span>Wolfram technical expertise, numerical engineering, and formal assurance.</span></div>
     </div></section>
@@ -231,7 +250,7 @@
   <button class="nav prev" id="prev" aria-label="Previous slide" hidden>‹</button>
   <button class="nav next" id="next" aria-label="Next slide">›</button>
   <div class="hint" id="hint">← Swipe to navigate →</div>
-  <div class="counter" id="counter">1 / 12</div>
+  <div class="counter" id="counter">1 / 13</div>
   <div class="progress-track"><div class="progress" id="progress"></div></div>
   <script>
     const deck=document.getElementById('deck'), slides=[...document.querySelectorAll('.slide')], prev=document.getElementById('prev'), next=document.getElementById('next'), counter=document.getElementById('counter'), progress=document.getElementById('progress'), hint=document.getElementById('hint');
