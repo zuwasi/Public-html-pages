@@ -236,6 +236,9 @@ Last updated: 2026-07-29
 • edpb-guidelines-databom-risk
   https://zuwasi.github.io/Public-html-pages/edpb-guidelines-databom-risk
 
+• floating-point-heat-method-verification
+  https://zuwasi.github.io/Public-html-pages/floating-point-heat-method-verification
+
 • games
   https://zuwasi.github.io/Public-html-pages/games
 
