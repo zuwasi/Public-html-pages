@@ -1,0 +1,74 @@
+<mxfile host="app.diagrams.net" modified="2026-07-29T00:00:00.000Z" agent="Amp" version="24.7.17">
+  <diagram id="yocto-bsp-workflow" name="Yocto BSP Studio Workflow">
+    <mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="Yocto BSP Studio — Expert-Guided Workflow" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=34;fontStyle=1;fontColor=#172554;" vertex="1" parent="1">
+          <mxGeometry x="55" y="28" width="1000" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="subtitle" value="From supported choices to a tested, auditable embedded Linux release" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=18;fontColor=#64748B;" vertex="1" parent="1">
+          <mxGeometry x="58" y="76" width="900" height="34" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="lane1" value="DESIGN &amp; GENERATE" style="swimlane;html=1;horizontal=0;startSize=42;rounded=1;arcSize=8;strokeColor=#BFDBFE;fillColor=#EFF6FF;swimlaneFillColor=#DBEAFE;fontColor=#1E3A8A;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="55" y="135" width="1490" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane2" value="BUILD &amp; VERIFY" style="swimlane;html=1;horizontal=0;startSize=42;rounded=1;arcSize=8;strokeColor=#FED7AA;fillColor=#FFF7ED;swimlaneFillColor=#FFEDD5;fontColor=#9A3412;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="55" y="365" width="1490" height="210" as="geometry"/>
+        </mxCell>
+        <mxCell id="lane3" value="EVIDENCE &amp; RELEASE" style="swimlane;html=1;horizontal=0;startSize=42;rounded=1;arcSize=8;strokeColor=#BBF7D0;fillColor=#F0FDF4;swimlaneFillColor=#DCFCE7;fontColor=#166534;fontStyle=1;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="55" y="595" width="1490" height="220" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="wizard" value="&lt;b&gt;Guided GUI&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Board · OS · Rust · Security · OTA&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#2563EB;strokeWidth=2;fillColor=#FFFFFF;fontColor=#172554;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="125" y="194" width="205" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="compat" value="&lt;b&gt;Compatibility Engine&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Curated profiles · Conflicts · Requirements&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#2563EB;strokeWidth=2;fillColor=#FFFFFF;fontColor=#172554;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="405" y="194" width="225" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="plan" value="&lt;b&gt;Immutable Plan&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Pinned layers · Commits · Policies · Digests&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#2563EB;strokeWidth=2;fillColor=#FFFFFF;fontColor=#172554;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="705" y="194" width="225" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="generate" value="&lt;b&gt;Generate Standard Yocto&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;meta-product · kas.yml · WIC · Recipes&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#2563EB;strokeWidth=2;fillColor=#FFFFFF;fontColor=#172554;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1005" y="194" width="245" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="review" value="&lt;b&gt;Reviewable Diff&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Normal files · No lock-in&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#2563EB;strokeWidth=2;fillColor=#FFFFFF;fontColor=#172554;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1325" y="194" width="170" height="92" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="skill" value="&lt;b&gt;Yocto Expert Skill — knowledge layer powering every decision&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Official docs · Bootlin · Kernel · U-Boot · DT · Rust&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;dashed=1;dashPattern=6 4;strokeColor=#7C3AED;strokeWidth=2;fillColor=#F5F3FF;fontColor=#4C1D95;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="660" y="110" width="390" height="62" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="build" value="&lt;b&gt;Isolated Linux Build&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;BitBake · kas · Trust-partitioned caches&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#EA580C;strokeWidth=2;fillColor=#FFFFFF;fontColor=#7C2D12;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="135" y="425" width="245" height="92" as="geometry"/>
+        </mxCell>
+        <mxCell id="verify" value="&lt;div style=&quot;font-size:18px;font-weight:bold;margin-bottom:10px&quot;&gt;Verification Matrix&lt;/div&gt;&lt;table style=&quot;width:100%;table-layout:fixed;font-size:13px;line-height:1.7&quot;&gt;&lt;tr&gt;&lt;td style=&quot;width:50%&quot;&gt;✓ Native Yocto SPDX · CVE · licenses&lt;/td&gt;&lt;td style=&quot;width:50%&quot;&gt;✓ ESL SBOMator · CycloneDX · VEX · KEV&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;✓ Unit · KUnit · ptest · oeqa&lt;/td&gt;&lt;td&gt;✓ Parasoft C/C++test · capture coverage&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;✓ QEMU boot · SSH · systemd · services&lt;/td&gt;&lt;td&gt;✓ Independent rebuild · reproducibility&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=12;strokeColor=#EA580C;strokeWidth=2;fillColor=#FFFFFF;fontColor=#7C2D12;fontSize=15;shadow=1;align=left;spacingLeft=22;" vertex="1" parent="1">
+          <mxGeometry x="500" y="405" width="900" height="132" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="normalize" value="&lt;b&gt;Normalize Results&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;PASS · FAIL · BLOCKED · WAIVED · N/A&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#16A34A;strokeWidth=2;fillColor=#FFFFFF;fontColor=#14532D;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="665" width="270" height="82" as="geometry"/>
+        </mxCell>
+        <mxCell id="gate" value="&lt;b&gt;Policy &amp; Release Gate&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Thresholds · VEX evidence · Expiring waivers&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#16A34A;strokeWidth=2;fillColor=#FFFFFF;fontColor=#14532D;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="650" y="665" width="290" height="82" as="geometry"/>
+        </mxCell>
+        <mxCell id="evidence" value="&lt;b&gt;Signed Evidence Bundle&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px&quot;&gt;Images · BSP · SBOM · Tests · Logs · Provenance&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;arcSize=16;strokeColor=#16A34A;strokeWidth=2;fillColor=#FFFFFF;fontColor=#14532D;fontSize=16;shadow=1;" vertex="1" parent="1">
+          <mxGeometry x="1125" y="665" width="300" height="82" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=3;" edge="1" parent="1" source="wizard" target="compat"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=3;" edge="1" parent="1" source="compat" target="plan"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=3;" edge="1" parent="1" source="plan" target="generate"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#2563EB;strokeWidth=3;" edge="1" parent="1" source="generate" target="review"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#EA580C;strokeWidth=3;exitX=0.5;exitY=1;entryX=0;entryY=0.5;" edge="1" parent="1" source="review" target="build"><mxGeometry relative="1" as="geometry"><Array as="points"><mxPoint x="1410" y="335"/><mxPoint x="90" y="335"/><mxPoint x="90" y="471"/></Array></mxGeometry></mxCell>
+        <mxCell id="e8" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#EA580C;strokeWidth=3;" edge="1" parent="1" source="build" target="verify"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e9" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#16A34A;strokeWidth=3;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="verify" target="normalize"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e19" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#16A34A;strokeWidth=3;" edge="1" parent="1" source="normalize" target="gate"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e20" value="Approved" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=block;endFill=1;strokeColor=#16A34A;strokeWidth=3;fontColor=#166534;fontStyle=1;" edge="1" parent="1" source="gate" target="evidence"><mxGeometry relative="1" as="geometry"/></mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

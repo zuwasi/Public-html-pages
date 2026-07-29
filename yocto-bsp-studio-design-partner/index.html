@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <title>Yocto BSP Studio — Design Partner Presentation</title>
+  <style>
+    :root {
+      --navy:#101b3f; --blue:#2563eb; --cyan:#06b6d4; --orange:#f97316;
+      --green:#16a34a; --violet:#7c3aed; --ink:#172033; --muted:#64748b;
+      --paper:#f7f9fc; --line:#dbe4f0; --white:#fff;
+    }
+    * { box-sizing:border-box; }
+    html,body { margin:0; width:100%; height:100%; overflow:hidden; background:var(--navy); font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    .deck { width:100%; height:100%; overflow:hidden; }
+    .track { height:100%; display:flex; transform:translateX(0); transition:transform .52s cubic-bezier(.22,.75,.18,1); }
+    .slide { flex:0 0 100vw; width:100vw; height:100vh; padding:clamp(26px,4.5vw,76px); padding-bottom:clamp(62px,8vh,90px); position:relative; overflow:hidden; background:var(--paper); color:var(--ink); }
+    .slide.dark { color:#fff; background:radial-gradient(circle at 80% 10%,#2447a3 0,transparent 34%),linear-gradient(135deg,#0b122d,#172554 58%,#0f3f57); }
+    .slide.blue { color:#fff; background:linear-gradient(135deg,#172554,#1d4ed8); }
+    .slide.green { color:#fff; background:linear-gradient(135deg,#052e2b,#0f766e 60%,#155e75); }
+    .slide::after { content:""; position:absolute; width:220px; height:220px; border:1px solid currentColor; opacity:.05; border-radius:50%; right:-80px; bottom:-100px; pointer-events:none; }
+    .brand { position:absolute; top:clamp(18px,3vw,34px); right:clamp(22px,4vw,58px); width:clamp(150px,16vw,270px); border-radius:8px; box-shadow:0 10px 28px #0003; }
+    .eyebrow { display:inline-flex; align-items:center; gap:9px; font-size:clamp(11px,1.1vw,15px); text-transform:uppercase; letter-spacing:.16em; font-weight:800; color:var(--blue); margin-bottom:14px; }
+    .dark .eyebrow,.blue .eyebrow,.green .eyebrow { color:#93c5fd; }
+    h1 { margin:0; max-width:1100px; font-size:clamp(42px,6.4vw,92px); line-height:.98; letter-spacing:-.045em; }
+    h2 { margin:0 0 18px; max-width:1200px; font-size:clamp(32px,4.5vw,66px); line-height:1.02; letter-spacing:-.035em; }
+    h3 { margin:0 0 8px; font-size:clamp(18px,2vw,28px); }
+    p { font-size:clamp(16px,1.55vw,23px); line-height:1.45; }
+    .lead { max-width:980px; font-size:clamp(19px,2.1vw,30px); color:var(--muted); }
+    .dark .lead,.blue .lead,.green .lead { color:#dbeafe; }
+    .hero-copy { max-width:1000px; margin-top:clamp(65px,11vh,125px); }
+    .accent { color:#60a5fa; }
+    .orange { color:#fb923c; }
+    .green-text { color:#4ade80; }
+    .grid { display:grid; gap:clamp(14px,2vw,28px); margin-top:clamp(22px,4vh,42px); }
+    .grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .grid.four { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .card { border:1px solid var(--line); border-radius:18px; padding:clamp(17px,2.1vw,28px); background:#fff; box-shadow:0 12px 32px #1720330b; }
+    .dark .card,.blue .card,.green .card { background:#ffffff0e; border-color:#ffffff25; box-shadow:none; backdrop-filter:blur(6px); }
+    .card p { margin:7px 0 0; font-size:clamp(14px,1.25vw,18px); color:var(--muted); }
+    .dark .card p,.blue .card p,.green .card p { color:#dbeafe; }
+    .icon { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; background:#dbeafe; color:#1d4ed8; font-weight:900; margin-bottom:16px; }
+    .orange-card .icon { background:#ffedd5; color:#c2410c; }
+    .green-card .icon { background:#dcfce7; color:#15803d; }
+    .violet-card .icon { background:#ede9fe; color:#6d28d9; }
+    ul { margin:12px 0 0; padding-left:1.25em; font-size:clamp(15px,1.35vw,20px); line-height:1.5; }
+    li { margin:.32em 0; }
+    .stack { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+    .pill { padding:8px 12px; border:1px solid #cbd5e1; border-radius:999px; background:#fff; font-size:clamp(12px,1vw,15px); font-weight:750; }
+    .dark .pill,.blue .pill,.green .pill { background:#ffffff10; border-color:#ffffff32; }
+    .status { display:inline-block; padding:5px 9px; border-radius:999px; font-size:11px; font-weight:900; letter-spacing:.08em; margin-bottom:10px; }
+    .now { color:#166534; background:#dcfce7; }
+    .mvp { color:#1e40af; background:#dbeafe; }
+    .roadmap { color:#7c2d12; background:#ffedd5; }
+    .metric { font-size:clamp(38px,5vw,76px); line-height:1; font-weight:900; letter-spacing:-.04em; color:var(--blue); }
+    .dark .metric,.blue .metric,.green .metric { color:#7dd3fc; }
+    .small { font-size:clamp(12px,1vw,15px); color:var(--muted); }
+    .dark .small,.blue .small,.green .small { color:#bfdbfe; }
+    .workflow { display:block; width:min(100%,1420px); max-height:66vh; margin:18px auto 0; object-fit:contain; background:#fff; border-radius:16px; box-shadow:0 18px 50px #17203320; }
+    .pipeline { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:34px; }
+    .step { min-width:150px; padding:16px 18px; border:1px solid var(--line); border-radius:14px; background:#fff; color:var(--ink); font-weight:800; text-align:center; }
+    .arrow { color:var(--blue); font-size:26px; font-weight:900; }
+    .comparison { width:100%; border-collapse:separate; border-spacing:0 9px; margin-top:25px; font-size:clamp(13px,1.15vw,17px); }
+    .comparison th { text-align:left; color:var(--muted); padding:8px 14px; }
+    .comparison td { padding:13px 14px; background:#fff; border-top:1px solid var(--line); border-bottom:1px solid var(--line); }
+    .comparison td:first-child { border-left:1px solid var(--line); border-radius:10px 0 0 10px; font-weight:800; }
+    .comparison td:last-child { border-right:1px solid var(--line); border-radius:0 10px 10px 0; }
+    .quote { max-width:1200px; margin-top:6vh; padding-left:26px; border-left:6px solid var(--orange); font-size:clamp(27px,4vw,58px); line-height:1.12; font-weight:800; letter-spacing:-.03em; }
+    .slide:last-child .grid { margin-top:2vh; }
+    .slide:last-child .quote { margin-top:3vh; font-size:clamp(24px,3.2vw,48px); }
+    .slide:last-child .stack { margin-top:12px; }
+    .footer-note { position:absolute; left:clamp(26px,4.5vw,76px); bottom:30px; font-size:12px; color:var(--muted); }
+    .nav { position:fixed; z-index:20; top:50%; transform:translateY(-50%); width:50px; height:50px; border:0; border-radius:50%; color:#fff; background:#101b3fdd; font-size:34px; line-height:1; cursor:pointer; box-shadow:0 8px 30px #0003; }
+    .nav:hover { background:var(--blue); }
+    #prev { left:14px; } #next { right:14px; }
+    .progress { position:fixed; z-index:21; left:0; right:0; bottom:0; height:6px; background:#ffffff25; }
+    .progress > div { height:100%; width:0; background:linear-gradient(90deg,var(--blue),var(--cyan),var(--orange)); transition:width .4s ease; }
+    .counter { position:fixed; z-index:22; right:20px; bottom:15px; color:#fff; background:#101b3fcc; padding:7px 11px; border-radius:999px; font-size:12px; font-weight:800; }
+    .swipe-hint { position:absolute; left:50%; bottom:8vh; transform:translateX(-50%); color:#bfdbfe; font-size:14px; animation:pulse 1.8s infinite; }
+    @keyframes pulse { 50% { opacity:.4; transform:translateX(-50%) translateY(4px); } }
+    @media(max-width:760px) {
+      .slide { padding-top:72px; overflow-x:hidden; overflow-y:auto; }
+      .grid.two,.grid.three,.grid.four { grid-template-columns:1fr; }
+      .brand { width:140px; }
+      .nav { width:42px; height:42px; font-size:28px; opacity:.88; }
+      #prev { left:7px; } #next { right:7px; }
+      .workflow { max-height:55vh; }
+      .comparison { font-size:12px; }
+      .comparison th,.comparison td { padding:8px; }
+    }
+    @media print {
+      html,body,.deck { overflow:visible; height:auto; background:#fff; }
+      .track { display:block; transform:none!important; }
+      .slide { width:100%; height:100vh; break-after:page; overflow:hidden; }
+      .nav,.progress,.counter,.swipe-hint { display:none!important; }
+    }
+  </style>
+</head>
+<body>
+<div class="deck" id="deck">
+  <div class="track" id="track">
+
+    <section class="slide dark">
+      <img class="brand" src="ESL_Logo.png" alt="ESL Engineering Software Lab">
+      <div class="hero-copy">
+        <div class="eyebrow">Design partner concept · 2026</div>
+        <h1>Close the <span class="accent">Yocto expertise gap</span></h1>
+        <p class="lead">A guided BSP engineering platform that turns scarce expert knowledge into a repeatable workflow—so a capable embedded developer can deliver with expert-level guardrails.</p>
+        <div class="stack">
+          <span class="pill">Configure</span><span class="pill">Generate</span><span class="pill">Build</span>
+          <span class="pill">Simulate</span><span class="pill">Test</span><span class="pill">Secure</span><span class="pill">Prove</span>
+        </div>
+      </div>
+      <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">The market problem</div>
+      <h2>Yocto experts are scarce.<br><span class="orange">The work does not wait.</span></h2>
+      <p class="lead">Experienced BSP engineers combine knowledge across the entire boot and Linux stack. When one becomes available, competition is immediate—and every new board restarts the same high-risk learning curve.</p>
+      <div class="grid three">
+        <article class="card orange-card"><div class="icon">1</div><h3>Hiring bottleneck</h3><p>Specialists must understand hardware, boot firmware, kernel, Device Tree, BitBake, packaging, security, and release operations.</p></article>
+        <article class="card orange-card"><div class="icon">2</div><h3>Knowledge bottleneck</h3><p>Critical decisions live in individual experience, vendor BSPs, scattered manuals, old recipes, and undocumented debugging history.</p></article>
+        <article class="card orange-card"><div class="icon">3</div><h3>Evidence bottleneck</h3><p>A successful build is not enough. Teams still need tests, static analysis, SBOM, CVEs, licenses, VEX, provenance, and release evidence.</p></article>
+      </div>
+      <div class="footer-note">Design-partner premise; validate against the partner’s hiring data and current BSP cycle time.</div>
+    </section>
+
+    <section class="slide blue">
+      <div class="eyebrow">Why the role is hard</div>
+      <h2>“Yocto expert” means owning the full chain</h2>
+      <div class="pipeline">
+        <div class="step">Boot ROM</div><div class="arrow">→</div>
+        <div class="step">SPL / TF-A</div><div class="arrow">→</div>
+        <div class="step">U-Boot</div><div class="arrow">→</div>
+        <div class="step">Device Tree</div><div class="arrow">→</div>
+        <div class="step">Linux + Drivers</div><div class="arrow">→</div>
+        <div class="step">Root Filesystem</div><div class="arrow">→</div>
+        <div class="step">Yocto BSP Layer</div><div class="arrow">→</div>
+        <div class="step">OTA · Security · SBOM</div>
+      </div>
+      <div class="grid two">
+        <article class="card"><h3>Running BitBake is easy</h3><p>Knowing which layers, versions, patches, machine settings, kernel fragments, and image policies form a maintainable product is the scarce capability.</p></article>
+        <article class="card"><h3>Hardware changes the answer</h3><p>Reference-board success does not prove a custom PCB. Clocks, regulators, DDR, PHYs, interrupts, storage, and power behavior remain board-specific.</p></article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Our product thesis</div>
+      <h2>Do not replace the expert.<br><span class="accent">Productize the expert workflow.</span></h2>
+      <div class="grid four">
+        <article class="card"><div class="icon">A</div><h3>Guide</h3><p>A GUI exposes only supported choices and explains their consequences.</p></article>
+        <article class="card violet-card"><div class="icon">B</div><h3>Codify</h3><p>A Yocto skill captures official, versioned engineering knowledge and troubleshooting practice.</p></article>
+        <article class="card orange-card"><div class="icon">C</div><h3>Automate</h3><p>Deterministic templates produce standard layers, pinned builds, tests, and evidence.</p></article>
+        <article class="card green-card"><div class="icon">D</div><h3>Prove</h3><p>Release gates require machine-readable evidence—not confidence, memory, or a green build alone.</p></article>
+      </div>
+      <p class="quote">A standard embedded developer becomes an effective Yocto BSP practitioner—with guardrails, automation, and escalation points.</p>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">End-to-end workflow</div>
+      <h2>One guided path from choices to evidence</h2>
+      <img class="workflow" src="yocto-bsp-studio-workflow.svg" alt="Yocto BSP Studio workflow">
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Guided configuration</div>
+      <h2>Users choose outcomes—not undocumented variables</h2>
+      <div class="grid three">
+        <article class="card"><span class="status mvp">MVP</span><h3>Platform profile</h3><ul><li>Yocto release and machine</li><li>Vendor layers and kernel family</li><li>Boot chain and storage</li><li>Declared QEMU/HIL capabilities</li></ul></article>
+        <article class="card"><span class="status mvp">MVP</span><h3>Product profile</h3><ul><li>Image and package policy</li><li>systemd, networking, graphics</li><li>Rust or C/C++ services</li><li>Read-only rootfs and diagnostics</li></ul></article>
+        <article class="card"><span class="status roadmap">EXPAND</span><h3>Lifecycle profile</h3><ul><li>OTA and A/B rollback</li><li>Secure Boot intent</li><li>Containers on target</li><li>Compliance and support policy</li></ul></article>
+      </div>
+      <p class="lead">A compatibility engine prevents invalid combinations. Expert overrides remain possible later—but are marked unsupported until validated.</p>
+    </section>
+
+    <section class="slide dark">
+      <div class="eyebrow">The knowledge advantage</div>
+      <h2>A version-aware <span class="accent">Yocto expert skill</span></h2>
+      <div class="grid two">
+        <article class="card"><h3>Authoritative sources first</h3><ul><li>Yocto 6.0 Wrynose and 5.0 Scarthgap manuals</li><li>BitBake, kernel, U-Boot, Device Tree</li><li>TF-A, OP-TEE, PREEMPT_RT, Rust</li><li>Vendor BSPs, datasheets, schematics, errata</li></ul></article>
+        <article class="card"><h3>Books become methods—not copied text</h3><ul><li>Bootlin slides and practical labs</li><li>Embedded Linux architecture</li><li>Driver and bring-up patterns</li><li>Anti-patterns, checklists, and decision tables</li></ul></article>
+      </div>
+      <div class="stack"><span class="pill">Source version</span><span class="pill">Applicable release</span><span class="pill">Authority level</span><span class="pill">Last verified</span><span class="pill">Deprecated warnings</span></div>
+      <p class="lead">The skill assists decisions. Deterministic schemas, catalogs, templates, and validators remain the release source of truth.</p>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Safe execution</div>
+      <h2>Every plan becomes an isolated, reproducible build</h2>
+      <div class="grid three">
+        <article class="card"><div class="icon">01</div><h3>Immutable plan</h3><p>Pin every layer, commit, tool, template, source revision, test policy, and worker image by digest.</p></article>
+        <article class="card"><div class="icon">02</div><h3>Linux worker</h3><p>Run BitBake in an isolated container for trusted MVP inputs and disposable VMs when customer-controlled layers arrive.</p></article>
+        <article class="card"><div class="icon">03</div><h3>Portable output</h3><p>Export normal `meta-product` files, `kas.yml`, images, logs, and manifests. The project remains usable outside the GUI.</p></article>
+      </div>
+      <p class="lead">BitBake metadata executes code—even during parsing. The control plane never executes customer recipes directly.</p>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Automated verification</div>
+      <h2>A build becomes a testable engineering claim</h2>
+      <table class="comparison">
+        <thead><tr><th>Layer</th><th>What we run</th><th>What it proves</th></tr></thead>
+        <tbody>
+          <tr><td>Generator</td><td>Schema, compatibility, deterministic rendering</td><td>The same intent produces the same metadata</td></tr>
+          <tr><td>Yocto metadata</td><td>kas validation, BitBake parse, layer and package QA</td><td>The generated project is structurally valid</td></tr>
+          <tr><td>Components</td><td>Unit tests, Rust tests, C/C++ tests, KUnit, ptest</td><td>Selected components behave as expected</td></tr>
+          <tr><td>Runtime</td><td>QEMU + oeqa/testimage: boot, SSH, systemd, logs, services</td><td>The supported virtual target boots and operates</td></tr>
+          <tr><td>Release</td><td>Independent rebuild and diff evidence</td><td>The candidate meets the chosen reproducibility policy</td></tr>
+        </tbody>
+      </table>
+      <div class="footer-note">QEMU does not certify custom-board wiring or peripherals; those become explicit hardware-in-the-loop gates.</div>
+    </section>
+
+    <section class="slide blue">
+      <div class="eyebrow">C/C++ quality gate</div>
+      <h2>Parasoft C/C++test—captured from the real Yocto build</h2>
+      <div class="grid three">
+        <article class="card"><div class="metric">1</div><h3>Capture</h3><p>An opt-in BitBake class records the actual target compiler invocations into a BDF or validated compilation database.</p></article>
+        <article class="card"><div class="metric">2</div><h3>Analyze</h3><p>C/C++test runs offline with the exact compiler family, version, architecture, ruleset, and baseline.</p></article>
+        <article class="card"><div class="metric">3</div><h3>Prove coverage</h3><p>The gate reconciles expected versus captured translation units. Empty or incomplete capture cannot appear as “zero findings.”</p></article>
+      </div>
+      <div class="stack"><span class="pill">Recommended Rules</span><span class="pill">MISRA / CERT where licensed</span><span class="pill">Compiler identity</span><span class="pill">Machine-readable report</span><span class="pill">Waiver audit</span></div>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Supply-chain security · available foundation</div>
+      <h2>ESL SBOMator becomes the security intelligence layer</h2>
+      <div class="grid four">
+        <article class="card green-card"><span class="status now">SBOMATOR NOW</span><h3>Inventory</h3><p>CycloneDX 1.6, supplier enrichment, licenses, containers, firmware images, binaries, kernel modules, and package ecosystems.</p></article>
+        <article class="card orange-card"><span class="status now">SBOMATOR NOW</span><h3>Vulnerabilities</h3><p>Syft/CDXgen inventory with Grype, OSV, local vulnerability data, CISA KEV intelligence, severity, and CVE links.</p></article>
+        <article class="card violet-card"><span class="status now">SBOMATOR NOW</span><h3>Triage</h3><p>Interactive reports and dashboard, persistent VEX suppressions, report diff/progress, database health, and false-positive management.</p></article>
+        <article class="card"><span class="status mvp">YOCTO ADAPTER</span><h3>Evidence fusion</h3><p>Reconcile native image SPDX, manifests, Yocto CVE status, applied fixes, licenses, and SBOMator findings.</p></article>
+      </div>
+      <p class="lead">Native Yocto evidence remains authoritative for the final image; SBOMator enriches, cross-checks, triages, and reports.</p>
+    </section>
+
+    <section class="slide green">
+      <div class="eyebrow">SBOMator depth</div>
+      <h2>Beyond a package list</h2>
+      <div class="grid three">
+        <article class="card"><h3>Embedded and firmware</h3><ul><li>Firmware unpacking and recursive extraction</li><li>SquashFS, CPIO, LZMA, gzip, XZ</li><li>U-Boot image headers</li><li>Seven binary architectures</li><li>Static/shared libraries and `.ko` modules</li></ul></article>
+        <article class="card"><h3>Security and compliance evidence</h3><ul><li>VEX documents and persistent dispositions</li><li>License/vendor enrichment</li><li>CISA KEV context</li><li>Offline vulnerability databases</li><li>HTML, JSON, inventory, and diff views</li></ul></article>
+        <article class="card"><h3>Modern software inventory</h3><ul><li>Secrets and issue triage surfaces</li><li>AI/agent dependency tagging</li><li>MCP server inventory</li><li>ML model artifact hashes</li><li>Container and source-tree scanning</li></ul></article>
+      </div>
+      <p class="small">Capabilities shown as “SBOMator now” are based on the current `C:\SBOMATOR-1-3-x` product. Yocto evidence fusion is part of this product integration.</p>
+    </section>
+
+    <section class="slide dark">
+      <div class="eyebrow">The product output</div>
+      <h2>Not just an image.<br><span class="green-text">A signed body of evidence.</span></h2>
+      <div class="grid three">
+        <article class="card"><h3>Build artifacts</h3><ul><li>Generated BSP layer and kas plan</li><li>Kernel, DTB, bootloader, rootfs</li><li>Images and package manifests</li><li>Exact source and tool digests</li></ul></article>
+        <article class="card"><h3>Quality evidence</h3><ul><li>Unit, KUnit, ptest, and oeqa</li><li>QEMU boot and service logs</li><li>Parasoft capture and findings</li><li>Reproducibility comparison</li></ul></article>
+        <article class="card"><h3>Security evidence</h3><ul><li>Native Yocto SPDX and licenses</li><li>CycloneDX and CVE reports</li><li>Evidence-backed VEX</li><li>Approvals and expiring waivers</li></ul></article>
+      </div>
+      <p class="lead">Required evidence that is missing, unavailable, or failed blocks release. Unknown never becomes pass.</p>
+    </section>
+
+    <section class="slide">
+      <div class="eyebrow">Smallest credible product</div>
+      <h2>Prove one complete vertical path first</h2>
+      <div class="grid two">
+        <article class="card"><span class="status mvp">MVP PROFILE</span><h3>Yocto 6.0 Wrynose + qemuarm64</h3><ul><li>systemd + glibc + minimal image</li><li>One generated Rust health service</li><li>Pinned kas configuration and meta-product layer</li><li>Clean isolated build and QEMU boot</li></ul></article>
+        <article class="card"><span class="status mvp">MVP EVIDENCE</span><h3>Quality and security gates</h3><ul><li>oeqa, package QA, Rust tests</li><li>Native SPDX/CVE/license outputs</li><li>SBOMator enrichment and report</li><li>Parasoft pilot on one C/C++ recipe</li><li>Independent candidate rebuild</li></ul></article>
+      </div>
+      <div class="pipeline"><div class="step">QEMU MVP</div><div class="arrow">→</div><div class="step">First real board</div><div class="arrow">→</div><div class="step">HIL + OTA</div><div class="arrow">→</div><div class="step">Multi-platform catalog</div></div>
+    </section>
+
+    <section class="slide dark">
+      <img class="brand" src="ESL_Logo.png" alt="ESL Engineering Software Lab">
+      <div class="eyebrow">Design partner opportunity</div>
+      <h2>Help shape the workflow around a real BSP</h2>
+      <div class="grid two">
+        <article class="card"><h3>We bring</h3><ul><li>Yocto knowledge system and deterministic generator</li><li>SBOMator security and compliance foundation</li><li>Parasoft integration design</li><li>GUI, orchestration, evidence, and release architecture</li></ul></article>
+        <article class="card"><h3>The partner brings</h3><ul><li>One representative board and vendor BSP</li><li>Real requirements and acceptance tests</li><li>Access to build, debug, and licensing environments</li><li>Feedback on workflow, evidence, and adoption</li></ul></article>
+      </div>
+      <p class="quote">Success means a capable embedded developer completes a repeatable BSP workflow—with fewer expert interventions and stronger evidence.</p>
+      <div class="stack"><span class="pill">Pilot scope</span><span class="pill">Baseline metrics</span><span class="pill">Joint validation</span><span class="pill">Product feedback</span></div>
+    </section>
+
+  </div>
+</div>
+
+<button class="nav" id="prev" aria-label="Previous slide">‹</button>
+<button class="nav" id="next" aria-label="Next slide">›</button>
+<div class="progress"><div id="progressFill"></div></div>
+<div class="counter" id="counter"></div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = [...document.querySelectorAll('.slide')];
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const counter = document.getElementById('counter');
+  const fill = document.getElementById('progressFill');
+  const hint = document.getElementById('swipeHint');
+  let index = 0, startX = null, dragging = false;
+
+  function show(nextIndex) {
+    index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+    track.style.transform = `translateX(-${index * 100}vw)`;
+    prev.style.display = index === 0 ? 'none' : 'block';
+    next.style.display = index === slides.length - 1 ? 'none' : 'block';
+    counter.textContent = `${index + 1} / ${slides.length}`;
+    fill.style.width = `${((index + 1) / slides.length) * 100}%`;
+    if (index > 0 && hint) hint.style.display = 'none';
+  }
+  prev.addEventListener('click', () => show(index - 1));
+  next.addEventListener('click', () => show(index + 1));
+  addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(index + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
+    if (e.key === 'Home') show(0);
+    if (e.key === 'End') show(slides.length - 1);
+  });
+  track.addEventListener('touchstart', e => { startX = e.changedTouches[0].clientX; }, {passive:true});
+  track.addEventListener('touchend', e => {
+    if (startX === null) return;
+    const delta = e.changedTouches[0].clientX - startX;
+    if (Math.abs(delta) >= 50) show(index + (delta < 0 ? 1 : -1));
+    startX = null;
+  }, {passive:true});
+  track.addEventListener('mousedown', e => { startX = e.clientX; dragging = true; });
+  addEventListener('mouseup', e => {
+    if (!dragging || startX === null) return;
+    const delta = e.clientX - startX;
+    if (Math.abs(delta) >= 50) show(index + (delta < 0 ? 1 : -1));
+    dragging = false; startX = null;
+  });
+  show(0);
+</script>
+</body>
+</html>
