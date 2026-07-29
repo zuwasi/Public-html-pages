@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="Technical presentation: Amp, Wolfram Mathematica 15, and Lean 4 certify a floating-point Heat Method study.">
+  <title>Beyond Nonzero — Certified Heat-Method Numerics</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+    :root {
+      --ink: #f6f8ff; --muted: #9fa9c6; --bg: #070914; --panel: rgba(17,22,43,.78);
+      --red: #e83b4f; --orange: #ff9d3d; --cyan: #3de1e8; --violet: #8d6cff;
+      --green: #4ee6a8; --line: rgba(255,255,255,.12);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: var(--bg); color: var(--ink); font-family: Inter, system-ui, sans-serif; }
+    body { cursor: default; }
+    #field { position: fixed; inset: 0; z-index: 0; opacity: .48; }
+    .noise { position: fixed; inset: 0; z-index: 1; pointer-events: none; background-image: radial-gradient(rgba(255,255,255,.07) .6px, transparent .6px); background-size: 8px 8px; opacity: .12; }
+    .deck { position: relative; z-index: 2; display: flex; width: 1200vw; height: 100vh; transition: transform .75s cubic-bezier(.22,.8,.2,1); }
+    .slide { width: 100vw; height: 100vh; flex: 0 0 100vw; padding: clamp(3.5rem,7vh,6rem) clamp(2rem,7vw,8rem) clamp(4.2rem,8vh,6.5rem); display: flex; align-items: center; position: relative; overflow: hidden; }
+    .slide::before { content: attr(data-num); position: absolute; right: 5vw; top: 3vh; font-weight: 800; font-size: clamp(5rem,14vw,13rem); line-height: 1; color: rgba(255,255,255,.025); }
+    .content { width: min(1180px, 100%); margin: auto; position: relative; }
+    .eyebrow { color: var(--cyan); text-transform: uppercase; letter-spacing: .2em; font-weight: 700; font-size: clamp(.7rem,1vw,.9rem); margin-bottom: 1rem; }
+    h1 { font-size: clamp(2.8rem,6vw,6.6rem); line-height: .95; letter-spacing: -.055em; margin: 0 0 1.5rem; max-width: 1080px; }
+    h2 { font-size: clamp(2rem,4.2vw,4.6rem); line-height: 1.02; letter-spacing: -.045em; margin: 0 0 1.5rem; max-width: 1050px; }
+    h3 { font-size: clamp(1rem,1.5vw,1.35rem); margin: 0 0 .6rem; }
+    p { color: var(--muted); font-size: clamp(.95rem,1.45vw,1.32rem); line-height: 1.55; max-width: 900px; }
+    strong, .white { color: var(--ink); }
+    .accent { background: linear-gradient(100deg,var(--red),var(--orange)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .cyan { color: var(--cyan); } .green { color: var(--green); } .red { color: var(--red); }
+    .grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(1rem,2vw,1.6rem); align-items: stretch; }
+    .grid.three { grid-template-columns: repeat(3,minmax(0,1fr)); }
+    .card { background: linear-gradient(145deg,rgba(23,29,57,.92),rgba(10,13,29,.84)); border: 1px solid var(--line); border-radius: 20px; padding: clamp(1rem,2vw,1.7rem); box-shadow: 0 20px 60px rgba(0,0,0,.22); backdrop-filter: blur(14px); }
+    .card.hot { border-color: rgba(232,59,79,.45); box-shadow: inset 0 0 50px rgba(232,59,79,.06); }
+    .card.cool { border-color: rgba(61,225,232,.38); box-shadow: inset 0 0 50px rgba(61,225,232,.05); }
+    .metric { font-size: clamp(2.2rem,4.8vw,5rem); font-weight: 800; letter-spacing: -.06em; line-height: 1; }
+    .metric-label { color: var(--muted); margin-top: .7rem; font-size: clamp(.8rem,1.1vw,1rem); }
+    .equation { font-family: "Cambria Math", Georgia, serif; font-size: clamp(1.05rem,2vw,1.8rem); color: white; padding: 1.1rem 1.3rem; background: rgba(0,0,0,.27); border-left: 4px solid var(--cyan); border-radius: 0 14px 14px 0; overflow-wrap: anywhere; }
+    .pipeline { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 1rem; margin-top: 2rem; }
+    .node { min-height: 160px; display: grid; place-content: center; text-align: center; border-radius: 24px; border: 1px solid var(--line); background: var(--panel); position: relative; overflow: hidden; }
+    .node::after { content: ""; position: absolute; inset: auto -30% -70% -30%; height: 130%; background: radial-gradient(circle,var(--glow),transparent 65%); opacity: .28; }
+    .node b { font-size: clamp(1.25rem,2.2vw,2rem); z-index: 1; }
+    .node span { color: var(--muted); margin-top: .5rem; z-index: 1; }
+    .arrow { font-size: clamp(1.7rem,3vw,3rem); color: var(--cyan); animation: pulse 1.8s infinite; }
+    .logo-panel { background: #fff; border-radius: 20px; padding: 1.2rem 1.7rem; width: min(650px,100%); box-shadow: 0 30px 90px rgba(232,59,79,.18); }
+    .logo-panel img { display: block; width: 100%; height: auto; }
+    .attribution { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 2rem; }
+    .esl { padding: .65rem 1rem; border: 1px solid rgba(78,230,168,.45); border-radius: 999px; color: var(--green); font-weight: 700; }
+    a { color: var(--cyan); text-decoration: none; }
+    .viz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+    .heat { position: relative; overflow: hidden; border-radius: 18px; border: 1px solid var(--line); background: #080b18; }
+    .heat img { display: block; width: 100%; max-height: 43vh; object-fit: contain; }
+    .heat label { position: absolute; left: .8rem; top: .8rem; background: rgba(5,7,16,.82); border: 1px solid var(--line); padding: .45rem .7rem; border-radius: 999px; font-size: .75rem; font-weight: 700; }
+    .code { font: 500 clamp(.72rem,1.1vw,1rem)/1.55 ui-monospace,SFMono-Regular,Consolas,monospace; white-space: pre-wrap; color: #d9e1ff; background: #050712; padding: 1.2rem; border-radius: 16px; border: 1px solid var(--line); }
+    .code .bad { color: #ff7887; } .code .good { color: #58efb4; } .code .kw { color: #8fcaff; }
+    .proof { display: flex; align-items: center; gap: 1rem; margin: .8rem 0; }
+    .check { flex: 0 0 30px; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: rgba(78,230,168,.15); color: var(--green); border: 1px solid rgba(78,230,168,.45); font-weight: 800; }
+    .boundary { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+    .boundary > div { background: rgba(7,9,20,.94); padding: 1.2rem; min-height: 170px; }
+    .tag { display: inline-block; font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; border-radius: 999px; padding: .35rem .55rem; background: rgba(141,108,255,.14); color: #beaaff; margin-bottom: .8rem; }
+    ul { margin: 0; padding-left: 1.15rem; color: var(--muted); font-size: clamp(.85rem,1.25vw,1.12rem); line-height: 1.55; }
+    li { margin: .45rem 0; }
+    .ribbon { display: flex; gap: .7rem; flex-wrap: wrap; margin-top: 1.5rem; }
+    .ribbon span { border: 1px solid var(--line); background: rgba(255,255,255,.04); padding: .55rem .8rem; border-radius: 10px; color: #cad2eb; font-size: .82rem; }
+    .nav { position: fixed; z-index: 20; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 1px solid rgba(255,255,255,.22); color: white; background: rgba(10,13,29,.72); backdrop-filter: blur(10px); font-size: 2rem; cursor: pointer; display: grid; place-items: center; transition: .25s; }
+    .nav:hover { background: var(--red); transform: translateY(-50%) scale(1.08); }
+    .nav.prev { left: 1.2rem; } .nav.next { right: 1.2rem; }
+    .nav[hidden] { display: none; }
+    .progress-track { position: fixed; z-index: 30; left: 0; bottom: 0; width: 100%; height: 5px; background: rgba(255,255,255,.08); }
+    .progress { height: 100%; width: 8.333%; background: linear-gradient(90deg,var(--red),var(--orange),var(--cyan)); transition: width .65s ease; box-shadow: 0 0 20px var(--cyan); }
+    .counter { position: fixed; z-index: 30; right: 1.4rem; bottom: 1.1rem; color: var(--muted); font: 600 .8rem ui-monospace,monospace; }
+    .hint { position: fixed; z-index: 25; left: 50%; bottom: 1.2rem; transform: translateX(-50%); color: var(--muted); font-size: .75rem; animation: hint 1.8s infinite; }
+    .hint.off { display: none; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(2px); opacity: .45; animation: float 8s ease-in-out infinite; }
+    @keyframes pulse { 50% { transform: translateX(8px); opacity: .55; } }
+    @keyframes hint { 50% { transform: translateX(-50%) scale(1.04); color: white; } }
+    @keyframes float { 50% { transform: translateY(-24px) scale(1.08); } }
+    @media (max-width: 760px) {
+      .slide { padding: 4rem 1.5rem 4.3rem; align-items: flex-start; overflow-y: auto; }
+      .grid, .grid.three, .viz-pair { grid-template-columns: 1fr; }
+      .pipeline { grid-template-columns: 1fr; }
+      .arrow { transform: rotate(90deg); justify-self: center; }
+      .node { min-height: 100px; }
+      .boundary { grid-template-columns: 1fr; }
+      .boundary > div { min-height: 0; }
+      .nav { width: 40px; height: 40px; top: auto; bottom: 2.4rem; transform: none; }
+      .nav:hover { transform: scale(1.05); }
+      .heat img { max-height: 28vh; }
+      .counter { bottom: .8rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="field" aria-hidden="true"></canvas><div class="noise"></div>
+  <main class="deck" id="deck">
+    <section class="slide" data-num="01"><div class="content">
+      <div class="eyebrow">ESL technical demonstration · 2026</div>
+      <h1>Beyond <span class="accent">“nonzero”</span></h1>
+      <p class="white" style="font-size:clamp(1.25rem,2.3vw,2rem)">Certifying floating-point Heat-Method numerics with Amp, Wolfram Mathematica 15, and Lean 4.</p>
+      <div class="logo-panel"><img src="assets/M15_logo-type_lg.png" alt="Wolfram Mathematica 15"></div>
+      <div class="attribution"><span class="esl">Built by ESL</span><span>Israeli reseller of Wolfram products · <a href="https://www.wolfram.com/company/contact/global-sales/?Country=Israel" target="_blank">Wolfram global sales — Israel ↗</a></span></div>
+    </div></section>
+
+    <section class="slide" data-num="02"><div class="content">
+      <div class="eyebrow">Starting point · Ferumlab article</div>
+      <h2>A mathematically positive field can become a computational <span class="red">void</span>.</h2>
+      <div class="grid">
+        <div class="card hot"><h3>Heat Method dependency</h3><div class="equation">(M + ΔtK)u = Mu₀<br><br>X = −∇u / ‖∇u‖</div><p>If tiny temperatures become exact zero, the normalized direction field is undefined or misleading.</p></div>
+        <div class="card cool"><h3>The article’s response</h3><ul><li>Replace one implicit solve with many explicit substeps.</li><li>Use Decimal or mpmath arbitrary precision.</li><li>Choose approximately one substep per grid dimension.</li></ul><p class="white">Our question: does this merely make values nonzero—or make them correct?</p></div>
+      </div>
+    </div></section>
+
+    <section class="slide" data-num="03"><div class="content">
+      <div class="eyebrow">Amp as the orchestrator</div>
+      <h2>One claim ledger. Three independent evidence lanes.</h2>
+      <div class="pipeline">
+        <div class="node" style="--glow:var(--orange)"><b>Wolfram 15</b><span>exact algebra + numerical experiments</span></div><div class="arrow">→</div>
+        <div class="node" style="--glow:var(--cyan)"><b>Amp</b><span>source audit · build · traceability</span></div><div class="arrow">→</div>
+        <div class="node" style="--glow:var(--violet)"><b>Lean 4</b><span>kernel-checked exact theorems</span></div>
+      </div>
+      <div class="ribbon"><span>article → normalized mathematics</span><span>reproducible scripts</span><span>machine-readable evidence</span><span>formalization map</span><span>adversarial audit</span></div>
+    </div></section>
+
+    <section class="slide" data-num="04"><div class="content">
+      <div class="eyebrow">Wolfram process</div><h2>Exact first. Precision becomes an explicit engineering parameter.</h2>
+      <div class="grid three">
+        <div class="card"><span class="tag">01 · derive</span><h3>Exact Q1 operators</h3><p>Construct rational mass and stiffness matrices before any numerical rounding.</p><div class="equation">Mₑ = hₓhᵧ/36 · A<br>Kₑ = 1/(6hₓhᵧ) · B</div></div>
+        <div class="card"><span class="tag">02 · execute</span><h3>Controlled arithmetic</h3><p>Run the same normalized stencil at MachinePrecision and 500 digits without downcasting the result path.</p></div>
+        <div class="card"><span class="tag">03 · classify</span><h3>Explain every zero</h3><p>Separate prescribed boundary zeros, finite-front zeros, and unexpected behind-front zeros.</p></div>
+      </div>
+    </div></section>
+
+    <section class="slide" data-num="05"><div class="content">
+      <div class="eyebrow">The exact interior stencil</div><h2>Positivity is conditional—not a property of the word “explicit.”</h2>
+      <div class="equation">uᵏ⁺¹ᵢⱼ = (1 − 8r/3)uᵏᵢⱼ + (r/3) Σ₍ₚ,ᵩ₎∈N₈₍ᵢ,ⱼ₎ uᵏₚᵩ, &nbsp; r = Δtₛ/h²</div>
+      <div class="grid" style="margin-top:1.4rem">
+        <div class="card cool"><div class="metric cyan">0 ≤ r ≤ 3/8</div><div class="metric-label">CFL-style condition ensuring all nine stencil weights are nonnegative</div></div>
+        <div class="card"><div class="metric green">Σw = 1</div><div class="metric-label">Constant data is preserved by the interior stencil; boundary treatment remains a separate contract</div></div>
+      </div>
+      <p>Finite propagation is also exact: after <strong>k</strong> steps, a local eight-neighbor stencil cannot reach nodes more than <strong>k</strong> Chebyshev edges away.</p>
+    </div></section>
+
+    <section class="slide" data-num="06"><div class="content">
+      <div class="eyebrow">Measured evidence</div><h2>Mesh refinement crosses the binary64 precision wall.</h2>
+      <div class="viz-pair">
+        <div class="heat"><label>110×110 · 0 unexpected zeros</label><img src="exports/heat_110_machine.png" alt="110 by 110 machine precision heat field"></div>
+        <div class="heat"><label>300×300 · 37,647 unexpected zeros</label><img src="exports/heat_300_machine.png" alt="300 by 300 machine precision heat field"></div>
+      </div>
+      <div class="grid" style="margin-top:1rem"><div><span class="metric">37,647</span><div class="metric-label">reachable interior nodes rounded to zero</div></div><div><span class="metric green">0 negatives</span><div class="metric-label">the CFL positivity contract held in both article-sized runs</div></div></div>
+    </div></section>
+
+    <section class="slide" data-num="07"><div class="content">
+      <div class="eyebrow">What we corrected beyond the article</div><h2>“Arbitrary precision” must cover the <span class="accent">entire data path</span>.</h2>
+      <div class="grid">
+        <div class="code"><span class="bad">Me, Ke = q1_element_matrices(float(dx), float(dy))</span>
+<span class="bad">Ke = [[datatype(Ke[i,j]) ...]]</span>
+
+# rounded binary64 coefficients do not
+# become exact after conversion
+
+<span class="bad">Tr = np.zeros((n,m))</span>
+<span class="bad">G  = np.zeros((n-1,m-1,2))</span>
+# arbitrary values are downcast on output</div>
+        <div class="card hot"><h3>Three algorithmic issues found</h3><ul><li><strong>Fixed ε = 10⁻⁶:</strong> lumped mass scales as h²; valid corner nodes become inactive near N = 501.</li><li><strong>Unused boundary_values:</strong> accepted by the API but never imposed.</li><li><strong>n = max(Nₓ,Nᵧ):</strong> a geometry heuristic, not a convergence certificate.</li></ul><p class="white">Nonzero propagation and temporal accuracy are different claims.</p></div>
+      </div>
+    </div></section>
+
+    <section class="slide" data-num="08"><div class="content">
+      <div class="eyebrow">Lean 4 proof layer</div><h2>The theorem prover checks the contract—not the screenshot.</h2>
+      <div class="grid">
+        <div class="card cool">
+          <div class="proof"><span class="check">✓</span><div><strong>centerCoeff_nonneg</strong><br><small>r ≤ 3/8 ⇒ 0 ≤ 1 − 8r/3</small></div></div>
+          <div class="proof"><span class="check">✓</span><div><strong>q1Update_nonneg</strong><br><small>nonnegative stencil + CFL ⇒ nonnegative update</small></div></div>
+          <div class="proof"><span class="check">✓</span><div><strong>constant_preserved</strong><br><small>all-equal neighborhood remains equal</small></div></div>
+          <div class="proof"><span class="check">✓</span><div><strong>zero_stencil_stays_zero</strong><br><small>the basis of finite-front classification</small></div></div>
+        </div>
+        <div class="code"><span class="kw">theorem</span> q1Update_nonneg
+  (hr₀ : 0 ≤ r)
+  (hr  : r ≤ 3 / 8)
+  (hc  : 0 ≤ c)
+  (h₁ ... h₈ : 0 ≤ nᵢ) :
+  0 ≤ q1Update r c n₁ ... n₈ := by
+  have hcCoeff := centerCoeff_nonneg hr₀ hr
+  have hnCoeff := neighborCoeff_nonneg hr₀
+  positivity
+
+<span class="good">Build: 8,656 jobs · exit 0</span>
+<span class="good">No sorry · no admit · no axiom</span></div>
+      </div>
+    </div></section>
+
+    <section class="slide" data-num="09"><div class="content">
+      <div class="eyebrow">Trust boundary</div><h2>Formal proof and numerical evidence answer different questions.</h2>
+      <div class="boundary">
+        <div><span class="tag">Formally proved</span><h3>Exact local algebra</h3><p>Coefficient signs, positivity preservation, constant preservation, and zero-stencil behavior over real numbers.</p></div>
+        <div><span class="tag">Numerically validated</span><h3>Concrete execution</h3><p>110/300 grids, 500-digit stress case, zero classification, temporal refinement, and exported figures.</p></div>
+        <div><span class="tag">Not claimed</span><h3>Outside this proof</h3><p>IEEE-754 hardware correctness, Wolfram/SciPy internals, irregular-mesh convergence, and the full Poisson distance reconstruction.</p></div>
+      </div>
+      <p class="white">A kernel-checked theorem cannot rescue a mistranscribed model. Amp maintains the mapping from article → normalized mathematics → Wolfram implementation → Lean theorem.</p>
+    </div></section>
+
+    <section class="slide" data-num="10"><div class="content">
+      <div class="eyebrow">Real-life implications</div><h2>Tiny fields drive large decisions.</h2>
+      <div class="grid three">
+        <div class="card"><h3>Geometry & robotics</h3><p>Geodesic distance, path planning, mesh parameterization, collision envelopes, and navigation around narrow passages.</p></div>
+        <div class="card"><h3>Physics & engineering</h3><p>Heat transfer, diffusion, electrostatics, reaction transport, FEM preconditioning, and multiscale simulation.</p></div>
+        <div class="card"><h3>Medical & scientific</h3><p>Anatomical surface distance, segmentation propagation, dose fields, molecular surfaces, and uncertainty-sensitive inverse problems.</p></div>
+      </div>
+      <p>Failure is not limited to a blank plot. A zero gradient can change a direction field, reroute an optimizer, break a normalizer, or silently bias a downstream Poisson solve.</p>
+    </div></section>
+
+    <section class="slide" data-num="11"><div class="content">
+      <div class="eyebrow">Commercial usage</div><h2>From research artifact to numerical assurance pipeline.</h2>
+      <div class="grid">
+        <div class="card cool"><h3>Product engineering</h3><ul><li>Precision policies selected from mesh and tolerance.</li><li>Regression gates for positivity, residuals, and unexpected zeros.</li><li>Golden arbitrary-precision references for optimized C++/GPU solvers.</li><li>Lean contracts for safety-critical numerical kernels.</li></ul></div>
+        <div class="card hot"><h3>Customer-facing assurance</h3><ul><li>Reproducible evidence packs for design reviews.</li><li>Traceable separation of proved, validated, and assumed claims.</li><li>Early warning before increasing mesh density breaks binary64.</li><li>MIT-licensed foundation for commercial adaptation.</li></ul></div>
+      </div>
+      <div class="ribbon"><span>digital twins</span><span>CAE/FEM platforms</span><span>robotics SDKs</span><span>medical imaging</span><span>simulation certification</span><span>solver QA</span></div>
+    </div></section>
+
+    <section class="slide" data-num="12"><div class="content">
+      <div class="eyebrow">Deliverable</div><h2>Executable. Audited. Formally scoped.</h2>
+      <div class="grid">
+        <div><div class="metric green">13 / 13</div><div class="metric-label">Wolfram audit checks passed</div><br><div class="metric cyan">8,656</div><div class="metric-label">Lean build jobs completed</div></div>
+        <div class="card"><h3>Repository contents</h3><ul><li>Reusable Wolfram package and Mathematica notebook</li><li>Build, audit, CSV, JSON, and visual evidence</li><li>Pinned Lean 4 + Mathlib proof project</li><li>Claim-to-proof formalization map</li><li>MIT license for reuse and extension</li></ul></div>
+      </div>
+      <div class="attribution"><span class="esl">ESL · Israel</span><span>Wolfram technical expertise, numerical engineering, and formal assurance.</span></div>
+    </div></section>
+  </main>
+  <button class="nav prev" id="prev" aria-label="Previous slide" hidden>‹</button>
+  <button class="nav next" id="next" aria-label="Next slide">›</button>
+  <div class="hint" id="hint">← Swipe to navigate →</div>
+  <div class="counter" id="counter">1 / 12</div>
+  <div class="progress-track"><div class="progress" id="progress"></div></div>
+  <script>
+    const deck=document.getElementById('deck'), slides=[...document.querySelectorAll('.slide')], prev=document.getElementById('prev'), next=document.getElementById('next'), counter=document.getElementById('counter'), progress=document.getElementById('progress'), hint=document.getElementById('hint');
+    let current=0, startX=null, dragging=false;
+    function go(n){ current=Math.max(0,Math.min(slides.length-1,n)); deck.style.transform=`translateX(-${current*100}vw)`; prev.hidden=current===0; next.hidden=current===slides.length-1; counter.textContent=`${current+1} / ${slides.length}`; progress.style.width=`${((current+1)/slides.length)*100}%`; if(current>0) hint.classList.add('off'); }
+    prev.onclick=()=>go(current-1); next.onclick=()=>go(current+1);
+    addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(current+1)} if(e.key==='ArrowLeft'){e.preventDefault();go(current-1)} });
+    addEventListener('touchstart',e=>startX=e.changedTouches[0].screenX,{passive:true}); addEventListener('touchend',e=>{const d=e.changedTouches[0].screenX-startX;if(Math.abs(d)>50)go(current+(d<0?1:-1))},{passive:true});
+    addEventListener('mousedown',e=>{startX=e.screenX;dragging=true}); addEventListener('mouseup',e=>{if(!dragging)return;dragging=false;const d=e.screenX-startX;if(Math.abs(d)>50)go(current+(d<0?1:-1))});
+    const canvas=document.getElementById('field'), ctx=canvas.getContext('2d'); let pts=[];
+    function resize(){canvas.width=innerWidth*devicePixelRatio;canvas.height=innerHeight*devicePixelRatio;ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);pts=Array.from({length:Math.min(70,Math.floor(innerWidth/22))},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.8+.5}))}
+    function draw(){ctx.clearRect(0,0,innerWidth,innerHeight);for(const p of pts){p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>innerWidth)p.vx*=-1;if(p.y<0||p.y>innerHeight)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(61,225,232,.55)';ctx.fill()}for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.hypot(dx,dy);if(d<120){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle=`rgba(141,108,255,${.13*(1-d/120)})`;ctx.stroke()}}requestAnimationFrame(draw)}
+    addEventListener('resize',resize);resize();draw();go(0);
+  </script>
+</body>
+</html>
