@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-07-28
+Last updated: 2026-07-29
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
