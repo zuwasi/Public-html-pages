@@ -275,4 +275,7 @@ Last updated: 2026-07-29
 • wolfram-engine-gpu-demo-assets
   https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-assets
 
+• yocto-bsp-studio-design-partner
+  https://zuwasi.github.io/Public-html-pages/yocto-bsp-studio-design-partner
+
 ══════════════════════════════════════════════════════════════
