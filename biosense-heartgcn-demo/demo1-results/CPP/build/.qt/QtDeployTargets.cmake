@@ -1,8 +1,0 @@
-set(__QT_DEPLOY_TARGET_heartgcn_core_FILE C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/libheartgcn_core.a)
-set(__QT_DEPLOY_TARGET_heartgcn_core_TYPE STATIC_LIBRARY)
-set(__QT_DEPLOY_TARGET_HeartGCNApp_FILE C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/HeartGCNApp.exe)
-set(__QT_DEPLOY_TARGET_HeartGCNApp_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_HeartGCNApp_RUNTIME_DLLS C:/Qt/6.10.3/mingw_64/bin/Qt6Widgets.dll;C:/Qt/6.10.3/mingw_64/bin/Qt6Gui.dll;C:/Qt/6.10.3/mingw_64/bin/Qt6Core.dll)
-set(__QT_DEPLOY_TARGET_test_model_FILE C:/Amp_demos/Biosense-19-7-2026/demo1-results/CPP/build/test_model.exe)
-set(__QT_DEPLOY_TARGET_test_model_TYPE EXECUTABLE)
-set(__QT_DEPLOY_TARGET_test_model_RUNTIME_DLLS )

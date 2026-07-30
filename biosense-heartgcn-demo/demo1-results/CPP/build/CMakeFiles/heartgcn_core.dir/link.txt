@@ -1,2 +1,0 @@
-C:\Qt\Tools\mingw1310_64\bin\ar.exe qc libheartgcn_core.a CMakeFiles/heartgcn_core.dir/heartgcn_core_autogen/mocs_compilation.cpp.obj CMakeFiles/heartgcn_core.dir/src/model.cpp.obj
-C:\Qt\Tools\mingw1310_64\bin\ranlib.exe libheartgcn_core.a

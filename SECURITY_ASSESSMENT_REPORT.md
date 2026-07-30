@@ -3,7 +3,7 @@
 
 **Assessment date:** 2026-07-29  
 **Assessor:** Claude Mythos Security Skill (Amp)  
-**Target:** `C:\Users\danie\Public-html-pages` (published at https://zuwasi.github.io/Public-html-pages/)  
+**Target:** `~/Public-html-pages` (published at https://zuwasi.github.io/Public-html-pages/)  
 **Branch:** main  
 **Files in scope:** 74 HTML files + subdirectory presentations  
 **Perspective:** Security review per Amit Tannenbaum's 9-item checklist for AI-generated HTML reports  
