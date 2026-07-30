@@ -1,0 +1,46 @@
+﻿name: Pre-Publication Security Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install ripgrep
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+
+      - name: Run pre-publication security checker
+        shell: pwsh
+        run: |
+          ./tools/pre-publish-check.ps1 -FailOnWarning
+
+      - name: Generate SHA-256 manifest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          echo "# SHA-256 Artifact Manifest" > SHA256-MANIFEST.txt
+          echo "# Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> SHA256-MANIFEST.txt
+          echo "# Commit: ${{ github.sha }}" >> SHA256-MANIFEST.txt
+          echo "" >> SHA256-MANIFEST.txt
+          find . -name '*.html' -not -path './.git/*' -not -path './node_modules/*' | sort | while read -r f; do
+            hash=$(sha256sum "$f" | awk '{print $1}')
+            echo "$hash  $f" >> SHA256-MANIFEST.txt
+          done
+          echo "Manifest generated with $(grep -c '  \./' SHA256-MANIFEST.txt) files"
+
+      - name: Upload SHA-256 manifest
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: sha256-manifest
+          path: SHA256-MANIFEST.txt
+          retention-days: 90
