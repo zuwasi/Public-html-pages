@@ -4,6 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>MSVC Two-Widenings Bug — short to unsigned</title>
+  <meta name="description" content="MSVC v19.51 /O2 silently miscompiles a short-to-unsigned widening. Root cause, assembly analysis, and verified workarounds - an 8-slide technical walkthrough by ESL.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MSVC /O2 Miscompiles short-to-unsigned Widening (v19.51)">
+  <meta property="og:description" content="Correct at /Od and /O1, wrong values at /O2. No warning, no error. Root cause, assembly analysis, and verified workarounds - by ESL, Engineering Software Lab.">
+  <meta property="og:url" content="https://zuwasi.github.io/Public-html-pages/MSVC_Two_Widenings_Bug_Presentation.html">
+  <meta property="og:image" content="https://zuwasi.github.io/Public-html-pages/assets/msvc-two-widenings-og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MSVC /O2 Miscompiles short-to-unsigned Widening (v19.51)">
+  <meta name="twitter:description" content="Correct at /Od and /O1, wrong values at /O2. Root cause, assembly analysis, and verified workarounds - by ESL.">
+  <meta name="twitter:image" content="https://zuwasi.github.io/Public-html-pages/assets/msvc-two-widenings-og.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
