@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>MSVC Two-Widenings Bug — short to unsigned</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0a0a1a; --card:#111128; --code:#0d1117; --cyan:#00d9ff; --purple:#7b6cf6; --red:#ff6b6b; --green:#51cf66; --yellow:#ffd54f; --text:#e0e0f0; --dim:#8888aa; --bright:#fff; --border:#222244; }
+    * { box-sizing:border-box; }
+    html, body { width:100%; height:100%; margin:0; overflow:hidden; background:var(--bg); color:var(--text); font-family:Inter,system-ui,sans-serif; }
+    body { user-select:none; }
+    #deck { display:flex; width:800vw; height:100vh; transition:transform .55s cubic-bezier(.22,.8,.26,1); will-change:transform; }
+    .slide { width:100vw; height:100vh; flex:0 0 100vw; position:relative; overflow:auto; padding:clamp(58px,7vh,88px) clamp(24px,7vw,112px) clamp(54px,7vh,82px); }
+    .slide::before { content:""; position:absolute; inset:0; background:radial-gradient(circle at 82% 18%,rgba(123,108,246,.15),transparent 36%),radial-gradient(circle at 12% 85%,rgba(0,217,255,.08),transparent 34%); pointer-events:none; }
+    .content { position:relative; z-index:1; width:min(1180px,100%); min-height:100%; margin:0 auto; display:flex; flex-direction:column; justify-content:center; gap:clamp(10px,1.5vh,20px); }
+    .slide-tag,.slide-number { position:absolute; z-index:2; top:clamp(20px,3vh,34px); font-size:clamp(10px,1vw,13px); font-weight:700; letter-spacing:clamp(1.5px,.22vw,3px); text-transform:uppercase; }
+    .slide-tag { left:clamp(24px,4vw,64px); color:var(--cyan); }
+    .slide-number { right:clamp(24px,4vw,64px); color:var(--dim); }
+    .heading-row { display:flex; align-items:center; flex-wrap:wrap; gap:clamp(10px,1.3vw,18px); }
+    h1 { margin:0; font-size:clamp(30px,4vw,58px); line-height:1.05; letter-spacing:clamp(-2px,-.1vw,-1px); background:linear-gradient(100deg,var(--bright) 22%,var(--cyan)); color:transparent; background-clip:text; -webkit-background-clip:text; }
+    .subtitle { margin:0; color:var(--dim); font-size:clamp(14px,1.55vw,21px); line-height:1.45; }
+    .badge { display:inline-flex; align-items:center; border-radius:clamp(14px,2vw,24px); padding:clamp(5px,.6vw,8px) clamp(10px,1vw,15px); font-size:clamp(10px,1vw,13px); font-weight:800; letter-spacing:clamp(.5px,.08vw,1px); white-space:nowrap; }
+    .badge.red { color:var(--red); background:rgba(255,107,107,.12); border:1px solid rgba(255,107,107,.4); }
+    .badge.green { color:var(--green); background:rgba(81,207,102,.12); border:1px solid rgba(81,207,102,.4); }
+    .badge.purple { color:var(--purple); background:rgba(123,108,246,.12); border:1px solid rgba(123,108,246,.4); }
+    pre { margin:0; padding:clamp(14px,2vw,25px); border:1px solid var(--border); border-radius:clamp(10px,1vw,14px); background:var(--code); overflow:auto; box-shadow:0 clamp(8px,1vw,14px) clamp(24px,3vw,42px) rgba(0,0,0,.25); }
+    code { font-family:"JetBrains Mono",Consolas,monospace; font-size:clamp(11px,1.4vw,18px); line-height:1.55; color:var(--text); user-select:text; }
+    .kw,.pre,.op { color:#ff79c6; font-weight:700; } .type { color:#8be9fd; } .fn { color:#50fa7b; } .num { color:#bd93f9; } .str,.lib { color:#f1fa8c; } .cmt { color:#6272a4; font-style:italic; } .reg { color:#ffb86c; font-weight:700; }
+    .cards { display:grid; grid-template-columns:1fr; gap:clamp(8px,1.2vh,14px); }
+    .card { background:var(--card); border:1px solid var(--border); border-left:clamp(3px,.35vw,5px) solid var(--cyan); border-radius:clamp(8px,1vw,12px); padding:clamp(11px,1.3vw,17px) clamp(14px,1.7vw,22px); font-size:clamp(12px,1.2vw,16px); line-height:1.5; }
+    .card.red { border-left-color:var(--red); } .card.green { border-left-color:var(--green); } .card.cyan { border-left-color:var(--cyan); } .card.purple { border-left-color:var(--purple); } .card.yellow { border-left-color:var(--yellow); }
+    .card strong { color:var(--bright); } .red-text { color:var(--red); } .green-text { color:var(--green); } .cyan-text { color:var(--cyan); } .purple-text { color:var(--purple); } .yellow-text { color:var(--yellow); }
+    .cols2 { display:grid; grid-template-columns:1fr 1fr; gap:clamp(10px,1.4vw,20px); align-items:start; }
+    .outbox { border:1px solid var(--border); border-radius:clamp(8px,1vw,12px); background:var(--code); padding:clamp(10px,1.2vw,16px) clamp(13px,1.5vw,20px); font-family:"JetBrains Mono",monospace; font-size:clamp(12px,1.3vw,17px); }
+    .outbox .lbl { display:block; font-family:Inter,sans-serif; font-size:clamp(10px,.95vw,12px); font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--dim); margin-bottom:clamp(4px,.5vh,7px); }
+    .flow { display:flex; flex-direction:column; align-items:center; gap:clamp(3px,.5vh,7px); }
+    .flow-card { width:min(920px,100%); display:grid; grid-template-columns:minmax(180px,.9fr) 1.6fr; align-items:center; background:var(--card); border:1px solid var(--border); border-left:clamp(3px,.35vw,5px) solid var(--purple); border-radius:clamp(8px,1vw,12px); padding:clamp(7px,.8vw,11px) clamp(12px,1.5vw,18px); font-size:clamp(11px,1.15vw,16px); }
+    .flow-card.wrong { border-left-color:var(--red); }
+    .flow-card.right { border-left-color:var(--green); }
+    .flow-code { color:var(--bright); font-family:"JetBrains Mono",monospace; font-weight:700; font-size:clamp(11px,1.1vw,15px); }
+    .arrow { color:var(--cyan); font-size:clamp(16px,1.7vw,24px); line-height:1; }
+    table.cmp { border-collapse:collapse; width:100%; font-size:clamp(11px,1.2vw,16px); }
+    table.cmp th, table.cmp td { border:1px solid var(--border); padding:clamp(7px,.9vw,12px) clamp(10px,1.2vw,16px); text-align:left; }
+    table.cmp th { background:var(--card); color:var(--cyan); font-weight:700; }
+    table.cmp td code { font-size:clamp(11px,1.1vw,15px); }
+    .summary { display:grid; grid-template-columns:1fr 1fr; gap:clamp(8px,1.2vw,16px); }
+    .summary .card { height:100%; }
+    .summary-title { display:block; margin-bottom:clamp(3px,.4vw,6px); color:var(--cyan); font-size:clamp(14px,1.4vw,19px); }
+    .links { display:flex; flex-wrap:wrap; gap:clamp(6px,.8vw,11px); }
+    .links a { display:inline-block; padding:clamp(4px,.5vw,7px) clamp(10px,1.2vw,15px); border-radius:8px; font-size:clamp(10px,.9vw,13px); font-weight:600; text-decoration:none; font-family:"JetBrains Mono",monospace; }
+    .links a.cy { background:rgba(0,217,255,.08); border:1px solid rgba(0,217,255,.2); color:#4fc3f7; }
+    .links a.rd { background:rgba(255,107,107,.08); border:1px solid rgba(255,107,107,.2); color:var(--red); }
+    .links a.gr { background:rgba(81,207,102,.08); border:1px solid rgba(81,207,102,.2); color:var(--green); }
+    .links a.pu { background:rgba(123,108,246,.08); border:1px solid rgba(123,108,246,.2); color:var(--purple); }
+    .links a.ye { background:rgba(255,213,79,.08); border:1px solid rgba(255,213,79,.2); color:var(--yellow); }
+    .slide.dense pre code { font-size:clamp(10px,1.05vw,14px); line-height:1.35; }
+    .slide.dense pre { padding:clamp(10px,1.3vw,17px); }
+    .slide.dense .card { padding:clamp(8px,.9vw,12px) clamp(12px,1.3vw,17px); font-size:clamp(11px,1.05vw,14px); line-height:1.35; }
+    .slide.dense h1 { font-size:clamp(26px,3.2vw,46px); }
+    .slide.dense .content { gap:clamp(7px,1vh,12px); }
+    .nav { position:fixed; z-index:10; top:50%; transform:translateY(-50%); width:clamp(40px,4vw,54px); height:clamp(40px,4vw,54px); border-radius:50%; border:1px solid var(--border); background:rgba(17,17,40,.9); color:var(--bright); font-size:clamp(26px,2.5vw,38px); cursor:pointer; display:grid; place-items:center; transition:opacity .2s,transform .2s,border-color .2s; }
+    .nav:hover { border-color:var(--cyan); transform:translateY(-50%) scale(1.06); } .nav:disabled { opacity:0; pointer-events:none; }
+    #prev { left:clamp(8px,1.5vw,22px); } #next { right:clamp(8px,1.5vw,22px); }
+    .progress-track { position:fixed; z-index:12; left:0; bottom:0; width:100%; height:clamp(3px,.4vh,5px); background:var(--border); }
+    #progress { height:100%; width:12.5%; background:linear-gradient(90deg,var(--purple),var(--cyan)); transition:width .55s ease; }
+    #counter { position:fixed; z-index:11; right:clamp(18px,3vw,44px); bottom:clamp(14px,2.5vh,28px); color:var(--dim); font-size:clamp(11px,1vw,14px); font-weight:600; }
+    #swipeHint { position:fixed; z-index:11; left:50%; bottom:clamp(16px,2.5vh,30px); transform:translateX(-50%); color:var(--dim); font-size:clamp(10px,1vw,13px); animation:pulse 1.8s ease-in-out infinite; transition:opacity .3s; }
+    #swipeHint.hidden { opacity:0; pointer-events:none; animation:none; }
+    @keyframes pulse { 0%,100%{opacity:.45;transform:translateX(-50%)} 50%{opacity:1;transform:translateX(-50%) translateY(clamp(-3px,-.3vh,-1px))} }
+    @media (max-width:700px) { .slide{padding:clamp(52px,7vh,66px) clamp(18px,5vw,30px) clamp(48px,7vh,64px)} .summary,.cols2{grid-template-columns:1fr}.flow-card{grid-template-columns:1fr;gap:clamp(2px,.4vh,4px)} .nav{top:auto;bottom:clamp(10px,1.5vh,16px);transform:none}.nav:hover{transform:scale(1.04)} .content{justify-content:flex-start}.slide-tag,.slide-number{top:clamp(17px,2.5vh,25px)} }
+    @media (max-height:760px) and (min-width:701px) { .content{justify-content:flex-start}.slide{padding-top:clamp(48px,7vh,62px)} }
+  </style>
+</head>
+<body>
+  <main id="deck">
+
+    <!-- 1: The Bug -->
+    <section class="slide">
+      <div class="slide-tag">Fantastic MSVC Bugs #2/N</div><div class="slide-number">01</div>
+      <div class="content">
+        <div class="heading-row"><h1>The Two-Widenings Bug</h1><span class="badge red">MISCOMPILATION</span></div>
+        <p class="subtitle">MSVC <strong>/O2</strong> miscompiles a <code>short</code> → <code>unsigned int</code> widening and reuses the wrong sign extension</p>
+        <div class="cards">
+          <div class="card red"><strong class="red-text">The bug:</strong> <code>res = (unsigned int)v4</code> where <code>v4</code> is a <code>short</code> holding <code>-1</code> must store <strong>4294967295</strong>. Under MSVC v19.51 <strong>/O2</strong> it stores <strong class="red-text">-1</strong>.</div>
+          <div class="card cyan"><strong class="cyan-text">Reported by:</strong> Ofek Shilon — Microsoft Developer Community, July 2026. More convoluted than bug #1 (3 nested loops), but still a reasonable compiler-bug repro. The repro is fragile and sensitive to register allocation.</div>
+          <div class="card purple"><strong class="purple-text">Regression:</strong> v19.50 /O2 compiles it correctly. Only v19.51 (VS 18.6) /O2 is broken — and unlike bug #1, <strong>/O1 is NOT affected</strong>.</div>
+        </div>
+        <div class="links">
+          <a class="cy" href="https://compiler-explorer.com/z/36z713q78" target="_blank" rel="noopener">Repro on Compiler Explorer ↗</a>
+          <a class="ye" href="https://developercommunity.visualstudio.com/t/MSVC-O2-miscompiles-short-to-unsigned-w/11127140" target="_blank" rel="noopener">Bug report ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2: The Repro -->
+    <section class="slide dense">
+      <div class="slide-tag">The Repro</div><div class="slide-number">02</div>
+      <div class="content">
+        <h1>One Store, Two Answers</h1>
+        <div class="cols2">
+          <pre><code><span class="pre">#include</span> <span class="op">&lt;</span><span class="lib">stdio.h</span><span class="op">&gt;</span>
+
+<span class="type">int</span> v0 <span class="op">=</span> <span class="num">1</span>;   <span class="type">int</span> v1 <span class="op">=</span> <span class="num">1</span>;   <span class="type">int</span> v2 <span class="op">=</span> <span class="num">-84</span>;
+<span class="type">long long int</span> v3 <span class="op">=</span> <span class="num">-1</span>;
+<span class="type">short</span> v4 <span class="op">=</span> <span class="num">-1</span>;
+<span class="type">int</span> b <span class="op">=</span> <span class="num">0</span>;
+<span class="type">long long int</span> res <span class="op">=</span> <span class="num">1</span>;
+
+<span class="kw">constexpr</span> <span class="type">void</span> <span class="fn">test</span>(<span class="type">int</span> v0, <span class="type">int</span> v1, <span class="type">int</span> v2,
+        <span class="type">long long int</span> v3, <span class="type">short</span> v4) {
+  <span class="kw">for</span> (<span class="type">int</span> i_0 <span class="op">=</span> <span class="num">0</span>; i_0 <span class="op">&lt;</span> (<span class="type">int</span>)(v3 <span class="op">&gt;=</span> v4); i_0 <span class="op">+=</span> <span class="num">1</span>) {
+    <span class="kw">for</span> (<span class="type">int</span> i_2 <span class="op">=</span> <span class="num">0</span>; i_2 <span class="op">&lt;</span> v1; i_2 <span class="op">+=</span> <span class="num">1</span>) {
+      <span class="fn">printf</span>(<span class="str">"x"</span>);
+      <span class="kw">if</span> (v2 <span class="op">&lt;</span> (<span class="type">unsigned int</span>)(v1 <span class="op">?</span> <span class="num">-2</span> <span class="op">:</span> <span class="num">-1</span>)) {
+        <span class="kw">for</span> (<span class="type">int</span> i_4 <span class="op">=</span> <span class="num">1</span>; i_4 <span class="op">&lt;</span> <span class="num">2</span>; i_4 <span class="op">+=</span> (v4 <span class="op">?</span> v0 <span class="op">:</span> <span class="num">1</span>))
+          b <span class="op">=</span> v1 <span class="op">&amp;&amp;</span> v0;
+      }
+    }
+    res <span class="op">=</span> (<span class="type">unsigned int</span>)v4;   <span class="cmt">// ← the victim</span>
+  }
+}
+
+<span class="type">int</span> <span class="fn">main</span>() {
+  <span class="fn">test</span>(v0, v1, v2, v3, v4);
+  <span class="fn">printf</span>(<span class="str">"%lld\n"</span>, res);
+}</code></pre>
+          <div class="cards">
+            <div class="outbox"><span class="lbl">x64 msvc v19.51 — /Od (and GCC, Clang at any level)</span><span class="green-text">x4294967295</span> ✅</div>
+            <div class="outbox"><span class="lbl">x64 msvc v19.51 — /O2</span><span class="red-text">x-1</span> ❌</div>
+            <div class="card cyan"><strong class="cyan-text">The semantics:</strong> <code>(unsigned int)v4</code> = <code>(unsigned int)(-1)</code> = <strong>0xFFFFFFFF</strong> = 4 294 967 295. Converting that to <code>long long</code> is value-preserving: <code>res</code> must be <strong>4294967295</strong>.</div>
+            <div class="card purple"><strong class="purple-text">No UB escape hatch:</strong> the function is <code>constexpr</code>-callable — the whole program is UB-free, so the compiler has no license to do this.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3: Two widenings -->
+    <section class="slide">
+      <div class="slide-tag">Root Cause</div><div class="slide-number">03</div>
+      <div class="content">
+        <h1>v4 Must Be Widened Two Different Ways</h1>
+        <p class="subtitle">Same 16-bit source value — two different 64-bit results</p>
+        <table class="cmp">
+          <tr><th>Use in source</th><th>Conversion chain</th><th>64-bit value for <code>v4 = -1</code></th></tr>
+          <tr><td><code>v3 &gt;= v4</code></td><td><code>short</code> → <code>long long</code> (sign-extend all the way)</td><td><code class="red-text">0xFFFFFFFFFFFFFFFF</code> (−1)</td></tr>
+          <tr><td><code>res = (unsigned int)v4</code></td><td><code>short</code> → <code>int</code> (sign-extend) → <code>unsigned int</code> (reinterpret) → <code>long long</code> (zero-extend)</td><td><code class="green-text">0x00000000FFFFFFFF</code> (4294967295)</td></tr>
+        </table>
+        <div class="card yellow"><strong class="yellow-text">Claude's assembly-level diagnosis (quoted in the report):</strong> "The source needs v4 widened two different ways. MSVC /O2 computes only one and reuses it."</div>
+        <div class="card cyan"><strong class="cyan-text">In x64 terms:</strong> use #1 needs <code>movsx rax, v4</code> (sign-extend 16→64). Use #2 needs <code>movsx eax, v4</code> (sign-extend 16→32; writing a 32-bit register zero-extends the upper half for free). MSVC computed the first and reused it for the second.</div>
+      </div>
+    </section>
+
+    <!-- 4: The assembly -->
+    <section class="slide dense">
+      <div class="slide-tag">Root Cause — The Assembly</div><div class="slide-number">04</div>
+      <div class="content">
+        <h1>Right Value Computed, Then Thrown Away</h1>
+        <p class="subtitle">MSVC v19.51 /O2, <code>main</code> with <code>test</code> inlined — verified via the Compiler Explorer API</p>
+        <div class="cols2">
+          <pre><code><span class="cmt">; v4 sign-extended to 64 bits — for v3 &gt;= v4</span>
+<span class="fn">movsx</span>   <span class="reg">rbp</span>, WORD PTR v4      <span class="cmt">; rbp = 0xFFFF…FFFF</span>
+<span class="fn">cmp</span>     QWORD PTR v3, <span class="reg">rbp</span>     <span class="cmt">; -1 &gt;= -1 ✓</span>
+…
+<span class="cmt">; correct value for res prepared BEFORE the loop:</span>
+<span class="fn">mov</span>     <span class="reg">eax</span>, <span class="reg">ebp</span>              <span class="cmt">; rax = 0x00000000FFFFFFFF ✅</span>
+…
+$LL9@main:                     <span class="cmt">; inner loop body</span>
+<span class="fn">call</span>    printf                 <span class="cmt">; ← rax clobbered!</span>
+…
+<span class="fn">mov</span>     <span class="reg">eax</span>, <span class="num">1</span>                <span class="cmt">; ← rax reused as counter</span>
+…
+<span class="cmt">; after the loop, rax re-materialized:</span>
+<span class="fn">mov</span>     <span class="reg">rax</span>, <span class="reg">rbp</span>              <span class="cmt">; rax = 0xFFFF…FFFF ❌ WRONG</span>
+$LN8@main:
+<span class="fn">mov</span>     QWORD PTR res, <span class="reg">rax</span>    <span class="cmt">; res = -1</span></code></pre>
+          <div class="cards">
+            <div class="card green"><strong class="green-text">Step 1 — correct:</strong> before the loop, <code>mov eax, ebp</code> builds the zero-extended value <code>0x00000000FFFFFFFF</code> in <code>rax</code>. This is exactly what <code>res</code> needs.</div>
+            <div class="card yellow"><strong class="yellow-text">Step 2 — the clobber:</strong> the inner loop uses <code>rax</code> for the <code>printf</code> call and as the <code>i_4</code> loop counter. The prepared value doesn't survive.</div>
+            <div class="card red"><strong class="red-text">Step 3 — the bug:</strong> after the loop MSVC re-materializes <code>rax</code> from the 64-bit sign-extended copy: <code>mov rax, rbp</code> — reusing widening #1 where widening #2 is required. <code>res</code> gets −1.</div>
+            <div class="card cyan"><strong class="cyan-text">The fix is one letter:</strong> <code>mov <strong>e</strong>ax, ebp</code> instead of <code>mov <strong>r</strong>ax, rbp</code>. The rematerialization logic treats the two widenings of <code>v4</code> as the same value — they are not.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5: Failed fix -->
+    <section class="slide">
+      <div class="slide-tag">Workarounds</div><div class="slide-number">05</div>
+      <div class="content">
+        <div class="heading-row"><h1>The Fix That Doesn't Work</h1><span class="badge red">FAILED ❌</span></div>
+        <p class="subtitle">Same lesson as bug #1: intermediate variables and casts cannot beat value tracking</p>
+        <pre><code><span class="cmt">// Attempted fix: force the conversion through a separate unsigned variable</span>
+<span class="type">unsigned int</span> tmp <span class="op">=</span> (<span class="type">unsigned int</span>)v4;
+res <span class="op">=</span> tmp;</code></pre>
+        <div class="cards">
+          <div class="card red"><strong class="red-text">Result:</strong> still prints <strong>x-1</strong> under /O2 (verified on MSVC v19.51). The optimizer tracks <code>tmp</code> back to <code>v4</code> and re-materializes it from the same wrong 64-bit register.</div>
+          <div class="card cyan"><strong class="cyan-text">Pattern confirmed:</strong> in bug #1 the wrong <em>range</em> was tracked through every cast; here the wrong <em>widened register</em> is reused through every intermediate variable. Source-level laundering does not survive the optimizer — you must break its value tracking, not re-express the value.</div>
+        </div>
+        <div class="links">
+          <a class="rd" href="https://godbolt.org/z/qE1dYjc6z" target="_blank" rel="noopener">Cast fix failed ❌ — z/qE1dYjc6z</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6: volatile fix -->
+    <section class="slide">
+      <div class="slide-tag">Workarounds</div><div class="slide-number">06</div>
+      <div class="content">
+        <div class="heading-row"><h1>The Fix That Works — volatile</h1><span class="badge green">WORKS ✅</span></div>
+        <p class="subtitle">A forced memory round-trip severs the link to the wrongly-widened register</p>
+        <pre><code><span class="cmt">// Fix: volatile forces a real store + reload — the optimizer</span>
+<span class="cmt">// can no longer re-materialize res from the sign-extended copy of v4</span>
+<span class="kw">volatile</span> <span class="type">unsigned int</span> tmp <span class="op">=</span> (<span class="type">unsigned int</span>)v4;
+res <span class="op">=</span> tmp;</code></pre>
+        <div class="cards">
+          <div class="card green"><strong class="green-text">Result:</strong> prints <strong>x4294967295</strong> under /O2 (verified on MSVC v19.51). The value written to <code>tmp</code> must be a genuine 32-bit <code>unsigned int</code> in memory, and the reload zero-extends it correctly.</div>
+          <div class="card cyan"><strong class="cyan-text">Why it works:</strong> <code>volatile</code> makes the store and load observable side effects. The optimizer cannot substitute its register copy of <code>v4</code> for the reload — the one substitution that was producing the wrong value.</div>
+        </div>
+        <div class="links">
+          <a class="gr" href="https://godbolt.org/z/rMedMTsxx" target="_blank" rel="noopener">volatile fix works ✅ — z/rMedMTsxx</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7: pragma fix -->
+    <section class="slide">
+      <div class="slide-tag">Workarounds</div><div class="slide-number">07</div>
+      <div class="content">
+        <div class="heading-row"><h1>The Fix That Works — #pragma optimize</h1><span class="badge green">WORKS ✅</span></div>
+        <p class="subtitle">Disable optimization for the affected function only — pragma goes OUTSIDE the function</p>
+        <pre><code><span class="pre">#pragma optimize</span>(<span class="str">""</span>, off)
+<span class="type">void</span> <span class="fn">test</span>(<span class="type">int</span> v0, <span class="type">int</span> v1, <span class="type">int</span> v2, <span class="type">long long int</span> v3, <span class="type">short</span> v4) {
+    <span class="cmt">/* … unchanged … */</span>
+}
+<span class="pre">#pragma optimize</span>(<span class="str">""</span>, on)</code></pre>
+        <div class="cards">
+          <div class="card green"><strong class="green-text">Result:</strong> prints <strong>x4294967295</strong> under /O2 (verified on MSVC v19.51). The whole function compiles as if /Od, so the bogus rematerialization never happens.</div>
+          <div class="card purple"><strong class="purple-text">Two more flag-level escapes:</strong> compile the affected file with <strong>/O1</strong> (not affected by this bug — unlike bug #1!) or pin the toolset to <strong>v19.50</strong>, which compiles the original code correctly at /O2.</div>
+        </div>
+        <div class="summary">
+          <div class="card cyan"><strong class="summary-title">volatile</strong>One extra store/load. Most surgical — keeps /O2 for everything else.</div>
+          <div class="card cyan"><strong class="summary-title">#pragma optimize</strong>Deoptimizes one function. Most reliable — immune to this whole bug class.</div>
+        </div>
+        <div class="links">
+          <a class="gr" href="https://godbolt.org/z/4dvdKvKc8" target="_blank" rel="noopener">pragma fix works ✅ — z/4dvdKvKc8</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 8: Takeaways -->
+    <section class="slide">
+      <div class="slide-tag">Takeaways</div><div class="slide-number">08</div>
+      <div class="content">
+        <h1>Bug #1 vs Bug #2 — Same Species</h1>
+        <table class="cmp">
+          <tr><th></th><th>#1 — Euclidean Remainder Fallacy</th><th>#2 — Two-Widenings Bug</th></tr>
+          <tr><td><strong>Wrong assumption</strong></td><td><code>%</code> range is Euclidean <code>[0, d−1]</code></td><td>one widening of a <code>short</code> fits all uses</td></tr>
+          <tr><td><strong>Affected levels</strong></td><td class="red-text">/O1 and /O2</td><td class="red-text">/O2 only</td></tr>
+          <tr><td><strong>Regressed in</strong></td><td>v19.51</td><td>v19.51 (v19.50 OK; repro fragile)</td></tr>
+          <tr><td><strong>Cast workaround</strong></td><td class="red-text">fails ❌</td><td class="red-text">fails ❌</td></tr>
+          <tr><td><strong>volatile / pragma</strong></td><td class="green-text">work ✅</td><td class="green-text">work ✅</td></tr>
+        </table>
+        <div class="cards">
+          <div class="card yellow"><strong class="yellow-text">The common thread:</strong> both bugs live in MSVC's value-tracking machinery — a wrong fact about a value (its range, its widened form) is derived once and then confidently propagated everywhere. Source-level re-expression can't fix it; only breaking the tracking (<code>volatile</code>) or disabling the pass (<code>#pragma</code>, /Od) can.</div>
+          <div class="card cyan"><strong class="cyan-text">Credits:</strong> bug found and reported by <strong>Ofek Shilon</strong> ("Fantastic MSVC bugs and how to find them #2/N"). Root-cause lead: Claude-assisted assembly analysis. Reproduction, assembly verification, and workaround testing for this deck: Amp + Compiler Explorer API, MSVC v19.51 VS18.6.</div>
+        </div>
+        <div class="links">
+          <a class="cy" href="https://compiler-explorer.com/z/36z713q78" target="_blank" rel="noopener">Original repro ↗</a>
+          <a class="rd" href="https://godbolt.org/z/qE1dYjc6z" target="_blank" rel="noopener">Cast fix failed ❌</a>
+          <a class="gr" href="https://godbolt.org/z/rMedMTsxx" target="_blank" rel="noopener">volatile works ✅</a>
+          <a class="gr" href="https://godbolt.org/z/4dvdKvKc8" target="_blank" rel="noopener">pragma works ✅</a>
+          <a class="ye" href="https://developercommunity.visualstudio.com/t/MSVC-O2-miscompiles-short-to-unsigned-w/11127140" target="_blank" rel="noopener">Bug report ↗</a>
+          <a class="pu" href="Euclidean_Remainder_Fallacy_Presentation.html" target="_blank" rel="noopener">Bug #1 deck ↗</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <button class="nav" id="prev" aria-label="Previous slide">&lt;</button>
+  <button class="nav" id="next" aria-label="Next slide">&gt;</button>
+  <div id="swipeHint">← Swipe to navigate →</div>
+  <div id="counter" aria-live="polite">1 / 8</div>
+  <div class="progress-track"><div id="progress"></div></div>
+  <script>
+    (() => {
+      const total = 8;
+      let current = 0, touchStart = null, mouseStart = null;
+      const deck = document.getElementById('deck');
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const progress = document.getElementById('progress');
+      const counter = document.getElementById('counter');
+      const hint = document.getElementById('swipeHint');
+      function show(index) {
+        current = Math.max(0, Math.min(total - 1, index));
+        deck.style.transform = `translateX(-${current * 100}vw)`;
+        prev.disabled = current === 0;
+        next.disabled = current === total - 1;
+        progress.style.width = `${((current + 1) / total) * 100}%`;
+        counter.textContent = `${current + 1} / ${total}`;
+        if (current > 0) hint.classList.add('hidden');
+      }
+      prev.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(current + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); show(current - 1); }
+      });
+      document.addEventListener('touchstart', e => { touchStart = e.changedTouches[0].clientX; }, {passive:true});
+      document.addEventListener('touchend', e => { if (touchStart === null) return; const d = e.changedTouches[0].clientX - touchStart; if (Math.abs(d) >= 50) show(current + (d < 0 ? 1 : -1)); touchStart = null; }, {passive:true});
+      document.addEventListener('mousedown', e => { if (!e.target.closest('button')) mouseStart = e.clientX; });
+      document.addEventListener('mouseup', e => { if (mouseStart === null) return; const d = e.clientX - mouseStart; if (Math.abs(d) >= 50) show(current + (d < 0 ? 1 : -1)); mouseStart = null; });
+      show(0);
+    })();
+  </script>
+</body>
+</html>
