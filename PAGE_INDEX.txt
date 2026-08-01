@@ -49,127 +49,130 @@ Last updated: 2026-08-01
 13. MLX5-to-Zephyr-MISRA-Journey.html
    https://zuwasi.github.io/Public-html-pages/MLX5-to-Zephyr-MISRA-Journey.html
 
-14. NotebookComparison_Presentation.html
+14. MSVC_Two_Widenings_Bug_Presentation.html
+   https://zuwasi.github.io/Public-html-pages/MSVC_Two_Widenings_Bug_Presentation.html
+
+15. NotebookComparison_Presentation.html
    https://zuwasi.github.io/Public-html-pages/NotebookComparison_Presentation.html
 
-15. Quantum_MathBridge.html
+16. Quantum_MathBridge.html
    https://zuwasi.github.io/Public-html-pages/Quantum_MathBridge.html
 
-16. SBOMator_vs_FiniteState_Decision.html
+17. SBOMator_vs_FiniteState_Decision.html
    https://zuwasi.github.io/Public-html-pages/SBOMator_vs_FiniteState_Decision.html
 
-17. Trivy-Attack-SBOMator-Defense.html
+18. Trivy-Attack-SBOMator-Defense.html
    https://zuwasi.github.io/Public-html-pages/Trivy-Attack-SBOMator-Defense.html
 
-18. Unified_Intelligence_Platform_Proposal.html
+19. Unified_Intelligence_Platform_Proposal.html
    https://zuwasi.github.io/Public-html-pages/Unified_Intelligence_Platform_Proposal.html
 
-19. VeriMath_Pitch_Abel_Nazareth.html
+20. VeriMath_Pitch_Abel_Nazareth.html
    https://zuwasi.github.io/Public-html-pages/VeriMath_Pitch_Abel_Nazareth.html
 
-20. agent-halflife-tester.html
+21. agent-halflife-tester.html
    https://zuwasi.github.io/Public-html-pages/agent-halflife-tester.html
 
-21. ai-coding-agent-cost-calculator.html
+22. ai-coding-agent-cost-calculator.html
    https://zuwasi.github.io/Public-html-pages/ai-coding-agent-cost-calculator.html
 
-22. ai_agent_eval_presentation.html
+23. ai_agent_eval_presentation.html
    https://zuwasi.github.io/Public-html-pages/ai_agent_eval_presentation.html
 
-23. amp-arupilot-security-benchmark.html
+24. amp-arupilot-security-benchmark.html
    https://zuwasi.github.io/Public-html-pages/amp-arupilot-security-benchmark.html
 
-24. amp-deep3-vs-claude-opus47-benchmark.html
+25. amp-deep3-vs-claude-opus47-benchmark.html
    https://zuwasi.github.io/Public-html-pages/amp-deep3-vs-claude-opus47-benchmark.html
 
-25. amp-lost-in-the-middle-presentation.html
+26. amp-lost-in-the-middle-presentation.html
    https://zuwasi.github.io/Public-html-pages/amp-lost-in-the-middle-presentation.html
 
-26. ampcode-mcp-defense-presentation.html
+27. ampcode-mcp-defense-presentation.html
    https://zuwasi.github.io/Public-html-pages/ampcode-mcp-defense-presentation.html
 
-27. ampcode-prompt-injection-immunity.html
+28. ampcode-prompt-injection-immunity.html
    https://zuwasi.github.io/Public-html-pages/ampcode-prompt-injection-immunity.html
 
-28. ampcode-vs-claudecode-presentation.html
+29. ampcode-vs-claudecode-presentation.html
    https://zuwasi.github.io/Public-html-pages/ampcode-vs-claudecode-presentation.html
 
-29. answer-to-tannenbaum-concern.html
+30. answer-to-tannenbaum-concern.html
    https://zuwasi.github.io/Public-html-pages/answer-to-tannenbaum-concern.html
 
-30. asn1c-cpp26-modernization.html
+31. asn1c-cpp26-modernization.html
    https://zuwasi.github.io/Public-html-pages/asn1c-cpp26-modernization.html
 
-31. asn1c-workbench-amp-presentation.html
+32. asn1c-workbench-amp-presentation.html
    https://zuwasi.github.io/Public-html-pages/asn1c-workbench-amp-presentation.html
 
-32. baboons-benchmark-report.html
+33. baboons-benchmark-report.html
    https://zuwasi.github.io/Public-html-pages/baboons-benchmark-report.html
 
-33. baboons-face-off.html
+34. baboons-face-off.html
    https://zuwasi.github.io/Public-html-pages/baboons-face-off.html
 
-34. comparison-presentation-detailed.html
+35. comparison-presentation-detailed.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-detailed.html
 
-35. comparison-presentation-executive.html
+36. comparison-presentation-executive.html
    https://zuwasi.github.io/Public-html-pages/comparison-presentation-executive.html
 
-36. comparison-report.html
+37. comparison-report.html
    https://zuwasi.github.io/Public-html-pages/comparison-report.html
 
-37. cpp26-embedded-mavlink.html
+38. cpp26-embedded-mavlink.html
    https://zuwasi.github.io/Public-html-pages/cpp26-embedded-mavlink.html
 
-38. cuda-to-axelera-migration.html
+39. cuda-to-axelera-migration.html
    https://zuwasi.github.io/Public-html-pages/cuda-to-axelera-migration.html
 
-39. embedox-misra-c2023-presentation.html
+40. embedox-misra-c2023-presentation.html
    https://zuwasi.github.io/Public-html-pages/embedox-misra-c2023-presentation.html
 
-40. endorlabs-amp-integration-presentation.html
+41. endorlabs-amp-integration-presentation.html
    https://zuwasi.github.io/Public-html-pages/endorlabs-amp-integration-presentation.html
 
-41. final-scores.html
+42. final-scores.html
    https://zuwasi.github.io/Public-html-pages/final-scores.html
 
-42. harness-beats-model.html
+43. harness-beats-model.html
    https://zuwasi.github.io/Public-html-pages/harness-beats-model.html
 
-43. harness-story-backup.html
+44. harness-story-backup.html
    https://zuwasi.github.io/Public-html-pages/harness-story-backup.html
 
-44. harness-story.html
+45. harness-story.html
    https://zuwasi.github.io/Public-html-pages/harness-story.html
 
-45. hiring-agent-presentation.html
+46. hiring-agent-presentation.html
    https://zuwasi.github.io/Public-html-pages/hiring-agent-presentation.html
 
-46. nesher2gm-pentest-operator-guide.html
+47. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-47. nono-ampcode-presentation.html
+48. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-48. optical-ai-network-comparison-presentation.html
+49. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-49. proof-lean-cbmc.html
+50. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-50. rna-transcript-svd-lean4-presentation.html
+51. rna-transcript-svd-lean4-presentation.html
    https://zuwasi.github.io/Public-html-pages/rna-transcript-svd-lean4-presentation.html
 
-51. skillspector-droid-locate-and-judge.html
+52. skillspector-droid-locate-and-judge.html
    https://zuwasi.github.io/Public-html-pages/skillspector-droid-locate-and-judge.html
 
-52. static-code-analysis-2026.html
+53. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-53. why-amp-doesnt-need-node9-proxy.html
+54. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-54. wolfram-engine-gpu-demo-presentation.html
+55. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
 ──────────────────────────────────────────────────────────────
