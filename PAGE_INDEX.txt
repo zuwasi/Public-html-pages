@@ -263,6 +263,9 @@ Last updated: 2026-08-01
 • level5-safety-pipeline
   https://zuwasi.github.io/Public-html-pages/level5-safety-pipeline
 
+• mysticeti-consensus-digital-twin
+  https://zuwasi.github.io/Public-html-pages/mysticeti-consensus-digital-twin
+
 • nono-logo.png
   https://zuwasi.github.io/Public-html-pages/nono-logo.png
 
