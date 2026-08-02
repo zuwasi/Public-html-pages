@@ -5,16 +5,16 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; script-src 'unsafe-inline'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#07111f">
-  <meta name="description" content="Mysticeti Consensus Digital Twin: an Amp, Wolfram Mathematica, and Lean 4 workflow for production-relevant blockchain consensus research.">
+  <meta name="description" content="Mysticeti Consensus Digital Twin: an Amp, Rust, Wolfram Mathematica, and Lean 4 workflow for bounded consensus research.">
   <link rel="canonical" href="https://zuwasi.github.io/Public-html-pages/mysticeti-consensus-digital-twin/">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://zuwasi.github.io/Public-html-pages/mysticeti-consensus-digital-twin/">
-  <meta property="og:title" content="Mysticeti Consensus Digital Twin — Amp + Wolfram + Lean 4">
+  <meta property="og:title" content="Mysticeti Consensus Digital Twin - Amp + Rust + Wolfram + Lean 4">
   <meta property="og:description" content="Executable consensus simulation, Lean-checked quorum proofs, workflow diagrams, and practical Sui implications by ESL.">
   <meta property="og:image" content="https://zuwasi.github.io/Public-html-pages/mysticeti-consensus-digital-twin/slides/slide-01.jpg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Mysticeti Consensus Digital Twin">
-  <meta name="twitter:description" content="Amp + Wolfram Mathematica + Lean 4 for production-relevant blockchain consensus research.">
+  <meta name="twitter:description" content="Amp + Rust + Wolfram Mathematica + Lean 4 for bounded blockchain consensus research.">
   <meta name="twitter:image" content="https://zuwasi.github.io/Public-html-pages/mysticeti-consensus-digital-twin/slides/slide-01.jpg">
   <title>Mysticeti Consensus Digital Twin — ESL</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,7 +60,7 @@
 
     .deck {
       display: flex;
-      width: 1700vw;
+      width: 2100vw;
       height: 100%;
       transform: translate3d(calc(var(--slide) * -100vw), 0, 0);
       transition: transform 480ms cubic-bezier(.22, .8, .22, 1);
@@ -173,7 +173,7 @@
     }
 
     .progress {
-      width: 5.8823529%;
+      width: 4.7619048%;
       height: 100%;
       background: linear-gradient(90deg, var(--cyan), var(--violet), var(--green));
       box-shadow: 0 0 16px rgba(36, 213, 255, .45);
@@ -238,7 +238,7 @@
     @media (max-width: 700px) {
       .slide { padding: 48px 8px 42px; }
       .slide img { border-radius: 4px; }
-      .chip { display: none; }
+      .chip.brand { display: none; }
       .nav { top: auto; bottom: 12px; transform: none; width: 40px; height: 40px; font-size: 28px; }
       .nav:hover { transform: scale(1.04); }
       .counter { bottom: 13px; right: 50%; transform: translateX(50%); }
@@ -262,37 +262,42 @@
 </head>
 <body>
   <div class="topbar" aria-label="Presentation links and controls">
-    <a class="chip" href="https://eswlab.com/" target="_blank" rel="noopener"><strong>ESL</strong> Engineering Software Lab</a>
+    <button class="chip" id="home" type="button" aria-label="Go to slide 1" title="Home (Home key)"><strong>⌂</strong> Home</button>
+    <a class="chip brand" href="https://eswlab.com/" target="_blank" rel="noopener"><strong>ESL</strong> Engineering Software Lab</a>
     <a class="icon-button" href="https://il.linkedin.com/in/liezrowice" target="_blank" rel="noopener" aria-label="Daniel Liezrowice on LinkedIn" title="Daniel Liezrowice on LinkedIn">in</a>
     <button class="icon-button" id="fullscreen" type="button" aria-label="Toggle fullscreen" title="Fullscreen (F)">⛶</button>
   </div>
 
   <main class="viewport" id="viewport" aria-label="Mysticeti Consensus Digital Twin presentation">
     <div class="deck" id="deck">
-      <section class="slide" data-title="Mysticeti Consensus Digital Twin"><img src="slides/slide-01.jpg" alt="Title: Mysticeti Consensus Digital Twin — Amp, Wolfram Mathematica, and Lean 4" fetchpriority="high"></section>
+      <section class="slide" data-title="Mysticeti Consensus Digital Twin"><img src="slides/slide-01.jpg" alt="Title: Mysticeti Consensus Digital Twin - Amp, Wolfram Mathematica, Lean 4, and Rust" fetchpriority="high"></section>
       <section class="slide" data-title="Why Mysticeti"><img src="slides/slide-02.jpg" alt="Why Mysticeti: NDSS 2025 research deployed on Sui Mainnet" loading="lazy"></section>
       <section class="slide" data-title="The proof-to-production challenge"><img src="slides/slide-03.jpg" alt="The challenge: separate paper claims, executable models, formal proofs, reported data, and production equivalence" loading="lazy"></section>
-      <section class="slide" data-title="Amp orchestration workflow"><img src="slides/slide-04.jpg" alt="Workflow diagram: paper, Amp claim ledger, normalized mathematics, Wolfram and Lean lanes, cross-check, implications" loading="lazy"></section>
+      <section class="slide" data-title="Amp orchestration workflow"><img src="slides/slide-04.jpg" alt="Amp workflow with Rust, Mathematica, and Lean lanes converging at an evidence gate" loading="lazy"></section>
       <section class="slide" data-title="Evidence hierarchy"><img src="slides/slide-05.jpg" alt="Evidence hierarchy and trust boundaries" loading="lazy"></section>
       <section class="slide" data-title="Inside the Mysticeti DAG"><img src="slides/slide-06.jpg" alt="Mysticeti educational DAG showing rounds, validators, and equivocation" loading="lazy"></section>
       <section class="slide" data-title="A certificate is not a commit"><img src="slides/slide-07.jpg" alt="Direct-decision anatomy: proposal, support quorum, certificate quorum, commit, and skip" loading="lazy"></section>
       <section class="slide" data-title="Consensus Safety Microscope"><img src="slides/slide-08.jpg" alt="Interactive Wolfram Consensus Safety Microscope" loading="lazy"></section>
-      <section class="slide" data-title="Wolfram architecture"><img src="slides/slide-09.jpg" alt="Wolfram package architecture, executable fixtures, and generated evidence" loading="lazy"></section>
-      <section class="slide" data-title="Lean quorum proof"><img src="slides/slide-10.jpg" alt="Lean proof chain: quorum intersection and honest overlap" loading="lazy"></section>
-      <section class="slide" data-title="Lean theorem coverage"><img src="slides/slide-11.jpg" alt="Lean theorem coverage and explicit exclusions" loading="lazy"></section>
-      <section class="slide" data-title="Safety envelope"><img src="slides/slide-12.jpg" alt="Equal-authority quorum safety envelope" loading="lazy"></section>
-      <section class="slide" data-title="Synthetic fault sensitivity"><img src="slides/slide-13.jpg" alt="Uncalibrated synthetic fault sensitivity chart" loading="lazy"></section>
-      <section class="slide" data-title="Paper-reported production benchmark"><img src="slides/slide-14.jpg" alt="CSV transcription of Mysticeti NDSS 2025 Table I production comparison" loading="lazy"></section>
-      <section class="slide" data-title="Practical implications"><img src="slides/slide-15.jpg" alt="Practical implications and developer checklist" loading="lazy"></section>
-      <section class="slide" data-title="Reproducible evidence gate"><img src="slides/slide-16.jpg" alt="Combined Wolfram and Lean reproducibility workflow and validation results" loading="lazy"></section>
-      <section class="slide" data-title="Contact Daniel Liezrowice"><img src="slides/slide-17.jpg" alt="Daniel Liezrowice with a goat, ESL and LinkedIn contact details" loading="lazy"></section>
+      <section class="slide" data-title="Rust architecture"><img src="slides/slide-09.jpg" alt="Bounded Rust digital twin architecture" loading="lazy"></section>
+      <section class="slide" data-title="Causal network"><img src="slides/slide-10.jpg" alt="Receiver-specific event delivery, local views, deadlines, parent selection, and fault effects" loading="lazy"></section>
+      <section class="slide" data-title="Actual Rust output"><img src="slides/slide-11.jpg" alt="Actual Rust terminal output with tests, trace, replay, and benchmark evidence" loading="lazy"></section>
+      <section class="slide" data-title="Rust fault campaign"><img src="slides/slide-12.jpg" alt="Deterministic 20-seed 80-row Rust loss campaign" loading="lazy"></section>
+      <section class="slide" data-title="Wolfram architecture"><img src="slides/slide-13.jpg" alt="Wolfram package architecture and conformance evidence" loading="lazy"></section>
+      <section class="slide" data-title="Lean quorum proof"><img src="slides/slide-14.jpg" alt="Lean proof chain: quorum intersection and honest overlap" loading="lazy"></section>
+      <section class="slide" data-title="Lean theorem coverage"><img src="slides/slide-15.jpg" alt="Lean theorem coverage and explicit exclusions" loading="lazy"></section>
+      <section class="slide" data-title="Safety envelope"><img src="slides/slide-16.jpg" alt="Equal-authority quorum safety envelope" loading="lazy"></section>
+      <section class="slide" data-title="Synthetic fault sensitivity"><img src="slides/slide-17.jpg" alt="Uncalibrated synthetic fault sensitivity chart" loading="lazy"></section>
+      <section class="slide" data-title="Paper-reported production benchmark"><img src="slides/slide-18.jpg" alt="CSV transcription of Mysticeti NDSS 2025 Table I production comparison" loading="lazy"></section>
+      <section class="slide" data-title="Practical implications"><img src="slides/slide-19.jpg" alt="Practical implications and revision-pinned Sui adapter path" loading="lazy"></section>
+      <section class="slide" data-title="Three-lane evidence gate"><img src="slides/slide-20.jpg" alt="Rust, Wolfram, and Lean release gate with actual validation results" loading="lazy"></section>
+      <section class="slide" data-title="Contact Daniel Liezrowice"><img src="slides/slide-21.jpg" alt="Daniel Liezrowice with a goat, ESL and LinkedIn contact details" loading="lazy"></section>
     </div>
   </main>
 
   <button class="nav prev" id="prev" type="button" aria-label="Previous slide">‹</button>
   <button class="nav next" id="next" type="button" aria-label="Next slide">›</button>
   <div class="swipe-hint" id="hint">← Swipe, drag, or use arrow keys →</div>
-  <div class="counter" id="counter" aria-live="polite">1 / 17</div>
+  <div class="counter" id="counter" aria-live="polite">1 / 21</div>
   <div class="progress-track" aria-hidden="true"><div class="progress" id="progress"></div></div>
   <div class="sr-only" id="announcement" aria-live="polite"></div>
 
@@ -309,6 +314,7 @@
       const hint = document.getElementById('hint');
       const announcement = document.getElementById('announcement');
       const fullscreen = document.getElementById('fullscreen');
+      const home = document.getElementById('home');
       let current = Math.max(0, Math.min(total - 1, Number(location.hash.replace('#slide-', '')) - 1 || 0));
       let startX = null;
       let pointerX = null;
@@ -350,6 +356,7 @@
 
       prev.addEventListener('click', () => go(current - 1));
       next.addEventListener('click', () => go(current + 1));
+      home.addEventListener('click', () => go(0));
 
       document.addEventListener('keydown', event => {
         if (event.ctrlKey || event.metaKey || event.altKey) return;
