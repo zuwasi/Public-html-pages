@@ -106,6 +106,39 @@
       -webkit-user-drag: none;
     }
 
+    .contact-actions {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(48px, 5.5vh, 72px);
+      z-index: 3;
+      display: flex;
+      gap: 10px;
+      transform: translateX(-50%);
+    }
+
+    .contact-actions a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid rgba(36, 213, 255, .55);
+      border-radius: 999px;
+      background: rgba(7, 17, 31, .94);
+      color: var(--white);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
+      text-decoration: none;
+      font-size: clamp(11px, 1vw, 13px);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .contact-actions a:hover,
+    .contact-actions a:focus-visible {
+      border-color: var(--green);
+      outline: 2px solid rgba(45, 212, 167, .35);
+      outline-offset: 2px;
+    }
+
     .topbar {
       position: fixed;
       top: clamp(9px, 1.5vw, 18px);
@@ -238,6 +271,8 @@
     @media (max-width: 700px) {
       .slide { padding: 48px 8px 42px; }
       .slide img { border-radius: 4px; }
+      .contact-actions { bottom: 56px; gap: 6px; }
+      .contact-actions a { min-height: 34px; padding: 0 10px; }
       .chip.brand { display: none; }
       .nav { top: auto; bottom: 12px; transform: none; width: 40px; height: 40px; font-size: 28px; }
       .nav:hover { transform: scale(1.04); }
@@ -291,7 +326,13 @@
       <section class="slide" data-title="Paper-reported production benchmark"><img src="slides/slide-19.jpg" alt="CSV transcription of Mysticeti NDSS 2025 Table I production comparison" loading="lazy"></section>
       <section class="slide" data-title="Practical implications"><img src="slides/slide-20.jpg" alt="Practical implications and builder-relay-style provenance adapter path without production implementation claims" loading="lazy"></section>
       <section class="slide" data-title="Three-lane evidence gate"><img src="slides/slide-21.jpg" alt="Rust, campaign hash equality, Wolfram, and Lean release gate with actual validation results" loading="lazy"></section>
-      <section class="slide" data-title="Contact Daniel Liezrowice"><img src="slides/slide-22.jpg" alt="Daniel Liezrowice with a goat, ESL and LinkedIn contact details" loading="lazy"></section>
+      <section class="slide" data-title="Contact Daniel Liezrowice">
+        <img src="slides/slide-22.jpg" alt="Daniel Liezrowice with a goat, ESL and LinkedIn contact details" loading="lazy">
+        <nav class="contact-actions" aria-label="Slide 22 contact links">
+          <a href="https://eswlab.com/" target="_blank" rel="noopener">Visit ESL ↗</a>
+          <a href="https://il.linkedin.com/in/liezrowice" target="_blank" rel="noopener">Daniel on LinkedIn ↗</a>
+        </nav>
+      </section>
     </div>
   </main>
 
