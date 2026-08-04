@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-08-02
+Last updated: 2026-08-04
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -274,6 +274,9 @@ Last updated: 2026-08-02
 
 • og-how-i-use-amp.jpg
   https://zuwasi.github.io/Public-html-pages/og-how-i-use-amp.jpg
+
+• origami-continuum-inverse-design
+  https://zuwasi.github.io/Public-html-pages/origami-continuum-inverse-design
 
 • parasoft-cpptest-obfuscation
   https://zuwasi.github.io/Public-html-pages/parasoft-cpptest-obfuscation
