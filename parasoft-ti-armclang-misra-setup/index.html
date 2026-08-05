@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Parasoft C++test + TI Arm Clang Compiler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root { --bg:#0d1321; --panel:#111a2e; --panel2:#1a2332; --accent:#4fc3f7; --green:#66bb6a; --text:#e8ecf4; --muted:#aab5c8; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:Inter,system-ui,sans-serif; }
+    .deck { display:flex; width:1400vw; height:100vh; transition:transform .4s ease; }
+    .slide { width:100vw; height:100vh; flex:0 0 100vw; overflow-y:auto; padding:clamp(20px,5vw,60px); display:flex; flex-direction:column; justify-content:center; background:radial-gradient(circle at 85% 10%,rgba(79,195,247,.09),transparent 30%),var(--bg); }
+    .slide-inner { width:min(1180px,100%); margin:auto; }
+    h1 { margin:0 0 .45em; font-size:clamp(2rem,5.2vw,4.8rem); line-height:1.05; letter-spacing:-.04em; }
+    h2 { margin:0 0 .65em; font-size:clamp(1.65rem,3.7vw,3.25rem); line-height:1.08; letter-spacing:-.03em; }
+    h3 { color:var(--accent); margin:.2em 0 .55em; font-size:clamp(1rem,2vw,1.3rem); }
+    p, li { font-size:clamp(.85rem,1.6vw,1.1rem); line-height:1.55; }
+    .accent { color:var(--accent); } .muted { color:var(--muted); }
+    .subtitle { color:var(--accent); font-size:clamp(1.05rem,2.4vw,1.65rem); margin:.3rem 0 1.6rem; }
+    .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.16em; font-size:.76rem; font-weight:700; margin-bottom:1rem; }
+    pre { margin:.7rem 0; padding:clamp(12px,2vw,20px); overflow:auto; background:#111a2e; border:1px solid rgba(79,195,247,.22); border-radius:12px; color:#dce9f4; font:clamp(.65rem,1.5vw,.85rem)/1.55 Consolas,"Courier New",monospace; white-space:pre-wrap; }
+    code { font-family:Consolas,"Courier New",monospace; }
+    table { width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:12px; border:1px solid #26354b; font-size:clamp(.7rem,1.5vw,.9rem); }
+    th, td { text-align:left; padding:clamp(8px,1.35vw,14px); border-bottom:1px solid #26354b; vertical-align:top; }
+    th { background:#1a2332; color:var(--accent); font-weight:700; } tbody tr:nth-child(odd) { background:#111a2e; } tbody tr:nth-child(even) { background:#151f31; } tr:last-child td { border-bottom:0; }
+    .callout { margin-top:1rem; padding:1rem 1.2rem; border-left:4px solid var(--accent); border-radius:8px; background:rgba(79,195,247,.1); font-weight:700; }
+    .note { color:var(--muted); margin-top:.8rem; font-size:clamp(.75rem,1.4vw,.95rem); }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(12px,2vw,24px); }
+    .grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
+    .card { background:var(--panel); border:1px solid #26354b; border-radius:14px; padding:clamp(14px,2vw,22px); }
+    .card pre { border:0; padding:0; margin:0; background:transparent; }
+    .steps { list-style:none; counter-reset:step; padding:0; margin:0; display:grid; gap:.55rem; }
+    .steps li { counter-increment:step; display:flex; align-items:center; gap:1rem; padding:.65rem 1rem; border-radius:10px; background:var(--panel); border:1px solid #26354b; }
+    .steps li::before { content:counter(step); display:grid; place-items:center; flex:0 0 2rem; height:2rem; border-radius:50%; background:var(--accent); color:var(--bg); font-weight:800; }
+    .checklist { list-style:none; counter-reset:item; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.65rem; }
+    .checklist li { counter-increment:item; padding:.8rem 1rem .8rem 3.2rem; position:relative; background:var(--panel); border-radius:10px; border:1px solid #26354b; }
+    .checklist li::before { content:counter(item); position:absolute; left:.8rem; top:.65rem; width:1.8rem; height:1.8rem; display:grid; place-items:center; color:var(--bg); background:var(--green); border-radius:50%; font-weight:800; }
+    .takeaways { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
+    .takeaway { padding:1.1rem; background:linear-gradient(135deg,rgba(79,195,247,.12),rgba(102,187,106,.06)); border:1px solid rgba(79,195,247,.35); border-radius:14px; font-size:clamp(.85rem,1.6vw,1.05rem); line-height:1.5; }
+    .takeaway b { color:var(--accent); font-size:1.25em; margin-right:.4rem; }
+    .nav { position:fixed; z-index:10; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:50%; border:1px solid rgba(79,195,247,.45); background:rgba(17,26,46,.9); color:var(--accent); font-size:2rem; cursor:pointer; display:grid; place-items:center; transition:opacity .2s,background .2s; }
+    .nav:hover { background:#1a3045; } .nav.left { left:14px; } .nav.right { right:14px; } .nav[hidden] { display:none; }
+    .progress-track { position:fixed; z-index:11; left:0; bottom:0; width:100%; height:5px; background:#202a3b; }
+    .progress { height:100%; width:0; background:linear-gradient(90deg,#4fc3f7,#66bb6a); transition:width .4s ease; }
+    .counter { position:fixed; z-index:12; right:18px; bottom:15px; padding:.35rem .7rem; border-radius:20px; background:rgba(13,19,33,.82); color:var(--muted); font-size:.8rem; }
+    .swipe-hint { margin-top:3rem; color:var(--muted); animation:pulse 1.6s ease-in-out infinite; font-size:clamp(.8rem,1.5vw,1rem); }
+    @keyframes pulse { 50% { opacity:.35; transform:translateX(5px); } }
+    @media (max-width:760px) { .grid,.grid.three,.checklist,.takeaways { grid-template-columns:1fr; } .slide { justify-content:flex-start; } .slide-inner { margin:auto 0; } .nav { width:40px;height:40px;font-size:1.6rem;opacity:.75; } .nav.left{left:6px}.nav.right{right:6px} }
+    @media (max-height:700px) { h2{font-size:clamp(1.4rem,3.2vw,2.4rem)} p,li{line-height:1.35} th,td{padding:7px 10px} }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide"><div class="slide-inner">
+      <div class="eyebrow">DevOps setup guide</div>
+      <h1>Parasoft C++test +<br><span class="accent">TI Arm Clang Compiler</span></h1>
+      <p class="subtitle">MISRA C 2025 Static Analysis Setup Guide for DevOps</p>
+      <p class="muted">TI Arm Clang 5.1.0.LTS · Parasoft C++test Standard 2026.1.2 · MISRA C 2025</p>
+      <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Prerequisites</div><h2>What You Need Before You Start</h2>
+      <table><thead><tr><th>Item</th><th>Example</th></tr></thead><tbody>
+        <tr><td>Parasoft C++test Standard installed</td><td><code>C:\Projects\...\cpptest\</code></td></tr>
+        <tr><td>TI Arm Clang compiler installed</td><td><code>...\ti-cgt-armllvm_5.1.0.LTS\bin\tiarmclang.exe</code></td></tr>
+        <tr><td>DTP / License Server running</td><td><code>https://&lt;dtp-host&gt;:8443</code> (admin/admin)</td></tr>
+        <tr><td>Your C project source files</td><td>Any <code>.c</code>/<code>.h</code> project</td></tr>
+      </tbody></table>
+      <pre><code>tiarmclang.exe --version  →  "TI Arm Clang Compiler 5.1.0.LTS, Target: arm-ti-none-eabi"
+Test-NetConnection -ComputerName &lt;dtp-host&gt; -Port 8443</code></pre>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Compiler strategy</div><h2>TI Arm Clang is NOT on the Supported Compiler List</h2>
+      <p>Parasoft C++test ships approximately 45 supported compiler configurations. <code>tiarmclang</code> is LLVM/Clang-based and is not one of them.</p>
+      <table><thead><tr><th>Config ID</th><th>Targets</th><th>Works with tiarmclang?</th></tr></thead><tbody>
+        <tr><td><code>tiarm_20_2</code></td><td>Legacy TI armcl (EDG-based, uses <code>-fc=</code>, <code>-fr=</code>)</td><td><strong>NO</strong> — wrong flag syntax</td></tr>
+        <tr><td><code>tiarmgcc_7</code></td><td>TI ARM GCC 7.x (GCC/Clang-style: <code>-c</code>, <code>-I</code>, <code>-std</code>)</td><td><strong class="accent">YES</strong> — Clang accepts same flags</td></tr>
+      </tbody></table><div class="callout">Solution: Use <code>tiarmgcc_7</code> as the compiler family</div>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Step 1</div><h2>Configure License &amp; DTP Settings</h2>
+      <pre><code>parasoft.eula.accepted=true
+cpptest.license.use_network=true
+cpptest.license.network.edition=server_compliance_edition
+license.network.url=https://&lt;dtp-host&gt;:8443
+license.network.use.specified.server=true
+license.network.auth.enabled=true
+license.network.user=admin
+license.network.password=admin
+dtp.url=https://&lt;dtp-host&gt;:8443
+dtp.user=admin
+dtp.password=admin
+cpptest.configuration=builtin://MISRA C 2025
+cpptest.compiler.family=tiarmgcc_7</code></pre>
+      <p class="note">For CI/CD, use a per-project <code>localsettings.properties</code> file instead.</p>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Step 2</div><h2>Scan Your Build with cpptestscan</h2>
+      <p><code>cpptestscan</code> intercepts compiler calls and records them into a <code>.bdf</code> file.</p>
+      <pre><code>set CPPTEST_SCAN_OUTPUT_FILE=cpptestscan.bdf
+set CPPTEST_SCAN_PROJECT_NAME=YourProject
+set CPPTEST_SCAN_RUN_ORIG_CMD=0
+
+cpptestscan.exe tiarmclang.exe -c -I. -std=c11 file1.c
+cpptestscan.exe tiarmclang.exe -c -I. -std=c11 file2.c
+cpptestscan.exe tiarmclang.exe -c -I. -std=c11 file3.c</code></pre>
+      <p class="note">For CMake projects, use <code>compile_commands.json</code> with the <code>-compiler-commands</code> flag instead.</p>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Step 3</div><h2>Run MISRA C 2025 Static Analysis</h2>
+      <pre><code>cpptestcli.exe ^
+    -localsettings localsettings.properties ^
+    -config "builtin://MISRA C 2025" ^
+    -compiler tiarmgcc_7 ^
+    -bdf cpptestscan.bdf ^
+    -report report</code></pre>
+      <table><thead><tr><th>Flag</th><th>Purpose</th></tr></thead><tbody>
+        <tr><td><code>-localsettings</code></td><td>Per-project settings file</td></tr><tr><td><code>-config</code></td><td>Rule set (MISRA C 2025, CERT C, CWE, etc.)</td></tr>
+        <tr><td><code>-compiler</code></td><td>Compiler front-end config (<code>tiarmgcc_7</code>)</td></tr><tr><td><code>-bdf</code></td><td>Build Data File from cpptestscan</td></tr><tr><td><code>-report</code></td><td>Output directory for HTML/XML reports</td></tr>
+      </tbody></table>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Analysis pipeline</div><h2>What Happens During the Run</h2>
+      <ol class="steps"><li><span><strong>License check</strong> — connects to DTP, validates all rule features</span></li><li><span><strong>Scope collection</strong> — reads BDF, determines which files to analyze</span></li><li><span><strong>Code Analysis</strong> — pattern-based static rules (fastest)</span></li><li><span><strong>Flow Analysis</strong> — dataflow (null deref, buffer overflow, etc.)</span></li><li><span><strong>Global Static Analysis</strong> — cross-translation-unit rules</span></li><li><span><strong>Report generation</strong> — writes <code>report.html</code> and <code>report.xml</code></span></li></ol>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Example output</div><h2>Timer Project Results: <span class="accent">167 Violations</span></h2>
+      <table><thead><tr><th>Count</th><th>Rule</th><th>Description</th></tr></thead><tbody>
+        <tr><td>35</td><td>RULE_17_7-a</td><td>Unused function return value</td></tr><tr><td>26</td><td>RULE_7_4-a</td><td>String literal as non-const pointer</td></tr><tr><td>15</td><td>DIR_4_6-b</td><td>Standard integer type 'int' should not be used</td></tr><tr><td>15</td><td>RULE_17_3-a</td><td>Function called before prototype</td></tr><tr><td>10</td><td>RULE_8_2-c</td><td>Function not in prototype form</td></tr><tr><td>10</td><td>RULE_21_10-b</td><td>time.h functions not allowed</td></tr><tr><td>6</td><td>RULE_8_7-a</td><td>Referenced only in defining TU</td></tr><tr><td>5</td><td>RULE_2_8-c</td><td>Local variable declared but not used</td></tr>
+      </tbody></table><p class="note">30 distinct MISRA C 2025 rules triggered across 4 source files.</p>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Automation</div><h2>Integrate into Your CI/CD Pipeline</h2>
+      <div class="grid three"><div class="card"><h3>Jenkins</h3><pre><code>bat "cpptestcli -localsettings ... -compiler tiarmgcc_7 -bdf ... -report ... -fail"
+publishHTML(target: [reportDir: 'report', reportFiles: 'report.html'])</code></pre></div>
+      <div class="card"><h3>Azure DevOps</h3><pre><code>- task: CmdLine@2
+  script: cpptestcli -localsettings ... -compiler tiarmgcc_7 -bdf ... -report ... -fail
+- task: PublishBuildArtifacts@1</code></pre></div>
+      <div class="card"><h3>GitHub Actions</h3><pre><code>- run: cpptestcli -localsettings ... -compiler tiarmgcc_7 -bdf ... -report ... -fail
+- uses: actions/upload-artifact@v4
+  with: { name: parasoft-report, path: report/ }</code></pre></div></div>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Team visibility</div><h2>Publish Results to DTP for Team Dashboards</h2>
+      <pre><code>report.dtp.publish=true
+dtp.project=YourProjectName
+build.id=YourProjectName-${time:yyyy-MM-dd}</code></pre>
+      <div class="grid"><div class="card">✓ Track violation trends over time</div><div class="card">✓ Filter by rule, severity, author, file</div><div class="card">✓ Set quality gates and compliance policies</div><div class="card">✓ Generate compliance reports for audits</div></div>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Diagnostics</div><h2>Troubleshooting</h2>
+      <table><thead><tr><th>Problem</th><th>Fix</th></tr></thead><tbody>
+        <tr><td>License activation failed</td><td>Set <code>edition=server_compliance_edition</code></td></tr><tr><td>EULA not accepted</td><td>Set <code>parasoft.eula.accepted=true</code></td></tr><tr><td>DTP services not found</td><td>Check <code>dtp.url</code> and context path</td></tr><tr><td>Compiler crash/hang</td><td>Use <code>tiarmgcc_7</code>, NOT <code>tiarm_20_2</code></td></tr><tr><td>Missing files in analysis</td><td>Re-scan with cpptestscan, check BDF</td></tr><tr><td>Preprocessor errors</td><td>Pass exact <code>-I</code> and <code>-D</code> flags from your build</td></tr><tr><td>0 violations in report</td><td>Check BDF has entries, verify file paths</td></tr>
+      </tbody></table>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Implementation plan</div><h2>Checklist: Adapt for Your Project</h2>
+      <ol class="checklist"><li>Verify your TI compiler path → <code>tiarmclang.exe --version</code></li><li>Verify your DTP server URL → <code>Test-NetConnection</code></li><li>Create <code>localsettings.properties</code> with your DTP host/user/password</li><li>Scan your build → cpptestscan for each source file with real flags</li><li>Set your project name → <code>CPPTEST_SCAN_PROJECT_NAME</code></li><li>Run the analysis → <code>cpptestcli -compiler tiarmgcc_7 -bdf ... -report ...</code></li><li>Choose your rule set → MISRA C 2025, CERT C, CWE Top 25, etc.</li><li>Wire into CI → Jenkins, Azure DevOps, or GitHub Actions</li></ol>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Summary</div><h2>Key Takeaways</h2>
+      <div class="takeaways"><div class="takeaway"><b>1.</b> TI Arm Clang is NOT on Parasoft's supported list → use <code>tiarmgcc_7</code> (GCC/Clang-style)</div><div class="takeaway"><b>2.</b> <code>cpptestscan</code> intercepts your build to create the BDF → use exact compiler flags</div><div class="takeaway"><b>3.</b> One command runs all three analysis engines → static, flow, global</div><div class="takeaway"><b>4.</b> Reports in HTML + XML → publish to DTP or CI artifacts</div></div>
+      <p class="muted" style="margin-top:2rem">Questions? Check the full guide in the project repository.</p>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Build machine</div><h2>Files on the Build Machine</h2>
+      <pre><code>cpptest\
+├── cpptestcli.properties              ← global config
+└── your-project\
+    ├── localsettings.properties       ← per-project settings
+    ├── cpptestscan.bdf                ← build data file
+    ├── run_misra_analysis.bat         ← convenience script
+    └── report\
+        ├── report.html                ← human-readable report
+        └── report.xml                 ← machine-readable report</code></pre>
+    </div></section>
+  </main>
+
+  <button class="nav left" id="prev" aria-label="Previous slide" hidden>‹</button>
+  <button class="nav right" id="next" aria-label="Next slide">›</button>
+  <div class="counter" id="counter" aria-live="polite">1 / 14</div>
+  <div class="progress-track"><div class="progress" id="progress"></div></div>
+  <script>
+    (() => {
+      const deck = document.getElementById('deck');
+      const slides = [...document.querySelectorAll('.slide')];
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const counter = document.getElementById('counter');
+      const progress = document.getElementById('progress');
+      const hint = document.getElementById('swipeHint');
+      let index = 0, touchStart = null, mouseStart = null;
+
+      function show(target) {
+        const newIndex = Math.max(0, Math.min(slides.length - 1, target));
+        if (newIndex === index && target !== 0) return;
+        index = newIndex;
+        deck.style.transform = `translateX(-${index * 100}vw)`;
+        prev.hidden = index === 0;
+        next.hidden = index === slides.length - 1;
+        counter.textContent = `${index + 1} / ${slides.length}`;
+        progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+        if (index > 0 && hint) hint.style.display = 'none';
+      }
+      prev.addEventListener('click', () => show(index - 1));
+      next.addEventListener('click', () => show(index + 1));
+      document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); show(index + 1); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); show(index - 1); }
+      });
+      document.addEventListener('touchstart', e => { touchStart = e.changedTouches[0].clientX; }, {passive:true});
+      document.addEventListener('touchend', e => { const dx = e.changedTouches[0].clientX - touchStart; if (Math.abs(dx) >= 50) show(index + (dx < 0 ? 1 : -1)); touchStart = null; }, {passive:true});
+      document.addEventListener('mousedown', e => { if (!e.target.closest('button')) mouseStart = e.clientX; });
+      document.addEventListener('mouseup', e => { if (mouseStart === null) return; const dx = e.clientX - mouseStart; if (Math.abs(dx) >= 50) show(index + (dx < 0 ? 1 : -1)); mouseStart = null; });
+      show(0);
+    })();
+  </script>
+</body>
+</html>
