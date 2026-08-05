@@ -281,6 +281,9 @@ Last updated: 2026-08-05
 • parasoft-cpptest-obfuscation
   https://zuwasi.github.io/Public-html-pages/parasoft-cpptest-obfuscation
 
+• parasoft-ti-armclang-misra-setup
+  https://zuwasi.github.io/Public-html-pages/parasoft-ti-armclang-misra-setup
+
 • sbomator-databom-presentation
   https://zuwasi.github.io/Public-html-pages/sbomator-databom-presentation
 
