@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Parasoft C++test + TI Arm Clang Compiler</title>
+  <title>Parasoft C++test + TI Arm Clang Compiler — MISRA C 2025 & Flow Analysis</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
@@ -11,7 +11,7 @@
     :root { --bg:#0d1321; --panel:#111a2e; --panel2:#1a2332; --accent:#4fc3f7; --green:#66bb6a; --text:#e8ecf4; --muted:#aab5c8; }
     * { box-sizing:border-box; }
     html, body { margin:0; width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:Inter,system-ui,sans-serif; }
-    .deck { display:flex; width:1400vw; height:100vh; transition:transform .4s ease; }
+    .deck { display:flex; width:1700vw; height:100vh; transition:transform .4s ease; }
     .slide { width:100vw; height:100vh; flex:0 0 100vw; overflow-y:auto; padding:clamp(20px,5vw,60px); display:flex; flex-direction:column; justify-content:center; background:radial-gradient(circle at 85% 10%,rgba(79,195,247,.09),transparent 30%),var(--bg); }
     .slide-inner { width:min(1180px,100%); margin:auto; }
     h1 { margin:0 0 .45em; font-size:clamp(2rem,5.2vw,4.8rem); line-height:1.05; letter-spacing:-.04em; }
@@ -57,7 +57,7 @@
     <section class="slide"><div class="slide-inner">
       <div class="eyebrow">DevOps setup guide</div>
       <h1>Parasoft C++test +<br><span class="accent">TI Arm Clang Compiler</span></h1>
-      <p class="subtitle">MISRA C 2025 Static Analysis Setup Guide for DevOps</p>
+      <p class="subtitle">MISRA C 2025 & Flow Analysis Setup Guide for DevOps</p>
       <p class="muted">TI Arm Clang 5.1.0.LTS · Parasoft C++test Standard 2026.1.2 · MISRA C 2025</p>
       <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
     </div></section>
@@ -133,6 +133,66 @@ cpptestscan.exe tiarmclang.exe -c -I. -std=c11 file3.c</code></pre>
       </tbody></table><p class="note">30 distinct MISRA C 2025 rules triggered across 4 source files.</p>
     </div></section>
 
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Flow Analysis</div><h2>Flow Analysis Standard: <span class="accent">Bug Detective</span></h2>
+      <p>After MISRA C 2025 validated the compiler setup, we tested <b>Flow Analysis Standard</b> — Parasoft's interprocedural bug-detection engine — on a project with <b>13 C files containing intentionally seeded defects</b>.</p>
+      <div class="grid two" style="margin-top:1.2rem">
+        <div class="card"><h3>What Flow Analysis Does</h3><ul>
+          <li>Builds control-flow graphs across functions</li>
+          <li>Tracks taint from external inputs (console, file, socket)</li>
+          <li>Detects null deref, buffer overflow, resource leaks, division by zero, SQL injection, and more</li>
+          <li>Interprocedural: follows values through function calls</li>
+        </ul></div>
+        <div class="card"><h3>How We Ran It</h3><pre><code>cpptestcli.exe ^
+  -localsettings localsettings.properties ^
+  -config "builtin://Flow Analysis Standard" ^
+  -compiler tiarmgcc_7 ^
+  -bdf cpptestscan.bdf ^
+  -report report</code></pre>
+          <p class="note">Same compiler config, same BDF approach — just a different analysis config.</p>
+        </div>
+      </div>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Flow Analysis Results</div><h2>Detection Matrix: <span class="accent">10 of 11 Defects Found (91%)</span></h2>
+      <table>
+        <thead><tr><th>File</th><th>Expected Defect</th><th>Detected?</th><th>Rule(s)</th></tr></thead>
+        <tbody>
+          <tr><td><code>divisionByZero.c</code></td><td>Division by zero</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-ZERO</td></tr>
+          <tr><td><code>bufferOverflow.c</code></td><td>Buffer overflow</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-OVERFWR, BD-SECURITY-OVERFWR</td></tr>
+          <tr><td><code>arrayOutOfBounds.c</code></td><td>Array out of bounds</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-ARRAY, BD-SECURITY-ARRAY</td></tr>
+          <tr><td><code>nullPointerDeref.c</code></td><td>Null pointer deref</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-NP (4 findings)</td></tr>
+          <tr><td><code>memoryLeaks.c</code></td><td>Memory leak</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-RES-LEAKS</td></tr>
+          <tr><td><code>integerOverflow.c</code></td><td>Integer overflow</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-SECURITY-INTOVERF</td></tr>
+          <tr><td><code>sqlInjection.c</code></td><td>SQL injection</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-SECURITY-TDSQL</td></tr>
+          <tr><td><code>unreachableCode.c</code></td><td>Unreachable code</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-CC, BD-PB-SWITCH</td></tr>
+          <tr><td><code>useBeforeInit.c</code></td><td>Use before init</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-NOTINIT</td></tr>
+          <tr><td><code>nullPointerDerefBenchmark.c</code></td><td>Benchmark (TP + FP)</td><td style="color:var(--green);font-weight:700">✅ 3 TP, 0 FP</td><td>BD-PB-NP</td></tr>
+          <tr><td><code>fileLeaks.c</code></td><td>File/resource leak</td><td style="color:#ffa726;font-weight:700">⚠️ Partial</td><td>Other issues found, leak missed</td></tr>
+        </tbody>
+      </table>
+      <p class="note">41 total violations across 13 files. The file leak in fileLeaks.c (fclose commented out) was not flagged with BD-RES-LEAKS, likely because the file handle flows through an interprocedural helper.</p>
+    </div></section>
+
+    <section class="slide"><div class="slide-inner"><div class="eyebrow">Flow Analysis Deep Dive</div><h2>What the <span class="accent">Bug Detective</span> Caught</h2>
+      <div class="grid two">
+        <div class="card"><h3>🏆 Top Detections</h3><ul>
+          <li><b>Division by zero</b> — found both instances (struct field and function parameter)</li>
+          <li><b>SQL injection</b> — traced file input → fread → sprintf → SQLExecDirect (taint tracking)</li>
+          <li><b>Integer overflow</b> — detected socket-controlled length used in arithmetic</li>
+          <li><b>Null pointer deref</b> — 7 findings, including interprocedural paths through helper1() and helper2()</li>
+          <li><b>Buffer overflow</b> — both definite (1000 bytes into 999) and possible (arbitrary length)</li>
+          <li><b>Unreachable code</b> — 6 findings: always-true/false conditions + unreachable switch case</li>
+        </ul></div>
+        <div class="card"><h3>🎯 Benchmark Accuracy</h3><ul>
+          <li><b>nullPointerDerefBenchmark.c</b> has 6 "noFalseViolation" functions that should NOT trigger</li>
+          <li>Flow Analysis produced <b style="color:var(--green)">0 false positives</b> on these</li>
+          <li>All 3 findings were on intentionally buggy paths (trueViolation, functionCall_trueViolation1/2)</li>
+          <li>This validates the precision of the interprocedural null-tracking engine</li>
+        </ul></div>
+      </div>
+      <div class="callout" style="margin-top:1.5rem">41 violations · 19 distinct rules · 13 files analyzed · 0 setup problems · 0 preprocessing errors</div>
+    </div></section>
+
     <section class="slide"><div class="slide-inner"><div class="eyebrow">Automation</div><h2>Integrate into Your CI/CD Pipeline</h2>
       <div class="grid three"><div class="card"><h3>Jenkins</h3><pre><code>bat "cpptestcli -localsettings ... -compiler tiarmgcc_7 -bdf ... -report ... -fail"
 publishHTML(target: [reportDir: 'report', reportFiles: 'report.html'])</code></pre></div>
@@ -162,7 +222,7 @@ build.id=YourProjectName-${time:yyyy-MM-dd}</code></pre>
     </div></section>
 
     <section class="slide"><div class="slide-inner"><div class="eyebrow">Summary</div><h2>Key Takeaways</h2>
-      <div class="takeaways"><div class="takeaway"><b>1.</b> TI Arm Clang is NOT on Parasoft's supported list → use <code>tiarmgcc_7</code> (GCC/Clang-style)</div><div class="takeaway"><b>2.</b> <code>cpptestscan</code> intercepts your build to create the BDF → use exact compiler flags</div><div class="takeaway"><b>3.</b> One command runs all three analysis engines → static, flow, global</div><div class="takeaway"><b>4.</b> Reports in HTML + XML → publish to DTP or CI artifacts</div></div>
+      <div class="takeaways"><div class="takeaway"><b>1.</b> TI Arm Clang is NOT on Parasoft's supported list → use <code>tiarmgcc_7</code> (GCC/Clang-style)</div><div class="takeaway"><b>2.</b> <code>cpptestscan</code> intercepts your build to create the BDF → use exact compiler flags</div><div class="takeaway"><b>3.</b> One command runs all three analysis engines → static, flow, global</div><div class="takeaway"><b>4.</b> Reports in HTML + XML → publish to DTP or CI artifacts</div><div class="takeaway"><b>5.</b> Flow Analysis found 10/11 seeded defects (91%) with 0 false positives on benchmarks</div><div class="takeaway"><b>6.</b> Same setup works for both MISRA C 2025 and Flow Analysis — just change <code>-config</code></div></div>
       <p class="muted" style="margin-top:2rem">Questions? Check the full guide in the project repository.</p>
     </div></section>
 
