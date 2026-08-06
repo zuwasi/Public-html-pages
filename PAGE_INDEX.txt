@@ -290,6 +290,9 @@ Last updated: 2026-08-06
 • sbomator-databom-presentation
   https://zuwasi.github.io/Public-html-pages/sbomator-databom-presentation
 
+• sbomator-supply-chain-detection
+  https://zuwasi.github.io/Public-html-pages/sbomator-supply-chain-detection
+
 • terratest-ampcode-esl-presentation
   https://zuwasi.github.io/Public-html-pages/terratest-ampcode-esl-presentation
 
