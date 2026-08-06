@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SBOMator 1.3 — Real-Time Supply-Chain Threat Detection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; }
+  .deck { display: flex; height: 100vh; width: 100vw; transition: transform 0.45s cubic-bezier(.4,0,.2,1); }
+  .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: clamp(20px, 5vw, 70px); overflow-y: auto; }
+  .slide-inner { max-width: 1100px; width: 100%; }
+  h1 { font-size: clamp(1.7rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.5em; }
+  h2 { font-size: clamp(1.3rem, 3.2vw, 2.2rem); font-weight: 700; margin-bottom: 0.8em; color: #58a6ff; }
+  h3 { font-size: clamp(1rem, 2.2vw, 1.3rem); font-weight: 600; margin: 0.8em 0 0.4em; }
+  p, li { font-size: clamp(0.85rem, 1.7vw, 1.08rem); line-height: 1.55; }
+  ul, ol { margin: 0.6em 0 0.6em 1.3em; }
+  li { margin-bottom: 0.45em; }
+  .accent { color: #f85149; }
+  .green { color: #3fb950; }
+  .orange { color: #d29922; }
+  .blue { color: #58a6ff; }
+  .subtitle { font-size: clamp(1rem, 2.2vw, 1.4rem); color: #8b949e; font-weight: 400; }
+  .badge { display: inline-block; background: #f85149; color: #fff; padding: 4px 14px; border-radius: 20px; font-size: clamp(0.7rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 1.2em; letter-spacing: 0.05em; }
+  .badge.g { background: #238636; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: clamp(12px, 2.2vw, 22px); margin: 0.6em 0; }
+  .card.red { border-left: 4px solid #f85149; }
+  .card.green { border-left: 4px solid #3fb950; }
+  .card.orange { border-left: 4px solid #d29922; }
+  .card.blue { border-left: 4px solid #58a6ff; }
+  table { width: 100%; border-collapse: collapse; margin: 0.8em 0; font-size: clamp(0.72rem, 1.5vw, 0.98rem); }
+  th, td { padding: clamp(5px, 1vw, 10px) clamp(6px, 1.2vw, 12px); text-align: left; border-bottom: 1px solid #30363d; }
+  th { color: #58a6ff; font-weight: 700; background: #161b22; }
+  code, .mono { font-family: 'Consolas', 'Courier New', monospace; background: #161b22; padding: 1px 6px; border-radius: 4px; font-size: 0.92em; color: #79c0ff; }
+  pre { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: clamp(10px, 2vw, 18px); overflow-x: auto; margin: 0.6em 0; font-size: clamp(0.68rem, 1.4vw, 0.92rem); line-height: 1.5; font-family: 'Consolas', monospace; color: #c9d1d9; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 2vw, 24px); }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
+  .nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: clamp(40px, 6vw, 56px); height: clamp(40px, 6vw, 56px); border-radius: 50%; background: rgba(88,166,255,0.15); border: 1px solid #58a6ff; color: #58a6ff; font-size: clamp(1.3rem, 3vw, 1.8rem); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; user-select: none; transition: background 0.2s, opacity 0.3s; }
+  .nav-arrow:hover { background: rgba(88,166,255,0.35); }
+  .nav-arrow.hidden { opacity: 0; pointer-events: none; }
+  #prevBtn { left: clamp(8px, 2vw, 24px); }
+  #nextBtn { right: clamp(8px, 2vw, 24px); }
+  .progress { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #58a6ff, #3fb950); transition: width 0.4s; z-index: 10; }
+  .counter { position: fixed; bottom: 12px; right: 16px; font-size: clamp(0.7rem, 1.4vw, 0.85rem); color: #8b949e; z-index: 10; }
+  .swipe-hint { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); color: #8b949e; font-size: clamp(0.75rem, 1.6vw, 0.95rem); animation: pulse 1.8s infinite; z-index: 10; }
+  @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
+  .timeline { border-left: 3px solid #30363d; margin-left: clamp(8px, 2vw, 20px); padding-left: clamp(14px, 2.5vw, 26px); }
+  .t-item { position: relative; margin-bottom: clamp(8px, 1.6vw, 16px); }
+  .t-item::before { content: ''; position: absolute; left: calc(-1 * clamp(14px, 2.5vw, 26px) - 8px); top: 6px; width: 11px; height: 11px; border-radius: 50%; background: #58a6ff; }
+  .t-item.bad::before { background: #f85149; }
+  .t-item.good::before { background: #3fb950; }
+  .t-time { font-weight: 700; color: #79c0ff; font-family: 'Consolas', monospace; font-size: clamp(0.78rem, 1.6vw, 1rem); }
+  .logo-line { color: #8b949e; font-size: clamp(0.8rem, 1.6vw, 1rem); margin-top: 2.5em; }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- Slide 1: Title -->
+  <section class="slide">
+    <div class="slide-inner" style="text-align:center;">
+      <div class="badge">NEW IN SBOMATOR 1.3</div>
+      <h1>Real-Time Supply-Chain<br>Threat Detection</h1>
+      <p class="subtitle">Catching the next <span class="mono">keyv</span>-style npm attack — at scan time, at install time,<br>and before any vendor publishes an advisory</p>
+      <p class="logo-line">ESL — Embedded Security Solutions &nbsp;|&nbsp; SBOMator 1.3.x &nbsp;|&nbsp; August 2026</p>
+      <div class="swipe-hint" id="swipeHint">&larr; Swipe to navigate &rarr;</div>
+    </div>
+  </section>
+
+  <!-- Slide 2: The trigger -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>August 4, 2026 — the Mini Shai-Hulud attack</h2>
+      <div class="card red">
+        <p>A compromised maintainer account poisoned <span class="mono">keyv</span>, <span class="mono">cacheable</span>, <span class="mono">flat-cache</span>, <span class="mono">file-entry-cache</span> and their family — foundational npm packages that arrive through chains like <span class="mono">eslint &rarr; file-entry-cache &rarr; flat-cache &rarr; keyv</span>.</p>
+      </div>
+      <ul>
+        <li><strong class="accent">444 packages / 2,234 poisoned versions</strong> — a self-propagating worm using stolen publish tokens</li>
+        <li><strong class="accent">Over 2 billion</strong> combined monthly installs in the blast radius</li>
+        <li>Credential stealer: GitHub, npm, AWS, GCP, Azure tokens — RSA-encrypted and exfiltrated to public GitHub repos labeled <em>"Shai-Hulud: Here We Go Again"</em></li>
+        <li>IDE persistence: <span class="mono">.vscode/tasks.json</span> + <span class="mono">.claude/settings.json</span> — merely <strong>opening the repo</strong> executed the payload</li>
+        <li>A dead-man's switch fired an attacker command the moment stolen tokens were revoked</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Slide 3: Attack timeline -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>Anatomy of the attack (all times UTC)</h2>
+      <div class="timeline">
+        <div class="t-item bad"><span class="t-time">09:02</span> — Malicious commit lands in the public <span class="mono">keyv</span> GitHub repo: adds <span class="mono">setup.mjs</span> + 727&nbsp;KB obfuscated payload</div>
+        <div class="t-item bad"><span class="t-time">09:04</span> — Second commit plants VS&nbsp;Code / Claude&nbsp;Code auto-run hooks</div>
+        <div class="t-item bad"><span class="t-time">09:35</span> — <span class="mono">keyv@6.0.0</span> published to npm with a <span class="mono">preinstall</span> hook — and <strong>valid, CI-signed provenance</strong></div>
+        <div class="t-item bad"><span class="t-time">10:12&ndash;10:46</span> — Worm bursts into 8 more organizations (Ornikar, OneReach, ServiceTitan, Qlik&hellip;) at ~1 package/second</div>
+        <div class="t-item"><span class="t-time">~13:45</span> — First comprehensive public write-up (Wiz), IOC CSV follows</div>
+      </div>
+      <div class="card orange" style="margin-top:1em;">
+        <p><strong>The malware sat in public Git history for 33 minutes before it ever reached npm</strong> — and spread for hours before most teams heard about it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 4: Why tools missed it -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>Why traditional defenses were blind</h2>
+      <div class="grid2">
+        <div class="card red">
+          <h3>&#10060; Provenance / SLSA validation</h3>
+          <p>The attacker poisoned the <em>source</em>; the legitimate CI pipeline built, signed and published it. Provenance on <span class="mono">keyv@6.0.0</span> was <strong>genuine</strong>.</p>
+        </div>
+        <div class="card red">
+          <h3>&#10060; CVE scanners</h3>
+          <p>No CVE existed. Vulnerability databases describe <em>bugs</em>, not freshly published <em>malware</em>.</p>
+        </div>
+        <div class="card red">
+          <h3>&#10060; EDR / behavior monitoring</h3>
+          <p>The payload used only legitimate signed binaries — <span class="mono">node</span> and the official Bun runtime from GitHub. Normal developer behavior, nothing anomalous to flag.</p>
+        </div>
+        <div class="card green">
+          <h3>&#9989; Identity-based detection</h3>
+          <p>The only thing that worked: knowing <span class="mono">keyv@6.0.0</span> <em>itself</em> is malicious, or spotting the suspicious <span class="mono">preinstall</span> hook it introduced. <strong>That is exactly what SBOMator 1.3 adds.</strong></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5: Detection race -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>The detection race — who knew when</h2>
+      <table>
+        <tr><th>Time (UTC)</th><th>Who</th><th>What</th></tr>
+        <tr><td class="mono">09:35</td><td>npm registry</td><td>keyv@6.0.0 publish event (raw signal)</td></tr>
+        <tr><td class="mono">~09:41</td><td>Socket (automated)</td><td>Scanner flags the preinstall hook — ~6 minutes after publish</td></tr>
+        <tr><td class="mono">morning</td><td>SafeDep, Aikido feeds</td><td>Real-time publish-event capture, subscriber feeds</td></tr>
+        <tr><td class="mono">~13:45</td><td>Wiz</td><td>First comprehensive public report + IOC CSV</td></tr>
+        <tr><td class="mono">hours</td><td>OSV.dev</td><td>Canonical MAL-* advisories (MAL-2026-11524 for keyv)</td></tr>
+      </table>
+      <div class="card blue">
+        <p><strong>Lesson:</strong> real-time detection came from <em>registry-metadata monitoring</em> — new version &rarr; check lifecycle scripts &rarr; alert in minutes. Not from any cloud security platform. SBOMator 1.3 implements this exact mechanism on your endpoint.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 6: The three layers -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>What's new: three detection layers</h2>
+      <div class="card blue">
+        <h3>1 &mdash; OSV.dev malware check in every SBOM scan</h3>
+        <p>Every component is checked against OpenSSF <span class="mono">MAL-*</span> malicious-package advisories. Vendor-neutral, covering npm, PyPI, Go, crates.io, RubyGems, Maven, NuGet and more — one batched API call per 1,000 components.</p>
+      </div>
+      <div class="card blue">
+        <h3>2 &mdash; Real-time endpoint watcher with live OSV lookup</h3>
+        <p>Every npm package added or changed on the machine is checked within 30 seconds against built-in IOCs, cached Wiz feeds, and a live OSV query.</p>
+      </div>
+      <div class="card green">
+        <h3>3 &mdash; Install-hook delta heuristic (zero-day, feed-free)</h3>
+        <p>Flags any new version that introduces a <span class="mono">preinstall</span>/<span class="mono">install</span>/<span class="mono">postinstall</span> script its previous release didn't have — <strong>the exact keyv pattern, detected with no threat feed at all</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 7: Layer 3 deep dive -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>The zero-day layer: install-hook delta</h2>
+      <p>What changed between clean <span class="mono">keyv@5.6.0</span> and malicious <span class="mono">keyv@6.0.0</span>:</p>
+      <pre>  "scripts": {
+    "build": "tsdown",
+<span style="color:#3fb950;">+   "preinstall": "node setup.mjs"     &larr; the entire attack</span>
+  },
+  "files": [ "dist", "LICENSE",
+<span style="color:#3fb950;">+   "setup.mjs", "Math_Symbol.js"</span>  ]</pre>
+      <ul>
+        <li>SBOMator fetches the npm registry's lightweight metadata and compares the <span class="mono">hasInstallScript</span> flag against the previous stable release</li>
+        <li>New hook where none existed &rarr; <strong class="orange">SUSPICIOUS alert with the exact script line as evidence</strong></li>
+        <li>Works the moment the package lands — <strong>before Socket flagged it, before OSV had a record, half a day before the Wiz advisory</strong></li>
+        <li>Catches keyv, both earlier Shai-Hulud waves, and the next campaign that reuses the pattern</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Slide 8: Corroboration / verified live -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>Verified against the real attack</h2>
+      <p>Live run of SBOMator 1.3 against the actual incident packages:</p>
+      <pre>OSV keyv@6.0.0:  OSV malicious-package advisory (<span style="color:#f85149;">MAL-2026-11524</span>)
+OSV keyv@5.6.0:  clean
+SBOM scan: keyv 6.0.0  &lt;- Built-in IOC Database
+SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
+      <ul>
+        <li>Malicious findings are <strong>corroborated across independent sources</strong> — built-in IOC database, Wiz feed, OSV — and each source is shown in the report</li>
+        <li>Reports include the OSV advisory ID and link for auditability</li>
+        <li>Offline mode still works: built-in database + cached feeds, no network required</li>
+        <li>26 new automated tests; full suite green (126 tests)</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Slide 9: Usage — SBOM scan -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>How to use — SBOM scanning</h2>
+      <ol>
+        <li>Launch SBOMator and select your project as usual</li>
+        <li>Keep <strong>Online mode</strong> enabled (for live OSV + feed lookups)</li>
+        <li>Generate the SBOM — <strong>the malware check runs automatically</strong>, no extra step</li>
+      </ol>
+      <h3>Where results appear</h3>
+      <div class="grid2">
+        <div class="card red">
+          <h3>HTML report</h3>
+          <p>Red <strong>CRITICAL SUPPLY CHAIN THREAT</strong> banner + table: package, version, threat, source, required action</p>
+        </div>
+        <div class="card blue">
+          <h3>SBOM JSON</h3>
+          <p><span class="mono">metadata.esl_threat_detection</span> summary and per-component <span class="mono">esl_threat_intelligence</span> blocks with OSV IDs</p>
+        </div>
+      </div>
+      <p style="margin-top:0.6em;">Offline scans fall back to the built-in IOC database and local caches (<span class="mono">~\.esl-sbomator\threat_intel\</span>, 6-hour refresh).</p>
+    </div>
+  </section>
+
+  <!-- Slide 10: Usage — realtime -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>How to use — real-time protection</h2>
+      <ol>
+        <li>Open the <strong>Endpoint</strong> tab</li>
+        <li>Check <strong>"Real-Time Protection"</strong> &rarr; status shows <em>Active (30s poll)</em></li>
+        <li>Leave it running — alerts appear as packages arrive</li>
+      </ol>
+      <table>
+        <tr><th>Alert</th><th>Meaning</th><th>Action</th></tr>
+        <tr><td><strong style="color:#fff;background:#d32f2f;padding:2px 8px;border-radius:4px;">MALICIOUS</strong></td><td>Known-bad version (IOC feeds or live OSV)</td><td>Remove immediately + rotate credentials</td></tr>
+        <tr><td><strong style="color:#8a4b00;background:#fff3cd;padding:2px 8px;border-radius:4px;">SUSPICIOUS</strong></td><td>New install hook vs previous release</td><td>Review before trusting</td></tr>
+      </table>
+      <div class="card orange">
+        <p><strong>Positioning:</strong> this is not an EDR replacement — it's the supply-chain layer your EDR is blind to. EDR watches what code <em>does</em>; SBOMator watches what <em>enters</em> your software supply chain. The keyv payload looked completely benign to behavior-based tools.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 11: Impact -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>What early detection is worth</h2>
+      <div class="grid2">
+        <div class="card red">
+          <h3>Detected late (the common case)</h3>
+          <ul>
+            <li>Full incident response: forensics, credential rotation across GitHub / npm / AWS / GCP / Azure</li>
+            <li>Dead-man's-switch cleanup <em>before</em> rotating anything</li>
+            <li>Audit for exfil repos created under your identity</li>
+            <li>Days of engineering time, board-level reporting</li>
+          </ul>
+        </div>
+        <div class="card green">
+          <h3>Detected in minutes (SBOMator 1.3)</h3>
+          <ul>
+            <li>One registry-proxy block rule for the package family</li>
+            <li>Pin known-good versions, freeze auto-updates</li>
+            <li>Warn developers before anyone installs</li>
+            <li><strong>~10 minutes of configuration instead of days of IR</strong></li>
+          </ul>
+        </div>
+      </div>
+      <p style="margin-top:0.8em;">The worm reached its 2nd&ndash;12th victim organizations between <span class="mono">10:12</span> and <span class="mono">13:18</span> UTC — hours of window where an early alert prevented compromise entirely.</p>
+    </div>
+  </section>
+
+  <!-- Slide 12: Roadmap + close -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>Shipping now &amp; on the roadmap</h2>
+      <div class="card green">
+        <h3>&#9989; In SBOMator 1.3 today</h3>
+        <p>OSV malware check in every scan &bull; real-time endpoint watcher with live OSV &bull; install-hook zero-day heuristic &bull; multi-source IOC corroboration &bull; keyv attack demo &amp; sample client report</p>
+      </div>
+      <div class="card blue">
+        <h3>&#128640; Next: be first, not just fast</h3>
+        <ul>
+          <li><strong>npm publish-stream consumer</strong> — flag a malicious publish within ~60 seconds (would have alerted 09:36 UTC, five minutes before Socket)</li>
+          <li><strong>Dependency repo watch</strong> — monitor the Git repos behind your SBOM; the keyv payload was visible in public commits at 09:02, 33 minutes before npm</li>
+        </ul>
+      </div>
+      <p style="text-align:center; margin-top:1.5em;" class="subtitle">ESL — Embedded Security Solutions<br><strong style="color:#e6edf3;">SBOMator: the supply-chain detection layer your EDR can't see.</strong></p>
+    </div>
+  </section>
+
+</div>
+
+<div class="nav-arrow hidden" id="prevBtn">&#8249;</div>
+<div class="nav-arrow" id="nextBtn">&#8250;</div>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter">1 / 12</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = deck.children.length;
+  var current = 0;
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var progress = document.getElementById('progress');
+  var counter = document.getElementById('counter');
+  var hint = document.getElementById('swipeHint');
+  var navigated = false;
+
+  function go(n) {
+    current = Math.max(0, Math.min(slides - 1, n));
+    deck.style.transform = 'translateX(-' + (current * 100) + 'vw)';
+    prevBtn.classList.toggle('hidden', current === 0);
+    nextBtn.classList.toggle('hidden', current === slides - 1);
+    progress.style.width = (((current + 1) / slides) * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + slides;
+    if (!navigated && current > 0) { navigated = true; if (hint) hint.style.display = 'none'; }
+  }
+
+  prevBtn.addEventListener('click', function () { go(current - 1); });
+  nextBtn.addEventListener('click', function () { go(current + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+  });
+
+  var touchX = null;
+  document.addEventListener('touchstart', function (e) { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (touchX === null) return;
+    var dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) { if (dx < 0) go(current + 1); else go(current - 1); }
+    touchX = null;
+  }, { passive: true });
+
+  var mouseX = null;
+  document.addEventListener('mousedown', function (e) { mouseX = e.clientX; });
+  document.addEventListener('mouseup', function (e) {
+    if (mouseX === null) return;
+    var dx = e.clientX - mouseX;
+    if (Math.abs(dx) > 50) { if (dx < 0) go(current + 1); else go(current - 1); }
+    mouseX = null;
+  });
+
+  go(0);
+})();
+</script>
+</body>
+</html>
