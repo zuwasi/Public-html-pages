@@ -175,6 +175,9 @@ Last updated: 2026-08-06
 55. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
+56. xdp-verification-workflow-presentation.html
+   https://zuwasi.github.io/Public-html-pages/xdp-verification-workflow-presentation.html
+
 ──────────────────────────────────────────────────────────────
   OTHER FILES
 ──────────────────────────────────────────────────────────────
