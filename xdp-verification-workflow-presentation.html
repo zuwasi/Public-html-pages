@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Wolfram + Lean + eBPF/XDP — Closed-Loop Verification Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; overflow: hidden; font-family: 'Inter', -apple-system, sans-serif; background: #0d1117; color: #e6edf3; }
+  .deck { display: flex; height: 100vh; transition: transform 0.45s cubic-bezier(.4,0,.2,1); }
+  .slide { min-width: 100vw; height: 100vh; padding: clamp(20px, 4vw, 60px); display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+  h1 { font-size: clamp(1.8rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.5em; }
+  h2 { font-size: clamp(1.3rem, 3.5vw, 2.2rem); font-weight: 700; margin-bottom: 0.8em; }
+  h3 { font-size: clamp(1rem, 2.2vw, 1.3rem); font-weight: 600; margin: 0.6em 0 0.3em; }
+  p, li { font-size: clamp(0.9rem, 1.8vw, 1.15rem); line-height: 1.55; }
+  ul { padding-left: 1.3em; margin: 0.4em 0; }
+  li { margin-bottom: 0.35em; }
+  .accent { color: #58a6ff; }
+  .orange { color: #ffa657; }
+  .green { color: #7ee787; }
+  .purple { color: #d2a8ff; }
+  .red { color: #ff7b72; }
+  .yellow { color: #e3b341; }
+  .subtitle { font-size: clamp(1rem, 2.5vw, 1.5rem); color: #8b949e; font-weight: 400; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.15em; font-size: clamp(0.7rem, 1.4vw, 0.85rem); color: #58a6ff; font-weight: 700; margin-bottom: 1em; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 2.5vw, 30px); margin-top: 1em; }
+  .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: clamp(14px, 2vw, 24px); }
+  .card h3 { margin-top: 0; }
+  .flow { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 1em 0; }
+  .fbox { border-radius: 10px; padding: 10px 18px; font-size: clamp(0.75rem, 1.5vw, 1rem); font-weight: 600; text-align: center; min-width: min(420px, 80vw); }
+  .frow { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
+  .frow .fbox { min-width: min(260px, 40vw); }
+  .arrow { color: #8b949e; font-size: 1.1rem; line-height: 1; }
+  .b-gray   { background: #21262d; border: 1.5px solid #8b949e; }
+  .b-blue   { background: #0d2440; border: 1.5px solid #58a6ff; }
+  .b-green  { background: #0f2a1a; border: 1.5px solid #7ee787; }
+  .b-orange { background: #331f0b; border: 1.5px solid #ffa657; }
+  .b-yellow { background: #332b0b; border: 1.5px solid #e3b341; }
+  .b-red    { background: #33110d; border: 1.5px solid #ff7b72; }
+  .b-purple { background: #241333; border: 1.5px solid #d2a8ff; }
+  table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: clamp(0.78rem, 1.6vw, 1.05rem); }
+  th, td { border: 1px solid #30363d; padding: 8px 12px; text-align: left; }
+  th { background: #161b22; color: #58a6ff; }
+  code { background: #161b22; border: 1px solid #30363d; border-radius: 5px; padding: 1px 7px; font-size: 0.9em; color: #ffa657; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1em; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: clamp(0.75rem, 1.5vw, 0.95rem); color: #8b949e; }
+  .dot { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+  .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.4); color: #58a6ff; font-size: 26px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: background 0.2s; user-select: none; }
+  .nav-btn:hover { background: rgba(88,166,255,0.28); }
+  #prevBtn { left: 14px; } #nextBtn { right: 14px; }
+  .nav-btn.hidden { display: none; }
+  .progress { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #58a6ff, #7ee787); transition: width 0.3s; z-index: 10; }
+  .counter { position: fixed; bottom: 14px; right: 18px; font-size: 0.85rem; color: #8b949e; z-index: 10; }
+  .hint { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); color: #58a6ff; font-size: 0.95rem; animation: pulse 1.6s infinite; z-index: 10; }
+  @keyframes pulse { 0%,100% { opacity: 0.45; } 50% { opacity: 1; } }
+  @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } .frow { flex-direction: column; align-items: center; } }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1: Title -->
+  <section class="slide" style="text-align:center; align-items:center;">
+    <div class="kicker">Demo Plan Walkthrough</div>
+    <h1>Wolfram + Lean + eBPF/XDP</h1>
+    <p class="subtitle">A closed-loop formal-verification workflow for stateful packet processing</p>
+    <p style="margin-top:2em; color:#8b949e;">Symbolic discovery → machine-checked proof → executable validation</p>
+    <div class="legend" style="justify-content:center; margin-top:2.5em;">
+      <span><span class="dot" style="background:#ffa657;"></span>Wolfram</span>
+      <span><span class="dot" style="background:#7ee787;"></span>Lean 4</span>
+      <span><span class="dot" style="background:#58a6ff;"></span>Implementation / infra</span>
+      <span><span class="dot" style="background:#e3b341;"></span>Milestone gate</span>
+      <span><span class="dot" style="background:#ff7b72;"></span>Rejection / refinement</span>
+    </div>
+  </section>
+
+  <!-- 2: Big idea -->
+  <section class="slide">
+    <div class="kicker">The Big Idea</div>
+    <h2>One property, three independent representations</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3 class="orange">Wolfram Language</h3>
+        <p>Explores the state space symbolically. Proposes <b>candidate invariants</b> and finds <b>minimal counterexamples</b>. Fast, but not a proof.</p>
+      </div>
+      <div class="card">
+        <h3 class="green">Lean 4</h3>
+        <p>Independently formalizes the model and <b>machine-checks</b> every candidate. Accepts, strengthens, weakens, or rejects. No <code>sorry</code>, no axioms for main properties.</p>
+      </div>
+      <div class="card">
+        <h3 class="accent">Executable code</h3>
+        <p>A Python reference model plus a real compiled <b>eBPF/XDP program</b>. Differential tests prove the formal model matches what actually runs.</p>
+      </div>
+      <div class="card">
+        <h3 class="purple">Amp (orchestrator)</h3>
+        <p>Translates between all three, keeps names consistent, tracks invariant status, and turns every counterexample into a permanent regression test.</p>
+      </div>
+    </div>
+    <p style="margin-top:1em;">Research question: <i>can Wolfram-assisted invariant discovery reduce the manual effort of proving realistic XDP programs correct in Lean?</i></p>
+  </section>
+
+  <!-- 3: Use case -->
+  <section class="slide">
+    <div class="kicker">The Subject</div>
+    <h2>A stateful XDP rate limiter</h2>
+    <ul>
+      <li>Parses Ethernet, optional VLAN, IPv4, TCP/UDP — <b>rejecting malformed or truncated packets</b></li>
+      <li>Maintains a per-source-IP packet counter with a configurable threshold</li>
+      <li><span class="green">PASS</span> below the threshold, <span class="red">DROP</span> above it, <span class="yellow">ABORT</span> on error</li>
+    </ul>
+    <h3>Properties to prove (spec §7)</h3>
+    <div class="grid2">
+      <div class="card"><p><b>Memory safety</b> — every packet read within <code>[0, packet_length]</code><br><b>Parser monotonicity</b> — offset never moves backward<br><b>Parser boundedness</b> — offset ≤ packet length<br><b>Counter monotonicity</b> — counters never silently decrease</p></div>
+      <div class="card"><p><b>No silent overflow</b> — saturating counters, proved<br><b>Rate-limit correctness</b> — C ≤ T ⇒ PASS, C &gt; T ⇒ DROP<br><b>Packet preservation, determinism, malformed-packet safety</b><br><b>Refinement</b> — model ≡ real XDP program on all vectors</p></div>
+    </div>
+    <p style="margin-top:0.8em; color:#8b949e;">Relevant to DPU / SmartNIC-class systems; described conservatively, not as a vendor implementation.</p>
+  </section>
+
+  <!-- 4: Graph overview -->
+  <section class="slide">
+    <div class="kicker">The Workflow Graph — Overview</div>
+    <h2>Eight phases, one gate, one loop</h2>
+    <div class="flow">
+      <div class="fbox b-gray">PHASE 0 · Environment (WSL toolchain)</div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-blue">PHASE 1 · Repo skeleton + assumptions &nbsp;→&nbsp; PHASE 2 · Python reference model</div>
+      <div class="arrow">▼ &nbsp;(parallel split)</div>
+      <div class="frow">
+        <div class="fbox b-green">PHASE 3 · Lean formalization</div>
+        <div class="fbox b-orange">PHASE 4 · Wolfram boundary search</div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-yellow">MILESTONE 1 GATE · review stop</div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-purple">PHASE 5 · Closed invariant loop (the heart of the demo)</div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-blue">PHASE 6 · eBPF/XDP + differential tests</div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-blue">PHASE 7 · CI, metrics, docs → Definition of Done</div>
+    </div>
+  </section>
+
+  <!-- 5: Phase 0 -->
+  <section class="slide">
+    <div class="kicker">Phase 0</div>
+    <h2>Environment — a deliberate Windows / WSL split</h2>
+    <table>
+      <tr><th>Component</th><th>Runs on</th><th>Status</th></tr>
+      <tr><td>Wolfram Language (<code>wolframscript</code>)</td><td>Windows</td><td class="green">installed</td></tr>
+      <tr><td>Lean 4.32.2 / Lake 5.0</td><td>Windows</td><td class="green">installed</td></tr>
+      <tr><td>Python 3.12 reference model</td><td>Windows + WSL</td><td class="green">installed</td></tr>
+      <tr><td>Clang/LLVM (eBPF target), libbpf, bpftool</td><td>WSL Ubuntu-24.04</td><td class="yellow">to install</td></tr>
+      <tr><td>XDP execution via <code>BPF_PROG_TEST_RUN</code></td><td>WSL (no NIC attach)</td><td class="yellow">planned</td></tr>
+    </table>
+    <p><b>Why it works:</b> JSON files under <code>generated/</code> are the <i>only</i> exchange format between Wolfram, Lean, and the executable — so the OS boundary never leaks into the verification logic.</p>
+    <p style="margin-top:0.5em;"><b>Verify check:</b> all five toolchains answer a version query before anything else is built.</p>
+  </section>
+
+  <!-- 6: Phases 1-2 -->
+  <section class="slide">
+    <div class="kicker">Phases 1 – 2</div>
+    <h2>Foundation: assumptions first, then a reference model</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3 class="accent">Phase 1 · Repo skeleton</h3>
+        <ul>
+          <li>Directory tree from the spec: <code>xdp/</code>, <code>model/</code>, <code>wolfram/</code>, <code>lean/</code>, <code>generated/</code>, <code>scripts/</code>, <code>docs/</code></li>
+          <li><code>docs/assumptions.md</code> — every assumption explicit, split into <b>model / eBPF verifier / Linux / DPU</b> classes</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent">Phase 2 · Python reference model</h3>
+        <ul>
+          <li>Total-function evaluator: <code>evaluate(packet, state) → (result, state)</code></li>
+          <li>Explicit error status — malformed input never raises, never reads out of bounds</li>
+          <li>Unit tests include <b>truncation at every byte boundary</b></li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1em;">The reference model is the semantic anchor: Wolfram, Lean, and the eBPF program are all judged against it — and it stays <b>independent of the eBPF implementation</b>.</p>
+  </section>
+
+  <!-- 7: Phases 3-4 -->
+  <section class="slide">
+    <div class="kicker">Phases 3 – 4 (parallel)</div>
+    <h2>Two independent views of the same parser</h2>
+    <div class="grid2">
+      <div class="card" style="border-color:#7ee787;">
+        <h3 class="green">Phase 3 · Lean 4 formalization</h3>
+        <ul>
+          <li><code>Packet.lean</code>, <code>State.lean</code>, <code>Parser.lean</code> — defined independently, <b>not</b> imported from Wolfram output</li>
+          <li>First theorem: <i>successful IPv4 parse ⇒ every accessed header byte lies within the packet boundary</i></li>
+          <li>Gate: <code>lake build</code> green, zero <code>sorry</code></li>
+        </ul>
+      </div>
+      <div class="card" style="border-color:#ffa657;">
+        <h3 class="orange">Phase 4 · Wolfram boundary search</h3>
+        <ul>
+          <li><code>PacketModel.wl</code>, <code>StateTransition.wl</code> — symbolic packets with byte constraints</li>
+          <li>Sweeps <b>packet-length × IHL</b> boundary cases</li>
+          <li>Exports <code>generated/test_vectors.json</code>, replayed against the Python model — actions must agree</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1em;">Independence is the point: if two teams derive the same safety condition from the same spec, agreement is evidence, not coincidence.</p>
+  </section>
+
+  <!-- 8: Gate -->
+  <section class="slide" style="text-align:center; align-items:center;">
+    <div class="kicker">Milestone 1 Gate</div>
+    <h2 class="yellow">A hard stop, on purpose</h2>
+    <div class="fbox b-yellow" style="margin:1em auto; max-width:600px;">
+      parser safety proved in Lean · Wolfram vectors agree with Python · concept map documented
+    </div>
+    <p style="max-width:700px;">The spec forbids building the rate limiter until parser safety is settled. This gate is where the plan is reviewed: representations compared, naming table (<code>packetLength</code> ↔ <code>Packet.length</code> ↔ <code>data_end − data</code>) locked in, assumptions re-checked.</p>
+    <p style="margin-top:1em; color:#8b949e;">Everything after this gate builds on a proven-safe parser.</p>
+  </section>
+
+  <!-- 9: Phase 5 loop -->
+  <section class="slide">
+    <div class="kicker">Phase 5 — The Heart of the Demo</div>
+    <h2>The closed invariant loop</h2>
+    <div class="flow">
+      <div class="fbox b-orange">Wolfram: InvariantDiscovery.wl<br><span style="font-weight:400; font-size:0.85em;">bounded predicate grammar + reachability → <code>invariants.json</code></span></div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-green">ExportLean.wl → theorem skeletons in <code>GeneratedInvariants.lean</code></div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-green">Lean: prove / strengthen / weaken / <span class="red">reject</span></div>
+      <div class="arrow red">▼ rejected candidate</div>
+      <div class="fbox b-orange">Wolfram: CounterexampleSearch.wl<br><span style="font-weight:400; font-size:0.85em;">minimize by pkt len › headers › counter › threshold › trace → <code>counterexamples.json</code></span></div>
+      <div class="arrow red">▼</div>
+      <div class="fbox b-red">spec refinement + permanent regression vector &nbsp;⟲&nbsp; back to discovery (loop until stable)</div>
+    </div>
+    <p>Proved results land in <code>invariant_status.json</code>: <b>PROVED / STRENGTHENED / WEAKENED / REJECTED / REDUNDANT</b> — plus proof metrics per theorem.</p>
+  </section>
+
+  <!-- 10: Why the loop matters -->
+  <section class="slide">
+    <div class="kicker">Why the loop matters</div>
+    <h2>Failed proofs are results, not failures</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3 class="red">When Lean rejects a candidate</h3>
+        <ul>
+          <li>Wolfram hunts for the <b>smallest</b> counterexample</li>
+          <li>The counterexample becomes a <b>permanent regression test</b></li>
+          <li>The invariant grammar or spec is refined — never weakened just to make a proof pass</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="green">What gets measured</h3>
+        <ul>
+          <li>candidates proposed vs. accepted unmodified</li>
+          <li>strengthened / weakened / rejected counts</li>
+          <li>proof effort with and without Wolfram assistance (Modes A / B / C)</li>
+          <li>translation correctness of Amp-generated Lean skeletons</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1em;">Every generated theorem keeps its original Wolfram expression alongside the Lean translation, and both are evaluated on test assignments to catch <b>semantic drift in translation</b>.</p>
+  </section>
+
+  <!-- 11: Phase 6 -->
+  <section class="slide">
+    <div class="kicker">Phase 6</div>
+    <h2>Back to reality: the compiled XDP program</h2>
+    <div class="flow">
+      <div class="frow">
+        <div class="fbox b-blue">xdp_rate_limit.bpf.c<br><span style="font-weight:400;font-size:0.85em;">compiled with Clang → eBPF, loaded via libbpf</span></div>
+        <div class="fbox b-purple">generated/test_vectors.json<br><span style="font-weight:400;font-size:0.85em;">same corpus used everywhere</span></div>
+      </div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-blue">BPF_PROG_TEST_RUN harness (WSL, user-space — no NIC, no root network changes)</div>
+      <div class="arrow">▼</div>
+      <div class="fbox b-green">action + state compared against Python reference model — zero divergence allowed</div>
+    </div>
+    <p>This is the <b>refinement</b> property (§7.10) made executable: the thing we proved theorems about and the thing that actually runs must agree on every vector — including every counterexample the loop ever found.</p>
+  </section>
+
+  <!-- 12: Phase 7 + done -->
+  <section class="slide">
+    <div class="kicker">Phase 7 → Done</div>
+    <h2>CI keeps the loop honest</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3 class="accent">The build fails when…</h3>
+        <ul>
+          <li>a Lean theorem stops compiling, or <code>sorry</code> appears in final proofs</li>
+          <li>a regression vector changes behavior</li>
+          <li>reference model and XDP program disagree</li>
+          <li>generated invariants go stale or drift</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3 class="accent">Definition of done (§18)</h3>
+        <ul>
+          <li>rate limiter builds; models pass all tests</li>
+          <li>core safety properties machine-checked</li>
+          <li>byte-level malformed-packet coverage</li>
+          <li>differential tests green; assumptions documented; artifacts reproducible</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top:1em;">Plus conservative relevance docs: this verifies <b>the software class that runs on DPU / SmartNIC platforms</b> — it does not claim anything about proprietary silicon.</p>
+    <p style="margin-top:1.5em; text-align:center; color:#8b949e;">Plan: <code>C:\Amp_demos\Xsightlab\DEMO_PLAN.md</code> · Graph: <code>DEMO_PLAN_Workflow.drawio</code></p>
+  </section>
+
+</div>
+
+<button class="nav-btn hidden" id="prevBtn">‹</button>
+<button class="nav-btn" id="nextBtn">›</button>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter">1 / 12</div>
+<div class="hint" id="hint">← Swipe to navigate →</div>
+
+<script>
+(function () {
+  var deck = document.getElementById('deck');
+  var slides = deck.children.length;
+  var cur = 0;
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var progress = document.getElementById('progress');
+  var counter = document.getElementById('counter');
+  var hint = document.getElementById('hint');
+  var navigated = false;
+
+  function go(n) {
+    cur = Math.max(0, Math.min(slides - 1, n));
+    deck.style.transform = 'translateX(-' + (cur * 100) + 'vw)';
+    progress.style.width = (((cur + 1) / slides) * 100) + '%';
+    counter.textContent = (cur + 1) + ' / ' + slides;
+    prevBtn.classList.toggle('hidden', cur === 0);
+    nextBtn.classList.toggle('hidden', cur === slides - 1);
+    if (!navigated && cur > 0) { navigated = true; hint.style.display = 'none'; }
+  }
+
+  prevBtn.addEventListener('click', function () { go(cur - 1); });
+  nextBtn.addEventListener('click', function () { go(cur + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(cur - 1); }
+  });
+
+  var startX = null;
+  document.addEventListener('touchstart', function (e) { startX = e.touches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (startX === null) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) { dx < 0 ? go(cur + 1) : go(cur - 1); }
+    startX = null;
+  }, { passive: true });
+
+  var mouseX = null;
+  document.addEventListener('mousedown', function (e) { if (e.target.closest('.nav-btn')) return; mouseX = e.clientX; });
+  document.addEventListener('mouseup', function (e) {
+    if (mouseX === null) return;
+    var dx = e.clientX - mouseX;
+    if (Math.abs(dx) > 50) { dx < 0 ? go(cur + 1) : go(cur - 1); }
+    mouseX = null;
+  });
+
+  go(0);
+})();
+</script>
+</body>
+</html>
