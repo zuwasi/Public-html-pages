@@ -153,7 +153,8 @@
   <p id="pwdError" style="color:#ef4444;margin-top:15px;display:none;">Incorrect password. Try again.</p>
 </div>
 <script>
-function checkPwd(){var p=document.getElementById('pwdInput').value;if(p==='rty768'){document.getElementById('passwordOverlay').style.display='none';}else{document.getElementById('pwdError').style.display='block';document.getElementById('pwdInput').value='';document.getElementById('pwdInput').focus();}}
+var PWD_DIGEST='1274b5e0c2674640e235d2708c6e224ffed941321eed6030793e59d6dc24ab0b';
+async function checkPwd(){var v=document.getElementById('pwdInput').value;var buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(v));var h=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0');}).join('');if(h===PWD_DIGEST){document.getElementById('passwordOverlay').style.display='none';}else{document.getElementById('pwdError').style.display='block';document.getElementById('pwdInput').value='';document.getElementById('pwdInput').focus();}}
 document.addEventListener('DOMContentLoaded',function(){document.getElementById('pwdInput').focus();});
 </script>
 
