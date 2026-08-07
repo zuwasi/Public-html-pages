@@ -89,7 +89,82 @@
     </div>
   </section>
 
-  <!-- Slide 2: The trigger -->
+  <!-- Slide 2: What is SBOMator -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>New here? What is SBOMator?</h2>
+      <p><strong>SBOMator</strong> by ESL — Engineering Software Lab is a software supply-chain evidence platform: it discovers <em>everything</em> your product is built from, checks it against vulnerability and malware intelligence, and turns the result into audit-ready compliance evidence.</p>
+      <div class="grid2" style="margin-top:0.8em;">
+        <div class="card blue">
+          <h3>&#128230; Know what's inside</h3>
+          <p>Generates <strong>CycloneDX SBOMs</strong>: direct and transitive dependencies, versions, suppliers, licenses, PURLs and resolvable hashes — the full ingredient list of your software.</p>
+        </div>
+        <div class="card blue">
+          <h3>&#128270; Know what's dangerous</h3>
+          <p>Correlates every component with <strong>NVD, OSV and Grype</strong>, adds <strong>CISA KEV</strong> exploitation status and <strong>FIRST EPSS</strong> prioritization, and records <strong>VEX</strong> affected / not-affected decisions.</p>
+        </div>
+        <div class="card green">
+          <h3>&#128203; Prove what you did</h3>
+          <p>Hash-chained, tamper-evident audit history and ready-made evidence packs for the <strong>EU Cyber Resilience Act</strong> and <strong>FDA Section 524B</strong> (medical devices).</p>
+        </div>
+        <div class="card green">
+          <h3>&#128421; Watch what changes</h3>
+          <p>Endpoint monitoring inventories installed software, packages, runtimes and even AI-agent extensions — with rescans, integrity drift and new-CVE alerts.</p>
+        </div>
+      </div>
+      <p style="margin-top:0.8em;" class="subtitle">Core philosophy: <strong style="color:#e6edf3;">know what is in your product, know what changed, prove what you did.</strong></p>
+    </div>
+  </section>
+
+  <!-- Slide 3: What it scans -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>It scans far more than package manifests</h2>
+      <table>
+        <tr><th>Layer</th><th>What SBOMator analyzes</th></tr>
+        <tr><td><strong>Source &amp; vendored code</strong></td><td>CMake projects, includes, SDK paths, known-library source signatures</td></tr>
+        <tr><td><strong>Binaries</strong></td><td><span class="mono">.a &bull; .lib &bull; .so &bull; .ko &bull; .o</span> + symbol analysis, cross-architecture: ARM, AArch64, RISC-V, MIPS, Xtensa, PowerPC</td></tr>
+        <tr><td><strong>Firmware images</strong></td><td>HEX, U-Boot, SquashFS, CPIO, EXT4 — with Yocto and Zephyr Kconfig-aware analysis</td></tr>
+        <tr><td><strong>Package ecosystems</strong></td><td>npm, PyPI, vcpkg, Conan, NuGet, Scoop, Chocolatey and more</td></tr>
+        <tr><td><strong>Hardware (HBOM)</strong></td><td>Xilinx MPSoC / Vivado designs: HDL, IP cores, bitstreams join the evidence graph</td></tr>
+        <tr><td><strong>AI / ML (AI-BOM)</strong></td><td>Models, CUDA/TensorRT stacks, agent skills — G7 SBOM-for-AI minimum elements</td></tr>
+        <tr><td><strong>Endpoints</strong></td><td>Installed software, runtimes, MCP servers and AI-agent skills on developer machines</td></tr>
+      </table>
+      <div class="card blue">
+        <p>Built for <strong>embedded and regulated products</strong>: Yocto, Zephyr, embOS, ThreadX, FreeRTOS — where the riskiest components never appear in any package manifest.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 4: Why teams choose it -->
+  <section class="slide">
+    <div class="slide-inner">
+      <h2>Why teams choose SBOMator</h2>
+      <div class="grid2">
+        <div class="card green">
+          <h3>&#128274; Runs where your code lives</h3>
+          <p>Desktop dashboard + CLI on your own machines. <strong>Offline / air-gapped modes</strong> with local NVD, OSV and KEV mirrors — PUBLIC, HYBRID, PRIVATE or fully LOCAL, no cloud upload required.</p>
+        </div>
+        <div class="card green">
+          <h3>&#127919; Fewer false positives</h3>
+          <p>Build-aware firmware analysis recognizes <strong>backported security fixes</strong> in Yocto and Zephyr instead of naively matching version numbers.</p>
+        </div>
+        <div class="card green">
+          <h3>&#129302; AI-era protection</h3>
+          <p>HalluSquatting protection against hallucinated package names, plus security scanning of AI-agent skills and MCP servers.</p>
+        </div>
+        <div class="card green">
+          <h3>&#128737; Privacy-gated evidence</h3>
+          <p>Local fingerprinting with a privacy gate that strips secrets before any external lookup — similarity evidence without blind disclosure.</p>
+        </div>
+      </div>
+      <div class="card blue" style="margin-top:0.8em;">
+        <p><strong>And new in 1.3:</strong> the real-time supply-chain threat detection layer this presentation is about — starting with the attack that proved why it matters.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Slide 5: The trigger -->
   <section class="slide">
     <div class="slide-inner">
       <h2>August 4, 2026 — the Mini Shai-Hulud attack</h2>
@@ -325,7 +400,7 @@ SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
 <div class="nav-arrow hidden" id="prevBtn">&#8249;</div>
 <div class="nav-arrow" id="nextBtn">&#8250;</div>
 <div class="progress" id="progress"></div>
-<div class="counter" id="counter">1 / 12</div>
+<div class="counter" id="counter">1 / 15</div>
 
 <script>
 (function () {
