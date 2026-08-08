@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SBOMator 1.3 — Real-Time Supply-Chain Threat Detection</title>
+<title>SBOMator 1.4 — Real-Time Supply-Chain Threat Detection</title>
 <link rel="icon" type="image/png" href="sbomator-logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -38,6 +38,8 @@
   code, .mono { font-family: 'Consolas', 'Courier New', monospace; background: #161b22; padding: 1px 6px; border-radius: 4px; font-size: 0.92em; color: #79c0ff; }
   pre { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: clamp(10px, 2vw, 18px); overflow-x: auto; margin: 0.6em 0; font-size: clamp(0.68rem, 1.4vw, 0.92rem); line-height: 1.5; font-family: 'Consolas', monospace; color: #c9d1d9; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 2vw, 24px); }
+  .big-logo { width: clamp(140px, 22vw, 260px); height: auto; border-radius: 12px; margin-bottom: 0.8em; transition: transform 0.2s; }
+  .big-logo:hover { transform: scale(1.05); }
   @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
   .nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: clamp(40px, 6vw, 56px); height: clamp(40px, 6vw, 56px); border-radius: 50%; background: rgba(88,166,255,0.15); border: 1px solid #58a6ff; color: #58a6ff; font-size: clamp(1.3rem, 3vw, 1.8rem); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; user-select: none; transition: background 0.2s, opacity 0.3s; }
   .nav-arrow:hover { background: rgba(88,166,255,0.35); }
@@ -80,10 +82,13 @@
   <!-- Slide 1: Title -->
   <section class="slide">
     <div class="slide-inner" style="text-align:center;">
-      <div class="badge">NEW IN SBOMATOR 1.3</div>
+      <a href="https://eswlab.com/products/esl-ailogiclabs/sbomator/" target="_blank" rel="noopener noreferrer" title="SBOMator product page" style="display:block;">
+        <img src="sbomator-logo.png" alt="SBOMator by ESL" class="big-logo">
+      </a>
+      <div class="badge">NEW IN SBOMATOR 1.4</div>
       <h1>Real-Time Supply-Chain<br>Threat Detection</h1>
       <p class="subtitle">Catching the next <span class="mono">keyv</span>-style npm attack — at scan time, at install time,<br>and before any vendor publishes an advisory</p>
-      <p class="logo-line">ESL — Engineering Software Lab &nbsp;|&nbsp; SBOMator 1.3.x &nbsp;|&nbsp; August 2026<br>
+      <p class="logo-line">ESL — Engineering Software Lab &nbsp;|&nbsp; SBOMator 1.4.x &nbsp;|&nbsp; August 2026<br>
       <a href="https://www.eswlab.com" style="color:#58a6ff;text-decoration:none;">www.eswlab.com</a> &nbsp;|&nbsp; <a href="mailto:sales@eswlab.com" style="color:#58a6ff;text-decoration:none;">sales@eswlab.com</a></p>
       <div class="swipe-hint" id="swipeHint">&larr; Swipe to navigate &rarr;</div>
     </div>
@@ -159,7 +164,7 @@
         </div>
       </div>
       <div class="card blue" style="margin-top:0.8em;">
-        <p><strong>And new in 1.3:</strong> the real-time supply-chain threat detection layer this presentation is about — starting with the attack that proved why it matters.</p>
+        <p><strong>And new in 1.4:</strong> the real-time supply-chain threat detection layer this presentation is about — starting with the attack that proved why it matters.</p>
       </div>
     </div>
   </section>
@@ -218,7 +223,7 @@
         </div>
         <div class="card green">
           <h3>&#9989; Identity-based detection</h3>
-          <p>The only thing that worked: knowing <span class="mono">keyv@6.0.0</span> <em>itself</em> is malicious, or spotting the suspicious <span class="mono">preinstall</span> hook it introduced. <strong>That is exactly what SBOMator 1.3 adds.</strong></p>
+          <p>The only thing that worked: knowing <span class="mono">keyv@6.0.0</span> <em>itself</em> is malicious, or spotting the suspicious <span class="mono">preinstall</span> hook it introduced. <strong>That is exactly what SBOMator 1.4 adds.</strong></p>
         </div>
       </div>
     </div>
@@ -238,7 +243,7 @@
         <tr><td class="mono">hours</td><td>OSV.dev</td><td>Canonical MAL-* advisories (MAL-2026-11524 for keyv)</td></tr>
       </table>
       <div class="card blue">
-        <p><strong>Lesson:</strong> real-time detection came from <em>registry-metadata monitoring</em> — new version &rarr; check lifecycle scripts &rarr; alert in minutes. Not from any cloud security platform. SBOMator 1.3 implements this exact mechanism on your endpoint.</p>
+        <p><strong>Lesson:</strong> real-time detection came from <em>registry-metadata monitoring</em> — new version &rarr; check lifecycle scripts &rarr; alert in minutes. Not from any cloud security platform. SBOMator 1.4 implements this exact mechanism on your endpoint.</p>
       </div>
     </div>
   </section>
@@ -286,7 +291,7 @@
   <section class="slide">
     <div class="slide-inner">
       <h2>Verified against the real attack</h2>
-      <p>Live run of SBOMator 1.3 against the actual incident packages:</p>
+      <p>Live run of SBOMator 1.4 against the actual incident packages:</p>
       <pre>OSV keyv@6.0.0:  OSV malicious-package advisory (<span style="color:#f85149;">MAL-2026-11524</span>)
 OSV keyv@5.6.0:  clean
 SBOM scan: keyv 6.0.0  &lt;- Built-in IOC Database
@@ -359,7 +364,7 @@ SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
           </ul>
         </div>
         <div class="card green">
-          <h3>Detected in minutes (SBOMator 1.3)</h3>
+          <h3>Detected in minutes (SBOMator 1.4)</h3>
           <ul>
             <li>One registry-proxy block rule for the package family</li>
             <li>Pin known-good versions, freeze auto-updates</li>
@@ -377,7 +382,7 @@ SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
     <div class="slide-inner">
       <h2>Shipping now &amp; on the roadmap</h2>
       <div class="card green">
-        <h3>&#9989; In SBOMator 1.3 today</h3>
+        <h3>&#9989; In SBOMator 1.4 today</h3>
         <p>OSV malware check in every scan &bull; real-time endpoint watcher with live OSV &bull; install-hook zero-day heuristic &bull; multi-source IOC corroboration &bull; keyv attack demo &amp; sample client report</p>
       </div>
       <div class="card blue">
@@ -387,7 +392,12 @@ SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
           <li><strong>Dependency repo watch</strong> — monitor the Git repos behind your SBOM; the keyv payload was visible in public commits at 09:02, turning into the <strong class="green">09:08 alert</strong> shown in the timeline — 27 minutes before npm</li>
         </ul>
       </div>
-      <p style="text-align:center; margin-top:1.5em;" class="subtitle">ESL — Engineering Software Lab<br><strong style="color:#e6edf3;">SBOMator: the supply-chain detection layer your EDR can't see.</strong></p>
+      <p style="text-align:center; margin-top:1.2em;">
+        <a href="https://eswlab.com/products/esl-ailogiclabs/sbomator/" target="_blank" rel="noopener noreferrer" title="SBOMator product page">
+          <img src="sbomator-logo.png" alt="SBOMator by ESL" class="big-logo">
+        </a>
+      </p>
+      <p style="text-align:center; margin-top:0.6em;" class="subtitle">ESL — Engineering Software Lab<br><strong style="color:#e6edf3;">SBOMator: the supply-chain detection layer your EDR can't see.</strong></p>
       <p style="text-align:center; margin-top:1em;">
         <a href="https://www.eswlab.com" style="color:#58a6ff;text-decoration:none;">www.eswlab.com</a> &nbsp;|&nbsp;
         <a href="mailto:sales@eswlab.com" style="color:#58a6ff;text-decoration:none;">sales@eswlab.com</a>
