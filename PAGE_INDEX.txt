@@ -266,6 +266,9 @@ Last updated: 2026-08-08
 • level5-safety-pipeline
   https://zuwasi.github.io/Public-html-pages/level5-safety-pipeline
 
+• msvc-o1-miscompilation-parasoft
+  https://zuwasi.github.io/Public-html-pages/msvc-o1-miscompilation-parasoft
+
 • mysticeti-consensus-digital-twin
   https://zuwasi.github.io/Public-html-pages/mysticeti-consensus-digital-twin
 
