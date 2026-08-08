@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How layered verification with Parasoft C/C++test can expose an MSVC /O1 compiler miscompilation before release.">
+  <meta name="author" content="Daniel (Dani) Liezrowice">
+  <title>When Correct C++ Produces the Wrong Answer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; --bg: #0d1321; --surface: #151e30; --text: #e8ecf4; --muted: #aeb8ca; --link: #4fc3f7; --border: #344158; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem); line-height: 1.75; }
+    a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; overflow-wrap: anywhere; }
+    a:hover, a:focus-visible { color: #8cddff; }
+    .page { width: min(800px, calc(100% - 2rem)); margin: 0 auto; }
+    .origin { margin-top: 1.25rem; padding: .85rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--muted); font-size: .92rem; }
+    header { padding: clamp(2.5rem, 7vw, 5.5rem) 0 2rem; border-bottom: 1px solid var(--border); }
+    h1 { margin: 0 0 1.2rem; font-size: clamp(2rem, 5.5vw, 3.6rem); line-height: 1.1; letter-spacing: -.04em; }
+    .byline { color: var(--muted); margin: 0; }
+    main { padding: 1.5rem 0 4rem; }
+    h2 { margin: 3rem 0 1rem; font-size: clamp(1.55rem, 3vw, 2.15rem); line-height: 1.25; letter-spacing: -.025em; }
+    h3 { margin: 2.2rem 0 .7rem; font-size: clamp(1.2rem, 2vw, 1.45rem); line-height: 1.35; }
+    p, ul, ol { margin: 0 0 1.25rem; }
+    li + li { margin-top: .45rem; }
+    blockquote { margin: 1.7rem 0; padding: 1rem 1.25rem; border-left: 4px solid var(--link); background: var(--surface); color: #d7deea; }
+    blockquote p { margin: 0; }
+    pre { margin: 1.5rem 0; padding: 1.15rem; overflow-x: auto; border: 1px solid var(--border); border-radius: 9px; background: #172235; color: #f0f3f8; font: .9em/1.55 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; tab-size: 4; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+    :not(pre) > code { padding: .12em .32em; border-radius: 4px; background: #1b2840; }
+    .table-wrap { margin: 1.5rem 0; overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .95em; }
+    th, td { padding: .7rem .8rem; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+    th { background: var(--surface); font-weight: 600; }
+    td:nth-child(n+2) { font-variant-numeric: tabular-nums; }
+    hr { margin: 3rem 0; border: 0; border-top: 1px solid var(--border); }
+    .hashtags { color: var(--link); overflow-wrap: anywhere; }
+    footer { padding: 2rem 0 4rem; border-top: 1px solid var(--border); color: var(--muted); }
+    footer a + a::before { content: " · "; color: var(--muted); text-decoration: none; }
+    #back-to-top { position: fixed; right: 1rem; bottom: 1rem; width: 3rem; height: 3rem; border: 1px solid #60819a; border-radius: 50%; background: #17263a; color: var(--link); font-size: 1.35rem; cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(8px); transition: .2s ease; }
+    #back-to-top.visible { opacity: 1; visibility: visible; transform: none; }
+    #back-to-top:hover, #back-to-top:focus-visible { background: #213650; outline: 2px solid var(--link); outline-offset: 2px; }
+    @media (max-width: 520px) { .page { width: min(100% - 1.25rem, 800px); } th, td { padding: .55rem; } }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+  </style>
+</head>
+<body id="top">
+  <div class="page">
+    <div class="origin">Originally published on LinkedIn Pulse. <a href="https://www.linkedin.com/pulse/when-correct-c-produces-wrong-answer-how-parasoft-can-liezrowice-tdg2f/">Read the original article</a>.</div>
+    <header>
+      <h1>When Correct C++ Produces the Wrong Answer: How Parasoft C/C++test Can Catch an MSVC Compiler Bug Before Release</h1>
+      <p class="byline">Published August 7, 2026 by <strong>Daniel (Dani) Liezrowice</strong></p>
+    </header>
+    <main>
+      <article>
+        <h2>Your C++ Code Is Correct—but the Compiler Is Wrong</h2>
+        <p>Compiler optimizations are supposed to change performance, not program meaning. But a newly reported Microsoft Visual C++ regression demonstrates a rare and important exception: valid C++ produces the correct result without optimization and the wrong result when compiled with /O1.</p>
+        <p>The case is valuable beyond one compiler defect. It shows how static analysis, unit testing, code coverage, compiler-diverse testing, and CI quality gates work together—and why no single technique is enough.</p>
+        <blockquote><p>Status on August 7, 2026: Microsoft lists the report as Under Consideration. The public report does not yet identify a fixed compiler release.</p></blockquote>
+        <p>Microsoft Developer Community report: <a href="https://developercommunity.visualstudio.com/t/MSVC-O1-miscompiles-nested-array-loop/11126250">https://developercommunity.visualstudio.com/t/MSVC-O1-miscompiles-nested-array-loop/11126250</a></p>
+        <p>Live Compiler Explorer reproducer: <a href="https://compiler-explorer.com/z/fWc3nz1E5">https://compiler-explorer.com/z/fWc3nz1E5</a></p>
+
+        <h2>The symptom: /Od is correct, /O1 is not</h2>
+        <p>The minimized example initializes three 10×10 arrays to 1, then runs this assignment inside nested loops:</p>
+        <pre><code>arr_2[i][j] = arr_0[j + 1][i] + (arr_1[1][i] &lt; var_1);</code></pre>
+        <p>For the supplied inputs, the outer loop executes only once with i == 0, while j takes the values 0, 1, and 2. Every loaded value is 1, and the comparison 1 &lt; 2 is true. The expected first five results are therefore:</p>
+        <pre><code>2 2 2 1 1</code></pre>
+        <p>That is exactly what MSVC 19.51 produces with /Od. With /O1, however, the result is:</p>
+        <pre><code>81 161 241 1 1</code></pre>
+
+        <h2>Why 81, 161, 241 reveal the likely compiler failure</h2>
+        <p>The incorrect numbers initially look like data corruption. They are much more structured than that.</p>
+        <p>Each row of arr_0 contains ten long long values. On this target, that means an 80-byte row:</p>
+        <pre><code>10 elements × 8 bytes = 80 bytes</code></pre>
+        <p>For i == 0, the three requested values reside at these offsets from the start of arr_0:</p>
+        <div class="table-wrap"><table><thead><tr><th>Expression</th><th>Byte offset</th><th>Wrong output</th></tr></thead><tbody><tr><td>arr_0[1][0]</td><td>80</td><td>81</td></tr><tr><td>arr_0[2][0]</td><td>160</td><td>161</td></tr><tr><td>arr_0[3][0]</td><td>240</td><td>241</td></tr></tbody></table></div>
+        <p>The pattern is exact:</p>
+        <pre><code>wrong result = byte offset + 1</code></pre>
+        <p>The additional 1 is the true comparison result. This strongly supports the reporter's assembly-level observation: during optimization, MSVC appears to feed an address offset into an adc operation instead of feeding it the value loaded from that address.</p>
+        <p>In conceptual terms, behavior resembling this:</p>
+        <pre><code>load value, [arr_0 + offset]
+adc result, value</code></pre>
+        <p>has become behavior resembling this:</p>
+        <pre><code>adc result, offset</code></pre>
+        <p>This is a classic value-versus-address failure in optimized code generation.</p>
+        <p>For the reported inputs, the source does not rely on uninitialized memory, out-of-range indexing, signed overflow, aliasing tricks, or another obvious form of undefined behavior. The fact that the issue is reportedly a regression from MSVC 19.50 reinforces the compiler-defect diagnosis.</p>
+
+        <h2>Where Parasoft C/C++test provides protection—and where it does not</h2>
+        <p>It is tempting to say that static analysis "catches compiler bugs." That would overstate what static analysis can do.</p>
+        <p>The source expression is valid. The defect is introduced later, while MSVC generates optimized machine code. A source-level static analyzer will not ordinarily predict that one version of one optimizer will substitute an address offset for an array value.</p>
+        <p>Parasoft C/C++test protects the release through layered verification:</p>
+        <ol><li>Static analysis helps rule out source defects and undefined behavior that often imitate compiler bugs.</li><li>Unit tests with explicit expected results expose the wrong optimized behavior.</li><li>Structural coverage demonstrates that the affected statements and decisions were exercised.</li><li>Host and target execution checks the code in representative environments.</li><li>CI reporting and quality gates prevent a compiler upgrade from silently changing production behavior.</li></ol>
+        <p>Parasoft describes C/C++test as combining static analysis, unit testing, structural code coverage, requirements traceability, runtime analysis, and CI/CD integration: <a href="https://www.parasoft.com/products/parasoft-c-ctest/">https://www.parasoft.com/products/parasoft-c-ctest/</a></p>
+        <p>Official Parasoft code-coverage overview: <a href="https://www.parasoft.com/solutions/code-coverage/">https://www.parasoft.com/solutions/code-coverage/</a></p>
+        <hr>
+
+        <h2>The regression test that blocks the bad binary</h2>
+        <p>A focused test should initialize the arrays, call the real production function, and assert the exact result:</p>
+        <pre><code>TEST(MsvcRegression, NestedArrayLoopProducesValuesNotOffsets)
+{
+    long long arr0[10][10];
+    unsigned int arr1[10][10];
+    int arr2[10][10];
+
+    for (std::size_t i = 0; i &lt; 10; ++i) {
+        for (std::size_t j = 0; j &lt; 10; ++j) {
+            arr0[i][j] = 1;
+            arr1[i][j] = 1;
+            arr2[i][j] = 1;
+        }
+    }
+
+    test(656567182542236LL, 2, 1, arr0, arr1, arr2);
+
+    EXPECT_EQ(arr2[0][0], 2);
+    EXPECT_EQ(arr2[0][1], 2);
+    EXPECT_EQ(arr2[0][2], 2);
+    EXPECT_EQ(arr2[0][3], 1);
+    EXPECT_EQ(arr2[0][4], 1);
+}</code></pre>
+        <p>C/C++test CT integrates with frameworks such as GoogleTest, making this type of test suitable for automated CI execution and coverage collection.</p>
+        <p>The important detail is that the production function must be compiled with the actual release compiler and flags. A test that exercises only an /Od test build cannot detect an /O1 code-generation defect.</p>
+        <p>I would run the same test in this matrix:</p>
+        <div class="table-wrap"><table><thead><tr><th>Build</th><th>Purpose</th></tr></thead><tbody><tr><td>MSVC 19.50 /O1</td><td>Known-good baseline reported by the reproducer</td></tr><tr><td>MSVC 19.51 /Od</td><td>Unoptimized behavioral comparison</td></tr><tr><td>MSVC 19.51 /O1</td><td>Reproduce and block the defect</td></tr><tr><td>MSVC 19.51 /O2</td><td>Exercise a different optimization strategy</td></tr><tr><td>Clang-cl or another compiler</td><td>Independent compiler comparison</td></tr><tr><td>Uninstrumented production binary</td><td>Ensure coverage instrumentation did not mask the bug</td></tr></tbody></table></div>
+        <p>That last row matters. Instrumentation changes generated code and can perturb the optimizer enough to hide a defect. Coverage should therefore complement—not replace—execution of the uninstrumented release binary.</p>
+
+        <h2>Perspective 1: What should a compiler user do now?</h2>
+        <h3>1. Pin or roll back the compiler</h3>
+        <p>The safest immediate response is to remain on MSVC 19.50—or another validated release—until Microsoft identifies a fixed version. Record the exact compiler version in the build and make toolchain upgrades pass the same CI gates as source changes.</p>
+        <h3>2. Disable optimization for the affected function or translation unit</h3>
+        <p>If upgrading cannot be avoided, compile the affected source file with /Od, or isolate the function with MSVC's optimization pragma:</p>
+        <pre><code>#if defined(_MSC_VER)
+#pragma optimize("", off)
+#endif
+
+void test(/* parameters */)
+{
+    // Existing valid implementation
+}
+
+#if defined(_MSC_VER)
+#pragma optimize("", on)
+#endif</code></pre>
+        <p>Microsoft optimization-option documentation: <a href="https://learn.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-170">https://learn.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-170</a></p>
+        <h3>3. Do not assume that /O2 is automatically safe</h3>
+        <p>The public reproducer succeeds under /O2, but one passing example does not prove that the complete product is unaffected. Changing optimization strategy should be followed by full regression, performance, concurrency, and target testing.</p>
+        <h3>4. Keep the reproducer permanently</h3>
+        <p>Once a compiler has generated incorrect executable behavior, the test should become part of the project's permanent toolchain qualification suite. Do not remove it merely because a later compiler release passes.</p>
+        <hr>
+
+        <h2>Perspective 2: What is the permanent compiler fix?</h2>
+        <p>For the compiler team, changing user source is not the solution. The permanent repair belongs in the optimizer or backend.</p>
+        <p>The engineering path should be:</p>
+        <ol><li>Minimize the program while preserving the /O1 failure.</li><li>Compare optimizer-pass output between MSVC 19.50 and 19.51.</li><li>Locate the first intermediate form where the required load disappears or becomes an address calculation.</li><li>Inspect loop-strength reduction, address-mode formation, instruction selection, and any peephole that combines a comparison and addition into adc.</li><li>Preserve the semantic distinction among an effective address, a byte displacement, an induction variable, and the value loaded from memory.</li><li>Add both execution and assembly-level regression tests.</li></ol>
+        <p>The compiler test matrix should vary array dimensions, element sizes, comparison outcomes, loop increments, LTCG settings, and target architectures. It should also include randomized differential testing against an interpreter, an unoptimized build, or an independent compiler.</p>
+        <p>The key invariant is simple: calculating a memory address does not make the value at that address available. A load may be removed only when its value is proven unnecessary—not because its offset has already been calculated.</p>
+        <hr>
+
+        <h2>The broader lesson: verify the toolchain, not only the source</h2>
+        <p>Compiler failures are uncommon, but their impact is disproportionate: the source can pass review while the shipped binary violates the source semantics.</p>
+        <p>The practical defense is not distrust of optimization. It is an evidence-based toolchain process:</p>
+        <pre><code>Static analysis
++ explicit test oracles
++ release-flag execution
++ structural coverage
++ compiler diversity
++ target testing
++ CI quality gates</code></pre>
+        <p>Parasoft C/C++test does not repair an MSVC optimizer defect. It provides the verification framework that can expose the wrong binary, preserve the regression, document the evidence, and stop that binary from reaching production.</p>
+        <p>That distinction is important—and it is exactly why layered software verification works.</p>
+        <hr>
+
+        <h2>References</h2>
+        <ol><li>Microsoft Developer Community, "MSVC /O1 miscompiles nested array loop, regression from 19.50" — <a href="https://developercommunity.visualstudio.com/t/MSVC-O1-miscompiles-nested-array-loop/11126250">https://developercommunity.visualstudio.com/t/MSVC-O1-miscompiles-nested-array-loop/11126250</a></li><li>Compiler Explorer reproducer — <a href="https://compiler-explorer.com/z/fWc3nz1E5">https://compiler-explorer.com/z/fWc3nz1E5</a></li><li>Parasoft C/C++test product overview — <a href="https://www.parasoft.com/products/parasoft-c-ctest/">https://www.parasoft.com/products/parasoft-c-ctest/</a></li><li>Parasoft code-coverage overview and official screenshots — <a href="https://www.parasoft.com/solutions/code-coverage/">https://www.parasoft.com/solutions/code-coverage/</a></li><li>Microsoft /O1 and /O2 documentation — <a href="https://learn.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-170">https://learn.microsoft.com/en-us/cpp/build/reference/o1-o2-minimize-size-maximize-speed?view=msvc-170</a></li></ol>
+        <p class="hashtags">Hashtags: #Cpp #CPlusPlus #MSVC #CompilerEngineering #StaticAnalysis #SoftwareTesting #Parasoft #CodeCoverage #FunctionalSafety #DevOps #QualityEngineering</p>
+      </article>
+    </main>
+    <footer><a href="https://zuwasi.github.io/Public-html-pages/">Back to the ESL Public Pages catalog</a><a href="https://www.linkedin.com/pulse/when-correct-c-produces-wrong-answer-how-parasoft-can-liezrowice-tdg2f/">Original LinkedIn Pulse article</a></footer>
+  </div>
+  <button id="back-to-top" type="button" aria-label="Back to top" title="Back to top">↑</button>
+  <script>
+    const button = document.getElementById('back-to-top');
+    const updateButton = () => button.classList.toggle('visible', window.scrollY > 500);
+    window.addEventListener('scroll', updateButton, { passive: true });
+    button.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+    updateButton();
+  </script>
+</body>
+</html>
