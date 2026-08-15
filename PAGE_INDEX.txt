@@ -242,6 +242,9 @@ Last updated: 2026-08-15
 • claude-code-skills-vs-amp
   https://zuwasi.github.io/Public-html-pages/claude-code-skills-vs-amp
 
+• cpp-debugging-evidence-demo
+  https://zuwasi.github.io/Public-html-pages/cpp-debugging-evidence-demo
+
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
 
