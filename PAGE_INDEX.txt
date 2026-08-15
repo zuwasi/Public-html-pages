@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-08-09
+Last updated: 2026-08-15
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -268,6 +268,9 @@ Last updated: 2026-08-09
 
 • level5-safety-pipeline
   https://zuwasi.github.io/Public-html-pages/level5-safety-pipeline
+
+• mantiq-factor-fhe-hardware
+  https://zuwasi.github.io/Public-html-pages/mantiq-factor-fhe-hardware
 
 • msvc-o1-miscompilation-parasoft
   https://zuwasi.github.io/Public-html-pages/msvc-o1-miscompilation-parasoft
