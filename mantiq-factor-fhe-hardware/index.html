@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>MantiQ Factor — Simulation-to-FPGA Evidence Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #ecf5ff;
+      --muted: #9eb0c7;
+      --panel: rgba(14, 25, 46, .88);
+      --line: rgba(157, 185, 224, .22);
+      --cyan: #38d9ff;
+      --violet: #a885ff;
+      --green: #55e6a5;
+      --amber: #ffc857;
+      --red: #ff6b81;
+      --bg0: #050910;
+      --bg1: #081426;
+    }
+    * { box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+    body {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 75% 15%, rgba(77, 57, 180, .25), transparent 34%),
+        radial-gradient(circle at 14% 85%, rgba(0, 183, 214, .16), transparent 30%),
+        var(--bg0);
+      cursor: default;
+    }
+    body.dragging { cursor: grabbing; }
+    .deck { width: 100%; height: 100%; overflow: hidden; }
+    .track { display: flex; height: 100%; transition: transform .52s cubic-bezier(.22,.8,.24,1); will-change: transform; }
+    .slide {
+      position: relative;
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100vh;
+      padding: clamp(58px, 7vh, 88px) clamp(42px, 7vw, 116px) clamp(68px, 9vh, 98px);
+      overflow: hidden;
+      background:
+        linear-gradient(145deg, rgba(10, 19, 35, .96), rgba(6, 11, 20, .91)),
+        repeating-linear-gradient(90deg, transparent 0, transparent 79px, rgba(255,255,255,.018) 80px);
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -180px;
+      top: -190px;
+      border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      border-radius: 50%;
+      box-shadow: 0 0 120px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+    .slide::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 7px;
+      height: 100%;
+      background: linear-gradient(var(--accent), transparent 82%);
+    }
+    .slide[data-theme="wolfram"] { --accent: #ff5b4d; }
+    .slide[data-theme="lean"] { --accent: #a885ff; }
+    .slide[data-theme="rtl"] { --accent: #55e6a5; }
+    .slide[data-theme="fpga"] { --accent: #ffc857; }
+    .slide[data-theme="open"] { --accent: #38d9ff; }
+    .content { position: relative; z-index: 2; height: 100%; max-width: 1480px; margin: auto; display: flex; flex-direction: column; }
+    .eyebrow { display: flex; align-items: center; gap: 12px; color: var(--accent); font-size: clamp(.72rem, 1vw, .88rem); font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 34px; height: 2px; background: var(--accent); }
+    h1 { margin: 18px 0 12px; max-width: 1200px; font-size: clamp(2.25rem, 5.4vw, 5.4rem); line-height: .98; letter-spacing: -.055em; }
+    h2 { margin: 16px 0 12px; max-width: 1220px; font-size: clamp(1.75rem, 3.7vw, 3.75rem); line-height: 1.04; letter-spacing: -.042em; }
+    .dek { max-width: 1100px; margin: 0 0 clamp(18px, 3vh, 34px); color: #c5d4e8; font-size: clamp(1rem, 1.7vw, 1.42rem); line-height: 1.45; }
+    .body { flex: 1; min-height: 0; display: flex; align-items: stretch; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); width: 100%; align-content: center; }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .card {
+      padding: clamp(15px, 2vw, 26px);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(17,31,55,.88), rgba(9,18,34,.72));
+      box-shadow: 0 16px 44px rgba(0,0,0,.18);
+    }
+    .card h3 { margin: 0 0 9px; color: var(--accent); font-size: clamp(.98rem, 1.4vw, 1.25rem); }
+    .card p, .card li, .body > div > p, .body > div > li { color: #c8d5e7; font-size: clamp(.87rem, 1.18vw, 1.08rem); line-height: 1.5; }
+    ul { margin: 7px 0 0; padding-left: 1.2em; }
+    li + li { margin-top: 7px; }
+    code { color: #fff; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.08); border-radius: 6px; padding: .08em .35em; }
+    .metric { display: flex; flex-direction: column; justify-content: center; min-height: 122px; }
+    .metric strong { color: #fff; font-size: clamp(1.8rem, 3.4vw, 3.35rem); line-height: 1; letter-spacing: -.045em; }
+    .metric span { margin-top: 9px; color: var(--muted); font-size: clamp(.78rem, 1vw, .95rem); }
+    .status { display: inline-flex; align-items: center; width: fit-content; gap: 8px; padding: 7px 11px; border-radius: 999px; font-size: .74rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    .pass { color: var(--green); background: rgba(85,230,165,.11); border: 1px solid rgba(85,230,165,.28); }
+    .pending { color: var(--amber); background: rgba(255,200,87,.11); border: 1px solid rgba(255,200,87,.3); }
+    .fail { color: var(--red); background: rgba(255,107,129,.11); border: 1px solid rgba(255,107,129,.3); }
+    .source-box { display: grid; grid-template-columns: 1.15fr 1fr; gap: 12px; margin-top: 16px; font-size: clamp(.64rem, .85vw, .78rem); color: var(--muted); }
+    .source-box div { padding: 9px 12px; border-top: 1px solid var(--line); overflow-wrap: anywhere; }
+    .source-box b { color: var(--accent); text-transform: uppercase; letter-spacing: .08em; }
+    .hero-image, .figure { width: 100%; height: 100%; max-height: 55vh; object-fit: contain; border-radius: 18px; border: 1px solid var(--line); background: rgba(2,7,14,.66); }
+    .logo-strip { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+    .tool-logo { height: clamp(38px, 6vh, 70px); max-width: 180px; object-fit: contain; background: rgba(255,255,255,.94); border-radius: 12px; padding: 7px 11px; }
+    .tool-logo[src*="Amp-logo"] { background: rgba(4,12,24,.95); border: 1px solid var(--line); }
+    .tool-logo[src*="Wolfram-Mathematica"] { max-width: 300px; }
+    .opening-card { display: flex; flex-direction: column; justify-content: center; }
+    .opening-card > p { margin: 0 0 12px; }
+    .research-basis { margin-top: 11px; padding: 10px 12px; border-left: 3px solid var(--cyan); background: rgba(56,217,255,.07); color: #d8e8f8; font-size: clamp(.72rem, .9vw, .86rem); line-height: 1.42; }
+    .board-reference { display: grid; grid-template-columns: minmax(88px, 118px) 1fr; gap: 12px; align-items: center; margin: 12px 0 0; }
+    .board-reference img { width: 100%; height: clamp(82px, 13vh, 118px); object-fit: contain; border: 1px solid rgba(255,255,255,.24); border-radius: 11px; background: #fff; }
+    .board-reference figcaption { color: var(--muted); font-size: clamp(.68rem, .83vw, .8rem); line-height: 1.4; }
+    .board-reference strong { display: block; margin-bottom: 4px; color: var(--amber); }
+    .orchestration-grid { grid-template-columns: minmax(0, 1.7fr) minmax(300px, .7fr); }
+    .orchestration-grid .hero-image { max-height: 60vh; }
+    .closing-card { display: grid; grid-template-columns: minmax(280px, .8fr) minmax(0, 1.6fr); align-items: center; gap: clamp(24px, 4vw, 58px); width: 100%; }
+    .closing-brands { display: grid; place-items: center; gap: 18px; }
+    .closing-brands img { width: 100%; max-width: 340px; max-height: 200px; object-fit: contain; border-radius: 14px; }
+    .closing-brands .closing-esl { max-width: 240px; max-height: 100px; padding: 10px 16px; background: rgba(255,255,255,.96); }
+    .closing-message blockquote { margin: 0; color: #f2f7ff; font-size: clamp(1.3rem, 2.35vw, 2.35rem); font-weight: 650; line-height: 1.35; letter-spacing: -.025em; }
+    .closing-state { display: flex; flex-wrap: wrap; gap: 10px; margin-top: clamp(20px, 3vh, 32px); }
+    .flow { display: flex; align-items: stretch; justify-content: center; gap: 9px; width: 100%; }
+    .node { flex: 1; display: grid; place-items: center; min-height: 106px; padding: 13px; text-align: center; border: 1px solid var(--line); border-radius: 15px; background: var(--panel); color: #dce9fa; font-size: clamp(.75rem, 1vw, .95rem); font-weight: 700; }
+    .arrow { align-self: center; color: var(--accent); font-size: 1.6rem; }
+    .equation { margin: auto; padding: clamp(20px, 4vw, 52px); border: 1px solid var(--line); border-radius: 22px; background: rgba(5,12,24,.8); font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: clamp(1.15rem, 2.6vw, 2.45rem); line-height: 1.7; color: #f4f8ff; }
+    .bars { display: grid; gap: 15px; width: 100%; align-content: center; }
+    .bar-row { display: grid; grid-template-columns: minmax(130px, 210px) 1fr 110px; gap: 14px; align-items: center; color: #cdd9e9; font-size: clamp(.78rem, 1vw, .95rem); }
+    .bar { height: 18px; background: rgba(255,255,255,.07); border-radius: 999px; overflow: hidden; }
+    .bar i { display: block; height: 100%; width: var(--w); border-radius: inherit; background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 48%, white)); }
+    .callout { margin: auto; max-width: 1120px; padding: clamp(22px, 4vw, 50px); border-left: 5px solid var(--accent); border-radius: 0 22px 22px 0; background: rgba(13,25,46,.82); font-size: clamp(1.1rem, 2.3vw, 2rem); line-height: 1.45; }
+    .footer {
+      position: fixed;
+      z-index: 20;
+      left: 24px;
+      right: 24px;
+      bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      pointer-events: none;
+      color: #70839c;
+      font-size: .76rem;
+      letter-spacing: .04em;
+    }
+    .footer img { display: block; object-fit: contain; filter: saturate(.9); }
+    .footer .mantiq { width: 96px; height: 52px; border-radius: 6px; }
+    .footer .esl { width: 92px; height: 52px; border-radius: 6px; }
+    .footer .esl-link { display: inline-flex; align-items: center; gap: 9px; pointer-events: auto; color: #8da1bb; text-decoration: none; }
+    .footer .esl-link:hover, .footer .esl-link:focus-visible { color: var(--cyan); }
+    .footer .physical-state { margin-left: auto; margin-right: 74px; color: var(--amber); font-weight: 700; }
+    .jump-nav { position: fixed; z-index: 34; top: 18px; right: 22px; display: flex; gap: 8px; }
+    .jump-nav button { display: grid; place-items: center; width: 38px; height: 38px; padding: 0; border: 1px solid rgba(255,255,255,.2); border-radius: 11px; color: #dce9fa; background: rgba(8,17,32,.82); backdrop-filter: blur(12px); cursor: pointer; }
+    .jump-nav button:hover, .jump-nav button:focus-visible { color: var(--cyan); background: rgba(30,53,88,.95); }
+    .jump-nav button:disabled { opacity: .34; cursor: default; }
+    .jump-nav svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .nav {
+      position: fixed;
+      z-index: 30;
+      top: 50%;
+      width: 45px;
+      height: 45px;
+      margin-top: -22px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 50%;
+      color: white;
+      background: rgba(8,17,32,.78);
+      backdrop-filter: blur(12px);
+      font-size: 1.7rem;
+      cursor: pointer;
+      transition: opacity .2s, transform .2s, background .2s;
+    }
+    .nav:hover { transform: scale(1.08); background: rgba(30,53,88,.9); }
+    .nav.prev { left: 14px; }
+    .nav.next { right: 14px; }
+    .nav[hidden] { display: none; }
+    .progress { position: fixed; z-index: 31; left: 0; right: 0; bottom: 0; height: 5px; background: rgba(255,255,255,.08); }
+    .progress > div { height: 100%; width: 0; background: linear-gradient(90deg, var(--cyan), var(--violet), var(--amber)); transition: width .4s ease; }
+    .counter { position: fixed; z-index: 32; right: 23px; bottom: 16px; color: #9cb0ca; font-size: .73rem; font-variant-numeric: tabular-nums; }
+    .swipe-hint { position: fixed; z-index: 32; left: 50%; bottom: 48px; transform: translateX(-50%); color: #b7c8dd; font-size: .75rem; animation: pulse 1.6s infinite; }
+    .swipe-hint.hidden { display: none; }
+    @keyframes pulse { 50% { opacity: .35; transform: translateX(-50%) translateY(3px); } }
+    .notes {
+      position: fixed;
+      z-index: 40;
+      left: 50%;
+      bottom: 42px;
+      transform: translateX(-50%) translateY(120%);
+      width: min(900px, 86vw);
+      max-height: 30vh;
+      overflow: auto;
+      padding: 16px 20px;
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 16px;
+      background: rgba(3,8,16,.95);
+      color: #c6d4e6;
+      font-size: .88rem;
+      line-height: 1.5;
+      transition: transform .25s ease;
+    }
+    .notes.open { transform: translateX(-50%) translateY(0); }
+    .notes b { color: var(--cyan); }
+    @media (max-width: 850px) {
+      .slide { padding: 58px 30px 82px; overflow-y: auto; }
+      .content { height: auto; min-height: 100%; }
+      .grid, .grid.three, .grid.four { grid-template-columns: 1fr; }
+      .closing-card { grid-template-columns: 1fr; }
+      .body { flex: none; }
+      .flow { flex-direction: column; }
+      .arrow { transform: rotate(90deg); }
+      .node { min-height: 66px; }
+      .source-box { grid-template-columns: 1fr; }
+      .bar-row { grid-template-columns: 110px 1fr 88px; }
+      .nav { top: 50%; bottom: auto; width: 38px; height: 38px; margin-top: -19px; font-size: 1.35rem; }
+      .nav.prev { left: 10px; }
+      .nav.next { right: 10px; }
+      .footer { display: none; }
+      .jump-nav { top: 10px; right: 10px; gap: 6px; }
+      .jump-nav button { width: 34px; height: 34px; }
+      .swipe-hint { top: 16px; bottom: auto; white-space: nowrap; }
+      .card p, .card li { font-size: .92rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .track, .progress > div, .notes { transition: none; }
+      .swipe-hint { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-label="MantiQ Factor presentation"><div class="track" id="track"></div></main>
+  <button class="nav prev" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav next" id="next" aria-label="Next slide">›</button>
+  <nav class="jump-nav" aria-label="Jump to presentation boundary">
+    <button id="homeSlide" type="button" aria-label="Go to first slide" title="First slide (Home)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"></path><path d="M5.5 10.5V20h13v-9.5M9.5 20v-6h5v6"></path></svg></button>
+    <button id="endSlide" type="button" aria-label="Go to last slide" title="Last slide (End)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5v14M8 12h10M14 8l4 4-4 4"></path></svg></button>
+  </nav>
+  <div class="footer">
+    <img class="mantiq" src="assets/logos/MantiQ-Factor-logo.png" alt="MantiQ Factor identity">
+    <span>MantiQ Factor</span>
+    <span>•</span>
+    <a class="esl-link" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer" aria-label="Contact Engineering Software Lab"><img class="esl" src="assets/logos/ESL-logo.png" alt="Engineering Software Lab logo"><span>Engineering Software Lab</span></a>
+    <span class="physical-state">PHYSICAL GATE 11: WAITING FOR HW</span>
+  </div>
+  <div class="progress" aria-hidden="true"><div id="progressFill"></div></div>
+  <div class="counter" id="counter" aria-live="polite"></div>
+  <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+  <aside class="notes" id="notes" aria-live="polite"><b>Speaker notes (N)</b><div id="notesText"></div></aside>
+  <script>
+    const slides = [
+      {section:"Opening",theme:"open",title:"MantiQ Factor",dek:"Independent ESL demonstrator based on REED; formal and simulation evidence.",body:`<div class="grid"><img class="hero-image" src="assets/logos/MantiQ-Factor-logo.png" alt="MantiQ Factor orchestration and production-line visual"><div class="card opening-card"><span class="status pending">Simulation/mock demo</span><h3>Based on “REED: Chiplet-based Accelerator for Fully Homomorphic Encryption”</h3><p class="research-basis">Aikata Aikata, Ahmet Can Mert, Sunmin Kwon, Maxim Deryabin, and Sujoy Sinha Roy · TCHES 2025(2), 163–208 · DOI 10.46586/tches.v2025.i2.163-208. This is an independent ESL evidence demonstrator—not a complete REED, chiplet, or FHE-accelerator reproduction.</p><div class="logo-strip"><img class="tool-logo" src="assets/logos/Amp-logo.png" alt="Amp logo"><img class="tool-logo" src="assets/logos/Wolfram-Spikey-logo.png" alt="Wolfram logo"><img class="tool-logo" src="assets/logos/Lean4-logo.svg" alt="Lean 4 logo"></div><figure class="board-reference"><img src="assets/images/TUL-PYNQ-Z2.jpg" alt="Reference photograph of the target TUL PYNQ-Z2 board"><figcaption><strong>Target board · TUL PYNQ-Z2</strong>Ordered and in transit. Reference photo only—not execution evidence. Gate 11 remains BLOCKED — WAITING FOR HW.</figcaption></figure></div></div>`,source:"source/paper/REED-TCHES-2025-Issue2.pdf; docs/branding_inventory.md; docs/phase11_gate.md",limit:"No physical FPGA output or measurement exists; this independent NTT/INTT demonstrator does not reproduce the complete REED system.",notes:"Open with provenance and the evidence boundary. MantiQ Factor is the project orchestrator; the displayed tools contribute distinct evidence roles. The REED paper motivates the work, but this is an independent ESL demonstrator. The board photograph identifies the ordered target and is illustrative only—not proof of possession or execution."},
+      {section:"Opening",theme:"open",title:"What this demo promises",dek:"A reproducible answer to four engineering questions — and an explicit boundary around the fifth.",body:`<div class="grid four"><div class="card"><h3>1 · Source</h3><p>Can a public paper be converted into traceable requirements without silently repairing ambiguities?</p></div><div class="card"><h3>2 · Mathematics</h3><p>Can parameters and algorithms be checked by executable and formal methods?</p></div><div class="card"><h3>3 · RTL</h3><p>Can finite-width VHDL match independently generated vectors?</p></div><div class="card"><h3>4 · FPGA</h3><p>Can the design synthesize, route, and meet an honest clock?</p></div></div>`,source:"docs/requirements.md; docs/evidence_register.md",limit:"Question 5 — physical behavior — remains pending.",notes:"Set expectations: the audience will see evidence classes, not a single undifferentiated verification claim."},
+      {section:"Opening",theme:"open",title:"The sensitive-data compute problem",dek:"Useful computation often requires giving a service visibility into the data it processes.",body:`<div class="grid three"><div class="card"><h3>Data in use</h3><p>Encryption at rest and in transit does not normally protect plaintext while a processor operates on it.</p></div><div class="card"><h3>Trust expansion</h3><p>Cloud operators, accelerators, software stacks, and administrators can enter the trusted computing base.</p></div><div class="card"><h3>FHE objective</h3><p>Evaluate selected functions over ciphertexts while preserving an encrypted result for the data owner.</p></div></div>`,source:"REED §1; public FHE background",limit:"FHE does not solve every confidentiality, integrity, or side-channel problem.",notes:"Avoid claiming universal privacy. FHE protects a specific computation/data relationship under scheme assumptions."},
+      {section:"Opening",theme:"open",title:"FHE in plain language",dek:"Operate on locked data; only the owner holds the key that reveals the final answer.",body:`<div class="flow"><div class="node">Plaintext<br>owned by client</div><div class="arrow">→</div><div class="node">Encrypt<br>ciphertext polynomials</div><div class="arrow">→</div><div class="node">Evaluate<br>add / multiply / rotate</div><div class="arrow">→</div><div class="node">Encrypted result</div><div class="arrow">→</div><div class="node">Decrypt<br>by key owner</div></div>`,source:"REED §§1–2",limit:"This project implements an NTT/INTT building block, not encryption or a complete scheme.",notes:"Use this slide to distinguish the workload context from the demonstrator scope."},
+      {section:"Opening",theme:"open",title:"Ciphertext operations grow costly",dek:"A conceptual chain: multiplication consumes noise budget and invokes polynomial/RNS machinery.",body:`<div class="grid three"><div class="card"><h3>Addition</h3><p>Usually cheaper; combines ciphertext components coefficient-wise.</p></div><div class="card"><h3>Multiplication</h3><p>Expands components and drives polynomial products, modular reduction, relinearization, and rescaling.</p></div><div class="card"><h3>Noise</h3><p>Correct decryption requires controlling accumulated error through scheme-specific operations.</p></div></div>`,source:"REED §2; docs/math_companion.md",limit:"Noise growth is conceptual here; no CKKS noise/precision model is implemented.",notes:"Do not imply that the NTT itself manages noise. It accelerates polynomial arithmetic used by higher-level operations."},
+      {section:"Opening",theme:"open",title:"Why FHE stresses compute and memory",dek:"Large rings, many residue limbs, repeated transforms, and key material create a balanced-system problem.",body:`<div class="grid four"><div class="metric card"><strong>O(N log N)</strong><span>Transform arithmetic</span></div><div class="metric card"><strong>Many limbs</strong><span>RNS decomposition in full schemes</span></div><div class="metric card"><strong>Repeated passes</strong><span>NTT, multiply, INTT, conversions</span></div><div class="metric card"><strong>Large keys</strong><span>Bandwidth and locality pressure</span></div></div>`,source:"REED §§2–4; claim ledger",limit:"Milestone 1 models one 54-bit limb and local coefficient storage only.",notes:"The commercial relevance is architecture balance, not this small core's absolute speed."},
+      {section:"Opening",theme:"open",title:"Why specialized hardware matters",dek:"FHE exposes regular modular arithmetic and dataflow — but also hard trade-offs.",body:`<div class="grid"><div class="card"><h3>Opportunity</h3><ul><li>Exploit predictable butterfly structure.</li><li>Keep coefficients near arithmetic.</li><li>Pipeline wide modular operations.</li><li>Specialize control and data movement.</li></ul></div><div class="card"><h3>Risk</h3><ul><li>Hard-code parameters too early.</li><li>Underestimate memory and conversion cost.</li><li>Confuse peak arithmetic with application throughput.</li><li>Extrapolate FPGA evidence to ASIC products.</li></ul></div></div>`,source:"docs/customer_questions.md; docs/requirements.md",limit:"This evidence vehicle is not a production architecture recommendation.",notes:"Frame the demo as a method for screening design decisions."},
+      {section:"Opening",theme:"open",title:"MantiQ Factor — an engineering path toward FHE hardware",dek:"Chain Reaction describes the market destination: purpose-built processors for practical encrypted cloud computation. MantiQ Factor addresses the reproducible development path.",body:`<div class="grid three"><div class="card"><h3>Publicly stated challenge</h3><p>FHE keeps data encrypted during processing, but general-purpose CPU/GPU execution creates major speed and efficiency barriers for sensitive cloud workloads.</p></div><div class="card"><h3>Engineering gap</h3><p>A processor vision still needs traceable requirements, executable models, proof boundaries, finite-width RTL, regression evidence, and implementation feedback before silicon.</p></div><div class="card"><span class="status pass">MantiQ Factor solution</span><h3>Research → evidence-backed demonstrator</h3><p>Orchestrate public research through specification, Mathematica, Lean, VHDL simulation, and FPGA implementation to reduce early architecture and verification risk.</p></div></div>`,source:"Chain Reaction, “Chain Reaction Develops First Fully Homomorphic Encryption Processor,” 23 Jul 2025, https://chain-reaction.io/news-medias/chain-reaction-develops-first-fully-homomorphic-encryption-processor/; docs/customer_context.md",limit:"Market context only: no affiliation, endorsement, proprietary inference, product equivalence, or performance comparison. This project remains a one-limb NTT/INTT demonstrator, not a complete FHE processor.",notes:"Say: Chain Reaction describes the destination; MantiQ Factor demonstrates a disciplined engineering path toward that class of hardware. The announcement's speed and efficiency statements are company claims without numerical measurements on the cited page. Do not present MantiQ Factor as 3PU, a reproduction, or a commercial replacement."},
+      {section:"Foundation",theme:"open",title:"Polynomial rings in FHE",dek:"Milestone 1 operates in R = Zq[x] / (xᴺ + 1).",body:`<div class="equation">a(x) = a₀ + a₁x + … + aₙ₋₁xᴺ⁻¹<br>xᴺ = −1<br>0 ≤ aᵢ &lt; q</div>`,source:"docs/requirements.md §1",limit:"One ring and one modulus; no ciphertext packing or scheme semantics.",notes:"Explain negacyclic wraparound: terms crossing degree N return with a sign change."},
+      {section:"Foundation",theme:"open",title:"Canonical modular arithmetic",dek:"Every visible coefficient is represented in [0, q−1].",body:`<div class="grid three"><div class="card"><h3>Add</h3><p><code>(a+b) mod q</code> with one conditional subtraction.</p></div><div class="card"><h3>Subtract</h3><p><code>(a−b) mod q</code> with conditional addition of q.</p></div><div class="card"><h3>Multiply</h3><p>54×54 → 108-bit raw product, then frozen Barrett reduction.</p></div></div>`,source:"docs/requirements.md §§3–4",limit:"Constants and widths are frozen; alternate reducers are future experiments.",notes:"This canonical representation is checked by vectors and RTL scoreboards."},
+      {section:"Foundation",theme:"open",title:"The polynomial multiplication bottleneck",dek:"Direct convolution scales quadratically; transform-domain multiplication changes the cost structure.",body:`<div class="grid"><div class="metric card"><strong>O(N²)</strong><span>Direct coefficient convolution</span></div><div class="metric card"><strong>O(N log N)</strong><span>Forward NTT + pointwise multiply + inverse NTT</span></div></div>`,source:"docs/math_companion.md; REED §2",limit:"Asymptotics omit constants, memory traffic, RNS conversions, and key operations.",notes:"Use this as motivation, not a performance benchmark."},
+      {section:"Foundation",theme:"open",title:"NTT intuition",dek:"An FFT-like transform over a finite field converts negacyclic convolution into pointwise products.",body:`<div class="flow"><div class="node">a(x), b(x)</div><div class="arrow">→</div><div class="node">NTT(a), NTT(b)</div><div class="arrow">→</div><div class="node">Pointwise modular multiply</div><div class="arrow">→</div><div class="node">INTT</div><div class="arrow">→</div><div class="node">a·b mod (xᴺ+1,q)</div></div>`,source:"docs/requirements.md R-RING-2; Gate 04",limit:"Pointwise polynomial-multiply vectors are model-checked; no polynomial-multiplier RTL exists.",notes:"The implemented core supplies the forward/inverse transforms only."},
+      {section:"Foundation",theme:"open",title:"A butterfly worked example",dek:"The local operation reused across every stage.",body:`<div class="equation">V = b · S mod q<br>CT: (a + V, a − V) mod q<br><br>GS: (a + b, (a − b) · S) mod q</div>`,source:"docs/requirements.md §5; docs/formalization_map.md",limit:"Lean proves this algebra; simulation establishes the finite-width RTL transaction.",notes:"Point to the division of evidence: theorem for algebra, scoreboard for VHDL."},
+      {section:"Foundation",theme:"open",title:"Forward versus inverse",dek:"The frozen convention eliminates a hardware reorder block.",body:`<div class="grid"><div class="card"><h3>Forward · CT</h3><p>Natural-order input → bit-reversed output using merged-ψ twiddles.</p></div><div class="card"><h3>Inverse · GS</h3><p>Bit-reversed input → natural-order output, followed by explicit multiplication by N⁻¹.</p></div></div>`,source:"docs/requirements.md §§5–6",limit:"Ordering is binding and encoded in every transform vector.",notes:"A host-mediated roundtrip feeds the forward output directly into inverse without reordering."},
+      {section:"Foundation",theme:"open",title:"RNS and the larger FHE pipeline",dek:"Future context only: full schemes use multiple primes and operations around the NTT.",body:`<div class="flow"><div class="node">RNS limbs</div><div class="arrow">→</div><div class="node">NTT per limb</div><div class="arrow">→</div><div class="node">Pointwise arithmetic</div><div class="arrow">→</div><div class="node">INTT</div><div class="arrow">→</div><div class="node">Base conversion / key switching</div></div>`,source:"REED §§2–4; docs/requirements.md scope",limit:"RNS, key switching, ModUp/ModDown, and bootstrapping are not implemented.",notes:"Keep future scope visibly distinct from current evidence."},
+      {section:"Foundation",theme:"open",title:"What an ASIC must balance",dek:"Arithmetic alone is not the product architecture.",body:`<div class="grid four"><div class="card"><h3>Arithmetic</h3><p>Width, reducer, pipeline depth, parallel lanes.</p></div><div class="card"><h3>Memory</h3><p>Banking, capacity, locality, twiddles, keys.</p></div><div class="card"><h3>Interconnect</h3><p>Data movement, chiplets, host and HBM links.</p></div><div class="card"><h3>Agility</h3><p>Ring size, primes, schemes, updateability.</p></div></div>`,source:"docs/customer_questions.md; evidence register",limit:"FPGA LUT/DSP/BRAM cannot be translated directly to ASIC PPA.",notes:"This slide closes the technical primer with decision criteria."},
+      {section:"Research",theme:"open",title:"REED — public research starting point",dek:"Aikata Aikata, Ahmet Can Mert, Sunmin Kwon, Maxim Deryabin, and Sujoy Sinha Roy.",body:`<div class="grid"><div class="card"><h3>Publication</h3><p><em>REED: Chiplet-based Accelerator for Fully Homomorphic Encryption</em><br>TCHES 2025(2), pp. 163–208<br>DOI 10.46586/tches.v2025.i2.163-208</p></div><div class="card"><h3>Source control</h3><p>46-page authoritative PDF, latest listed revision 17 Jan 2025, SHA-256 authenticated, CC BY 4.0.</p></div></div>`,source:"docs/source_manifest.md; docs/references.md",limit:"MantiQ Factor is independent and does not reproduce the full REED system.",notes:"Credit all authors and the CC BY 4.0 source."},
+      {section:"Research",theme:"open",title:"What REED contributes",dek:"A public architecture study connecting FHE operations, hybrid NTT, chiplets, and modeled system trade-offs.",body:`<div class="grid three"><div class="card"><h3>Workload decomposition</h3><p>Operation-level view of FHE arithmetic and data movement.</p></div><div class="card"><h3>Hybrid NTT focus</h3><p>NTT/INTT is reported as a dominant micro-block and useful architectural lens.</p></div><div class="card"><h3>Chiplet study</h3><p>Reported performance, area, power, yield, and cost are paper results under paper assumptions.</p></div></div>`,source:"docs/claim_ledger.md C-001…C-064",limit:"No REED benchmark, area, or power figure is reproduced by this project.",notes:"The contribution overview must remain attributed to the paper."},
+      {section:"Research",theme:"open",title:"Why chiplets appear in the paper",dek:"As reported by REED: scaling compute and memory while examining interconnect, yield, and cost trade-offs.",body:`<div class="grid"><div class="card"><h3>Motivation</h3><ul><li>Partition large accelerator resources</li><li>Scale processing and bandwidth</li><li>Study die-size/yield economics</li></ul></div><div class="card"><h3>MantiQ scope</h3><p>One iterative FPGA NTT/INTT block. No chiplet topology, die-to-die protocol, package, HBM, yield, or cost model.</p></div></div>`,source:"REED §§1, 4–6; claim ledger",limit:"Paper chiplet conclusions are not MantiQ measurements.",notes:"This prevents a public source from being mistaken for implemented scope."},
+      {section:"Research",theme:"open",title:"Relevant NTT architecture content",dek:"The paper motivated the problem; ESL froze a simpler, reviewable baseline.",body:`<div class="grid"><div class="card"><h3>Paper lens</h3><p>Hybrid NTT, modular units, memory/bandwidth balance, and parameterized FHE kernels.</p></div><div class="card"><h3>Chosen baseline</h3><p>Single butterfly, ping-pong banks, CT forward / GS inverse, merged-ψ, Barrett, N=1024.</p></div></div>`,source:"docs/paper_analysis.md; phase03_decision_record.md",limit:"The baseline is an engineering decision, not a transcription of REED RTL.",notes:"Use the paper as a source of requirements questions, not an implementation recipe."},
+      {section:"Research",theme:"open",title:"Scope, claims, and issue discipline",dek:"A narrow baseline and explicit ledgers protect evidence quality.",body:`<div class="grid three"><div class="card"><span class="status pass">In scope</span><ul><li>One 54-bit prime</li><li>Barrett + CT/GS butterflies</li><li>NTT/INTT + local memories</li><li>AXI-Lite evaluation wrapper</li></ul></div><div class="card"><span class="status pending">Future scope</span><ul><li>RNS, key switching, bootstrapping</li><li>DMA, streaming, HBM</li><li>Chiplets and ASIC signoff</li><li>Application benchmarks</li></ul></div><div class="card"><h3>Paper discipline</h3><p><strong>58</strong> normalized claims<br><strong>17</strong> recorded issues<br><strong>0</strong> silent repairs allowed</p></div></div>`,source:"docs/requirements.md §§2,11; docs/claim_ledger.md; docs/paper_issue_ledger.md",limit:"Future blocks cannot be inferred from transform evidence; author confirmation was not obtained for implementation-critical interpretations.",notes:"Mention the 2N root condition and Algorithm 6 k+t interpretation as examples of issues recorded rather than silently repaired."},
+      {section:"Research",theme:"open",title:"Frozen Milestone 1 parameters",dek:"The binding contract — no constant was re-derived inside RTL.",body:`<div class="grid four"><div class="metric card"><strong>1024</strong><span>N · BASE configuration</span></div><div class="metric card"><strong>54 bit</strong><span>Canonical coefficient</span></div><div class="metric card"><strong>108 bit</strong><span>Raw product</span></div><div class="metric card"><strong>≤ 2</strong><span>Barrett corrections</span></div></div><div class="card"><p><code>q = 9007199390269441</code> · <code>μ = 36028796476850180</code> · CT natural→bit-reversed · GS bit-reversed→natural.</p></div>`,source:"docs/requirements.md §§3–7",limit:"Changing any parameter starts a new evidence baseline.",notes:"This is the frozen point shared by Wolfram, Lean, RTL, and FPGA implementation."},
+      {section:"Process",theme:"open",title:"MantiQ Factor orchestration and tool roles",dek:"Each phase creates a different evidence class; orchestration never replaces independent tools.",body:`<div class="grid orchestration-grid"><img class="hero-image" src="assets/diagrams/MantiQ-Factor-Project-Flow.svg" alt="Editable MantiQ Factor project flow export"><div class="card"><img class="tool-logo" src="assets/logos/Amp-logo.png" alt="Amp logo"><h3>Amp inside the orchestrated workflow</h3><p>MantiQ Factor, developed by ESL, orchestrated the phased project. Amp assisted with reasoning, code changes, tool execution, failure preservation, and traceability; it did not become the numerical oracle, Lean kernel, HDL simulator, Vivado timing engine, or measurement instrument.</p></div></div>`,source:"assets/diagrams/MantiQ-Factor-Project-Flow.drawio/.svg; MantiQ.MD §§3–6; docs/branding_inventory.md",limit:"The flow does not imply that each layer formally proves the next; user-authorized logo use implies no endorsement.",notes:"The editable Draw.io source and PNG/SVG exports are preserved. Attribute orchestration to MantiQ Factor and stress role separation rather than “AI verified hardware.”"},
+      {section:"Process",theme:"open",title:"Evidence statuses prevent claim inflation",dek:"A downstream phase may add evidence, but never silently strengthen an upstream claim.",body:`<div class="grid four"><div class="card"><h3>PAPER / DERIVED</h3><p>Sourced statement or recorded derivation.</p></div><div class="card"><h3>FORMALLY PROVED</h3><p>Lean theorem within explicit definitions and assumptions.</p></div><div class="card"><h3>RTL VERIFIED</h3><p>Simulation matched independent expected values.</p></div><div class="card"><h3>FPGA MEASURED</h3><p>Reserved for an identified physical device and setup — currently absent.</p></div></div>`,source:"MantiQ.MD §3",limit:"Vivado implementation is not physical measurement.",notes:"This vocabulary is the backbone of the final audit."},
+      {section:"Process",theme:"open",title:"Pinned, reproducible toolchain",dek:"Versions are evidence metadata, not decoration.",body:`<div class="grid three"><div class="card"><h3>Computation & proof</h3><p>Mathematica 15.0.1 · WolframScript 1.14.0 · Lean 4.33.0 · Mathlib v4.33.0.</p></div><div class="card"><h3>RTL</h3><p>Python 3.12.7 · cocotb 2.0.1 · VUnit 4.7.1 · GHDL 5.1.1/GNAT 15.1.0.</p></div><div class="card"><h3>FPGA</h3><p>Vivado/XSim 2026.1 · SW build 6511674 · BASIC node-locked license.</p></div></div>`,source:"docs/tool_versions.md",limit:"Wolfram and Vivado reproduction requires valid host-specific licensing.",notes:"A later board run must add PYNQ image/package and board identity."},
+      {section:"Process",theme:"open",title:"Twelve gates, one visible blocker",dek:"The customer artifact can be complete without pretending physical work happened.",body:`<div class="bars"><div class="bar-row"><span>01–05 Research/math</span><div class="bar"><i style="--w:100%"></i></div><b>PASS</b></div><div class="bar-row"><span>06–09 RTL/regression</span><div class="bar"><i style="--w:100%"></i></div><b>PASS</b></div><div class="bar-row"><span>10 FPGA implementation</span><div class="bar"><i style="--w:100%"></i></div><b>PASS</b></div><div class="bar-row"><span>11 Physical hardware</span><div class="bar"><i style="--w:22%"></i></div><b>BLOCKED</b></div><div class="bar-row"><span>12 Customer artifacts</span><div class="bar"><i style="--w:100%"></i></div><b>PASS*</b></div></div>`,source:"docs/phase01_gate.md … phase12_gate.md",limit:"*Provisional simulation/mock customer package; Gate 12 completion does not change the Gate 11 hardware blocker.",notes:"The user explicitly authorized simulation/mock deliverables and the supplied branding assets while the board is in transit."},
+      {section:"Process",theme:"open",title:"Phase-ahead: computation and proof",dek:"Independent paths meet at reviewable contracts.",body:`<div class="flow"><div class="node">Frozen requirements</div><div class="arrow">→</div><div class="node">Mathematica oracle<br>vectors + ROMs</div><div class="arrow">↘</div><div class="node">Cross-model evidence</div></div><div class="flow" style="margin-top:12px"><div class="node">Formalization map</div><div class="arrow">→</div><div class="node">Lean definitions<br>theorems + audits</div><div class="arrow">↗</div><div class="node">Scope-aware review</div></div>`,source:"docs/vector_schema.md; formalization_map.md",limit:"Neither path proves the other implementation artifact.",notes:"Transition to Mathematica: the executable oracle owns expected numeric behavior."},
+      {section:"Wolfram",theme:"wolfram",title:"Mathematica as executable oracle",dek:"A separate computational source of expected values for the RTL.",body:`<div class="grid"><div class="card"><img class="tool-logo" src="assets/logos/Wolfram-Mathematica-15-logo.png" alt="Wolfram Mathematica 15 logo"><h3>Responsibilities</h3><ul><li>Validate q, roots, inverses, μ</li><li>Define modular/transform behavior</li><li>Generate deterministic vectors and ROMs</li><li>Run a named 53-check audit</li></ul></div><div class="card"><h3>Independence rule</h3><p>The RTL consumes frozen outputs. Expected values are never derived from or edited for the VHDL.</p></div></div>`,source:"mathematica/MantiQOracle.wl; Gate 04",limit:"Numerical oracle tests named cases; it is not a universal theorem.",notes:"The supplied Mathematica 15 identity is used only for its oracle role; logo use is user-authorized and implies no endorsement."},
+      {section:"Wolfram",theme:"wolfram",title:"Package and notebook architecture",dek:"Code is the source of truth; the notebook is a generated walkthrough.",body:`<div class="flow"><div class="node">MantiQOracle.wl</div><div class="arrow">→</div><div class="node">build_project.wls</div><div class="arrow">→</div><div class="node">vectors / ROM / reports</div></div><div class="flow" style="margin-top:12px"><div class="node">proof_audit.wls</div><div class="arrow">→</div><div class="node">53 named checks</div><div class="arrow">→</div><div class="node">generated notebook</div></div>`,source:"mathematica/; generated/phase04",limit:"Headless notebook evaluation avoids a front-end process that once prevented a trustworthy exit code.",notes:"Describe the preserved failure: a printed PASS is insufficient if the process does not terminate correctly."},
+      {section:"Wolfram",theme:"wolfram",title:"Parameter and root validation",dek:"The BASE-1024 certificate is checked before any vector is trusted.",body:`<div class="grid three"><div class="metric card"><strong>q prime</strong><span>9007199390269441</span></div><div class="metric card"><strong>ψᴺ = −1</strong><span>Primitive 2N-th root condition</span></div><div class="metric card"><strong>N⁻¹</strong><span>8998403297114881</span></div></div>`,source:"generated/phase04/parameter_report.md; Gate 04",limit:"The selected q is this project's instance of the paper’s prime family, not a published REED modulus.",notes:"This distinction avoids claiming that the paper disclosed a concrete prime it did not print."},
+      {section:"Wolfram",theme:"wolfram",title:"NTT / INTT expected behavior",dek:"Forward natural order → bit-reversed transform domain → inverse natural order.",body:`<div class="flow"><div class="node">a[0…N−1]<br>natural</div><div class="arrow">→</div><div class="node">CT NTT<br>merged ψ</div><div class="arrow">→</div><div class="node">A[bitrev]<br>stored verbatim</div><div class="arrow">→</div><div class="node">GS INTT + N⁻¹</div><div class="arrow">→</div><div class="node">a[0…N−1]</div></div>`,source:"docs/requirements.md §§5–6; Phase 04 vectors",limit:"Worked outputs are vector-specific; no reorder engine exists.",notes:"This data ordering is one of the most important integration contracts."},
+      {section:"Wolfram",theme:"wolfram",title:"Deterministic vector schema",dek:"Large integers remain exact across Mathematica, Python, JSON, cocotb, and host software.",body:`<div class="grid three"><div class="card"><h3>Schema 1.0.0</h3><p>Operation, parameters, ordering, decimal-string arrays, expected output.</p></div><div class="card"><h3>Determinism</h3><p>Random values derive from seed + test_id + index; byte-identical rebuild is audited.</p></div><div class="card"><h3>Integrity</h3><p>Canonical payload SHA-256 plus a 157-entry manifest and frozen Git tree.</p></div></div>`,source:"docs/vector_schema.md; generated/phase04/vectors/manifest.json",limit:"JSON is normative; CSV and HEX are mirrors.",notes:"Values exceed JavaScript's safe integer range, so decimal strings are mandatory."},
+      {section:"Wolfram",theme:"wolfram",title:"Audit and generated evidence",dek:"A self-checking generator still needed an independent second model.",body:`<div class="grid four"><div class="metric card"><strong>53 / 53</strong><span>Mathematica audit checks</span></div><div class="metric card"><strong>157</strong><span>Immutable JSON vectors</span></div><div class="metric card"><strong>0</strong><span>Independent Python mismatches</span></div><div class="metric card"><strong>1</strong><span>Canonicalization defect caught</span></div></div>`,source:"docs/phase04_gate.md; scripts/verify_vectors.py",limit:"Agreement between two models reduces common-mode risk but is not proof of all inputs.",notes:"The defect was JSON key sorting shared by the producer and first same-language auditor."},
+      {section:"Lean",theme:"lean",title:"Why add machine-checked proof?",dek:"Tests sample behavior; proofs quantify over stated domains and assumptions.",body:`<div class="grid"><div class="card"><img class="tool-logo" src="assets/logos/Lean4-logo.svg" alt="Lean 4 logo"><h3>Lean contribution</h3><p>Kernel-checked statements about modular arithmetic, reduction bounds, butterflies, transforms, and concrete BASE constants.</p></div><div class="card"><h3>Trust discipline</h3><p>No production <code>sorry</code>, <code>admit</code>, <code>native_decide</code>, <code>unsafe</code>, or explicit project axioms.</p></div></div>`,source:"docs/phase05_gate.md; lean/placeholder_scan.py",limit:"Logo use is user-authorized; it does not expand the proof scope or imply endorsement.",notes:"Explain that proof strength comes from exact definitions and a small trusted kernel, not the logo or tool name."},
+      {section:"Lean",theme:"lean",title:"Formal definitions and assumptions",dek:"The formalization mirrors the frozen mathematical contract, not the VHDL syntax.",body:`<div class="grid three"><div class="card"><h3>ZMod q</h3><p>Canonical modular algebra and finite-field facts.</p></div><div class="card"><h3>Roots and transforms</h3><p>Primitive-root assumptions, definitional NTT/INTT, roundtrip and convolution.</p></div><div class="card"><h3>Concrete certificate</h3><p>BASE-1024 primality, orders, inverses, and μ discharged by kernel-checked computation.</p></div></div>`,source:"lean/MantiqFactor; formalization_map.md",limit:"Generic theorems require their documented hypotheses.",notes:"Differentiate generic statements from the concrete N=1024 certificate."},
+      {section:"Lean",theme:"lean",title:"Butterfly theorem in plain language",dek:"The local CT/GS algebra composes correctly under modular arithmetic.",body:`<div class="callout">Given canonical field values and the stated twiddle, the formal CT and GS butterfly definitions satisfy the intended modular identities — including the Barrett result used by the finite-width algorithm.</div>`,source:"docs/formalization_map.md L-1…L-3; Gate 05",limit:"The theorem does not assert a clock, handshake, register, reset, or VHDL behavior.",notes:"This is where formal and RTL evidence meet at a specification, not through tool magic."},
+      {section:"Lean",theme:"lean",title:"Transform inversion proof status",dek:"The definitional transform roundtrip is proved for BASE-1024 after concrete obligations are discharged.",body:`<div class="grid"><div class="metric card"><strong>26</strong><span>Headline theorem axiom audit</span></div><div class="card"><span class="status pass">Kernel checked</span><h3>Allowed foundations</h3><p><code>propext</code>, <code>Classical.choice</code>, and <code>Quot.sound</code> from Lean/Mathlib's logical foundation.</p></div></div>`,source:"docs/evidence/phase05/axiom_audit_output.txt",limit:"The staged iterative schedule and bit-reversal implementation are only partially formalized.",notes:"Do not say “the NTT RTL is formally verified.”"},
+      {section:"Lean",theme:"lean",title:"What Lean does not prove",dek:"A proof boundary is part of the result.",body:`<div class="grid four"><div class="card"><h3>Not Wolfram</h3><p>No implementation equivalence.</p></div><div class="card"><h3>Not RTL</h3><p>No VHDL/controller/memory proof.</p></div><div class="card"><h3>Not Vivado</h3><p>No synthesis/bitstream theorem.</p></div><div class="card"><h3>Not hardware</h3><p>No FPGA behavior or measurement.</p></div></div>`,source:"docs/formalization_map.md; A-021",limit:"Loop-level equivalence is a named future proof opportunity.",notes:"This slide should prevent the most common formal-method overclaim."},
+      {section:"RTL",theme:"rtl",title:"Phase-ahead hardware feedback loop",dek:"Frozen vectors drive a finite-width implementation and exact mismatch context.",body:`<div class="flow"><div class="node">Requirements + ROMs</div><div class="arrow">→</div><div class="node">VHDL-2008 RTL</div><div class="arrow">→</div><div class="node">GHDL / cocotb</div><div class="arrow">→</div><div class="node">Exact comparator</div><div class="arrow">↺</div></div>`,source:"docs/verification_plan.md; scripts/run-phase09-regression.ps1",limit:"Waveforms explain failures; they are never pass criteria.",notes:"Transition from theorem scope to implementation evidence."},
+      {section:"RTL",theme:"rtl",title:"Modular arithmetic datapath",dek:"The frozen Barrett method is visible in widths and corrections.",body:`<img class="figure" src="generated/phase04/figures/fig_barrett_corrections.png" alt="Generated Barrett correction behavior figure">`,source:"generated/phase04/figures/fig_barrett_corrections.png; Gate 06",limit:"60 arithmetic vectors + 22 reducer checks are enumerated evidence, not exhaustive input proof of RTL.",notes:"Lean proves the algorithmic correction bound; GHDL checks the implemented operators."},
+      {section:"RTL",theme:"rtl",title:"Butterfly RTL transaction",dek:"One shared arithmetic path, deterministic one-cycle accepted-edge latency.",body:`<div class="grid"><div class="card"><h3>Protocol</h3><p><code>start_i & ready_o</code> accepts; <code>valid_o = done_o</code> identifies the result one cycle later.</p></div><div class="card"><h3>Backpressure</h3><p>Same-mode initiation interval is one; a CT↔GS mode change drains one pending result cycle.</p></div></div>`,source:"docs/architecture.md §9; Gate 07",limit:"Reset flushes an in-flight leaf transaction; transform busy is controller-owned.",notes:"Twenty-four immutable butterfly vectors produce 48 compared outputs."},
+      {section:"RTL",theme:"rtl",title:"Memory, twiddles, scheduler",dek:"One butterfly trades throughput for a compact, inspectable baseline.",body:`<div class="grid three"><div class="card"><h3>Coefficient banks</h3><p>Two N×54 true-dual-port ping-pong memories.</p></div><div class="card"><h3>Twiddle ROMs</h3><p>Frozen forward/inverse HEX images generated by Mathematica.</p></div><div class="card"><h3>Controller</h3><p>Nested stage/group/butterfly counters with explicit pipeline drain.</p></div></div>`,source:"docs/architecture.md §§8–10",limit:"Single-butterfly architecture is a baseline, not peak-throughput design.",notes:"Highlight why a stage drain avoids reading a bank while writes remain in flight."},
+      {section:"RTL",theme:"rtl",title:"Integrated NTT / INTT controller",dek:"ISSUE → FEED → STAGE → WRITE with explicit inter-stage drain and normalization.",body:`<img class="figure" src="generated/phase04/figures/fig_forward_address_schedule.png" alt="Generated forward address schedule">`,source:"generated/phase04/figures/fig_forward_address_schedule.png; Gate 08",limit:"Address/schedule equivalence is simulation-tested, not formally proved.",notes:"Inputs/outputs follow the frozen natural/bit-reversed contract."},
+      {section:"RTL",theme:"rtl",title:"GHDL feedback loop",dek:"Vendor-neutral VHDL-2008 runs before board-specific implementation.",body:`<div class="grid four"><div class="metric card"><strong>82</strong><span>Arithmetic DUT checks</span></div><div class="metric card"><strong>48</strong><span>Butterfly outputs</span></div><div class="metric card"><strong>102,912</strong><span>Transform comparisons</span></div><div class="metric card"><strong>0</strong><span>Mismatches</span></div></div>`,source:"docs/phase09_gate.md; verification/results/phase09_regression_results.json",limit:"Counts are exact for the enumerated suite and named diagnostics.",notes:"Numeric-std metavalue warnings outside valid windows are preserved rather than hidden."},
+      {section:"RTL",theme:"rtl",title:"cocotb regression contract",dek:"Python loads frozen decimal strings, drives transactions, and fails with precise context.",body:`<div class="grid"><div class="card"><h3>Required mismatch fields</h3><p><code>test_id</code>, operation, N, q, coefficient index, expected, actual — plus cycle where available.</p></div><div class="card"><h3>Failure policy</h3><p>Every failed stage exits nonzero, preserves logs, and never edits the oracle to accommodate RTL.</p></div></div>`,source:"docs/vector_schema.md §4; Gate 09",limit:"VUnit is installed but not duplicated where cocotb already owns coverage.",notes:"The comparator format is reusable for physical bring-up."},
+      {section:"RTL",theme:"rtl",title:"Exact mismatch diagnostics",dek:"The harness is proven capable of failing visibly.",body:`<div class="equation" style="font-size:clamp(.9rem,1.6vw,1.5rem)">TEST FAILED<br>test_id: NTT_FWD_ZERO_0001<br>operation: ntt_forward<br>n: 1024 · q: 9007199390269441<br>coefficient_index: 17<br>expected: 0 · actual: 1</div>`,source:"docs/evidence/phase11/mock_deliberate_mismatch.json",limit:"This is an injected mock fault, not an observed RTL or board defect.",notes:"Also mention the deliberate never-done path exits 2 with DeviceTimeout."},
+      {section:"RTL",theme:"rtl",title:"Regression matrix",dek:"Transform vectors cover three concrete sizes and five classes.",body:`<div class="grid three"><div class="card"><h3>N = 256</h3><p>4 forward · 4 inverse · 4 roundtrip<br>1,056 / 1,316 cycles</p></div><div class="card"><h3>N = 1024</h3><p>13 forward · 13 inverse · 13 roundtrip<br>5,160 / 6,188 cycles</p></div><div class="card"><h3>N = 4096</h3><p>4 forward · 4 inverse · 4 roundtrip<br>24,624 / 28,724 cycles</p></div></div>`,source:"Gate 08/09 machine summaries",limit:"N=512 and 2048 are generic-supported but have no Phase 04 transform vectors.",notes:"Classes include zero, unit, max, alternating, and deterministic random."},
+      {section:"RTL",theme:"rtl",title:"Simulation conclusion — carefully scoped",dek:"The RTL matched the independent oracle for every required vector and diagnostic.",body:`<div class="grid"><div class="card"><span class="status pass">RTL verified</span><h3>Established</h3><p>Finite-width arithmetic, butterfly, transform values, ordering, cycles, reset/busy rules, and regression reproducibility for the recorded matrix.</p></div><div class="card"><span class="status pending">Not established</span><h3>Still outside</h3><p>Exhaustive equivalence, physical timing/output/power, full FHE, and ASIC/product performance.</p></div></div>`,source:"docs/phase09_gate.md; A-029",limit:"Lean remains mathematical only; GHDL/cocotb supply RTL evidence.",notes:"This closes the simulation layer before moving to the FPGA vehicle."},
+      {section:"FPGA",theme:"fpga",title:"Why PYNQ-Z2?",dek:"An evaluation vehicle selected after requirements — not a product architecture.",body:`<div class="grid"><div class="card"><h3>Exact target</h3><p>TUL PYNQ-Z2 · AMD/Xilinx <code>XC7Z020-1CLG400C</code> · 220 DSP · 630 KB BRAM · 125 MHz PL source · Arm/Python host.</p></div><div class="card"><h3>Decision logic</h3><p>Resource headroom, no-charge supported Vivado flow, and the clearest scriptable Mathematica-vector-to-PL demonstration.</p></div></div>`,source:"docs/fpga_board_selection.md; D-14",limit:"Board selection is an engineering decision, not a performance result.",notes:"The initial 100 MHz target is a constraint target, not an achieved clock."},
+      {section:"FPGA",theme:"fpga",title:"Alternatives ruled out — for evidence efficiency",dek:"Every candidate could hold the estimate; integration value decided the baseline.",body:`<div class="grid four"><div class="card"><h3>Arty A7-100T</h3><p>Adequate fallback; weaker scripted host path.</p></div><div class="card"><h3>Nexys A7-100T</h3><p>Extra peripherals without evidence benefit.</p></div><div class="card"><h3>DE10-Standard</h3><p>Adequate; higher cost and Quartus ecosystem change.</p></div><div class="card"><h3>Alveo U250</h3><p>PCIe/Vitis/scale overkill for Milestone 1.</p></div></div>`,source:"docs/fpga_board_selection.md §5",limit:"Rejection is not a statement of technical incapability.",notes:"This slide explains procurement rationale without turning it into a universal board ranking."},
+      {section:"FPGA",theme:"fpga",title:"PYNQ-Z2 implementation flow",dek:"Board specificity stays outside the vendor-neutral core.",body:`<div class="flow"><div class="node">Mathematica JSON</div><div class="arrow">→</div><div class="node">PYNQ Python</div><div class="arrow">→</div><div class="node">PS AXI4-Lite</div><div class="arrow">→</div><div class="node">Isolated adapter</div><div class="arrow">→</div><div class="node">NTT core</div><div class="arrow">→</div><div class="node">Exact compare</div></div>`,source:"fpga/pynq-z2/README.md; D-16",limit:"AXI-Lite is correctness-oriented: no DMA, batching, streaming, interrupts, or PCIe.",notes:"Two 32-bit accesses carry each zero-extended 64-bit coefficient, LO then HI commit."},
+      {section:"FPGA",theme:"fpga",title:"Timing: preserve the failure",dek:"The initial 100 MHz implementation did not meet timing — and produced no bitstream.",body:`<div class="grid"><div class="card"><span class="status fail">100 MHz failed</span><div class="metric"><strong>−37.859 ns</strong><span>Post-route worst negative slack at 10 ns</span></div></div><div class="card"><span class="status pass">20 MHz passed</span><div class="metric"><strong>+1.154 ns</strong><span>Setup slack at 50 ns; hold +0.046 ns</span></div></div></div>`,source:"docs/phase10_gate.md §§3–4",limit:"20 MHz is the only timing-clean bitstream baseline; no physical clock observation exists.",notes:"The build script refused to write a bitstream on negative slack."},
+      {section:"FPGA",theme:"fpga",title:"Critical path: the architectural price",dek:"The frozen single-cycle 54-bit modular multiply dominates the routed path.",body:`<div class="grid"><div class="metric card"><strong>48.075 ns</strong><span>Reported data path</span></div><div class="card"><h3>Path composition</h3><p>BRAM → 54×54 multiply → carry correction → Barrett multiply/corrections → butterfly output register.</p><p>Seven DSP48E1, 30 CARRY4, 17 LUT on the reported path.</p></div></div>`,source:"post_impl_critical_paths.rpt; A-032",limit:"A 7-series FPGA path does not predict an ASIC frequency.",notes:"The next clean experiment is pipelining, which would change latency and require regression updates."},
+      {section:"FPGA",theme:"fpga",title:"Utilization and memory balance",dek:"Compare implementation to the Phase 03 estimate — not to an ASIC.",body:`<div class="bars"><div class="bar-row"><span>LUT</span><div class="bar"><i style="--w:7.7%"></i></div><b>4,077</b></div><div class="bar-row"><span>FF</span><div class="bar"><i style="--w:1%"></i></div><b>1,015</b></div><div class="bar-row"><span>DSP48E1</span><div class="bar"><i style="--w:10.5%"></i></div><b>23</b></div><div class="bar-row"><span>BRAM36 equiv.</span><div class="bar"><i style="--w:2.1%"></i></div><b>3</b></div></div>`,source:"post_impl_utilization.rpt; docs/phase10_gate.md §5",limit:"Twiddle ROMs mapped to LUT ROM under Vivado AUTO; BRAM under-run is partly a mapping choice.",notes:"Coefficient banks inferred as true dual-port BRAM after a declared synthesis-driven template change."},
+      {section:"FPGA",theme:"fpga",title:"Physical setup — explicitly pending",dek:"The exact board is ordered and in transit from China.",body:`<div class="grid"><div class="card"><span class="status pending">Gate 11 blocked</span><h3>Needed on arrival</h3><ul><li>TUL PYNQ-Z2, XC7Z020-1CLG400C</li><li>Supported PYNQ image and ≥8 GB microSD</li><li>Micro-USB, Ethernet, documented power</li><li>Board/image/package identity and setup record</li></ul></div><div class="card"><h3>Authenticated overlay</h3><p><code>.bit 5e62d5a0…9ac5</code><br><code>.hwh 24a7f4ab…b9dd</code><br><code>host 5008b649…a352</code></p></div></div>`,source:"docs/phase11_gate.md; fpga/pynq-z2/host",limit:"No board photo, programming log, device identity, or electrical run exists.",notes:"This slide substitutes an explicit blocked status for a fabricated hardware setup photo."},
+      {section:"FPGA",theme:"fpga",title:"Oracle versus ‘hardware’: current evidence",dek:"Simulation agrees; host mock orchestration works; the physical comparison column is empty by design.",body:`<div class="grid three"><div class="card"><span class="status pass">GHDL/XSim</span><h3>Simulated adapter/core</h3><p>N=256 forward + inverse; 512 golden output coefficients; <code>TB_PASS</code>.</p></div><div class="card"><span class="status pass">Fixture mock</span><h3>Host orchestration</h3><p>52 transactions; 53,248 comparisons; zero mock mismatches; one mock restart.</p></div><div class="card"><span class="status pending">Physical</span><h3>Waiting for board</h3><p>No output, reset, repeatability, latency, throughput, or power result.</p></div></div>`,source:"verification/results/phase11_simulation_results.json",limit:"Mock outputs are supplied expected fixtures and cannot test arithmetic.",notes:"Never title this slide “hardware results.”"},
+      {section:"FPGA",theme:"fpga",title:"What translates to ASIC review — and what does not",dek:"Architecture insight survives; implementation numbers do not transfer directly.",body:`<div class="grid"><div class="card"><h3>Useful for decisions</h3><ul><li>Reducer/pipeline criticality</li><li>Memory/twiddle organization</li><li>Cycle and bandwidth models</li><li>Parameter and evidence contracts</li></ul></div><div class="card"><h3>Not portable as results</h3><ul><li>LUT/DSP/BRAM → ASIC area</li><li>Zynq vectorless power → product power</li><li>20 MHz FPGA → ASIC frequency</li><li>AXI-Lite host → data-center interface</li></ul></div></div>`,source:"docs/phase10_gate.md §9; evidence register",limit:"An ASIC claim needs process, libraries, corners, memories, activity, P&R, and signoff.",notes:"This is the core anti-extrapolation slide."},
+      {section:"FPGA",theme:"fpga",title:"Practical and commercial relevance",dek:"The result is a due-diligence workflow and reusable evidence package — not a benchmark headline.",body:`<div class="grid four"><div class="card"><h3>Screen IP</h3><p>Expose arithmetic and memory assumptions early.</p></div><div class="card"><h3>Reduce risk</h3><p>Independent models catch common-mode defects.</p></div><div class="card"><h3>Preserve failures</h3><p>Turn timing misses into architecture choices.</p></div><div class="card"><h3>Reuse assets</h3><p>Vectors, ROMs, proof maps, regressions, host diagnostics.</p></div></div>`,source:"docs/evidence_register.md; article journal",limit:"No claim about a commercial product's internals or performance.",notes:"Tie relevance to privacy-preserving AI/cloud workload evaluation without claiming application throughput."},
+      {section:"Close",theme:"open",title:"Lessons, surprises, next engineering moves",dek:"Evidence quality improved when tools disagreed, targets failed, and boundaries stayed visible.",body:`<div class="grid three"><div class="card"><h3>Surprise</h3><p>Independent Python found a same-language canonicalization blind spot.</p></div><div class="card"><h3>Failure</h3><p>100 MHz exposed the unpipelined Barrett path; 20 MHz established the honest baseline.</p></div><div class="card"><h3>Roadmap</h3><p>Physical Gate 11 → multiplier pipeline → RNS/key switching → staged-schedule proof → ASIC methodology.</p></div></div>`,source:"Gates 04, 10, 11; docs/assumptions.md",limit:"Every roadmap item requires a new contract and evidence gate.",notes:"The board run updates evidence; it does not rewrite historical simulation artifacts."},
+      {section:"Close",theme:"open",title:"Definition of done — today",dek:"From public research to an evidence-backed accelerator demonstrator.",body:`<div class="card closing-card"><div class="closing-brands"><img src="assets/logos/MantiQ-Factor-logo.png" alt="MantiQ Factor orchestration and production-line visual"><a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer" aria-label="Contact Engineering Software Lab"><img class="closing-esl" src="assets/logos/ESL-logo.png" alt="Engineering Software Lab logo"></a></div><div class="closing-message"><blockquote>“MantiQ Factor took us from a public research paper to a reproducible, formally grounded, simulation-verified and FPGA-implemented NTT/INTT demonstrator. The design artifacts are ready; the final step is to execute the authenticated bitstream and the same test vectors on the arriving PYNQ-Z2.”</blockquote><div class="closing-state"><span class="status pass">Design artifacts ready</span><span class="status pending">Physical execution pending</span></div></div></div>`,source:"source/paper/REED-TCHES-2025-Issue2.pdf; docs/phase11_gate.md; docs/branding_inventory.md; Phase 12 deliverables",limit:"Gate 11 remains BLOCKED — WAITING FOR HW; no FPGA MEASURED claim exists.",notes:"Close with the exact project outcome, prominent MantiQ Factor and ESL identities, REED author credit, CC BY 4.0, and the evidence boundary. Invite questions about both results and limitations."}
+    ];
+
+    const track = document.getElementById('track');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const homeSlide = document.getElementById('homeSlide');
+    const endSlide = document.getElementById('endSlide');
+    const counter = document.getElementById('counter');
+    const progressFill = document.getElementById('progressFill');
+    const swipeHint = document.getElementById('swipeHint');
+    const notes = document.getElementById('notes');
+    const notesText = document.getElementById('notesText');
+    let index = 0;
+    let pointerStart = null;
+
+    function escapeHtml(value) {
+      return value.replace(/[&<>"']/g, character => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[character]));
+    }
+
+    slides.forEach((slide, position) => {
+      const section = document.createElement('section');
+      section.className = 'slide';
+      section.dataset.theme = slide.theme;
+      section.setAttribute('aria-label', `Slide ${position + 1}: ${slide.title}`);
+      const heading = position === 0 ? 'h1' : 'h2';
+      section.innerHTML = `<div class="content"><div class="eyebrow">${escapeHtml(slide.section)} · ${String(position + 1).padStart(2,'0')}</div><${heading}>${slide.title}</${heading}><p class="dek">${slide.dek}</p><div class="body">${slide.body}</div><div class="source-box"><div><b>Evidence</b> ${escapeHtml(slide.source)}</div><div><b>Limitation</b> ${escapeHtml(slide.limit)}</div></div></div>`;
+      track.appendChild(section);
+    });
+
+    function show(target, fromUser = true) {
+      index = Math.max(0, Math.min(slides.length - 1, target));
+      track.style.transform = `translateX(${-index * 100}vw)`;
+      prev.hidden = index === 0;
+      next.hidden = index === slides.length - 1;
+      homeSlide.disabled = index === 0;
+      endSlide.disabled = index === slides.length - 1;
+      counter.textContent = `${index + 1} / ${slides.length}`;
+      progressFill.style.width = `${((index + 1) / slides.length) * 100}%`;
+      notesText.textContent = slides[index].notes;
+      if (fromUser && index > 0) swipeHint.classList.add('hidden');
+      history.replaceState(null, '', `#slide-${index + 1}`);
+    }
+
+    function move(delta) { show(index + delta); }
+    prev.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    homeSlide.addEventListener('click', () => show(0));
+    endSlide.addEventListener('click', () => show(slides.length - 1));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'ArrowRight' || event.key === ' ') { event.preventDefault(); move(1); }
+      if (event.key === 'ArrowLeft') { event.preventDefault(); move(-1); }
+      if (event.key === 'Home') { event.preventDefault(); show(0); }
+      if (event.key === 'End') { event.preventDefault(); show(slides.length - 1); }
+      if (event.key.toLowerCase() === 'n') notes.classList.toggle('open');
+    });
+    document.addEventListener('touchstart', event => { pointerStart = event.changedTouches[0].clientX; }, {passive:true});
+    document.addEventListener('touchend', event => {
+      if (pointerStart === null) return;
+      const delta = event.changedTouches[0].clientX - pointerStart;
+      if (Math.abs(delta) >= 50) move(delta < 0 ? 1 : -1);
+      pointerStart = null;
+    }, {passive:true});
+    document.addEventListener('mousedown', event => { pointerStart = event.clientX; document.body.classList.add('dragging'); });
+    document.addEventListener('mouseup', event => {
+      if (pointerStart !== null) {
+        const delta = event.clientX - pointerStart;
+        if (Math.abs(delta) >= 50) move(delta < 0 ? 1 : -1);
+      }
+      pointerStart = null;
+      document.body.classList.remove('dragging');
+    });
+    const requested = Number(location.hash.replace('#slide-', ''));
+    show(Number.isInteger(requested) && requested > 0 ? requested - 1 : 0, false);
+  </script>
+</body>
+</html>
