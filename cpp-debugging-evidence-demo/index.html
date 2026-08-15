@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="description" content="ESL evidence-driven C++ debugging demo: GDB, AddressSanitizer, regression tests, automation, and a findings dashboard.">
+  <title>Beyond Breakpoints to Evidence — ESL C++ Debugging Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #10243c;
+      --muted: #587089;
+      --paper: #f7fbff;
+      --panel: rgba(255, 255, 255, .82);
+      --line: rgba(30, 83, 128, .16);
+      --blue: #1599d6;
+      --blue-deep: #0b5f91;
+      --orange: #f4a321;
+      --red: #df405a;
+      --green: #1d9d74;
+      --shadow: 0 24px 70px rgba(18, 62, 96, .16);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      color: var(--ink);
+      background: #dbeefa;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, a { font: inherit; }
+    a { color: var(--blue-deep); }
+    code, pre { font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace; }
+
+    .deck { display: flex; width: 100%; height: 100%; transition: transform .52s cubic-bezier(.22,.8,.28,1); }
+    .slide {
+      position: relative;
+      flex: 0 0 100vw;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      padding: clamp(112px, 13vh, 138px) clamp(32px, 7vw, 104px) clamp(62px, 8vh, 90px);
+      background:
+        radial-gradient(circle at 92% 8%, rgba(21,153,214,.18), transparent 31%),
+        radial-gradient(circle at 2% 95%, rgba(244,163,33,.16), transparent 28%),
+        linear-gradient(135deg, #fff 0%, var(--paper) 56%, #eaf7ff 100%);
+    }
+    .slide::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -125px;
+      width: 320px;
+      height: 320px;
+      border: 2px solid rgba(21,153,214,.12);
+      border-radius: 44% 56% 62% 38%;
+      transform: rotate(22deg);
+      pointer-events: none;
+    }
+    .brand {
+      position: absolute;
+      top: clamp(18px, 3vh, 30px);
+      left: clamp(24px, 4vw, 58px);
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .brand img { width: clamp(145px, 17vw, 235px); height: auto; display: block; }
+    .brand-tag {
+      padding-left: 15px;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: clamp(.66rem, .85vw, .82rem);
+      font-weight: 700;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+    .eyebrow {
+      margin-bottom: clamp(10px, 1.8vh, 18px);
+      color: var(--blue-deep);
+      font-size: clamp(.72rem, 1.1vw, .92rem);
+      font-weight: 800;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 22px; max-width: 980px; font-size: clamp(2.55rem, 6vw, 6.2rem); line-height: .94; letter-spacing: -.065em; }
+    h2 { margin-bottom: clamp(16px, 2.5vh, 28px); max-width: 1020px; font-size: clamp(2rem, 4.6vw, 4.9rem); line-height: .98; letter-spacing: -.055em; }
+    h3 { margin-bottom: 8px; font-size: clamp(1rem, 1.5vw, 1.35rem); }
+    .lead { max-width: 880px; color: var(--muted); font-size: clamp(1.02rem, 1.8vw, 1.55rem); line-height: 1.55; }
+    .accent { color: var(--blue); }
+    .orange { color: #c97800; }
+    .red { color: var(--red); }
+    .green { color: var(--green); }
+    .small { font-size: clamp(.76rem, 1vw, .92rem); }
+    .muted { color: var(--muted); }
+
+    .title-layout { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(250px, .55fr); gap: clamp(32px, 6vw, 90px); align-items: center; height: 100%; }
+    .byline { display: flex; align-items: center; gap: 16px; margin-top: clamp(24px, 4vh, 42px); }
+    .portrait { width: clamp(88px, 10vw, 132px); aspect-ratio: 1; object-fit: cover; object-position: 50% 35%; border: 6px solid white; border-radius: 50%; box-shadow: var(--shadow); }
+    .profile-link { font-weight: 800; text-decoration: none; }
+    .hero-card {
+      position: relative;
+      padding: clamp(22px, 3vw, 38px);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      transform: rotate(1.5deg);
+    }
+    .hero-card::before { content: "C++"; display: block; margin-bottom: 24px; color: var(--orange); font-size: clamp(4rem, 9vw, 8rem); font-weight: 800; letter-spacing: -.09em; }
+    .hero-card strong { display: block; font-size: clamp(1.15rem, 2vw, 1.8rem); line-height: 1.25; }
+
+    .grid-2, .grid-3 { display: grid; gap: clamp(14px, 2vw, 24px); }
+    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card {
+      min-width: 0;
+      padding: clamp(18px, 2.2vw, 30px);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel);
+      box-shadow: 0 12px 34px rgba(18,62,96,.09);
+    }
+    .card p { margin-bottom: 0; color: var(--muted); font-size: clamp(.86rem, 1.16vw, 1.04rem); line-height: 1.5; }
+    .num { display: block; margin-bottom: 15px; color: var(--blue); font-size: clamp(1.8rem, 3vw, 3rem); font-weight: 800; letter-spacing: -.05em; }
+
+    .code-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 26px); }
+    .code-card { overflow: hidden; border: 1px solid #20384e; border-radius: 20px; background: #091725; box-shadow: var(--shadow); }
+    .code-title { padding: 11px 17px; border-bottom: 1px solid #20384e; color: #91a9bf; font-size: .78rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    pre { margin: 0; padding: clamp(16px, 2vw, 25px); color: #d6e5f0; font-size: clamp(.72rem, 1.06vw, .98rem); line-height: 1.65; white-space: pre-wrap; }
+    .code-red { color: #ff7184; }
+    .code-green { color: #5ee2af; }
+    .code-blue { color: #65cfff; }
+
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: clamp(8px, 1.3vw, 18px); align-items: stretch; margin-top: clamp(22px, 4vh, 48px); }
+    .flow-step { position: relative; min-width: 0; padding: clamp(16px, 2vw, 25px); border: 1px solid var(--line); border-radius: 20px; background: var(--panel); }
+    .flow-step:not(:last-child)::after { content: "→"; position: absolute; z-index: 3; top: 50%; right: clamp(-17px, -1.4vw, -10px); color: var(--orange); font-size: clamp(1.2rem, 2vw, 2rem); font-weight: 800; transform: translateY(-50%); }
+    .flow-step b { display: block; margin-bottom: 9px; color: var(--blue-deep); font-size: clamp(.8rem, 1.12vw, 1rem); }
+    .flow-step span { color: var(--muted); font-size: clamp(.7rem, .92vw, .86rem); line-height: 1.42; }
+
+    .evidence-timeline { position: relative; display: grid; gap: clamp(13px, 2vh, 20px); max-width: 1050px; }
+    .evidence-row { display: grid; grid-template-columns: 125px 42px minmax(0,1fr); gap: 15px; align-items: center; }
+    .evidence-row .when { color: var(--muted); font-size: clamp(.75rem, 1vw, .9rem); font-weight: 700; text-align: right; }
+    .dot { display: grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; color: white; background: var(--blue); font-weight: 800; box-shadow: 0 0 0 7px rgba(21,153,214,.1); }
+    .evidence-row:nth-child(2) .dot { background: var(--red); box-shadow: 0 0 0 7px rgba(223,64,90,.1); }
+    .evidence-row:nth-child(3) .dot { background: var(--orange); box-shadow: 0 0 0 7px rgba(244,163,33,.12); }
+    .evidence-row .event { padding: clamp(13px, 1.8vw, 20px); border: 1px solid var(--line); border-radius: 16px; background: var(--panel); }
+    .evidence-row .event b { display: block; margin-bottom: 4px; }
+    .evidence-row .event span { color: var(--muted); font-size: clamp(.76rem, 1vw, .93rem); }
+
+    .terminal { overflow: hidden; border: 1px solid #20384e; border-radius: 22px; background: #07131f; box-shadow: var(--shadow); }
+    .terminal-head { display: flex; align-items: center; gap: 7px; padding: 12px 16px; border-bottom: 1px solid #20384e; }
+    .terminal-head i { width: 10px; height: 10px; border-radius: 50%; background: #ff6c7b; }
+    .terminal-head i:nth-child(2) { background: #ffc55d; }
+    .terminal-head i:nth-child(3) { background: #5bd69a; }
+    .terminal pre { color: #a9bfd0; }
+
+    .checklist { display: grid; gap: 13px; }
+    .check { display: grid; grid-template-columns: 34px 1fr; gap: 13px; align-items: start; }
+    .check::before { content: "✓"; display: grid; width: 30px; height: 30px; place-items: center; border-radius: 50%; color: white; background: var(--green); font-weight: 800; }
+    .check b { display: block; margin: 3px 0 4px; }
+    .check span { color: var(--muted); font-size: clamp(.78rem, 1vw, .92rem); line-height: 1.45; }
+
+    .compare { display: grid; grid-template-columns: 1fr auto 1fr; gap: clamp(18px, 3vw, 40px); align-items: center; }
+    .versus { color: var(--orange); font-size: clamp(1.6rem, 3vw, 3rem); font-weight: 800; }
+    .big-quote { max-width: 1050px; font-size: clamp(1.8rem, 4.4vw, 4.5rem); font-weight: 800; line-height: 1.08; letter-spacing: -.045em; }
+
+    .links { display: grid; gap: 12px; margin-top: 24px; }
+    .link-card { display: block; padding: 16px 19px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); color: var(--ink); text-decoration: none; overflow-wrap: anywhere; }
+    .link-card:hover { border-color: var(--blue); }
+    .link-card b { display: block; margin-bottom: 3px; color: var(--blue-deep); }
+    .link-card span { color: var(--muted); font-size: clamp(.72rem, .9vw, .85rem); }
+
+    .nav {
+      position: fixed;
+      z-index: 20;
+      top: 50%;
+      display: grid;
+      width: clamp(42px, 4.5vw, 58px);
+      height: clamp(42px, 4.5vw, 58px);
+      place-items: center;
+      border: 1px solid rgba(21,95,145,.24);
+      border-radius: 50%;
+      color: var(--blue-deep);
+      background: rgba(255,255,255,.86);
+      box-shadow: 0 12px 34px rgba(18,62,96,.15);
+      cursor: pointer;
+      transform: translateY(-50%);
+      backdrop-filter: blur(8px);
+    }
+    .nav:hover { color: white; border-color: var(--blue); background: var(--blue); }
+    .nav:disabled { opacity: 0; pointer-events: none; }
+    .nav.prev { left: 14px; }
+    .nav.next { right: 14px; }
+    .progress-track { position: fixed; z-index: 21; right: 0; bottom: 0; left: 0; height: 6px; background: rgba(11,95,145,.12); }
+    .progress { width: 0; height: 100%; background: linear-gradient(90deg, var(--blue), var(--orange)); transition: width .45s ease; }
+    .counter { position: fixed; z-index: 22; right: 20px; bottom: 15px; color: var(--blue-deep); font-size: .8rem; font-weight: 800; }
+    .swipe-hint { position: fixed; z-index: 22; bottom: 22px; left: 50%; color: var(--muted); font-size: .8rem; font-weight: 700; transform: translateX(-50%); animation: hint 1.7s ease-in-out infinite; }
+    @keyframes hint { 50% { opacity: .35; transform: translateX(-50%) translateY(-4px); } }
+
+    @media (max-width: 800px) {
+      .slide { overflow-y: auto; padding: 74px 26px 70px; }
+      .brand { top: 16px; left: 20px; }
+      .brand img { width: 130px; }
+      .brand-tag { display: none; }
+      .title-layout, .grid-2, .grid-3, .compare, .code-grid { grid-template-columns: 1fr; }
+      .title-layout { height: auto; }
+      .hero-card { display: none; }
+      .flow { grid-template-columns: 1fr; }
+      .flow-step:not(:last-child)::after { content: "↓"; top: auto; right: 50%; bottom: -20px; transform: translateX(50%); }
+      .versus { text-align: center; }
+      .evidence-row { grid-template-columns: 74px 28px minmax(0,1fr); gap: 8px; }
+      .dot { width: 27px; height: 27px; }
+      .portrait { width: 82px; }
+      .nav { top: auto; bottom: 24px; transform: none; }
+      .nav.prev { left: 12px; }
+      .nav.next { right: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck">
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL — Engineering Software Lab"><span class="brand-tag">Engineering evidence, not guesses</span></div>
+      <div class="title-layout">
+        <div>
+          <div class="eyebrow">Hands-on extension to “Beyond Breakpoints”</div>
+          <h1>From breakpoints<br>to <span class="accent">evidence</span>.</h1>
+          <p class="lead">A repeatable C++ lab that turns a delayed heap-use-after-free into a verified cause, a minimal ownership fix, and a permanent regression check.</p>
+          <div class="byline">
+            <img class="portrait" src="daniel-liezrowice.jpg" alt="Daniel Liezrowice">
+            <div><b>Daniel Liezrowice</b><br><a class="profile-link" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">LinkedIn profile ↗</a><br><span class="small muted">ESL — Engineering Software Lab · August 2026</span></div>
+          </div>
+        </div>
+        <aside class="hero-card"><strong>One defect.<br>Multiple observations.<br>One verified explanation.</strong></aside>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">Purpose</span></div>
+      <div class="eyebrow">Why we built it</div>
+      <h2>Make the debugging workflow <span class="accent">tangible</span>.</h2>
+      <p class="lead">Vivek Bhadra’s article explains why one tool cannot answer every debugging question. We turned that principle into a public lab where each tool has a precise job.</p>
+      <div class="grid-3">
+        <article class="card"><span class="num">01</span><h3>Reproduce</h3><p>Make undefined behavior visible without pretending that one observed output is guaranteed.</p></article>
+        <article class="card"><span class="num">02</span><h3>Explain</h3><p>Separate the late symptom from the earlier lifetime-ending event that caused it.</p></article>
+        <article class="card"><span class="num">03</span><h3>Verify</h3><p>Prove the smallest correction with sanitizers and regression tests—not confidence alone.</p></article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">The defect</span></div>
+      <div class="eyebrow">A realistic ownership mistake</div>
+      <h2>The pointer survives.<br>The object does <span class="red">not</span>.</h2>
+      <div class="code-grid">
+        <div class="code-card">
+          <div class="code-title">1 · Borrowed pointer escapes into the cache</div>
+          <pre><span class="code-blue">const Reading*</span> cached_reading = nullptr;
+
+void cache_for_dashboard(const Reading&amp; reading)
+{
+    <span class="code-red">cached_reading = &amp;reading;</span>
+}</pre>
+        </div>
+        <div class="code-card">
+          <div class="code-title">2 · Owner retires the object; cache still points there</div>
+          <pre>void retire_reading(std::unique_ptr&lt;Reading&gt;&amp; reading)
+{
+    <span class="code-red">reading.reset();</span>
+}
+
+// later, elsewhere...
+const Reading&amp; reading = <span class="code-red">*cached_reading</span>;</pre>
+        </div>
+      </div>
+      <p class="lead" style="margin-top:22px">A non-null address proves only that bits remain in the pointer. It does not prove that a live object still occupies that address.</p>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">The misleading symptom</span></div>
+      <div class="eyebrow">Correct-looking output is not correctness</div>
+      <h2>Undefined behavior can look <span class="orange">plausible</span>.</h2>
+      <div class="compare">
+        <article class="card"><span class="num red">42</span><h3>Expected record</h3><p>The dashboard cache should retain the original reactor-inlet reading.</p></article>
+        <div class="versus">≠</div>
+        <article class="card"><span class="num orange">9001</span><h3>Observed record</h3><p>A later allocation can reuse the same heap address, making unrelated data appear in the dashboard.</p></article>
+      </div>
+      <div class="terminal" style="margin-top:24px">
+        <div class="terminal-head"><i></i><i></i><i></i></div>
+        <pre>cached object at 0x603000000040
+new object at    0x603000000040
+cached reading: id=<span class="code-red">9001</span>, value=-273.15, label=unrelated-record</pre>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">The repeatable workflow</span></div>
+      <div class="eyebrow">Five stages, one command</div>
+      <h2>Move deliberately between forms of <span class="accent">evidence</span>.</h2>
+      <div class="flow">
+        <div class="flow-step"><b>1 · Build</b><span>Debug symbols, frame pointers, useful warnings.</span></div>
+        <div class="flow-step"><b>2 · Observe</b><span>Capture the visible symptom without over-interpreting it.</span></div>
+        <div class="flow-step"><b>3 · Diagnose</b><span>AddressSanitizer identifies the invalid memory operation.</span></div>
+        <div class="flow-step"><b>4 · Inspect</b><span>GDB stops at the delayed use and exposes program state.</span></div>
+        <div class="flow-step"><b>5 · Verify</b><span>Corrected sanitizer target and regression tests must pass.</span></div>
+      </div>
+      <div class="terminal" style="margin-top:28px"><div class="terminal-head"><i></i><i></i><i></i></div><pre>C:\amp-demos\cpp-debugging-demo&gt; <span class="code-blue">run_demo.bat</span>
+...
+<span class="code-green">SUCCESS: symptom, root-cause evidence, debugger inspection, and fix verified.</span></pre></div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">AddressSanitizer</span></div>
+      <div class="eyebrow">The causal timeline</div>
+      <h2>ASan connects the symptom to its <span class="red">history</span>.</h2>
+      <div class="evidence-timeline">
+        <div class="evidence-row"><span class="when">First</span><span class="dot">A</span><div class="event"><b>Allocation in <code>main()</code></b><span>Where the object’s valid lifetime begins.</span></div></div>
+        <div class="evidence-row"><span class="when">Then</span><span class="dot">F</span><div class="event"><b>Deallocation in <code>retire_reading()</code></b><span>The causal event: <code>unique_ptr::reset()</code> ends the object’s lifetime.</span></div></div>
+        <div class="evidence-row"><span class="when">Later</span><span class="dot">R</span><div class="event"><b>Invalid read in <code>render_dashboard()</code></b><span>The visible symptom occurs away from the cause.</span></div></div>
+      </div>
+      <p class="lead" style="margin-top:24px">That allocation → free → invalid-read chain is stronger than guessing from the crash line.</p>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">GDB</span></div>
+      <div class="eyebrow">Interactive inspection</div>
+      <h2>GDB shows why “not null” is <span class="red">not enough</span>.</h2>
+      <div class="grid-2">
+        <div class="terminal"><div class="terminal-head"><i></i><i></i><i></i></div><pre><span class="code-blue">break</span> cache_for_dashboard
+<span class="code-blue">break</span> retire_reading
+<span class="code-blue">break</span> render_dashboard
+run
+print cached_reading
+continue
+backtrace full
+info locals</pre></div>
+        <div class="card">
+          <div class="checklist">
+            <div class="check"><div><b>Before retirement</b><span>The cache and owner refer to the same live object.</span></div></div>
+            <div class="check"><div><b>After retirement</b><span>The cached pointer still contains the same address.</span></div></div>
+            <div class="check"><div><b>At the symptom</b><span>The address exists, but the object lifetime has ended.</span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">The correction</span></div>
+      <div class="eyebrow">Fix ownership, not the symptom</div>
+      <h2>The cache must own what it <span class="green">retains</span>.</h2>
+      <div class="code-grid">
+        <div class="code-card"><div class="code-title">Before · borrowed lifetime</div><pre><span class="code-red">const Reading*</span> cached_reading;
+
+cached_reading = &amp;reading;
+
+// Owner can destroy reading independently.</pre></div>
+        <div class="code-card"><div class="code-title">After · cache-owned value</div><pre><span class="code-green">std::optional&lt;Reading&gt;</span> cached_reading;
+
+cached_reading = reading;
+
+// Cache retains a valid independent value.</pre></div>
+      </div>
+      <div class="grid-3" style="margin-top:24px">
+        <article class="card"><h3>Original ID retained</h3><p>The corrected program prints <code>id=42</code>.</p></article>
+        <article class="card"><h3>Sanitizer clean</h3><p>The corrected ASan target has no lifetime finding.</p></article>
+        <article class="card"><h3>Regression protected</h3><p>CTest makes the expected behavior repeatable.</p></article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">What our work adds</span></div>
+      <div class="eyebrow">From article to runnable artifact</div>
+      <h2>A practical companion—not a replacement.</h2>
+      <div class="grid-3">
+        <article class="card"><span class="num">MIT</span><h3>Public source</h3><p>A small C++17 project readers can inspect, modify, and teach from.</p></article>
+        <article class="card"><span class="num">1×</span><h3>One-click runner</h3><p>A Windows batch file orchestrates the WSL build and all five verification stages.</p></article>
+        <article class="card"><span class="num">∞</span><h3>Repeatable state</h3><p>Every run rebuilds the diagnostic targets, so the demonstration can be repeated safely.</p></article>
+        <article class="card"><span class="num">UI</span><h3>Findings dashboard</h3><p>A local browser view presents progress, confirmed findings, code changes, and terminal evidence.</p></article>
+        <article class="card"><span class="num">CI</span><h3>Executable acceptance</h3><p>The runner fails if expected sanitizer evidence or corrected tests are missing.</p></article>
+        <article class="card"><span class="num">↔</span><h3>Symptom vs. cause</h3><p>The lab explicitly teaches that the crash location and causal event may be far apart.</p></article>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">Run it yourself</span></div>
+      <div class="eyebrow">Public, open, repeatable</div>
+      <h2>What you need—and what to run.</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Prerequisites</h3>
+          <div class="checklist" style="margin-top:16px">
+            <div class="check"><div><b>Windows + WSL</b><span>With a Linux distribution available.</span></div></div>
+            <div class="check"><div><b>Build tools</b><span>CMake, GCC or Clang, and GDB.</span></div></div>
+            <div class="check"><div><b>Optional dashboard</b><span>Python 3.9 or newer.</span></div></div>
+          </div>
+        </div>
+        <div>
+          <div class="terminal"><div class="terminal-head"><i></i><i></i><i></i></div><pre>git clone https://github.com/zuwasi/cpp-debugging-demo.git
+cd cpp-debugging-demo
+
+<span class="code-blue">run_demo.bat</span>
+
+# or launch the visual dashboard
+<span class="code-blue">start_dashboard.bat</span></pre></div>
+          <div class="links">
+            <a class="link-card" href="https://github.com/zuwasi/cpp-debugging-demo" target="_blank" rel="noopener"><b>GitHub repository ↗</b><span>github.com/zuwasi/cpp-debugging-demo</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">Closing principle</span></div>
+      <div class="eyebrow">The engineering lesson</div>
+      <div class="big-quote">AI may propose.<br><span class="accent">The engineering toolchain must verify.</span></div>
+      <p class="lead" style="margin-top:28px">The durable result of debugging is not merely an explanation. It is evidence, a justified correction, and an automated check that prevents rediscovery.</p>
+      <div class="grid-2" style="margin-top:28px">
+        <a class="link-card" href="https://www.linkedin.com/pulse/beyond-breakpoints-glimpse-c-debugging-toolkit-vivek-bhadra-sjhue/" target="_blank" rel="noopener"><b>Original article by Vivek Bhadra ↗</b><span>Beyond Breakpoints: A Glimpse into the C++ Debugging Toolkit</span></a>
+        <a class="link-card" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener"><b>Daniel Liezrowice · ESL ↗</b><span>linkedin.com/in/liezrowice</span></a>
+      </div>
+    </section>
+  </main>
+
+  <button class="nav prev" id="prev" aria-label="Previous slide">‹</button>
+  <button class="nav next" id="next" aria-label="Next slide">›</button>
+  <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+  <div class="counter" id="counter" aria-live="polite">1 / 11</div>
+  <div class="progress-track"><div class="progress" id="progress"></div></div>
+
+  <script>
+    (() => {
+      const deck = document.getElementById('deck');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      const counter = document.getElementById('counter');
+      const progress = document.getElementById('progress');
+      const swipeHint = document.getElementById('swipeHint');
+      let current = 0;
+      let startX = null;
+
+      function show(index) {
+        current = Math.max(0, Math.min(index, slides.length - 1));
+        deck.style.transform = `translateX(-${current * 100}vw)`;
+        prev.disabled = current === 0;
+        next.disabled = current === slides.length - 1;
+        counter.textContent = `${current + 1} / ${slides.length}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        if (current > 0) swipeHint.hidden = true;
+      }
+
+      prev.addEventListener('click', () => show(current - 1));
+      next.addEventListener('click', () => show(current + 1));
+      document.addEventListener('keydown', event => {
+        if (event.key === 'ArrowRight' || event.key === ' ') {
+          event.preventDefault();
+          show(current + 1);
+        } else if (event.key === 'ArrowLeft') {
+          event.preventDefault();
+          show(current - 1);
+        }
+      });
+
+      function begin(x) { startX = x; }
+      function end(x) {
+        if (startX === null) return;
+        const delta = x - startX;
+        startX = null;
+        if (Math.abs(delta) < 50) return;
+        show(current + (delta < 0 ? 1 : -1));
+      }
+      document.addEventListener('touchstart', event => begin(event.changedTouches[0].clientX), { passive: true });
+      document.addEventListener('touchend', event => end(event.changedTouches[0].clientX), { passive: true });
+      document.addEventListener('mousedown', event => begin(event.clientX));
+      document.addEventListener('mouseup', event => end(event.clientX));
+
+      show(0);
+    })();
+  </script>
+</body>
+</html>
