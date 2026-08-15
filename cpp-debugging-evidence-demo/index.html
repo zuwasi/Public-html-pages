@@ -176,6 +176,15 @@
     .link-card b { display: block; margin-bottom: 3px; color: var(--blue-deep); }
     .link-card span { color: var(--muted); font-size: clamp(.72rem, .9vw, .85rem); }
 
+    .screenshot-layout { display: grid; grid-template-columns: minmax(0, 1.75fr) minmax(250px, .75fr); gap: clamp(20px, 3vw, 42px); align-items: center; }
+    .screenshot-frame { overflow: hidden; margin: 0; border: 1px solid var(--line); border-radius: 18px; background: white; box-shadow: var(--shadow); }
+    .screenshot-frame img { display: block; width: 100%; max-height: 57vh; object-fit: contain; }
+    .screenshot-frame figcaption { padding: 10px 15px; border-top: 1px solid var(--line); color: var(--muted); font-size: clamp(.68rem, .85vw, .8rem); }
+    .dashboard-steps { display: grid; gap: 13px; }
+    .dashboard-step { padding: 14px 16px; border-left: 4px solid var(--blue); border-radius: 0 14px 14px 0; background: var(--panel); box-shadow: 0 8px 24px rgba(11,95,145,.08); }
+    .dashboard-step b { display: block; margin-bottom: 4px; color: var(--blue-deep); }
+    .dashboard-step span { color: var(--muted); font-size: clamp(.75rem, .95vw, .9rem); line-height: 1.4; }
+
     .nav {
       position: fixed;
       z-index: 20;
@@ -208,7 +217,7 @@
       .brand { top: 16px; left: 20px; }
       .brand img { width: 130px; }
       .brand-tag { display: none; }
-      .title-layout, .grid-2, .grid-3, .compare, .code-grid { grid-template-columns: 1fr; }
+      .title-layout, .grid-2, .grid-3, .compare, .code-grid, .screenshot-layout { grid-template-columns: 1fr; }
       .title-layout { height: auto; }
       .hero-card { display: none; }
       .flow { grid-template-columns: 1fr; }
@@ -216,6 +225,7 @@
       .versus { text-align: center; }
       .evidence-row { grid-template-columns: 74px 28px minmax(0,1fr); gap: 8px; }
       .dot { width: 27px; height: 27px; }
+      .screenshot-frame img { max-height: none; }
       .portrait { width: 82px; }
       .nav { top: auto; bottom: 24px; transform: none; }
       .nav.prev { left: 12px; }
@@ -387,6 +397,41 @@ cached_reading = reading;
     </section>
 
     <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">One-click dashboard</span></div>
+      <div class="eyebrow">The easiest way to present the demo</div>
+      <h2>One click runs the full <span class="accent">investigation</span>.</h2>
+      <div class="screenshot-layout">
+        <figure class="screenshot-frame">
+          <img src="dashboard-findings.jpg" alt="Completed debugging dashboard with five verified stages and live findings">
+          <figcaption>The completed run turns raw tool output into a five-stage debugging story.</figcaption>
+        </figure>
+        <div class="dashboard-steps">
+          <div class="dashboard-step"><b>1 · Launch</b><span>Double-click <code>start_dashboard.bat</code>. It selects a free local port and opens the browser—no WSL window is required.</span></div>
+          <div class="dashboard-step"><b>2 · Run</b><span>Click <strong>Run complete demo</strong> and watch build, symptom, ASan, GDB, and verification stages update live.</span></div>
+          <div class="dashboard-step"><b>3 · Present again</b><span>Use <strong>Run again</strong> to repeat the same controlled investigation from a clean build.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">Dashboard evidence</span></div>
+      <div class="eyebrow">Cause, correction, and proof in one view</div>
+      <h2>The dashboard explains what the run <span class="green">proved</span>.</h2>
+      <div class="screenshot-layout">
+        <figure class="screenshot-frame">
+          <img src="dashboard-evidence.jpg" alt="Dashboard showing borrowed-pointer defect, owned-value correction, and passing tests">
+          <figcaption>The ownership change appears beside the GDB evidence and passing regression tests.</figcaption>
+        </figure>
+        <div class="dashboard-steps">
+          <div class="dashboard-step"><b>Defect</b><span>A borrowed pointer remains in the cache after the pointed-to object’s lifetime ends.</span></div>
+          <div class="dashboard-step"><b>Correction</b><span><code>std::optional&lt;Reading&gt;</code> gives the cache ownership of the retained value.</span></div>
+          <div class="dashboard-step"><b>Proof</b><span>The terminal preserves debugger observations, clean sanitizer execution, and two passing regression tests.</span></div>
+          <div class="dashboard-step"><b>Takeaway</b><span>The audience sees the complete evidence chain—not only a final “fixed” message.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide">
       <div class="brand"><img src="esl-logo.png" alt="ESL"><span class="brand-tag">Run it yourself</span></div>
       <div class="eyebrow">Public, open, repeatable</div>
       <h2>What you need—and what to run.</h2>
@@ -429,7 +474,7 @@ cd cpp-debugging-demo
   <button class="nav prev" id="prev" aria-label="Previous slide">‹</button>
   <button class="nav next" id="next" aria-label="Next slide">›</button>
   <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
-  <div class="counter" id="counter" aria-live="polite">1 / 11</div>
+  <div class="counter" id="counter" aria-live="polite">1 / 13</div>
   <div class="progress-track"><div class="progress" id="progress"></div></div>
 
   <script>
