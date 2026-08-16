@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Daniel Liezrowice and ESL engineering services in C/C++, embedded systems, MISRA compliance, software supply-chain security, AI assessment, formal verification, and research-to-product engineering.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+  <title>Engineering Services | Daniel Liezrowice and ESL</title>
+  <style>
+    :root {
+      --ink: #102238;
+      --muted: #52677d;
+      --blue: #087db5;
+      --blue-dark: #07547e;
+      --cyan: #27b8dd;
+      --paper: #f5f9fc;
+      --panel: #ffffff;
+      --line: #d8e4ed;
+      --night: #071521;
+      --shadow: 0 18px 45px rgba(16, 45, 71, .12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; color: var(--ink); background: var(--paper); font-family: Inter, "Segoe UI", Arial, sans-serif; line-height: 1.6; }
+    a { color: inherit; }
+    img { max-width: 100%; }
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar { position: sticky; z-index: 10; top: 0; border-bottom: 1px solid rgba(216,228,237,.85); background: rgba(255,255,255,.94); backdrop-filter: blur(12px); }
+    .topbar-inner { display: flex; min-height: 76px; align-items: center; justify-content: space-between; gap: 24px; }
+    .logo { width: 190px; height: auto; }
+    .nav { display: flex; align-items: center; gap: 22px; color: var(--muted); font-size: .9rem; font-weight: 700; }
+    .nav a { text-decoration: none; }
+    .nav a:hover { color: var(--blue); }
+    .hero { overflow: hidden; padding: clamp(76px, 10vw, 140px) 0 clamp(64px, 8vw, 110px); background: radial-gradient(circle at 86% 12%, rgba(39,184,221,.22), transparent 31%), linear-gradient(135deg, #fff 0%, #eff9ff 54%, #eef4f7 100%); }
+    .eyebrow { margin-bottom: 15px; color: var(--blue); font-size: .78rem; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+    h1, h2, h3 { margin-top: 0; line-height: 1.1; }
+    h1 { max-width: 940px; margin-bottom: 24px; font-size: clamp(2.6rem, 7.4vw, 6.5rem); letter-spacing: -.055em; }
+    h1 span { color: var(--blue); }
+    .hero-copy { max-width: 930px; margin: 0; color: var(--muted); font-size: clamp(1.05rem, 2vw, 1.35rem); }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+    .button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; padding: 12px 20px; border: 1px solid var(--blue); border-radius: 11px; color: white; background: var(--blue); font-weight: 800; text-decoration: none; }
+    .button:hover { background: var(--blue-dark); }
+    .button.secondary { color: var(--blue-dark); background: white; }
+    .button.secondary:hover { color: white; background: var(--blue-dark); }
+    .portfolio-url { margin: 18px 0 0; color: var(--muted); font-size: .9rem; }
+    .portfolio-url a { color: var(--blue-dark); font-weight: 800; overflow-wrap: anywhere; }
+    .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 52px; }
+    .metric { padding: 18px; border: 1px solid rgba(8,125,181,.18); border-radius: 15px; background: rgba(255,255,255,.76); }
+    .metric b { display: block; color: var(--blue-dark); font-size: clamp(1.5rem, 3vw, 2.2rem); }
+    .metric span { color: var(--muted); font-size: .86rem; }
+    section { padding: clamp(64px, 8vw, 105px) 0; }
+    .section-head { max-width: 830px; margin-bottom: 34px; }
+    h2 { margin-bottom: 16px; font-size: clamp(2rem, 4.5vw, 4rem); letter-spacing: -.04em; }
+    .section-head p { margin: 0; color: var(--muted); font-size: 1.05rem; }
+    .service-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 18px; }
+    .service-card { display: flex; min-height: 260px; flex-direction: column; padding: clamp(22px, 3vw, 32px); border: 1px solid var(--line); border-radius: 19px; background: var(--panel); box-shadow: 0 8px 28px rgba(16,45,71,.06); }
+    .service-card .number { margin-bottom: 25px; color: var(--cyan); font-size: .78rem; font-weight: 850; letter-spacing: .13em; }
+    .service-card h3 { margin-bottom: 11px; font-size: clamp(1.25rem, 2.4vw, 1.7rem); }
+    .service-card p { margin: 0 0 22px; color: var(--muted); }
+    .evidence-link { margin-top: auto; color: var(--blue-dark); font-size: .9rem; font-weight: 850; text-decoration: none; }
+    .evidence-link:hover { color: var(--blue); text-decoration: underline; }
+    .dark { color: #edf7ff; background: var(--night); }
+    .dark .eyebrow { color: #66d9f4; }
+    .mantiq { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(360px, .95fr); gap: clamp(28px, 5vw, 65px); align-items: center; }
+    .mantiq-image { overflow: hidden; border: 1px solid #27445c; border-radius: 19px; background: #07131f; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
+    .mantiq-image img { display: block; width: 100%; }
+    .creator { display: inline-flex; margin: 0 0 20px; padding: 7px 11px; border: 1px solid rgba(102,217,244,.34); border-radius: 999px; color: #8ee9ff; background: rgba(39,184,221,.1); font-size: .76rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .mantiq h2 { font-size: clamp(2.1rem, 4.6vw, 4.4rem); }
+    .mantiq p { color: #a8bed0; }
+    .app-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; }
+    .app-card { padding: 24px; border: 1px solid var(--line); border-radius: 17px; background: white; }
+    .app-card h3 { margin-bottom: 9px; font-size: 1.25rem; }
+    .app-card p { margin: 0 0 18px; color: var(--muted); font-size: .92rem; }
+    .app-card a { color: var(--blue-dark); font-size: .87rem; font-weight: 850; text-decoration: none; }
+    .app-card a:hover { text-decoration: underline; }
+    .community { background: linear-gradient(135deg, #e9f7fc 0%, #fff7e8 100%); }
+    .community-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .community-card { padding: clamp(25px, 4vw, 40px); border: 1px solid rgba(8,125,181,.18); border-radius: 20px; background: rgba(255,255,255,.8); }
+    .community-card h3 { margin-bottom: 13px; font-size: 1.55rem; }
+    .community-card p { color: var(--muted); }
+    .cta { text-align: center; }
+    .cta-inner { padding: clamp(40px, 7vw, 80px); border-radius: 25px; color: white; background: linear-gradient(135deg, var(--blue-dark), var(--blue)); box-shadow: var(--shadow); }
+    .cta h2 { max-width: 850px; margin-right: auto; margin-left: auto; }
+    .cta p { max-width: 760px; margin: 0 auto; color: #d6effb; }
+    .cta .actions { justify-content: center; }
+    .cta .button { border-color: white; color: var(--blue-dark); background: white; }
+    .cta .button.secondary { color: white; background: transparent; }
+    footer { padding: 30px 0 45px; color: var(--muted); font-size: .85rem; text-align: center; }
+    @media (max-width: 850px) {
+      .nav { display: none; }
+      .metrics, .app-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .service-grid, .mantiq, .community-grid { grid-template-columns: 1fr; }
+      .mantiq-image { order: 2; }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 26px, 1180px); }
+      .logo { width: 155px; }
+      .metrics, .app-grid { grid-template-columns: 1fr; }
+      .actions { flex-direction: column; }
+      .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a href="https://eswlab.com/" target="_blank" rel="noopener noreferrer" aria-label="ESL website"><img class="logo" src="esl-logo.png" alt="ESL Engineering Software Lab"></a>
+      <nav class="nav" aria-label="Page navigation">
+        <a href="#services">Services</a>
+        <a href="#mantiq">MantiQ Factor</a>
+        <a href="#apps">AI LogicLab Apps</a>
+        <a href="#community">Open source</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="shell">
+        <div class="eyebrow">Daniel Liezrowice · ESL Engineering Services</div>
+        <h1>Complex engineering,<br><span>made verifiable.</span></h1>
+        <p class="hero-copy">I help engineering teams turn complex C/C++, embedded, AI, and research challenges into verified, auditable deliverables. Services include C/C++ debugging and modernization, MISRA and safety compliance, SBOM and supply-chain security, AI-tool assessment, Wolfram and Lean formal verification, and embedded Linux or accelerator prototyping.</p>
+        <div class="actions">
+          <a class="button" href="#services">Explore services</a>
+          <a class="button secondary" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer">Discuss a project</a>
+        </div>
+        <p class="portfolio-url">Portfolio: <a href="../">https://zuwasi.github.io/Public-html-pages/</a></p>
+        <div class="metrics" aria-label="Portfolio summary">
+          <div class="metric"><b>~250</b><span>public and private repositories</span></div>
+          <div class="metric"><b>120+</b><span>public repositories and community resources</span></div>
+          <div class="metric"><b>6</b><span>ESL AI LogicLab applications</span></div>
+          <div class="metric"><b>8</b><span>featured engineering service areas</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">Services with supporting work</div>
+          <h2>Working evidence, not a capability list.</h2>
+          <p>Each service below links to a public presentation, demonstration, analysis, or implementation that shows how I approach the work. These examples are a fraction of a larger portfolio, much of which consists of confidential, bespoke customer projects.</p>
+        </div>
+        <div class="service-grid">
+          <article class="service-card">
+            <span class="number">SERVICE 01</span>
+            <h3>C/C++ debugging and defect investigation</h3>
+            <p>Reproduce difficult failures, separate symptoms from causes, collect GDB and sanitizer evidence, correct ownership and lifetime defects, and preserve the result with regression tests.</p>
+            <a class="evidence-link" href="../cpp-debugging-evidence-demo/">View the C++ debugging evidence lab →</a>
+          </article>
+          <article class="service-card">
+            <span class="number">SERVICE 02</span>
+            <h3>MISRA C compliance and remediation</h3>
+            <p>Analyze safety-critical code, triage violations, implement controlled fixes, document formal deviations, and verify changes through unit tests and compliance reports.</p>
+            <a class="evidence-link" href="../embedox-misra-c2023-presentation.html">View the MISRA C:2023 remediation case →</a>
+          </article>
+          <article class="service-card">
+            <span class="number">SERVICE 03</span>
+            <h3>Embedded Linux and Yocto BSP engineering</h3>
+            <p>Design guided BSP workflows covering component selection, isolated builds, simulation, testing, CVE triage, SBOM, VEX, and evidence-based release gates.</p>
+            <a class="evidence-link" href="../yocto-bsp-studio-design-partner/">View the Yocto BSP Studio concept →</a>
+          </article>
+          <article class="service-card">
+            <span class="number">SERVICE 04</span>
+            <h3>SBOM, CVE, and supply-chain security</h3>
+            <p>Generate and assess SBOMs, investigate dependency exposure, triage CVEs and malware risk, map licenses, and produce audit-ready evidence for connected or air-gapped environments.</p>
+            <a class="evidence-link" href="../sbomator-supply-chain-detection/">View real-time supply-chain detection →</a>
+          </article>
+          <article class="service-card">
+            <span class="number">SERVICE 05</span>
+            <h3>AI coding-tool security and CISO assessments</h3>
+            <p>Evaluate AI development tools for enterprise adoption, data handling, access boundaries, supply-chain exposure, governance, and regulated-environment readiness.</p>
+            <a class="evidence-link" href="../AI_Coding_Tools_Security_Comparison.html">View the CISO assessment →</a>
+          </article>
+          <article class="service-card">
+            <span class="number">SERVICE 06</span>
+            <h3>Formal verification with Wolfram and Lean 4</h3>
+            <p>Translate research claims into executable models, cross-check numerical behavior, derive invariants, and create kernel-checked proofs for critical properties.</p>
+            <a class="evidence-link" href="../floating-point-heat-method-verification/">View certified numerical verification →</a>
+          </article>
+          <article class="service-card">
+            <span class="number">SERVICE 07</span>
+            <h3>Research-to-hardware prototyping</h3>
+            <p>Move from papers and mathematical models to reproducible computation, formal properties, HDL simulation, FPGA-oriented prototypes, and an explicit physical-validation plan.</p>
+            <a class="evidence-link" href="../mantiq-factor-fhe-hardware/">View the FHE accelerator workflow →</a>
+          </article>
+          <article class="service-card">
+            <span class="number">SERVICE 08</span>
+            <h3>CUDA and edge-AI platform migration</h3>
+            <p>Assess CUDA inference pipelines, export compatible models, map preprocessing and operators, build target configurations, and validate performance on edge-AI platforms.</p>
+            <a class="evidence-link" href="../cuda-to-axelera-migration.html">View the CUDA-to-Axelera guide →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark" id="mantiq">
+      <div class="shell mantiq">
+        <figure class="mantiq-image">
+          <img src="mantiq-factor.png" alt="MantiQ Factor production line from research documents through computation and formal verification to executable systems">
+        </figure>
+        <div>
+          <span class="creator">Creator of the MantiQ Factor product</span>
+          <div class="eyebrow">Research knowledge to verified systems</div>
+          <h2>The MantiQ Factor</h2>
+          <p>MantiQ Factor is my product vision and engineering workflow for converting research and technical documents into traceable, formally verified executable systems. It combines structured document conversion, AI orchestration, Wolfram computation, Lean 4 proof, domain skills, curated knowledge, and code or hardware synthesis.</p>
+          <p>The goal is not automatic code generation without controls. Every stage is designed to remain inspectable, reproducible, and connected to its source evidence.</p>
+          <div class="actions">
+            <a class="button" href="../mantiq-factor-fhe-hardware/">Explore a MantiQ Factor implementation</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="apps">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">ESL AI LogicLab Apps</div>
+          <h2>Products built for secure engineering workflows.</h2>
+          <p>ESL AI LogicLab develops local and air-gap-capable applications for environments where code privacy, correctness, traceability, and auditability matter.</p>
+        </div>
+        <div class="app-grid">
+          <article class="app-card">
+            <h3>Assemblomator</h3>
+            <p>Multi-architecture static analysis for assembly language, with rule-based inspection, reviewed AI fix suggestions, and regulatory reporting.</p>
+            <a href="https://eswlab.com/products/esl-ailogiclabs/assemblomator/" target="_blank" rel="noopener noreferrer">Explore Assemblomator →</a>
+          </article>
+          <article class="app-card">
+            <h3>FixCreator</h3>
+            <p>An isolated local-LLM workflow for precise, reviewable fixes to C, C++, and C# static-analysis findings without sending source code to the cloud.</p>
+            <a href="https://eswlab.com/products/esl-ailogiclabs/fixcreator/" target="_blank" rel="noopener noreferrer">Explore FixCreator →</a>
+          </article>
+          <article class="app-card">
+            <h3>PythonStator</h3>
+            <p>A coordinated Python analysis workflow combining seven engines with deduplication, unified severity, source context, GUI review, and repeatable CLI execution.</p>
+            <a href="https://eswlab.com/products/esl-ailogiclabs/pythonstator/" target="_blank" rel="noopener noreferrer">Explore PythonStator →</a>
+          </article>
+          <article class="app-card">
+            <h3>ReactStator</h3>
+            <p>Local React analysis for component health, dependency risk, dead code, modernization planning, security review, and QA quality gates.</p>
+            <a href="https://eswlab.com/products/esl-ailogiclabs/reactstator/" target="_blank" rel="noopener noreferrer">Explore ReactStator →</a>
+          </article>
+          <article class="app-card">
+            <h3>SBOMator</h3>
+            <p>Air-gap-ready SBOM, vulnerability, malware, license, AI/ML inventory, and dataset-provenance analysis for regulated software supply chains.</p>
+            <a href="https://eswlab.com/products/esl-ailogiclabs/sbomator/" target="_blank" rel="noopener noreferrer">Explore SBOMator →</a>
+          </article>
+          <article class="app-card">
+            <h3>TSscrutinizer</h3>
+            <p>TypeScript-native, air-gapped SAST that correlates multiple scanners, assesses reachability locally, and keeps every proposed fix under human review.</p>
+            <a href="https://eswlab.com/products/esl-ailogiclabs/tsscrutinizer/" target="_blank" rel="noopener noreferrer">Explore TSscrutinizer →</a>
+          </article>
+        </div>
+        <div class="actions">
+          <a class="button secondary" href="https://eswlab.com/products/esl-ailogiclabs/" target="_blank" rel="noopener noreferrer">View all ESL AI LogicLab Apps</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="community" id="community">
+      <div class="shell">
+        <div class="section-head">
+          <div class="eyebrow">Portfolio and community contribution</div>
+          <h2>Private client delivery. Public engineering contribution.</h2>
+          <p>My work spans approximately 250 public and private repositories. More than 120 are publicly visible; most private repositories contain bespoke customer work that cannot be published because it was created for specific organizations and environments.</p>
+        </div>
+        <div class="community-grid">
+          <article class="community-card">
+            <h3>Public project portfolio</h3>
+            <p>The public portfolio connects presentations, demonstrations, technical analyses, reports, prototypes, and reproducible engineering workflows across embedded development, AI, security, formal methods, and scientific computing.</p>
+            <div class="actions">
+              <a class="button" href="../">Browse presentation projects</a>
+              <a class="button secondary" href="https://github.com/zuwasi/" target="_blank" rel="noopener noreferrer">Browse public repositories</a>
+            </div>
+          </article>
+          <article class="community-card">
+            <h3>A continuing donation to open source</h3>
+            <p>I publish reusable demos, educational labs, technical guides, security research, verification workflows, and working source code as a practical donation of engineering time and knowledge to the open-source community.</p>
+            <p>These public artifacts are intended to help other engineers learn, reproduce results, challenge assumptions, and build safer systems. They are also transparent evidence of the services I can deliver.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="shell">
+        <div class="cta-inner">
+          <div class="eyebrow" style="color:#bceeff">Start with the engineering problem</div>
+          <h2>Need a result that can survive technical review?</h2>
+          <p>Bring the defect, research paper, compliance target, legacy codebase, supply-chain question, or prototype objective. We will define the evidence required and build the smallest credible path to a verified deliverable.</p>
+          <div class="actions">
+            <a class="button" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer">Contact ESL</a>
+            <a class="button secondary" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener noreferrer">Connect on LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">Daniel Liezrowice · ESL Engineering Software Lab · Services supported by public, reviewable engineering work</div>
+  </footer>
+</body>
+</html>
