@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-08-15
+Last updated: 2026-08-16
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -304,6 +304,9 @@ Last updated: 2026-08-15
 
 • sbomator-supply-chain-detection
   https://zuwasi.github.io/Public-html-pages/sbomator-supply-chain-detection
+
+• services
+  https://zuwasi.github.io/Public-html-pages/services
 
 • terratest-ampcode-esl-presentation
   https://zuwasi.github.io/Public-html-pages/terratest-ampcode-esl-presentation
