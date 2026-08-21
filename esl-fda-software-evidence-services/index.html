@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ESL | Complete FDA Software Evidence Services</title>
+  <style>
+    :root {
+      --ink:#222; --navy:#1c2d44; --blue:#3b86f7; --blue2:#1e65d6;
+      --gold:#f9a01b; --paper:#f4f7fb; --mist:#edf4ff; --warm:#fef6eb;
+      --muted:#5f6368; --line:#d9e2ee; --green:#17866f;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:#dce4e8;color:var(--ink);font-family:Arial,Helvetica,sans-serif}
+    @page{size:A4;margin:0}
+    @media print{html,body{background:#fff}.page{margin:0!important;box-shadow:none!important;break-after:page}a{color:inherit;text-decoration:none}.web-controls{display:none!important}}
+    .web-controls{position:fixed;top:18px;left:18px;z-index:20;display:flex;gap:10px}.web-controls a{padding:10px 15px;border:1px solid #ffffff55;border-radius:999px;background:#1c2d44e8;color:#fff;font-size:13px;font-weight:700;text-decoration:none;box-shadow:0 3px 10px #10233640;backdrop-filter:blur(8px)}.web-controls a:hover{background:var(--blue2)}
+    .page{position:relative;width:210mm;height:297mm;margin:10mm auto;padding:17mm 17mm 15mm;overflow:hidden;background:var(--paper);box-shadow:0 5mm 12mm #1023362e}
+    .page::after{content:attr(data-page);position:absolute;right:17mm;bottom:7mm;color:#7890a2;font-size:8pt;font-weight:700;letter-spacing:.12em}
+    h1,h2,h3,p{margin-top:0} h1{font-size:37pt;line-height:1.02;letter-spacing:-.04em} h2{font-size:25pt;line-height:1.08;letter-spacing:-.025em;margin-bottom:5mm} h3{font-size:13pt;line-height:1.15;margin-bottom:2mm}
+    p,li{font-size:9.7pt;line-height:1.45} p{margin-bottom:3mm} ul{margin:2mm 0 0;padding-left:5mm} li{margin-bottom:1.6mm}
+    strong{color:var(--navy)} .muted{color:var(--muted)} .small{font-size:8pt;line-height:1.4}.tiny{font-size:6.5pt;line-height:1.3}.white,.white strong{color:#fff}
+    .eyebrow{color:var(--blue);font-size:8.5pt;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+    .rule{width:20mm;height:1.4mm;margin:3mm 0 6mm;background:linear-gradient(90deg,var(--gold),var(--blue))}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:5mm}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:4mm}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:3.5mm}
+    .card{padding:5mm;border:.35mm solid var(--line);border-radius:3mm;background:#fff}.card.blue{border-top:1.6mm solid var(--blue)}.card.gold{border-top:1.6mm solid var(--gold)}.card.green{border-top:1.6mm solid var(--green)}.card.navy{border-top:1.6mm solid var(--navy)}
+    .badge{display:inline-block;margin-bottom:2.5mm;padding:1.2mm 2.4mm;border-radius:8mm;background:var(--mist);color:var(--blue2);font-size:7.5pt;font-weight:800;text-transform:uppercase;letter-spacing:.06em}
+    .pill{display:inline-block;margin:0 1mm 1.5mm 0;padding:1.3mm 2.4mm;border-radius:8mm;background:var(--mist);color:var(--blue2);font-size:7.3pt;font-weight:700}
+    .footer{position:absolute;left:17mm;bottom:7mm;color:#7890a2;font-size:7.4pt}
+    .logo{width:53mm;padding:3mm;border-radius:3mm;background:#fff;filter:drop-shadow(0 2mm 3mm #0004)}
+    .promise{padding:6mm;border-left:2mm solid var(--gold);border-radius:0 3mm 3mm 0;background:var(--warm);font-size:13pt;line-height:1.35;font-weight:700;color:var(--navy)}
+    .scope{padding:4mm 5mm;border-radius:3mm;background:var(--navy);color:#fff;font-size:9pt;line-height:1.4}.scope strong{color:var(--gold)}
+    .step{display:grid;grid-template-columns:11mm 42mm 1fr;gap:4mm;align-items:start;padding:4mm 0;border-bottom:.3mm solid var(--line)}.step:last-child{border-bottom:0}.num{display:grid;place-items:center;width:9mm;height:9mm;border-radius:50%;background:var(--blue);color:#fff;font-size:8pt;font-weight:800}.step h3{margin:1mm 0 0}.step p{margin:.5mm 0 0;color:var(--muted);font-size:8.2pt}.output{padding:2.7mm 3mm;border-radius:2mm;background:var(--mist);font-size:7.7pt;line-height:1.4}
+    .chain{display:grid;grid-template-columns:repeat(5,1fr);gap:2.5mm;margin:5mm 0}.chain div{min-height:28mm;padding:4mm 2.5mm;border-radius:2.5mm;background:var(--navy);color:#fff;font-size:7.5pt;line-height:1.35}.chain b{display:block;margin-bottom:1mm;color:var(--gold);font-size:9pt}
+    .deliver{display:flex;gap:3mm;align-items:flex-start;margin-bottom:3mm}.check{flex:0 0 6mm;display:grid;place-items:center;width:6mm;height:6mm;border-radius:50%;background:var(--green);color:#fff;font-weight:800;font-size:7pt}.deliver p{margin:0;font-size:8.5pt}
+    .cover{padding:0;color:#fff;background:radial-gradient(circle at 82% 24%,#3b86f780,transparent 28%),radial-gradient(circle at 10% 82%,#f9a01b40,transparent 25%),linear-gradient(145deg,#111827,#1c2d44 58%,#1e65d6)}
+    .cover::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff0c 1px,transparent 1px),linear-gradient(90deg,#ffffff0c 1px,transparent 1px);background-size:13mm 13mm}.cover::after,.back::after{color:#fff;z-index:4}
+    .cover-top{position:absolute;top:16mm;left:17mm;right:17mm;display:flex;justify-content:space-between;align-items:center;z-index:2}.cover-tag{padding:2mm 3mm;border:.3mm solid #ffffff70;border-radius:10mm;font-size:7.5pt;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .cover-main{position:absolute;top:68mm;left:17mm;width:174mm;z-index:2}.cover h1{max-width:165mm;margin:5mm 0 7mm}.cover-lead{max-width:151mm;color:#dfecff;font-size:15pt;line-height:1.35}.cover-band{position:absolute;left:0;right:0;bottom:0;min-height:68mm;padding:10mm 17mm;background:#06101bcf;border-top:.4mm solid #ffffff30;z-index:2}.cover-band h3{font-size:15pt}.cover-band p{color:#d8e7ef}
+    .cover-band .pill{display:block;width:100%;margin:0;text-align:center}
+    .hero-line{margin:5mm 0 7mm;padding:7mm;border-radius:4mm;background:linear-gradient(135deg,var(--navy),var(--blue2));color:#fff;font-size:18pt;line-height:1.25;font-weight:800}.hero-line em{color:var(--gold);font-style:normal}
+    .before-after{display:grid;grid-template-columns:1fr 12mm 1fr;gap:3mm;align-items:center}.arrow{font-size:24pt;color:var(--gold);text-align:center;font-weight:800}.state{padding:5mm;border-radius:3mm}.state.before{background:#fff;border:.35mm solid var(--line)}.state.after{background:var(--navy);color:#fff}.state.after strong{color:var(--gold)}
+    .trace{display:grid;grid-template-columns:1fr 9mm 1fr 9mm 1fr 9mm 1fr;gap:1.5mm;align-items:center;margin:6mm 0}.trace div:not(.link){min-height:28mm;padding:4mm 2mm;display:grid;place-items:center;text-align:center;border-radius:2.5mm;background:var(--mist);color:var(--navy);font-size:8pt;font-weight:800}.trace .link{text-align:center;color:var(--gold);font-size:18pt;font-weight:800}
+    .evidence-shot{display:block;width:100%;height:72mm;object-fit:cover;border:.35mm solid var(--line);border-radius:3mm;background:#fff;box-shadow:0 2mm 5mm #10233626}.evidence-shot.static{object-position:center top}.evidence-shot.coverage{object-position:center bottom}
+    .evidence-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin-top:4mm}.evidence-grid .card{padding:4mm}.evidence-grid p{font-size:7.8pt;line-height:1.36;margin:0}
+    .link-strip{margin-top:4mm;padding:3mm 4mm;border-radius:2.5mm;background:var(--navy);color:#fff;font-size:7.7pt;line-height:1.35}.link-strip b{color:var(--gold)}.link-strip a{color:#dcecff;overflow-wrap:anywhere}
+    .solution-card ul{margin-top:3mm}.solution-card li{font-size:8.6pt}.solution-link{display:block;margin-top:4mm;padding:3mm;border-radius:2mm;background:var(--mist);color:var(--blue2);font-size:7.4pt;font-weight:800;overflow-wrap:anywhere}
+    .back{color:#fff;background:linear-gradient(145deg,#111827,#1c2d44 68%,#1e65d6)}.back::before{content:"";position:absolute;width:120mm;height:120mm;right:-45mm;top:-42mm;border:18mm solid #3b86f729;transform:rotate(25deg)}.back .logo{position:relative;z-index:2}.cta{position:relative;z-index:2;padding:8mm;border:.4mm solid #ffffff40;border-radius:5mm;background:#ffffff12}.contacts{display:grid;grid-template-columns:1fr 1fr;gap:4mm;margin-top:5mm}.contacts div{padding:4mm;border-radius:2.5mm;background:#ffffff12}.contacts b{display:block;margin-bottom:1mm;color:var(--gold);font-size:7pt;text-transform:uppercase;letter-spacing:.1em}.contacts span{font-size:9pt}.sources{margin-top:6mm;columns:2;column-gap:7mm}.sources p{break-inside:avoid;margin:0 0 2mm;color:#c7d7e2;font-size:5.8pt;line-height:1.28}.sources a{color:#e1efff;overflow-wrap:anywhere}.disclaimer{position:absolute;left:17mm;right:17mm;bottom:12mm;padding-top:3mm;border-top:.3mm solid #ffffff35;color:#b9ccd7;font-size:6.2pt;line-height:1.32}
+  </style>
+</head>
+<body>
+  <nav class="web-controls" aria-label="Brochure controls">
+    <a href="../">⌂ Home</a>
+    <a href="ESL_FDA_Software_Evidence_Services_Focused.pdf" download>⇩ Download PDF</a>
+  </nav>
+  <section class="page cover" data-page="01 / 09">
+    <div class="cover-top">
+      <img class="logo" src="assets/ESL_Logo.png" alt="ESL Engineering Software Lab">
+      <div class="cover-tag">FDA software evidence services</div>
+    </div>
+    <div class="cover-main">
+      <div class="eyebrow" style="color:#f9a01b">Preparing for an FDA submission or inspection?</div>
+      <h1>ESL takes complete ownership of your software evidence work.</h1>
+      <p class="cover-lead">SBOM &amp; CVE remediation. Static analysis &amp; bug fixing. Unit testing &amp; code coverage. Traceability &amp; audit-ready reports.</p>
+    </div>
+    <div class="cover-band">
+      <h3 class="white">We do not stop at finding problems.</h3>
+      <p>ESL analyzes the software, fixes the findings, reruns the tools, cleans the reports and delivers the evidence package—across source, build artifacts and binary-only systems.</p>
+      <div class="grid4">
+        <span class="pill">SBOM + CVEs</span><span class="pill">Static analysis</span><span class="pill">Unit tests + coverage</span><span class="pill">ALM traceability</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="page" data-page="02 / 09">
+    <div class="eyebrow">One accountable engineering partner</div><div class="rule"></div>
+    <h2>Many FDA tasks. One complete software-evidence workstream.</h2>
+    <div class="hero-line">You keep ownership of the product and submission. <em>ESL owns the execution</em> of the software analysis, remediation, testing and evidence tasks in scope.</div>
+    <div class="scope"><strong>Right-sized to your submission:</strong> not every product or submission level needs every activity. ESL first identifies the applicable software evidence scope with your quality and regulatory team—then performs only the work that is needed.</div>
+    <div class="grid2" style="margin-top:6mm">
+      <div class="card blue"><span class="badge">01 · Software supply chain</span><h3>SBOM reports—even from binaries only</h3><p>Inventory components and dependencies from source, packages, containers, firmware or available binary artifacts. Correlate known vulnerabilities, assess relevance and produce submission-oriented reports.</p></div>
+      <div class="card gold"><span class="badge">02 · Source-code quality</span><h3>Static code analysis—and actual fixes</h3><p>Configure language-appropriate rules, triage findings, repair defects, document justified deviations and rerun analysis until the code and evidence are clean enough for the agreed acceptance criteria.</p></div>
+      <div class="card green"><span class="badge">03 · Verification</span><h3>Unit testing and structural coverage</h3><p>Create and execute tests, measure statement/branch/condition or other appropriate coverage, analyze uncovered code, repair testability defects and assemble objective results.</p></div>
+      <div class="card navy"><span class="badge">04 · Traceability</span><h3>Requirements-to-test proof in your ALM</h3><p>Connect requirements, risks, tests, runs, results, defects and code evidence in Polarion or another supported ALM—so reviewers can navigate the chain rather than reconcile disconnected reports.</p></div>
+    </div>
+    <div class="promise" style="margin-top:6mm">The deliverable is not a tool dashboard. It is a reviewed, reproducible and traceable software evidence package.</div>
+    <div class="footer">ESL · Complete FDA-relevant software evidence execution</div>
+  </section>
+
+  <section class="page" data-page="03 / 09">
+    <div class="eyebrow">End-to-end remediation—not scan-and-leave</div><div class="rule"></div>
+    <h2>Find it. Understand it. Fix it. Prove it.</h2>
+    <p class="muted">A long finding list does not help a submission. ESL closes the engineering loop for both source-code defects and software-component vulnerabilities.</p>
+    <div class="chain">
+      <div><b>1 · Discover</b>Scan source, builds, dependencies, containers, firmware and binaries available for assessment.</div>
+      <div><b>2 · Triage</b>Remove noise, confirm applicability, classify impact and prioritize against product risk.</div>
+      <div><b>3 · Remediate</b>Fix code defects; upgrade, replace, patch or otherwise address vulnerable components.</div>
+      <div><b>4 · Verify</b>Rebuild, rescan, retest and perform regression checks to confirm the remediation.</div>
+      <div><b>5 · Evidence</b>Record tool versions, configuration, findings, dispositions, results and traceability.</div>
+    </div>
+    <div class="grid2">
+      <div class="card gold">
+        <h3>Static-analysis cleanup</h3>
+        <div class="deliver"><span class="check">✓</span><p>Rules and severity profile configured for the language, product and coding policy</p></div>
+        <div class="deliver"><span class="check">✓</span><p>Findings reviewed to distinguish defects, accepted deviations and false positives</p></div>
+        <div class="deliver"><span class="check">✓</span><p>Source repaired by experienced engineers—not merely reassigned to your team</p></div>
+        <div class="deliver"><span class="check">✓</span><p>Final scan and disposition report tied to the controlled code baseline</p></div>
+      </div>
+      <div class="card blue">
+        <h3>SBOM and CVE cleanup</h3>
+        <div class="deliver"><span class="check">✓</span><p>Machine-readable SBOM plus human-readable inventory and dependency evidence</p></div>
+        <div class="deliver"><span class="check">✓</span><p>Known-vulnerability correlation, including binary-only discovery where feasible</p></div>
+        <div class="deliver"><span class="check">✓</span><p>Applicability analysis, remediation, compensating-control input or documented rationale</p></div>
+        <div class="deliver"><span class="check">✓</span><p>Rescan after changes, with remaining vulnerability status made explicit</p></div>
+      </div>
+    </div>
+    <div class="before-after" style="margin-top:7mm">
+      <div class="state before"><h3>Before ESL</h3><p class="small">Unknown components · noisy findings · unowned defects · incomplete tests · disconnected evidence</p></div>
+      <div class="arrow">→</div>
+      <div class="state after"><h3 class="white">After ESL</h3><p class="small"><strong>Controlled baseline</strong> · remediated findings · repeatable tests · reviewed reports · explicit residual risk</p></div>
+    </div>
+    <div class="footer">ESL · Analysis, engineering remediation and clean evidence</div>
+  </section>
+
+  <section class="page" data-page="04 / 09">
+    <div class="eyebrow">Technology-independent execution</div><div class="rule"></div>
+    <h2>Your software stack should not become your evidence gap.</h2>
+    <p class="muted">ESL assembles the appropriate tool and engineering workflow for the languages, targets and artifacts in your product. The exact scope is confirmed during assessment.</p>
+    <div class="grid3">
+      <div class="card navy"><span class="badge">Source languages</span><h3>Broad language coverage</h3><p class="small">C, C++, C#, Java, VB.NET and other stacks through suitable static-analysis, testing and software-composition technologies.</p></div>
+      <div class="card blue"><span class="badge">Execution targets</span><h3>Host to embedded</h3><p class="small">Desktop, server, cloud, container, mobile, cross-compiled and resource-constrained embedded targets—including on-target testing where needed.</p></div>
+      <div class="card gold"><span class="badge">Available artifacts</span><h3>Source or binary-only</h3><p class="small">Full repositories, partial source, package manifests, build outputs, containers, firmware and binaries. SBOM work does not require a perfect source tree to begin.</p></div>
+    </div>
+    <div class="grid2" style="margin-top:6mm">
+      <div class="card green">
+        <h3>Unit testing + code coverage service</h3>
+        <ul>
+          <li>Test strategy and risk-appropriate acceptance criteria</li>
+          <li>Automated and engineer-authored unit/integration tests</li>
+          <li>Harnesses, stubs, mocks and target communication</li>
+          <li>Statement, branch, condition and MC/DC where appropriate</li>
+          <li>Uncovered/dead-code analysis and documented disposition</li>
+          <li>Regression execution tied to the release baseline</li>
+        </ul>
+      </div>
+      <div class="card blue">
+        <h3>Evidence delivered with the work</h3>
+        <ul>
+          <li>Plans, procedures, scope and acceptance criteria</li>
+          <li>Tool identification, versions, settings and environment</li>
+          <li>Controlled inputs and tested software configuration</li>
+          <li>Test specifications, expected results and actual results</li>
+          <li>Finding/anomaly status, fixes and residual rationale</li>
+          <li>Traceability and final summary suitable for review</li>
+        </ul>
+      </div>
+    </div>
+    <div class="promise" style="margin-top:6mm">One ESL engagement can combine SBOM, CVE remediation, static analysis, code repair, unit tests, coverage and ALM traceability—or provide only the individual service you need.</div>
+    <div class="footer">ESL · Language-appropriate tools, one consistent evidence standard</div>
+  </section>
+
+  <section class="page" data-page="05 / 09">
+    <div class="eyebrow">The ESL FDA software-evidence stack</div><div class="rule"></div>
+    <h2>One ESL team. Two specialized evidence pillars.</h2>
+    <p class="muted">Use only the evidence activities your device, risk and submission require. ESL implements the tools, performs the engineering work, fixes findings and delivers the reviewed evidence.</p>
+    <div class="grid2" style="margin-top:6mm">
+      <div class="card blue solution-card">
+        <span class="badge">Developed by ESL</span>
+        <h3>SBOMator™ · FDA-focused software supply-chain evidence</h3>
+        <ul>
+          <li>Source, package, container, firmware and binary-only analysis</li>
+          <li>CycloneDX SBOM, VEX decisions and CVSS v4.0 context</li>
+          <li>CVE applicability review, remediation and cleaner reports</li>
+          <li>Section 524B evidence mapping and postmarket monitoring</li>
+          <li>HBOM, FPGA and DataBOM evidence where applicable</li>
+        </ul>
+        <a class="solution-link" href="https://zuwasi.github.io/Public-html-pages/sbomator-fda-edition/#1">Explore SBOMator FDA Edition →</a>
+      </div>
+      <div class="card gold solution-card">
+        <span class="badge">Represented and implemented by ESL</span>
+        <h3>Parasoft · IEC 62304-focused software verification</h3>
+        <ul>
+          <li>Static analysis with defect triage and source-code remediation</li>
+          <li>Automated and engineer-authored unit testing</li>
+          <li>Statement, branch, condition and MC/DC coverage</li>
+          <li>Requirements-to-test traceability and ALM integration</li>
+          <li>C/C++test is TÜV SÜD-certified for use in IEC 62304 development</li>
+        </ul>
+        <a class="solution-link" href="https://parasoft.com/industries/embedded/medical-devices/">Explore Parasoft Medical Devices →</a>
+      </div>
+    </div>
+    <div class="scope" style="margin-top:6mm"><strong>Complementary roles:</strong> SBOMator produces software-composition and cybersecurity evidence. Parasoft produces source-code verification evidence. ESL connects both to the controlled build, requirements, tests, findings, fixes and release baseline.</div>
+    <div class="promise" style="margin-top:6mm">The manufacturer owns the regulatory decision. ESL supplies the engineering execution and objective evidence behind it.</div>
+    <div class="footer">ESL · SBOMator + Parasoft · Complementary FDA software evidence</div>
+  </section>
+
+  <section class="page" data-page="06 / 09">
+    <div class="eyebrow">Static code analysis + remediation</div><div class="rule"></div>
+    <h2>Find and fix defects before they become audit findings.</h2>
+    <p class="muted">FDA-ready evidence is not a raw warning count. Findings must be reviewed, corrected or justified, rerun and retained against the controlled software baseline.</p>
+    <a href="https://www.parasoft.com/products/parasoft-c-ctest/c-c-static-analysis/"><img class="evidence-shot static" src="assets/parasoft-misra-c-2025-static-analysis.jpg" alt="Parasoft C/C++test MISRA C 2025 static-analysis configuration"></a>
+    <div class="evidence-grid">
+      <div class="card gold"><h3>Detect deeply</h3><p>Pattern, control-flow and data-flow analysis plus abstract interpretation expose null dereferences, memory corruption, concurrency defects and dead code.</p></div>
+      <div class="card blue"><h3>Enforce standards</h3><p>Apply MISRA C/C++, CERT C/C++, CWE and project rules with reviewable compliance reports rather than an unexplained warning dump.</p></div>
+      <div class="card green"><h3>Clean and prove</h3><p>ESL fixes real defects, documents justified deviations, reruns analysis and retains before/after evidence linked to the build and requirements.</p></div>
+    </div>
+    <div class="link-strip"><b>Parasoft C/C++test:</b> TÜV SÜD-certified for use in IEC 62304 development. <a href="https://www.parasoft.com/products/parasoft-c-ctest/c-c-static-analysis/">parasoft.com/products/parasoft-c-ctest/c-c-static-analysis/</a></div>
+    <div class="footer">ESL · Static analysis, remediation and reviewable compliance evidence</div>
+  </section>
+
+  <section class="page" data-page="07 / 09">
+    <div class="eyebrow">Unit testing + structural code coverage</div><div class="rule"></div>
+    <h2>FDA mandates no universal coverage percentage.</h2>
+    <p class="muted">Coverage criteria must be justified and commensurate with risk. Strong evidence explains what ran, what did not, why the gaps are acceptable and whether the tested configuration represents the release.</p>
+    <a href="https://www.linkedin.com/pulse/when-code-coverage-becomes-fda-issue-daniel-dani-liezrowice-fchdf/"><img class="evidence-shot coverage" src="assets/parasoft-unit-testing-code-coverage.jpg" alt="Parasoft unit testing, structural code coverage and requirements traceability"></a>
+    <div class="evidence-grid">
+      <div class="card gold"><h3>Risk-based criteria</h3><p>Select statement, branch or MC/DC coverage by software risk. A headline percentage without the rationale is weak FDA evidence.</p></div>
+      <div class="card blue"><h3>Test where it matters</h3><p>Run generated or engineer-authored tests on host or target; instrument constrained firmware module by module and merge the results.</p></div>
+      <div class="card green"><h3>Explain every gap</h3><p>Identify uncovered and dead code, add tests or document justification, preserve regression results, requirements links and tested configuration.</p></div>
+    </div>
+    <div class="link-strip"><b>The FDA question:</b> not “What percentage did you reach?” but “How do you know coverage is adequate for the risk?” <a href="https://www.linkedin.com/pulse/when-code-coverage-becomes-fda-issue-daniel-dani-liezrowice-fchdf/">Read ESL’s analysis →</a></div>
+    <div class="footer">ESL · Unit testing, risk-based coverage and uncovered-code justification</div>
+  </section>
+
+  <section class="page" data-page="08 / 09">
+    <div class="eyebrow">Traceability that a reviewer can follow</div><div class="rule"></div>
+    <h2>Every requirement should lead to evidence.</h2>
+    <p class="muted">ESL can integrate the testing and analysis work with your ALM so the evidence remains connected to product intent and risk—not trapped in separate PDFs and dashboards.</p>
+    <div class="trace">
+      <div>Requirement<br>&amp; risk control</div><div class="link">→</div><div>Linked test case<br>&amp; code</div><div class="link">→</div><div>Test run, result<br>&amp; coverage</div><div class="link">→</div><div>Defect, fix<br>&amp; approval</div>
+    </div>
+    <div class="grid2">
+      <div class="card blue">
+        <span class="badge">Concrete example · Polarion ALM</span>
+        <h3>Parasoft Test Tool Suite Connector</h3>
+        <ul>
+          <li>Polarion-authored requirements visible in Parasoft DTP</li>
+          <li>Parasoft tests linked directly to Polarion requirements</li>
+          <li>Executed tests export realized cases, runs and results into Polarion</li>
+          <li>Traceability extends from requirement through tests to code</li>
+          <li>Gaps and progress visible in DTP dashboards and Polarion traceability matrices</li>
+        </ul>
+        <p class="tiny muted">Capabilities described by the Polarion Extensions listing for Parasoft’s connector; deployment/version compatibility is confirmed per project.<sup>5</sup></p>
+      </div>
+      <div class="card gold">
+        <span class="badge">ESL integration service</span>
+        <h3>More than installing a connector</h3>
+        <ul>
+          <li>Define work-item types, relationships and ownership</li>
+          <li>Map requirements and risk controls to test levels</li>
+          <li>Configure result exchange and evidence retention</li>
+          <li>Connect CI execution to controlled baselines</li>
+          <li>Create traceability views and release gates</li>
+          <li>Train engineering, QA and regulatory users</li>
+        </ul>
+        <p class="small"><strong>Other ALM systems:</strong> ESL applies the same evidence model using supported APIs, connectors and reporting capabilities available in the customer environment.</p>
+      </div>
+    </div>
+    <div class="scope" style="margin-top:6mm"><strong>The outcome:</strong> when someone asks “Which requirement does this test verify?”, “Which release produced this result?” or “How was this finding closed?”, the answer is one traceable navigation path—not a document search.</div>
+    <div class="footer">ESL · Requirement → risk → test → result → fix → release</div>
+  </section>
+
+  <section class="page back" data-page="09 / 09">
+    <img class="logo" src="assets/ESL_Logo.png" alt="ESL Engineering Software Lab">
+    <div style="position:relative;z-index:2;margin-top:13mm">
+      <div class="eyebrow" style="color:#f9a01b">Bring ESL the software—not a cleaned-up demo</div>
+      <h2 class="white" style="font-size:30pt;margin-top:4mm">We will build, clean and connect the evidence.</h2>
+    </div>
+    <div class="cta">
+      <h3 class="white">Start with a software evidence scoping workshop</h3>
+      <p class="white">ESL will review the intended submission context, software stack, available artifacts, existing tests and ALM environment—then define the smallest complete work package needed.</p>
+      <div class="contacts">
+        <div><b>Email</b><span>sales@eswlab.com</span></div><div><b>Web</b><span>www.eswlab.com</span></div>
+        <div><b>Phone</b><span>+972 9 8855803</span></div><div><b>Israel office</b><span>Ha-Nagar 24 A, Hod Hasharon</span></div>
+      </div>
+    </div>
+    <h3 class="white" style="position:relative;z-index:2;margin:6mm 0 2mm">Key references</h3>
+    <div class="sources">
+      <p><b>1.</b> FDA, <i>General Principles of Software Validation</i>, Jan. 11, 2002, with current QMSR notice. <a href="https://www.fda.gov/media/73141/download">fda.gov/media/73141/download</a></p>
+      <p><b>2.</b> FDA, <i>Cybersecurity in Medical Devices: QMS Considerations and Content of Premarket Submissions</i>, Feb. 3, 2026. <a href="https://www.fda.gov/media/119933/download">fda.gov/media/119933/download</a></p>
+      <p><b>3.</b> FD&amp;C Act §524B requirements for qualifying cyber-device submissions, summarized in FDA’s 2026 cybersecurity guidance.</p>
+      <p><b>4.</b> Parasoft, Inovytec case study—customized C/C++ static analysis and ESL support. <a href="https://www.parasoft.com/resources/case-studies/inovytec-achieves-fda-certification-with-customized-static-code-analysis-solution/">Parasoft Inovytec case study</a></p>
+      <p><b>5.</b> Polarion Extensions, <i>Parasoft’s Test Tool Suite Connector for Polarion ALM</i>. <a href="https://extensions.polarion.com/extensions/361-parasoft-s-test-tool-suite-connector-for-polarion-alm">extensions.polarion.com/extensions/361</a></p>
+      <p><b>6.</b> Daniel (Dani) Liezrowice, <i>When Code Coverage Becomes an FDA Issue</i>, LinkedIn, July 27, 2026. <a href="https://www.linkedin.com/pulse/when-code-coverage-becomes-fda-issue-daniel-dani-liezrowice-fchdf/">Read the article</a></p>
+      <p><b>7.</b> Parasoft, <i>C/C++ Static Code Analysis</i>. <a href="https://www.parasoft.com/products/parasoft-c-ctest/c-c-static-analysis/">Parasoft static analysis</a></p>
+      <p><b>8.</b> Parasoft, <i>Software Development &amp; Testing for Medical Devices</i>. <a href="https://parasoft.com/industries/embedded/medical-devices/">Parasoft medical devices</a></p>
+      <p><b>9.</b> ESL, <i>SBOMator FDA Edition</i>. <a href="https://zuwasi.github.io/Public-html-pages/sbomator-fda-edition/#1">SBOMator FDA Edition</a></p>
+    </div>
+    <div class="disclaimer">This brochure describes engineering services, not legal or regulatory advice. FDA guidance documents generally contain nonbinding recommendations unless specific statutory or regulatory requirements are cited. Applicable evidence depends on the device, software functions, risk, submission type and current FDA expectations. ESL does not guarantee FDA clearance, approval or inspection outcomes. The manufacturer retains responsibility for safety, effectiveness, quality-system compliance, risk decisions, validation and submissions. Product and company names are trademarks of their respective owners.</div>
+  </section>
+</body>
+</html>
