@@ -83,6 +83,7 @@
     }
     .brand { min-width: 0; font-size: clamp(.72rem, 1.4vw, .88rem); font-weight: 800; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .brand span { color: var(--blue); }
+    .top-actions { display: flex; flex: 0 0 auto; gap: 8px; }
     .download {
       flex: 0 0 auto;
       padding: 7px 11px;
@@ -162,7 +163,10 @@
 <body>
   <header class="topbar">
     <div class="brand"><span>ESL</span> · SBOMator FDA Edition</div>
-    <a class="download" href="SBOMator_FDA_Edition.pdf" download>Download PDF</a>
+    <nav class="top-actions" aria-label="Page actions">
+      <a class="download" href="../">Home</a>
+      <a class="download" href="SBOMator_FDA_Edition.pdf" download>Download PDF</a>
+    </nav>
   </header>
 
   <main class="track" id="track" aria-live="polite">
