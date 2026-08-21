@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-08-19
+Last updated: 2026-08-21
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -310,6 +310,9 @@ Last updated: 2026-08-19
 
 • sbomator-databom-presentation
   https://zuwasi.github.io/Public-html-pages/sbomator-databom-presentation
+
+• sbomator-fda-edition
+  https://zuwasi.github.io/Public-html-pages/sbomator-fda-edition
 
 • sbomator-supply-chain-detection
   https://zuwasi.github.io/Public-html-pages/sbomator-supply-chain-detection
