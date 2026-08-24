@@ -4725,5 +4725,82 @@ root.querySelector('[data-action=close-details]').addEventListener('click',()=>m
             rows.forEach(function(row) { tbody.appendChild(row); });
         }
         </script>
+
+<!-- ESL: collapse no-CVE components for readability (keeps 1 sample, hides the rest behind a toggle) -->
+<style>
+  #eslNoCveToggleWrap{margin:8px 0 14px 0;display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
+  #eslNoCveToggleBtn{cursor:pointer;font:inherit;border:1px solid #adb5bd;background:#f1f3f5;color:#0d6efd;
+    padding:8px 14px;border-radius:6px;font-weight:600;line-height:1.2;}
+  #eslNoCveToggleBtn:hover{background:#e2e6ea;}
+  #eslNoCveToggleWrap .esl-muted{color:#6c757d;font-weight:400;font-size:.9em;}
+</style>
+<script>
+(function(){
+  function init(){
+    var table=document.getElementById('componentsTable');
+    if(!table) return;
+    var tbody=table.getElementsByTagName('tbody')[0];
+    if(!tbody) return;
+    var rows=Array.prototype.slice.call(tbody.children).filter(function(n){return n.tagName==='TR';});
+    function isNoCve(r){
+      var b=r.querySelectorAll('span.badge.bg-success');
+      for(var i=0;i<b.length;i++){ if(b[i].textContent.trim()==='No CVEs') return true; }
+      return false;
+    }
+    var noCve=rows.filter(isNoCve);
+    if(noCve.length<3) return;            /* nothing worth collapsing */
+    var extras=noCve.slice(1);            /* keep the first as a visible sample */
+    var collapsed=true;
+
+    /* Toggle lives ABOVE the table (outside it) so sort/filter never touch it */
+    var wrap=document.createElement('div');
+    wrap.id='eslNoCveToggleWrap';
+    var btn=document.createElement('button');
+    btn.id='eslNoCveToggleBtn'; btn.type='button';
+    var note=document.createElement('span'); note.className='esl-muted';
+    wrap.appendChild(btn); wrap.appendChild(note);
+    table.parentNode.insertBefore(wrap, table);
+
+    function searching(){
+      var box=document.getElementById('componentFilter');
+      return !!(box && box.value.trim().length>0);
+    }
+    function updateBtn(){
+      if(collapsed){
+        btn.textContent='\u25B6 Show '+extras.length+' components with no known CVEs';
+        note.textContent='(showing 1 of '+noCve.length+' \u2014 the rest are hidden to keep this report short)';
+      } else {
+        btn.textContent='\u25BC Hide '+extras.length+' no-CVE components';
+        note.textContent='';
+      }
+    }
+    function apply(){
+      if(searching()){ updateBtn(); return; }   /* don't fight an active search */
+      for(var i=0;i<extras.length;i++){ extras[i].style.display = collapsed ? 'none' : ''; }
+      updateBtn();
+    }
+    btn.addEventListener('click', function(){ collapsed=!collapsed; apply(); });
+
+    /* Integrate with the built-in search: reveal all while searching, re-collapse when cleared */
+    var orig=window.filterTable;
+    window.filterTable=function(){
+      if(searching()){
+        for(var i=0;i<extras.length;i++){ extras[i].style.display=''; }
+        if(orig) orig();
+        wrap.style.display='none';
+      } else {
+        if(orig) orig();
+        wrap.style.display='';
+        apply();
+      }
+    };
+
+    apply();  /* initial collapse */
+  }
+  if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded', init); }
+  else { init(); }
+})();
+</script>
+
 </body>
 </html>
