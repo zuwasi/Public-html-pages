@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<!--
+  ESL FDA SOFTWARE EVIDENCE / VALIDATION SERVICES - STANDALONE LANDING PAGE (WordPress-ready)
+  Paste this whole file into a single Custom HTML block.
+  This page is SEPARATE from the SBOMator product pages.
+  Content sourced from: ESL_FDA_Software_Evidence_Services_Focused.pdf (2026).
+  Prefilled demo form: https://eswlab.com/contact-us/?your-subject=...
+  Images used (already in WP media library):
+    - ESL logo:      https://eswlab.com/wp-content/uploads/2024/11/esl-icon.png
+    - SBOMator icon: https://eswlab.com/wp-content/uploads/2026/07/New-icon.png
+    - Parasoft logo: https://eswlab.com/wp-content/uploads/2025/01/parasoft-logo-home.png
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ESL FDA Software Evidence Services: one accountable engineering partner for SBOM & CVE remediation, static analysis & code fixing, unit testing & structural coverage, and requirements-to-test ALM traceability. ESL builds, cleans, and connects audit-ready software evidence for FDA submissions and inspections - across source, build artifacts, and binary-only systems.">
+  <title>ESL FDA Software Validation &amp; Evidence Services &mdash; SBOM, Static Analysis, Testing &amp; Traceability</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --background: hsl(210, 100%, 98%);
+      --foreground: hsl(220, 20%, 15%);
+      --card: hsl(0, 0%, 100%);
+      --card-foreground: hsl(220, 20%, 15%);
+      --primary: hsl(220, 70%, 25%);
+      --primary-foreground: hsl(0, 0%, 100%);
+      --muted-foreground: hsl(220, 15%, 50%);
+      --accent: hsl(199, 89%, 48%);
+      --accent-foreground: hsl(0, 0%, 100%);
+      --border: hsl(220, 15%, 88%);
+      --gradient-primary: linear-gradient(135deg, hsl(220, 70%, 25%) 0%, hsl(220, 60%, 35%) 100%);
+      --gradient-accent: linear-gradient(135deg, hsl(199, 89%, 48%) 0%, hsl(189, 94%, 43%) 100%);
+      --gradient-hero: linear-gradient(180deg, hsl(210, 100%, 98%) 0%, hsl(199, 90%, 96%) 100%);
+      --shadow-sm: 0 2px 8px -2px hsla(220, 20%, 15%, 0.08);
+      --shadow-md: 0 8px 24px -4px hsla(220, 20%, 15%, 0.12);
+      --radius: 0.75rem;
+      --accent-soft: hsla(199, 89%, 48%, 0.1);
+      --win: hsl(150, 60%, 40%);
+      --win-soft: hsla(150, 60%, 40%, 0.12);
+      --danger: hsl(0, 70%, 45%);
+      --danger-soft: hsla(0, 70%, 45%, 0.08);
+    }
+
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: var(--background); color: var(--foreground); line-height: 1.6; }
+
+    /* Stays inside the WordPress content column (sidebar layout) - no viewport breakout */
+    .rs-fullwidth { position: relative; width: 100%; max-width: 100%; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1.5rem; width: 100%; }
+
+    /* Hero */
+    .hero { background: var(--gradient-hero); padding: 3.5rem 1.5rem; }
+    .hero-grid { max-width: 78rem; margin: 0 auto; display: grid; gap: 2.5rem; align-items: center; }
+    @media (min-width: 900px) { .hero-grid { grid-template-columns: 1.05fr 0.95fr; gap: 3.5rem; } }
+    .hero-content { display: flex; flex-direction: column; align-items: flex-start; gap: 1.25rem; text-align: left; }
+    .hero-visual { position: relative; display: flex; align-items: center; justify-content: center; }
+    .hero-glow { position: absolute; inset: 0; margin: auto; width: 85%; height: 85%; background: radial-gradient(circle, hsla(195, 85%, 50%, 0.28), transparent 70%); filter: blur(45px); z-index: 0; }
+    @media (max-width: 899px) { .hero-content { align-items: center; text-align: center; } .hero-visual { order: -1; } }
+    .badge-row { display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: flex-start; }
+    @media (max-width: 899px) { .badge-row, .hero-actions, .hero-stats { justify-content: center; } }
+    @media (min-width: 900px) { .hero-content .badge-row { flex-wrap: nowrap; } .hero-content .hero-stats { flex-wrap: nowrap; gap: 1.5rem; } }
+    .badge { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent-soft); color: var(--accent); padding: 0.5rem 1rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; width: fit-content; white-space: nowrap; }
+    .badge svg { width: 1rem; height: 1rem; }
+    .badge.win { background: var(--win-soft); color: var(--win); }
+    .hero h1 { font-size: 2rem; font-weight: 700; line-height: 1.15; overflow-wrap: break-word; }
+    @media (min-width: 768px) { .hero h1 { font-size: 2.75rem; } }
+    @media (min-width: 1280px) { .hero h1 { font-size: 3rem; } }
+    .hero-description { font-size: 1.0625rem; color: var(--muted-foreground); max-width: 44rem; }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+    .hero-stats { display: flex; gap: 2.5rem; padding-top: 0.5rem; flex-wrap: wrap; justify-content: center; }
+    .stat { text-align: center; white-space: nowrap; flex-shrink: 0; }
+    .stat-value { font-size: 1.375rem; font-weight: 700; background: var(--gradient-accent); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .stat-label { font-size: 0.875rem; color: var(--muted-foreground); }
+
+    .btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 2rem; background: var(--gradient-primary); color: var(--primary-foreground); border: none; border-radius: var(--radius); font-size: 1rem; font-weight: 600; font-family: inherit; cursor: pointer; text-decoration: none; box-shadow: var(--shadow-md); transition: opacity 0.2s ease; width: fit-content; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 2rem; background: transparent; color: var(--primary); border: 1px solid var(--border); border-radius: var(--radius); font-size: 1rem; font-weight: 600; font-family: inherit; cursor: pointer; text-decoration: none; transition: border-color 0.2s ease, color 0.2s ease; width: fit-content; }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    .section-header { text-align: center; max-width: 48rem; margin: 0 auto 2.5rem; }
+    .section-header h2 { font-size: 2.25rem; font-weight: 700; margin-bottom: 1rem; }
+    .section-header p { font-size: 1.25rem; color: var(--muted-foreground); }
+
+    /* Intro */
+    .intro { padding: 3rem 1.5rem; }
+    .intro-grid { display: grid; gap: 1.5rem; max-width: 56rem; margin: 0 auto; }
+    @media (min-width: 768px) { .intro-grid { grid-template-columns: repeat(2, 1fr); } }
+    .intro-card { display: flex; gap: 1rem; padding: 1.5rem; background: var(--card); border-radius: 0.75rem; box-shadow: var(--shadow-sm); }
+    .intro-check { flex-shrink: 0; width: 1.5rem; height: 1.5rem; border-radius: 9999px; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; margin-top: 0.25rem; }
+    .intro-check svg { width: 1rem; height: 1rem; color: var(--accent); }
+    .intro-card h3 { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .intro-card p { color: var(--muted-foreground); }
+
+    /* Feature grid */
+    .features { padding: 3rem 1.5rem; background: var(--gradient-hero); }
+    .features-grid { display: grid; gap: 1.5rem; }
+    @media (min-width: 640px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .features-grid { grid-template-columns: repeat(2, 1fr); } }
+    .feature-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; text-decoration: none; color: inherit; transition: box-shadow 0.3s ease, transform 0.2s ease, border-color 0.3s ease; }
+    .feature-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--accent); }
+    .feature-num { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem; }
+    .feature-icon { width: 3.5rem; height: 3.5rem; border-radius: 0.75rem; background: var(--gradient-accent); display: flex; align-items: center; justify-content: center; margin-bottom: 1.25rem; }
+    .feature-icon svg { width: 1.75rem; height: 1.75rem; color: white; stroke: white; }
+    .feature-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; }
+    .feature-card p { color: var(--muted-foreground); margin-bottom: 1.25rem; font-size: 0.9375rem; flex-grow: 1; }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+    .feature-list li { display: flex; align-items: flex-start; gap: 0.5rem; font-size: 0.9rem; color: var(--foreground); }
+    .feature-list li svg { flex-shrink: 0; width: 1.1rem; height: 1.1rem; color: var(--win); margin-top: 0.15rem; }
+
+    /* Process band */
+    .process { padding: 3.5rem 1.5rem; }
+    .process-grid { display: grid; gap: 1.25rem; max-width: 66rem; margin: 0 auto; }
+    @media (min-width: 700px) { .process-grid { grid-template-columns: repeat(5, 1fr); } }
+    .process-step { position: relative; text-align: center; padding: 1.5rem 1rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+    .step-num { width: 2.5rem; height: 2.5rem; border-radius: 9999px; background: var(--gradient-primary); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; margin: 0 auto 0.75rem; }
+    .process-step h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.375rem; }
+    .process-step p { color: var(--muted-foreground); font-size: 0.85rem; }
+
+    /* Two-pillar stack */
+    .stack { padding: 3.5rem 1.5rem; background: var(--gradient-hero); }
+    .stack-grid { display: grid; gap: 1.5rem; max-width: 60rem; margin: 0 auto; }
+    @media (min-width: 768px) { .stack-grid { grid-template-columns: repeat(2, 1fr); } }
+    .stack-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow-sm); }
+    .stack-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+    .stack-logo { height: 2.75rem; width: auto; max-width: 11rem; object-fit: contain; }
+    .stack-eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 1rem; }
+    .stack-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+    .stack-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.5rem; flex-grow: 1; }
+    .stack-list li { display: flex; align-items: flex-start; gap: 0.55rem; font-size: 0.92rem; }
+    .stack-list li svg { flex-shrink: 0; width: 1.1rem; height: 1.1rem; color: var(--accent); margin-top: 0.15rem; }
+    .stack-note { max-width: 60rem; margin: 1.75rem auto 0; text-align: center; color: var(--muted-foreground); font-size: 0.95rem; line-height: 1.7; }
+    .stack-note strong { color: var(--foreground); }
+
+    /* Technology-independent execution */
+    .tech { padding: 3.5rem 1.5rem; }
+    .tech-grid { display: grid; gap: 1.5rem; max-width: 64rem; margin: 0 auto; }
+    @media (min-width: 768px) { .tech-grid { grid-template-columns: repeat(3, 1fr); } }
+    .tech-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+    .tech-card .di-icon { width: 3rem; height: 3rem; border-radius: 0.75rem; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; }
+    .tech-card .di-icon svg { width: 1.5rem; height: 1.5rem; color: var(--accent); }
+    .tech-card .eyebrow { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 0.35rem; }
+    .tech-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .tech-card p { color: var(--muted-foreground); font-size: 0.92rem; }
+
+    /* Before / After */
+    .ba { padding: 3.5rem 1.5rem; background: var(--gradient-hero); }
+    .ba-grid { display: grid; gap: 1.5rem; max-width: 60rem; margin: 0 auto; align-items: stretch; }
+    @media (min-width: 768px) { .ba-grid { grid-template-columns: 1fr auto 1fr; align-items: center; } }
+    .ba-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; height: 100%; }
+    .ba-card.before { border-left: 4px solid var(--danger); }
+    .ba-card.after { border-left: 4px solid var(--win); }
+    .ba-card h3 { font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 1rem; }
+    .ba-card.before h3 { color: var(--danger); }
+    .ba-card.after h3 { color: var(--win); }
+    .ba-list { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+    .ba-list li { display: flex; align-items: flex-start; gap: 0.55rem; font-size: 0.92rem; }
+    .ba-list li svg { flex-shrink: 0; width: 1.05rem; height: 1.05rem; margin-top: 0.15rem; }
+    .ba-card.before .ba-list li svg { color: var(--danger); }
+    .ba-card.after .ba-list li svg { color: var(--win); }
+    .ba-arrow { display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 2rem; font-weight: 700; }
+    @media (max-width: 767px) { .ba-arrow { transform: rotate(90deg); } }
+
+    /* CTA */
+    .cta { padding: 4rem 1.5rem; background: var(--gradient-hero); }
+    .cta-card { max-width: 56rem; margin: 0 auto; text-align: center; background: var(--gradient-primary); color: var(--primary-foreground); border-radius: 1rem; padding: 3rem 2rem; box-shadow: var(--shadow-md); }
+    .cta-card h2 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+    .cta-card p { font-size: 1.125rem; opacity: 0.9; max-width: 42rem; margin: 0 auto 2rem; }
+    .cta-card .btn-primary { background: white; color: var(--primary); }
+    .cta-card .btn-secondary { color: white; border-color: hsla(0,0%,100%,0.4); }
+    .cta-card .btn-secondary:hover { border-color: white; color: white; }
+    .cta-actions { display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; }
+
+    /* Contact */
+    .contact { padding: 3.5rem 1.5rem; }
+    .contact-grid { display: grid; gap: 1.25rem; max-width: 60rem; margin: 0 auto; }
+    @media (min-width: 640px) { .contact-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .contact-grid { grid-template-columns: repeat(4, 1fr); } }
+    .contact-item { text-align: center; padding: 1.5rem 1rem; background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); }
+    .contact-item .di-icon { width: 3rem; height: 3rem; border-radius: 0.75rem; background: var(--accent-soft); display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+    .contact-item .di-icon svg { width: 1.5rem; height: 1.5rem; color: var(--accent); }
+    .contact-item h3 { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted-foreground); margin-bottom: 0.375rem; }
+    .contact-item a, .contact-item p { color: var(--foreground); font-size: 0.95rem; font-weight: 600; text-decoration: none; word-break: break-word; }
+    .contact-item a:hover { color: var(--accent); }
+
+    .disclaimer { text-align: center; padding: 2.5rem 1.5rem 3rem; font-size: 0.8125rem; color: var(--muted-foreground); max-width: 60rem; margin: 0 auto; line-height: 1.6; }
+
+    svg.icon, svg.icon * { fill: none !important; stroke: currentColor !important; }
+    svg.icon { display: inline-block; width: 1em; height: 1em; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* Hero evidence-package card (pure CSS, no external image needed) */
+    .hero-card { position: relative; z-index: 1; width: 100%; max-width: 34rem; background: var(--card); border: 1px solid var(--border); border-radius: 1rem; box-shadow: var(--shadow-md); padding: 2rem 2.25rem; }
+    .hero-card .hc-title { display: flex; align-items: center; gap: 0.6rem; font-weight: 700; font-size: 1.2rem; margin-bottom: 1.25rem; }
+    .hero-card .hc-title svg { width: 1.4rem; height: 1.4rem; color: var(--accent); }
+    .hero-card .hc-row { display: flex; align-items: center; gap: 0.85rem; padding: 0.95rem 0; border-top: 1px solid var(--border); }
+    .hero-card .hc-check { flex-shrink: 0; width: 1.65rem; height: 1.65rem; border-radius: 9999px; background: var(--win-soft); display: flex; align-items: center; justify-content: center; }
+    .hero-card .hc-check svg { width: 1rem; height: 1rem; color: var(--win); }
+    .hero-card .hc-row span { font-size: 0.98rem; font-weight: 500; }
+    .hero-card .hc-foot { margin-top: 1.1rem; padding-top: 1rem; border-top: 1px solid var(--border); font-size: 0.82rem; color: var(--muted-foreground); text-align: center; }
+
+    .site-header { background: var(--card); border-bottom: 1px solid var(--border); }
+    .header-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 0.85rem 1.5rem; flex-wrap: wrap; }
+    .header-brand { display: flex; align-items: center; gap: 0.65rem; text-decoration: none; }
+    .header-logo { height: 2.5rem; width: auto; border-radius: 0.55rem; display: block; object-fit: contain; }
+    .header-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); letter-spacing: -0.01em; }
+    .header-tag { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--primary); background: hsla(199, 89%, 48%, 0.1); padding: 0.45rem 0.9rem; border-radius: 9999px; }
+    .header-tag svg { width: 1.1rem; height: 1.1rem; }
+    @media (max-width: 600px) { .header-tag { font-size: 0.8rem; } .header-name { font-size: 1.2rem; } }
+  </style>
+</head>
+<body>
+
+  <div class="rs-fullwidth">
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="header-brand" href="https://eswlab.com/">
+        <img src="https://eswlab.com/wp-content/uploads/2024/11/esl-icon.png" alt="ESL - Engineering Software Lab logo" class="header-logo">
+        <span class="header-name">Engineering Software Lab</span>
+      </a>
+      <div class="header-tag">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        FDA Software Evidence Services
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <div class="badge-row">
+          <div class="badge">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"></path><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Preparing for an FDA submission or inspection?
+          </div>
+          <div class="badge win">
+            <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            One accountable engineering partner
+          </div>
+        </div>
+        <h1>ESL Takes Complete Ownership of Your Software Evidence Work</h1>
+        <p class="hero-description">SBOM &amp; CVE remediation. Static analysis &amp; bug fixing. Unit testing &amp; code coverage. Requirements-to-test traceability. <strong>We do not stop at finding problems</strong> &mdash; ESL analyzes the software, fixes the findings, reruns the tools, cleans the reports, and delivers the evidence package across source, build artifacts, and binary-only systems.</p>
+        <div class="hero-actions">
+          <a href="https://eswlab.com/contact-us/?your-subject=FDA%20Software%20Evidence%20Services%20-%20Scoping%20Workshop" class="btn-primary">Request a Scoping Workshop</a>
+          <a href="#services" class="btn-secondary">
+            Explore the Services
+            <svg class="icon" viewBox="0 0 24 24" style="width:1.05rem;height:1.05rem;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><div class="stat-value">SBOM + CVEs</div><div class="stat-label">Even from binaries</div></div>
+          <div class="stat"><div class="stat-value">Static Analysis</div><div class="stat-label">&amp; actual fixes</div></div>
+          <div class="stat"><div class="stat-value">Unit Tests</div><div class="stat-label">&amp; coverage</div></div>
+          <div class="stat"><div class="stat-value">ALM Traceability</div><div class="stat-label">requirement &rarr; release</div></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-glow"></div>
+        <div class="hero-card">
+          <div class="hc-title">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            Software Evidence Package
+          </div>
+          <div class="hc-row"><span class="hc-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span>SBOM + CVE remediation report</span></div>
+          <div class="hc-row"><span class="hc-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span>Static analysis &amp; disposition, code fixed</span></div>
+          <div class="hc-row"><span class="hc-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span>Unit tests &amp; structural coverage results</span></div>
+          <div class="hc-row"><span class="hc-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span>Requirements-to-test traceability</span></div>
+          <div class="hc-foot">Reviewed &middot; reproducible &middot; traceable &mdash; not a tool dashboard</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Intro: One accountable partner -->
+  <section class="intro">
+    <div class="container">
+      <div class="section-header">
+        <h2>Many FDA Tasks. One Complete Software-Evidence Workstream.</h2>
+        <p>You keep ownership of the product and submission. ESL owns the execution of the software analysis, remediation, testing, and evidence tasks in scope.</p>
+      </div>
+      <div class="intro-grid">
+        <div class="intro-card">
+          <div class="intro-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div>
+            <h3>Right-Sized to Your Submission</h3>
+            <p>Not every product or submission level needs every activity. ESL first identifies the applicable software-evidence scope with your quality and regulatory team &mdash; then performs only the work that is needed.</p>
+          </div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div>
+            <h3>End-to-End Remediation &mdash; Not Scan-and-Leave</h3>
+            <p>A long finding list does not help a submission. ESL closes the engineering loop for both source-code defects and software-component vulnerabilities: find it, understand it, fix it, prove it.</p>
+          </div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div>
+            <h3>Engineers Who Fix, Not Reassign</h3>
+            <p>Source is repaired by experienced engineers &mdash; not merely reassigned back to your team. Justified deviations are documented, analysis is rerun, and before/after evidence is retained against the controlled baseline.</p>
+          </div>
+        </div>
+        <div class="intro-card">
+          <div class="intro-check"><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg></div>
+          <div>
+            <h3>The Deliverable Is Evidence, Not a Dashboard</h3>
+            <p>The outcome is a reviewed, reproducible, and traceable software-evidence package that reviewers can navigate &mdash; not disconnected tool reports they must reconcile.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Four core services -->
+  <section class="features" id="services">
+    <div class="container">
+      <div class="section-header">
+        <h2>Four Software-Evidence Services. One Engagement.</h2>
+        <p>Combine SBOM, CVE remediation, static analysis, code repair, unit tests, coverage, and ALM traceability &mdash; or take only the individual service you need.</p>
+      </div>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-num">01 &middot; Software Supply Chain</div>
+          <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div>
+          <h3>SBOM Reports &mdash; Even From Binaries Only</h3>
+          <p>Inventory components and dependencies from source, packages, containers, firmware, or available binary artifacts. Correlate known vulnerabilities, assess relevance, and produce submission-oriented reports.</p>
+          <ul class="feature-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Machine-readable SBOM plus human-readable inventory</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Known-vulnerability correlation, incl. binary-only discovery</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Applicability analysis, remediation &amp; documented rationale</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Rescan after changes, residual status made explicit</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-num">02 &middot; Source-Code Quality</div>
+          <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
+          <h3>Static Code Analysis &mdash; and Actual Fixes</h3>
+          <p>Configure language-appropriate rules, triage findings, repair defects, document justified deviations, and rerun analysis until the code and evidence are clean enough for the agreed acceptance criteria.</p>
+          <ul class="feature-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Rules &amp; severity profile tuned to language and policy</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Findings triaged: defects, deviations, false positives</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>MISRA C/C++, CERT C/C++, CWE &amp; project rules</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Final scan &amp; disposition tied to controlled baseline</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-num">03 &middot; Verification</div>
+          <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg></div>
+          <h3>Unit Testing and Structural Coverage</h3>
+          <p>Create and execute tests, measure statement / branch / condition or other appropriate coverage, analyze uncovered code, repair testability defects, and assemble objective results.</p>
+          <ul class="feature-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Risk-appropriate test strategy &amp; acceptance criteria</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Harnesses, stubs, mocks &amp; target communication</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Statement, branch, condition &amp; MC/DC where appropriate</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Uncovered / dead-code analysis with documented disposition</li>
+          </ul>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-num">04 &middot; Traceability</div>
+          <div class="feature-icon"><svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><path d="M20 4v5a2 2 0 0 1-2 2H9a2 2 0 0 0-2 2v0"></path></svg></div>
+          <h3>Requirements-to-Test Proof in Your ALM</h3>
+          <p>Connect requirements, risks, tests, runs, results, defects, and code evidence in Polarion or another supported ALM &mdash; so reviewers can navigate the chain rather than reconcile disconnected reports.</p>
+          <ul class="feature-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Requirements &amp; risk controls mapped to test levels</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Executed tests exported into the ALM with results</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Traceability from requirement through tests to code</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Gaps &amp; progress visible in dashboards &amp; matrices</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Process: 5 steps -->
+  <section class="process">
+    <div class="container">
+      <div class="section-header">
+        <h2>Find It. Understand It. Fix It. Prove It.</h2>
+        <p>ESL closes the engineering loop for both source-code defects and software-component vulnerabilities &mdash; one repeatable remediation workflow.</p>
+      </div>
+      <div class="process-grid">
+        <div class="process-step">
+          <div class="step-num">1</div>
+          <h3>Discover</h3>
+          <p>Scan source, builds, dependencies, containers, firmware, and binaries available for assessment.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">2</div>
+          <h3>Triage</h3>
+          <p>Remove noise, confirm applicability, classify impact, and prioritize against product risk.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">3</div>
+          <h3>Remediate</h3>
+          <p>Fix code defects; upgrade, replace, patch, or otherwise address vulnerable components.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">4</div>
+          <h3>Verify</h3>
+          <p>Rebuild, rescan, retest, and run regression checks to confirm the remediation.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-num">5</div>
+          <h3>Evidence</h3>
+          <p>Record tool versions, configuration, findings, dispositions, results, and traceability.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two-pillar stack -->
+  <section class="stack">
+    <div class="container">
+      <div class="section-header">
+        <h2>One ESL Team. Two Specialized Evidence Pillars.</h2>
+        <p>Use only the evidence activities your device, risk, and submission require. ESL implements the tools, performs the engineering work, fixes findings, and delivers the reviewed evidence.</p>
+      </div>
+      <div class="stack-grid">
+
+        <div class="stack-card">
+          <div class="stack-head">
+            <img src="https://eswlab.com/wp-content/uploads/2026/07/New-icon.png" alt="SBOMator logo" class="stack-logo" style="height:2.5rem;">
+            <div>
+              <div class="stack-eyebrow">Developed by ESL</div>
+              <h3 style="margin:0;">SBOMator&trade;</h3>
+            </div>
+          </div>
+          <div class="stack-eyebrow">FDA-focused software supply-chain evidence</div>
+          <ul class="stack-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Source, package, container, firmware &amp; binary-only analysis</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>CycloneDX SBOM, VEX decisions &amp; CVSS v4.0 context</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>CVE applicability review, remediation &amp; cleaner reports</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Section 524B evidence mapping &amp; postmarket monitoring</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>HBOM, FPGA &amp; DataBOM evidence where applicable</li>
+          </ul>
+          <a href="https://eswlab.com/products/esl-ailogiclabs/sbomator/" class="btn-secondary">Explore SBOMator FDA Edition
+            <svg class="icon" viewBox="0 0 24 24" style="width:1.05rem;height:1.05rem;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+
+        <div class="stack-card">
+          <div class="stack-head">
+            <img src="https://eswlab.com/wp-content/uploads/2025/01/parasoft-logo-home.png" alt="Parasoft logo" class="stack-logo">
+          </div>
+          <div class="stack-eyebrow">Represented &amp; implemented by ESL</div>
+          <h3 style="margin-top:-0.5rem;">Parasoft &mdash; IEC 62304-focused verification</h3>
+          <ul class="stack-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Static analysis with defect triage &amp; source-code remediation</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Automated and engineer-authored unit testing</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Statement, branch, condition &amp; MC/DC coverage</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Requirements-to-test traceability &amp; ALM integration</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>C/C++test is T&Uuml;V S&Uuml;D-certified for use in IEC 62304 development</li>
+          </ul>
+          <a href="https://eswlab.com/parasoft/" class="btn-secondary">Explore Parasoft for Medical Devices
+            <svg class="icon" viewBox="0 0 24 24" style="width:1.05rem;height:1.05rem;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+
+      </div>
+      <p class="stack-note"><strong>Complementary roles:</strong> SBOMator produces software-composition and cybersecurity evidence. Parasoft produces source-code verification evidence. ESL connects both to the controlled build, requirements, tests, findings, fixes, and release baseline. <strong>The manufacturer owns the regulatory decision; ESL supplies the engineering execution and objective evidence behind it.</strong></p>
+    </div>
+  </section>
+
+  <!-- Technology-independent execution -->
+  <section class="tech">
+    <div class="container">
+      <div class="section-header">
+        <h2>Your Software Stack Should Not Become Your Evidence Gap</h2>
+        <p>ESL assembles the appropriate tool and engineering workflow for the languages, targets, and artifacts in your product. The exact scope is confirmed during assessment.</p>
+      </div>
+      <div class="tech-grid">
+        <div class="tech-card">
+          <div class="di-icon"><svg class="icon" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg></div>
+          <div class="eyebrow">Source Languages</div>
+          <h3>Broad Language Coverage</h3>
+          <p>C, C++, C#, Java, VB.NET, and other stacks through suitable static-analysis, testing, and software-composition technologies.</p>
+        </div>
+        <div class="tech-card">
+          <div class="di-icon"><svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg></div>
+          <div class="eyebrow">Execution Targets</div>
+          <h3>Host to Embedded</h3>
+          <p>Desktop, server, cloud, container, mobile, cross-compiled, and resource-constrained embedded targets &mdash; including on-target testing where needed.</p>
+        </div>
+        <div class="tech-card">
+          <div class="di-icon"><svg class="icon" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg></div>
+          <div class="eyebrow">Available Artifacts</div>
+          <h3>Source or Binary-Only</h3>
+          <p>Full repositories, partial source, package manifests, build outputs, containers, firmware, and binaries. SBOM work does not require a perfect source tree to begin.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Before / After -->
+  <section class="ba">
+    <div class="container">
+      <div class="section-header">
+        <h2>From Scattered Findings to a Controlled Baseline</h2>
+        <p>What changes when ESL owns the software-evidence execution.</p>
+      </div>
+      <div class="ba-grid">
+        <div class="ba-card before">
+          <h3>Before ESL</h3>
+          <ul class="ba-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>Unknown components</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>Noisy findings</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>Unowned defects</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>Incomplete tests</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>Disconnected evidence</li>
+          </ul>
+        </div>
+        <div class="ba-arrow">&rarr;</div>
+        <div class="ba-card after">
+          <h3>After ESL</h3>
+          <ul class="ba-list">
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Controlled baseline</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Remediated findings</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Repeatable tests</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Reviewed reports</li>
+            <li><svg class="icon" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>Explicit residual risk</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="cta-card">
+      <h2>Bring ESL the Software &mdash; Not a Cleaned-Up Demo</h2>
+      <p>We will build, clean, and connect the evidence. Start with a software-evidence scoping workshop: ESL reviews your intended submission context, software stack, available artifacts, existing tests, and ALM environment &mdash; then defines the smallest complete work package needed.</p>
+      <div class="cta-actions">
+        <a href="https://eswlab.com/contact-us/?your-subject=FDA%20Software%20Evidence%20Services%20-%20Scoping%20Workshop" class="btn-primary">Request a Scoping Workshop</a>
+        <a href="https://eswlab.com/contact-us/?your-subject=FDA%20Software%20Evidence%20Services%20-%20General%20Enquiry" class="btn-secondary">Talk to an Engineer
+          <svg class="icon" viewBox="0 0 24 24" style="width:1.05rem;height:1.05rem;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <p class="disclaimer">This page describes engineering services, not legal or regulatory advice. FDA guidance documents generally contain nonbinding recommendations unless specific statutory or regulatory requirements are cited. Applicable evidence depends on the device, software functions, risk, submission type, and current FDA expectations. ESL does not guarantee FDA clearance, approval, or inspection outcomes. The manufacturer retains responsibility for safety, effectiveness, quality-system compliance, risk decisions, validation, and submissions. Product and company names are trademarks of their respective owners.</p>
+
+  </div>
+
+</body>
+</html>
