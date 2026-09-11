@@ -16,6 +16,8 @@
   header { display: grid; grid-template-columns: 200px 1fr 200px; align-items: start; margin-bottom: 14px; }
   .brand { font-weight: 800; font-size: 20px; line-height: 1.05; }
   .brand span { display: block; width: 90px; height: 3px; background: var(--blue); margin-top: 6px; }
+  .brand .role { font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 5px; }
+  .tag b { color: var(--ink); font-weight: 800; }
   h1 { text-align: center; font-size: 40px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; }
   h1 em { color: var(--blue); font-style: normal; }
   .sub { text-align: center; font-size: 19px; color: var(--muted); margin-top: 6px; }
@@ -54,12 +56,12 @@
 <body>
 <div class="page">
   <header>
-    <div class="brand">Embedded<br>Systems World<span></span></div>
+    <div class="brand">Daniel Liezrowice<br>ESL, eswlab.com<span></span><div class="role">answering</div></div>
     <div>
       <h1>What <em>Really</em> Happens When You Call a Function in C?</h1>
       <div class="sub">Same C code, same Cortex-M4, real arm-none-eabi-gcc 14.2 output. The only thing that changed is the -O flag.</div>
     </div>
-    <div class="tag">Companion to<br>"Call a Function in C"<br>(the -O0 view)</div>
+    <div class="tag">A reply to the post by<br><b>Embedded Systems World</b><br>"Call a Function in C"<br>(the <span style="white-space:nowrap">-O0</span> view)</div>
   </header>
 
   <div class="grid">
@@ -183,7 +185,7 @@
     <div class="hand">Ship at -O2.<br>Debug at -Og.<br>Teach at -O0.</div>
   </div>
 
-  <footer><b>Embedded Systems World</b> | Output captured from Arm GNU Toolchain 14.2.Rel1, target -mcpu=cortex-m4 -mthumb; instruction counts measured by executing the code in the Unicorn emulator. <a href="animation.html" style="color:var(--blue);font-weight:600">Watch the animated run</a> | <a href="https://github.com/zuwasi/cortex-m-call-anatomy" style="color:var(--blue);font-weight:600">Source and Python visualizer (MIT)</a></footer>
+  <footer><b style="white-space:nowrap">Daniel Liezrowice, ESL</b> | Original -O0 infographic and question: Embedded Systems World. Measurements and reply: Daniel Liezrowice, Engineering Software Lab (eswlab.com). Output captured from Arm GNU Toolchain 14.2.Rel1, target -mcpu=cortex-m4 -mthumb; instruction counts measured by executing the code in the Unicorn emulator. <a href="animation.html" style="color:var(--blue);font-weight:600">Watch the animated run</a> | <a href="https://github.com/zuwasi/cortex-m-call-anatomy" style="color:var(--blue);font-weight:600">Source and Python visualizer (MIT)</a></footer>
 </div>
 </body>
 </html>
