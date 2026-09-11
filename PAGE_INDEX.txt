@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-08-27
+Last updated: 2026-09-11
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -250,6 +250,9 @@ Last updated: 2026-08-27
 
 • claude-code-skills-vs-amp
   https://zuwasi.github.io/Public-html-pages/claude-code-skills-vs-amp
+
+• cortex-m-call-anatomy
+  https://zuwasi.github.io/Public-html-pages/cortex-m-call-anatomy
 
 • cpp-debugging-evidence-demo
   https://zuwasi.github.io/Public-html-pages/cpp-debugging-evidence-demo
