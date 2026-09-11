@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Really Happens When You Call a Function in C: -O0 vs -O2</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1565c0; --green: #1b7f3b; --orange: #e65100; --purple: #5e35b1; --red: #c62828;
+    --ink: #0f1a2b; --muted: #4a5568; --bg: #f5f7fb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: var(--ink); }
+  .page { width: 1536px; min-height: 1024px; margin: 0 auto; padding: 22px 26px 18px; background: #fff; }
+  header { display: grid; grid-template-columns: 200px 1fr 200px; align-items: start; margin-bottom: 14px; }
+  .brand { font-weight: 800; font-size: 20px; line-height: 1.05; }
+  .brand span { display: block; width: 90px; height: 3px; background: var(--blue); margin-top: 6px; }
+  h1 { text-align: center; font-size: 40px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; }
+  h1 em { color: var(--blue); font-style: normal; }
+  .sub { text-align: center; font-size: 19px; color: var(--muted); margin-top: 6px; }
+  .tag { text-align: right; font-size: 15px; font-weight: 600; color: var(--muted); line-height: 1.3; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .card { border-radius: 14px; padding: 14px 16px 14px; }
+  .card h2 { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+  .num { width: 42px; height: 42px; border-radius: 50%; color: #fff; display: grid; place-items: center; font-size: 22px; font-weight: 800; flex: none; }
+  .c1 { background: #e8f1fb; } .c1 .num { background: var(--blue); }
+  .c2 { background: #e8f6ec; } .c2 .num { background: var(--green); }
+  .c3 { background: #fdf0e6; } .c3 .num { background: var(--orange); }
+  .lead { font-size: 15px; color: var(--muted); margin-bottom: 8px; line-height: 1.35; }
+  .cmd { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12.5px; background: var(--ink); color: #dfe8f5; padding: 6px 10px; border-radius: 7px; margin-bottom: 8px; }
+  pre { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 12.6px; line-height: 1.42; background: #fff; border: 1px solid #d9e0ea; border-radius: 8px; padding: 8px 10px; overflow: hidden; white-space: pre; }
+  pre .lbl { color: var(--purple); font-weight: 600; }
+  pre .hi { background: #fff3c4; border-radius: 3px; }
+  pre .call { background: #ffd9d9; border-radius: 3px; font-weight: 600; }
+  pre .cm { color: #8a94a6; }
+  .stat { display: flex; gap: 10px; margin: 8px 0; }
+  .stat div { flex: 1; background: #fff; border: 1px solid #d9e0ea; border-radius: 8px; padding: 6px 8px; text-align: center; }
+  .stat b { display: block; font-size: 22px; }
+  .stat small { font-size: 12px; color: var(--muted); }
+  .note { font-size: 13.5px; line-height: 1.4; }
+  .note li { margin-left: 18px; margin-bottom: 3px; }
+  .key { margin-top: 14px; display: grid; grid-template-columns: 120px 1fr 190px; gap: 16px; align-items: center; background: #eaf2fc; border: 1px solid #cfe0f5; border-radius: 14px; padding: 12px 18px; }
+  .key h3 { color: var(--blue); font-size: 20px; font-weight: 800; margin-bottom: 4px; }
+  .key ol { font-size: 14px; line-height: 1.4; margin-left: 20px; }
+  .key ol li { margin-bottom: 2px; }
+  .bulb { font-size: 56px; text-align: center; }
+  .hand { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 20px; line-height: 1.15; text-align: center; transform: rotate(-4deg); color: var(--ink); }
+  footer { margin-top: 10px; font-size: 14px; color: var(--muted); display: flex; gap: 14px; align-items: baseline; }
+  footer b { color: var(--blue); font-weight: 800; font-size: 16px; }
+  @media (max-width: 1000px) { .page { width: 100%; } .grid, .key { grid-template-columns: 1fr; } h1 { font-size: clamp(24px, 5vw, 40px); } }
+</style>
+</head>
+<body>
+<div class="page">
+  <header>
+    <div class="brand">Embedded<br>Systems World<span></span></div>
+    <div>
+      <h1>What <em>Really</em> Happens When You Call a Function in C?</h1>
+      <div class="sub">Same C code, same Cortex-M4, real arm-none-eabi-gcc 14.2 output. The only thing that changed is the -O flag.</div>
+    </div>
+    <div class="tag">Companion to<br>"Call a Function in C"<br>(the -O0 view)</div>
+  </header>
+
+  <div class="grid">
+    <!-- Column 1 -->
+    <section class="card c1">
+      <h2><span class="num">1</span> -O0: the textbook call</h2>
+      <div class="lead">This is what the original infographic describes. Args in R0/R1, <b>BL add</b>, result in R0, return with <b>BX LR</b>. Plus a lot of stack traffic nobody asked for.</div>
+      <div class="cmd">arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -O0 -c add.c</div>
+<pre><span class="lbl">&lt;add&gt;:</span>
+  push  {r7}
+  sub   sp, #12
+  add   r7, sp, #0
+  str   r0, [r7, #4]      <span class="cm">; spill a</span>
+  str   r1, [r7, #0]      <span class="cm">; spill b</span>
+  ldr   r2, [r7, #4]      <span class="cm">; reload a</span>
+  ldr   r3, [r7, #0]      <span class="cm">; reload b</span>
+  add   r3, r2
+  mov   r0, r3            <span class="cm">; return value</span>
+  adds  r7, #12
+  mov   sp, r7
+  pop   {r7}
+  <span class="hi">bx    lr</span>
+<span class="lbl">&lt;main&gt;:</span>
+  push  {r7, lr}
+  sub   sp, #8
+  add   r7, sp, #0
+  movs  r3, #5
+  str   r3, [r7, #4]      <span class="cm">; x = 5</span>
+  movs  r1, #20           <span class="cm">; b</span>
+  movs  r0, #10           <span class="cm">; a</span>
+  <span class="call">bl    add</span>
+  str   r0, [r7, #0]      <span class="cm">; result = R0</span>
+  ldr   r3, [r7, #4]
+  adds  r3, #1
+  str   r3, [r7, #4]      <span class="cm">; x = x + 1</span>
+  movs  r3, #0
+  mov   r0, r3
+  adds  r7, #8
+  mov   sp, r7
+  pop   {r7, pc}</pre>
+      <div class="stat"><div><b>30</b><small>instructions executed</small></div><div><b>1</b><small>BL + 1 BX LR</small></div><div><b>8</b><small>stack loads/stores</small></div></div>
+      <ul class="note">
+        <li>Leaf function <b>add</b> never saves LR; only non-leaf <b>main</b> pushes it.</li>
+        <li>Every variable lives on the stack, so <b>a</b> and <b>b</b> are stored and immediately reloaded.</li>
+      </ul>
+    </section>
+
+    <!-- Column 2 -->
+    <section class="card c2">
+      <h2><span class="num">2</span> -O2: the call is gone</h2>
+      <div class="lead"><b>add(10, 20)</b> has constant arguments, so the compiler computes 30 at build time. <b>result</b> and <b>x</b> are never read, so they are deleted. What remains of <b>main</b> is "return 0".</div>
+      <div class="cmd">arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -O2 -c add.c</div>
+<pre><span class="lbl">&lt;add&gt;:</span>
+  add   r0, r1            <span class="cm">; a + b, straight into R0</span>
+  <span class="hi">bx    lr</span>
+
+<span class="lbl">&lt;main&gt;:</span>
+  movs  r0, #0            <span class="cm">; return 0</span>
+  <span class="hi">bx    lr</span>
+
+
+
+<span class="cm">; No BL. No LR write. No stack.
+; No 10, no 20, no 30.
+; add() is still emitted only because
+; it has external linkage and something
+; else might call it.
+
+; -O1 gives the identical result.</span></pre>
+      <div class="stat"><div><b>2</b><small>executed (4 emitted)</small></div><div><b>0</b><small>BL executed</small></div><div><b>0</b><small>stack accesses</small></div></div>
+      <ul class="note">
+        <li>Constant folding + dead-store elimination + inlining make the "6 steps" disappear.</li>
+        <li>This is why breakpoints on <b>add</b> never hit in a release build, and why <b>result</b> shows "optimized out" in the debugger.</li>
+        <li>The poster is not wrong. It is a picture of <b>-O0</b>, and production firmware is almost never built at -O0.</li>
+      </ul>
+    </section>
+
+    <!-- Column 3 -->
+    <section class="card c3">
+      <h2><span class="num">3</span> -O2 when the call is forced</h2>
+      <div class="lead">Make the inputs <b>volatile</b> (unknown at build time), mark <b>add</b> <b>noinline</b>, and store the outputs. Now a real call survives optimization. This is what production code looks like.</div>
+      <div class="cmd">arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -O2 -c add_forced.c</div>
+<pre><span class="lbl">&lt;add&gt;:</span>
+  add   r0, r1
+  <span class="hi">bx    lr</span>
+
+<span class="lbl">&lt;main&gt;:</span>
+  push  {r3, lr}          <span class="cm">; r3 only pads SP to 8 bytes</span>
+  ldr   r3, =in_a
+  ldr   r0, [r3, #0]      <span class="cm">; a = in_a</span>
+  ldr   r1, [r3, #4]      <span class="cm">; b = in_b</span>
+  ldr   r3, =out          <span class="cm">; kept live ACROSS the call (!)</span>
+  <span class="call">bl    add</span>
+  movs  r2, #6            <span class="cm">; x = x + 1 already folded</span>
+  str   r0, [r3, #0]      <span class="cm">; out = result</span>
+  movs  r0, #0            <span class="cm">; return 0 (before 2nd store)</span>
+  str   r2, [r3, #0]      <span class="cm">; out = x</span>
+  <span class="hi">pop   {r3, pc}</span>          <span class="cm">; return via epilogue, not BX LR</span></pre>
+      <div class="stat"><div><b>13</b><small>instructions executed</small></div><div><b>1</b><small>BL executed</small></div><div><b>2</b><small>stack accesses</small></div></div>
+      <ul class="note">
+        <li><b>push {r3, lr}</b>: r3 is not being preserved, it is filler so SP stays 8-byte aligned at the call (AAPCS rule).</li>
+        <li>The instruction after <b>BL</b> is <b>movs r2, #6</b>, which belongs to the C line <i>after</i> <b>result = ...</b>. Execution resumes at an <i>instruction</i>, not at a C statement.</li>
+        <li><b>r3</b> is scratch per AAPCS, yet GCC loads it <i>before</i> <b>BL</b> and uses it <i>after</i>. Not a bug: <b>-fipa-ra</b> (on at -O2) saw that <b>add</b> only writes R0, so it kept r3 live. Build with <b>-fno-ipa-ra</b>, or move <b>add</b> to another .c file, and the load moves after the call. The ABI is a contract for code the compiler cannot see.</li>
+        <li><b>pop {r3, pc}</b> loads PC straight from the stack. That single instruction is the ROP attack surface on ARMv7-M.</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="key">
+    <div class="bulb">&#128161;</div>
+    <div>
+      <h3>Key Takeaways</h3>
+      <ol>
+        <li>"What really happens" depends on the -O level more than on the CPU. At -O2 the call in the original example does not exist.</li>
+        <li>A leaf function never touches LR or the stack; the first nested call turns <b>BX LR</b> into <b>push {lr} ... pop {pc}</b>.</li>
+        <li>The register moves are free. The cost of a call is the pipeline flush on <b>BL</b> and on the return, which is exactly why the compiler inlines.</li>
+        <li>R0 to R3 and R12 are scratch: assume they are garbage after any call. R4 to R11 are preserved by the callee.</li>
+        <li>The return address only maps to an instruction. Optimized code returns into the middle of a reordered statement, which is why single-stepping -O2 code "jumps around".</li>
+      </ol>
+    </div>
+    <div class="hand">Ship at -O2.<br>Debug at -Og.<br>Teach at -O0.</div>
+  </div>
+
+  <footer><b>Embedded Systems World</b> | Output captured from Arm GNU Toolchain 14.2.Rel1, target -mcpu=cortex-m4 -mthumb; instruction counts measured by executing the code in the Unicorn emulator. <a href="animation.html" style="color:var(--blue);font-weight:600">Watch the animated run</a> | <a href="https://github.com/zuwasi/cortex-m-call-anatomy" style="color:var(--blue);font-weight:600">Source and Python visualizer (MIT)</a></footer>
+</div>
+</body>
+</html>
