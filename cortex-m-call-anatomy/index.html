@@ -13,6 +13,14 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Inter', system-ui, sans-serif; background: #fff; color: var(--ink); }
   .page { width: 1536px; min-height: 1024px; margin: 0 auto; padding: 22px 26px 18px; background: #fff; }
+  .anim { max-width: 1536px; margin: 0 auto; padding: 30px 26px 40px; border-top: 3px solid var(--blue); }
+  .anim h2 { font-size: 30px; font-weight: 800; margin-bottom: 8px; }
+  .anim h3 { font-size: 19px; font-weight: 700; margin: 26px 0 8px; }
+  .anim p { font-size: 16px; color: var(--muted); line-height: 1.45; max-width: 1100px; }
+  .anim img { display: block; width: 100%; height: auto; border: 1px solid #d9e0ea; border-radius: 10px; }
+  .anim code { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 14px; background: #eef2f8; padding: 1px 5px; border-radius: 4px; }
+  .anim a { color: var(--blue); font-weight: 600; }
+  .anim .repro { margin-top: 22px; }
   header { display: grid; grid-template-columns: 200px 1fr 200px; align-items: start; margin-bottom: 14px; }
   .brand { font-weight: 800; font-size: 20px; line-height: 1.05; }
   .brand span { display: block; width: 90px; height: 3px; background: var(--blue); margin-top: 6px; }
@@ -186,6 +194,20 @@
   </div>
 
   <footer><b style="white-space:nowrap">Daniel Liezrowice, ESL</b> | Original -O0 infographic and question: Embedded Systems World. Measurements and reply: Daniel Liezrowice, Engineering Software Lab (eswlab.com). Output captured from Arm GNU Toolchain 14.2.Rel1, target -mcpu=cortex-m4 -mthumb; instruction counts measured by executing the code in the Unicorn emulator. <a href="animation.html" style="color:var(--blue);font-weight:600">Watch the animated run</a> | <a href="https://github.com/zuwasi/cortex-m-call-anatomy" style="color:var(--blue);font-weight:600">Source and Python visualizer (MIT)</a></footer>
+</div>
+
+<div class="anim">
+  <h2>Now watch the CPU do it</h2>
+  <p>These are not drawings. The same <code>add.c</code> is compiled with arm-none-eabi-gcc 14.2 for Cortex-M4, the machine code runs in the
+    Unicorn CPU emulator, and every register, stack word and PC value is read back after each instruction.
+    Yellow = instruction just executed, blue = PC, red = state changed, grey stack rows = dead frames.</p>
+  <h3>Three builds in lockstep: -O0, -O2, and -O2 with a call the optimizer cannot remove</h3>
+  <img src="compare.gif" alt="Lockstep animation of the -O0, -O2 and forced -O2 builds">
+  <h3>-O0 in detail: the textbook call, spills and all</h3>
+  <img src="o0.gif" alt="Detailed animation of the -O0 build">
+  <p class="repro">Reproduce it: <code>git clone https://github.com/zuwasi/cortex-m-call-anatomy</code>, <code>pip install -r requirements.txt</code>,
+    <code>python callviz.py --compare O0 O2 forced</code>. Space plays and pauses, the arrow keys step one instruction at a time.
+    <a href="animation.html">Standalone animation page</a>.</p>
 </div>
 </body>
 </html>
