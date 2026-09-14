@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-09-12
+Last updated: 2026-09-14
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -319,6 +319,9 @@ Last updated: 2026-09-12
 
 • parasoft-ti-armclang-misra-setup
   https://zuwasi.github.io/Public-html-pages/parasoft-ti-armclang-misra-setup
+
+• sbomator-cra-reporting-demo
+  https://zuwasi.github.io/Public-html-pages/sbomator-cra-reporting-demo
 
 • sbomator-databom-presentation
   https://zuwasi.github.io/Public-html-pages/sbomator-databom-presentation
