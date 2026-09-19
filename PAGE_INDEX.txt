@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-09-14
+Last updated: 2026-09-19
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -211,6 +211,9 @@ Last updated: 2026-09-14
 
 • agent-halflife-tester-guide.md
   https://zuwasi.github.io/Public-html-pages/agent-halflife-tester-guide.md
+
+• agent-memory-benchmark
+  https://zuwasi.github.io/Public-html-pages/agent-memory-benchmark
 
 • ai-cost-estimation-presentation
   https://zuwasi.github.io/Public-html-pages/ai-cost-estimation-presentation
