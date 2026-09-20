@@ -299,6 +299,9 @@ Last updated: 2026-09-20
 • mantiq-factor-fhe-hardware
   https://zuwasi.github.io/Public-html-pages/mantiq-factor-fhe-hardware
 
+• mantiq-solidity
+  https://zuwasi.github.io/Public-html-pages/mantiq-solidity
+
 • msvc-o1-miscompilation-parasoft
   https://zuwasi.github.io/Public-html-pages/msvc-o1-miscompilation-parasoft
 
