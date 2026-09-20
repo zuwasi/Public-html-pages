@@ -293,6 +293,9 @@ Last updated: 2026-09-20
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
 
+• jev-decision-safeguards
+  https://zuwasi.github.io/Public-html-pages/jev-decision-safeguards
+
 • level5-safety-pipeline
   https://zuwasi.github.io/Public-html-pages/level5-safety-pipeline
 
