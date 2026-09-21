@@ -1,0 +1,927 @@
+{
+  "date": "2026-09-21T07:40:53.716729+00:00",
+  "method": "Two identical offline inventory scans per pinned checkout; separate experimental Scrapling evidence enrichment of the second output. Not a native SBOMator feature.",
+  "scope": "Top-level checkouts only, no submodule population or builds. CVE/Grype disabled. Candidate hardware mappings were manually selected and reviewed; dates/quotes extracted from vendor HTML.",
+  "scanner": {
+    "version": "1.4.8",
+    "commit": "aac4ff3e1e0c29f43da2c383773eb27faf3d29a2",
+    "working_tree_dirty": true
+  },
+  "scanner_source_unchanged": true,
+  "scrapling_version": "0.4.15",
+  "projects": [
+    {
+      "id": "nxp-lpc",
+      "vendor": "NXP",
+      "repository": "https://github.com/nxp-mcuxpresso/mcux-devices-lpc",
+      "target": "LPC55S69",
+      "commit": "fdf4429f3dda7f427bf4ef438a0e85fca083e178",
+      "target_evidence": "LPC5500/LPC55S69/chip.yml",
+      "tracked_files": 2006,
+      "submodules": "",
+      "evidence": {
+        "id": "nxp-lpc",
+        "target": "LPC55S69",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "LPC55S6x",
+        "source_id": "nxp-longevity",
+        "source_url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+        "quote": "Microcontrollers LPC5500 Series LPC55S6x Feb 2019 - - Feb 2034",
+        "commitment_until": "Feb 2034",
+        "limitations": "chip.yml identifies family LPC55S6x; no exact ordering-code status.",
+        "commit_source_url": "https://github.com/nxp-mcuxpresso/mcux-devices-lpc/blob/fdf4429f3dda7f427bf4ef438a0e85fca083e178/LPC5500/LPC55S69/chip.yml",
+        "repo_evidence": [
+          "L5: belong_to: set.device.LPC55S69",
+          "L9: - id: \"LPC55S69\"",
+          "L10: full_name: \"LPC55S69\"",
+          "L11: name: \"LPC55S69\"",
+          "L15: subfamily: \"LPC55S69\""
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "nxp-longevity",
+            "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+            "status": 200,
+            "seconds": 0.4256306000170298,
+            "title": "Product Longevity | NXP Semiconductors",
+            "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+            "snapshot_path": "evidence/nxp-longevity.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 52.89,
+        "with": 43.45
+      },
+      "sha256": {
+        "without": "ab5dacf7af05d6f6f8a53a6d6f086d170a40320f8d18aa05916e442588c77ce9",
+        "repeat": "e00515eafbca0e2447696acdaf392d4d282b44e1a7895ae8ac1d37ff855cec6a",
+        "enriched": "64f63d695a217a4d2a08e915fed401387e49b9f12f9c65902f5fd3ffa7e3b756"
+      }
+    },
+    {
+      "id": "nxp-rt",
+      "vendor": "NXP",
+      "repository": "https://github.com/nxp-mcuxpresso/mcux-devices-rt",
+      "target": "MIMXRT1176",
+      "commit": "5aca9adfa3dd9be25fb31144dc52a5a845fd95aa",
+      "target_evidence": "RT1170/MIMXRT1176/chip.yml",
+      "tracked_files": 3913,
+      "submodules": "",
+      "evidence": {
+        "id": "nxp-rt",
+        "target": "MIMXRT1176",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "i.MX RT1170",
+        "source_id": "nxp-longevity",
+        "source_url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+        "quote": "Microcontrollers i.MX RT Series i.MX RT1170 Feb 2021 - - Feb 2036",
+        "commitment_until": "Feb 2036",
+        "limitations": "chip.yml identifies family MIMXRT1170; no exact ordering-code status.",
+        "commit_source_url": "https://github.com/nxp-mcuxpresso/mcux-devices-rt/blob/5aca9adfa3dd9be25fb31144dc52a5a845fd95aa/RT1170/MIMXRT1176/chip.yml",
+        "repo_evidence": [
+          "L5: belong_to: set.device.MIMXRT1176",
+          "L9: - id: \"MIMXRT1176xxxxx\"",
+          "L10: full_name: \"MIMXRT1176xxxxx\"",
+          "L11: name: \"MIMXRT1176\"",
+          "L120: - name: \"MIMXRT1176DVMAA\""
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "nxp-longevity",
+            "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+            "status": 200,
+            "seconds": 0.4256306000170298,
+            "title": "Product Longevity | NXP Semiconductors",
+            "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+            "snapshot_path": "evidence/nxp-longevity.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 86.45,
+        "with": 71.03
+      },
+      "sha256": {
+        "without": "4b512d0186202783d754aa0c0138cc75730b8186cf44cd3bc688eb467f8297b4",
+        "repeat": "6dbf97c17408e7b0d5bbfba0d30d17390db02d868e55b5662042b651df1619e1",
+        "enriched": "44ae6fe5f578f1c1fd668070dcff1c41403ede139c71a60f8e8e8fc1bcf4b703"
+      }
+    },
+    {
+      "id": "nxp-kinetis",
+      "vendor": "NXP",
+      "repository": "https://github.com/nxp-mcuxpresso/mcux-devices-kinetis",
+      "target": "MK22FN512xxx12",
+      "commit": "b8c9e31246223da57b9e85bfe638da9a853bf125",
+      "target_evidence": "K/MK22F51212/chip.yml",
+      "tracked_files": 1477,
+      "submodules": "",
+      "evidence": {
+        "id": "nxp-kinetis",
+        "target": "MK22FN512xxx12",
+        "match_level": "conditional_family",
+        "matched_vendor_identifier": "K22 (excluding WLCSP, 88QFN)",
+        "source_id": "nxp-longevity",
+        "source_url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+        "quote": "Microcontrollers Kinetis K K22 (excluding WLCSP, 88QFN) Apr 2014 - - Jun 2035",
+        "commitment_until": "Jun 2035",
+        "limitations": "K22 row excludes WLCSP and 88QFN. Wildcard target does not select a package; applicability remains conditional.",
+        "commit_source_url": "https://github.com/nxp-mcuxpresso/mcux-devices-kinetis/blob/b8c9e31246223da57b9e85bfe638da9a853bf125/K/MK22F51212/chip.yml",
+        "repo_evidence": [
+          "L9: - id: \"MK22FN512xxx12\"",
+          "L10: full_name: \"MK22FN512xxx12\""
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "nxp-longevity",
+            "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+            "status": 200,
+            "seconds": 0.4256306000170298,
+            "title": "Product Longevity | NXP Semiconductors",
+            "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+            "snapshot_path": "evidence/nxp-longevity.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 32.44,
+        "with": 27.73
+      },
+      "sha256": {
+        "without": "fd94a941040e48e266b5799f07d8faa47fa126432d051ea9ad4c3411909c418f",
+        "repeat": "51d07728a6ecd31412ca789906fd9dcb1fa33ae24a888e3b81d6181065e92a69",
+        "enriched": "ae31396a560ed1129285f203600b1005def8cca053eb4f6d58ac64103dc7fc37"
+      }
+    },
+    {
+      "id": "st-f4",
+      "vendor": "ST",
+      "repository": "https://github.com/STMicroelectronics/STM32F4-GettingStarted-HandPosture",
+      "target": "STM32F401RE",
+      "commit": "2dd5299537ed87949a174f543d0068583427e79f",
+      "target_evidence": "Application/NUCLEO-F401RE/STM32CubeIDE/STM32F401RETX_FLASH.ld",
+      "tracked_files": 504,
+      "submodules": "",
+      "evidence": {
+        "id": "st-f4",
+        "target": "STM32F401RE",
+        "match_level": "base_part_match",
+        "matched_vendor_identifier": "STM32F401RE",
+        "source_id": "st-longevity-10",
+        "source_url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+        "quote": "STM32F401RE Active STM32 Dynamic Efficiency MCU, Arm Cortex-M4 core with DSP and FPU, up to 512 Kbytes of Flash memory, 84 MHz CPU, Art Accelerator January 2036",
+        "commitment_until": "January 2036",
+        "limitations": "Exact base-part table row, not a full package/temperature ordering-code commitment.",
+        "commit_source_url": "https://github.com/STMicroelectronics/STM32F4-GettingStarted-HandPosture/blob/2dd5299537ed87949a174f543d0068583427e79f/Application/NUCLEO-F401RE/STM32CubeIDE/STM32F401RETX_FLASH.ld",
+        "repo_evidence": [
+          "L8: **  Abstract    : Linker script for NUCLEO-F401RE Board embedding STM32F401RETx Device from stm32f4 series"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "st-longevity-10",
+            "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+            "status": 200,
+            "seconds": 0.3996688000042923,
+            "title": "ST 10-year product table",
+            "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+            "snapshot_path": "evidence/st-longevity-10.html",
+            "discovered_from": "st-longevity#list-btn-10"
+          }
+        ]
+      },
+      "before_count": 6,
+      "after_count": 6,
+      "inventory_equal": true,
+      "quality_status": "blocked",
+      "blockers": [
+        {
+          "component": "FreeRTOS",
+          "component_id": "FreeRTOS",
+          "field": "version",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Azure RTOS ThreadX",
+          "component_id": "Azure RTOS ThreadX",
+          "field": "version",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Zephyr RTOS",
+          "component_id": "pkg:generic/zephyr-rtos",
+          "field": "version",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "CNN2D_ST_HandPosture_8classes.h5",
+          "component_id": "model:Application/Network/CNN2D_ST_HandPosture_8classes.h5@sha256:df36f6e90f2ebfcb",
+          "field": "license",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        }
+      ],
+      "components": [
+        {
+          "name": "FreeRTOS"
+        },
+        {
+          "name": "Azure RTOS ThreadX"
+        },
+        {
+          "name": "Zephyr RTOS",
+          "purl": "pkg:generic/zephyr-rtos"
+        },
+        {
+          "name": "CMSIS",
+          "version": "5.1",
+          "purl": "pkg:github/ARM-software/CMSIS_5@5.1"
+        },
+        {
+          "name": "STM32F4xx-HAL-Driver",
+          "version": "1.8.5",
+          "purl": "pkg:github/STMicroelectronics/stm32f4xx-hal-driver@1.8.5"
+        },
+        {
+          "name": "CNN2D_ST_HandPosture_8classes.h5",
+          "version": "sha256:df36f6e90f2ebfcb"
+        }
+      ],
+      "raw_scan_seconds": {
+        "without": 33.24,
+        "with": 34.26
+      },
+      "sha256": {
+        "without": "31d5e42e44370085fa73b4178c0607eec2f9906520eef110a458be00293b3360",
+        "repeat": "ce2ec125ac513c9413382d0d083e96fe5e53240f0e51025e6448e8165d8bb54b",
+        "enriched": "4d423c77b16afaa9d498869f2918b2b615a6bbb265a6953f7e3b92f8cffd650f"
+      }
+    },
+    {
+      "id": "st-f7",
+      "vendor": "ST",
+      "repository": "https://github.com/STMicroelectronics/stm32f7508-dk-bsp",
+      "target": "STM32F7508-DK",
+      "commit": "c2d05137d8cf115f6b6bddb1f9cf95a885476868",
+      "target_evidence": "README.md",
+      "tracked_files": 28,
+      "submodules": "",
+      "evidence": {
+        "id": "st-f7",
+        "target": "STM32F7508-DK",
+        "match_level": "board_to_mcu",
+        "matched_vendor_identifier": "STM32F750N8",
+        "source_id": "st-longevity-10",
+        "source_url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+        "quote": "STM32F750N8 Active High-performance and DSP with FPU, Arm Cortex-M7 MCU with 64 Kbyte of Flash memory, 216 MHz CPU, Art Accelerator, L1 cache, HW crypto, SDRAM, TFT January 2036",
+        "commitment_until": "January 2036",
+        "limitations": "Official board page identifies STM32F750N8H6; longevity row is MCU base-part only. Board and MCU status are separate.",
+        "commit_source_url": "https://github.com/STMicroelectronics/stm32f7508-dk-bsp/blob/c2d05137d8cf115f6b6bddb1f9cf95a885476868/README.md",
+        "repo_evidence": [
+          "L1: # BSP STM32F7508-DK Component",
+          "L3: ![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/stm32f7508-dk.svg?color=brightgreen)",
+          "L22: This **stm32f7508-dk** MCU component repository is one element of the **STM32CubeF7** MCU embedded software package, providing the **STM32F7508-DK** BSP BOARD component part.",
+          "L26: Details about the content of this release are available in the release note [here](https://htmlpreview.github.io/?https://github.com/STMicroelectronics/stm32f7508-dk/blob/main/Release_Notes.html)."
+        ],
+        "board_evidence": {
+          "source_id": "st-f7508-board",
+          "source_url": "https://www.st.com/en/evaluation-tools/stm32f7508-dk.html",
+          "quote": "STM32F7508-DK Obsolete Out of Production.",
+          "status": "Obsolete",
+          "mcu": "STM32F750N8H6"
+        },
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "st-f7508-board",
+            "url": "https://www.st.com/en/evaluation-tools/stm32f7508-dk.html",
+            "status": 200,
+            "seconds": 0.1267309000249952,
+            "title": "STM32F7508-DK | Product - STMicroelectronics",
+            "sha256": "13fe8c1798d5d275d68b74177ba39d7c5691344fc5cf0d153037e74006049014",
+            "snapshot_path": "evidence/st-f7508-board.html"
+          },
+          {
+            "id": "st-longevity-10",
+            "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+            "status": 200,
+            "seconds": 0.3996688000042923,
+            "title": "ST 10-year product table",
+            "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+            "snapshot_path": "evidence/st-longevity-10.html",
+            "discovered_from": "st-longevity#list-btn-10"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 7.92,
+        "with": 8.74
+      },
+      "sha256": {
+        "without": "aac9cd715c4407416cd3aacd2ed3b3d54d1d8301b5c47c85af0e20b500151c90",
+        "repeat": "7de38cabca734a61c73b28594158de50382e08812ba3a19e1b810878f6c59cca",
+        "enriched": "5ab02962d90a6b418d87d448e5cf105cdd132c1a2d20adc0b1c0203d962470c6"
+      }
+    },
+    {
+      "id": "st-h7",
+      "vendor": "ST",
+      "repository": "https://github.com/STMicroelectronics/STM32H7-GettingStarted-ObjectDetection",
+      "target": "STM32H747XI",
+      "commit": "0f3cc423832ecc5e7307e1b8e5d2f7e915dc35f2",
+      "target_evidence": "Application/STM32H747I-DISCO/STM32CubeIDE/CM7/STM32H747XIHx_CM7.ld",
+      "tracked_files": 1167,
+      "submodules": "",
+      "evidence": {
+        "id": "st-h7",
+        "target": "STM32H747XI",
+        "match_level": "base_part_match",
+        "matched_vendor_identifier": "STM32H747XI",
+        "source_id": "st-longevity-10",
+        "source_url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+        "quote": "STM32H747XI Active High-performance and DSP with DP-FPU, Arm Cortex-M7 + Cortex-M4 MCU with 2MBytes of Flash memory, 1MB RAM, 480 MHz CPU, Art Accelerator, L1 cache, external memory interface, large set of peripherals, SMPS January 2036",
+        "commitment_until": "January 2036",
+        "limitations": "Exact base-part table row, not a full package/temperature ordering-code commitment.",
+        "commit_source_url": "https://github.com/STMicroelectronics/STM32H7-GettingStarted-ObjectDetection/blob/0f3cc423832ecc5e7307e1b8e5d2f7e915dc35f2/Application/STM32H747I-DISCO/STM32CubeIDE/CM7/STM32H747XIHx_CM7.ld",
+        "repo_evidence": [
+          "L7: **  Abstract    : Linker script for STM32H747XI Devices"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "st-longevity-10",
+            "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+            "status": 200,
+            "seconds": 0.3996688000042923,
+            "title": "ST 10-year product table",
+            "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+            "snapshot_path": "evidence/st-longevity-10.html",
+            "discovered_from": "st-longevity#list-btn-10"
+          }
+        ]
+      },
+      "before_count": 4,
+      "after_count": 4,
+      "inventory_equal": true,
+      "quality_status": "blocked",
+      "blockers": [
+        {
+          "component": "FreeRTOS",
+          "component_id": "FreeRTOS",
+          "field": "version",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Azure RTOS ThreadX",
+          "component_id": "Azure RTOS ThreadX",
+          "field": "version",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Zephyr RTOS",
+          "component_id": "pkg:generic/zephyr-rtos",
+          "field": "version",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "st_ssd_mobilenet_v1_025_192_int8.tflite",
+          "component_id": "model:Application/Network/st_ssd_mobilenet_v1_025_192_int8.tflite@sha256:2194099fa5f0da71",
+          "field": "license",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        }
+      ],
+      "components": [
+        {
+          "name": "FreeRTOS"
+        },
+        {
+          "name": "Azure RTOS ThreadX"
+        },
+        {
+          "name": "Zephyr RTOS",
+          "purl": "pkg:generic/zephyr-rtos"
+        },
+        {
+          "name": "st_ssd_mobilenet_v1_025_192_int8.tflite",
+          "version": "sha256:2194099fa5f0da71"
+        }
+      ],
+      "raw_scan_seconds": {
+        "without": 53.11,
+        "with": 41.75
+      },
+      "sha256": {
+        "without": "d8f62763ebbfd5bff100faa109cb620815e0fe7c94dd621f18fd8e88d78119b5",
+        "repeat": "d9480d08612e471a937fe5b465bf9fb67eb6a4fc2c28a3e57c474f2497ffdeaf",
+        "enriched": "f865c82792cf9f986fb626ee86dd1031ef444d3ce817af610c735357ba51828c"
+      }
+    },
+    {
+      "id": "xilinx-basys",
+      "vendor": "Xilinx",
+      "repository": "https://github.com/Digilent/Basys-3-GPIO",
+      "target": "xc7a35tcpg236-1",
+      "commit": "8c509578322bd713134e5f10218cd8774202a889",
+      "target_evidence": "project_info.tcl",
+      "tracked_files": 24,
+      "submodules": "-89eeabb9bee0a05582055c16e0f0d10a0498e987 digilent-vivado-scripts",
+      "evidence": {
+        "id": "xilinx-basys",
+        "target": "xc7a35tcpg236-1",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "XC7A35T",
+        "source_id": "amd-artix7",
+        "source_url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+        "quote": "extending AMD 7 Series FPGAs and adaptive SoCs through 2040",
+        "commitment_until": "2040",
+        "limitations": "7 Series family availability only; no package/speed-grade lifecycle verdict.",
+        "commit_source_url": "https://github.com/Digilent/Basys-3-GPIO/blob/8c509578322bd713134e5f10218cd8774202a889/project_info.tcl",
+        "repo_evidence": [
+          "L4: set_property \"part\" \"xc7a35tcpg236-1\" $project_obj"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "amd-artix7",
+            "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+            "status": 200,
+            "seconds": 0.12735490000341088,
+            "title": "Artix 7 FPGAs",
+            "sha256": "e1d3c3c58be0ce6c4512edb4bf69dc06525b5d1fe78d2142a4e45c07cae124b5",
+            "snapshot_path": "evidence/amd-artix7.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 10.82,
+        "with": 10.17
+      },
+      "sha256": {
+        "without": "1d27048ff327dd0c96d65d2d4b667d9842b08c7611aae0a2228f2132cb7460ec",
+        "repeat": "ad30c8a76dafacd61a8023dfce937bc37485af1d5587adfc3942cec478068320",
+        "enriched": "5df168b0e8bdadc945a59f0b757422a7dd0f021dfdeeece52c85d733e6452c07"
+      },
+      "hbom": {
+        "status": "partial",
+        "entries": 19,
+        "quality_score": 29,
+        "top": "GPIO_demo",
+        "note": "Separate design HBOM includes HDL entities and file records, not this many physical parts. No inferred hardware target was inserted. Missing product identity/procurement fields remain."
+      }
+    },
+    {
+      "id": "xilinx-arty",
+      "vendor": "Xilinx",
+      "repository": "https://github.com/Digilent/Arty-A7-35-GPIO",
+      "target": "xc7a35ticsg324-1L",
+      "commit": "1b7200619b5b358afa97016f9ca8daca0316aa79",
+      "target_evidence": "project_info.tcl",
+      "tracked_files": 19,
+      "submodules": "-ffa3f4f7bea46dc30645e1b618701ea3806b7707 digilent-vivado-scripts",
+      "evidence": {
+        "id": "xilinx-arty",
+        "target": "xc7a35ticsg324-1L",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "XC7A35T",
+        "source_id": "amd-artix7",
+        "source_url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+        "quote": "extending AMD 7 Series FPGAs and adaptive SoCs through 2040",
+        "commitment_until": "2040",
+        "limitations": "7 Series family availability only; no package/speed-grade lifecycle verdict.",
+        "commit_source_url": "https://github.com/Digilent/Arty-A7-35-GPIO/blob/1b7200619b5b358afa97016f9ca8daca0316aa79/project_info.tcl",
+        "repo_evidence": [
+          "L4: set_property \"part\" \"xc7a35ticsg324-1L\" $project_obj"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "amd-artix7",
+            "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+            "status": 200,
+            "seconds": 0.12735490000341088,
+            "title": "Artix 7 FPGAs",
+            "sha256": "e1d3c3c58be0ce6c4512edb4bf69dc06525b5d1fe78d2142a4e45c07cae124b5",
+            "snapshot_path": "evidence/amd-artix7.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 10.94,
+        "with": 9.78
+      },
+      "sha256": {
+        "without": "32cad6df979c381c165ad5b34fc6026b3325f6df4231a21e811993e3266be4c1",
+        "repeat": "017d4fce20f7cc233f36bbd0d2169349631a67810fd2b413be776c4d9ad12b1f",
+        "enriched": "e0e18e71a9fed8abb513982aab2f5c05620c66c9c602598862b10092f067038e"
+      },
+      "hbom": {
+        "status": "partial",
+        "entries": 8,
+        "quality_score": 14,
+        "top": "GPIO_demo",
+        "note": "Separate design HBOM includes HDL entities and file records, not this many physical parts. No inferred hardware target was inserted. Missing product identity/procurement fields remain."
+      }
+    },
+    {
+      "id": "xilinx-zybo",
+      "vendor": "Xilinx",
+      "repository": "https://github.com/Digilent/Zybo-Z7-20-pcam-5c",
+      "target": "xc7z020clg400-1",
+      "commit": "5f808263943eb0aa1aede6025e5966ace33f7e0f",
+      "target_evidence": "project_info.tcl",
+      "tracked_files": 88,
+      "submodules": "-5dee436ae7810e2fa098d298308567c73736a639 digilent-vivado-scripts\n-7257aef09a87c0535952a75421913234d2f7f0a0 repo/vivado-library",
+      "evidence": {
+        "id": "xilinx-zybo",
+        "target": "xc7z020clg400-1",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "Z-7020",
+        "source_id": "amd-zynq7000",
+        "source_url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-7000.html",
+        "quote": "extending AMD 7 Series FPGAs and adaptive SoCs through 2040",
+        "commitment_until": "2040",
+        "limitations": "Zynq-7000 family availability only; no package/speed-grade lifecycle verdict.",
+        "commit_source_url": "https://github.com/Digilent/Zybo-Z7-20-pcam-5c/blob/5f808263943eb0aa1aede6025e5966ace33f7e0f/project_info.tcl",
+        "repo_evidence": [
+          "L4: set_property \"part\" \"xc7z020clg400-1\" $project_obj"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "amd-zynq7000",
+            "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-7000.html",
+            "status": 200,
+            "seconds": 0.10205039998982102,
+            "title": "Zynq 7000 SoCs",
+            "sha256": "6140ced14d579932357e651e23cd740772097a91824e25e04b9f77129371b620",
+            "snapshot_path": "evidence/amd-zynq7000.html"
+          }
+        ]
+      },
+      "before_count": 1,
+      "after_count": 1,
+      "inventory_equal": true,
+      "quality_status": "blocked",
+      "blockers": [
+        {
+          "component": "vivado-library",
+          "component_id": "pkg:github/Digilent/vivado-library@7257aef09a87c0535952a75421913234d2f7f0a0",
+          "field": "license",
+          "observed_value": "<missing>",
+          "reason": "no valid component-specific approval was found"
+        }
+      ],
+      "components": [
+        {
+          "name": "vivado-library",
+          "version": "7257aef09a87",
+          "purl": "pkg:github/Digilent/vivado-library@7257aef09a87c0535952a75421913234d2f7f0a0"
+        }
+      ],
+      "raw_scan_seconds": {
+        "without": 14.41,
+        "with": 11.9
+      },
+      "sha256": {
+        "without": "168373a81a8de18231d7387be080828662c70b1b84467028665d28bc261f564a",
+        "repeat": "16bf745d033214f5c849a062b1721e2cbfa61810eea4d1917dc373f6e0a1fb74",
+        "enriched": "30b597ad0ca058733df870b8bd5f1e2aa23d85f403907396540cdb30211dabf5"
+      },
+      "hbom": {
+        "status": "blocked",
+        "note": "No authoritative top module in initial scan; generated system_wrapper absent from checkout. No wrapper fabricated and no Vivado build executed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "nxp-longevity",
+      "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+      "status": 200,
+      "seconds": 0.4256306000170298,
+      "title": "Product Longevity | NXP Semiconductors",
+      "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+      "snapshot_path": "evidence/nxp-longevity.html"
+    },
+    {
+      "id": "st-longevity",
+      "url": "https://www.st.com/content/st_com/en/about/quality-and-reliability/product-longevity.html",
+      "status": 200,
+      "seconds": 0.1524088000296615,
+      "title": "Product longevity - STMicroelectronics",
+      "sha256": "b14716f8e406bb4a7c6333881d26672b7246d5ece9042d0cfa309a218d527b48",
+      "snapshot_path": "evidence/st-longevity.html"
+    },
+    {
+      "id": "amd-artix7",
+      "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+      "status": 200,
+      "seconds": 0.12735490000341088,
+      "title": "Artix 7 FPGAs",
+      "sha256": "e1d3c3c58be0ce6c4512edb4bf69dc06525b5d1fe78d2142a4e45c07cae124b5",
+      "snapshot_path": "evidence/amd-artix7.html"
+    },
+    {
+      "id": "amd-zynq7000",
+      "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-7000.html",
+      "status": 200,
+      "seconds": 0.10205039998982102,
+      "title": "Zynq 7000 SoCs",
+      "sha256": "6140ced14d579932357e651e23cd740772097a91824e25e04b9f77129371b620",
+      "snapshot_path": "evidence/amd-zynq7000.html"
+    },
+    {
+      "id": "st-f7508-board",
+      "url": "https://www.st.com/en/evaluation-tools/stm32f7508-dk.html",
+      "status": 200,
+      "seconds": 0.1267309000249952,
+      "title": "STM32F7508-DK | Product - STMicroelectronics",
+      "sha256": "13fe8c1798d5d275d68b74177ba39d7c5691344fc5cf0d153037e74006049014",
+      "snapshot_path": "evidence/st-f7508-board.html"
+    },
+    {
+      "id": "st-longevity-10",
+      "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+      "status": 200,
+      "seconds": 0.3996688000042923,
+      "title": "ST 10-year product table",
+      "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+      "snapshot_path": "evidence/st-longevity-10.html",
+      "discovered_from": "st-longevity#list-btn-10"
+    }
+  ],
+  "trials": [
+    {
+      "source_id": "nxp-longevity",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.42,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 1,
+      "method": "requests",
+      "status": 200,
+      "seconds": 0.5551,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 2,
+      "method": "requests",
+      "status": 200,
+      "seconds": 0.5363,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.4515,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.4048,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 3,
+      "method": "requests",
+      "status": 200,
+      "seconds": 0.6089,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2208,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 1,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.3212,
+      "error": "HTTPSConnectionPool(host='www.st.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 2,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2749,
+      "error": "HTTPSConnectionPool(host='www.st.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2602,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2156,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 3,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2864,
+      "error": "HTTPSConnectionPool(host='www.st.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2797,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 1,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.3178,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 2,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2677,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2861,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1137,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 3,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2882,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1137,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 1,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2757,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 2,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.351,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1259,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1683,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 3,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2993,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    }
+  ]
+}

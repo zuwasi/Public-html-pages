@@ -1,0 +1,988 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Scrapling × SBOMator | Nine real repository comparisons</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#08121b;--panel:#101f2d;--line:#284051;--muted:#a9bdca;--cyan:#59e5d0;--amber:#ffc56b;--red:#ff9b9b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#edf5f8;font-family:Inter,system-ui,sans-serif;overflow:hidden;font-size:clamp(14px,1.1vw,17px);line-height:1.5}a{color:var(--cyan);overflow-wrap:anywhere}button,select{font:inherit}button,a,select{touch-action:manipulation}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--amber);outline-offset:4px}
+header{position:fixed;inset:0 0 auto;height:66px;padding:14px 5vw;display:flex;align-items:center;justify-content:space-between;gap:20px;background:var(--bg);z-index:5;border-bottom:1px solid var(--line)}.brand{font-weight:800;letter-spacing:.08em;font-size:13px}.brand span{color:var(--cyan)}select{max-width:48vw;background:var(--panel);color:#edf5f8;border:1px solid var(--line);padding:7px 10px;border-radius:7px}
+#track{display:flex;transition:transform .32s ease;will-change:transform}.slide{flex:0 0 100vw;width:100vw;height:100vh;overflow-y:auto;padding:100px 8vw 82px;background:radial-gradient(ellipse at 95% 0%,#123b3d55,transparent 48%)}.inner{max-width:1220px;margin:auto}.eyebrow{color:var(--cyan);text-transform:uppercase;font-size:12px;letter-spacing:.14em;font-weight:800}h1{font-size:clamp(36px,4.7vw,72px);line-height:1.06;letter-spacing:-.055em;max-width:940px;margin:20px 0}h2{font-size:clamp(27px,3vw,46px);line-height:1.12;letter-spacing:-.035em;margin:12px 0 18px}h3{font-size:clamp(18px,1.5vw,23px);margin:0 0 12px}p{margin:10px 0}.lead{font-size:clamp(17px,1.6vw,23px);color:var(--muted);max-width:950px}.accent{color:var(--cyan)}.muted,small{color:var(--muted)}.small{font-size:13px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:22px 0}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:30px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;min-width:0}.card.good{border-top:3px solid var(--cyan)}.card.warn{border-top:3px solid var(--amber)}.card.bad{border-top:3px solid var(--red)}.metric{font-size:clamp(32px,3.5vw,53px);line-height:1.1;font-weight:800;color:var(--cyan);letter-spacing:-.04em}.label{font-size:13px;color:var(--muted);margin-top:8px}.pill{display:inline-block;padding:4px 10px;border-radius:20px;border:1px solid var(--line);font-size:12px;color:var(--muted);margin:3px 4px 3px 0}.warning{color:var(--amber)}.alert{padding:14px 18px;background:#4b391e55;border-left:3px solid var(--amber);border-radius:0 8px 8px 0;margin:18px 0}.table-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;margin:20px 0}table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:11px 15px;border-bottom:1px solid var(--line);vertical-align:top}th{background:#142839;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.04em}tr:last-child td{border-bottom:0}.nowrap{white-space:nowrap}.btn{display:inline-block;background:#163e40;color:var(--cyan);border:1px solid #2e7472;padding:10px 16px;border-radius:8px;text-decoration:none;margin:5px 8px 5px 0}.quote{border-left:2px solid var(--cyan);padding-left:14px;color:#deebf0;margin:15px 0;font-size:15px}code{font-size:.86em;color:#cee4ec;overflow-wrap:anywhere}ul{padding-left:21px}li{margin:8px 0}.repo{font-size:13px;margin-bottom:18px}.repo a{display:block;margin-bottom:5px}.compare-label{font-size:11px;letter-spacing:.11em;font-weight:800;color:var(--muted);margin-bottom:12px}.nav{position:fixed;top:50%;border-radius:50%;width:44px;height:44px;background:#102b38dd;border:1px solid #48606d;color:#fff;font-size:34px;line-height:1;z-index:10;cursor:pointer}.nav[hidden]{display:none}#prev{left:16px}#next{right:16px}footer{position:fixed;inset:auto 0 0;background:var(--bg);height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;font-size:12px;color:var(--muted);z-index:5}#progress{position:fixed;bottom:0;height:4px;left:0;background:linear-gradient(90deg,#25aeba,var(--cyan));z-index:11;transition:width .3s}#hint{animation:pulse 2s infinite;color:var(--cyan);font-size:13px}@keyframes pulse{50%{opacity:.45}}.sources a{display:block;font-size:12px;margin:12px 0}.mono{font-family:ui-monospace,monospace}.rowbtn{border:0;background:none;color:var(--cyan);padding:0;cursor:pointer;text-align:left;font:inherit}
+@media(max-width:700px){header{height:64px;padding:12px 18px}.brand{font-size:10px;max-width:130px}.slide{padding:86px 30px 78px}.grid{grid-template-columns:1fr;gap:14px}.stats{grid-template-columns:1fr 1fr;gap:12px}.card{padding:17px}.nav{width:26px;height:38px;font-size:27px;border-radius:8px}#prev{left:1px}#next{right:1px}footer{padding:0 22px;font-size:10px}td,th{padding:10px;font-size:12px}select{font-size:12px}.table-scroll table{min-width:640px}h1{margin-top:14px}.repo{font-size:12px}}
+@media(prefers-reduced-motion:reduce){#track,#progress{transition:none}#hint{animation:none}}
+.slide{overflow:hidden}.inner{max-height:100%;overflow-y:auto;scrollbar-width:thin;scroll-padding:12px}h2{overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<header><div class="brand">ESL <span>SBOMATOR</span> / FIELD TEST</div><label><span class="small">Explore </span><select id="jump" aria-label="Choose report slide"></select></label></header>
+<main id="track"></main>
+<button class="nav" id="prev" aria-label="Previous slide">‹</button><button class="nav" id="next" aria-label="Next slide">›</button>
+<footer><span>21 SEPTEMBER 2026 · EXPERIMENTAL ENRICHMENT</span><span id="counter" aria-live="polite"></span></footer><div id="progress"></div>
+<script id="report-data" type="application/json">{
+  "date": "2026-09-21T07:40:53.716729+00:00",
+  "method": "Two identical offline inventory scans per pinned checkout; separate experimental Scrapling evidence enrichment of the second output. Not a native SBOMator feature.",
+  "scope": "Top-level checkouts only, no submodule population or builds. CVE/Grype disabled. Candidate hardware mappings were manually selected and reviewed; dates/quotes extracted from vendor HTML.",
+  "scanner": {
+    "version": "1.4.8",
+    "commit": "aac4ff3e1e0c29f43da2c383773eb27faf3d29a2",
+    "working_tree_dirty": true
+  },
+  "scanner_source_unchanged": true,
+  "scrapling_version": "0.4.15",
+  "projects": [
+    {
+      "id": "nxp-lpc",
+      "vendor": "NXP",
+      "repository": "https://github.com/nxp-mcuxpresso/mcux-devices-lpc",
+      "target": "LPC55S69",
+      "commit": "fdf4429f3dda7f427bf4ef438a0e85fca083e178",
+      "target_evidence": "LPC5500/LPC55S69/chip.yml",
+      "tracked_files": 2006,
+      "submodules": "",
+      "evidence": {
+        "id": "nxp-lpc",
+        "target": "LPC55S69",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "LPC55S6x",
+        "source_id": "nxp-longevity",
+        "source_url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+        "quote": "Microcontrollers LPC5500 Series LPC55S6x Feb 2019 - - Feb 2034",
+        "commitment_until": "Feb 2034",
+        "limitations": "chip.yml identifies family LPC55S6x; no exact ordering-code status.",
+        "commit_source_url": "https://github.com/nxp-mcuxpresso/mcux-devices-lpc/blob/fdf4429f3dda7f427bf4ef438a0e85fca083e178/LPC5500/LPC55S69/chip.yml",
+        "repo_evidence": [
+          "L5: belong_to: set.device.LPC55S69",
+          "L9: - id: \"LPC55S69\"",
+          "L10: full_name: \"LPC55S69\"",
+          "L11: name: \"LPC55S69\"",
+          "L15: subfamily: \"LPC55S69\""
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "nxp-longevity",
+            "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+            "status": 200,
+            "seconds": 0.4256306000170298,
+            "title": "Product Longevity | NXP Semiconductors",
+            "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+            "snapshot_path": "evidence/nxp-longevity.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 52.89,
+        "with": 43.45
+      },
+      "sha256": {
+        "without": "ab5dacf7af05d6f6f8a53a6d6f086d170a40320f8d18aa05916e442588c77ce9",
+        "repeat": "e00515eafbca0e2447696acdaf392d4d282b44e1a7895ae8ac1d37ff855cec6a",
+        "enriched": "64f63d695a217a4d2a08e915fed401387e49b9f12f9c65902f5fd3ffa7e3b756"
+      }
+    },
+    {
+      "id": "nxp-rt",
+      "vendor": "NXP",
+      "repository": "https://github.com/nxp-mcuxpresso/mcux-devices-rt",
+      "target": "MIMXRT1176",
+      "commit": "5aca9adfa3dd9be25fb31144dc52a5a845fd95aa",
+      "target_evidence": "RT1170/MIMXRT1176/chip.yml",
+      "tracked_files": 3913,
+      "submodules": "",
+      "evidence": {
+        "id": "nxp-rt",
+        "target": "MIMXRT1176",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "i.MX RT1170",
+        "source_id": "nxp-longevity",
+        "source_url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+        "quote": "Microcontrollers i.MX RT Series i.MX RT1170 Feb 2021 - - Feb 2036",
+        "commitment_until": "Feb 2036",
+        "limitations": "chip.yml identifies family MIMXRT1170; no exact ordering-code status.",
+        "commit_source_url": "https://github.com/nxp-mcuxpresso/mcux-devices-rt/blob/5aca9adfa3dd9be25fb31144dc52a5a845fd95aa/RT1170/MIMXRT1176/chip.yml",
+        "repo_evidence": [
+          "L5: belong_to: set.device.MIMXRT1176",
+          "L9: - id: \"MIMXRT1176xxxxx\"",
+          "L10: full_name: \"MIMXRT1176xxxxx\"",
+          "L11: name: \"MIMXRT1176\"",
+          "L120: - name: \"MIMXRT1176DVMAA\""
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "nxp-longevity",
+            "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+            "status": 200,
+            "seconds": 0.4256306000170298,
+            "title": "Product Longevity | NXP Semiconductors",
+            "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+            "snapshot_path": "evidence/nxp-longevity.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 86.45,
+        "with": 71.03
+      },
+      "sha256": {
+        "without": "4b512d0186202783d754aa0c0138cc75730b8186cf44cd3bc688eb467f8297b4",
+        "repeat": "6dbf97c17408e7b0d5bbfba0d30d17390db02d868e55b5662042b651df1619e1",
+        "enriched": "44ae6fe5f578f1c1fd668070dcff1c41403ede139c71a60f8e8e8fc1bcf4b703"
+      }
+    },
+    {
+      "id": "nxp-kinetis",
+      "vendor": "NXP",
+      "repository": "https://github.com/nxp-mcuxpresso/mcux-devices-kinetis",
+      "target": "MK22FN512xxx12",
+      "commit": "b8c9e31246223da57b9e85bfe638da9a853bf125",
+      "target_evidence": "K/MK22F51212/chip.yml",
+      "tracked_files": 1477,
+      "submodules": "",
+      "evidence": {
+        "id": "nxp-kinetis",
+        "target": "MK22FN512xxx12",
+        "match_level": "conditional_family",
+        "matched_vendor_identifier": "K22 (excluding WLCSP, 88QFN)",
+        "source_id": "nxp-longevity",
+        "source_url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+        "quote": "Microcontrollers Kinetis K K22 (excluding WLCSP, 88QFN) Apr 2014 - - Jun 2035",
+        "commitment_until": "Jun 2035",
+        "limitations": "K22 row excludes WLCSP and 88QFN. Wildcard target does not select a package; applicability remains conditional.",
+        "commit_source_url": "https://github.com/nxp-mcuxpresso/mcux-devices-kinetis/blob/b8c9e31246223da57b9e85bfe638da9a853bf125/K/MK22F51212/chip.yml",
+        "repo_evidence": [
+          "L9: - id: \"MK22FN512xxx12\"",
+          "L10: full_name: \"MK22FN512xxx12\""
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "nxp-longevity",
+            "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+            "status": 200,
+            "seconds": 0.4256306000170298,
+            "title": "Product Longevity | NXP Semiconductors",
+            "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+            "snapshot_path": "evidence/nxp-longevity.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 32.44,
+        "with": 27.73
+      },
+      "sha256": {
+        "without": "fd94a941040e48e266b5799f07d8faa47fa126432d051ea9ad4c3411909c418f",
+        "repeat": "51d07728a6ecd31412ca789906fd9dcb1fa33ae24a888e3b81d6181065e92a69",
+        "enriched": "ae31396a560ed1129285f203600b1005def8cca053eb4f6d58ac64103dc7fc37"
+      }
+    },
+    {
+      "id": "st-f4",
+      "vendor": "ST",
+      "repository": "https://github.com/STMicroelectronics/STM32F4-GettingStarted-HandPosture",
+      "target": "STM32F401RE",
+      "commit": "2dd5299537ed87949a174f543d0068583427e79f",
+      "target_evidence": "Application/NUCLEO-F401RE/STM32CubeIDE/STM32F401RETX_FLASH.ld",
+      "tracked_files": 504,
+      "submodules": "",
+      "evidence": {
+        "id": "st-f4",
+        "target": "STM32F401RE",
+        "match_level": "base_part_match",
+        "matched_vendor_identifier": "STM32F401RE",
+        "source_id": "st-longevity-10",
+        "source_url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+        "quote": "STM32F401RE Active STM32 Dynamic Efficiency MCU, Arm Cortex-M4 core with DSP and FPU, up to 512 Kbytes of Flash memory, 84 MHz CPU, Art Accelerator January 2036",
+        "commitment_until": "January 2036",
+        "limitations": "Exact base-part table row, not a full package/temperature ordering-code commitment.",
+        "commit_source_url": "https://github.com/STMicroelectronics/STM32F4-GettingStarted-HandPosture/blob/2dd5299537ed87949a174f543d0068583427e79f/Application/NUCLEO-F401RE/STM32CubeIDE/STM32F401RETX_FLASH.ld",
+        "repo_evidence": [
+          "L8: **  Abstract    : Linker script for NUCLEO-F401RE Board embedding STM32F401RETx Device from stm32f4 series"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "st-longevity-10",
+            "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+            "status": 200,
+            "seconds": 0.3996688000042923,
+            "title": "ST 10-year product table",
+            "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+            "snapshot_path": "evidence/st-longevity-10.html",
+            "discovered_from": "st-longevity#list-btn-10"
+          }
+        ]
+      },
+      "before_count": 6,
+      "after_count": 6,
+      "inventory_equal": true,
+      "quality_status": "blocked",
+      "blockers": [
+        {
+          "component": "FreeRTOS",
+          "component_id": "FreeRTOS",
+          "field": "version",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Azure RTOS ThreadX",
+          "component_id": "Azure RTOS ThreadX",
+          "field": "version",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Zephyr RTOS",
+          "component_id": "pkg:generic/zephyr-rtos",
+          "field": "version",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "CNN2D_ST_HandPosture_8classes.h5",
+          "component_id": "model:Application/Network/CNN2D_ST_HandPosture_8classes.h5@sha256:df36f6e90f2ebfcb",
+          "field": "license",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        }
+      ],
+      "components": [
+        {
+          "name": "FreeRTOS"
+        },
+        {
+          "name": "Azure RTOS ThreadX"
+        },
+        {
+          "name": "Zephyr RTOS",
+          "purl": "pkg:generic/zephyr-rtos"
+        },
+        {
+          "name": "CMSIS",
+          "version": "5.1",
+          "purl": "pkg:github/ARM-software/CMSIS_5@5.1"
+        },
+        {
+          "name": "STM32F4xx-HAL-Driver",
+          "version": "1.8.5",
+          "purl": "pkg:github/STMicroelectronics/stm32f4xx-hal-driver@1.8.5"
+        },
+        {
+          "name": "CNN2D_ST_HandPosture_8classes.h5",
+          "version": "sha256:df36f6e90f2ebfcb"
+        }
+      ],
+      "raw_scan_seconds": {
+        "without": 33.24,
+        "with": 34.26
+      },
+      "sha256": {
+        "without": "31d5e42e44370085fa73b4178c0607eec2f9906520eef110a458be00293b3360",
+        "repeat": "ce2ec125ac513c9413382d0d083e96fe5e53240f0e51025e6448e8165d8bb54b",
+        "enriched": "4d423c77b16afaa9d498869f2918b2b615a6bbb265a6953f7e3b92f8cffd650f"
+      }
+    },
+    {
+      "id": "st-f7",
+      "vendor": "ST",
+      "repository": "https://github.com/STMicroelectronics/stm32f7508-dk-bsp",
+      "target": "STM32F7508-DK",
+      "commit": "c2d05137d8cf115f6b6bddb1f9cf95a885476868",
+      "target_evidence": "README.md",
+      "tracked_files": 28,
+      "submodules": "",
+      "evidence": {
+        "id": "st-f7",
+        "target": "STM32F7508-DK",
+        "match_level": "board_to_mcu",
+        "matched_vendor_identifier": "STM32F750N8",
+        "source_id": "st-longevity-10",
+        "source_url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+        "quote": "STM32F750N8 Active High-performance and DSP with FPU, Arm Cortex-M7 MCU with 64 Kbyte of Flash memory, 216 MHz CPU, Art Accelerator, L1 cache, HW crypto, SDRAM, TFT January 2036",
+        "commitment_until": "January 2036",
+        "limitations": "Official board page identifies STM32F750N8H6; longevity row is MCU base-part only. Board and MCU status are separate.",
+        "commit_source_url": "https://github.com/STMicroelectronics/stm32f7508-dk-bsp/blob/c2d05137d8cf115f6b6bddb1f9cf95a885476868/README.md",
+        "repo_evidence": [
+          "L1: # BSP STM32F7508-DK Component",
+          "L3: ![latest tag](https://img.shields.io/github/v/tag/STMicroelectronics/stm32f7508-dk.svg?color=brightgreen)",
+          "L22: This **stm32f7508-dk** MCU component repository is one element of the **STM32CubeF7** MCU embedded software package, providing the **STM32F7508-DK** BSP BOARD component part.",
+          "L26: Details about the content of this release are available in the release note [here](https://htmlpreview.github.io/?https://github.com/STMicroelectronics/stm32f7508-dk/blob/main/Release_Notes.html)."
+        ],
+        "board_evidence": {
+          "source_id": "st-f7508-board",
+          "source_url": "https://www.st.com/en/evaluation-tools/stm32f7508-dk.html",
+          "quote": "STM32F7508-DK Obsolete Out of Production.",
+          "status": "Obsolete",
+          "mcu": "STM32F750N8H6"
+        },
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "st-f7508-board",
+            "url": "https://www.st.com/en/evaluation-tools/stm32f7508-dk.html",
+            "status": 200,
+            "seconds": 0.1267309000249952,
+            "title": "STM32F7508-DK | Product - STMicroelectronics",
+            "sha256": "13fe8c1798d5d275d68b74177ba39d7c5691344fc5cf0d153037e74006049014",
+            "snapshot_path": "evidence/st-f7508-board.html"
+          },
+          {
+            "id": "st-longevity-10",
+            "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+            "status": 200,
+            "seconds": 0.3996688000042923,
+            "title": "ST 10-year product table",
+            "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+            "snapshot_path": "evidence/st-longevity-10.html",
+            "discovered_from": "st-longevity#list-btn-10"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 7.92,
+        "with": 8.74
+      },
+      "sha256": {
+        "without": "aac9cd715c4407416cd3aacd2ed3b3d54d1d8301b5c47c85af0e20b500151c90",
+        "repeat": "7de38cabca734a61c73b28594158de50382e08812ba3a19e1b810878f6c59cca",
+        "enriched": "5ab02962d90a6b418d87d448e5cf105cdd132c1a2d20adc0b1c0203d962470c6"
+      }
+    },
+    {
+      "id": "st-h7",
+      "vendor": "ST",
+      "repository": "https://github.com/STMicroelectronics/STM32H7-GettingStarted-ObjectDetection",
+      "target": "STM32H747XI",
+      "commit": "0f3cc423832ecc5e7307e1b8e5d2f7e915dc35f2",
+      "target_evidence": "Application/STM32H747I-DISCO/STM32CubeIDE/CM7/STM32H747XIHx_CM7.ld",
+      "tracked_files": 1167,
+      "submodules": "",
+      "evidence": {
+        "id": "st-h7",
+        "target": "STM32H747XI",
+        "match_level": "base_part_match",
+        "matched_vendor_identifier": "STM32H747XI",
+        "source_id": "st-longevity-10",
+        "source_url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+        "quote": "STM32H747XI Active High-performance and DSP with DP-FPU, Arm Cortex-M7 + Cortex-M4 MCU with 2MBytes of Flash memory, 1MB RAM, 480 MHz CPU, Art Accelerator, L1 cache, external memory interface, large set of peripherals, SMPS January 2036",
+        "commitment_until": "January 2036",
+        "limitations": "Exact base-part table row, not a full package/temperature ordering-code commitment.",
+        "commit_source_url": "https://github.com/STMicroelectronics/STM32H7-GettingStarted-ObjectDetection/blob/0f3cc423832ecc5e7307e1b8e5d2f7e915dc35f2/Application/STM32H747I-DISCO/STM32CubeIDE/CM7/STM32H747XIHx_CM7.ld",
+        "repo_evidence": [
+          "L7: **  Abstract    : Linker script for STM32H747XI Devices"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "st-longevity-10",
+            "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+            "status": 200,
+            "seconds": 0.3996688000042923,
+            "title": "ST 10-year product table",
+            "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+            "snapshot_path": "evidence/st-longevity-10.html",
+            "discovered_from": "st-longevity#list-btn-10"
+          }
+        ]
+      },
+      "before_count": 4,
+      "after_count": 4,
+      "inventory_equal": true,
+      "quality_status": "blocked",
+      "blockers": [
+        {
+          "component": "FreeRTOS",
+          "component_id": "FreeRTOS",
+          "field": "version",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Azure RTOS ThreadX",
+          "component_id": "Azure RTOS ThreadX",
+          "field": "version",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "Zephyr RTOS",
+          "component_id": "pkg:generic/zephyr-rtos",
+          "field": "version",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        },
+        {
+          "component": "st_ssd_mobilenet_v1_025_192_int8.tflite",
+          "component_id": "model:Application/Network/st_ssd_mobilenet_v1_025_192_int8.tflite@sha256:2194099fa5f0da71",
+          "field": "license",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        }
+      ],
+      "components": [
+        {
+          "name": "FreeRTOS"
+        },
+        {
+          "name": "Azure RTOS ThreadX"
+        },
+        {
+          "name": "Zephyr RTOS",
+          "purl": "pkg:generic/zephyr-rtos"
+        },
+        {
+          "name": "st_ssd_mobilenet_v1_025_192_int8.tflite",
+          "version": "sha256:2194099fa5f0da71"
+        }
+      ],
+      "raw_scan_seconds": {
+        "without": 53.11,
+        "with": 41.75
+      },
+      "sha256": {
+        "without": "d8f62763ebbfd5bff100faa109cb620815e0fe7c94dd621f18fd8e88d78119b5",
+        "repeat": "d9480d08612e471a937fe5b465bf9fb67eb6a4fc2c28a3e57c474f2497ffdeaf",
+        "enriched": "f865c82792cf9f986fb626ee86dd1031ef444d3ce817af610c735357ba51828c"
+      }
+    },
+    {
+      "id": "xilinx-basys",
+      "vendor": "Xilinx",
+      "repository": "https://github.com/Digilent/Basys-3-GPIO",
+      "target": "xc7a35tcpg236-1",
+      "commit": "8c509578322bd713134e5f10218cd8774202a889",
+      "target_evidence": "project_info.tcl",
+      "tracked_files": 24,
+      "submodules": "-89eeabb9bee0a05582055c16e0f0d10a0498e987 digilent-vivado-scripts",
+      "evidence": {
+        "id": "xilinx-basys",
+        "target": "xc7a35tcpg236-1",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "XC7A35T",
+        "source_id": "amd-artix7",
+        "source_url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+        "quote": "extending AMD 7 Series FPGAs and adaptive SoCs through 2040",
+        "commitment_until": "2040",
+        "limitations": "7 Series family availability only; no package/speed-grade lifecycle verdict.",
+        "commit_source_url": "https://github.com/Digilent/Basys-3-GPIO/blob/8c509578322bd713134e5f10218cd8774202a889/project_info.tcl",
+        "repo_evidence": [
+          "L4: set_property \"part\" \"xc7a35tcpg236-1\" $project_obj"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "amd-artix7",
+            "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+            "status": 200,
+            "seconds": 0.12735490000341088,
+            "title": "Artix 7 FPGAs",
+            "sha256": "e1d3c3c58be0ce6c4512edb4bf69dc06525b5d1fe78d2142a4e45c07cae124b5",
+            "snapshot_path": "evidence/amd-artix7.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 10.82,
+        "with": 10.17
+      },
+      "sha256": {
+        "without": "1d27048ff327dd0c96d65d2d4b667d9842b08c7611aae0a2228f2132cb7460ec",
+        "repeat": "ad30c8a76dafacd61a8023dfce937bc37485af1d5587adfc3942cec478068320",
+        "enriched": "5df168b0e8bdadc945a59f0b757422a7dd0f021dfdeeece52c85d733e6452c07"
+      },
+      "hbom": {
+        "status": "partial",
+        "entries": 19,
+        "quality_score": 29,
+        "top": "GPIO_demo",
+        "note": "Separate design HBOM includes HDL entities and file records, not this many physical parts. No inferred hardware target was inserted. Missing product identity/procurement fields remain."
+      }
+    },
+    {
+      "id": "xilinx-arty",
+      "vendor": "Xilinx",
+      "repository": "https://github.com/Digilent/Arty-A7-35-GPIO",
+      "target": "xc7a35ticsg324-1L",
+      "commit": "1b7200619b5b358afa97016f9ca8daca0316aa79",
+      "target_evidence": "project_info.tcl",
+      "tracked_files": 19,
+      "submodules": "-ffa3f4f7bea46dc30645e1b618701ea3806b7707 digilent-vivado-scripts",
+      "evidence": {
+        "id": "xilinx-arty",
+        "target": "xc7a35ticsg324-1L",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "XC7A35T",
+        "source_id": "amd-artix7",
+        "source_url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+        "quote": "extending AMD 7 Series FPGAs and adaptive SoCs through 2040",
+        "commitment_until": "2040",
+        "limitations": "7 Series family availability only; no package/speed-grade lifecycle verdict.",
+        "commit_source_url": "https://github.com/Digilent/Arty-A7-35-GPIO/blob/1b7200619b5b358afa97016f9ca8daca0316aa79/project_info.tcl",
+        "repo_evidence": [
+          "L4: set_property \"part\" \"xc7a35ticsg324-1L\" $project_obj"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "amd-artix7",
+            "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+            "status": 200,
+            "seconds": 0.12735490000341088,
+            "title": "Artix 7 FPGAs",
+            "sha256": "e1d3c3c58be0ce6c4512edb4bf69dc06525b5d1fe78d2142a4e45c07cae124b5",
+            "snapshot_path": "evidence/amd-artix7.html"
+          }
+        ]
+      },
+      "before_count": 0,
+      "after_count": 0,
+      "inventory_equal": true,
+      "quality_status": "passed",
+      "blockers": [],
+      "components": [],
+      "raw_scan_seconds": {
+        "without": 10.94,
+        "with": 9.78
+      },
+      "sha256": {
+        "without": "32cad6df979c381c165ad5b34fc6026b3325f6df4231a21e811993e3266be4c1",
+        "repeat": "017d4fce20f7cc233f36bbd0d2169349631a67810fd2b413be776c4d9ad12b1f",
+        "enriched": "e0e18e71a9fed8abb513982aab2f5c05620c66c9c602598862b10092f067038e"
+      },
+      "hbom": {
+        "status": "partial",
+        "entries": 8,
+        "quality_score": 14,
+        "top": "GPIO_demo",
+        "note": "Separate design HBOM includes HDL entities and file records, not this many physical parts. No inferred hardware target was inserted. Missing product identity/procurement fields remain."
+      }
+    },
+    {
+      "id": "xilinx-zybo",
+      "vendor": "Xilinx",
+      "repository": "https://github.com/Digilent/Zybo-Z7-20-pcam-5c",
+      "target": "xc7z020clg400-1",
+      "commit": "5f808263943eb0aa1aede6025e5966ace33f7e0f",
+      "target_evidence": "project_info.tcl",
+      "tracked_files": 88,
+      "submodules": "-5dee436ae7810e2fa098d298308567c73736a639 digilent-vivado-scripts\n-7257aef09a87c0535952a75421913234d2f7f0a0 repo/vivado-library",
+      "evidence": {
+        "id": "xilinx-zybo",
+        "target": "xc7z020clg400-1",
+        "match_level": "family_mapping",
+        "matched_vendor_identifier": "Z-7020",
+        "source_id": "amd-zynq7000",
+        "source_url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-7000.html",
+        "quote": "extending AMD 7 Series FPGAs and adaptive SoCs through 2040",
+        "commitment_until": "2040",
+        "limitations": "Zynq-7000 family availability only; no package/speed-grade lifecycle verdict.",
+        "commit_source_url": "https://github.com/Digilent/Zybo-Z7-20-pcam-5c/blob/5f808263943eb0aa1aede6025e5966ace33f7e0f/project_info.tcl",
+        "repo_evidence": [
+          "L4: set_property \"part\" \"xc7z020clg400-1\" $project_obj"
+        ],
+        "retrieved_at": "2026-09-21T07:40:53.716729+00:00",
+        "review_status": "experimental_candidate_not_procurement_approval",
+        "source_snapshots": [
+          {
+            "id": "amd-zynq7000",
+            "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-7000.html",
+            "status": 200,
+            "seconds": 0.10205039998982102,
+            "title": "Zynq 7000 SoCs",
+            "sha256": "6140ced14d579932357e651e23cd740772097a91824e25e04b9f77129371b620",
+            "snapshot_path": "evidence/amd-zynq7000.html"
+          }
+        ]
+      },
+      "before_count": 1,
+      "after_count": 1,
+      "inventory_equal": true,
+      "quality_status": "blocked",
+      "blockers": [
+        {
+          "component": "vivado-library",
+          "component_id": "pkg:github/Digilent/vivado-library@7257aef09a87c0535952a75421913234d2f7f0a0",
+          "field": "license",
+          "observed_value": "\u003cmissing>",
+          "reason": "no valid component-specific approval was found"
+        }
+      ],
+      "components": [
+        {
+          "name": "vivado-library",
+          "version": "7257aef09a87",
+          "purl": "pkg:github/Digilent/vivado-library@7257aef09a87c0535952a75421913234d2f7f0a0"
+        }
+      ],
+      "raw_scan_seconds": {
+        "without": 14.41,
+        "with": 11.9
+      },
+      "sha256": {
+        "without": "168373a81a8de18231d7387be080828662c70b1b84467028665d28bc261f564a",
+        "repeat": "16bf745d033214f5c849a062b1721e2cbfa61810eea4d1917dc373f6e0a1fb74",
+        "enriched": "30b597ad0ca058733df870b8bd5f1e2aa23d85f403907396540cdb30211dabf5"
+      },
+      "hbom": {
+        "status": "blocked",
+        "note": "No authoritative top module in initial scan; generated system_wrapper absent from checkout. No wrapper fabricated and no Vivado build executed."
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "nxp-longevity",
+      "url": "https://www.nxp.com/products/nxp-product-information/nxp-product-programs/product-longevity:PRDCT_LONGEVITY_HM",
+      "status": 200,
+      "seconds": 0.4256306000170298,
+      "title": "Product Longevity | NXP Semiconductors",
+      "sha256": "413abaa40f30f80bf9320c28844689c309c8ad6578dab39f5279e6ccf5c73a2b",
+      "snapshot_path": "evidence/nxp-longevity.html"
+    },
+    {
+      "id": "st-longevity",
+      "url": "https://www.st.com/content/st_com/en/about/quality-and-reliability/product-longevity.html",
+      "status": 200,
+      "seconds": 0.1524088000296615,
+      "title": "Product longevity - STMicroelectronics",
+      "sha256": "b14716f8e406bb4a7c6333881d26672b7246d5ece9042d0cfa309a218d527b48",
+      "snapshot_path": "evidence/st-longevity.html"
+    },
+    {
+      "id": "amd-artix7",
+      "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/fpga/artix-7.html",
+      "status": 200,
+      "seconds": 0.12735490000341088,
+      "title": "Artix 7 FPGAs",
+      "sha256": "e1d3c3c58be0ce6c4512edb4bf69dc06525b5d1fe78d2142a4e45c07cae124b5",
+      "snapshot_path": "evidence/amd-artix7.html"
+    },
+    {
+      "id": "amd-zynq7000",
+      "url": "https://www.amd.com/en/products/adaptive-socs-and-fpgas/soc/zynq-7000.html",
+      "status": 200,
+      "seconds": 0.10205039998982102,
+      "title": "Zynq 7000 SoCs",
+      "sha256": "6140ced14d579932357e651e23cd740772097a91824e25e04b9f77129371b620",
+      "snapshot_path": "evidence/amd-zynq7000.html"
+    },
+    {
+      "id": "st-f7508-board",
+      "url": "https://www.st.com/en/evaluation-tools/stm32f7508-dk.html",
+      "status": 200,
+      "seconds": 0.1267309000249952,
+      "title": "STM32F7508-DK | Product - STMicroelectronics",
+      "sha256": "13fe8c1798d5d275d68b74177ba39d7c5691344fc5cf0d153037e74006049014",
+      "snapshot_path": "evidence/st-f7508-board.html"
+    },
+    {
+      "id": "st-longevity-10",
+      "url": "https://www.st.com/content/st_com_cx/en/about/quality-and-reliability/product-longevity/jcr:content.content.10_0.html",
+      "status": 200,
+      "seconds": 0.3996688000042923,
+      "title": "ST 10-year product table",
+      "sha256": "a905980dedadd07fbcff9d15315381153586775717791abc76fd4b6518a5003e",
+      "snapshot_path": "evidence/st-longevity-10.html",
+      "discovered_from": "st-longevity#list-btn-10"
+    }
+  ],
+  "trials": [
+    {
+      "source_id": "nxp-longevity",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.42,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 1,
+      "method": "requests",
+      "status": 200,
+      "seconds": 0.5551,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 2,
+      "method": "requests",
+      "status": 200,
+      "seconds": 0.5363,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.4515,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.4048,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "nxp-longevity",
+      "trial": 3,
+      "method": "requests",
+      "status": 200,
+      "seconds": 0.6089,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2208,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 1,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.3212,
+      "error": "HTTPSConnectionPool(host='www.st.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 2,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2749,
+      "error": "HTTPSConnectionPool(host='www.st.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2602,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2156,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "st-longevity",
+      "trial": 3,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2864,
+      "error": "HTTPSConnectionPool(host='www.st.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2797,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 1,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.3178,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 2,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2677,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.2861,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1137,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-artix7",
+      "trial": 3,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2882,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 1,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1137,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 1,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2757,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 2,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.351,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 2,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1259,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 3,
+      "method": "scrapling",
+      "status": 200,
+      "seconds": 0.1683,
+      "error": null,
+      "valid_content": true
+    },
+    {
+      "source_id": "amd-zynq7000",
+      "trial": 3,
+      "method": "requests",
+      "status": null,
+      "seconds": 15.2993,
+      "error": "HTTPSConnectionPool(host='www.amd.com', port=443): Read timed out. (read timeout=15)",
+      "valid_content": false
+    }
+  ]
+}</script>
+<script>
+const data=JSON.parse(document.getElementById('report-data').textContent);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const link=(url,label=url)=>`<a href="${esc(url)}" target="_blank" rel="noopener">${esc(label)}</a>`;
+const projects=data.projects;
+const titles=[];
+function slide(title,body){titles.push(title);document.getElementById('track').insertAdjacentHTML('beforeend',`<section class="slide" aria-label="${esc(title)}"><div class="inner">${body}</div></section>`)}
+const sourceLinks=e=>`${link(e.source_url)}${e.board_evidence?link(e.board_evidence.source_url):''}`;
+slide('Verdict',`<div class="eyebrow">9 public repositories · 18 actual scans · 3 silicon ecosystems</div>
+<h1>Better vendor evidence.<br><span class="accent">Not a better inventory.</span></h1>
+<p class="lead">Does Scrapling help SBOMator? Yes, as an optional collector for hardware lifecycle evidence. In this experiment it did not discover a single additional software component.</p>
+<div class="stats"><div class="card"><div class="metric">3 × 3</div><div class="label">NXP · ST · AMD/Xilinx</div></div><div class="card"><div class="metric">9 / 9</div><div class="label">Component inventories unchanged</div></div><div class="card"><div class="metric">+0</div><div class="label">Software components added</div></div><div class="card warn"><div class="metric">1</div><div class="label">Board-obsolescence warning found</div></div></div>
+<div class="alert"><strong>This is not a native “Scrapling on/off” switch.</strong> Two identical baseline scans per repository, followed by an experimental evidence attachment to the second output. Hardware targets were manually selected from pinned source files.</div>
+<a class="btn" href="scan-artifacts.zip" download>Download all paired SBOMs</a><a class="btn" href="comparison.json" download>Download measured data</a><p id="hint">← Swipe to navigate →</p>`);
+slide('All nine comparisons',`<div class="eyebrow">Measured outcome / click a project for evidence</div><h2>Same components. Additional context.</h2><p class="muted">Counts exclude the top-level product. “With” adds project-level vendor evidence, not extra component records.</p><div class="table-scroll"><table><thead><tr><th>Project / target</th><th>Without</th><th>With</th><th>Vendor commitment*</th><th>Scope / warning</th></tr></thead><tbody>${projects.map((p,i)=>`<tr><td><button class="rowbtn" data-go="${i+3}">${esc(p.id)}</button><br><small>${esc(p.target)}</small></td><td>${p.before_count}</td><td>${p.after_count}</td><td>${esc(p.evidence.commitment_until)}</td><td>${esc(p.evidence.match_level.replaceAll('_',' '))}${p.evidence.board_evidence?'<br><strong class="warning">Board: obsolete</strong>':''}</td></tr>`).join('')}</tbody></table></div><p class="small">*Commitment is not an EOL date, stock guarantee, or approval for every ordering code. K22 applicability remains conditional. The ST F7 date is for the MCU, not its obsolete board.</p><div class="alert"><strong>Six inventories contain zero components.</strong> This is a coverage limitation, not proof of zero dependencies. ST F4/H7 include unconfirmed RTOS heuristic detections; three scans retain unresolved quality-gate blockers.</div>`);
+slide('Method and boundaries',`<div class="eyebrow">Reproducibility</div><h2>What “with Scrapling” actually means</h2><div class="grid"><div class="card"><h3>1. Freeze and scan</h3><ul><li>9 public repositories, commits pinned in every project slide.</li><li>SBOMator ${esc(data.scanner.version)}, existing dirty development tree; source hashes checked unchanged throughout.</li><li>Two comprehensive CLI scans per checkout with identical options.</li><li>Top-level sources only. No builds, no submodule checkout.</li></ul></div><div class="card good"><h3>2. Collect and attach</h3><ul><li>Scrapling ${esc(data.scrapling_version)} Fetcher, ordinary HTTP fetching, no browser or CAPTCHA handling.</li><li>Reviewed hardware query mappings; dates and quotes extracted from actual HTML rows.</li><li>Attach one <code>experiment:scrapling:project_hardware_evidence</code> metadata property to the second SBOM.</li><li>Preserve component fields and quality blockers exactly.</li></ul></div></div><p><code>--source-type local_folder --generator comprehensive --no-lockfile --skip-db-update --no-cve --no-grype --no-report</code></p><div class="alert">The baseline intentionally skips online lifecycle/CVE services. This tests adding vendor evidence to that baseline, not Scrapling versus every existing SBOMator online provider. CVE exposure and security posture were not assessed.</div><p class="small">The ZIP contains the first raw scan, second raw scan, and enriched second scan for each project. Inventory equality ignores component order only. Raw scan durations are recorded, but warm caches and concurrency prevent a valid scan-speed comparison.</p>`);
+projects.forEach(p=>{
+const e=p.evidence;
+const issue=p.before_count===0?'Empty inventory: dependencies may be omitted.':p.id==='xilinx-zybo'?'vivado-library is an unpopulated submodule reference, not scanned source.':'Includes heuristic RTOS hits that are not validated runtime dependencies.';
+slide(p.id,`<div class="eyebrow">${esc(p.vendor)} / ${esc(p.target)}</div><h2>${esc(p.repository.split('/').pop())}</h2><div class="repo">${link(p.repository)}Pinned commit: ${link(p.repository+'/commit/'+p.commit,p.commit)} · ${p.tracked_files} tracked files</div><div class="grid"><div class="card"><div class="compare-label">WITHOUT SCRAPLING / RAW SCANNER OUTPUT</div><h3>${p.before_count} software/model component records</h3><p>${esc(issue)}</p><p>Vendor webpage evidence: <strong>not collected</strong>.</p><p>Quality gate: <strong class="${p.blockers.length?'warning':''}">${esc(p.quality_status)}</strong>${p.blockers.length?' · '+p.blockers.length+' unresolved fields':''}.</p><p class="small">A gate pass on an empty inventory does not establish completeness. Advisory mode exported artifacts even when blocked.</p>${p.components.length?`<details><summary>Observed component names</summary><ul class="small">${p.components.map(c=>`<li>${esc(c.name)} · ${esc(c.version||'version missing')}</li>`).join('')}</ul></details>`:''}</div><div class="card ${e.board_evidence?'bad':'good'}"><div class="compare-label">WITH SCRAPLING / EXPERIMENTAL ENRICHMENT</div><h3>${p.after_count} components <span class="muted">→ no inventory change</span></h3><p>Vendor commitment: <strong class="accent">${esc(e.commitment_until)}</strong></p>${e.board_evidence?'<p class="warning"><strong>STM32F7508-DK board: obsolete / out of production.</strong><br>The date above applies to its STM32F750N8 MCU only.</p>':''}<span class="pill">${esc(e.match_level.replaceAll('_',' '))}</span><p>${esc(e.limitations)}</p><p class="small">No licenses, versions, security findings, or quality blockers were repaired.</p></div></div><div class="quote">“${esc(e.quote)}”${e.board_evidence?'<br>“'+esc(e.board_evidence.quote)+'”':''}</div><div class="sources">${sourceLinks(e)}</div><details><summary>Source identity and limitations</summary><p>${link(e.commit_source_url)}</p><code>${esc(e.repo_evidence.join('\n'))}</code>${p.vendor==='NXP'?'<p>The repository contains many devices. This target is one representative mapping, not coverage of the entire repository. Existing vendor SPDX documents were not automatically imported.</p>':''}${p.hbom?`<p>Supplemental HBOM: <strong>${esc(p.hbom.status)}</strong>${p.hbom.entries?' · '+p.hbom.entries+' design entries · quality '+p.hbom.quality_score+'/100':''}. ${esc(p.hbom.note)}</p>`:''}<p>Submodules: ${esc(p.submodules||'none recorded')}. Retrieved ${esc(e.retrieved_at)}.</p></details>`);
+});
+const trialRows=['nxp-longevity','st-longevity','amd-artix7','amd-zynq7000'].map(id=>{const ts=data.trials.filter(t=>t.source_id===id);return `<tr><td>${esc(id)}</td>${['requests','scrapling'].map(m=>{const x=ts.filter(t=>t.method===m);return `<td>${x.filter(t=>t.valid_content).length} / ${x.length}</td><td>${(x.reduce((n,t)=>n+t.seconds,0)/x.length).toFixed(2)} s</td>`}).join('')}</tr>`}).join('');
+slide('HTTP retrieval experiment',`<div class="eyebrow">Separate experiment / default HTTP clients on this machine</div><h2>Scrapling reached more vendor pages.</h2><p class="lead">${data.trials.filter(t=>t.method==='scrapling'&&t.valid_content).length}/12 valid Scrapling responses versus ${data.trials.filter(t=>t.method==='requests'&&t.valid_content).length}/12 with Python requests.</p><div class="table-scroll"><table><thead><tr><th>Page</th><th>Requests valid</th><th>Mean elapsed*</th><th>Scrapling valid</th><th>Mean elapsed*</th></tr></thead><tbody>${trialRows}</tbody></table></div><div class="grid"><div class="card"><h3>Controlled</h3><p>Same four URLs, three trials per client, alternating order, 15-second timeout, no Scrapling retries. Success requires HTTP 200 and a relevant body marker.</p><p class="small">*Elapsed includes timeouts. It is not a successful-request latency comparison or an SBOM scan benchmark.</p></div><div class="card warn"><h3>Not proven</h3><p>Nine plain requests timed out. This does not prove anti-bot blocking. No tuned requests headers, alternative HTTP clients, other networks, or long-term reliability were compared.</p><p class="small">ST's product data required following its 10-year tab HTML endpoint. The 12-trial measurement covers the main page, not that extra endpoint or the board page.</p></div></div>`);
+slide('HBOM and quality gaps',`<div class="eyebrow">Do not mistake successful export for complete coverage</div><h2>Scraping does not repair the BOM.</h2><div class="grid"><div class="card warn"><h3>Software inventory</h3><ul><li>All three NXP repositories, ST F7 BSP, Basys and Arty exported zero component inventories.</li><li>ST F4 and H7 each retain four blockers: three missing RTOS versions and one missing model license.</li><li>Zybo retains one missing submodule license.</li><li>Heuristic FreeRTOS, ThreadX and Zephyr detections require review. No dependency builds were validated.</li></ul></div><div class="card warn"><h3>Supplemental design HBOM</h3><ul><li>Basys: 19 records, quality 29/100. Arty: 8 records, quality 14/100. These include HDL entities and file hashes, not just physical parts.</li><li>Both required explicit <code>GPIO_demo</code> top selection, supported by the README and VHDL.</li><li>Zybo blocked: generated <code>system_wrapper</code> absent.</li><li>Part identity from Tcl was reviewed separately; procurement, exact ordering-code status and approval remain unresolved.</li></ul></div></div><div class="alert">The vendor evidence is attached at project metadata level because the standard SBOMs do not contain identified hardware components. It is not silently relabelled as authoritative component lifecycle data.</div>`);
+slide('Product recommendation',`<div class="eyebrow">Decision for SBOMator</div><h2>Use it as an evidence collector,<br>with explicit review boundaries.</h2><div class="grid"><div class="card good"><h3>Useful now</h3><ul><li>Fetch official lifecycle, longevity and product-status pages when ordinary HTTP retrieval fails.</li><li>Preserve source URL, quote, retrieval timestamp, HTML hash and matching scope.</li><li>Surface contradictions such as obsolete board versus active MCU.</li></ul></div><div class="card"><h3>Required before integration</h3><ul><li>Resolve exact manufacturer part numbers before applying component-level status.</li><li>Separate family, base-part, full ordering-code and board evidence.</li><li>Prefer official APIs/downloads; respect site terms and rate limits. Cache evidence and flag stale or changed rows.</li><li>Do not infer EOL, CVEs or procurement approval from availability commitments.</li></ul></div></div><p class="lead">Recommended: an optional HBOM enrichment adapter. Not a replacement for dependency discovery, SPDX import, license analysis, vendor advisories, or supplier confirmation.</p><a class="btn" href="scan-artifacts.zip" download>Download 27 SBOM artifacts + data</a><a class="btn" href="comparison.json" download>Evidence, hashes and trials</a><p class="small">Results reflect the selected source-only checkouts and vendor pages as retrieved on 21 September 2026. No native product code was changed.</p>`);
+const slides=[...document.querySelectorAll('.slide')],jump=document.getElementById('jump');
+titles.forEach((title,i)=>jump.add(new Option(`${i+1}. ${title}`,i)));
+let current=0;
+function go(n){current=Math.max(0,Math.min(slides.length-1,n));document.getElementById('track').style.transform=`translateX(-${current*100}vw)`;slides.forEach((s,i)=>{s.inert=i!==current;s.setAttribute('aria-hidden',String(i!==current))});jump.value=current;document.getElementById('prev').hidden=current===0;document.getElementById('next').hidden=current===slides.length-1;document.getElementById('counter').textContent=`${current+1} / ${slides.length}`;document.getElementById('progress').style.width=`${(current+1)/slides.length*100}%`;if(current)document.getElementById('hint').hidden=true;history.replaceState(null,'',`#${current+1}`)}
+document.getElementById('prev').onclick=()=>go(current-1);document.getElementById('next').onclick=()=>go(current+1);jump.onchange=()=>go(Number(jump.value));document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(Number(b.dataset.go)));
+document.addEventListener('keydown',e=>{if(e.target.closest('select,input,textarea,button,a,summary'))return;if(['ArrowRight','ArrowLeft',' '].includes(e.key)){e.preventDefault();go(current+(e.key==='ArrowLeft'?-1:1))}});
+let start=null;
+function begin(x,y,target){start=target.closest('a,button,select,summary,.table-scroll')?null:{x,y}}
+function end(x,y){if(start&&Math.abs(x-start.x)>50&&Math.abs(x-start.x)>Math.abs(y-start.y))go(current+(x<start.x?1:-1));start=null}
+document.addEventListener('touchstart',e=>begin(e.touches[0].clientX,e.touches[0].clientY,e.target),{passive:true});document.addEventListener('touchend',e=>end(e.changedTouches[0].clientX,e.changedTouches[0].clientY),{passive:true});document.addEventListener('mousedown',e=>{if(e.button===0)begin(e.clientX,e.clientY,e.target)});document.addEventListener('mouseup',e=>{if(e.button===0)end(e.clientX,e.clientY)});
+go(Number(location.hash.slice(1))-1||0);
+</script>
+</body>
+</html>
