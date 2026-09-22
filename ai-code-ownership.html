@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" content="Five conversation starters on AI-generated code, counterexamples, observability debt, atomicity, learning loops and durable code ownership.">
+<title>Code Is Cheap. Understanding Is Earned.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#0b111a;--panel:#131f2d;--text:#eef3f7;--muted:#adbdcb;--mint:#8de8c0;--line:#2b3c4d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;overflow:hidden}a{color:var(--mint);text-underline-offset:4px}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--mint);outline-offset:5px}
+header{position:fixed;inset:0 0 auto;z-index:3;height:64px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:var(--bg);font-size:12px;letter-spacing:.12em;text-transform:uppercase}header span{color:var(--muted)}
+.deck{display:flex;transition:transform .4s ease;touch-action:pan-y}
+.slide{flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;padding:94px max(6vw,64px) 80px;background:radial-gradient(ellipse at 95% 15%,#1b393332,transparent 55%)}
+.inner{max-width:1260px;margin:auto;height:100%;overflow-y:auto;display:flex;flex-direction:column;justify-content:safe center}
+.inner>*{flex-shrink:0}
+.eyebrow{color:var(--mint);font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin:0 0 16px}
+h1{font-size:clamp(36px,6.4vw,88px);line-height:1.04;letter-spacing:-.055em;max-width:1000px;margin:0 0 24px}h1 em{font-style:normal;color:var(--mint)}
+h2{font-size:clamp(28px,3.2vw,46px);line-height:1.1;letter-spacing:-.035em;margin:0 0 24px;max-width:1000px}
+p{font-size:clamp(15px,1.35vw,19px);line-height:1.65;margin:0 0 16px;color:var(--muted)}strong{color:var(--text)}.lead{max-width:840px;font-size:clamp(18px,2vw,25px)}
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:36px;align-items:start}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px}.panel p:last-child{margin-bottom:0}
+.takeaway{margin-top:20px;padding:16px 0 0;border-top:1px solid var(--line);font-size:clamp(17px,1.65vw,23px);line-height:1.45;color:var(--text)}
+pre{margin:0 0 18px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:clamp(12px,1.08vw,16px);line-height:1.75;color:#b9f5d9;font-family:Consolas,monospace}code{font-family:Consolas,monospace}
+.copy{align-self:flex-start;background:var(--mint);color:#0b211b;border:0;border-radius:8px;padding:11px 16px;font-weight:700;margin-top:16px;font-size:13px}.copy:hover{background:#b3f6d8}
+.topics{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}.topics span{border:1px solid var(--line);border-radius:100px;padding:9px 14px;font-size:13px;color:var(--muted)}
+.small{font-size:12px;line-height:1.6}.source{margin-top:18px;max-width:900px}
+.nav{position:fixed;z-index:4;top:50%;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:#172332;color:var(--text);font-size:30px;line-height:1}.nav:hover{border-color:var(--mint)}#prev{left:12px}#next{right:12px}[hidden]{display:none!important}
+footer{position:fixed;bottom:5px;left:0;right:0;padding:18px 5vw;display:flex;justify-content:space-between;gap:20px;background:var(--bg);z-index:3;color:var(--muted);font-size:12px}
+#progress{position:fixed;bottom:0;left:0;height:5px;background:linear-gradient(90deg,#68b8f4,var(--mint));transition:width .4s;z-index:5}#hint{color:var(--mint);animation:pulse 2s infinite}@keyframes pulse{50%{opacity:.45}}
+@media(max-width:700px){header{padding:0 20px;font-size:10px}header span{display:none}.slide{padding:88px 26px 95px}.inner{justify-content:flex-start}.grid{grid-template-columns:1fr;gap:16px}.panel{padding:18px}h2{margin-bottom:20px}.nav{top:auto;bottom:16px;width:34px;height:34px;font-size:25px}#prev{left:12px}#next{right:12px}footer{padding:18px 58px;font-size:10px}.topics{gap:7px}.topics span{font-size:11px}.takeaway{margin-top:12px}.copy{margin-top:12px}}
+@media(prefers-reduced-motion:reduce){.deck,#progress{transition:none}#hint{animation:none}}
+</style>
+</head>
+<body>
+<header><a href="index.html">Engineering notes</a><span>AI-assisted engineering / five perspectives</span></header>
+<main class="deck" id="deck">
+<section class="slide" aria-label="Introduction">
+<div class="inner">
+<p class="eyebrow">Beyond “engineers still matter”</p>
+<h1>Code is cheap.<br><em>Understanding<br>is earned.</em></h1>
+<p class="lead">Five comments on what code ownership means when a plausible implementation arrives before a reliable mental model.</p>
+<div class="topics"><span>Counterexamples</span><span>Observability debt</span><span>Atomicity</span><span>Learning loops</span><span>Durable ownership</span></div>
+<p class="source small">Discussion companion to Michal Stawarz’s “Engineering Leadership in the AI Era, Part 5.”<br>Original post: <a href="https://lnkd.in/p/dTEM2d2a" target="_blank" rel="noopener noreferrer">https://lnkd.in/p/dTEM2d2a</a><br>These are proposed responses, not quotations from the author. Code samples are illustrative, not the rejected PR or complete production implementations.</p>
+<p class="small">Read a perspective, copy the comment, and adapt it to your voice.</p>
+</div></section>
+<section class="slide" aria-label="Counterexamples">
+<div class="inner"><p class="eyebrow">01 / Recommended conversation starter</p>
+<article class="comment"><h2>Ask for a counterexample,<br>not just an explanation.</h2>
+<div class="grid"><div>
+<p>Michal, I’d add one requirement to code ownership: <strong>explain a scenario where your fix would be wrong.</strong></p>
+<p>An explanation can be generated as easily as an implementation. A counterexample makes the assumptions testable.</p>
+<p>Take duplicate payments. Disabling the submit button looks reasonable. But what happens if the server charges the customer and the response is lost? The user retries. The button guard cannot tell whether the first payment succeeded.</p>
+</div><div class="panel"><pre><code>if (isSubmitting) return;
+setIsSubmitting(true);
+await submitPayment();</code></pre>
+<p>Now the engineering question becomes: how does the server recognize the same payment intent across retries? That requires a durable idempotency mechanism, not just a UI change.</p></div></div>
+<p class="takeaway">The revealing review question isn’t “Does this work?” It’s “What sequence of events would make this look correct while still failing?”</p>
+<p>That tests understanding much better than a polished explanation.</p></article><button class="copy" type="button">Copy comment</button>
+</div></section>
+<section class="slide" aria-label="Observability debt">
+<div class="inner"><p class="eyebrow">02 / The silent failure</p>
+<article class="comment"><h2>Some fixes remove the evidence,<br>not the defect.</h2>
+<div class="grid"><div>
+<p>One subtle danger is that a patch can improve the dashboard while making the system less truthful.</p>
+<p>The exception disappears. The financial total may now be wrong.</p>
+<p>Neither behavior is automatically the right product experience. The important question is whether <strong>“unknown amount” is allowed to mean “zero amount.”</strong> If not, the system needs an explicit incomplete-data state, rejection, or correction upstream.</p>
+</div><div class="panel"><pre><code># Before: missing data fails visibly.
+total = sum(order["amount"]
+            for order in orders)
+
+# "Fix": missing data becomes zero.
+total = sum(order.get("amount", 0)
+            for order in orders)</code></pre>
+<p>I’d call this <strong>observability debt</strong>: we make the system look healthier by removing its ability to tell us something is wrong.</p></div></div>
+<p class="takeaway">A useful review question: “Did this change eliminate the invalid state, handle it honestly, or merely hide it?”</p></article><button class="copy" type="button">Copy comment</button>
+</div></section>
+<section class="slide" aria-label="Atomicity">
+<div class="inner"><p class="eyebrow">03 / The boundary of correctness</p>
+<article class="comment"><h2>The correct fix may live<br>outside the changed function.</h2>
+<div class="grid"><div>
+<p>Your example also highlights why reviewing only the diff is insufficient.</p>
+<p>Suppose inventory occasionally becomes negative. A local stock check looks sensible. But two requests can both read the last available item before either updates it. Adding another local condition does not solve that race.</p>
+<p>For a simple single-row inventory model, the operation could instead be expressed atomically. <strong>The caller must check whether one row was updated</strong> before treating the reservation as successful.</p>
+</div><div class="panel"><pre><code># A local check is not atomic.
+if stock &gt; 0:
+    stock -= 1</code></pre>
+<pre><code>UPDATE inventory
+SET stock = stock - 1
+WHERE product_id = :product_id
+  AND stock &gt; 0;</code></pre>
+<p>Correctness depends on <strong>where the rule is enforced</strong>, not how convincing the local code looks.</p></div></div>
+<p class="takeaway">AI can make a function more elegant while leaving the system-level failure untouched. Review needs to follow the state across requests and storage, not stop at the function boundary.</p></article><button class="copy" type="button">Copy comment</button>
+</div></section>
+<section class="slide" aria-label="Learning loops">
+<div class="inner"><p class="eyebrow">04 / A better use of the agent</p>
+<article class="comment"><h2>AI can compress the learning loop too,<br>if we ask for the right work.</h2>
+<div class="grid"><div>
+<p>I agree that implementation used to force some learning to happen. But writing everything manually was never a guarantee of understanding either.</p>
+<p>The opportunity is to use AI to accelerate investigation, not just construction. Instead of immediately asking for a patch, ask:</p>
+<p>For an intermittent timeout, for example, slow queries and connection-pool exhaustion can produce similar symptoms but require different fixes.</p>
+</div><div class="panel"><pre><code>Identify two plausible causes.
+Find an observation that distinguishes them.
+Build a minimal reproduction.
+Predict the result before running it.
+Then propose the smallest supported fix.</code></pre>
+<p>The important distinction is <strong>a plausible story versus a prediction checked against the system.</strong></p></div></div>
+<p class="takeaway">Perhaps the new engineering skill is designing learning loops that are faster than coding loops.</p></article><button class="copy" type="button">Copy comment</button>
+</div></section>
+<section class="slide" aria-label="Durable ownership">
+<div class="inner"><p class="eyebrow">05 / After the handover</p>
+<article class="comment"><h2>An FDE’s understanding must<br>survive their departure.</h2>
+<div class="grid"><div>
+<p>The Forward Deployed Engineering connection is interesting, but I’d separate acquiring context from leaving it behind.</p>
+<p>An FDE might discover that “one customer” means a legal entity to finance, an account to sales, and a subscription to the application. A technically correct integration can still reconcile the wrong things.</p>
+<p>The valuable output isn’t just working code. It is that distinction captured in the data model, examples, tests, and operational documentation.</p>
+</div><div class="panel">
+<p>Otherwise, the organisation has temporarily <strong>rented someone’s understanding.</strong></p>
+<p>A useful success criterion would be: can the permanent team diagnose the next failure without calling the original implementer?</p>
+</div></div>
+<p class="takeaway">Code ownership becomes durable when understanding is transferred, not merely demonstrated.</p></article><button class="copy" type="button">Copy comment</button>
+<p class="source small">Continue the discussion: <a href="https://lnkd.in/p/dTEM2d2a" target="_blank" rel="noopener noreferrer">https://lnkd.in/p/dTEM2d2a</a></p>
+</div></section>
+</main>
+<button class="nav" id="prev" aria-label="Previous slide" hidden>‹</button>
+<button class="nav" id="next" aria-label="Next slide">›</button>
+<footer><span id="hint">← Swipe to navigate →</span><span id="status" role="status" aria-live="polite"></span><span id="counter" aria-live="polite">1 / 6</span></footer>
+<div id="progress" aria-hidden="true"></div>
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+const deck = document.getElementById('deck');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+let current = 0;
+function show(index) {
+  current = Math.max(0, Math.min(slides.length - 1, index));
+  deck.style.transform = `translateX(-${current * 100}vw)`;
+  slides.forEach((slide, i) => { slide.inert = i !== current; slide.setAttribute('aria-hidden', String(i !== current)); });
+  prev.hidden = current === 0;
+  next.hidden = current === slides.length - 1;
+  document.getElementById('counter').textContent = `${current + 1} / ${slides.length}`;
+  document.getElementById('progress').style.width = `${(current + 1) / slides.length * 100}%`;
+  if (current > 0) document.getElementById('hint').hidden = true;
+  document.getElementById('status').textContent = '';
+}
+prev.addEventListener('click', () => show(current - 1));
+next.addEventListener('click', () => show(current + 1));
+document.addEventListener('keydown', event => {
+  if (event.target.closest('input, textarea, select, [contenteditable]')) return;
+  if (event.key === ' ' && event.target.closest('button, a')) return;
+  if (['ArrowRight', 'ArrowLeft', ' '].includes(event.key)) {
+    event.preventDefault();
+    show(current + (event.key === 'ArrowLeft' ? -1 : 1));
+  }
+});
+let start = null;
+function begin(x, y, target) {
+  start = target.closest('button, a, pre, code') ? null : { x, y };
+}
+function end(x, y) {
+  if (!start) return;
+  const dx = x - start.x;
+  const dy = y - start.y;
+  start = null;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) && !window.getSelection().toString()) show(current + (dx < 0 ? 1 : -1));
+}
+deck.addEventListener('touchstart', e => begin(e.touches[0].clientX, e.touches[0].clientY, e.target), {passive:true});
+deck.addEventListener('touchend', e => end(e.changedTouches[0].clientX, e.changedTouches[0].clientY), {passive:true});
+deck.addEventListener('touchcancel', () => { start = null; });
+deck.addEventListener('mousedown', e => { if (e.button === 0) begin(e.clientX, e.clientY, e.target); });
+document.addEventListener('mouseup', e => end(e.clientX, e.clientY));
+document.querySelectorAll('.copy').forEach(button => button.addEventListener('click', async () => {
+  const article = button.previousElementSibling;
+  const text = [...article.querySelectorAll('h2, p, pre')].map(el => el.innerText).join('\n\n');
+  try {
+    await navigator.clipboard.writeText(text);
+    document.getElementById('status').textContent = 'Comment copied';
+  } catch {
+    const range = document.createRange();
+    range.selectNodeContents(article);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+    document.getElementById('status').textContent = 'Text selected. Copy using your device’s copy command.';
+  }
+}));
+show(0);
+</script>
+</body>
+</html>
