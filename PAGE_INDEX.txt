@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-09-21
+Last updated: 2026-09-22
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -292,6 +292,9 @@ Last updated: 2026-09-21
 
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
+
+• jev-cost-of-being-wrong
+  https://zuwasi.github.io/Public-html-pages/jev-cost-of-being-wrong
 
 • jev-decision-safeguards
   https://zuwasi.github.io/Public-html-pages/jev-decision-safeguards
