@@ -332,6 +332,9 @@ Last updated: 2026-09-22
 • parasoft-ti-armclang-misra-setup
   https://zuwasi.github.io/Public-html-pages/parasoft-ti-armclang-misra-setup
 
+• prediction-is-not-permission
+  https://zuwasi.github.io/Public-html-pages/prediction-is-not-permission
+
 • sbomator-cra-reporting-demo
   https://zuwasi.github.io/Public-html-pages/sbomator-cra-reporting-demo
 
