@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Same Probability. Different Action. | ESL AI SDLC</title>
+<meta name="description" content="An interactive ESL AI SDLC field guide to cost-aware AI decisions: explore expected error loss, try a Python policy, and separate model confidence from permission to act.">
+<meta name="theme-color" content="#101917">
+<meta property="og:title" content="Same probability. Different action. | ESL AI SDLC">
+<meta property="og:description" content="The model estimates. The policy authorizes. Six interactive slides on the real cost of an AI decision.">
+<meta property="og:image" content="https://zuwasi.github.io/Public-html-pages/prediction-is-not-permission/decision-infographic.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#101917;--paper:#f3f0e6;--lime:#d0ff57;--orange:#ff975d;--muted:#b1beb8;--line:#ffffff26}
+*{box-sizing:border-box}body{margin:0;overflow:hidden;background:var(--ink);color:var(--paper);font-family:Inter,system-ui,sans-serif}button,input{font:inherit}a{color:inherit;text-underline-offset:4px}button,a,input{outline-offset:5px}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--orange)}button{touch-action:manipulation}h1,h2,h3,p{margin:0}button[hidden]{display:none}
+.topbar{position:fixed;inset:0 0 auto;z-index:5;height:84px;display:flex;align-items:center;justify-content:space-between;padding:8px 4vw;background:var(--ink);border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:15px;text-decoration:none}.brand img{width:112px;height:65px;object-fit:contain}.brand strong{font-size:14px;letter-spacing:.12em}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.08em;margin-top:5px}.edition{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+#track{display:flex;height:100vh;height:100dvh;transition:transform .55s cubic-bezier(.2,.8,.2,1)}.slide{flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;padding:108px max(7vw,55px) 86px;position:relative}.inner{max-width:1280px;min-height:100%;margin:auto;display:flex;flex-direction:column;justify-content:center;gap:22px}.eyebrow{text-transform:uppercase;letter-spacing:.18em;font-weight:700;font-size:11px;color:var(--lime);display:flex;gap:14px;align-items:center}.eyebrow:before{content:"";height:8px;width:8px;background:currentColor;display:block}h1{font-size:clamp(40px,5.3vw,82px);line-height:.99;letter-spacing:-.065em;max-width:1100px}h2{font-size:clamp(32px,4.2vw,65px);line-height:1.03;letter-spacing:-.05em}h3{font-size:clamp(19px,1.8vw,27px);letter-spacing:-.04em}.accent{color:var(--lime)}.lede{color:var(--muted);max-width:830px;line-height:1.6;font-size:clamp(14px,1.2vw,18px)}.small{font-size:12px;line-height:1.65;color:var(--muted)}.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.rule{border-top:1px solid var(--line);padding-top:15px}.split{display:grid;grid-template-columns:1fr 1fr;gap:28px}.receipt{background:var(--paper);color:var(--ink);padding:24px 28px;position:relative;border-bottom:7px solid var(--lime)}.receipt.risk{border-color:var(--orange)}.receipt header{display:flex;gap:18px;align-items:start;justify-content:space-between;border-bottom:1px dashed #9ba39c;padding-bottom:15px}.receipt .serial{font:11px ui-monospace,Consolas,monospace;color:#57635b;white-space:nowrap}.receipt .calculation{margin-top:18px;color:#4c5952;font-size:14px}.amount{font-size:clamp(45px,5.5vw,84px);font-weight:800;line-height:1.12;letter-spacing:-.07em;margin:5px 0 10px;font-variant-numeric:tabular-nums}.receipt footer{border-top:1px dashed #9ba39c;padding-top:13px;font-size:13px;display:flex;align-items:center;justify-content:space-between;gap:10px}.stamp{display:inline-block;font-weight:800;font-size:12px;letter-spacing:.08em;padding:8px 12px;background:var(--lime);color:var(--ink);white-space:nowrap}.stamp.review{background:var(--orange)}.stamp.block{background:#ffc5cf}.premise{display:flex;gap:22px;align-items:center;justify-content:space-between}.review-price{font-size:25px;font-weight:800;white-space:nowrap}.hint{color:var(--lime);font-size:12px;animation:nudge 2s ease-in-out infinite}.hint.gone{visibility:hidden}@keyframes nudge{50%{transform:translateX(5px)}}
+.light{background:var(--paper);color:var(--ink)}.light .eyebrow{color:#4a6220}.light .lede,.light .small{color:#58665f}.lab{display:grid;grid-template-columns:.85fr 1.15fr;gap:36px}.controls{display:flex;flex-direction:column;gap:20px}.control-head{display:flex;align-items:baseline;justify-content:space-between;gap:15px;font-weight:600}.control-head output{font-size:28px;letter-spacing:-.04em;font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:#415e14;min-height:36px;cursor:pointer}input[type=checkbox]{accent-color:#415e14;width:18px;height:18px}.toggles{border-top:1px solid #b9bfb5;padding-top:15px;display:grid;gap:12px}.toggles label{display:flex;align-items:center;gap:10px;font-size:13px}.presets{display:flex;gap:8px;flex-wrap:wrap}.presets button{border:1px solid #919e91;background:transparent;padding:7px 10px;font-size:12px}.presets button:hover{background:#dce5cb}.lab-results{background:var(--ink);color:var(--paper);padding:24px}.result-row{display:grid;grid-template-columns:1fr auto;gap:8px;padding:15px 0;border-bottom:1px solid var(--line)}.result-row:first-child{padding-top:0}.result-row .value{font-size:clamp(32px,3.4vw,48px);letter-spacing:-.05em;font-weight:800}.result-row .label{font-size:13px;color:var(--muted)}.result-row .stamp{align-self:center}.lab-message{margin-top:20px;font-size:13px;line-height:1.6;color:var(--lime)}.formula{font-size:clamp(15px,2vw,25px);letter-spacing:-.03em;border-top:1px solid #b9bfb5;padding-top:18px}
+.code-layout{display:grid;grid-template-columns:1.6fr 1fr;gap:32px}.codebox{min-width:0;background:#080f0d;border:1px solid var(--line)}.codebar{padding:12px 17px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--muted)}.copy{border:1px solid var(--line);color:var(--lime);background:none;padding:7px 12px;font-size:11px}pre{margin:0;padding:20px;overflow:auto;tab-size:4;font-size:clamp(11px,1.04vw,15px);line-height:1.65;color:#cde8bb}pre code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}.notes{display:flex;flex-direction:column;gap:20px;justify-content:center}.note{border-left:2px solid var(--lime);padding-left:18px}.note h3{font-size:19px;margin-bottom:7px}.note p{font-size:13px;color:var(--muted);line-height:1.65}.terminal{font-family:ui-monospace,Consolas,monospace;font-size:13px;line-height:1.9;color:var(--muted)}.terminal b{color:var(--lime)}
+.fact{border-top:1px solid var(--line);padding-top:20px}.fact .number{font-size:12px;color:var(--lime);margin-bottom:14px}.fact h3{font-size:clamp(24px,2.7vw,38px);line-height:1.15;margin-bottom:16px}.fact p{font-size:15px;line-height:1.7;color:var(--muted)}.source{display:block;overflow-wrap:anywhere;font-size:11px;margin-top:18px;color:var(--lime)}.callout{background:var(--lime);color:var(--ink);padding:22px;font-size:clamp(18px,2vw,29px);font-weight:700;letter-spacing:-.035em}.poster-layout{display:grid;grid-template-columns:1fr 1fr;gap:45px;align-items:center}.poster{max-width:100%;max-height:65vh;display:block;margin:auto;box-shadow:12px 12px 0 #2d3b33}.poster-copy{display:flex;flex-direction:column;gap:25px}.button{display:inline-flex;align-items:center;gap:25px;background:var(--lime);color:var(--ink);padding:15px 22px;font-weight:700;text-decoration:none;font-size:14px;width:fit-content}.button:hover{background:#e6ffa7}.contact{background:var(--lime);color:var(--ink)}.contact .eyebrow,.contact .lede,.contact .small{color:#3b4d27}.contact h2{font-size:clamp(43px,5.6vw,86px);max-width:1000px}.contact .outline{-webkit-text-stroke:1.5px var(--ink);color:transparent}.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;border-top:1px solid #80964f;padding-top:25px}.contact-details{display:grid;gap:12px;justify-items:start}.contact-details a{font-size:clamp(16px,1.7vw,24px);font-weight:600}.contact .button{background:var(--ink);color:var(--lime)}
+.nav{position:fixed;top:50%;z-index:10;width:42px;height:42px;border:1px solid #6e7a70;border-radius:50%;background:#101917;color:var(--paper);font-size:29px;line-height:1}.nav:hover{background:#30482b}#prev{left:12px}#next{right:12px}.bottom{position:fixed;inset:auto 0 5px;z-index:5;height:48px;background:var(--ink);display:flex;align-items:center;justify-content:space-between;padding:0 4vw;gap:12px}.bottom small{color:var(--muted);font-size:10px;letter-spacing:.07em}.dots{display:flex;gap:9px}.dots button{padding:0;width:23px;height:23px;border:0;background:none;position:relative}.dots button:after{content:"";width:7px;height:7px;border:1px solid #9ea99f;position:absolute;inset:8px}.dots button[aria-current=true]:after{background:var(--lime);border-color:var(--lime)}#counter{font:12px ui-monospace,Consolas,monospace;color:var(--lime);min-width:45px;text-align:right}.progress{position:fixed;inset:auto 0 0;height:5px;background:#25332c;z-index:20}.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--lime),#43d9b0);transition:width .4s}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+@media(min-width:1400px){.inner{gap:26px}}
+@media(max-width:760px){.topbar{height:70px;padding:5px 18px}.brand img{width:84px;height:55px}.brand strong{font-size:11px}.edition{display:none}.slide{padding:93px 27px 94px}.inner{gap:20px;justify-content:flex-start;min-height:0}h1{font-size:clamp(38px,9.4vw,64px)}h2{font-size:35px}.split,.lab,.code-layout,.poster-layout,.contact-grid{grid-template-columns:1fr;gap:20px}.receipt{padding:19px 20px}.receipt h3{font-size:20px}.receipt .calculation{margin-top:12px}.amount{font-size:52px}.receipt footer{font-size:11px}.premise{align-items:start;gap:12px}.review-price{font-size:20px}.nav{top:auto;bottom:60px;width:33px;height:33px;font-size:24px}#prev{left:7px}#next{right:7px}.bottom{padding:0 22px}.bottom small{max-width:100px;font-size:8px}.dots{gap:3px}.poster{max-height:none;width:min(100%,460px)}.poster-copy{gap:17px}.contact h2{font-size:45px}.contact-grid{padding-top:20px}.codebar{padding:10px}.codebox pre{font-size:11px;padding:15px}.lab-results{padding:21px}.fact p{font-size:14px}}
+@media(min-width:761px){.codebox pre{font-size:clamp(11px,.9vw,13px);line-height:1.5}}
+@media(max-width:760px){.nav{bottom:12px}#prev{left:12px}#next{right:12px}.bottom{padding:0 55px}.bottom small{display:none}.dots{flex:1;justify-content:center}.codebox pre{white-space:pre-wrap;overflow-wrap:anywhere}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="https://eswlab.com/" target="_blank" rel="noopener"><img src="../ESL-AI-LOGOS.png" alt="ESL Engineering Software Lab"><span><strong>AI SDLC</strong><small>ENGINEERING THE DECISION</small></span></a><span class="edition">ESL field notes / 01 &nbsp; · &nbsp; September 2026</span></header>
+<main id="track" aria-label="Cost-aware AI decision presentation">
+<section class="slide" aria-labelledby="title-1"><div class="inner">
+  <p class="eyebrow">01 / The example</p>
+  <h1 id="title-1"><span class="accent">Same probability.</span><br>Different action.</h1>
+  <p class="lede">A 1% chance of being wrong is not a decision policy.<br>The consequence of being wrong changes everything.</p>
+  <div class="split">
+    <article class="receipt"><header><h3>Misrouted<br>support ticket</h3><span class="serial">CASE / 001</span></header><p class="calculation mono">1% error probability × $5 loss</p><p class="amount">$0.05</p><footer><span>Expected error loss per decision</span><span class="stamp">AUTO*</span></footer></article>
+    <article class="receipt risk"><header><h3>Wrongful<br>account closure</h3><span class="serial">CASE / 002</span></header><p class="calculation mono">1% error probability × $10,000 loss</p><p class="amount">$100</p><footer><span>Expected error loss per decision</span><span class="stamp review">REVIEW</span></footer></article>
+  </div>
+  <div class="premise"><p class="small">Illustrative costs, not measured Jev performance. Assumes validated error probabilities, zero loss when correct, and error-free review.<br>*Economic preference only. Hard rules and mandatory approvals still apply.</p><span class="review-price">$2 <span class="small">/ review</span></span></div>
+  <p class="hint" id="hint">← Swipe to navigate → &nbsp; or use the arrow keys</p>
+</div></section>
+<section class="slide light" aria-labelledby="title-2" inert aria-hidden="true"><div class="inner">
+  <p class="eyebrow">02 / The decision lab</p><h2 id="title-2">Move the probability.<br>Watch the policy change.</h2><p class="lede">Same model estimate. Two consequences. A separate layer decides what happens next.</p>
+  <div class="lab"><div class="controls">
+    <div><label class="control-head" for="error">Estimated error probability <output id="error-label" for="error">1.000%</output></label><input id="error" type="range" min="0" max="5" step="0.001" value="1"><div class="presets"><button data-error="1">1% / original</button><button data-error="0.02">0.02% / boundary</button><button data-error="0.01">0.01% / lower risk</button></div></div>
+    <div><label class="control-head" for="review">Cost of review <output id="review-label" for="review">$2.00</output></label><input id="review" type="range" min="0.5" max="25" step="0.5" value="2"></div>
+    <div class="toggles"><label><input id="allowed" type="checkbox" checked>Policy allows the action</label><label><input id="calibrated" type="checkbox" checked>Error estimates validated for this workload</label></div>
+    <p class="small">These switches model preconditions. Checking a box here does not perform authorization or validate a model.</p>
+  </div><div class="lab-results" aria-live="polite" aria-atomic="true">
+    <div class="result-row"><div><p class="label">Ticket / $5 if wrong</p><p class="value" id="ticket-loss">$0.05</p><p class="label">expected error loss</p></div><span class="stamp" id="ticket-action">AUTO</span></div>
+    <div class="result-row"><div><p class="label">Account closure / $10,000 if wrong</p><p class="value" id="account-loss">$100.00</p><p class="label">expected error loss</p></div><span class="stamp review" id="account-action">REVIEW</span></div>
+    <p class="lab-message" id="lab-message"></p>
+  </div></div>
+  <p class="formula mono">Automate only if p(error) × cost(wrong) &lt; cost(review)</p>
+  <p class="small">Simplified expected-cost comparison: correct actions cost $0; review is error-free and has no delay cost. Equality goes to REVIEW. Real review has residual errors and delay costs; real policies may forbid automation regardless of the economics.</p>
+</div></section>
+<section class="slide" aria-labelledby="title-3" inert aria-hidden="true"><div class="inner">
+  <p class="eyebrow">03 / The implementation</p><h2 id="title-3">Make abstention<br><span class="accent">part of the contract.</span></h2><p class="lede">A small, model-independent policy. No model gets to grant itself permission.</p>
+  <div class="code-layout"><div class="codebox"><div class="codebar"><span class="mono">decision_policy.py / Python</span><button class="copy" id="copy-code">COPY CODE</button></div><pre tabindex="0" aria-label="Python decision policy"><code id="python-code">def decide(p_error, wrong_cost, review_cost, *,
+           policy_allows, calibration_valid):
+    if not policy_allows:
+        return "BLOCK"
+
+    if not calibration_valid or p_error is None:
+        return "REVIEW"
+
+    if not 0 &lt;= p_error &lt;= 1:
+        raise ValueError("p_error must be between 0 and 1")
+
+    expected_loss = p_error * wrong_cost
+    return "AUTO" if expected_loss &lt; review_cost else "REVIEW"
+
+print(decide(0.01, 5, 2,
+             policy_allows=True, calibration_valid=True))
+print(decide(0.01, 10_000, 2,
+             policy_allows=True, calibration_valid=True))</code></pre></div>
+  <aside class="notes"><div class="note"><h3>01. Hard rules first.</h3><p>Permissions, legal restrictions, and mandatory approvals override any favorable cost calculation.</p></div><div class="note"><h3>02. Unknown? Abstain.</h3><p>No usable estimate or no workload validation means REVIEW, not an optimistic default.</p></div><div class="note"><h3>03. Probability ≠ confidence.</h3><p><code>p_error</code> is a validated estimate of error probability. Do not substitute <code>1 - answer.confidence</code>.</p></div><p class="terminal">$ python decision_policy.py<br><b>AUTO</b> &nbsp; # support ticket<br><b>REVIEW</b> # account closure</p></aside></div>
+  <p class="small">Educational policy, not a Jev SDK integration. Assumes finite non-negative cost inputs. Production systems also need input validation, audit records, and explicit handling of API failures.</p>
+</div></section>
+<section class="slide" aria-labelledby="title-4" inert aria-hidden="true"><div class="inner">
+  <p class="eyebrow">04 / Two technical distinctions</p><h2 id="title-4">A valid answer<br>can still be <span class="accent">the wrong action.</span></h2>
+  <div class="split"><article class="fact"><p class="number mono">01 / JEV CONFIDENCE</p><h3>A concentrated distribution<br>is not permission.</h3><p>TypeSafe describes <code>confidence</code> as a statistic derived from the probability distribution of Choice and Score answers. It is not an independent correctness check. Noul answers do not carry this field.</p><p style="margin-top:12px">Validate calibration on your own workload. Do not read <code>confidence = 0.99</code> as “99% safe to execute.”</p><a class="source" href="https://docs.typesafe.ai/confidence" target="_blank" rel="noopener">https://docs.typesafe.ai/confidence ↗</a></article>
+  <article class="fact"><p class="number mono">02 / STRUCTURED LLM OUTPUTS</p><h3>Typed output is not<br>exclusive to Jev.</h3><p>Modern LLM APIs support schema-constrained structured outputs. Applications still need to handle refusals and incomplete responses. A schema-valid answer can contain a semantic mistake.</p><p style="margin-top:12px">Compare measured decision quality, calibration, latency, and cost, not “typed versus untyped” alone.</p><a class="source" href="https://developers.openai.com/api/docs/guides/structured-outputs" target="_blank" rel="noopener">https://developers.openai.com/api/docs/guides/structured-outputs ↗</a></article></div>
+  <p class="callout">Measure how much work you can automate<br>at an acceptable error cost.</p><p class="small">Source documentation reviewed 22 September 2026. These are design considerations, not comparative model benchmark results.</p>
+</div></section>
+<section class="slide" aria-labelledby="title-5" inert aria-hidden="true"><div class="inner"><div class="poster-layout">
+  <div class="poster-copy"><p class="eyebrow">05 / The takeaway, in one image</p><h2 id="title-5">99% correct<br>is not<br><span class="accent">a policy.</span></h2><p class="lede">Typed output is not proof of correctness.<br>Confidence is not permission.<br>Keep an explicit abstain path.</p><a class="button" href="decision-infographic.png" download="ESL-decision-economics.png">Download the infographic <span aria-hidden="true">↓</span></a><p class="small">Illustrative economics with stated assumptions.<br>Generated illustration, not evidence of model performance.</p></div>
+  <a href="decision-infographic.png" target="_blank" rel="noopener" aria-label="Open full-size infographic"><img class="poster" src="decision-infographic.png" alt="99% correct is not a policy. With a 1% error probability, a $5 misrouted ticket has $0.05 expected loss, while a $10,000 wrongful account closure has $100 expected loss. Compare with a $2 review. Assumes validated probabilities, error-free review and zero loss when correct."></a>
+  </div></div></section>
+<section class="slide contact" aria-labelledby="title-6" inert aria-hidden="true"><div class="inner">
+  <p class="eyebrow">06 / ESL AI SDLC</p><h2 id="title-6">The model estimates.<br><span class="outline">The policy authorizes.</span></h2><p class="lede">Put the distinction into your AI software lifecycle:<br>define the rubric, validate the estimates, enforce the policy, monitor the outcomes.</p>
+  <div class="contact-grid"><div class="notes"><h3>Start with one decision.</h3><p>Which action in your agent needs a cost-aware policy, not just a confidence threshold?</p><a class="button" href="mailto:daniel.l@eswlab.com?subject=Cost-aware%20AI%20decision%20policies">Let’s talk AI SDLC <span aria-hidden="true">↗</span></a></div><address class="contact-details" style="font-style:normal"><h3>Daniel Liezrowice</h3><p>ESL · Engineering Software Lab</p><a href="mailto:daniel.l@eswlab.com">daniel.l@eswlab.com</a><a href="tel:+97298855803">+972 9 8855803</a><a href="https://eswlab.com/" target="_blank" rel="noopener">https://eswlab.com/ ↗</a></address></div>
+  <p class="small">ESL AI SDLC field notes · September 2026 · Educational example<br><a href="../">Explore more ESL presentations</a></p>
+</div></section>
+</main>
+<button class="nav" id="prev" aria-label="Previous slide" hidden>‹</button><button class="nav" id="next" aria-label="Next slide">›</button>
+<footer class="bottom"><small>ESL AI SDLC / FIELD NOTES</small><nav class="dots" aria-label="Choose slide"></nav><span id="counter" aria-live="polite">1 / 6</span></footer>
+<div class="progress" role="progressbar" aria-label="Presentation progress" aria-valuemin="1" aria-valuemax="6" aria-valuenow="1"><span id="progress-fill" style="width:16.6667%"></span></div>
+<p class="sr-only" id="copy-status" role="status"></p>
+<script>
+const slides = [...document.querySelectorAll('.slide')];
+const track = document.getElementById('track');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+const dots = document.querySelector('.dots');
+let current = 0;
+slides.forEach((slide, index) => {
+  const button = document.createElement('button');
+  button.setAttribute('aria-label', `Slide ${index + 1}: ${slide.querySelector('h1,h2').textContent}`);
+  button.addEventListener('click', () => go(index));
+  dots.append(button);
+});
+function go(index) {
+  current = Math.max(0, Math.min(slides.length - 1, index));
+  if (slides.some(slide => slide.contains(document.activeElement))) document.activeElement.blur();
+  track.style.transform = `translateX(-${current * 100}vw)`;
+  slides.forEach((slide, i) => { slide.inert = i !== current; slide.setAttribute('aria-hidden', String(i !== current)); });
+  [...dots.children].forEach((button, i) => button.setAttribute('aria-current', String(i === current)));
+  prev.hidden = current === 0;
+  next.hidden = current === slides.length - 1;
+  document.getElementById('counter').textContent = `${current + 1} / ${slides.length}`;
+  document.getElementById('progress-fill').style.width = `${(current + 1) / slides.length * 100}%`;
+  document.querySelector('.progress').setAttribute('aria-valuenow', current + 1);
+  if (current > 0) document.getElementById('hint').classList.add('gone');
+  history.replaceState(null, '', `#slide-${current + 1}`);
+}
+prev.addEventListener('click', () => go(current - 1));
+next.addEventListener('click', () => go(current + 1));
+document.addEventListener('keydown', event => {
+  if (event.target.closest('input,pre,textarea,select') || event.ctrlKey || event.metaKey || event.altKey) return;
+  if (event.key === ' ' && event.target.closest('button,a')) return;
+  if (['ArrowRight', 'ArrowLeft', ' '].includes(event.key)) {
+    event.preventDefault();
+    go(current + (event.key === 'ArrowLeft' || (event.key === ' ' && event.shiftKey) ? -1 : 1));
+  }
+});
+let gesture;
+function startGesture(x, y, target) { gesture = target.closest('input,button,a,pre') ? null : {x,y}; }
+function endGesture(x, y) {
+  if (gesture && Math.abs(x - gesture.x) > 50 && Math.abs(x - gesture.x) > Math.abs(y - gesture.y)) go(current + (x < gesture.x ? 1 : -1));
+  gesture = null;
+}
+track.addEventListener('touchstart', event => { if(event.touches.length === 1) startGesture(event.touches[0].clientX, event.touches[0].clientY, event.target); else gesture = null; }, {passive:true});
+track.addEventListener('touchend', event => { if(event.changedTouches.length) endGesture(event.changedTouches[0].clientX, event.changedTouches[0].clientY); }, {passive:true});
+track.addEventListener('touchcancel', () => { gesture = null; });
+track.addEventListener('mousedown', event => { if(event.button === 0) startGesture(event.clientX, event.clientY, event.target); });
+document.addEventListener('mouseup', event => endGesture(event.clientX, event.clientY));
+document.getElementById('copy-code').addEventListener('click', async event => {
+  const button = event.currentTarget;
+  try { await navigator.clipboard.writeText(document.getElementById('python-code').textContent); button.textContent = 'COPIED'; document.getElementById('copy-status').textContent = 'Python code copied.'; }
+  catch { button.textContent = 'SELECT CODE'; const selection = window.getSelection(); const range = document.createRange(); range.selectNodeContents(document.getElementById('python-code')); selection.removeAllRanges(); selection.addRange(range); document.getElementById('copy-status').textContent = 'Copy unavailable. Code selected; use your device copy command.'; }
+});
+const errorInput = document.getElementById('error');
+const reviewInput = document.getElementById('review');
+const allowed = document.getElementById('allowed');
+const calibrated = document.getElementById('calibrated');
+const money = value => value.toLocaleString('en-US', {style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:value > 0 && value < .01 ? 5 : 2});
+function updateLab() {
+  const errorPercent = Number(errorInput.value), reviewCost = Number(reviewInput.value);
+  document.getElementById('error-label').textContent = `${errorPercent.toFixed(3)}%`;
+  document.getElementById('review-label').textContent = money(reviewCost);
+  for (const [name,cost] of [['ticket',5],['account',10000]]) {
+    const loss = errorPercent * cost / 100;
+    const action = !allowed.checked ? 'BLOCK' : !calibrated.checked ? 'REVIEW' : loss < reviewCost ? 'AUTO' : 'REVIEW';
+    document.getElementById(`${name}-loss`).textContent = money(loss);
+    const badge = document.getElementById(`${name}-action`);
+    badge.textContent = action;
+    badge.className = `stamp ${action === 'BLOCK' ? 'block' : action === 'REVIEW' ? 'review' : ''}`;
+  }
+  document.getElementById('lab-message').textContent = !allowed.checked ? 'Policy veto: both actions are BLOCKED, regardless of the estimated loss.' : !calibrated.checked ? 'Estimates are not validated: both actions go to REVIEW. The amounts above are hypothetical only.' : `Review costs ${money(reviewCost)}. Account closure is economically eligible for AUTO only below ${(reviewCost / 10000 * 100).toFixed(3)}% error, subject to hard rules.`;
+}
+[errorInput,reviewInput,allowed,calibrated].forEach(input => input.addEventListener('input', updateLab));
+document.querySelectorAll('[data-error]').forEach(button => button.addEventListener('click', () => { errorInput.value = button.dataset.error; updateLab(); }));
+function fromHash() { const match = location.hash.match(/^#slide-([1-6])$/); go(match ? Number(match[1]) - 1 : 0); }
+window.addEventListener('hashchange', fromHash);
+updateLab(); fromHash();
+</script>
+</body>
+</html>
