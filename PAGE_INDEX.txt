@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-09-23
+Last updated: 2026-09-24
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -307,6 +307,9 @@ Last updated: 2026-09-23
 
 • mantiq-factor-fhe-hardware
   https://zuwasi.github.io/Public-html-pages/mantiq-factor-fhe-hardware
+
+• mantiq-qpe
+  https://zuwasi.github.io/Public-html-pages/mantiq-qpe
 
 • mantiq-solidity
   https://zuwasi.github.io/Public-html-pages/mantiq-solidity
