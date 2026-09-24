@@ -48,6 +48,17 @@ with sync_playwright() as playwright:
     assert sum(run["counts"]) == run["shots"]
     assert run["options"]["weight"] == 0.25
     assert len(run["engineSHA256"]) == 64
+    # Hidden superposition values must not prevent a single-eigenstate run.
+    page.locator("#phase-b").fill("1")
+    page.locator("#weight").fill("2")
+    page.locator("#input-state").select_option("single")
+    assert page.locator("#phase-b").is_disabled()
+    assert page.locator("#weight").is_disabled()
+    page.locator("#controls button[type=submit]").click()
+    assert "PASS" in page.locator("#verdict").inner_text()
+    page.locator("#input-state").select_option("mixture")
+    assert page.locator("#phase-b").is_enabled()
+    assert not page.locator("#controls").evaluate("el=>el.checkValidity()")
     for fault, peak in [("sign", "101"), ("reverse", "110"), ("power", None)]:
         page.evaluate("showSlide(5)")
         page.wait_for_timeout(500)

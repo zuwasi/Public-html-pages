@@ -41,7 +41,7 @@
  <div class="lab-grid">
   <form class="card controls" id="controls"><label for="phase">Phase φA (0 ≤ φ &lt; 1)</label><input id="phase" type="number" min="0" max="0.9999999999999999" step="any" value="0.375" required><label for="qubits">Estimation qubits m</label><select id="qubits"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select>
    <div class="presets"><button type="button" class="preset" data-preset="exact">3/8 exact</button><button type="button" class="preset" data-preset="third">1/3</button><button type="button" class="preset" data-preset="mixture">Two eigenstates</button><button type="button" class="preset" data-preset="wrap">Near 1</button></div>
-   <label for="input-state">Target state</label><select id="input-state"><option value="single">Eigenstate |0⟩</option><option value="mixture">Superposition</option></select><div id="mixture-fields" hidden><div><label for="phase-b">Phase φB</label><input id="phase-b" type="number" min="0" max="0.9999999999999999" step="any" value="0.625"></div><div><label for="weight">Population w of |0⟩</label><input id="weight" type="number" min="0" max="1" step="any" value="0.25"></div></div>
+   <label for="input-state">Target state</label><select id="input-state"><option value="single">Eigenstate |0⟩</option><option value="mixture">Superposition</option></select><div id="mixture-fields" hidden><div><label for="phase-b">Phase φB</label><input id="phase-b" type="number" min="0" max="0.9999999999999999" step="any" value="0.625" disabled></div><div><label for="weight">Population w of |0⟩</label><input id="weight" type="number" min="0" max="1" step="any" value="0.25" disabled></div></div>
    <label for="fault">Circuit fault injection</label><select id="fault"><option value="none">Correct circuit</option><option value="sign">Wrong Fourier sign</option><option value="reverse">Reversed output bits</option><option value="power">Omit largest U power</option></select>
    <div class="input-pair"><div><label for="shots">Simulated shots</label><select id="shots"><option>256</option><option selected>1024</option><option>4096</option></select></div><div><label for="seed">PRNG seed</label><input id="seed" type="number" min="1" max="4294967295" step="1" value="42" required></div></div>
    <button class="btn primary" type="submit">Run experiment →</button><div id="input-error" class="error" role="alert"></div><div class="control-note">Changing controls marks results stale until you run again. Shots are seeded classical samples, not physical measurements.</div>
@@ -193,6 +193,8 @@ document.addEventListener('touchend', e => {
 }, {passive:true});
 function markStale() {
   $('mixture-fields').hidden = $('input-state').value !== 'mixture';
+  $('phase-b').disabled = $('mixture-fields').hidden;
+  $('weight').disabled = $('mixture-fields').hidden;
   $('verdict').className='verdict pending'; $('verdict').innerHTML='<strong>Inputs changed</strong><p>Displayed results belong to the previous run. Run again to check the new input.</p>';
   $('export').disabled=true;
 }
@@ -237,7 +239,7 @@ $('controls').addEventListener('submit',e=>{e.preventDefault();run();});
 function preset(name,fault='none') {
   $('qubits').value='3';$('fault').value=fault;$('input-state').value=name==='mixture'?'mixture':'single';
   $('phase').value=({exact:3/8,third:1/3,mixture:1/8,wrap:1-1e-9})[name];$('phase-b').value=5/8;$('weight').value=.25;
-  if(name==='wrap')$('qubits').value='5';$('mixture-fields').hidden=name!=='mixture';run();
+  if(name==='wrap')$('qubits').value='5';markStale();run();
 }
 document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>preset(b.dataset.preset));
 document.querySelectorAll('[data-fault-demo]').forEach(b=>b.onclick=()=>{preset('exact',b.dataset.faultDemo);showSlide(4);});
