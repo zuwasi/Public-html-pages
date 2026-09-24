@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="description" content="An executable MantiQ Factor case study: Quantum Phase Estimation, independent Wolfram evidence, scoped Lean proof, and live fault injection.">
+<title>MantiQ Factor | From quantum claim to checked result</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f6f5f0;--ink:#142b37;--muted:#566b73;--line:#d8dfdb;--green:#067565;--mint:#dff2e9;--amber:#9a5100;--red:#b32f39;--navy:#132e3a;--white:#fff;--purple:#6554af}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--paper);color:var(--ink);overflow:hidden}button,input,select{font:inherit}button,a,input,select{touch-action:manipulation}a{color:var(--green)}button,a{ -webkit-tap-highlight-color:transparent}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #7b60cd;outline-offset:3px}button:disabled{cursor:default;opacity:.5}header{position:fixed;inset:0 0 auto;height:76px;padding:0 5.2vw;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);background:var(--paper);z-index:5}.brand{font-size:22px;letter-spacing:-1px;font-weight:800;color:var(--ink);text-decoration:none}.brand span{font-weight:400}.brand i{color:var(--green);font-style:normal}.header-note{font-size:11px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-left:26px}nav{display:flex;gap:18px;align-items:center}nav a{font-size:12px;font-weight:600;text-decoration:none}nav .pill{border:1px solid var(--line);border-radius:30px;padding:10px 15px;color:var(--ink)}.deck{display:flex;height:100vh;transition:transform .45s cubic-bezier(.22,.7,.2,1)}.slide{flex:0 0 100vw;width:100vw;height:100vh;padding:110px 7.5vw 78px;overflow-y:auto;position:relative}.eyebrow{font-size:11px;font-weight:700;letter-spacing:.15em;color:var(--green);text-transform:uppercase;display:flex;align-items:center;gap:10px;margin:0 0 22px}.eyebrow:before{content:"";width:24px;height:2px;background:var(--green)}h1{font-size:clamp(42px,5.8vw,88px);line-height:1.02;letter-spacing:-.065em;max-width:790px;font-weight:600;margin:0 0 24px}h1 em{font-style:normal;color:var(--green)}h2{font-size:clamp(30px,3.2vw,49px);letter-spacing:-.045em;font-weight:600;line-height:1.12;margin:0 0 16px}h3{font-size:19px;letter-spacing:-.025em;margin:0 0 12px}p{line-height:1.65;margin:0 0 16px}.lede{font-size:clamp(15px,1.4vw,20px);color:var(--muted);max-width:710px}.small{font-size:12px;color:var(--muted);line-height:1.6}.mono,code{font-family:ui-monospace,Consolas,monospace}code{font-size:.9em}.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:5vw;align-items:center;min-height:65vh}.hero-art{background:var(--navy);border-radius:8px;padding:32px;color:#f2f7f6;box-shadow:0 22px 50px #142b3714}.hero-art .small{color:#b9cfd0}.hero-art h3{font-size:27px;font-weight:500}.hero-art .case-label{color:#8adac1;font-size:11px;letter-spacing:.14em;margin-bottom:25px}.hero-formula{font-family:Georgia,serif;font-size:clamp(23px,2.2vw,34px);padding:24px 0 32px;border-bottom:1px solid #ffffff26}.hero-hist{display:flex;align-items:flex-end;gap:10px;height:155px;margin-top:26px;border-bottom:1px solid #ffffff33}.hero-hist div{flex:1;height:3px;background:#527c83;position:relative}.hero-hist .peak{height:130px;background:#8de0c2}.hero-hist span{position:absolute;top:calc(100% + 8px);left:50%;transform:translateX(-50%);font-size:10px;color:#b9cfd0}.hero-verdict{margin-top:45px;display:flex;justify-content:space-between;gap:12px;font-size:12px}.hero-verdict b{color:#8de0c2}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:25px}.btn{display:inline-flex;justify-content:center;align-items:center;gap:9px;border:1px solid var(--line);background:transparent;color:var(--ink);padding:12px 18px;border-radius:5px;font-size:12px;font-weight:600;text-decoration:none}.btn.primary{background:var(--green);color:white;border-color:var(--green)}.btn:hover{filter:brightness(.95)}.tag{display:inline-block;padding:5px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.035em;background:var(--mint);color:var(--green)}.tag.amber{background:#faeacb;color:var(--amber)}.tag.red{background:#fae3e2;color:var(--red)}.tag.neutral{background:#e6e9e7;color:var(--muted)}.hero-foot{margin-top:35px;font-size:11px;line-height:1.6;color:var(--muted)}.hint{font-size:11px;color:var(--muted);position:absolute;bottom:52px;animation:breathe 2s ease-in-out infinite}.hint.hidden{display:none}@keyframes breathe{50%{opacity:.4;transform:translateX(6px)}}.columns{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:30px}.card{padding:25px;background:#ffffffb0;border:1px solid var(--line);border-radius:7px}.card.dark{background:var(--navy);color:white;border:0}.card.dark p,.card.dark .small{color:#c0d1d2}.quote{font-size:clamp(23px,2.2vw,34px);line-height:1.45;letter-spacing:-.03em;margin:15px 0 25px}.number{font-size:11px;color:var(--green);font-weight:700;margin-bottom:18px;letter-spacing:.1em}.rule-list{list-style:none;padding:0;margin:0}.rule-list li{border-top:1px solid var(--line);padding:14px 0;font-size:14px;line-height:1.5}.rule-list li strong{display:block;margin-bottom:4px}.pipeline{display:grid;grid-template-columns:repeat(7,1fr);gap:10px;margin:35px 0}.phase-card{border-top:3px solid var(--green);padding:18px 12px 15px;background:#fff;border-radius:0 0 5px 5px}.phase-card .number{margin-bottom:28px}.phase-card h3{font-size:16px}.phase-card p{font-size:12px;color:var(--muted);line-height:1.5}.phase-card small{font-size:10px;color:var(--green);font-weight:600}.callout{padding:18px 22px;border-left:3px solid var(--green);background:var(--mint);font-size:14px;line-height:1.6}.formula{font-family:Georgia,serif;font-size:clamp(24px,2.2vw,34px);padding:22px 0}.assumptions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.assumptions span{font-size:11px;padding:8px 11px;border:1px solid var(--line);border-radius:20px}.lab.slide{padding:98px 5.2vw 70px}.lab-top{display:flex;align-items:flex-start;justify-content:space-between;gap:20px}.lab h2{font-size:clamp(28px,2.6vw,39px);margin-bottom:7px}.lab .eyebrow{margin-bottom:10px}.lab-grid{display:grid;grid-template-columns:220px minmax(0,1fr) 250px;gap:17px;margin-top:18px}.controls{padding:19px}.controls label{display:block;font-size:11px;font-weight:700;margin:13px 0 7px}.controls label:first-child{margin-top:0}input,select{width:100%;padding:9px 10px;color:var(--ink);border:1px solid #bdcbc6;border-radius:4px;background:var(--white);font-size:12px}.input-pair{display:grid;grid-template-columns:1fr 1fr;gap:10px}.presets{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}.preset{border:1px solid var(--line);border-radius:4px;padding:6px 8px;font-size:10px;background:white;color:var(--ink)}.preset:hover{border-color:var(--green);background:var(--mint)}.controls .btn{width:100%;margin-top:12px}.control-note{font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}.chart-panel{min-width:0;padding:21px}.panel-title{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:8px;font-size:12px;font-weight:700}.circuit{width:100%;height:120px;display:block}.circuit text{font-family:ui-monospace,Consolas,monospace;font-size:11px;fill:var(--ink)}.chart-scroll{overflow-x:auto;padding-top:16px}.histogram{height:174px;display:flex;align-items:stretch;gap:6px;padding:12px 8px 29px;border-bottom:1px solid var(--line);background:repeating-linear-gradient(to top,transparent 0,transparent 42px,#d8dfdb60 43px,#d8dfdb60 44px)}.bar-slot{flex:1;min-width:21px;position:relative}.bar{position:absolute;bottom:0;left:12%;width:60%;background:var(--green);min-height:1px;border-radius:3px 3px 0 0}.reference-line{position:absolute;left:5%;width:85%;border-top:2px solid var(--purple)}.shot-dot{position:absolute;right:5%;width:5px;height:5px;border-radius:50%;background:#9a5100;transform:translateY(50%)}.bar-label{position:absolute;top:calc(100% + 9px);left:50%;transform:translateX(-50%);font-size:9px;color:var(--muted)}.legend{display:flex;flex-wrap:wrap;gap:13px;font-size:10px;margin:12px 0 17px;color:var(--muted)}.legend span:before{content:"";display:inline-block;width:9px;height:9px;background:var(--green);margin-right:5px}.legend .ref:before{height:2px;background:var(--purple);vertical-align:middle}.legend .shots:before{border-radius:50%;background:#9a5100}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;border-top:1px solid var(--line);padding-top:15px}.stat b{display:block;font-size:23px;letter-spacing:-.04em;margin-bottom:4px}.stat span{font-size:10px;color:var(--muted)}.verdict{padding:16px;background:var(--mint);border:1px solid #b6dac9;border-radius:5px;margin:12px 0 15px}.verdict.fail{background:#fae3e2;border-color:#e5aeb1}.verdict.pending{background:#fff2d9;border-color:#e4cfa6}.verdict strong{display:block;color:var(--green);font-size:14px;margin-bottom:7px}.verdict.fail strong{color:var(--red)}.verdict.pending strong{color:var(--amber)}.verdict p{font-size:11px;margin:0;line-height:1.6}.evidence-panel{padding:20px}.evidence-panel dl{font-size:11px;margin:0}.evidence-panel dt{color:var(--muted);margin-top:13px}.evidence-panel dd{margin:4px 0 0;font-weight:600;overflow-wrap:anywhere}.evidence-panel .btn{width:100%;margin-top:17px}.lab-note{font-size:10px;color:var(--muted);line-height:1.5;margin-top:10px}.error{font-size:11px;color:var(--red);min-height:16px;margin-top:8px}.results-table{margin-top:14px;font-size:11px}.results-table summary{cursor:pointer;color:var(--green)}.results-table .table-wrap{max-height:180px;overflow:auto;margin-top:10px}table{width:100%;border-collapse:collapse;font-size:12px}th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line)}th{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}.scenario-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:30px}.scenario-grid .card{display:flex;flex-direction:column}.scenario-grid .card p{font-size:13px;color:var(--muted)}.scenario-grid .btn{margin-top:auto}.big-result{font-size:45px;letter-spacing:-.05em;margin:18px 0;font-weight:600}.strike{color:var(--red)}.evidence-table{margin-top:22px}.evidence-table td{padding:17px 12px;font-size:13px;line-height:1.5}.downloads{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:20px}.download{display:block;padding:16px;background:white;border:1px solid var(--line);border-radius:5px;text-decoration:none;font-size:12px;font-weight:600}.download span{display:block;font-size:10px;color:var(--muted);font-weight:400;margin-top:6px}.source-link{overflow-wrap:anywhere;font-size:11px}.footer{position:fixed;bottom:0;left:0;right:0;height:42px;background:var(--paper);border-top:1px solid var(--line);padding:0 5.2vw;display:flex;justify-content:space-between;align-items:center;z-index:5;font-size:10px;color:var(--muted)}.counter{font-variant-numeric:tabular-nums}.progress{position:fixed;bottom:0;height:3px;left:0;width:0;background:linear-gradient(90deg,var(--green),#82cbb0);z-index:8;transition:width .4s}.arrow{position:fixed;top:50%;z-index:6;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:28px;line-height:1;box-shadow:0 3px 10px #142b3708}.arrow.prev{left:12px}.arrow.next{right:12px}.arrow[hidden]{display:none}pre{background:#e9eee9;padding:17px;font-size:11px;line-height:1.8;border-radius:4px;overflow:auto}.source-caption{font-size:11px;color:var(--muted);margin-top:15px}
+@media(min-width:1600px){.slide:not(.lab){padding-top:140px}.lab-grid{margin-top:30px;gap:25px}.chart-panel{padding:28px}.histogram{height:220px}.circuit{height:150px}.controls,.evidence-panel{padding:25px}.controls label{margin-top:19px}}
+@media(max-width:1100px){.header-note{display:none}.slide{padding-left:6vw;padding-right:6vw}.hero-grid{gap:25px}.hero-art{padding:24px}.lab-grid{grid-template-columns:190px minmax(0,1fr)}.evidence-panel{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:10px 25px}.evidence-panel h3{grid-column:1/-1}.evidence-panel dl{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}.evidence-panel .btn{margin:0}.pipeline{grid-template-columns:repeat(4,1fr)}.phase-card .number{margin-bottom:12px}}
+@media(max-width:680px){header{height:62px;padding:0 20px}.brand{font-size:19px}nav{gap:10px}nav a{font-size:10px}nav .pill{padding:8px 10px}.slide,.lab.slide{padding:86px 26px 75px}.hero-grid,.columns,.scenario-grid{grid-template-columns:1fr;gap:20px}.hero-grid{min-height:auto}h1{font-size:49px;max-width:480px}.hero-art{margin-top:5px}.hero-hist{height:105px}.hero-hist .peak{height:90px}.hero-foot{margin-top:20px}.hint{position:static;margin-top:22px}.pipeline{grid-template-columns:1fr 1fr;margin-top:20px}.lab-top{display:block}.lab-top>.tag{margin-top:7px}.lab-grid{grid-template-columns:1fr;gap:14px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}.controls>.presets,.controls>.input-pair,.controls>#mixture-fields,.controls>.control-note,.controls>.error,.controls>.btn{grid-column:1/-1}.controls label:first-child{margin-top:13px}.controls>#mixture-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.controls>#mixture-fields[hidden]{display:none}.controls>label{align-self:end}.controls>input,.controls>select{grid-row:auto}.evidence-panel{grid-column:auto;display:block}.evidence-panel dl{display:block}.evidence-panel .btn{margin-top:15px}.chart-panel{padding:15px}.histogram{gap:4px}.stat b{font-size:21px}.card{padding:20px}.downloads{grid-template-columns:1fr}.evidence-table{display:block;overflow:auto}.arrow{top:auto;bottom:50px;width:31px;height:31px;font-size:24px}.arrow.prev{left:5px}.arrow.next{right:5px}.footer{padding:0 20px;font-size:9px}.footer .desktop-only{display:none}.lab .eyebrow{font-size:10px}.big-result{font-size:38px}}
+@media(prefers-reduced-motion:reduce){.deck,.progress{transition:none}.hint{animation:none}}
+@media(max-width:680px){.controls>label[for="fault"],.controls>#fault{grid-column:1/-1}.arrow{bottom:6px}.footer{padding:0 45px}}
+.chart-panel.has-failure .legend span:first-child:before{background:var(--red)}
+</style>
+</head>
+<body>
+<header><a class="brand" href="#intro">Manti<i>Q</i> <span>Factor</span></a><span class="header-note">Research → executable evidence</span><nav><a href="#workflow">The process</a><a href="#evidence">Evidence</a><a class="pill" href="#lab">Open live lab ↗</a></nav></header>
+<main class="deck" id="deck">
+<section class="slide" id="intro" aria-label="Introduction">
+ <div class="hero-grid"><div><div class="eyebrow">Case study 01 / Quantum Phase Estimation</div><h1>From a quantum claim<br>to a <em>checked result.</em></h1><p class="lede">How MantiQ handles an algorithm explanation: make its assumptions explicit, build it, test it, and show exactly what the evidence supports.</p><div class="actions"><a class="btn primary" href="#workflow">Follow the process →</a><a class="btn" href="#lab">Experiment live ↗</a></div><p class="hero-foot">A working educational case study. Browser simulation, independent Wolfram results, and a scoped Lean proof. No quantum hardware used.</p></div><div class="hero-art"><div class="case-label">THE FIRST CHECK / IDEAL QPE</div><h3>One phase. One exact outcome.</h3><div class="hero-formula">φ = 3/8 &nbsp; · &nbsp; m = 3 &nbsp; → &nbsp; |011⟩</div><div class="hero-hist" aria-label="Ideal theoretical probability is 1 at outcome 011"><div><span>000</span></div><div><span>001</span></div><div><span>010</span></div><div class="peak"><span>011</span></div><div><span>100</span></div><div><span>101</span></div><div><span>110</span></div><div><span>111</span></div></div><div class="hero-verdict"><span>Theoretical probability</span><b>100% at 011</b></div><p class="small" style="margin:18px 0 0">Then try 1/3. The certainty disappears.<br>The verification requirement does not.</p></div></div>
+ <div class="hint" id="swipe-hint">← Swipe to navigate → &nbsp; or use arrow keys</div>
+</section>
+<section class="slide" id="source" aria-label="What the source leaves implicit">
+ <div class="eyebrow">01 / Input and interpretation</div><h2>A useful explanation.<br>Not yet an engineering specification.</h2><p class="lede">The supplied LinkedIn post describes the standard QPE flow. MantiQ turns that narrative into testable statements.</p>
+ <div class="columns"><div class="card dark"><div class="number" style="color:#8de0c2">SOURCE IDEA / PARAPHRASED</div><p class="quote">Controlled powers encode phase.<br>An inverse QFT makes it observable.<br>Measurement gives a binary estimate.</p><p>Correct as a high-level description. But which input state, which bit order, and what does “accuracy” mean?</p><p class="small">The screenshot was inspected manually. No OCR or automated document-ingestion capability is claimed here.</p></div><div class="card"><h3>Questions that become explicit requirements</h3><ul class="rule-list"><li><strong>Is the input an eigenstate?</strong>A superposition can produce multiple phase peaks.</li><li><strong>Can the phase fit in m bits?</strong>Only an exactly representable phase has a certain ideal outcome.</li><li><strong>What is being verified?</strong>A numerical model, an implementation, a theorem, or a physical device are different claims.</li><li><strong>What does extra precision cost?</strong>Repeated controlled-U requires 2ᵐ − 1 applications.</li></ul></div></div><p class="source-caption">Technical reference: IBM Quantum Learning, “Phase estimation procedure”. Source links and reproducible artifacts are on the final slide.</p>
+</section>
+<section class="slide" id="workflow" aria-label="MantiQ workflow">
+ <div class="eyebrow">02 / The MantiQ production line</div><h2>Seven stages.<br>No silent upgrade from claim to proof.</h2><p class="lede">This case study executes the modeling and verification steps. The stage map explains the methodology, not an autonomous ingestion product.</p>
+ <div class="pipeline"><article class="phase-card"><div class="number">01</div><h3>Input</h3><p>LinkedIn explanation + authoritative QPE reference.</p><small>Source identified</small></article><article class="phase-card"><div class="number">02</div><h3>Convert</h3><p>Manual transcription of the mathematical scope. OCR unnecessary.</p><small>Explicitly manual</small></article><article class="phase-card"><div class="number">03</div><h3>Understand</h3><p>Eigenstates, phase range, bit order, exactness and cost.</p><small>Assumptions recorded</small></article><article class="phase-card"><div class="number">04</div><h3>Compute</h3><p>Wolfram Fourier-sum model and a browser gate simulator.</p><small>Two implementations</small></article><article class="phase-card"><div class="number">05</div><h3>Verify</h3><p>Independent probabilities, fault tests and a Lean cost proof.</p><small>Bounded evidence</small></article><article class="phase-card"><div class="number">06</div><h3>Engineer</h3><p>Interactive controls, circuit trace, sampling and failure gates.</p><small>Runnable artifact</small></article><article class="phase-card"><div class="number">07</div><h3>Output</h3><p>Downloadable source, notebook, proof and execution evidence.</p><small>Reproducible package</small></article></div>
+ <div class="callout"><strong>The contract:</strong> a passing simulation is not a proof of the whole algorithm. A checked theorem is not evidence of physical hardware performance.</div>
+</section>
+<section class="slide" id="model" aria-label="Model and assumptions">
+ <div class="eyebrow">03 / Normalize the mathematics</div><h2>Make the model small enough to inspect.</h2><div class="columns"><div class="card"><h3>The mathematical contract</h3><div class="formula">U|u⟩ = e<sup>2πiφ</sup>|u⟩</div><p class="small">φ is a fraction of a full turn, not an angle in radians. With N = 2ᵐ, outcome y represents phase y/N, modulo one.</p><div class="formula" style="font-size:24px">p(y) = | N⁻¹ ∑<sub>x=0</sub><sup>N−1</sup> e<sup>2πix(φ−y/N)</sup> |²</div><p class="small">Independent browser oracle: the squared sine ratio obtained from the finite geometric series, with the removable singularity handled explicitly.</p></div><div class="card"><h3>The actual simulated system</h3><p>One target qubit with a diagonal unitary:</p><p class="mono">U = diag(e<sup>2πiφA</sup>, e<sup>2πiφB</sup>)</p><p>Single eigenstate: target |0⟩.<br>Superposition: √w |0⟩ + √(1−w) |1⟩.</p><p class="small">The browser evolves the joint state using Hadamard gates, controlled powers, swaps, and inverse-QFT controlled-phase gates. It sums over the target qubit to obtain the displayed marginal.</p><div class="assumptions"><span>Ideal, noiseless gates</span><span>m = 2…6 in the UI</span><span>MSB-first displayed bits</span><span>Classical simulation</span></div></div></div><div class="callout" style="margin-top:20px"><strong>Important:</strong> the demo supplies the phases to construct U. It illustrates and checks QPE; it does not discover a secret phase or demonstrate a quantum speedup.</div>
+</section>
+<section class="slide lab" id="lab" aria-label="Interactive QPE lab">
+ <div class="lab-top"><div><div class="eyebrow">04 / Live executable experiment</div><h2>Change the input. Inspect the evidence.</h2><p class="small" style="margin:0">Real calculations in your browser. No backend, no hardware, no canned output.</p></div><span class="tag neutral">IDEAL SIMULATION · NOT HARDWARE</span></div>
+ <div class="lab-grid">
+  <form class="card controls" id="controls"><label for="phase">Phase φA (0 ≤ φ &lt; 1)</label><input id="phase" type="number" min="0" max="0.9999999999999999" step="any" value="0.375" required><label for="qubits">Estimation qubits m</label><select id="qubits"><option>2</option><option selected>3</option><option>4</option><option>5</option><option>6</option></select>
+   <div class="presets"><button type="button" class="preset" data-preset="exact">3/8 exact</button><button type="button" class="preset" data-preset="third">1/3</button><button type="button" class="preset" data-preset="mixture">Two eigenstates</button><button type="button" class="preset" data-preset="wrap">Near 1</button></div>
+   <label for="input-state">Target state</label><select id="input-state"><option value="single">Eigenstate |0⟩</option><option value="mixture">Superposition</option></select><div id="mixture-fields" hidden><div><label for="phase-b">Phase φB</label><input id="phase-b" type="number" min="0" max="0.9999999999999999" step="any" value="0.625"></div><div><label for="weight">Population w of |0⟩</label><input id="weight" type="number" min="0" max="1" step="any" value="0.25"></div></div>
+   <label for="fault">Circuit fault injection</label><select id="fault"><option value="none">Correct circuit</option><option value="sign">Wrong Fourier sign</option><option value="reverse">Reversed output bits</option><option value="power">Omit largest U power</option></select>
+   <div class="input-pair"><div><label for="shots">Simulated shots</label><select id="shots"><option>256</option><option selected>1024</option><option>4096</option></select></div><div><label for="seed">PRNG seed</label><input id="seed" type="number" min="1" max="4294967295" step="1" value="42" required></div></div>
+   <button class="btn primary" type="submit">Run experiment →</button><div id="input-error" class="error" role="alert"></div><div class="control-note">Changing controls marks results stale until you run again. Shots are seeded classical samples, not physical measurements.</div>
+  </form>
+  <div class="card chart-panel"><div class="panel-title"><span>Gate-level circuit</span><span id="circuit-size" class="small"></span></div><svg id="circuit" class="circuit" role="img" aria-label="QPE circuit summary"></svg><div class="panel-title" style="margin-top:12px"><span>Outcome probability</span><span class="small">Fixed scale: 0 to 100%</span></div><div class="chart-scroll"><div id="histogram" class="histogram" role="img" aria-label="Outcome probability histogram"></div></div><div class="legend"><span>Gate simulation</span><span class="ref">Analytical reference</span><span class="shots">Sample frequency</span></div><div class="stats"><div class="stat"><b id="peak-bits">…</b><span>Most likely outcome*</span></div><div class="stat"><b id="peak-prob">…</b><span>Peak probability</span></div><div class="stat"><b id="resolution">…</b><span>Phase-grid spacing</span></div></div><p id="result-note" class="lab-note"></p><details class="results-table"><summary>Inspect all probabilities and sampled counts</summary><div class="table-wrap"><table><thead><tr><th>Bits</th><th>Phase</th><th>Simulated</th><th>Reference</th><th>Count</th></tr></thead><tbody id="outcomes"></tbody></table></div></details></div>
+  <aside class="card evidence-panel"><h3>Verification gate</h3><div id="verdict" class="verdict pending" role="status" aria-live="polite"><strong>Not run</strong><p>Run an experiment.</p></div><dl><dt>Maximum probability difference</dt><dd id="max-diff">…</dd><dt>Comparison tolerance</dt><dd>1 × 10⁻⁹ (absolute)</dd><dt>Repeated controlled-U cost</dt><dd id="resource-count">…</dd><dt>Independent Wolfram vectors</dt><dd id="wolfram-status">Loading reference…</dd></dl><button type="button" id="export" class="btn">Download this run ↓</button><p class="lab-note">A pass is local numerical agreement for this input. It does not certify every input or the physical system.</p></aside>
+ </div>
+</section>
+<section class="slide" id="faults" aria-label="Fault demonstrations">
+ <div class="eyebrow">05 / Verification that can say no</div><h2>A useful test must catch a plausible mistake.</h2><p class="lede">Start with 3/8 and three estimation qubits. Each mistake below changes the simulated distribution while the independent reference remains unchanged.</p>
+ <div class="scenario-grid"><article class="card"><span class="tag red">FAULT / FOURIER SIGN</span><div class="big-result">011 → <span class="strike">101</span></div><h3>Use QFT instead of inverse QFT</h3><p>The sign error sends phase 3/8 to 5/8. The result is sharply peaked, but wrong. A clean-looking chart is not sufficient evidence.</p><button class="btn" data-fault-demo="sign">Run sign-error example ↗</button></article><article class="card"><span class="tag red">FAULT / BIT ORDER</span><div class="big-result">011 → <span class="strike">110</span></div><h3>Reverse the output bits</h3><p>The same bits become a different number: 6/8 instead of 3/8. Asymmetric test inputs expose an error that 000 or 111 would hide.</p><button class="btn" data-fault-demo="reverse">Run bit-order example ↗</button></article><article class="card"><span class="tag red">FAULT / CONTROLLED POWER</span><div class="big-result">U⁴ → <span class="strike">I</span></div><h3>Omit the largest power</h3><p>One qubit no longer accumulates its required phase. The probability distribution disagrees with the reference and the gate blocks a pass.</p><button class="btn" data-fault-demo="power">Run missing-power example ↗</button></article></div><p class="source-caption">A fault can be invisible for special inputs, such as zero phase. This is why the test suite uses many phases rather than relying on one successful run.</p>
+</section>
+<section class="slide" id="evidence" aria-label="Evidence scope">
+ <div class="eyebrow">06 / Claim-by-claim evidence</div><h2>What has actually been established?</h2><p class="lede">The statuses apply to the stated scope. They do not combine into a blanket “QPE formally verified” claim.</p>
+ <table class="evidence-table"><thead><tr><th>Claim</th><th>Evidence status</th><th>Artifact and boundary</th></tr></thead><tbody><tr><td><strong>QPE-01</strong> · Exact 3/8 example</td><td><span class="tag">SYMBOLICALLY VALIDATED</span></td><td>Wolfram exact amplitudes and normalization; 62 dyadic cases across m = 1…5.</td></tr><tr><td><strong>QPE-02</strong> · Non-dyadic and mixed inputs</td><td><span class="tag">NUMERICALLY TESTED</span></td><td>Direct Fourier sum versus geometric formula; independent exported vectors, bounded cases.</td></tr><tr><td><strong>QPE-03</strong> · Browser gate simulator</td><td><span class="tag" id="browser-evidence">RUNTIME CHECK PENDING</span></td><td id="browser-evidence-detail">Runtime comparison loads the independently generated Wolfram vectors.</td></tr><tr><td><strong>QPE-04</strong> · Repeated-U resource count</td><td><span class="tag">FORMALLY PROVED</span></td><td>Lean 4: cost(m) + 1 = 2ᵐ. Only this recurrence is proved; not the simulator or full QPE.</td></tr><tr><td><strong>QPE-05</strong> · Hardware performance / speedup</td><td><span class="tag amber">NOT ESTABLISHED</span></td><td>No device run, no noise calibration, no speedup benchmark, no physical measurement.</td></tr></tbody></table>
+ <div class="callout" style="margin-top:23px">The repeated-U cost assumes powers are built by repetition. This toy diagonal unitary permits direct phase rotations, so the count is <strong>not</strong> this simulator’s wall-clock cost or its compiled gate count.</div>
+</section>
+<section class="slide" id="reproduce" aria-label="Reproduce and download">
+ <div class="eyebrow">07 / Reproduce, inspect, extend</div><h2>The evidence travels with the demo.</h2><div class="columns"><div><p class="lede">Open the notebook, inspect the proof, or rerun the checks. Nothing here requires access to the private MantiQ product.</p><div class="downloads"><a class="download" href="evidence/QPE.nb" download>Wolfram notebook ↓<span>Interactive, executable narrative</span></a><a class="download" href="evidence/reference.json" download>Reference vectors ↓<span>Executed results, versions, source hashes</span></a><a class="download" href="evidence/QPE.wl" download>Wolfram model ↓<span>Reusable mathematical package</span></a><a class="download" href="evidence/lean/QPECost.lean" download>Lean theorem ↓<span>Resource count only</span></a><a class="download" href="evidence/validation_report.md">Validation report ↗<span>Scope of executed Wolfram checks</span></a><a class="download" href="evidence/README.md">Reproduction instructions ↗<span>Source, assumptions and commands</span></a></div></div><div class="card"><h3>Run the same checks locally</h3><pre>node validate.mjs
+wolframscript -file evidence/build.wls
+# From evidence/lean:
+lake build</pre><p class="small">Download the folder from the public source repository, preserving its structure. The HTML runs standalone; the external Wolfram comparison requires serving the folder over HTTP.</p><p class="small"><a href="validate.mjs">Browser-model test source</a> · <a href="evidence/build.wls">Wolfram build script</a> · <a href="evidence/lean_build_report.txt">Lean build evidence</a></p><p class="small">Primary technical reference:</p><a class="source-link" href="https://quantum.cloud.ibm.com/learning/en/courses/fundamentals-of-quantum-algorithms/phase-estimation-and-factoring/phase-estimation-procedure" target="_blank" rel="noopener">IBM Quantum Learning: Phase estimation procedure ↗</a><p class="small" style="margin-top:14px">Input inspiration: <a href="https://lnkd.in/p/dyDHSNrA" target="_blank" rel="noopener">the user-supplied LinkedIn group post</a>. Screenshot inspected privately; not republished. No affiliation or endorsement by IBM or the post’s author is implied.</p></div></div><div class="actions"><a class="btn primary" href="#lab">Return to the live lab ↗</a><a class="btn" href="https://github.com/zuwasi/Public-html-pages/tree/main/mantiq-qpe" target="_blank" rel="noopener">Browse all source files ↗</a></div>
+</section>
+</main>
+<button class="arrow prev" id="prev" aria-label="Previous slide">‹</button><button class="arrow next" id="next" aria-label="Next slide">›</button><footer class="footer"><span>MantiQ Factor <span class="desktop-only">/ Quantum Phase Estimation · Educational case study</span></span><span id="counter" class="counter" aria-live="polite">1 / 8</span></footer><div id="progress" class="progress"></div>
+<script id="qpe-engine">
+// Pure numerical engine, also executed by validate.mjs. Bit q=0 is least significant.
+const QPE = (() => {
+  const TAU = 2 * Math.PI;
+  function validate({m, phiA, phiB = 0, weight = 1, fault = 'none'}) {
+    if (!Number.isInteger(m) || m < 1 || m > 8) throw new RangeError('m must be an integer from 1 through 8.');
+    if (![phiA, phiB].every(p => Number.isFinite(p) && p >= 0 && p < 1)) throw new RangeError('Phases must be finite numbers from 0 (inclusive) to 1 (exclusive).');
+    if (!Number.isFinite(weight) || weight < 0 || weight > 1) throw new RangeError('Population must be between 0 and 1.');
+    if (!['none','sign','reverse','power'].includes(fault)) throw new RangeError('Unknown circuit fault.');
+  }
+  function simulate(options) {
+    validate(options);
+    const {m, phiA, phiB = 0, weight = 1, fault = 'none'} = options;
+    const n = 2 ** m, re = new Float64Array(2 * n), im = new Float64Array(2 * n);
+    re[0] = Math.sqrt(weight); re[n] = Math.sqrt(1 - weight);
+    function h(q) {
+      const mask = 1 << q;
+      for (let a = 0; a < re.length; a++) if (!(a & mask)) {
+        const b = a | mask, ar = re[a], ai = im[a], br = re[b], bi = im[b];
+        re[a] = (ar + br) * Math.SQRT1_2; im[a] = (ai + bi) * Math.SQRT1_2;
+        re[b] = (ar - br) * Math.SQRT1_2; im[b] = (ai - bi) * Math.SQRT1_2;
+      }
+    }
+    function rotate(index, angle) {
+      const c = Math.cos(angle), s = Math.sin(angle), r = re[index], i = im[index];
+      re[index] = r * c - i * s; im[index] = r * s + i * c;
+    }
+    function swap(a, b) {
+      for (let i = 0; i < re.length; i++) if (!(i & (1 << a)) && (i & (1 << b))) {
+        const j = i ^ (1 << a) ^ (1 << b);
+        [re[i], re[j]] = [re[j], re[i]]; [im[i], im[j]] = [im[j], im[i]];
+      }
+    }
+    for (let q = 0; q < m; q++) h(q);
+    for (let q = 0; q < m; q++) {
+      if (fault === 'power' && q === m - 1) continue;
+      for (let i = 0; i < re.length; i++) if (i & (1 << q)) rotate(i, TAU * (i & n ? phiB : phiA) * 2 ** q);
+    }
+    for (let q = 0; q < Math.floor(m / 2); q++) swap(q, m - 1 - q);
+    for (let q = 0; q < m; q++) {
+      for (let k = 0; k < q; k++) {
+        const angle = (fault === 'sign' ? 1 : -1) * Math.PI / 2 ** (q - k);
+        for (let i = 0; i < re.length; i++) if ((i & (1 << q)) && (i & (1 << k))) rotate(i, angle);
+      }
+      h(q);
+    }
+    const probabilities = Array(n).fill(0);
+    for (let y = 0; y < n; y++) {
+      const output = fault === 'reverse' ? parseInt(y.toString(2).padStart(m,'0').split('').reverse().join(''),2) : y;
+      probabilities[output] = re[y] ** 2 + im[y] ** 2 + re[n+y] ** 2 + im[n+y] ** 2;
+    }
+    return probabilities;
+  }
+  // Independent geometric-series oracle: it does not call the gate implementation.
+  function reference(options) {
+    validate(options);
+    const {m, phiA, phiB = 0, weight = 1} = options, n = 2 ** m;
+    function p(phi, y) {
+      const delta = phi - y / n;
+      const d = delta - Math.round(delta); // circular phase distance
+      if (Math.abs(d) < 1e-14) return 1;
+      return (Math.sin(Math.PI * n * d) / (n * Math.sin(Math.PI * d))) ** 2;
+    }
+    return Array.from({length:n}, (_, y) => weight * p(phiA,y) + (1-weight) * p(phiB,y));
+  }
+  function sample(probabilities, shots, seed) {
+    if (!Number.isInteger(shots) || shots < 1 || shots > 1000000 || !Number.isInteger(seed) || seed < 1 || seed > 4294967295) throw new RangeError('Invalid shot count or seed.');
+    let state = seed >>> 0;
+    const counts = Array(probabilities.length).fill(0);
+    for (let shot = 0; shot < shots; shot++) {
+      state ^= state << 13; state ^= state >>> 17; state ^= state << 5;
+      const random = (state >>> 0) / 4294967296;
+      let cumulative = 0, y = 0;
+      for (; y < probabilities.length - 1; y++) { cumulative += probabilities[y]; if (random < cumulative) break; }
+      counts[y]++;
+    }
+    return counts;
+  }
+  const difference = (a,b) => Math.max(...a.map((p,i) => Math.abs(p-b[i])));
+  return {simulate, reference, sample, difference};
+})();
+</script>
+<script>
+const $ = id => document.getElementById(id);
+const slides = [...document.querySelectorAll('.slide')];
+let slideIndex = 0, lastRun = null, referenceEvidence = {status:'not-loaded'};
+function showSlide(index) {
+  slideIndex = Math.max(0, Math.min(slides.length - 1, index));
+  $('deck').style.transform = `translateX(-${slideIndex * 100}vw)`;
+  slides.forEach((slide,i) => { slide.inert = i !== slideIndex; slide.setAttribute('aria-hidden', String(i !== slideIndex)); });
+  $('prev').hidden = slideIndex === 0; $('next').hidden = slideIndex === slides.length - 1;
+  $('counter').textContent = `${slideIndex+1} / ${slides.length}`;
+  $('progress').style.width = `${(slideIndex+1)/slides.length*100}%`;
+  if (slideIndex) $('swipe-hint').classList.add('hidden');
+  history.replaceState(null,'',`#${slides[slideIndex].id}`);
+}
+function hashNavigate() { const index = slides.findIndex(s => s.id === location.hash.slice(1)); showSlide(index < 0 ? 0 : index); }
+window.addEventListener('hashchange',hashNavigate);
+$('prev').onclick = () => showSlide(slideIndex-1); $('next').onclick = () => showSlide(slideIndex+1);
+document.addEventListener('keydown', event => {
+  if (event.target.closest('input,select,button,a,summary,textarea') || event.altKey || event.ctrlKey || event.metaKey) return;
+  if (['ArrowRight','ArrowLeft',' '].includes(event.key)) { event.preventDefault(); showSlide(slideIndex+(event.key === 'ArrowLeft' ? -1 : 1)); }
+});
+let dragStart = null;
+document.addEventListener('pointerdown', event => {
+  if (event.button !== 0 || event.target.closest('input,select,button,a,summary,.chart-scroll,.table-wrap,pre')) return;
+  dragStart = {x:event.clientX,y:event.clientY};
+});
+document.addEventListener('pointerup', event => {
+  if (!dragStart) return;
+  const dx = event.clientX-dragStart.x, dy = event.clientY-dragStart.y; dragStart = null;
+  if (Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5) showSlide(slideIndex+(dx<0 ? 1 : -1));
+});
+document.addEventListener('pointercancel', () => { dragStart = null; });
+// Explicit touch handlers preserve swipe navigation when a browser cancels pointer scrolling.
+let touchStart = null;
+document.addEventListener('touchstart', e => {
+  if (e.target.closest('input,select,button,a,summary,.chart-scroll,.table-wrap,pre')) return;
+  const t=e.changedTouches[0]; touchStart={x:t.clientX,y:t.clientY}; dragStart=null;
+}, {passive:true});
+document.addEventListener('touchend', e => {
+  if(!touchStart)return; const t=e.changedTouches[0],dx=t.clientX-touchStart.x,dy=t.clientY-touchStart.y;touchStart=null;dragStart=null;
+  if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.5)showSlide(slideIndex+(dx<0?1:-1));
+}, {passive:true});
+function markStale() {
+  $('mixture-fields').hidden = $('input-state').value !== 'mixture';
+  $('verdict').className='verdict pending'; $('verdict').innerHTML='<strong>Inputs changed</strong><p>Displayed results belong to the previous run. Run again to check the new input.</p>';
+  $('export').disabled=true;
+}
+$('controls').addEventListener('input',markStale); $('controls').addEventListener('change',markStale);
+function readOptions() {
+  const mixture = $('input-state').value==='mixture';
+  if ($('phase').value.trim()==='' || (mixture && ($('phase-b').value.trim()==='' || $('weight').value.trim()===''))) throw new Error('Enter the phase and population values.');
+  return {m:Number($('qubits').value),phiA:Number($('phase').value),phiB:mixture?Number($('phase-b').value):0,weight:mixture?Number($('weight').value):1,fault:$('fault').value};
+}
+function drawCircuit(m,fault) {
+  const height = 26*(m+1)+16, width=500, targetY=26*(m+1);
+  let svg='';
+  for(let row=0;row<m;row++){
+    const q=m-1-row,y=26*(row+1),x=140+row*32;
+    svg+=`<text x="0" y="${y+4}">q${q}</text><path d="M28 ${y} H488" stroke="#bdcbc6"/><rect x="50" y="${y-9}" width="22" height="18" rx="2" fill="#dff2e9"/><text x="57" y="${y+4}">H</text><path d="M${x} ${y} V${targetY}" stroke="${fault==='power'&&q===m-1?'#b32f39':'#628477'}"/><circle cx="${x}" cy="${y}" r="3" fill="#067565"/><rect x="${x-13}" y="${targetY-9}" width="27" height="18" fill="#f6f5f0" stroke="#bdcbc6"/><text x="${x-10}" y="${targetY+4}" style="font-size:9px">${fault==='power'&&q===m-1?'I':`U^${2**q}`}</text><text x="455" y="${y+4}">M</text>`;
+  }
+  svg=`<path d="M28 ${targetY} H488" stroke="#bdcbc6"/>`+svg+`<text x="0" y="${targetY+4}">u</text><rect x="370" y="14" width="65" height="${26*m}" rx="4" fill="${fault==='sign'?'#fae3e2':'#eae6f5'}"/><text x="377" y="${20+13*m}">${fault==='sign'?'QFT +':'QFT⁻¹'}</text>`;
+  $('circuit').setAttribute('viewBox',`0 0 ${width} ${height}`);$('circuit').innerHTML=svg;
+  $('circuit').setAttribute('aria-label',`${m} Hadamards, controlled powers of U, ${fault==='sign'?'wrong-sign QFT':'inverse QFT'}, and measurement. ${fault==='reverse'?'Output bits deliberately reversed.':''}`);
+  $('circuit-size').textContent=`${m} estimation + 1 target`;
+}
+function run() {
+  try {
+    const options=readOptions(),shots=Number($('shots').value),seed=Number($('seed').value);
+    const actual=QPE.simulate(options),expected=QPE.reference(options),counts=QPE.sample(actual,shots,seed);
+    const maxDifference=QPE.difference(actual,expected),sum=actual.reduce((a,b)=>a+b,0),pass=maxDifference<1e-9&&Math.abs(sum-1)<1e-9;
+    const n=actual.length,peak=Math.max(...actual),peakIndex=actual.indexOf(peak),bits=y=>y.toString(2).padStart(options.m,'0');
+    lastRun={timestampUTC:new Date().toISOString(),model:'ideal diagonal-unitary QPE; gate simulation',evidenceStatus:pass?'NUMERICALLY TESTED':'FAILED COMPARISON',options,shots,seed,prng:'xorshift32',probabilities:actual,reference:expected,counts,maxDifference,normalization:sum,tolerance:1e-9,passed:pass,physicalMeasurement:false,formalProofScope:'Only repeated-controlled-U resource recurrence, separate Lean artifact.'};
+    $('histogram').innerHTML=actual.map((p,y)=>`<div class="bar-slot" title="${bits(y)}: circuit ${(p*100).toFixed(4)}%, reference ${(expected[y]*100).toFixed(4)}%, count ${counts[y]}"><div class="bar" style="height:${Math.min(100,p*100)}%;background:${pass?'var(--green)':'var(--red)'}"></div><div class="reference-line" style="bottom:${Math.min(100,expected[y]*100)}%"></div><div class="shot-dot" style="bottom:${counts[y]/shots*100}%"></div><span class="bar-label">${n<=16?bits(y):y}</span></div>`).join('');
+    $('histogram').setAttribute('aria-label',`Most likely outcome ${bits(peakIndex)}, probability ${(peak*100).toFixed(2)} percent. Full values in the table below.`);
+    $('peak-bits').textContent=bits(peakIndex);$('peak-prob').textContent=`${(peak*100).toFixed(2)}%`;$('resolution').textContent=`1/${n}`;
+    $('result-note').textContent=`*One maximum shown; ties are possible. Peak phase = ${(peakIndex/n).toFixed(6)}. ${options.weight!==1?'Two-eigenstate marginal; do not interpret one peak as the whole input.':'Phase is periodic: 0 and 1 represent the same point.'} ${n>16?'Chart labels are decimal outcomes; the table shows binary.':''}`;
+    $('outcomes').innerHTML=actual.map((p,y)=>`<tr><td class="mono">${bits(y)}</td><td>${(y/n).toFixed(6)}</td><td>${(p*100).toFixed(4)}%</td><td>${(expected[y]*100).toFixed(4)}%</td><td>${counts[y]}</td></tr>`).join('');
+    $('verdict').className=`verdict${pass?'':' fail'}`;
+    document.querySelector('.chart-panel').classList.toggle('has-failure',!pass);
+    $('verdict').innerHTML=pass?'<strong>PASS · numerical agreement</strong><p>Gate simulation matches the independent analytical distribution for this input.</p>':'<strong>FAIL · evidence gate blocked</strong><p>The simulated circuit disagrees with the correct-QPE reference. Do not promote this result to a verified implementation.</p>';
+    $('max-diff').textContent=maxDifference.toExponential(2);$('resource-count').textContent=`${n-1} applications (if repeated)`;$('input-error').textContent='';$('export').disabled=false;
+    drawCircuit(options.m,options.fault);
+  }catch(error){$('input-error').textContent=error.message;$('export').disabled=true;$('verdict').className='verdict fail';$('verdict').innerHTML='<strong>Invalid input</strong><p>No new experiment was executed. Previous plotted results are unchanged.</p>';}
+}
+$('controls').addEventListener('submit',e=>{e.preventDefault();run();});
+function preset(name,fault='none') {
+  $('qubits').value='3';$('fault').value=fault;$('input-state').value=name==='mixture'?'mixture':'single';
+  $('phase').value=({exact:3/8,third:1/3,mixture:1/8,wrap:1-1e-9})[name];$('phase-b').value=5/8;$('weight').value=.25;
+  if(name==='wrap')$('qubits').value='5';$('mixture-fields').hidden=name!=='mixture';run();
+}
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>preset(b.dataset.preset));
+document.querySelectorAll('[data-fault-demo]').forEach(b=>b.onclick=()=>{preset('exact',b.dataset.faultDemo);showSlide(4);});
+$('export').onclick=async()=>{
+  if(!lastRun||$('export').disabled)return;
+  const runSnapshot={...lastRun,independentWolframEvidence:referenceEvidence};
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode($('qpe-engine').textContent));
+  const engineSHA256=Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,'0')).join('');
+  const blob=new Blob([JSON.stringify({...runSnapshot,engineSHA256,browser:navigator.userAgent,reproduce:'Use the included options, shots, seed and xorshift32 PRNG; node validate.mjs checks this engine.'},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='mantiq-qpe-run.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+async function loadEvidence() {
+  try {
+    const response=await fetch('evidence/reference.json');if(!response.ok)throw new Error('Reference unavailable');
+    const evidence=await response.json();
+    // Explicit manifest cases, never execute expression strings from a downloaded file.
+    const cases={nonDyadicOneThird:{m:3,phiA:1/3},wrapNearOne:{m:5,phiA:1-1e-9},weightedOrthogonal:{m:3,phiA:1/8,phiB:5/8,weight:.25}};
+    const checked=Object.entries(cases).map(([name,options])=>{
+      const vector=evidence.vectors.find(v=>v.name===name),actual=QPE.simulate(options);
+      if(!vector||vector.probabilities.length!==actual.length||!vector.probabilities.every(Number.isFinite))throw new Error('Incomplete reference vectors');
+      return {name,maxDifference:QPE.difference(actual,vector.probabilities)};
+    });
+    const passed=checked.every(c=>c.maxDifference<1e-9);
+    referenceEvidence={status:passed?'passed':'failed',timestampUTC:evidence.timestampUTC,environment:evidence.environment,sourceHashes:evidence.sourceHashes,vectors:checked};
+    $('wolfram-status').textContent=passed?`${checked.length}/${checked.length} vectors agree`:'Reference mismatch';
+    $('browser-evidence').textContent=passed?'IMPLEMENTATION VERIFIED':'COMPARISON FAILED';$('browser-evidence').className=`tag${passed?'':' red'}`;
+    $('browser-evidence-detail').textContent=`Runtime gate simulation ${passed?'matches':'does not match'} three independently exported Wolfram distributions. Scope: these vectors only.`;
+  }catch(error){referenceEvidence={status:'unavailable',reason:error.message};$('wolfram-status').textContent='Unavailable: serve this folder over HTTP';$('browser-evidence').textContent='REFERENCE UNAVAILABLE';$('browser-evidence').className='tag amber';$('browser-evidence-detail').textContent='Independent vector comparison unavailable. The local analytical comparison still runs; it is a different check.';}
+}
+hashNavigate();run();loadEvidence();
+</script>
+</body>
+</html>

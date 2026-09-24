@@ -1,0 +1,19 @@
+Notebook[{
+ Cell["Quantum Phase Estimation: bounded mathematical evidence", "Title"],
+ Cell["This executable notebook evaluates the ideal noiseless QPE distribution. It is educational evidence, not a full formal verification of QPE or hardware behavior.", "Text"],
+ Cell["Load the reusable package and make results reproducible.", "Text"],
+ Cell["SetDirectory[NotebookDirectory[]];\nGet[\"QPE.wl\"];\nSeedRandom[42];", "Input"],
+ Cell["Direct Fourier distribution", "Section"],
+ Cell["The outcome probability is the squared magnitude of the normalized finite Fourier sum. Labels are shown MSB first.", "Text"],
+ Cell["With[{m = 3, phi = 3/8}, Table[{y, BitStringMSB[y, m], QPEProbabilities[m, phi][[y + 1]]}, {y, 0, 2^m - 1}]]", "Input"],
+ Cell["Interactive ideal QPE", "Section"],
+ Cell["Move the phase and estimation-register size. Each evaluation uses only local state.", "Text"],
+ Cell["Manipulate[Module[{p = N[QPEProbabilities[m, phi], 16]}, BarChart[p, ChartLabels -> Table[BitStringMSB[y, m], {y, 0, 2^m - 1}], PlotRange -> {0, 1}, AxesLabel -> {\"MSB-first outcome\", \"probability\"}, ImageSize -> Large]], {{phi, 1/3, \"phase phi\"}, 0, 1 - 10^-6, 10^-3}, {{m, 3, \"estimation qubits\"}, 1, 6, 1}]", "Input"],
+ Cell["Independent formula and mixture", "Section"],
+ Cell["The sine-ratio expression follows from the finite geometric series. Orthogonal eigenstates contribute an incoherent weighted marginal.", "Text"],
+ Cell["Max[Abs[N[QPEProbabilities[3, 1/3], 30] - N[GeometricProbabilities[3, 1/3], 30]]]", "Input"],
+ Cell["MixtureProbabilities[3, 1/8, 5/8, 1/4]", "Input"],
+ Cell["Validation", "Section"],
+ Cell["These checks are exact symbolic checks and bounded finite numerical tests. They are not a formal proof of the complete QPE algorithm.", "Text"],
+ Cell["RunValidationSuite[]", "Input"]
+}, WindowTitle -> "MantiQ QPE Evidence", StyleDefinitions -> "Default.nb"]

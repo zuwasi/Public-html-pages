@@ -1,0 +1,7 @@
+name = "qpe_cost"
+version = "0.1.0"
+defaultTargets = ["QPECost"]
+
+[[lean_lib]]
+name = "QPECost"
+roots = ["QPECost"]

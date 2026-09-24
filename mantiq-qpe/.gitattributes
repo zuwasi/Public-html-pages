@@ -1,0 +1,3 @@
+# Keep hashed source files in LF form on every platform.
+* text eol=lf
+*.png binary
