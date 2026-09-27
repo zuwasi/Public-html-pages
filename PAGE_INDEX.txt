@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-09-24
+Last updated: 2026-09-27
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -349,6 +349,9 @@ Last updated: 2026-09-24
 
 • sbomator-fda-edition
   https://zuwasi.github.io/Public-html-pages/sbomator-fda-edition
+
+• sbomator-market-comparison
+  https://zuwasi.github.io/Public-html-pages/sbomator-market-comparison
 
 • sbomator-scrapling-vendor-comparison
   https://zuwasi.github.io/Public-html-pages/sbomator-scrapling-vendor-comparison
