@@ -374,6 +374,9 @@ Last updated: 2026-09-27
 • wolfram-engine-gpu-demo-assets
   https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-assets
 
+• xsightlab-automation
+  https://zuwasi.github.io/Public-html-pages/xsightlab-automation
+
 • yocto-bsp-studio-design-partner
   https://zuwasi.github.io/Public-html-pages/yocto-bsp-studio-design-partner
 
