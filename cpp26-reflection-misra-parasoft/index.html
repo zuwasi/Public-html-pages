@@ -247,7 +247,7 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
 
 cpptestcli -config "builtin://MISRA C++ 2023" \
     -compiler gcc_11-64 -input pre.bdf -report reports/pre</pre>
-      <p class="muted" style="margin-top:.6rem">C/C++test Standard 2025.2 (engine 10.7.3), built-in MISRA C++ 2023 test configuration, all rules enabled, no suppressions. Compiler profile <code>gcc_11-64</code> against a local GCC 15.2 toolchain. Same command for the C++26 file with <code>-std=c++26</code>.</p>
+      <p class="muted" style="margin-top:.6rem">Run twice, on C/C++test Standard 2025.2 (engine 10.7.3) and on C/C++test Professional 2026.1 (engine 10.7.4, May 2026; Professional imports the same BDF with <code>-bdf</code> instead of <code>-input</code>). Built-in MISRA C++ 2023 test configuration, all 279 rules enabled, no suppressions. Compiler profile <code>gcc_11-64</code> against a local GCC 15.2 toolchain. Same command for the C++26 file with <code>-std=c++26</code>. Both versions produced identical findings.</p>
     </div>
   </div>
   <p class="muted" style="margin-top:1rem">Why it matters: in a safety project the analyzer's report is the evidence. If a violation is not in the report, the auditor does not see it. If the parser silently skips code, the report is still green. Keep that in mind for slide 11.</p>
@@ -255,7 +255,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
 
 <!-- 9 Results before -->
 <section class="slide">
-  <div class="kicker">Parasoft C/C++test 2025.2 &middot; builtin://MISRA C++ 2023 &middot; pre_cpp26/fault_telemetry.cpp</div>
+  <div class="kicker">Parasoft C/C++test 2025.2 and 2026.1 (identical) &middot; builtin://MISRA C++ 2023 &middot; pre_cpp26/fault_telemetry.cpp</div>
   <h2><span class="big" style="color:var(--red)">29</span> <span class="muted">violations, 11 rules</span></h2>
   <table>
     <thead><tr><th>Rule</th><th>Category</th><th class="num">Count</th><th>Message (as reported)</th></tr></thead>
@@ -276,7 +276,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
 
 <!-- 10 Results after -->
 <section class="slide">
-  <div class="kicker">Parasoft C/C++test 2025.2 &middot; builtin://MISRA C++ 2023 &middot; cpp26/fault_telemetry.cpp</div>
+  <div class="kicker">Parasoft C/C++test 2025.2 and 2026.1 (identical) &middot; builtin://MISRA C++ 2023 &middot; cpp26/fault_telemetry.cpp</div>
   <h2><span class="big" style="color:var(--green)">4</span> <span class="muted">violations, 3 rules</span></h2>
   <div class="grid g2">
     <div class="card good">
@@ -312,7 +312,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
     <div class="card warn">
       <h3>Evidence from the C++26 scan</h3>
       <ul>
-        <li>Rule 6.0.3 flagged <code>Fault</code> (line 12) and <code>print_fields</code> (line 52), but <strong>not</strong> <code>TelemetryFrame</code> (line 26), a plain struct sitting between them.</li>
+        <li>Rule 6.0.3 flagged <code>Fault</code> (line 12) and <code>print_fields</code> (line 52), but <strong>not</strong> <code>TelemetryFrame</code> (line 26), a plain struct sitting between them. The same rule flags <code>TelemetryFrame</code> in the pre-C++26 file, on both tool versions.</li>
         <li><code>enum_name</code> and <code>is_padding_free</code>, both global, were not flagged either.</li>
         <li>Flow Analysis built 1 function graph (<code>main</code>). The C++20 file produced 3.</li>
         <li>Console output: no error, no warning, no setup problem. Exit code 0.</li>
@@ -321,7 +321,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
     <div class="card">
       <h3>Control experiment</h3>
       <p>A three-line file with <code>int broken = ;</code> between two structs: C/C++test flagged both structs and the broken variable, and printed no parse error. Error recovery is on and silent by default.</p>
-      <p style="margin-top:.6rem">Conclusion: the 2025.2 EDG front-end does not yet understand <code>^^T</code>, <code>[:m:]</code> or <code>template for</code>. It dropped that region, recovered at the next template, and reported a clean scan.</p>
+      <p style="margin-top:.6rem">Conclusion: the EDG front-end in both 2025.2 (10.7.3) and 2026.1 (10.7.4, released May 2026) does not yet understand <code>^^T</code>, <code>[:m:]</code> or <code>template for</code>. It dropped that region, recovered at the next template, and reported a clean scan.</p>
     </div>
   </div>
   <p style="margin-top:1rem"><strong>For a safety audit this is the finding.</strong> "Fewer violations" is only evidence if the tool parsed the code. Until your analyzer vendor ships P2996 support, a MISRA report on reflection code proves less than it appears to. Ask for the parser status in writing before you rely on it.</p>
@@ -361,7 +361,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
       <li>C++26 version on GCC 16.1: <a href="https://godbolt.org/z/M7os6nq9c" target="_blank" rel="noopener">https://godbolt.org/z/M7os6nq9c</a></li>
       <li>Pre-C++26 version on GCC 15.2: <a href="https://godbolt.org/z/jaTbPzEM7" target="_blank" rel="noopener">https://godbolt.org/z/jaTbPzEM7</a></li>
       <li>Original post: <a href="https://lnkd.in/p/dndmzJYN" target="_blank" rel="noopener">https://lnkd.in/p/dndmzJYN</a></li>
-      <li>Parasoft scan: C/C++test Standard 2025.2, <code>builtin://MISRA C++ 2023</code>, compiler profile <code>gcc_11-64</code>, 29 September 2026.</li>
+      <li>Parasoft scans: C/C++test Standard 2025.2 (10.7.3) and Professional 2026.1 (10.7.4), <code>builtin://MISRA C++ 2023</code>, compiler profile <code>gcc_11-64</code>, 29 September 2026. Identical results on both.</li>
     </ul>
   </div>
   <div class="foot">MISRA and MISRA C++ are registered trademarks of The MISRA Consortium Limited. Parasoft and C/C++test are trademarks of Parasoft Corporation. ESL is an independent consultancy.</div>
