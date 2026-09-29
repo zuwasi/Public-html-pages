@@ -8,80 +8,118 @@
 <title>C++26 Reflection on GCC 16.1: What Actually Compiles Today | ESL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Figtree:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* Palette and type sampled from parasoft.com/products/parasoft-c-ctest on 29 Sep 2026:
+     headings rgb(0,56,95), body rgb(92,105,112), accent rgb(10,147,210), links rgb(24,99,220),
+     hero glow rgba(52,165,218,.2), CTA pills green-to-cyan, banner navy-to-magenta. Body font Lato;
+     Parasoft's heading face (Zeitung) is not freely available, Figtree stands in for it. */
   :root {
-    --bg: #0b1020; --bg2: #111a30; --surface: #16213a; --border: #2c3a57;
-    --text: #e9edf5; --muted: #a9b4c9; --accent: #4fc3f7; --green: #4ade80; --red: #f87171; --amber: #fbbf24;
+    --navy: #00385f; --navy-dark: #002743; --ink: #212121; --body: #5c6970; --mute: #919ba0;
+    --line: #e5e9ec; --panel: #f4f8fb; --white: #fff;
+    --blue: #0a93d2; --link: #1863dc; --glow: rgba(52,165,218,.22);
+    --grad: linear-gradient(90deg, #14e08a 0%, #4be7c6 55%, #6ff2e2 100%);
+    --banner: linear-gradient(135deg, #12395f 0%, #38254f 14%, #5a1340 36%, #731247 63%, #b3175a 85%, #e01a6c 100%);
+    --ok: #1f9d55; --bad: #d7263d; --warn: #e08a00;
+    --head: Figtree, "Trebuchet MS", "Segoe UI", sans-serif;
+    --sans: Lato, "Segoe UI", system-ui, sans-serif;
     --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+    --topbar: 64px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
-  a { color: var(--accent); }
+  html, body { height: 100%; overflow: hidden; background: var(--white); color: var(--body); font-family: var(--sans); }
+  a { color: var(--link); text-decoration: none; } a:hover { text-decoration: underline; }
+  /* Fixed top bar, modelled on the Parasoft product-page header */
+  .topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar); background: var(--white); border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 1rem; padding: 0 clamp(1rem, 4vw, 3rem); z-index: 30; }
+  .topbar img { height: 38px; width: auto; }
+  .topbar .who { font-size: .78rem; line-height: 1.2; color: var(--body); border-left: 1px solid var(--line); padding-left: .9rem; }
+  .topbar .who b { display: block; color: var(--navy); font-size: .86rem; }
+  .topbar .spacer { flex: 1; }
+  .topbar .crumb { font-size: .8rem; color: var(--mute); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; padding: .55em 1.35em; border-radius: 999px; font-weight: 700; font-size: .86rem; white-space: nowrap; border: 1.5px solid transparent; }
+  .btn.ghost { border-color: #79d9d0; color: var(--navy-dark); background: var(--white); }
+  .btn.ghost:hover { background: #f0fffc; text-decoration: none; }
+  .btn.cta { background: var(--grad); color: var(--navy-dark); }
+  .btn.cta:hover { filter: brightness(1.04); text-decoration: none; }
   .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
   .track { display: flex; height: 100%; transition: transform .45s cubic-bezier(.4,0,.2,1); will-change: transform; }
-  .slide { position: relative; flex: 0 0 100vw; width: 100vw; height: 100vh; padding: clamp(1rem, 4vh, 3rem) clamp(1rem, 6vw, 6rem) clamp(3.5rem, 8vh, 5rem); overflow-y: auto; display: flex; flex-direction: column; justify-content: center; background: radial-gradient(1200px 600px at 80% -10%, #1a2a4d 0%, transparent 60%), var(--bg); }
-  .slide::-webkit-scrollbar { width: 6px; } .slide::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-  .kicker { color: var(--accent); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: clamp(.7rem, 1.1vw, .85rem); margin-bottom: .6rem; }
-  h1 { font-size: clamp(1.9rem, 5.2vw, 4rem); line-height: 1.08; letter-spacing: -.03em; font-weight: 800; }
-  h2 { font-size: clamp(1.4rem, 3.4vw, 2.5rem); line-height: 1.15; letter-spacing: -.025em; font-weight: 700; margin-bottom: clamp(.8rem, 2vh, 1.4rem); }
-  h3 { font-size: clamp(1rem, 1.7vw, 1.25rem); font-weight: 600; margin-bottom: .5rem; color: var(--accent); }
-  p, li { font-size: clamp(.92rem, 1.45vw, 1.15rem); line-height: 1.6; color: var(--text); }
-  .muted { color: var(--muted); }
-  ul { padding-left: 1.2em; } li + li { margin-top: .4rem; }
-  .grid { display: grid; gap: clamp(.8rem, 2vw, 1.6rem); }
+  .slide { position: relative; flex: 0 0 100vw; width: 100vw; height: 100vh; padding: calc(var(--topbar) + clamp(.8rem, 3vh, 2rem)) clamp(1rem, 6vw, 6rem) clamp(3.5rem, 8vh, 5rem); overflow-y: auto; display: flex; flex-direction: column; justify-content: center; background: radial-gradient(102% 100% at 52% 0%, var(--glow) 0%, rgba(52,165,218,0) 100%), var(--white); }
+  .slide::-webkit-scrollbar { width: 6px; } .slide::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+  .kicker { display: inline-flex; align-items: center; gap: .5rem; align-self: flex-start; background: var(--panel); color: var(--navy); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: clamp(.66rem, 1vw, .8rem); padding: .4em .9em; border-radius: 999px; margin-bottom: .9rem; }
+  .kicker::before { content: ""; width: .55em; height: .55em; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 3px rgba(10,147,210,.18); }
+  .kicker a { color: var(--link); text-transform: none; letter-spacing: 0; font-weight: 700; }
+  h1 { font-family: var(--head); color: var(--navy); font-size: clamp(1.9rem, 5vw, 3.9rem); line-height: 1.08; letter-spacing: -.02em; font-weight: 800; }
+  h2 { font-family: var(--head); color: var(--navy); font-size: clamp(1.35rem, 3.1vw, 2.3rem); line-height: 1.18; letter-spacing: -.015em; font-weight: 700; margin-bottom: clamp(.8rem, 2vh, 1.4rem); }
+  h3 { font-family: var(--head); color: var(--navy); font-size: clamp(1rem, 1.6vw, 1.2rem); font-weight: 700; margin-bottom: .5rem; }
+  p, li { font-size: clamp(.9rem, 1.4vw, 1.1rem); line-height: 1.55; color: var(--body); }
+  strong { color: var(--ink); }
+  .muted { color: var(--mute); }
+  ul { padding-left: 1.2em; } li + li { margin-top: .4rem; } li::marker { color: var(--blue); }
+  .grid { display: grid; gap: clamp(.8rem, 2vw, 1.5rem); }
   .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: clamp(.8rem, 1.8vw, 1.3rem); }
-  .card.good { border-color: #1f6b43; } .card.bad { border-color: #7a2e2e; } .card.warn { border-color: #7a5a1a; }
-  pre { background: #0d1526; border: 1px solid var(--border); border-radius: 10px; padding: clamp(.7rem, 1.4vw, 1.1rem); overflow: auto; font: clamp(.6rem, min(1.05vw, 1.25vh), .9rem)/1.45 var(--mono); color: #e6edf7; tab-size: 4; }
-  code { font-family: var(--mono); } :not(pre) > code { background: #1b2740; padding: .1em .35em; border-radius: 4px; font-size: .92em; }
-  .c-k { color: #c792ea; } .c-t { color: #82aaff; } .c-s { color: #c3e88d; } .c-m { color: #f78c6c; } .c-c { color: #7f8ea3; font-style: italic; } .c-r { color: #4fc3f7; font-weight: 600; } .c-v { color: var(--red); } .c-ok { color: var(--green); }
-  table { width: 100%; border-collapse: collapse; font-size: clamp(.72rem, 1.15vw, .98rem); }
-  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-  th { color: var(--muted); font-weight: 600; font-size: .85em; text-transform: uppercase; letter-spacing: .06em; }
+  .card { background: var(--white); border: 1px solid var(--line); border-top: 4px solid var(--blue); border-radius: 6px; padding: clamp(.8rem, 1.8vw, 1.3rem); box-shadow: 0 6px 24px rgba(0,56,95,.06); }
+  .card.good { border-top-color: var(--ok); } .card.bad { border-top-color: var(--bad); } .card.warn { border-top-color: var(--warn); }
+  pre { background: var(--navy-dark); border-radius: 6px; padding: clamp(.7rem, 1.4vw, 1.1rem); overflow: auto; font: clamp(.6rem, min(1vw, 1.2vh), .88rem)/1.4 var(--mono); color: #e6edf7; tab-size: 4; box-shadow: 0 10px 30px rgba(0,39,67,.18); }
+  code { font-family: var(--mono); } :not(pre) > code { background: var(--panel); color: var(--navy); padding: .1em .35em; border-radius: 3px; font-size: .92em; }
+  .c-k { color: #c792ea; } .c-t { color: #82aaff; } .c-s { color: #c3e88d; } .c-m { color: #f78c6c; } .c-c { color: #8fa3b8; font-style: italic; } .c-r { color: #6ff2e2; font-weight: 700; } .c-v { color: #ff6b6b; } .c-ok { color: #14e08a; }
+  table { width: 100%; border-collapse: collapse; font-size: clamp(.72rem, 1.12vw, .96rem); background: var(--white); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; box-shadow: 0 6px 24px rgba(0,56,95,.06); }
+  th, td { text-align: left; padding: .5rem .7rem; border-bottom: 1px solid var(--line); vertical-align: top; color: var(--body); }
+  th { background: var(--panel); color: var(--navy); font-weight: 700; font-size: .82em; text-transform: uppercase; letter-spacing: .06em; }
+  tbody tr:last-child td { border-bottom: 0; }
   td.num { font-variant-numeric: tabular-nums; text-align: right; }
-  td code, .err { font-family: var(--mono); font-size: .92em; } .err { color: var(--red); }
-  .pill { display: inline-block; padding: .12em .55em; border-radius: 999px; font-size: .8em; font-weight: 600; }
-  .pill.req { background: #3a1d1d; color: #fca5a5; } .pill.adv { background: #3a2f12; color: #fde68a; } .pill.ok { background: #143526; color: #86efac; }
-  .big { font-size: clamp(2.6rem, 7vw, 5.5rem); font-weight: 800; line-height: 1; letter-spacing: -.04em; }
-  .logo { height: clamp(56px, 9vh, 110px); width: auto; background: #fff; border-radius: 10px; padding: 0 .4rem; }
+  td code, .err { font-family: var(--mono); font-size: .92em; } .err { color: var(--bad); }
+  .pill { display: inline-block; padding: .12em .55em; border-radius: 999px; font-size: .8em; font-weight: 700; }
+  .pill.req { background: #fde8eb; color: #a3132a; } .pill.adv { background: #fff3dc; color: #8a5300; } .pill.ok { background: #e3f7ec; color: #14703c; }
+  .big { font-family: var(--head); color: var(--navy); font-size: clamp(2.6rem, 7vw, 5.5rem); font-weight: 800; line-height: 1; letter-spacing: -.03em; }
+  .logo { height: clamp(56px, 9vh, 110px); width: auto; }
   .brand { display: flex; align-items: center; gap: 1rem; margin-bottom: clamp(1rem, 3vh, 2rem); }
-  .brand small { color: var(--muted); font-size: clamp(.75rem, 1.1vw, .95rem); line-height: 1.35; }
-  .out { font-family: var(--mono); font-size: clamp(.7rem, 1.1vw, .92rem); color: var(--green); white-space: pre; }
-  .term { background: #050912; border-radius: 10px; padding: .9rem 1rem; border: 1px solid var(--border); }
-  .foot { position: absolute; left: clamp(1rem, 6vw, 6rem); right: clamp(1rem, 6vw, 6rem); bottom: 3.2rem; color: var(--muted); font-size: clamp(.68rem, 1vw, .82rem); }
-  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); background: rgba(22,33,58,.85); color: var(--text); font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; user-select: none; transition: opacity .2s; }
-  .nav:hover { background: var(--accent); color: #041018; }
+  .brand small { color: var(--body); font-size: clamp(.75rem, 1.1vw, .95rem); line-height: 1.35; border-left: 1px solid var(--line); padding-left: 1rem; }
+  .banner { background: var(--banner); color: #fff; font-weight: 700; padding: .7em 1.2em; border-radius: 6px; font-size: clamp(.8rem, 1.2vw, 1rem); display: inline-block; margin-bottom: 1.2rem; }
+  .banner a { color: #fff; text-decoration: underline; }
+  .out { font-family: var(--mono); font-size: clamp(.7rem, 1.1vw, .92rem); color: #14e08a; white-space: pre; }
+  .term { background: var(--navy-dark); border-radius: 6px; padding: .9rem 1rem; }
+  .foot { position: absolute; left: clamp(1rem, 6vw, 6rem); right: clamp(1rem, 6vw, 6rem); bottom: 3.2rem; color: var(--mute); font-size: clamp(.66rem, 1vw, .8rem); }
+  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid #79d9d0; background: var(--white); color: var(--navy-dark); font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; user-select: none; transition: opacity .2s, background .2s; box-shadow: 0 4px 14px rgba(0,56,95,.12); }
+  .nav:hover { background: var(--grad); }
   .nav.prev { left: 14px; } .nav.next { right: 14px; } .nav.hidden { opacity: 0; pointer-events: none; }
-  .progress { position: fixed; left: 0; bottom: 0; height: 5px; width: 100%; background: #0f1830; z-index: 20; }
-  .progress > div { height: 100%; width: 0; background: linear-gradient(90deg, #4fc3f7, #a78bfa, #4ade80); transition: width .35s; }
-  .counter { position: fixed; right: 16px; bottom: 12px; color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; z-index: 20; }
-  .hint { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); color: var(--muted); font-size: .9rem; z-index: 20; animation: pulse 1.6s ease-in-out infinite; transition: opacity .3s; }
+  .progress { position: fixed; left: 0; bottom: 0; height: 5px; width: 100%; background: var(--line); z-index: 20; }
+  .progress > div { height: 100%; width: 0; background: var(--grad); transition: width .35s; }
+  .counter { position: fixed; right: 16px; bottom: 12px; color: var(--mute); font-size: .85rem; font-weight: 700; font-variant-numeric: tabular-nums; z-index: 20; }
+  .hint { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); color: var(--navy); font-weight: 700; font-size: .9rem; z-index: 20; animation: pulse 1.6s ease-in-out infinite; transition: opacity .3s; }
   .hint.gone { opacity: 0; pointer-events: none; animation: none; }
   @keyframes pulse { 0%,100% { opacity: .45; transform: translateX(-50%) translateY(0); } 50% { opacity: 1; transform: translateX(-50%) translateY(-4px); } }
   @media (max-width: 820px) {
     .g2, .g3 { grid-template-columns: 1fr; }
-    .slide { justify-content: flex-start; padding-top: 1.2rem; }
+    .slide { justify-content: flex-start; }
     .foot { position: static; margin-top: 1rem; }
     .nav { width: 40px; height: 40px; font-size: 1.3rem; }
+    .topbar .who, .topbar .crumb, .topbar .ghost { display: none; }
   }
 </style>
 </head>
 <body>
+<header class="topbar">
+  <img src="esl-logo.jpg" alt="ESL Engineering Software Lab">
+  <div class="who"><b>ESL Engineering Software Lab</b>Software Engineering Consultancy</div>
+  <div class="spacer"></div>
+  <span class="crumb" id="crumb">C++26 Reflection &middot; GCC 16.1</span>
+  <a class="btn ghost" href="https://godbolt.org/z/M7os6nq9c" target="_blank" rel="noopener">Run on Compiler Explorer</a>
+  <a class="btn cta" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact Us</a>
+</header>
 <div class="deck">
 <div class="track" id="track">
 
 <!-- 1 Title -->
-<section class="slide">
-  <div class="brand"><img class="logo" src="esl-logo.jpg" alt="ESL Engineering Software Lab"><small>ESL Engineering Software Lab<br>Software Engineering Consultancy</small></div>
-  <div class="kicker">A reply to "C++26 just shipped compile time reflection"</div>
+<section class="slide" data-crumb="A LinkedIn reply, in slides">
+  <div class="banner">A reply to Amadeus Ferro: "C++26 just shipped compile time reflection" &middot; <a href="https://lnkd.in/p/dndmzJYN" target="_blank" rel="noopener">original post &raquo;</a></div>
+  <div class="kicker">Built and run on GCC 16.1, 29 September 2026</div>
   <h1>C++26 Reflection on GCC 16.1:<br>What Actually Compiles Today</h1>
-  <p class="muted" style="margin-top:1rem; max-width: 64ch;">Amadeus Ferro's <code>print_fields()</code>, plus a second job for the same feature, built and run on the shipping compiler. The six things that stop the snippet compiling on the first try, where the rest of the toolchain still lags, and one consequence for teams under a coding standard.</p>
-  <p class="muted" style="margin-top:1.4rem; font-size:.9em;">Daniel Liezrowice, ESL &middot; 29 September 2026 &middot; <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">eswlab.com/contact-us</a></p>
+  <p style="margin-top:1rem; max-width: 64ch;">Amadeus Ferro's <code>print_fields()</code>, plus a second job for the same feature, built and run on the shipping compiler. The six things that stop the snippet compiling on the first try, where the rest of the toolchain still lags, and one consequence for teams under a coding standard.</p>
+  <p class="muted" style="margin-top:1.4rem; font-size:.9em;">Daniel Liezrowice, ESL Engineering Software Lab &middot; <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">eswlab.com/contact-us</a></p>
 </section>
 
 <!-- 2 The post and what we did -->
-<section class="slide">
+<section class="slide" data-crumb="Context">
   <div class="kicker">Context</div>
   <h2>The post shows one function. We ran it, extended it, and broke it on purpose.</h2>
   <div class="grid g2">
@@ -105,7 +143,7 @@
 </section>
 
 <!-- 3 Facts -->
-<section class="slide">
+<section class="slide" data-crumb="Compiler status, Sep 2026">
   <div class="kicker">Verified status, September 2026</div>
   <h2>"Just shipped" means GCC. Only GCC.</h2>
   <div class="grid g3">
@@ -117,7 +155,7 @@
 </section>
 
 <!-- 4 Pre-C++26 code -->
-<section class="slide">
+<section class="slide" data-crumb="Before: C++20 on GCC 15.2">
   <div class="kicker">Before &middot; <a href="https://godbolt.org/z/jaTbPzEM7" target="_blank" rel="noopener">Run on Compiler Explorer (GCC 15.2, -std=c++20)</a></div>
   <h2>pre_cpp26/fault_telemetry.cpp: three jobs, three workarounds</h2>
 <pre><span class="c-m">#define</span> FAULT_LIST(X)   \                                    <span class="c-c">// job 1: X-macro so the enum and its names stay in sync</span>
@@ -159,7 +197,7 @@
 </section>
 
 <!-- 5 C++26 code -->
-<section class="slide">
+<section class="slide" data-crumb="After: C++26 on GCC 16.1">
   <div class="kicker">After &middot; <a href="https://godbolt.org/z/M7os6nq9c" target="_blank" rel="noopener">Run on Compiler Explorer (GCC 16.1, -std=c++26 -freflection)</a></div>
   <h2>cpp26/fault_telemetry.cpp: same three jobs, one definition of everything</h2>
 <pre><span class="c-m">#include</span> <span class="c-s">&lt;meta&gt;</span>
@@ -202,7 +240,7 @@
 </section>
 
 <!-- 6 Proof it runs -->
-<section class="slide">
+<section class="slide" data-crumb="Executed on GCC 16.1">
   <div class="kicker">Executed on GCC 16.1, Compiler Explorer, 29 Sep 2026</div>
   <h2>Same output. Then two edits the old code could not catch.</h2>
   <div class="grid g3">
@@ -221,7 +259,7 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
 </section>
 
 <!-- 7 Gotchas -->
-<section class="slide">
+<section class="slide" data-crumb="Six compile errors and fixes">
   <div class="kicker">Six errors between the post's snippet and a running binary &middot; each one reproduced on GCC 16.1</div>
   <h2>What it took to make it compile</h2>
   <table>
@@ -239,7 +277,7 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
 </section>
 
 <!-- 8 Tooling lag -->
-<section class="slide">
+<section class="slide" data-crumb="Toolchain lag">
   <div class="kicker">The compiler is ahead of everything that reads the compiler's input</div>
   <h2>GCC parses this. Check whether your other tools do.</h2>
   <div class="grid g2">
@@ -262,7 +300,7 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
 </section>
 
 <!-- 9 Compliance -->
-<section class="slide">
+<section class="slide" data-crumb="One compliance slide">
   <div class="kicker">One consequence the post does not mention</div>
   <h2>For teams under MISRA C++:2023, the boilerplate reflection removes is the boilerplate the standard forbids</h2>
   <table>
@@ -280,7 +318,7 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
 </section>
 
 <!-- 10 Recommendations -->
-<section class="slide">
+<section class="slide" data-crumb="Recommendations">
   <div class="kicker">What to do this quarter</div>
   <h2>Recommendations by where you stand</h2>
   <div class="grid g3">
@@ -291,11 +329,11 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
 </section>
 
 <!-- 11 Contact -->
-<section class="slide">
-  <div class="brand"><img class="logo" src="esl-logo.jpg" alt="ESL Engineering Software Lab"><small>ESL Engineering Software Lab<br>Software Engineering Consultancy</small></div>
+<section class="slide" data-crumb="Contact and reproduce">
+  <div class="kicker">ESL Engineering Software Lab</div>
   <h2>Modern C++ migration, static analysis and safety evidence for embedded C and C++</h2>
   <p style="max-width:62ch">We run this kind of before/after measurement on client codebases: which modernisation steps pay off, which ones only move the problem, and where the toolchain is not ready yet.</p>
-  <p style="margin-top:1.2rem; font-size:1.15em"><strong>Contact us:</strong> <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">https://eswlab.com/contact-us/</a></p>
+  <p style="margin-top:1.2rem; display:flex; gap:.8rem; flex-wrap:wrap; align-items:center;"><a class="btn cta" style="font-size:1rem" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact Us</a><span class="muted">https://eswlab.com/contact-us/</span></p>
   <div class="card" style="margin-top:1.4rem">
     <h3>Reproduce everything</h3>
     <ul>
@@ -324,7 +362,7 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
   var slides = track.querySelectorAll('.slide');
   var total = slides.length, cur = 0, navigated = false;
   var prev = document.getElementById('prev'), next = document.getElementById('next');
-  var bar = document.getElementById('bar'), counter = document.getElementById('counter'), hint = document.getElementById('hint');
+  var bar = document.getElementById('bar'), counter = document.getElementById('counter'), hint = document.getElementById('hint'), crumb = document.getElementById('crumb');
   function go(n) {
     cur = Math.max(0, Math.min(total - 1, n));
     track.style.transform = 'translateX(' + (-cur * 100) + 'vw)';
@@ -332,6 +370,8 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
     counter.textContent = (cur + 1) + ' / ' + total;
     prev.classList.toggle('hidden', cur === 0);
     next.classList.toggle('hidden', cur === total - 1);
+    var s = slides[cur], k = s.querySelector('.kicker');
+    crumb.textContent = s.dataset.crumb || (k ? k.textContent.split('\u00b7')[0].trim() : 'C++26 Reflection \u00b7 GCC 16.1');
     if (!navigated && cur !== 0) { navigated = true; hint.classList.add('gone'); }
     if (location.hash !== '#' + (cur + 1)) history.replaceState(null, '', '#' + (cur + 1));
   }
