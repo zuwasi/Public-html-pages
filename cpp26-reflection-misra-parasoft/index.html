@@ -327,18 +327,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
   <p style="margin-top:1rem"><strong>For a safety audit this is the finding.</strong> "Fewer violations" is only evidence if the tool parsed the code. Until your analyzer vendor ships P2996 support, a MISRA report on reflection code proves less than it appears to. Ask for the parser status in writing before you rely on it.</p>
 </section>
 
-<!-- 12 Supply chain angle -->
-<section class="slide">
-  <div class="kicker">The SBOM angle</div>
-  <h2>Every codegen step you delete is a component out of your SBOM</h2>
-  <div class="grid g3">
-    <div class="card good"><h3>Fewer components</h3><p>protoc, moc, flatc, magic_enum, Boost.PFR, Boost.Describe, cereal macros: each is a dependency with its own CVE feed, licence text and CRA/FDA disclosure line. Reflection collapses serializers, enum tables and layout checks into the compiler you already have.</p></div>
-    <div class="card warn"><h3>Heavier trust anchor</h3><p>The compiler now generates what a reviewable tool used to generate. Under ISO 26262-8 §11 and DO-330 the compiler's tool confidence level does not go down; the code it synthesises at compile time has no source artefact to diff in review.</p></div>
-    <div class="card"><h3>What to review instead</h3><p>Review the metafunction once (<code>is_padding_free</code>, <code>enum_name</code>), not every generated line. Keep the negative tests from slide 7 in CI: they are the evidence that the metafunction does what the review says.</p></div>
-  </div>
-</section>
-
-<!-- 13 Recommendations -->
+<!-- 12 Recommendations -->
 <section class="slide">
   <div class="kicker">What to do this quarter</div>
   <h2>Recommendations by where you stand</h2>
@@ -349,10 +338,10 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
   </div>
 </section>
 
-<!-- 14 Contact -->
+<!-- 13 Contact -->
 <section class="slide">
   <div class="brand"><img class="logo" src="esl-logo.jpg" alt="ESL Engineering Software Lab"><small>ESL Engineering Software Lab<br>Software Engineering Consultancy</small></div>
-  <h2>Static analysis, MISRA/CERT compliance, SBOM and safety evidence for embedded C and C++</h2>
+  <h2>Static analysis, MISRA/CERT compliance and safety evidence for embedded C and C++</h2>
   <p style="max-width:62ch">We run this kind of before/after measurement on client codebases: which modernisation steps remove real violations, which ones only move them, and where the toolchain is not ready yet.</p>
   <p style="margin-top:1.2rem; font-size:1.15em"><strong>Contact us:</strong> <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">https://eswlab.com/contact-us/</a></p>
   <div class="card" style="margin-top:1.4rem">
@@ -373,7 +362,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
 <button class="nav prev hidden" id="prev" aria-label="Previous slide">&#8249;</button>
 <button class="nav next" id="next" aria-label="Next slide">&#8250;</button>
 <div class="progress"><div id="bar"></div></div>
-<div class="counter" id="counter">1 / 14</div>
+<div class="counter" id="counter">1 / 13</div>
 <div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
 
 <script>
