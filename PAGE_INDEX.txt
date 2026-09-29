@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-09-27
+Last updated: 2026-09-29
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -262,6 +262,9 @@ Last updated: 2026-09-27
 
 • cpp-debugging-evidence-demo
   https://zuwasi.github.io/Public-html-pages/cpp-debugging-evidence-demo
+
+• cpp26-reflection-misra-parasoft
+  https://zuwasi.github.io/Public-html-pages/cpp26-reflection-misra-parasoft
 
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
