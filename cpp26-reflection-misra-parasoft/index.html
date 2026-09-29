@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="description" content="C++26 reflection measured against MISRA C++:2023 with Parasoft C/C++test: 29 violations before, 4 after, and one warning about what the static analyzer did not see.">
+<meta name="description" content="C++26 reflection (P2996) run on GCC 16.1: Amadeus Ferro's print_fields plus a compile-time layout check, the six things that stop the snippet compiling on the first try, where the toolchain still lags, and one consequence for regulated teams.">
 <meta name="author" content="Daniel Liezrowice, ESL Engineering Software Lab">
-<title>C++26 Reflection Is a Compliance Feature | ESL</title>
+<title>C++26 Reflection on GCC 16.1: What Actually Compiles Today | ESL</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -40,6 +40,7 @@
   th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
   th { color: var(--muted); font-weight: 600; font-size: .85em; text-transform: uppercase; letter-spacing: .06em; }
   td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  td code, .err { font-family: var(--mono); font-size: .92em; } .err { color: var(--red); }
   .pill { display: inline-block; padding: .12em .55em; border-radius: 999px; font-size: .8em; font-weight: 600; }
   .pill.req { background: #3a1d1d; color: #fca5a5; } .pill.adv { background: #3a2f12; color: #fde68a; } .pill.ok { background: #143526; color: #86efac; }
   .big { font-size: clamp(2.6rem, 7vw, 5.5rem); font-weight: 800; line-height: 1; letter-spacing: -.04em; }
@@ -49,7 +50,6 @@
   .out { font-family: var(--mono); font-size: clamp(.7rem, 1.1vw, .92rem); color: var(--green); white-space: pre; }
   .term { background: #050912; border-radius: 10px; padding: .9rem 1rem; border: 1px solid var(--border); }
   .foot { position: absolute; left: clamp(1rem, 6vw, 6rem); right: clamp(1rem, 6vw, 6rem); bottom: 3.2rem; color: var(--muted); font-size: clamp(.68rem, 1vw, .82rem); }
-  /* nav */
   .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); background: rgba(22,33,58,.85); color: var(--text); font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; user-select: none; transition: opacity .2s; }
   .nav:hover { background: var(--accent); color: #041018; }
   .nav.prev { left: 14px; } .nav.next { right: 14px; } .nav.hidden { opacity: 0; pointer-events: none; }
@@ -75,15 +75,15 @@
 <section class="slide">
   <div class="brand"><img class="logo" src="esl-logo.jpg" alt="ESL Engineering Software Lab"><small>ESL Engineering Software Lab<br>Software Engineering Consultancy</small></div>
   <div class="kicker">A reply to "C++26 just shipped compile time reflection"</div>
-  <h1>C++26 Reflection Is a<br>Compliance Feature</h1>
-  <p class="muted" style="margin-top:1rem; max-width: 60ch;">The same 60-line program, before and after reflection, scanned with Parasoft C/C++test against MISRA C++:2023. 29 violations became 4. Then the analyzer told us something the compiler did not.</p>
+  <h1>C++26 Reflection on GCC 16.1:<br>What Actually Compiles Today</h1>
+  <p class="muted" style="margin-top:1rem; max-width: 64ch;">Amadeus Ferro's <code>print_fields()</code>, plus a second job for the same feature, built and run on the shipping compiler. The six things that stop the snippet compiling on the first try, where the rest of the toolchain still lags, and one consequence for teams under a coding standard.</p>
   <p class="muted" style="margin-top:1.4rem; font-size:.9em;">Daniel Liezrowice, ESL &middot; 29 September 2026 &middot; <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">eswlab.com/contact-us</a></p>
 </section>
 
-<!-- 2 The post and my point -->
+<!-- 2 The post and what we did -->
 <section class="slide">
   <div class="kicker">Context</div>
-  <h2>The post said "less boilerplate". For safety-critical C++ that is the smaller story.</h2>
+  <h2>The post shows one function. We ran it, extended it, and broke it on purpose.</h2>
   <div class="grid g2">
     <div class="card">
       <h3>What the post shows</h3>
@@ -91,9 +91,15 @@
       <p class="muted" style="margin-top:.6rem">Original post by Amadeus Ferro: <a href="https://lnkd.in/p/dndmzJYN" target="_blank" rel="noopener">lnkd.in/p/dndmzJYN</a></p>
     </div>
     <div class="card good">
-      <h3>My point</h3>
-      <p>Every workaround reflection replaces is something <strong>MISRA C++:2023 already forbids or discourages</strong>: X-macros, <code>#</code> stringizing, <code>offsetof</code>, hand-copied field lists. Reflection is the first C++ language feature that <em>deletes</em> violations instead of adding rules.</p>
-      <p style="margin-top:.6rem">And the tooling that certifies your code has not caught up yet. This deck measures both halves.</p>
+      <h3>What this deck adds</h3>
+      <ul>
+        <li>Which compilers actually have it today (one of three).</li>
+        <li>The same program written the old way and the reflection way, both runnable in Compiler Explorer.</li>
+        <li>A second job for reflection: a compile-time wire-layout check that replaces five <code>offsetof</code> asserts.</li>
+        <li>Two negative tests that prove "add a field and it just works" instead of asserting it.</li>
+        <li>Six compile errors you will hit porting the snippet to GCC 16.1, with the fix for each.</li>
+        <li>Where the toolchain around the compiler still cannot read this code.</li>
+      </ul>
     </div>
   </div>
 </section>
@@ -101,47 +107,31 @@
 <!-- 3 Facts -->
 <section class="slide">
   <div class="kicker">Verified status, September 2026</div>
-  <h2>What actually shipped, and where</h2>
+  <h2>"Just shipped" means GCC. Only GCC.</h2>
   <div class="grid g3">
-    <div class="card good"><h3>Standard</h3><p>P2996R13 <em>Reflection for C++26</em> is in the frozen C++26 draft (Croydon, March 2026). <code>template for</code> is a separate paper, P1306 <em>Expansion statements</em>, adopted alongside it.</p></div>
-    <div class="card good"><h3>GCC 16.1</h3><p>Released 30 April 2026. Reflection enabled with <code>-std=c++26 -freflection</code>, header <code>&lt;meta&gt;</code>. GCC calls it experimental. Also ships annotations (P3394), <code>define_static_*</code> (P3491), contracts.</p></div>
-    <div class="card warn"><h3>Clang and MSVC</h3><p>Mainline Clang: none. Only the Bloomberg <code>clang-p2996</code> fork (header <code>&lt;experimental/meta&gt;</code>). MSVC: no public implementation and no published ETA. If you ship on Visual Studio, this is "prepare", not "deploy".</p></div>
+    <div class="card good"><h3>Standard</h3><p>P2996R13 <em>Reflection for C++26</em> is in the frozen C++26 draft (Croydon, March 2026). <code>template for</code> is a separate paper, P1306 <em>Expansion statements</em>, adopted alongside it. Both are needed for the snippet in the post.</p></div>
+    <div class="card good"><h3>GCC 16.1</h3><p>Released 30 April 2026. Enabled with <code>-std=c++26 -freflection</code>, header <code>&lt;meta&gt;</code>. GCC's own release notes call it experimental. Also ships annotations (P3394), <code>define_static_*</code> (P3491) and contracts.</p></div>
+    <div class="card warn"><h3>Clang and MSVC</h3><p>Mainline Clang: nothing. Only the Bloomberg <code>clang-p2996</code> fork, with header <code>&lt;experimental/meta&gt;</code>. MSVC: no public implementation and no published ETA. If you ship on Visual Studio this is "prepare", not "deploy".</p></div>
   </div>
-  <p class="muted" style="margin-top:1.2rem">All code in this deck was compiled and executed on GCC 16.1 through Compiler Explorer. Links on the code slides.</p>
+  <p class="muted" style="margin-top:1.2rem">Everything in this deck was compiled and executed on GCC 16.1 through Compiler Explorer (compiler id <code>g161</code>). Links on the code slides.</p>
 </section>
 
-<!-- 4 The three workarounds -->
-<section class="slide">
-  <div class="kicker">What we have been writing for 20 years</div>
-  <h2>Three workarounds, three MISRA C++:2023 rules</h2>
-  <table>
-    <thead><tr><th>Job</th><th>Pre-reflection technique</th><th>MISRA C++:2023</th><th>Reflection replacement</th></tr></thead>
-    <tbody>
-      <tr><td>Enum to string</td><td>X-macro list plus <code>#name</code> stringizing</td><td><span class="pill req">19.0.2 Required</span> no function-like macros<br><span class="pill adv">19.3.1 Advisory</span> no <code>#</code> / <code>##</code></td><td><code>enumerators_of(^^E)</code> + <code>identifier_of(e)</code></td></tr>
-      <tr><td>Wire-format layout contract</td><td><code>static_assert(offsetof(Frame, f) == N)</code>, one per field</td><td><span class="pill req">21.2.4 Required</span> <code>offsetof</code> shall not be used</td><td><code>offset_of(m)</code>, <code>size_of(m)</code> in one <code>consteval</code> loop</td></tr>
-      <tr><td>Field dump / serializer</td><td>Struct listed a second time by hand</td><td>No rule. Silent rot: add a field, forget the printer, still compiles.</td><td><code>template for</code> over <code>nonstatic_data_members_of(^^T)</code></td></tr>
-      <tr><td>Enum names without macros</td><td><code>__PRETTY_FUNCTION__</code> parsing (magic_enum)</td><td>Non-portable, range-limited, compile-time heavy</td><td>Exact enumerator list from the compiler</td></tr>
-    </tbody>
-  </table>
-  <p class="muted" style="margin-top:1rem">The rule numbers are from the MISRA C++:2023 first edition. The Parasoft rule IDs are <code>MISRACPP2023-19_0_2-a</code>, <code>19_3_1-a</code>, <code>21_2_4-a</code>.</p>
-</section>
-
-<!-- 5 Pre-C++26 code -->
+<!-- 4 Pre-C++26 code -->
 <section class="slide">
   <div class="kicker">Before &middot; <a href="https://godbolt.org/z/jaTbPzEM7" target="_blank" rel="noopener">Run on Compiler Explorer (GCC 15.2, -std=c++20)</a></div>
-  <h2>pre_cpp26/fault_telemetry.cpp</h2>
-<pre><span class="c-m">#define</span> FAULT_LIST(X)   \                                    <span class="c-v">// 19.0.2</span>
+  <h2>pre_cpp26/fault_telemetry.cpp: three jobs, three workarounds</h2>
+<pre><span class="c-m">#define</span> FAULT_LIST(X)   \                                    <span class="c-c">// job 1: X-macro so the enum and its names stay in sync</span>
     X(None) X(OverTemp) X(UnderVoltage) X(SensorTimeout)
 
 <span class="c-k">enum class</span> <span class="c-t">Fault</span> : <span class="c-t">std::uint8_t</span> {
-<span class="c-m">#define</span> AS_ENUM(name) name,                                  <span class="c-v">// 19.0.2</span>
+<span class="c-m">#define</span> AS_ENUM(name) name,
     FAULT_LIST(AS_ENUM)
 <span class="c-m">#undef</span> AS_ENUM
 };
 
 <span class="c-k">constexpr const char</span>* to_string(<span class="c-t">Fault</span> f) {
-    <span class="c-k">switch</span> (f) {                                             <span class="c-v">// 9.4.2: no default</span>
-<span class="c-m">#define</span> AS_CASE(name) <span class="c-k">case</span> <span class="c-t">Fault</span>::name: <span class="c-k">return</span> #name;         <span class="c-v">// 19.3.1 (#)</span>
+    <span class="c-k">switch</span> (f) {
+<span class="c-m">#define</span> AS_CASE(name) <span class="c-k">case</span> <span class="c-t">Fault</span>::name: <span class="c-k">return</span> #name;         <span class="c-c">// stringize with #</span>
         FAULT_LIST(AS_CASE)
 <span class="c-m">#undef</span> AS_CASE
     }
@@ -152,13 +142,13 @@
     <span class="c-t">std::uint32_t</span> timestamp_ms;  <span class="c-t">float</span> temp_c;  <span class="c-t">std::uint16_t</span> voltage_mv;
     <span class="c-t">std::uint8_t</span>  fault;         <span class="c-t">std::uint8_t</span> crc8;
 };
-<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, timestamp_ms) == 0);      <span class="c-v">// 21.2.4</span>
-<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, temp_c)       == 4);      <span class="c-v">// 21.2.4</span>
-<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, voltage_mv)   == 8);      <span class="c-v">// 21.2.4</span>
-<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, fault)        == 10);     <span class="c-v">// 21.2.4</span>
-<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, crc8)         == 11);     <span class="c-v">// 21.2.4</span>
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, timestamp_ms) == 0);      <span class="c-c">// job 2: wire layout, one line per field,</span>
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, temp_c)       == 4);      <span class="c-c">//        edited by hand when the struct changes</span>
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, voltage_mv)   == 8);
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, fault)        == 10);
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, crc8)         == 11);
 
-<span class="c-k">void</span> print_frame(<span class="c-k">const</span> <span class="c-t">TelemetryFrame</span>&amp; f) {              <span class="c-c">// the struct, listed again by hand</span>
+<span class="c-k">void</span> print_frame(<span class="c-k">const</span> <span class="c-t">TelemetryFrame</span>&amp; f) {              <span class="c-c">// job 3: the struct, listed again by hand</span>
     <span class="c-t">std</span>::printf(<span class="c-s">"timestamp_ms = %u\n"</span>, f.timestamp_ms);
     <span class="c-t">std</span>::printf(<span class="c-s">"temp_c       = %g\n"</span>, <span class="c-k">static_cast</span>&lt;<span class="c-t">double</span>&gt;(f.temp_c));
     <span class="c-t">std</span>::printf(<span class="c-s">"voltage_mv   = %u\n"</span>, f.voltage_mv);
@@ -168,15 +158,15 @@
 }</pre>
 </section>
 
-<!-- 6 C++26 code -->
+<!-- 5 C++26 code -->
 <section class="slide">
   <div class="kicker">After &middot; <a href="https://godbolt.org/z/M7os6nq9c" target="_blank" rel="noopener">Run on Compiler Explorer (GCC 16.1, -std=c++26 -freflection)</a></div>
-  <h2>cpp26/fault_telemetry.cpp</h2>
+  <h2>cpp26/fault_telemetry.cpp: same three jobs, one definition of everything</h2>
 <pre><span class="c-m">#include</span> <span class="c-s">&lt;meta&gt;</span>
 <span class="c-k">enum class</span> <span class="c-t">Fault</span> : <span class="c-t">std::uint8_t</span> { None, OverTemp, UnderVoltage, SensorTimeout };
 
 <span class="c-k">template</span> &lt;<span class="c-k">typename</span> E&gt; <span class="c-k">requires</span> <span class="c-t">std::is_enum_v</span>&lt;E&gt;
-<span class="c-k">constexpr</span> <span class="c-t">std::string_view</span> enum_name(E value) {                   <span class="c-ok">// no macro, no #</span>
+<span class="c-k">constexpr</span> <span class="c-t">std::string_view</span> enum_name(E value) {                   <span class="c-ok">// job 1: names come from the compiler</span>
     <span class="c-r">template for</span> (<span class="c-k">constexpr auto</span> e : <span class="c-t">std</span>::define_static_array(<span class="c-t">std::meta</span>::enumerators_of(<span class="c-r">^^E</span>))) {
         <span class="c-k">if</span> (value == <span class="c-r">[:e:]</span>) <span class="c-k">return</span> <span class="c-t">std::meta</span>::identifier_of(e);
     }
@@ -189,7 +179,7 @@
 };
 
 <span class="c-k">template</span> &lt;<span class="c-k">typename</span> T&gt;
-<span class="c-k">consteval bool</span> is_padding_free() {                                 <span class="c-ok">// replaces 5 x offsetof</span>
+<span class="c-k">consteval bool</span> is_padding_free() {                                 <span class="c-ok">// job 2: one loop replaces 5 x offsetof</span>
     <span class="c-t">std::size_t</span> expected = 0;
     <span class="c-k">for</span> (<span class="c-k">auto</span> m : <span class="c-t">std::meta</span>::nonstatic_data_members_of(<span class="c-r">^^T</span>, <span class="c-t">std::meta</span>::access_context::current())) {
         <span class="c-k">if</span> (<span class="c-k">static_cast</span>&lt;<span class="c-t">std::size_t</span>&gt;(<span class="c-t">std::meta</span>::offset_of(m).bytes) != expected) <span class="c-k">return false</span>;
@@ -200,7 +190,7 @@
 <span class="c-k">static_assert</span>(is_padding_free&lt;<span class="c-t">TelemetryFrame</span>&gt;(), <span class="c-s">"TelemetryFrame has padding: wire format broken"</span>);
 
 <span class="c-k">template</span> &lt;<span class="c-k">typename</span> T&gt;
-<span class="c-k">void</span> print_fields(<span class="c-k">const</span> T&amp; obj) {                                  <span class="c-ok">// one definition of the struct</span>
+<span class="c-k">void</span> print_fields(<span class="c-k">const</span> T&amp; obj) {                                  <span class="c-ok">// job 3: the function from the post</span>
     <span class="c-r">template for</span> (<span class="c-k">constexpr auto</span> m : <span class="c-t">std</span>::define_static_array(
                       <span class="c-t">std::meta</span>::nonstatic_data_members_of(<span class="c-r">^^T</span>, <span class="c-t">std::meta</span>::access_context::current()))) {
         <span class="c-k">if constexpr</span> (<span class="c-t">std::is_enum_v</span>&lt;<span class="c-k">typename</span><span class="c-r">[:</span><span class="c-t">std::meta</span>::type_of(m)<span class="c-r">:]</span>&gt;)
@@ -211,7 +201,7 @@
 }</pre>
 </section>
 
-<!-- 7 Proof it runs -->
+<!-- 6 Proof it runs -->
 <section class="slide">
   <div class="kicker">Executed on GCC 16.1, Compiler Explorer, 29 Sep 2026</div>
   <h2>Same output. Then two edits the old code could not catch.</h2>
@@ -220,7 +210,7 @@
 temp_c       = 71.5
 voltage_mv   = 3300
 fault        = OverTemp
-crc8         = 90</div></div><p class="muted" style="margin-top:.6rem">No warnings with <code>-Wall -Wextra</code>. Byte-for-byte equal to the C++20 binary's output.</p></div>
+crc8         = 90</div></div><p class="muted" style="margin-top:.6rem">No warnings with <code>-Wall -Wextra -Wpedantic</code>. Byte-for-byte equal to the C++20 binary's output.</p></div>
     <div class="card bad"><h3>Edit 1: insert a <code>uint8_t</code> before <code>timestamp_ms</code></h3><div class="term"><div class="out" style="color:var(--red)">error: static assertion failed:
 TelemetryFrame has padding:
 wire format broken</div></div><p class="muted" style="margin-top:.6rem">Build fails. The pre-C++26 version needs someone to remember to update five <code>offsetof</code> lines.</p></div>
@@ -230,119 +220,81 @@ seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appe
   </div>
 </section>
 
-<!-- 8 Parasoft explanation -->
+<!-- 7 Gotchas -->
 <section class="slide">
-  <div class="kicker">Before the results: what did the scanning</div>
-  <h2>Parasoft C/C++test and the MISRA C++:2023 configuration</h2>
-  <div class="grid g2">
-    <div class="card">
-      <h3>The tool</h3>
-      <p>Parasoft C/C++test is a static analysis, unit test and coverage tool qualified for ISO 26262, IEC 62304, IEC 61508 and EN 50128 workflows. Its parser is an EDG-based C/C++ front-end that mirrors your real compiler's configuration, so it sees the code the way your build does.</p>
-      <p style="margin-top:.6rem">Rules come in two families: compiled checkers (DLL) and RuleWizard pattern rules (<code>.rule</code> files). The three rules this deck cares about, 19.0.2, 19.3.1 and 21.2.4, are all pattern rules cloned from older base rules (<code>PREPROC-28</code>, <code>MISRA2004-19_13</code>, <code>MISRA2004-20_6</code>).</p>
-    </div>
-    <div class="card">
-      <h3>How this scan was run</h3>
-<pre>cpptestscan --cpptestscanOutputFile=pre.bdf \
-    g++ -std=c++20 -c pre_cpp26/fault_telemetry.cpp
-
-cpptestcli -config "builtin://MISRA C++ 2023" \
-    -compiler gcc_11-64 -input pre.bdf -report reports/pre</pre>
-      <p class="muted" style="margin-top:.6rem">Run twice, on C/C++test Standard 2025.2 (engine 10.7.3) and on C/C++test Professional 2026.1 (engine 10.7.4, May 2026; Professional imports the same BDF with <code>-bdf</code> instead of <code>-input</code>). Built-in MISRA C++ 2023 test configuration, all 279 rules enabled, no suppressions. Compiler profile <code>gcc_11-64</code> against a local GCC 15.2 toolchain. Same command for the C++26 file with <code>-std=c++26</code>. Both versions produced identical findings.</p>
-    </div>
-  </div>
-  <p class="muted" style="margin-top:1rem">Why it matters: in a safety project the analyzer's report is the evidence. If a violation is not in the report, the auditor does not see it. If the parser silently skips code, the report is still green. Keep that in mind for slide 11.</p>
-</section>
-
-<!-- 9 Results before -->
-<section class="slide">
-  <div class="kicker">Parasoft C/C++test 2025.2 and 2026.1 (identical) &middot; builtin://MISRA C++ 2023 &middot; pre_cpp26/fault_telemetry.cpp</div>
-  <h2><span class="big" style="color:var(--red)">29</span> <span class="muted">violations, 11 rules</span></h2>
+  <div class="kicker">Six errors between the post's snippet and a running binary &middot; each one reproduced on GCC 16.1</div>
+  <h2>What it took to make it compile</h2>
   <table>
-    <thead><tr><th>Rule</th><th>Category</th><th class="num">Count</th><th>Message (as reported)</th></tr></thead>
+    <thead><tr><th>You write</th><th>GCC 16.1 says</th><th>Fix</th></tr></thead>
     <tbody>
-      <tr><td><strong>19.0.2-a</strong></td><td><span class="pill req">Required</span></td><td class="num">2</td><td>Do not define the function-like macro: FAULT_LIST / AS_ENUM <span class="muted">(AS_CASE exempt: it uses #)</span></td></tr>
-      <tr><td><strong>19.3.1-a</strong></td><td><span class="pill adv">Advisory</span></td><td class="num">1</td><td>Preprocessor operator # should not be used</td></tr>
-      <tr><td><strong>19.3.4-a</strong></td><td><span class="pill req">Required</span></td><td class="num">5</td><td>Each instance of parameter 'X' / 'name' should be enclosed in parentheses</td></tr>
-      <tr><td><strong>21.2.4-a</strong></td><td><span class="pill req">Required</span></td><td class="num">5</td><td>The macro offsetof shall not be used</td></tr>
-      <tr><td><strong>9.4.2-a</strong></td><td><span class="pill req">Required</span></td><td class="num">1</td><td>There is no 'default' label in a switch statement</td></tr>
-      <tr><td>0.1.2-a</td><td><span class="pill req">Required</span></td><td class="num">5</td><td>Unused function's 'printf' return value</td></tr>
-      <tr><td>7.0.6-c</td><td><span class="pill req">Required</span></td><td class="num">2</td><td>Do not pass uint16_t / uint8_t through the ellipsis parameter</td></tr>
-      <tr><td>30.0.1-a</td><td><span class="pill req">Required</span></td><td class="num">1</td><td>&lt;cstdio&gt; library shall not be used</td></tr>
-      <tr><td>6.0.3-a, 6.5.1-a, 18.3.1-a</td><td class="muted">housekeeping</td><td class="num">7</td><td>Global namespace, missing header declaration, no catch(...) in main</td></tr>
+      <tr><td><code>^E</code> (single caret, as in early P2996 drafts)</td><td class="err">expected primary-expression before '^' token</td><td>The reflection operator is <code>^^</code> since P2996R4; <code>^E</code> is not valid.</td></tr>
+      <tr><td><code>template for (constexpr auto e : enumerators_of(^^E))</code></td><td class="err">not a constant expression because it refers to a result of 'operator new'</td><td><code>enumerators_of</code> returns a <code>std::vector</code>. Wrap it: <code>std::define_static_array(...)</code> (P3491) gives a constant-usable span.</td></tr>
+      <tr><td><code>nonstatic_data_members_of(^^T)</code></td><td class="err">too few arguments to function ... (info, access_context)</td><td>P2996R13 added the second parameter. Pass <code>std::meta::access_context::current()</code>.</td></tr>
+      <tr><td><code>offset_of(m).bytes != expected</code></td><td class="err">warning: comparison of integer expressions of different signedness [-Wsign-compare]</td><td><code>.bytes</code> is <code>ptrdiff_t</code>, not <code>size_t</code>. Cast, or make the accumulator signed. Compiles either way.</td></tr>
+      <tr><td><code>#include &lt;experimental/meta&gt;</code></td><td class="err">fatal error: experimental/meta: No such file or directory</td><td>That header belongs to the Bloomberg clang fork. GCC 16 ships <code>&lt;meta&gt;</code>.</td></tr>
+      <tr><td><code>-std=c++26</code> alone, or <code>-std=c++23 -freflection</code></td><td class="err">reflection is only available with '-freflection' / '-freflection' only supported with '-std=c++26' or '-std=gnu++26'</td><td>Both flags, together: <code>-std=c++26 -freflection</code>.</td></tr>
     </tbody>
   </table>
-  <p class="muted" style="margin-top:.8rem"><strong>14 of the 29</strong> (bold rows) exist only because of the macro, switch and offsetof workarounds. Another 8 come from <code>printf</code>, which <code>std::println</code> also removes.</p>
+  <p class="muted" style="margin-top:.9rem">None of these are in the post's snippet, which is written against the paper rather than the compiler. All six were reproduced through the Compiler Explorer API on 29 September 2026; the script and raw output are in the reproduction folder linked on the last slide.</p>
 </section>
 
-<!-- 10 Results after -->
+<!-- 8 Tooling lag -->
 <section class="slide">
-  <div class="kicker">Parasoft C/C++test 2025.2 and 2026.1 (identical) &middot; builtin://MISRA C++ 2023 &middot; cpp26/fault_telemetry.cpp</div>
-  <h2><span class="big" style="color:var(--green)">4</span> <span class="muted">violations, 3 rules</span></h2>
-  <div class="grid g2">
-    <div class="card good">
-      <table>
-        <thead><tr><th>Rule</th><th class="num">Count</th><th>Message</th></tr></thead>
-        <tbody>
-          <tr><td>6.0.3-a</td><td class="num">2</td><td>Do not declare 'Fault' / 'print_fields' in the global namespace</td></tr>
-          <tr><td>6.5.1-a</td><td class="num">1</td><td>'print_fields' has external linkage and is not declared in the header</td></tr>
-          <tr><td>18.3.1-a</td><td class="num">1</td><td>'main' does not contain a catch(...)</td></tr>
-        </tbody>
-      </table>
-      <p class="muted" style="margin-top:.7rem">All four are demo-file housekeeping (single translation unit, no namespace). None involve preprocessor, switch, offsetof or I/O.</p>
-    </div>
-    <div class="card">
-      <h3>What disappeared</h3>
-      <ul>
-        <li><span class="pill ok">0</span> function-like macros (was 2 + 5 parenthesisation)</li>
-        <li><span class="pill ok">0</span> <code>#</code> operators (was 1)</li>
-        <li><span class="pill ok">0</span> <code>offsetof</code> (was 5)</li>
-        <li><span class="pill ok">0</span> switch statements (was 1 without default)</li>
-        <li><span class="pill ok">0</span> <code>printf</code> ellipsis and ignored-return findings (was 8)</li>
-      </ul>
-      <p style="margin-top:.8rem">Not one suppression, not one deviation record. The code the rules were written against no longer exists.</p>
-    </div>
-  </div>
-</section>
-
-<!-- 11 The catch -->
-<section class="slide">
-  <div class="kicker">The part nobody puts on LinkedIn</div>
-  <h2>The analyzer said "files checked: 1". It did not check the reflection.</h2>
+  <div class="kicker">The compiler is ahead of everything that reads the compiler's input</div>
+  <h2>GCC parses this. Check whether your other tools do.</h2>
   <div class="grid g2">
     <div class="card warn">
-      <h3>Evidence from the C++26 scan</h3>
-      <ul>
-        <li>Rule 6.0.3 flagged <code>Fault</code> (line 12) and <code>print_fields</code> (line 52), but <strong>not</strong> <code>TelemetryFrame</code> (line 26), a plain struct sitting between them. The same rule flags <code>TelemetryFrame</code> in the pre-C++26 file, on both tool versions.</li>
-        <li><code>enum_name</code> and <code>is_padding_free</code>, both global, were not flagged either.</li>
-        <li>Flow Analysis built 1 function graph (<code>main</code>). The C++20 file produced 3.</li>
-        <li>Console output: no error, no warning, no setup problem. Exit code 0.</li>
+      <h3>What we tested</h3>
+      <p>We fed <code>cpp26/fault_telemetry.cpp</code> to a commercial C++ static analyzer with an EDG-based front-end (Parasoft C/C++test, both the 2025.2 and the May 2026 release). It reported a clean scan, exit code 0, no parse error.</p>
+      <ul style="margin-top:.6rem">
+        <li>It flagged <code>Fault</code> (line 12) and <code>print_fields</code> (line 52) for a global-namespace rule, but <strong>not</strong> <code>TelemetryFrame</code> (line 26), a plain struct sitting between them. The same rule flags <code>TelemetryFrame</code> in the C++20 file.</li>
+        <li><code>enum_name</code> and <code>is_padding_free</code> were not seen at all. Flow analysis built one function graph (<code>main</code>); the C++20 file produced three.</li>
+        <li>A control file with a deliberate syntax error also printed no parse error: recovery is silent by default.</li>
       </ul>
     </div>
     <div class="card">
-      <h3>Control experiment</h3>
-      <p>A three-line file with <code>int broken = ;</code> between two structs: C/C++test flagged both structs and the broken variable, and printed no parse error. Error recovery is on and silent by default.</p>
-      <p style="margin-top:.6rem">Conclusion: the EDG front-end in both 2025.2 (10.7.3) and 2026.1 (10.7.4, released May 2026) does not yet understand <code>^^T</code>, <code>[:m:]</code> or <code>template for</code>. It dropped that region, recovered at the next template, and reported a clean scan.</p>
+      <h3>Why it matters for a C++ team</h3>
+      <p>Every tool that has its own parser is a separate port: static analyzers, IDE indexers, formatters, coverage instrumenters, documentation generators. <code>^^</code>, <code>[: :]</code> and <code>template for</code> are new syntax, not new library, so each parser has to be taught them.</p>
+      <p style="margin-top:.6rem">Until then a green result from such a tool on reflection code means "I skipped it", not "it is fine". Test with a known-bad file first, and compare function counts between the compiler and the tool.</p>
+      <p class="muted" style="margin-top:.6rem">GCC itself labels the feature experimental. Treat the ecosystem the same way.</p>
     </div>
   </div>
-  <p style="margin-top:1rem"><strong>For a safety audit this is the finding.</strong> "Fewer violations" is only evidence if the tool parsed the code. Until your analyzer vendor ships P2996 support, a MISRA report on reflection code proves less than it appears to. Ask for the parser status in writing before you rely on it.</p>
 </section>
 
-<!-- 12 Recommendations -->
+<!-- 9 Compliance -->
+<section class="slide">
+  <div class="kicker">One consequence the post does not mention</div>
+  <h2>For teams under MISRA C++:2023, the boilerplate reflection removes is the boilerplate the standard forbids</h2>
+  <table>
+    <thead><tr><th>Job</th><th>Pre-reflection idiom</th><th>MISRA C++:2023</th><th>Reflection replacement</th></tr></thead>
+    <tbody>
+      <tr><td>Enum to string</td><td>X-macro list plus <code>#name</code></td><td><span class="pill req">19.0.2 Required</span> no function-like macros<br><span class="pill adv">19.3.1 Advisory</span> no <code>#</code> / <code>##</code></td><td><code>enumerators_of(^^E)</code> + <code>identifier_of(e)</code></td></tr>
+      <tr><td>Wire-format layout</td><td><code>static_assert(offsetof(Frame, f) == N)</code> per field</td><td><span class="pill req">21.2.4 Required</span> <code>offsetof</code> shall not be used</td><td><code>offset_of(m)</code> / <code>size_of(m)</code> in one <code>consteval</code> loop</td></tr>
+      <tr><td>Field dump</td><td>Struct listed a second time by hand</td><td>No rule; silent rot instead</td><td><code>template for</code> over <code>nonstatic_data_members_of</code></td></tr>
+    </tbody>
+  </table>
+  <div class="grid g2" style="margin-top:1rem">
+    <div class="card"><h3>Measured on the old code</h3><p>The C++20 file yields <strong>29</strong> MISRA C++:2023 findings in Parasoft C/C++test (identical on 2025.2 and 2026.1), <strong>14</strong> of them caused directly by the macro, <code>#</code>, <code>offsetof</code> and switch idioms above, and 8 more by <code>printf</code>.</p></div>
+    <div class="card good"><h3>By construction on the new code</h3><p>The C++26 file contains no macro, no <code>#</code>, no <code>offsetof</code>, no <code>switch</code>, no <code>printf</code>. Those rules cannot fire on tokens that are not there. That is a stronger statement than any scan result, because the scanner has not parsed the code yet (previous slide). MISRA has no reflection rules of its own so far.</p></div>
+  </div>
+</section>
+
+<!-- 10 Recommendations -->
 <section class="slide">
   <div class="kicker">What to do this quarter</div>
   <h2>Recommendations by where you stand</h2>
   <div class="grid g3">
-    <div class="card"><h3>GCC shops</h3><ul><li>Pilot <code>-freflection</code> on non-shipping code: enum names, layout asserts, test-only field dumps.</li><li>Keep the C++20 fallback until GCC drops "experimental".</li><li>Gate with the negative tests, not just "it compiles".</li></ul></div>
-    <div class="card"><h3>MSVC shops</h3><ul><li>Nothing to deploy yet. Isolate today's X-macros behind one header so the swap is mechanical later.</li><li>Record 19.0.2 / 19.3.1 / 21.2.4 deviations with "pending C++26 reflection" as the planned closure.</li></ul></div>
-    <div class="card"><h3>Safety and compliance teams</h3><ul><li>Ask Parasoft (and any EDG-based vendor) for the P2996 front-end roadmap in writing.</li><li>Add a parse-coverage check to the analyzer stage: compare function counts from the compiler and the analyzer.</li><li>Watch MISRA for a C++26 amendment; there are no reflection rules yet.</li></ul></div>
+    <div class="card"><h3>GCC shops</h3><ul><li>Pilot <code>-std=c++26 -freflection</code> on non-shipping code: enum names, layout asserts, test-only field dumps.</li><li>Keep the C++20 fallback until GCC drops "experimental".</li><li>Gate with negative tests like slide 6, not just "it compiles".</li></ul></div>
+    <div class="card"><h3>Clang and MSVC shops</h3><ul><li>Nothing to deploy yet. Isolate today's X-macros and <code>offsetof</code> tables behind one header so the swap is mechanical later.</li><li>Try the Bloomberg <code>clang-p2996</code> fork for experiments only; its header and API lag the final paper.</li></ul></div>
+    <div class="card"><h3>Whoever owns the toolchain</h3><ul><li>Run a known-bad reflection file through every parser you depend on and see who complains. Silence is the bad answer.</li><li>Ask analyzer and IDE vendors for their P2996 front-end date in writing.</li><li>If you are under MISRA, plan the deviation records for 19.0.2 / 19.3.1 / 21.2.4 with "pending C++26 reflection" as the closure.</li></ul></div>
   </div>
 </section>
 
-<!-- 13 Contact -->
+<!-- 11 Contact -->
 <section class="slide">
   <div class="brand"><img class="logo" src="esl-logo.jpg" alt="ESL Engineering Software Lab"><small>ESL Engineering Software Lab<br>Software Engineering Consultancy</small></div>
-  <h2>Static analysis, MISRA/CERT compliance and safety evidence for embedded C and C++</h2>
-  <p style="max-width:62ch">We run this kind of before/after measurement on client codebases: which modernisation steps remove real violations, which ones only move them, and where the toolchain is not ready yet.</p>
+  <h2>Modern C++ migration, static analysis and safety evidence for embedded C and C++</h2>
+  <p style="max-width:62ch">We run this kind of before/after measurement on client codebases: which modernisation steps pay off, which ones only move the problem, and where the toolchain is not ready yet.</p>
   <p style="margin-top:1.2rem; font-size:1.15em"><strong>Contact us:</strong> <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">https://eswlab.com/contact-us/</a></p>
   <div class="card" style="margin-top:1.4rem">
     <h3>Reproduce everything</h3>
@@ -350,7 +302,8 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
       <li>C++26 version on GCC 16.1: <a href="https://godbolt.org/z/M7os6nq9c" target="_blank" rel="noopener">https://godbolt.org/z/M7os6nq9c</a></li>
       <li>Pre-C++26 version on GCC 15.2: <a href="https://godbolt.org/z/jaTbPzEM7" target="_blank" rel="noopener">https://godbolt.org/z/jaTbPzEM7</a></li>
       <li>Original post: <a href="https://lnkd.in/p/dndmzJYN" target="_blank" rel="noopener">https://lnkd.in/p/dndmzJYN</a></li>
-      <li>Parasoft scans: C/C++test Standard 2025.2 (10.7.3) and Professional 2026.1 (10.7.4), <code>builtin://MISRA C++ 2023</code>, compiler profile <code>gcc_11-64</code>, 29 September 2026. Identical results on both.</li>
+      <li>Gotcha reproductions: each variant on slide 7 was sent to <code>g161</code> through the Compiler Explorer API with <code>-std=c++26 -freflection -O2 -Wall -Wextra</code>; the quoted messages are GCC's verbatim output.</li>
+      <li>Analyzer test: Parasoft C/C++test 2025.2 and 2026.1, <code>builtin://MISRA C++ 2023</code>, compiler profile <code>gcc_11-64</code>, 29 September 2026.</li>
     </ul>
   </div>
   <div class="foot">MISRA and MISRA C++ are registered trademarks of The MISRA Consortium Limited. Parasoft and C/C++test are trademarks of Parasoft Corporation. ESL is an independent consultancy.</div>
@@ -362,7 +315,7 @@ cpptestcli -config "builtin://MISRA C++ 2023" \
 <button class="nav prev hidden" id="prev" aria-label="Previous slide">&#8249;</button>
 <button class="nav next" id="next" aria-label="Next slide">&#8250;</button>
 <div class="progress"><div id="bar"></div></div>
-<div class="counter" id="counter">1 / 13</div>
+<div class="counter" id="counter">1 / 11</div>
 <div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
 
 <script>
