@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="description" content="C++26 reflection measured against MISRA C++:2023 with Parasoft C/C++test: 29 violations before, 4 after, and one warning about what the static analyzer did not see.">
+<meta name="author" content="Daniel Liezrowice, ESL Engineering Software Lab">
+<title>C++26 Reflection Is a Compliance Feature | ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1020; --bg2: #111a30; --surface: #16213a; --border: #2c3a57;
+    --text: #e9edf5; --muted: #a9b4c9; --accent: #4fc3f7; --green: #4ade80; --red: #f87171; --amber: #fbbf24;
+    --mono: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  a { color: var(--accent); }
+  .deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+  .track { display: flex; height: 100%; transition: transform .45s cubic-bezier(.4,0,.2,1); will-change: transform; }
+  .slide { position: relative; flex: 0 0 100vw; width: 100vw; height: 100vh; padding: clamp(1rem, 4vh, 3rem) clamp(1rem, 6vw, 6rem) clamp(3.5rem, 8vh, 5rem); overflow-y: auto; display: flex; flex-direction: column; justify-content: center; background: radial-gradient(1200px 600px at 80% -10%, #1a2a4d 0%, transparent 60%), var(--bg); }
+  .slide::-webkit-scrollbar { width: 6px; } .slide::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  .kicker { color: var(--accent); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: clamp(.7rem, 1.1vw, .85rem); margin-bottom: .6rem; }
+  h1 { font-size: clamp(1.9rem, 5.2vw, 4rem); line-height: 1.08; letter-spacing: -.03em; font-weight: 800; }
+  h2 { font-size: clamp(1.4rem, 3.4vw, 2.5rem); line-height: 1.15; letter-spacing: -.025em; font-weight: 700; margin-bottom: clamp(.8rem, 2vh, 1.4rem); }
+  h3 { font-size: clamp(1rem, 1.7vw, 1.25rem); font-weight: 600; margin-bottom: .5rem; color: var(--accent); }
+  p, li { font-size: clamp(.92rem, 1.45vw, 1.15rem); line-height: 1.6; color: var(--text); }
+  .muted { color: var(--muted); }
+  ul { padding-left: 1.2em; } li + li { margin-top: .4rem; }
+  .grid { display: grid; gap: clamp(.8rem, 2vw, 1.6rem); }
+  .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: clamp(.8rem, 1.8vw, 1.3rem); }
+  .card.good { border-color: #1f6b43; } .card.bad { border-color: #7a2e2e; } .card.warn { border-color: #7a5a1a; }
+  pre { background: #0d1526; border: 1px solid var(--border); border-radius: 10px; padding: clamp(.7rem, 1.4vw, 1.1rem); overflow: auto; font: clamp(.6rem, min(1.05vw, 1.25vh), .9rem)/1.45 var(--mono); color: #e6edf7; tab-size: 4; }
+  code { font-family: var(--mono); } :not(pre) > code { background: #1b2740; padding: .1em .35em; border-radius: 4px; font-size: .92em; }
+  .c-k { color: #c792ea; } .c-t { color: #82aaff; } .c-s { color: #c3e88d; } .c-m { color: #f78c6c; } .c-c { color: #7f8ea3; font-style: italic; } .c-r { color: #4fc3f7; font-weight: 600; } .c-v { color: var(--red); } .c-ok { color: var(--green); }
+  table { width: 100%; border-collapse: collapse; font-size: clamp(.72rem, 1.15vw, .98rem); }
+  th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: .85em; text-transform: uppercase; letter-spacing: .06em; }
+  td.num { font-variant-numeric: tabular-nums; text-align: right; }
+  .pill { display: inline-block; padding: .12em .55em; border-radius: 999px; font-size: .8em; font-weight: 600; }
+  .pill.req { background: #3a1d1d; color: #fca5a5; } .pill.adv { background: #3a2f12; color: #fde68a; } .pill.ok { background: #143526; color: #86efac; }
+  .big { font-size: clamp(2.6rem, 7vw, 5.5rem); font-weight: 800; line-height: 1; letter-spacing: -.04em; }
+  .logo { height: clamp(56px, 9vh, 110px); width: auto; background: #fff; border-radius: 10px; padding: 0 .4rem; }
+  .brand { display: flex; align-items: center; gap: 1rem; margin-bottom: clamp(1rem, 3vh, 2rem); }
+  .brand small { color: var(--muted); font-size: clamp(.75rem, 1.1vw, .95rem); line-height: 1.35; }
+  .out { font-family: var(--mono); font-size: clamp(.7rem, 1.1vw, .92rem); color: var(--green); white-space: pre; }
+  .term { background: #050912; border-radius: 10px; padding: .9rem 1rem; border: 1px solid var(--border); }
+  .foot { position: absolute; left: clamp(1rem, 6vw, 6rem); right: clamp(1rem, 6vw, 6rem); bottom: 3.2rem; color: var(--muted); font-size: clamp(.68rem, 1vw, .82rem); }
+  /* nav */
+  .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--border); background: rgba(22,33,58,.85); color: var(--text); font-size: 1.6rem; line-height: 1; cursor: pointer; z-index: 20; display: flex; align-items: center; justify-content: center; user-select: none; transition: opacity .2s; }
+  .nav:hover { background: var(--accent); color: #041018; }
+  .nav.prev { left: 14px; } .nav.next { right: 14px; } .nav.hidden { opacity: 0; pointer-events: none; }
+  .progress { position: fixed; left: 0; bottom: 0; height: 5px; width: 100%; background: #0f1830; z-index: 20; }
+  .progress > div { height: 100%; width: 0; background: linear-gradient(90deg, #4fc3f7, #a78bfa, #4ade80); transition: width .35s; }
+  .counter { position: fixed; right: 16px; bottom: 12px; color: var(--muted); font-size: .85rem; font-variant-numeric: tabular-nums; z-index: 20; }
+  .hint { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); color: var(--muted); font-size: .9rem; z-index: 20; animation: pulse 1.6s ease-in-out infinite; transition: opacity .3s; }
+  .hint.gone { opacity: 0; pointer-events: none; animation: none; }
+  @keyframes pulse { 0%,100% { opacity: .45; transform: translateX(-50%) translateY(0); } 50% { opacity: 1; transform: translateX(-50%) translateY(-4px); } }
+  @media (max-width: 820px) {
+    .g2, .g3 { grid-template-columns: 1fr; }
+    .slide { justify-content: flex-start; padding-top: 1.2rem; }
+    .foot { position: static; margin-top: 1rem; }
+    .nav { width: 40px; height: 40px; font-size: 1.3rem; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+<div class="track" id="track">
+
+<!-- 1 Title -->
+<section class="slide">
+  <div class="brand"><img class="logo" src="esl-logo.jpg" alt="ESL Engineering Software Lab"><small>ESL Engineering Software Lab<br>Software Engineering Consultancy</small></div>
+  <div class="kicker">A reply to "C++26 just shipped compile time reflection"</div>
+  <h1>C++26 Reflection Is a<br>Compliance Feature</h1>
+  <p class="muted" style="margin-top:1rem; max-width: 60ch;">The same 60-line program, before and after reflection, scanned with Parasoft C/C++test against MISRA C++:2023. 29 violations became 4. Then the analyzer told us something the compiler did not.</p>
+  <p class="muted" style="margin-top:1.4rem; font-size:.9em;">Daniel Liezrowice, ESL &middot; 29 September 2026 &middot; <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">eswlab.com/contact-us</a></p>
+</section>
+
+<!-- 2 The post and my point -->
+<section class="slide">
+  <div class="kicker">Context</div>
+  <h2>The post said "less boilerplate". For safety-critical C++ that is the smaller story.</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>What the post shows</h3>
+      <p><code>print_fields()</code> works on any struct. Add a field, the function picks it up. Four pieces: <code>^^T</code>, <code>nonstatic_data_members_of</code>, <code>template for</code>, <code>[:m:]</code>. No macro, no codegen, no registration list. Everything disappears before <code>main()</code>.</p>
+      <p class="muted" style="margin-top:.6rem">Original post by Amadeus Ferro: <a href="https://lnkd.in/p/dndmzJYN" target="_blank" rel="noopener">lnkd.in/p/dndmzJYN</a></p>
+    </div>
+    <div class="card good">
+      <h3>My point</h3>
+      <p>Every workaround reflection replaces is something <strong>MISRA C++:2023 already forbids or discourages</strong>: X-macros, <code>#</code> stringizing, <code>offsetof</code>, hand-copied field lists. Reflection is the first C++ language feature that <em>deletes</em> violations instead of adding rules.</p>
+      <p style="margin-top:.6rem">And the tooling that certifies your code has not caught up yet. This deck measures both halves.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 Facts -->
+<section class="slide">
+  <div class="kicker">Verified status, September 2026</div>
+  <h2>What actually shipped, and where</h2>
+  <div class="grid g3">
+    <div class="card good"><h3>Standard</h3><p>P2996R13 <em>Reflection for C++26</em> is in the frozen C++26 draft (Croydon, March 2026). <code>template for</code> is a separate paper, P1306 <em>Expansion statements</em>, adopted alongside it.</p></div>
+    <div class="card good"><h3>GCC 16.1</h3><p>Released 30 April 2026. Reflection enabled with <code>-std=c++26 -freflection</code>, header <code>&lt;meta&gt;</code>. GCC calls it experimental. Also ships annotations (P3394), <code>define_static_*</code> (P3491), contracts.</p></div>
+    <div class="card warn"><h3>Clang and MSVC</h3><p>Mainline Clang: none. Only the Bloomberg <code>clang-p2996</code> fork (header <code>&lt;experimental/meta&gt;</code>). MSVC: no public implementation and no published ETA. If you ship on Visual Studio, this is "prepare", not "deploy".</p></div>
+  </div>
+  <p class="muted" style="margin-top:1.2rem">All code in this deck was compiled and executed on GCC 16.1 through Compiler Explorer. Links on the code slides.</p>
+</section>
+
+<!-- 4 The three workarounds -->
+<section class="slide">
+  <div class="kicker">What we have been writing for 20 years</div>
+  <h2>Three workarounds, three MISRA C++:2023 rules</h2>
+  <table>
+    <thead><tr><th>Job</th><th>Pre-reflection technique</th><th>MISRA C++:2023</th><th>Reflection replacement</th></tr></thead>
+    <tbody>
+      <tr><td>Enum to string</td><td>X-macro list plus <code>#name</code> stringizing</td><td><span class="pill req">19.0.2 Required</span> no function-like macros<br><span class="pill adv">19.3.1 Advisory</span> no <code>#</code> / <code>##</code></td><td><code>enumerators_of(^^E)</code> + <code>identifier_of(e)</code></td></tr>
+      <tr><td>Wire-format layout contract</td><td><code>static_assert(offsetof(Frame, f) == N)</code>, one per field</td><td><span class="pill req">21.2.4 Required</span> <code>offsetof</code> shall not be used</td><td><code>offset_of(m)</code>, <code>size_of(m)</code> in one <code>consteval</code> loop</td></tr>
+      <tr><td>Field dump / serializer</td><td>Struct listed a second time by hand</td><td>No rule. Silent rot: add a field, forget the printer, still compiles.</td><td><code>template for</code> over <code>nonstatic_data_members_of(^^T)</code></td></tr>
+      <tr><td>Enum names without macros</td><td><code>__PRETTY_FUNCTION__</code> parsing (magic_enum)</td><td>Non-portable, range-limited, compile-time heavy</td><td>Exact enumerator list from the compiler</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top:1rem">The rule numbers are from the MISRA C++:2023 first edition. The Parasoft rule IDs are <code>MISRACPP2023-19_0_2-a</code>, <code>19_3_1-a</code>, <code>21_2_4-a</code>.</p>
+</section>
+
+<!-- 5 Pre-C++26 code -->
+<section class="slide">
+  <div class="kicker">Before &middot; <a href="https://godbolt.org/z/jaTbPzEM7" target="_blank" rel="noopener">Run on Compiler Explorer (GCC 15.2, -std=c++20)</a></div>
+  <h2>pre_cpp26/fault_telemetry.cpp</h2>
+<pre><span class="c-m">#define</span> FAULT_LIST(X)   \                                    <span class="c-v">// 19.0.2</span>
+    X(None) X(OverTemp) X(UnderVoltage) X(SensorTimeout)
+
+<span class="c-k">enum class</span> <span class="c-t">Fault</span> : <span class="c-t">std::uint8_t</span> {
+<span class="c-m">#define</span> AS_ENUM(name) name,                                  <span class="c-v">// 19.0.2</span>
+    FAULT_LIST(AS_ENUM)
+<span class="c-m">#undef</span> AS_ENUM
+};
+
+<span class="c-k">constexpr const char</span>* to_string(<span class="c-t">Fault</span> f) {
+    <span class="c-k">switch</span> (f) {                                             <span class="c-v">// 9.4.2: no default</span>
+<span class="c-m">#define</span> AS_CASE(name) <span class="c-k">case</span> <span class="c-t">Fault</span>::name: <span class="c-k">return</span> #name;         <span class="c-v">// 19.3.1 (#)</span>
+        FAULT_LIST(AS_CASE)
+<span class="c-m">#undef</span> AS_CASE
+    }
+    <span class="c-k">return</span> <span class="c-s">"&lt;unknown&gt;"</span>;
+}
+
+<span class="c-k">struct</span> <span class="c-t">TelemetryFrame</span> {
+    <span class="c-t">std::uint32_t</span> timestamp_ms;  <span class="c-t">float</span> temp_c;  <span class="c-t">std::uint16_t</span> voltage_mv;
+    <span class="c-t">std::uint8_t</span>  fault;         <span class="c-t">std::uint8_t</span> crc8;
+};
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, timestamp_ms) == 0);      <span class="c-v">// 21.2.4</span>
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, temp_c)       == 4);      <span class="c-v">// 21.2.4</span>
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, voltage_mv)   == 8);      <span class="c-v">// 21.2.4</span>
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, fault)        == 10);     <span class="c-v">// 21.2.4</span>
+<span class="c-k">static_assert</span>(offsetof(<span class="c-t">TelemetryFrame</span>, crc8)         == 11);     <span class="c-v">// 21.2.4</span>
+
+<span class="c-k">void</span> print_frame(<span class="c-k">const</span> <span class="c-t">TelemetryFrame</span>&amp; f) {              <span class="c-c">// the struct, listed again by hand</span>
+    <span class="c-t">std</span>::printf(<span class="c-s">"timestamp_ms = %u\n"</span>, f.timestamp_ms);
+    <span class="c-t">std</span>::printf(<span class="c-s">"temp_c       = %g\n"</span>, <span class="c-k">static_cast</span>&lt;<span class="c-t">double</span>&gt;(f.temp_c));
+    <span class="c-t">std</span>::printf(<span class="c-s">"voltage_mv   = %u\n"</span>, f.voltage_mv);
+    <span class="c-t">std</span>::printf(<span class="c-s">"fault        = %s\n"</span>, to_string(<span class="c-k">static_cast</span>&lt;<span class="c-t">Fault</span>&gt;(f.fault)));
+    <span class="c-t">std</span>::printf(<span class="c-s">"crc8         = %u\n"</span>, f.crc8);
+    <span class="c-c">// Add a field to TelemetryFrame and forget this function: still compiles.</span>
+}</pre>
+</section>
+
+<!-- 6 C++26 code -->
+<section class="slide">
+  <div class="kicker">After &middot; <a href="https://godbolt.org/z/M7os6nq9c" target="_blank" rel="noopener">Run on Compiler Explorer (GCC 16.1, -std=c++26 -freflection)</a></div>
+  <h2>cpp26/fault_telemetry.cpp</h2>
+<pre><span class="c-m">#include</span> <span class="c-s">&lt;meta&gt;</span>
+<span class="c-k">enum class</span> <span class="c-t">Fault</span> : <span class="c-t">std::uint8_t</span> { None, OverTemp, UnderVoltage, SensorTimeout };
+
+<span class="c-k">template</span> &lt;<span class="c-k">typename</span> E&gt; <span class="c-k">requires</span> <span class="c-t">std::is_enum_v</span>&lt;E&gt;
+<span class="c-k">constexpr</span> <span class="c-t">std::string_view</span> enum_name(E value) {                   <span class="c-ok">// no macro, no #</span>
+    <span class="c-r">template for</span> (<span class="c-k">constexpr auto</span> e : <span class="c-t">std</span>::define_static_array(<span class="c-t">std::meta</span>::enumerators_of(<span class="c-r">^^E</span>))) {
+        <span class="c-k">if</span> (value == <span class="c-r">[:e:]</span>) <span class="c-k">return</span> <span class="c-t">std::meta</span>::identifier_of(e);
+    }
+    <span class="c-k">return</span> <span class="c-s">"&lt;unknown&gt;"</span>;
+}
+
+<span class="c-k">struct</span> <span class="c-t">TelemetryFrame</span> {
+    <span class="c-t">std::uint32_t</span> timestamp_ms;  <span class="c-t">float</span> temp_c;  <span class="c-t">std::uint16_t</span> voltage_mv;
+    <span class="c-t">Fault</span> fault;                 <span class="c-t">std::uint8_t</span> crc8;
+};
+
+<span class="c-k">template</span> &lt;<span class="c-k">typename</span> T&gt;
+<span class="c-k">consteval bool</span> is_padding_free() {                                 <span class="c-ok">// replaces 5 x offsetof</span>
+    <span class="c-t">std::size_t</span> expected = 0;
+    <span class="c-k">for</span> (<span class="c-k">auto</span> m : <span class="c-t">std::meta</span>::nonstatic_data_members_of(<span class="c-r">^^T</span>, <span class="c-t">std::meta</span>::access_context::current())) {
+        <span class="c-k">if</span> (<span class="c-k">static_cast</span>&lt;<span class="c-t">std::size_t</span>&gt;(<span class="c-t">std::meta</span>::offset_of(m).bytes) != expected) <span class="c-k">return false</span>;
+        expected += <span class="c-t">std::meta</span>::size_of(m);
+    }
+    <span class="c-k">return</span> expected == <span class="c-k">sizeof</span>(T);
+}
+<span class="c-k">static_assert</span>(is_padding_free&lt;<span class="c-t">TelemetryFrame</span>&gt;(), <span class="c-s">"TelemetryFrame has padding: wire format broken"</span>);
+
+<span class="c-k">template</span> &lt;<span class="c-k">typename</span> T&gt;
+<span class="c-k">void</span> print_fields(<span class="c-k">const</span> T&amp; obj) {                                  <span class="c-ok">// one definition of the struct</span>
+    <span class="c-r">template for</span> (<span class="c-k">constexpr auto</span> m : <span class="c-t">std</span>::define_static_array(
+                      <span class="c-t">std::meta</span>::nonstatic_data_members_of(<span class="c-r">^^T</span>, <span class="c-t">std::meta</span>::access_context::current()))) {
+        <span class="c-k">if constexpr</span> (<span class="c-t">std::is_enum_v</span>&lt;<span class="c-k">typename</span><span class="c-r">[:</span><span class="c-t">std::meta</span>::type_of(m)<span class="c-r">:]</span>&gt;)
+            <span class="c-t">std</span>::println(<span class="c-s">"{:&lt;12} = {}"</span>, <span class="c-t">std::meta</span>::identifier_of(m), enum_name(obj.<span class="c-r">[:m:]</span>));
+        <span class="c-k">else</span>
+            <span class="c-t">std</span>::println(<span class="c-s">"{:&lt;12} = {}"</span>, <span class="c-t">std::meta</span>::identifier_of(m), obj.<span class="c-r">[:m:]</span>);
+    }
+}</pre>
+</section>
+
+<!-- 7 Proof it runs -->
+<section class="slide">
+  <div class="kicker">Executed on GCC 16.1, Compiler Explorer, 29 Sep 2026</div>
+  <h2>Same output. Then two edits the old code could not catch.</h2>
+  <div class="grid g3">
+    <div class="card good"><h3>Clean build, identical stdout</h3><div class="term"><div class="out">timestamp_ms = 1000
+temp_c       = 71.5
+voltage_mv   = 3300
+fault        = OverTemp
+crc8         = 90</div></div><p class="muted" style="margin-top:.6rem">No warnings with <code>-Wall -Wextra</code>. Byte-for-byte equal to the C++20 binary's output.</p></div>
+    <div class="card bad"><h3>Edit 1: insert a <code>uint8_t</code> before <code>timestamp_ms</code></h3><div class="term"><div class="out" style="color:var(--red)">error: static assertion failed:
+TelemetryFrame has padding:
+wire format broken</div></div><p class="muted" style="margin-top:.6rem">Build fails. The pre-C++26 version needs someone to remember to update five <code>offsetof</code> lines.</p></div>
+    <div class="card good"><h3>Edit 2: add <code>seq_no</code> field and <code>WatchdogReset</code> enumerator, nothing else</h3><div class="term"><div class="out">fault        = WatchdogReset
+crc8         = 90
+seq_no       = 42</div></div><p class="muted" style="margin-top:.6rem">Both appear. The pre-C++26 <code>print_frame</code> would still compile and print a stale frame.</p></div>
+  </div>
+</section>
+
+<!-- 8 Parasoft explanation -->
+<section class="slide">
+  <div class="kicker">Before the results: what did the scanning</div>
+  <h2>Parasoft C/C++test and the MISRA C++:2023 configuration</h2>
+  <div class="grid g2">
+    <div class="card">
+      <h3>The tool</h3>
+      <p>Parasoft C/C++test is a static analysis, unit test and coverage tool qualified for ISO 26262, IEC 62304, IEC 61508 and EN 50128 workflows. Its parser is an EDG-based C/C++ front-end that mirrors your real compiler's configuration, so it sees the code the way your build does.</p>
+      <p style="margin-top:.6rem">Rules come in two families: compiled checkers (DLL) and RuleWizard pattern rules (<code>.rule</code> files). The three rules this deck cares about, 19.0.2, 19.3.1 and 21.2.4, are all pattern rules cloned from older base rules (<code>PREPROC-28</code>, <code>MISRA2004-19_13</code>, <code>MISRA2004-20_6</code>).</p>
+    </div>
+    <div class="card">
+      <h3>How this scan was run</h3>
+<pre>cpptestscan --cpptestscanOutputFile=pre.bdf \
+    g++ -std=c++20 -c pre_cpp26/fault_telemetry.cpp
+
+cpptestcli -config "builtin://MISRA C++ 2023" \
+    -compiler gcc_11-64 -input pre.bdf -report reports/pre</pre>
+      <p class="muted" style="margin-top:.6rem">C/C++test Standard 2025.2 (engine 10.7.3), built-in MISRA C++ 2023 test configuration, all rules enabled, no suppressions. Compiler profile <code>gcc_11-64</code> against a local GCC 15.2 toolchain. Same command for the C++26 file with <code>-std=c++26</code>.</p>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:1rem">Why it matters: in a safety project the analyzer's report is the evidence. If a violation is not in the report, the auditor does not see it. If the parser silently skips code, the report is still green. Keep that in mind for slide 11.</p>
+</section>
+
+<!-- 9 Results before -->
+<section class="slide">
+  <div class="kicker">Parasoft C/C++test 2025.2 &middot; builtin://MISRA C++ 2023 &middot; pre_cpp26/fault_telemetry.cpp</div>
+  <h2><span class="big" style="color:var(--red)">29</span> <span class="muted">violations, 11 rules</span></h2>
+  <table>
+    <thead><tr><th>Rule</th><th>Category</th><th class="num">Count</th><th>Message (as reported)</th></tr></thead>
+    <tbody>
+      <tr><td><strong>19.0.2-a</strong></td><td><span class="pill req">Required</span></td><td class="num">2</td><td>Do not define the function-like macro: FAULT_LIST / AS_ENUM <span class="muted">(AS_CASE exempt: it uses #)</span></td></tr>
+      <tr><td><strong>19.3.1-a</strong></td><td><span class="pill adv">Advisory</span></td><td class="num">1</td><td>Preprocessor operator # should not be used</td></tr>
+      <tr><td><strong>19.3.4-a</strong></td><td><span class="pill req">Required</span></td><td class="num">5</td><td>Each instance of parameter 'X' / 'name' should be enclosed in parentheses</td></tr>
+      <tr><td><strong>21.2.4-a</strong></td><td><span class="pill req">Required</span></td><td class="num">5</td><td>The macro offsetof shall not be used</td></tr>
+      <tr><td><strong>9.4.2-a</strong></td><td><span class="pill req">Required</span></td><td class="num">1</td><td>There is no 'default' label in a switch statement</td></tr>
+      <tr><td>0.1.2-a</td><td><span class="pill req">Required</span></td><td class="num">5</td><td>Unused function's 'printf' return value</td></tr>
+      <tr><td>7.0.6-c</td><td><span class="pill req">Required</span></td><td class="num">2</td><td>Do not pass uint16_t / uint8_t through the ellipsis parameter</td></tr>
+      <tr><td>30.0.1-a</td><td><span class="pill req">Required</span></td><td class="num">1</td><td>&lt;cstdio&gt; library shall not be used</td></tr>
+      <tr><td>6.0.3-a, 6.5.1-a, 18.3.1-a</td><td class="muted">housekeeping</td><td class="num">7</td><td>Global namespace, missing header declaration, no catch(...) in main</td></tr>
+    </tbody>
+  </table>
+  <p class="muted" style="margin-top:.8rem"><strong>14 of the 29</strong> (bold rows) exist only because of the macro, switch and offsetof workarounds. Another 8 come from <code>printf</code>, which <code>std::println</code> also removes.</p>
+</section>
+
+<!-- 10 Results after -->
+<section class="slide">
+  <div class="kicker">Parasoft C/C++test 2025.2 &middot; builtin://MISRA C++ 2023 &middot; cpp26/fault_telemetry.cpp</div>
+  <h2><span class="big" style="color:var(--green)">4</span> <span class="muted">violations, 3 rules</span></h2>
+  <div class="grid g2">
+    <div class="card good">
+      <table>
+        <thead><tr><th>Rule</th><th class="num">Count</th><th>Message</th></tr></thead>
+        <tbody>
+          <tr><td>6.0.3-a</td><td class="num">2</td><td>Do not declare 'Fault' / 'print_fields' in the global namespace</td></tr>
+          <tr><td>6.5.1-a</td><td class="num">1</td><td>'print_fields' has external linkage and is not declared in the header</td></tr>
+          <tr><td>18.3.1-a</td><td class="num">1</td><td>'main' does not contain a catch(...)</td></tr>
+        </tbody>
+      </table>
+      <p class="muted" style="margin-top:.7rem">All four are demo-file housekeeping (single translation unit, no namespace). None involve preprocessor, switch, offsetof or I/O.</p>
+    </div>
+    <div class="card">
+      <h3>What disappeared</h3>
+      <ul>
+        <li><span class="pill ok">0</span> function-like macros (was 2 + 5 parenthesisation)</li>
+        <li><span class="pill ok">0</span> <code>#</code> operators (was 1)</li>
+        <li><span class="pill ok">0</span> <code>offsetof</code> (was 5)</li>
+        <li><span class="pill ok">0</span> switch statements (was 1 without default)</li>
+        <li><span class="pill ok">0</span> <code>printf</code> ellipsis and ignored-return findings (was 8)</li>
+      </ul>
+      <p style="margin-top:.8rem">Not one suppression, not one deviation record. The code the rules were written against no longer exists.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11 The catch -->
+<section class="slide">
+  <div class="kicker">The part nobody puts on LinkedIn</div>
+  <h2>The analyzer said "files checked: 1". It did not check the reflection.</h2>
+  <div class="grid g2">
+    <div class="card warn">
+      <h3>Evidence from the C++26 scan</h3>
+      <ul>
+        <li>Rule 6.0.3 flagged <code>Fault</code> (line 12) and <code>print_fields</code> (line 52), but <strong>not</strong> <code>TelemetryFrame</code> (line 26), a plain struct sitting between them.</li>
+        <li><code>enum_name</code> and <code>is_padding_free</code>, both global, were not flagged either.</li>
+        <li>Flow Analysis built 1 function graph (<code>main</code>). The C++20 file produced 3.</li>
+        <li>Console output: no error, no warning, no setup problem. Exit code 0.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Control experiment</h3>
+      <p>A three-line file with <code>int broken = ;</code> between two structs: C/C++test flagged both structs and the broken variable, and printed no parse error. Error recovery is on and silent by default.</p>
+      <p style="margin-top:.6rem">Conclusion: the 2025.2 EDG front-end does not yet understand <code>^^T</code>, <code>[:m:]</code> or <code>template for</code>. It dropped that region, recovered at the next template, and reported a clean scan.</p>
+    </div>
+  </div>
+  <p style="margin-top:1rem"><strong>For a safety audit this is the finding.</strong> "Fewer violations" is only evidence if the tool parsed the code. Until your analyzer vendor ships P2996 support, a MISRA report on reflection code proves less than it appears to. Ask for the parser status in writing before you rely on it.</p>
+</section>
+
+<!-- 12 Supply chain angle -->
+<section class="slide">
+  <div class="kicker">The SBOM angle</div>
+  <h2>Every codegen step you delete is a component out of your SBOM</h2>
+  <div class="grid g3">
+    <div class="card good"><h3>Fewer components</h3><p>protoc, moc, flatc, magic_enum, Boost.PFR, Boost.Describe, cereal macros: each is a dependency with its own CVE feed, licence text and CRA/FDA disclosure line. Reflection collapses serializers, enum tables and layout checks into the compiler you already have.</p></div>
+    <div class="card warn"><h3>Heavier trust anchor</h3><p>The compiler now generates what a reviewable tool used to generate. Under ISO 26262-8 §11 and DO-330 the compiler's tool confidence level does not go down; the code it synthesises at compile time has no source artefact to diff in review.</p></div>
+    <div class="card"><h3>What to review instead</h3><p>Review the metafunction once (<code>is_padding_free</code>, <code>enum_name</code>), not every generated line. Keep the negative tests from slide 7 in CI: they are the evidence that the metafunction does what the review says.</p></div>
+  </div>
+</section>
+
+<!-- 13 Recommendations -->
+<section class="slide">
+  <div class="kicker">What to do this quarter</div>
+  <h2>Recommendations by where you stand</h2>
+  <div class="grid g3">
+    <div class="card"><h3>GCC shops</h3><ul><li>Pilot <code>-freflection</code> on non-shipping code: enum names, layout asserts, test-only field dumps.</li><li>Keep the C++20 fallback until GCC drops "experimental".</li><li>Gate with the negative tests, not just "it compiles".</li></ul></div>
+    <div class="card"><h3>MSVC shops</h3><ul><li>Nothing to deploy yet. Isolate today's X-macros behind one header so the swap is mechanical later.</li><li>Record 19.0.2 / 19.3.1 / 21.2.4 deviations with "pending C++26 reflection" as the planned closure.</li></ul></div>
+    <div class="card"><h3>Safety and compliance teams</h3><ul><li>Ask Parasoft (and any EDG-based vendor) for the P2996 front-end roadmap in writing.</li><li>Add a parse-coverage check to the analyzer stage: compare function counts from the compiler and the analyzer.</li><li>Watch MISRA for a C++26 amendment; there are no reflection rules yet.</li></ul></div>
+  </div>
+</section>
+
+<!-- 14 Contact -->
+<section class="slide">
+  <div class="brand"><img class="logo" src="esl-logo.jpg" alt="ESL Engineering Software Lab"><small>ESL Engineering Software Lab<br>Software Engineering Consultancy</small></div>
+  <h2>Static analysis, MISRA/CERT compliance, SBOM and safety evidence for embedded C and C++</h2>
+  <p style="max-width:62ch">We run this kind of before/after measurement on client codebases: which modernisation steps remove real violations, which ones only move them, and where the toolchain is not ready yet.</p>
+  <p style="margin-top:1.2rem; font-size:1.15em"><strong>Contact us:</strong> <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">https://eswlab.com/contact-us/</a></p>
+  <div class="card" style="margin-top:1.4rem">
+    <h3>Reproduce everything</h3>
+    <ul>
+      <li>C++26 version on GCC 16.1: <a href="https://godbolt.org/z/M7os6nq9c" target="_blank" rel="noopener">https://godbolt.org/z/M7os6nq9c</a></li>
+      <li>Pre-C++26 version on GCC 15.2: <a href="https://godbolt.org/z/jaTbPzEM7" target="_blank" rel="noopener">https://godbolt.org/z/jaTbPzEM7</a></li>
+      <li>Original post: <a href="https://lnkd.in/p/dndmzJYN" target="_blank" rel="noopener">https://lnkd.in/p/dndmzJYN</a></li>
+      <li>Parasoft scan: C/C++test Standard 2025.2, <code>builtin://MISRA C++ 2023</code>, compiler profile <code>gcc_11-64</code>, 29 September 2026.</li>
+    </ul>
+  </div>
+  <div class="foot">MISRA and MISRA C++ are registered trademarks of The MISRA Consortium Limited. Parasoft and C/C++test are trademarks of Parasoft Corporation. ESL is an independent consultancy.</div>
+</section>
+
+</div>
+</div>
+
+<button class="nav prev hidden" id="prev" aria-label="Previous slide">&#8249;</button>
+<button class="nav next" id="next" aria-label="Next slide">&#8250;</button>
+<div class="progress"><div id="bar"></div></div>
+<div class="counter" id="counter">1 / 14</div>
+<div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
+
+<script>
+(function () {
+  var track = document.getElementById('track');
+  var slides = track.querySelectorAll('.slide');
+  var total = slides.length, cur = 0, navigated = false;
+  var prev = document.getElementById('prev'), next = document.getElementById('next');
+  var bar = document.getElementById('bar'), counter = document.getElementById('counter'), hint = document.getElementById('hint');
+  function go(n) {
+    cur = Math.max(0, Math.min(total - 1, n));
+    track.style.transform = 'translateX(' + (-cur * 100) + 'vw)';
+    bar.style.width = ((cur + 1) / total * 100) + '%';
+    counter.textContent = (cur + 1) + ' / ' + total;
+    prev.classList.toggle('hidden', cur === 0);
+    next.classList.toggle('hidden', cur === total - 1);
+    if (!navigated && cur !== 0) { navigated = true; hint.classList.add('gone'); }
+    if (location.hash !== '#' + (cur + 1)) history.replaceState(null, '', '#' + (cur + 1));
+  }
+  prev.addEventListener('click', function () { go(cur - 1); });
+  next.addEventListener('click', function () { go(cur + 1); });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') { e.preventDefault(); go(cur + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(cur - 1); }
+    else if (e.key === 'Home') { go(0); } else if (e.key === 'End') { go(total - 1); }
+  });
+  var sx = null, sy = null, TH = 50;
+  document.addEventListener('touchstart', function (e) { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (sx === null) return;
+    var dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy;
+    if (Math.abs(dx) > TH && Math.abs(dx) > Math.abs(dy)) go(dx < 0 ? cur + 1 : cur - 1);
+    sx = sy = null;
+  }, { passive: true });
+  var mx = null;
+  document.addEventListener('mousedown', function (e) { if (e.target.closest('a, button, pre, table')) return; mx = e.clientX; });
+  document.addEventListener('mouseup', function (e) {
+    if (mx === null) return;
+    var dx = e.clientX - mx; mx = null;
+    if (Math.abs(dx) > TH) go(dx < 0 ? cur + 1 : cur - 1);
+  });
+  var h = parseInt(location.hash.slice(1), 10);
+  go(isNaN(h) ? 0 : h - 1);
+})();
+</script>
+</body>
+</html>
