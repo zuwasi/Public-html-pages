@@ -59,7 +59,11 @@
   .closing { text-align: center; background: #0f1a2b; color: #fff; border: none; }
   .closing p { color: #d5e3f7; font-size: clamp(17px, 2.6vw, 22px); font-weight: 600; margin: 0; }
   .closing p em { color: #ffd36b; font-style: normal; }
-  footer { text-align: center; font-size: 13.5px; color: var(--muted); padding: 0 0 40px; }
+  footer { padding: 0 20px 40px; }
+  footer .esl { max-width: 1000px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; background: #05070d; border-radius: 16px; padding: 18px 24px; color: #c9d6ea; font-size: 15px; line-height: 1.7; }
+  footer .esl img { display: block; width: 200px; height: auto; border-radius: 8px; }
+  footer .esl b { color: #fff; }
+  footer .esl a { color: #9cc3ff; }
   @media (max-width: 640px) { section { padding: 20px 16px; } pre { font-size: 12px; padding: 14px 12px; } .num { width: 36px; height: 36px; font-size: 17px; } }
 </style>
 </head>
@@ -269,7 +273,15 @@ Always: bound arrival rate [6] · mask by priority, not globally [5]</div>
 
 </main>
 
-<footer>Daniel Liezrowice · ESL, eswlab.com · <a href="https://zuwasi.github.io/Public-html-pages/">More pages</a></footer>
+<footer>
+  <div class="esl">
+    <a href="https://eswlab.com/about-us/" target="_blank" rel="noopener noreferrer"><img src="../assets/esl-logo-small.png" alt="ESL, Engineering Software Lab" width="200" height="131"></a>
+    <div>
+      <b>Daniel Liezrowice</b> · ESL, Engineering Software Lab<br>
+      <a href="https://eswlab.com/about-us/" target="_blank" rel="noopener noreferrer">About ESL</a> · <a href="https://zuwasi.github.io/Public-html-pages/">More pages</a>
+    </div>
+  </div>
+</footer>
 
 <script>
   document.querySelectorAll('.copy').forEach(function (btn) {
