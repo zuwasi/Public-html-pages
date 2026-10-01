@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interrupt on the Edge, Poll on the Level: Beyond "Interrupts vs Polling"</title>
+<meta name="description" content="Seven compiled Cortex-M code samples that go beyond interrupts vs polling: NAPI-style hybrid, DMA with idle line, hardware event routing, the lost-wakeup race, BASEPRI, interrupt storm guards, and polling as a filter.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1565c0; --green: #1b7f3b; --orange: #e65100; --purple: #5e35b1; --red: #c62828; --teal: #00796b;
+    --ink: #0f1a2b; --muted: #4a5568; --bg: #f5f7fb; --line: #d9e0ea;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.55; }
+  a { color: var(--blue); font-weight: 600; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+  header.hero { background: linear-gradient(135deg, #0f1a2b 0%, #16325c 60%, #1565c0 100%); color: #fff; padding: 56px 0 44px; }
+  .hero .kicker { font-size: 13px; letter-spacing: 2.5px; text-transform: uppercase; color: #9cc3ff; font-weight: 700; }
+  .hero h1 { font-size: clamp(30px, 5.5vw, 52px); font-weight: 800; line-height: 1.08; letter-spacing: -0.5px; margin: 12px 0 14px; }
+  .hero h1 em { font-style: normal; color: #ffd36b; }
+  .hero p { font-size: clamp(16px, 2.2vw, 19px); color: #d5e3f7; max-width: 820px; }
+  .hero .by { margin-top: 22px; font-size: 14px; color: #9cc3ff; }
+  .hero .by a { color: #fff; }
+  main { padding: 34px 0 60px; }
+  section { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 26px 28px; margin-bottom: 22px; }
+  h2 { font-size: clamp(21px, 3vw, 27px); font-weight: 800; line-height: 1.2; margin-bottom: 10px; display: flex; gap: 14px; align-items: center; }
+  h3 { font-size: 16px; font-weight: 700; margin: 18px 0 6px; }
+  p { color: var(--muted); margin-bottom: 10px; }
+  p b, li b { color: var(--ink); }
+  ul, ol { margin: 6px 0 10px 22px; color: var(--muted); }
+  li { margin-bottom: 4px; }
+  .num { width: 42px; height: 42px; border-radius: 50%; color: #fff; display: grid; place-items: center; font-size: 20px; font-weight: 800; flex: none; }
+  .n1 { background: var(--blue); } .n2 { background: var(--green); } .n3 { background: var(--teal); }
+  .n4 { background: var(--red); } .n5 { background: var(--purple); } .n6 { background: var(--orange); } .n7 { background: #455a64; }
+  code { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 0.88em; background: #eef2f8; padding: 1px 5px; border-radius: 4px; color: var(--ink); }
+  .code { position: relative; margin: 10px 0 12px; }
+  pre { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 13.2px; line-height: 1.5; background: #0f1a2b; color: #dfe8f5; border-radius: 10px; padding: 16px 18px; overflow-x: auto; white-space: pre; }
+  pre .c { color: #a8b8d0; } pre .k { color: #82b1ff; } pre .h { background: rgba(255, 211, 107, 0.18); color: #ffe39a; border-radius: 3px; }
+  .copy { position: absolute; top: 8px; right: 8px; font: 600 12px 'Inter', sans-serif; background: #22324d; color: #cfe0f5; border: 1px solid #3a4f73; border-radius: 6px; padding: 4px 10px; cursor: pointer; }
+  .copy:hover { background: #2d4266; }
+  .code .copy + pre { padding-top: 36px; }
+  .why { background: #eaf2fc; border-left: 4px solid var(--blue); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 10px 0; }
+  .trap { background: #fdecec; border-left: 4px solid var(--red); border-radius: 0 10px 10px 0; padding: 10px 14px; margin: 10px 0; }
+  .why p, .trap p { margin: 0; color: var(--ink); font-size: 15px; }
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 640px; }
+  th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f0f4fa; font-weight: 700; }
+  td:first-child { font-weight: 700; white-space: nowrap; }
+  .good { color: var(--green); font-weight: 700; } .bad { color: var(--red); font-weight: 700; } .mid { color: var(--orange); font-weight: 700; }
+  .diagram { font-family: 'JetBrains Mono', Consolas, monospace; font-size: 13px; line-height: 1.35; background: #f7f9fc; border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; overflow-x: auto; white-space: pre; color: var(--ink); }
+  .formula { font-family: 'JetBrains Mono', Consolas, monospace; background: #fff8e1; border: 1px solid #f3dd9b; border-radius: 10px; padding: 12px 16px; font-size: 14.5px; margin: 10px 0; overflow-x: auto; }
+  .toc { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 8px; margin-top: 8px; }
+  .toc a { display: block; text-decoration: none; background: #f0f4fa; border: 1px solid var(--line); border-radius: 10px; padding: 9px 12px; font-size: 14.5px; color: var(--ink); }
+  .toc a:hover { border-color: var(--blue); }
+  .toc a span { color: var(--blue); font-weight: 800; margin-right: 6px; }
+  .verify { background: #e8f6ec; border: 1px solid #bfe3c9; }
+  .closing { text-align: center; background: #0f1a2b; color: #fff; border: none; }
+  .closing p { color: #d5e3f7; font-size: clamp(17px, 2.6vw, 22px); font-weight: 600; margin: 0; }
+  .closing p em { color: #ffd36b; font-style: normal; }
+  footer { text-align: center; font-size: 13.5px; color: var(--muted); padding: 0 0 40px; }
+  @media (max-width: 640px) { section { padding: 20px 16px; } pre { font-size: 12px; padding: 14px 12px; } .num { width: 36px; height: 36px; font-size: 17px; } }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">Embedded firmware · Cortex-M · compiled code samples</div>
+    <h1>Interrupt on the <em>Edge</em>,<br>Poll on the <em>Level</em></h1>
+    <p>Interrupts and polling are not competitors. An interrupt tells you an <b style="color:#fff">edge</b> happened; polling tells you the current <b style="color:#fff">level</b> (the state). Robust firmware uses both, and the best answer is often a third option that needs neither. Seven code samples, each compiled against real vendor headers.</p>
+    <div class="by">A reply to <a href="https://www.linkedin.com/pulse/why-interrupts-better-than-polling-embedded-systems-world-3xzlc/" target="_blank" rel="noopener">"Why Are Interrupts Better Than Polling?"</a> by Embedded_Systems_World · Daniel Liezrowice, ESL</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <h2>The axis is wrong: who pays for each event, and when?</h2>
+    <p>The usual framing is a two-way choice: the CPU keeps asking, or the peripheral notifies. In practice there are at least five mechanisms, and their costs scale differently with event rate.</p>
+    <div class="table-wrap">
+    <table>
+      <tr><th>Mechanism</th><th>CPU cost per event</th><th>Latency</th><th>Idle power</th><th>Behaviour under load</th><th>Worst case analyzable?</th></tr>
+      <tr><td>Polling</td><td class="mid">Paid every loop, even with no events</td><td>Up to one loop period</td><td class="bad">High (CPU awake)</td><td class="good">Graceful, fixed cost</td><td class="good">Yes, by design</td></tr>
+      <tr><td>Interrupt</td><td class="mid">Entry + exit per event</td><td class="good">12 cycles + masking time</td><td class="good">Low (WFI)</td><td class="bad">Can livelock</td><td class="mid">Only with bounded arrival rate</td></tr>
+      <tr><td>Hybrid (NAPI)</td><td class="good">One IRQ per burst</td><td class="good">Interrupt when idle</td><td class="good">Low</td><td class="good">Becomes polling under load</td><td class="good">Yes (bounded budget)</td></tr>
+      <tr><td>DMA + idle line</td><td class="good">One IRQ per message</td><td>End of frame</td><td class="good">Low</td><td class="good">Hardware moves the bytes</td><td class="good">Yes</td></tr>
+      <tr><td>Event routing</td><td class="good">Zero</td><td class="good">Fixed, no jitter</td><td class="good">Lowest (core asleep)</td><td class="good">Hardware only</td><td class="good">Yes</td></tr>
+    </table>
+    </div>
+    <div class="toc">
+      <a href="#s1"><span>1</span>Hybrid: interrupt to wake, poll to drain</a>
+      <a href="#s2"><span>2</span>DMA + idle line: one IRQ per message</a>
+      <a href="#s3"><span>3</span>Event routing: zero CPU, zero jitter</a>
+      <a href="#s4"><span>4</span>The lost-wakeup race in "check, then WFI"</a>
+      <a href="#s5"><span>5</span>Your latency is your longest critical section</a>
+      <a href="#s6"><span>6</span>Interrupt storm guard</a>
+      <a href="#s7"><span>7</span>Polling as a filter: debounce for free</a>
+      <a href="#guide"><span>→</span>Decision guide</a>
+    </div>
+  </section>
+
+  <section id="s1">
+    <h2><span class="num n1">1</span>Hybrid: interrupt to wake, poll to drain</h2>
+    <p>Linux handles network cards this way (NAPI). The first packet raises an IRQ. The driver masks that IRQ, polls the receive ring until it is empty (within a work budget), and then re-arms it. When the link is idle you get interrupt latency and low power. Under load you get polling efficiency, with no per-packet interrupt overhead.</p>
+    <p>Pure interrupt-driven receive at high rates leads to <b>receive livelock</b>: the CPU spends all its time entering and leaving the ISR, and the code that consumes the data never runs (Mogul &amp; Ramakrishnan, <i>Eliminating Receive Livelock in an Interrupt-Driven Kernel</i>, 1997). The same pattern works on a microcontroller UART:</p>
+    <div class="code"><button class="copy">Copy</button><pre><span class="k">static volatile</span> bool rx_work;
+
+<span class="k">void</span> USART2_IRQHandler(<span class="k">void</span>) {
+    USART2-&gt;CR1 &amp;= ~USART_CR1_RXNEIE;   <span class="c">// mute: switch to polling mode</span>
+    rx_work = true;
+}
+
+<span class="k">void</span> uart_service(<span class="k">void</span>) {             <span class="c">// main loop or RTOS task</span>
+    <span class="k">if</span> (!rx_work) <span class="k">return</span>;
+    <span class="k">int</span> budget = 64;                    <span class="c">// bounded work keeps other tasks schedulable</span>
+    <span class="k">while</span> ((USART2-&gt;SR &amp; USART_SR_RXNE) &amp;&amp; budget-- &gt; 0)
+        ring_put(&amp;rx, (uint8_t)USART2-&gt;DR);
+    <span class="k">if</span> (USART2-&gt;SR &amp; USART_SR_RXNE) <span class="k">return</span>;   <span class="c">// still busy: keep polling</span>
+    rx_work = false;
+    <span class="h">USART2-&gt;CR1 |= USART_CR1_RXNEIE;</span>          <span class="c">// re-arm</span>
+}</pre></div>
+    <div class="why"><p><b>Why there is no race on re-arm:</b> RXNE is a <i>level</i> flag. If a byte arrived between the last check and the re-arm, the IRQ becomes pending as soon as RXNEIE is set. Here the hardware level protects you from a lost edge. That is the "edge plus level" idea in practice.</p></div>
+    <div class="trap"><p><b>Caveat:</b> the STM32F4 USART has a 1-byte data register. At 115200 baud a character arrives about every 87 µs, so in polling mode the service must run faster than that, or you get an overrun (ORE). The pattern fits parts with an RX FIFO (STM32G4/H7/L4+, most network MACs) or is combined with DMA (section 2).</p></div>
+  </section>
+
+  <section id="s2">
+    <h2><span class="num n2">2</span>DMA + idle line: one interrupt per message, not per byte</h2>
+    <p>Most serial protocols are framed: a burst of bytes followed by silence. The UART can detect the silence (IDLE line), and DMA moves the bytes. The CPU never touches individual bytes; it receives one callback for each complete frame.</p>
+    <div class="code"><button class="copy">Copy</button><pre>HAL_UARTEx_ReceiveToIdle_DMA(&amp;huart2, rx_buf, <span class="k">sizeof</span> rx_buf);
+
+<span class="k">void</span> HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *h, uint16_t len) {
+    <span class="h"><span class="k">if</span> (HAL_UARTEx_GetRxEventType(h) == HAL_UART_RXEVENT_HT) <span class="k">return</span>;</span>
+    frame_ready(rx_buf, len);            <span class="c">// whole frame; the CPU never copied a byte</span>
+    HAL_UARTEx_ReceiveToIdle_DMA(h, rx_buf, <span class="k">sizeof</span> rx_buf);
+}</pre></div>
+    <div class="trap"><p><b>Gotcha that many examples miss:</b> the same callback also fires on the DMA <i>half-transfer</i> event, with <code>len</code> equal to half the buffer. Without the <code>HAL_UART_RXEVENT_HT</code> check you would process half a frame as if it were complete.</p></div>
+  </section>
+
+  <section id="s3">
+    <h2><span class="num n3">3</span>Event routing: zero CPU, zero jitter</h2>
+    <p>Many modern MCUs let one peripheral's <i>event</i> trigger another peripheral's <i>task</i> directly in hardware: nRF52 PPI / nRF53 DPPI, Microchip SAM and AVR Dx EVSYS, ESP32-C6/H2 ETM, and STM32 timer trigger chains. A GPIO edge can capture a timer value while the core stays asleep. No polling, no ISR, and no software jitter in the timestamp.</p>
+    <div class="code"><button class="copy">Copy</button><pre><span class="c">// nRF52: falling edge on P0.13 captures TIMER1 into CC[0], no CPU involved</span>
+NRF_GPIOTE-&gt;CONFIG[0] = (GPIOTE_CONFIG_MODE_Event &lt;&lt; GPIOTE_CONFIG_MODE_Pos)
+                      | (13UL &lt;&lt; GPIOTE_CONFIG_PSEL_Pos)
+                      | (GPIOTE_CONFIG_POLARITY_HiToLo &lt;&lt; GPIOTE_CONFIG_POLARITY_Pos);
+NRF_TIMER1-&gt;TASKS_START = 1;
+<span class="h">NRF_PPI-&gt;CH[0].EEP = (uint32_t)&amp;NRF_GPIOTE-&gt;EVENTS_IN[0];</span>
+<span class="h">NRF_PPI-&gt;CH[0].TEP = (uint32_t)&amp;NRF_TIMER1-&gt;TASKS_CAPTURE[0];</span>
+NRF_PPI-&gt;CHENSET   = PPI_CHENSET_CH0_Msk;
+
+uint32_t last_edge_ticks(<span class="k">void</span>) { <span class="k">return</span> NRF_TIMER1-&gt;CC[0]; }</pre></div>
+    <div class="why"><p><b>Insight:</b> an ISR timestamp includes interrupt entry, tail-chaining, any masked sections and higher-priority ISRs, so it jitters. A hardware capture does not. For input capture, PWM sync, ADC triggering or quadrature decoding, any CPU path (polling or interrupt) is the slower and noisier option.</p></div>
+  </section>
+
+  <section id="s4">
+    <h2><span class="num n4">4</span>The lost-wakeup race in "check the flag, then sleep"</h2>
+    <p>This is how many people write a low-power loop that waits for an interrupt flag. It has a race condition:</p>
+    <div class="code"><button class="copy">Copy</button><pre><span class="c">// BROKEN: if the IRQ fires between the check and WFI, the flag is already set</span>
+<span class="c">// but the core goes to sleep anyway, until some *other* interrupt wakes it.</span>
+<span class="k">while</span> (!rx_ready) __WFI();</pre></div>
+    <p>With a 1 ms SysTick this shows up as occasional 1 ms latency spikes. In a tickless low-power design it can mean sleeping until the next unrelated event, which may be seconds away. The fix relies on an architectural guarantee: <b>WFI wakes the core when an interrupt becomes pending, even while PRIMASK masks it.</b></p>
+    <div class="code"><button class="copy">Copy</button><pre><span class="c">// CORRECT: check and sleep atomically</span>
+__disable_irq();
+<span class="k">while</span> (!rx_ready) {
+    __WFI();           <span class="c">// wakes on a pending IRQ even with PRIMASK = 1</span>
+    __enable_irq();    <span class="c">// let the ISR run now</span>
+    __disable_irq();
+}
+rx_ready = false;
+__enable_irq();</pre></div>
+    <p>Actual <code>arm-none-eabi-gcc 14.2 -O2</code> output: the flag is checked with interrupts masked, so no window exists between the check and the <code>wfi</code>.</p>
+    <div class="code"><pre>wait_rx:
+    <span class="h">cpsid   i</span>                 <span class="c">; mask</span>
+    ldr     r2, [pc, #32]
+    ldrb.w  r3, [r2, #464]    <span class="c">; check rx_ready (masked)</span>
+    cbnz    r3, done
+loop:
+    <span class="h">wfi</span>                       <span class="c">; sleep; a pending IRQ wakes us</span>
+    cpsie   i                 <span class="c">; ISR runs here</span>
+    cpsid   i
+    ldrb.w  r3, [r2, #464]
+    cmp     r3, #0
+    beq.n   loop
+done:
+    movs    r3, #0
+    strb.w  r3, [r2, #464]    <span class="c">; rx_ready = false</span>
+    cpsie   i
+    bx      lr</pre></div>
+    <div class="trap"><p><b>Use PRIMASK here, not BASEPRI.</b> An interrupt masked by BASEPRI does not wake WFI, so a BASEPRI version of this loop would sleep through the very event it is waiting for.</p></div>
+  </section>
+
+  <section id="s5">
+    <h2><span class="num n5">5</span>Your interrupt latency is your longest critical section</h2>
+    <p>Datasheets quote 12 cycles of interrupt entry latency for Cortex-M3/M4 (with zero-wait-state memory) and 6 cycles for tail-chaining. That figure is the best case. In a real system the worst-case response time is:</p>
+    <div class="formula">R<sub>worst</sub> = entry (12 cycles, more with FPU stacking and flash wait states)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <b>longest interrupts-disabled section anywhere in the code</b><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ execution time of all higher-priority ISRs that can arrive meanwhile</div>
+    <p>One <code>__disable_irq()</code> around a 40 µs logging call in a library you didn't write is now your motor-control latency. Instead of masking everything, mask only the priorities that actually share the data:</p>
+    <div class="code"><button class="copy">Copy</button><pre>uint32_t prev = __get_BASEPRI();
+<span class="h">__set_BASEPRI_MAX(5U &lt;&lt; (8U - __NVIC_PRIO_BITS));</span>  <span class="c">// block priority 5 and lower</span>
+shared_update();                                    <span class="c">// IRQs at priority 0..4 still run</span>
+__set_BASEPRI(prev);</pre></div>
+    <div class="why"><p><b>Why <code>_MAX</code>:</b> <code>__set_BASEPRI_MAX</code> only ever <i>raises</i> the masking level. If the code is already running under a stricter mask, it is not accidentally loosened, so nested critical sections stay correct.</p></div>
+  </section>
+
+  <section id="s6">
+    <h2><span class="num n6">6</span>Interrupt storm guard: enforce physics in the ISR</h2>
+    <p>An interrupt is only analyzable if its arrival rate is bounded. A broken sensor wire, EMI, or a floating input can produce edges at MHz rates and starve every lower-priority task. Polling has a fixed cost no matter what the input does; interrupts don't. The fix is to make the ISR enforce the <b>minimum inter-arrival time</b> that the physical signal can actually produce:</p>
+    <div class="code"><button class="copy">Copy</button><pre><span class="k">#define</span> MIN_GAP_CYCLES (168000000U / 10000U)   <span class="c">// sensor cannot exceed 10 kHz</span>
+
+<span class="k">void</span> EXTI0_IRQHandler(<span class="k">void</span>) {
+    EXTI-&gt;PR = EXTI_PR_PR0;
+    uint32_t now = DWT-&gt;CYCCNT;
+    <span class="k">if</span> ((now - last_edge) &lt; MIN_GAP_CYCLES) {   <span class="c">// faster than physics allows</span>
+        <span class="h">EXTI-&gt;IMR &amp;= ~EXTI_IMR_MR0;</span>              <span class="c">// mute; a timer re-enables later</span>
+        storm_count++;                           <span class="c">// diagnostic for the fault log</span>
+        <span class="k">return</span>;
+    }
+    last_edge = now;
+    handle_edge();
+}</pre></div>
+    <div class="why"><p><b>Safety angle:</b> this turns an unbounded interrupt into a <i>sporadic task</i> with a known minimum period, so response-time analysis (WCET) holds again. It is also why many ISO 26262 and DO-178C designs deliberately choose a time-triggered, polled architecture (Kopetz-style TTA): the worst case is fixed by design rather than by the environment. Unsigned subtraction makes <code>now - last_edge</code> correct across the 32-bit CYCCNT wrap. Remember to enable the DWT cycle counter at startup.</p></div>
+  </section>
+
+  <section id="s7">
+    <h2><span class="num n7">7</span>Polling as a filter: debouncing for free</h2>
+    <p>An edge interrupt on a mechanical button can fire many times per press while the contact bounces. Polling at a fixed rate is a sampled low-pass filter, so you get debouncing without extra hardware. An integrator debouncer with hysteresis:</p>
+    <div class="code"><button class="copy">Copy</button><pre><span class="k">#define</span> DEBOUNCE_MAX 4U                  <span class="c">// 4 x 5 ms = 20 ms</span>
+<span class="k">static</span> uint8_t integ;
+<span class="k">static</span> bool pressed;
+
+<span class="k">void</span> button_poll_5ms(<span class="k">void</span>) {               <span class="c">// from a 5 ms timer tick</span>
+    bool raw = (GPIOA-&gt;IDR &amp; GPIO_IDR_ID0) == 0U;   <span class="c">// active low</span>
+    <span class="k">if</span> (raw &amp;&amp; integ &lt; DEBOUNCE_MAX) integ++;
+    <span class="k">else if</span> (!raw &amp;&amp; integ &gt; 0U) integ--;
+    <span class="k">if</span> (integ == DEBOUNCE_MAX) pressed = true;
+    <span class="k">else if</span> (integ == 0U)      pressed = false;
+}</pre></div>
+    <div class="why"><p><b>Best of both:</b> for battery devices, use the edge interrupt only to <i>wake</i> from deep sleep. Disable it in the ISR, then debounce by polling and re-arm once the button is released. That is the same pattern as section 1: interrupt on the edge, poll on the level.</p></div>
+  </section>
+
+  <section id="guide">
+    <h2>Decision guide</h2>
+    <div class="diagram">Is the event rate bounded and low?
+ ├─ yes ── Does the core need to sleep between events?
+ │          ├─ yes ── INTERRUPT (wake) ── check + WFI atomically   [4]
+ │          └─ no ─── POLL in the scheduler tick (deterministic)   [6, 7]
+ └─ no / bursty
+            ├─ framed data (UART, SPI, I2S)? ── DMA + IDLE / half-full  [2]
+            ├─ peripheral → peripheral reaction? ── EVENT ROUTING        [3]
+            └─ otherwise ── HYBRID: IRQ once, poll with a budget, re-arm [1]
+
+Always: bound arrival rate [6] · mask by priority, not globally [5]</div>
+  </section>
+
+  <section class="verify">
+    <h2>How these samples were checked</h2>
+    <ul>
+      <li>Sections 1, 2, 4, 5, 6 and 7 compiled together with <b>Arm GNU Toolchain 14.2.Rel1</b> (<code>-mcpu=cortex-m4 -mthumb -O2 -Wall -Wextra -std=c11</code>) against the real <b>STM32F407 CMSIS device header</b>, <b>CMSIS-Core</b> and <b>STM32F4 HAL</b> (<code>STMicroelectronics/cmsis_device_f4</code>, <code>stm32f4xx_hal_driver</code>, <code>ARM-software/CMSIS_5</code>). Result: zero errors, zero warnings.</li>
+      <li>Section 3 compiled the same way against the <b>Nordic nRF52832 MDK</b> (<code>nrfx v2.11.0</code>). Result: zero errors, zero warnings.</li>
+      <li>The section 4 disassembly is real <code>arm-none-eabi-objdump</code> output from that build (labels renamed for readability).</li>
+      <li><b>Not run on hardware.</b> These are teaching snippets. Ring buffers, DMA/clock initialization and fault handling are omitted.</li>
+    </ul>
+  </section>
+
+  <section class="closing">
+    <p>Polling <em>asks</em>. Interrupts <em>notify</em>. DMA <em>delivers</em>.<br>Event routing doesn't need the CPU at all.</p>
+  </section>
+
+</main>
+
+<footer>Daniel Liezrowice · ESL, eswlab.com · <a href="https://zuwasi.github.io/Public-html-pages/">More pages</a></footer>
+
+<script>
+  document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = btn.parentElement.querySelector('pre').innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1400);
+      });
+    });
+  });
+</script>
+</body>
+</html>
