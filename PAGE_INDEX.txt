@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-09-29
+Last updated: 2026-10-01
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -298,6 +298,9 @@ Last updated: 2026-09-29
 
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
+
+• interrupts-vs-polling
+  https://zuwasi.github.io/Public-html-pages/interrupts-vs-polling
 
 • jev-cost-of-being-wrong
   https://zuwasi.github.io/Public-html-pages/jev-cost-of-being-wrong
