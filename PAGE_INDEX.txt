@@ -380,6 +380,9 @@ Last updated: 2026-10-02
 • tools
   https://zuwasi.github.io/Public-html-pages/tools
 
+• wazatator
+  https://zuwasi.github.io/Public-html-pages/wazatator
+
 • wolfram-engine-gpu-demo-assets
   https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-assets
 
