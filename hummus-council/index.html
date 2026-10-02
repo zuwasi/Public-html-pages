@@ -1,0 +1,1604 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#234738" />
+    <title>The Hummus Council | A very serious lunch decision</title>
+    <style>
+      :root {
+        --paper: #f8f6ee;
+        --ink: #243e32;
+        --muted: #6b7165;
+        --line: #dddcd0;
+        --orange: #b84925;
+        --green: #234738;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font:
+          14px/1.5 Arial,
+          Helvetica,
+          sans-serif;
+      }
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+      button,
+      a,
+      input,
+      select,
+      summary {
+        -webkit-tap-highlight-color: transparent;
+      }
+      button,
+      a {
+        touch-action: manipulation;
+      }
+      button {
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: wait;
+        opacity: 0.6;
+      }
+      a {
+        color: inherit;
+      }
+      button:focus-visible,
+      a:focus-visible,
+      input:focus-visible,
+      select:focus-visible,
+      summary:focus-visible {
+        outline: 3px solid var(--orange);
+        outline-offset: 4px;
+      }
+      button {
+        color: inherit;
+      }
+      .shell {
+        max-width: 1480px;
+        margin: auto;
+        padding: 0 42px;
+      }
+      .topbar {
+        height: 86px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        gap: 16px;
+      }
+      .brand {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        font-size: 19px;
+        font-weight: 750;
+        letter-spacing: -0.6px;
+      }
+      .brand small {
+        font: 10px/1.5 Arial;
+        letter-spacing: 2.2px;
+        display: block;
+        color: var(--muted);
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #e6c37f;
+        border: 1px solid #be9b60;
+        display: grid;
+        place-items: center;
+        font-size: 23px;
+        transform: rotate(-12deg);
+      }
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .text-button {
+        border: 0;
+        background: none;
+        padding: 8px 0;
+        font-size: 12px;
+      }
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: #e7eddf;
+        color: #3d5c39;
+        border: 1px solid #d5dfca;
+        border-radius: 30px;
+        padding: 6px 11px;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        background: #648255;
+        border-radius: 50%;
+      }
+      .hero {
+        padding: 39px 0 31px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 24px;
+      }
+      .eyebrow {
+        font-size: 10px;
+        letter-spacing: 2.3px;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--orange);
+      }
+      h1 {
+        font:
+          clamp(37px, 4.1vw, 62px) / 1.02 Georgia,
+          serif;
+        letter-spacing: -2px;
+        margin: 12px 0 16px;
+        font-weight: 400;
+      }
+      h1 em {
+        color: var(--orange);
+        font-weight: 400;
+      }
+      .hero p {
+        color: var(--muted);
+        margin: 0;
+        font-size: 14px;
+      }
+      .hero-note {
+        transform: rotate(5deg);
+        border: 1px solid #c2c8b3;
+        background: #edf0df;
+        border-radius: 50%;
+        width: 131px;
+        height: 131px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        text-align: center;
+        font: italic 18px/1.2 Georgia;
+      }
+      .hero-note span {
+        font: 9px Arial;
+        letter-spacing: 1px;
+        margin-top: 8px;
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns:
+          minmax(270px, 0.92fr) minmax(330px, 1.2fr)
+          minmax(300px, 1fr);
+        gap: 20px;
+        align-items: start;
+      }
+      .panel {
+        background: #fffefa;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        overflow: hidden;
+      }
+      .panel-head {
+        padding: 21px 22px 17px;
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        border-bottom: 1px solid var(--line);
+        gap: 10px;
+      }
+      h2 {
+        font:
+          23px/1.15 Georgia,
+          serif;
+        margin: 5px 0 5px;
+        font-weight: 400;
+      }
+      .sub {
+        color: var(--muted);
+        font-size: 11px;
+        margin: 0;
+      }
+      .step {
+        font: 11px monospace;
+        color: #919789;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        width: 25px;
+        height: 25px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+      }
+      .form-body {
+        padding: 19px 22px 22px;
+      }
+      fieldset {
+        margin: 0;
+        padding: 0;
+        border: 0;
+        min-width: 0;
+      }
+      .field {
+        margin-bottom: 17px;
+      }
+      .field > label:not(.source-row),
+      .field > legend {
+        display: block;
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 7px;
+      }
+      select,
+      input[type="date"] {
+        width: 100%;
+        min-width: 0;
+        padding: 10px 11px;
+        border: 1px solid #d9dbce;
+        border-radius: 7px;
+        background: #fffefa;
+        color: var(--ink);
+        height: 41px;
+      }
+      input[type="range"] {
+        width: 100%;
+        accent-color: var(--orange);
+      }
+      .two {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+      .hint {
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.5;
+        margin-top: 6px;
+      }
+      .season-tag {
+        font-size: 10px;
+        color: var(--orange);
+        margin-top: 6px;
+      }
+      .choices {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+      }
+      .choice {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        border: 1px solid var(--line);
+        border-radius: 7px;
+        padding: 9px;
+        font-size: 11px;
+        cursor: pointer;
+      }
+      .choice:has(input:checked) {
+        background: #edf1e5;
+        border-color: #7d9565;
+      }
+      .choice input {
+        accent-color: var(--green);
+        margin: 0;
+      }
+      .source-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 7px 0;
+        font-size: 11px;
+        cursor: pointer;
+      }
+      .source-row input {
+        accent-color: var(--green);
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        margin: 0;
+      }
+      .source-row .source-name {
+        flex: 1;
+      }
+      .source-name [lang="he"] {
+        display: block;
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .source-row small {
+        font-size: 9px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .primary {
+        width: 100%;
+        border: 1px solid var(--green);
+        background: var(--green);
+        color: #fffefa;
+        padding: 13px 15px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .primary:hover {
+        background: #315d47;
+      }
+      .fineprint {
+        font-size: 9px;
+        color: var(--muted);
+        text-align: center;
+        margin: 10px 0 0;
+      }
+      .error {
+        font-size: 12px;
+        color: #a82d22;
+        margin: 8px 0;
+      }
+      .council {
+        padding: 22px;
+      }
+      .council-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+      }
+      .pill {
+        font-size: 9px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 4px 8px;
+        color: var(--muted);
+      }
+      .layer {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: #fffefa;
+        transition:
+          background 0.25s,
+          border-color 0.25s;
+        overflow: visible;
+      }
+      .layer + .layer {
+        margin-top: 22px;
+      }
+      .layer + .layer:before {
+        content: "↓";
+        position: absolute;
+        top: -23px;
+        left: 27px;
+        color: #a2ab97;
+        font-size: 16px;
+      }
+      .layer.active {
+        border-color: var(--orange);
+        background: #fff7ec;
+        box-shadow: 0 0 0 3px #b849250b;
+      }
+      .layer.done {
+        border-color: #bac9aa;
+        background: #f5f8ee;
+      }
+      .layer summary {
+        padding: 14px 12px;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        cursor: pointer;
+      }
+      .layer summary::-webkit-details-marker {
+        display: none;
+      }
+      .avatar {
+        height: 38px;
+        width: 38px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        background: #efe9d6;
+        font-size: 21px;
+        flex-shrink: 0;
+      }
+      .layer:nth-child(2) .avatar {
+        background: #e4ebdf;
+      }
+      .layer:nth-child(3) .avatar {
+        background: #fae5cf;
+      }
+      .layer:nth-child(4) .avatar {
+        background: #eddfed;
+      }
+      .layer-title {
+        font-size: 12px;
+        font-weight: 700;
+      }
+      .layer-title small {
+        display: block;
+        font-size: 9px;
+        font-weight: 400;
+        letter-spacing: 1px;
+        color: var(--muted);
+        margin-top: 2px;
+      }
+      .layer-mark {
+        margin-left: auto;
+        color: #8b947e;
+        font-size: 12px;
+      }
+      .layer p {
+        font-size: 11px;
+        color: var(--muted);
+        margin: 0;
+        padding: 0 15px 14px 61px;
+      }
+      .console {
+        margin-top: 22px;
+        background: #eef0e7;
+        border: 1px dashed #cbd0bd;
+        border-radius: 9px;
+        padding: 14px;
+        font: 11px/1.6 monospace;
+        min-height: 84px;
+      }
+      .console-label {
+        font: 9px Arial;
+        letter-spacing: 1.4px;
+        color: #6a785b;
+        margin-bottom: 7px;
+      }
+      .console p {
+        margin: 0;
+      }
+      .track {
+        height: 3px;
+        background: #e0e4d7;
+        margin-top: 16px;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+      .track span {
+        display: block;
+        height: 100%;
+        width: 0;
+        background: var(--orange);
+        transition: width 0.4s;
+      }
+      .presets {
+        padding: 17px 22px;
+        display: flex;
+        gap: 8px;
+        border-top: 1px solid var(--line);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      .presets span {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      .small-button {
+        background: transparent;
+        border: 1px solid #d3d8c7;
+        border-radius: 6px;
+        font-size: 10px;
+        padding: 7px 9px;
+      }
+      .small-button:hover {
+        background: #e8eddc;
+      }
+      .verdict {
+        background: #eef1e5;
+        border-color: #d2dbc3;
+      }
+      .verdict .panel-head {
+        border-color: #d2dbc3;
+      }
+      .result-body {
+        padding: 23px;
+      }
+      .plate {
+        width: 172px;
+        height: 172px;
+        margin: 17px auto 25px;
+        background: #faf9f1;
+        border: 9px solid #fffefa;
+        border-radius: 50%;
+        box-shadow:
+          0 4px 0 #d8d4be,
+          0 13px 23px #4f4b3317;
+        display: grid;
+        place-items: center;
+        transform: rotate(-13deg);
+      }
+      .hummus {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(
+          ellipse at 56% 42%,
+          #b8963d 0 16%,
+          #d7b763 17% 26%,
+          #e6cc94 27% 36%,
+          #cfac68 37% 40%,
+          #ead4a8 41% 52%,
+          #c4a15d 53% 56%,
+          #e8d0a0 57%
+        );
+        position: relative;
+        box-shadow: inset 0 2px 7px #a97e4d55;
+      }
+      .hummus:before {
+        content: "● ●";
+        position: absolute;
+        font-size: 22px;
+        letter-spacing: 5px;
+        top: 45px;
+        left: 43px;
+        color: #e9cd81;
+        text-shadow: 1px 2px #9f7c34;
+      }
+      .hummus:after {
+        content: "✦";
+        font-size: 43px;
+        color: #638146;
+        position: absolute;
+        top: 5px;
+        left: 24px;
+        transform: rotate(24deg);
+      }
+      .empty-title {
+        font: 29px/1.15 Georgia;
+        text-align: center;
+        margin: 0 0 10px;
+      }
+      .empty-copy {
+        font-size: 12px;
+        color: var(--muted);
+        text-align: center;
+        margin: 0 auto;
+        max-width: 235px;
+      }
+      .quote {
+        border-top: 1px solid #d2dbc3;
+        padding-top: 20px;
+        margin: 25px 0 0;
+        font: italic 15px/1.5 Georgia;
+        text-align: center;
+      }
+      .quote small {
+        display: block;
+        font: 9px Arial;
+        margin-top: 10px;
+        letter-spacing: 1px;
+      }
+      .winner-name {
+        font: 36px/1.1 Georgia;
+        margin: 12px 0 7px;
+        letter-spacing: -0.5px;
+      }
+      .winner-city {
+        font-size: 12px;
+        color: var(--muted);
+      }
+      .score-block {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 17px 0;
+      }
+      .score-ring {
+        width: 66px;
+        height: 66px;
+        display: grid;
+        place-items: center;
+        border: 4px solid #7e9460;
+        border-radius: 50%;
+        font: 25px Georgia;
+        flex-shrink: 0;
+      }
+      .score-label {
+        font-size: 11px;
+        font-weight: 700;
+      }
+      .score-label small {
+        display: block;
+        font-size: 9px;
+        color: var(--muted);
+        font-weight: 400;
+      }
+      .reason {
+        font-size: 12px;
+        line-height: 1.65;
+      }
+      .breakdown {
+        margin: 17px 0;
+        border-top: 1px solid #d2dbc3;
+        padding-top: 14px;
+      }
+      .bar-row {
+        display: grid;
+        grid-template-columns: 70px 1fr 35px;
+        gap: 8px;
+        align-items: center;
+        font-size: 10px;
+        margin: 8px 0;
+      }
+      .bar {
+        height: 5px;
+        background: #dce3d0;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+      .bar i {
+        display: block;
+        height: 100%;
+        background: #728b57;
+      }
+      .bar-row b {
+        font: 10px monospace;
+        text-align: right;
+      }
+      .result-links {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 17px;
+      }
+      .result-links a {
+        font-size: 10px;
+        text-decoration: none;
+        border: 1px solid #aebc9c;
+        padding: 8px 10px;
+        border-radius: 6px;
+        background: #f8faef;
+      }
+      .caution {
+        font-size: 10px;
+        line-height: 1.6;
+        color: #665c3a;
+        background: #f8f0da;
+        border: 1px solid #e4d9b8;
+        border-radius: 8px;
+        padding: 12px;
+        margin-top: 18px;
+      }
+      .alternatives {
+        margin-top: 20px;
+        border-top: 1px solid #d2dbc3;
+        padding-top: 13px;
+      }
+      .alt {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        font-size: 11px;
+        padding: 10px 0;
+        border-bottom: 1px solid #dce2d1;
+      }
+      .alt small {
+        display: block;
+        color: var(--muted);
+        font-size: 9px;
+      }
+      .alt strong {
+        white-space: nowrap;
+      }
+      .bottom-note {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        border-top: 1px solid var(--line);
+        padding: 19px 0 25px;
+        margin-top: 25px;
+        color: var(--muted);
+        font-size: 10px;
+      }
+      .bottom-note b {
+        font-weight: 400;
+        color: var(--ink);
+      }
+      dialog {
+        border: 1px solid var(--line);
+        background: var(--paper);
+        color: var(--ink);
+        border-radius: 16px;
+        max-width: 750px;
+        width: calc(100% - 30px);
+        padding: 26px;
+        max-height: 85vh;
+      }
+      dialog::backdrop {
+        background: #18332688;
+      }
+      .dialog-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+      }
+      dialog h2 {
+        font-size: 30px;
+      }
+      dialog p,
+      dialog li {
+        font-size: 12px;
+      }
+      dialog article {
+        border-top: 1px solid var(--line);
+        padding: 12px 0;
+      }
+      dialog article h3 {
+        font-size: 14px;
+        margin: 0 0 4px;
+      }
+      dialog article p {
+        margin: 5px 0;
+      }
+      dialog article a {
+        font-size: 11px;
+        overflow-wrap: anywhere;
+      }
+      .source-detail {
+        font-size: 10px;
+        color: var(--muted);
+      }
+      [hidden] {
+        display: none !important;
+      }
+      @media (min-width: 1500px) {
+        .hero {
+          padding: 48px 0 40px;
+        }
+        .workspace {
+          gap: 26px;
+        }
+      }
+      @media (max-width: 1100px) {
+        .shell {
+          padding: 0 22px;
+        }
+        .workspace {
+          grid-template-columns: minmax(260px, 0.9fr) minmax(300px, 1.1fr);
+        }
+        .verdict {
+          grid-column: 1/-1;
+        }
+        .result-body {
+          max-width: 760px;
+          margin: auto;
+        }
+        .hero-note {
+          display: none;
+        }
+      }
+      @media (max-width: 650px) {
+        .shell {
+          padding: 0 16px;
+        }
+        .topbar {
+          height: 74px;
+        }
+        .brand {
+          font-size: 16px;
+        }
+        .brand small {
+          font-size: 8px;
+        }
+        .nav {
+          gap: 10px;
+        }
+        .nav .tag {
+          display: none;
+        }
+        .hero {
+          padding: 28px 0;
+        }
+        .hero p {
+          font-size: 12px;
+          max-width: 300px;
+        }
+        h1 {
+          letter-spacing: -1px;
+        }
+        .workspace {
+          grid-template-columns: 1fr;
+          gap: 16px;
+        }
+        .verdict {
+          grid-column: auto;
+        }
+        .bottom-note {
+          flex-direction: column;
+          gap: 6px;
+        }
+        .panel-head {
+          padding: 18px 20px;
+        }
+        .hero .eyebrow {
+          font-size: 9px;
+        }
+        .two {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        * {
+          transition: none !important;
+          scroll-behavior: auto !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="logo" aria-hidden="true">◡</div>
+          <div>
+            The Hummus Council<small>DEPARTMENT OF IMPORTANT DIPS</small>
+          </div>
+        </div>
+        <nav class="nav" aria-label="About this demo">
+          <button class="text-button" id="about-button">How it works ↗</button
+          ><span class="tag"><span class="dot"></span> DEMO KITCHEN</span>
+        </nav>
+      </header>
+      <main>
+        <section class="hero">
+          <div>
+            <div class="eyebrow">Less overthinking. More olive oil.</div>
+            <h1>Big decisions.<br /><em>Small chickpeas.</em></h1>
+            <p>Your lunch deserves a committee. Unfortunately, we made one.</p>
+          </div>
+          <div class="hero-note" aria-hidden="true">
+            100% opinions.<br />0% actual<br />chickpeas.<span
+              >EST. FIVE MINUTES AGO</span
+            >
+          </div>
+        </section>
+        <div class="workspace">
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="eyebrow">The briefing</div>
+                <h2>Tell us your situation.</h2>
+                <p class="sub">Be honest. The pita can tell.</p>
+              </div>
+              <span class="step">01</span>
+            </div>
+            <form id="brief" class="form-body">
+              <fieldset id="inputs">
+                <div class="two">
+                  <div class="field">
+                    <label for="city">Where are you?</label
+                    ><select id="city" name="city">
+                      <option value="tel-aviv">Tel Aviv / Jaffa</option>
+                      <option value="jerusalem">Jerusalem</option>
+                      <option value="haifa">Haifa</option>
+                      <option value="ramla">Ramla</option>
+                      <option value="nazareth">Nazareth</option>
+                      <option value="ness-ziona">Ness Ziona</option>
+                      <option value="kafr-qasim">Kafr Qasim</option>
+                      <option value="beit-dagan">Beit Dagan area</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label for="date">Date of the dip</label
+                    ><input type="date" id="date" name="date" required />
+                    <div id="season-label" class="season-tag"></div>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="travel">How far will you go for hummus?</label
+                  ><select name="travel" id="travel">
+                    <option value="local">My city only. I have a life.</option>
+                    <option value="any">
+                      Any listed city. This IS my life.
+                    </option>
+                  </select>
+                  <div class="hint">
+                    City-level matching, not GPS or driving-time estimates.
+                  </div>
+                </div>
+                <fieldset class="field">
+                  <legend>Your hummus personality</legend>
+                  <div class="choices">
+                    <label class="choice"
+                      ><input
+                        type="radio"
+                        name="taste"
+                        value="light"
+                        checked
+                      />Light &amp; silky</label
+                    ><label class="choice"
+                      ><input type="radio" name="taste" value="rich" />Rich
+                      &amp; tahini-ish</label
+                    ><label class="choice"
+                      ><input type="radio" name="taste" value="chunky" />Team
+                      masabacha</label
+                    ><label class="choice"
+                      ><input type="radio" name="taste" value="any" />I trust
+                      the chickpea</label
+                    >
+                  </div>
+                </fieldset>
+                <div class="field">
+                  <label for="hunger"
+                    >Hunger level
+                    <span
+                      id="hunger-label"
+                      style="float: right; color: var(--orange)"
+                      >Politely hungry</span
+                    ></label
+                  ><input
+                    id="hunger"
+                    name="hunger"
+                    type="range"
+                    min="1"
+                    max="5"
+                    value="3"
+                  />
+                  <div class="hint">
+                    1: a little peckish · 5: the table looks edible
+                  </div>
+                </div>
+                <label class="source-row" style="margin-bottom: 14px"
+                  ><input type="checkbox" id="seasonal" checked /><span
+                    >Let the season have an opinion</span
+                  ><span aria-hidden="true">☀</span></label
+                >
+                <fieldset class="field">
+                  <legend>Who gets a seat at the table?</legend>
+                  <label class="source-row"
+                    ><input
+                      type="checkbox"
+                      name="sources"
+                      value="humus101"
+                      checked
+                    /><span class="source-name"
+                      >Hummus for the Masses
+                      <span lang="he">חומוס להמונים</span></span
+                    ><small>4 reviews</small></label
+                  ><label class="source-row"
+                    ><input
+                      type="checkbox"
+                      name="sources"
+                      value="hummusai"
+                      checked
+                    /><span class="source-name"
+                      >The Hummusai <span lang="he">החומוסאי</span></span
+                    ><small>4 reviews</small></label
+                  ><label class="source-row"
+                    ><input
+                      type="checkbox"
+                      name="sources"
+                      value="foodout"
+                      checked
+                    /><span class="source-name"
+                      >Eating Out <span lang="he">אוכל בחוץ</span></span
+                    ><small>1 review</small></label
+                  >
+                  <div class="hint">
+                    Curated review snapshot. No live blog scraping.
+                  </div>
+                </fieldset>
+                <div id="form-error" class="error" role="alert" hidden></div>
+                <button class="primary" type="submit" id="run">
+                  <span>Convene the council</span
+                  ><span aria-hidden="true">→</span>
+                </button>
+                <p class="fineprint">
+                  No sign-up. No tracking. Just questionable priorities.
+                </p>
+              </fieldset>
+            </form>
+          </section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <div class="eyebrow">The deliberation</div>
+                <h2>Four layers. One lunch.</h2>
+                <p class="sub">An unnecessarily transparent decision.</p>
+              </div>
+              <span class="step">02</span>
+            </div>
+            <div class="council">
+              <div class="council-top">
+                <span
+                  class="eyebrow"
+                  style="color: var(--muted); font-size: 9px"
+                  >Inside the chickpea brain</span
+                ><span class="pill" id="state">Awaiting your brief</span>
+              </div>
+              <div id="layers">
+                <details class="layer">
+                  <summary>
+                    <span class="avatar" aria-hidden="true">⌖</span
+                    ><span class="layer-title"
+                      >The Logistics Minister<small
+                        >LAYER 01 · LOCATION &amp; HUNGER</small
+                      ></span
+                    ><span class="layer-mark">+</span>
+                  </summary>
+                  <p>
+                    Can we get lunch without turning it into a pilgrimage?
+                    Same-city candidates get more points. Very hungry people
+                    give geography more voting power.
+                  </p>
+                </details>
+                <details class="layer">
+                  <summary>
+                    <span class="avatar" aria-hidden="true">▤</span
+                    ><span class="layer-title"
+                      >The Blog Archaeologist<small
+                        >LAYER 02 · SOURCE EVIDENCE</small
+                      ></span
+                    ><span class="layer-mark">+</span>
+                  </summary>
+                  <p>
+                    Only restaurants covered by your selected sources enter the
+                    vote. Old reviews are evidence of an old visit, not proof of
+                    today's lunch.
+                  </p>
+                </details>
+                <details class="layer">
+                  <summary>
+                    <span class="avatar" aria-hidden="true">☀</span
+                    ><span class="layer-title"
+                      >The Seasonal Philosopher<small
+                        >LAYER 03 · DATE &amp; APPETITE</small
+                      ></span
+                    ><span class="layer-mark">+</span>
+                  </summary>
+                  <p>
+                    June through September: a lighter dip gets a bonus. December
+                    through February: rich hummus gets its moment. This is a
+                    playful preference rule, not nutrition advice.
+                  </p>
+                </details>
+                <details class="layer">
+                  <summary>
+                    <span class="avatar" aria-hidden="true">♡</span
+                    ><span class="layer-title"
+                      >Your Inner Chickpea<small
+                        >LAYER 04 · TASTE &amp; FINAL SCORE</small
+                      ></span
+                    ><span class="layer-mark">+</span>
+                  </summary>
+                  <p>
+                    Your chosen texture gets the biggest taste bonus. The
+                    council adds up the visible points. Ties go alphabetically,
+                    because arm-wrestling chickpeas is impractical.
+                  </p>
+                </details>
+              </div>
+              <div class="console" role="status" aria-live="polite">
+                <div class="console-label">COUNCIL MINUTES</div>
+                <p id="minutes">
+                  “We could just eat somewhere.”<br />Motion rejected. We have a
+                  process.
+                </p>
+              </div>
+              <div class="track" aria-hidden="true">
+                <span id="progress"></span>
+              </div>
+            </div>
+            <div class="presets">
+              <span>Try a plot twist:</span
+              ><button class="small-button" id="summer" type="button">
+                ☀ Summer lunch</button
+              ><button class="small-button" id="winter" type="button">
+                ☂ Winter comfort
+              </button>
+            </div>
+          </section>
+          <section
+            class="panel verdict"
+            id="verdict"
+            aria-labelledby="verdict-heading"
+          >
+            <div class="panel-head">
+              <div>
+                <div class="eyebrow">The verdict</div>
+                <h2 id="verdict-heading">Your next great dip.</h2>
+                <p class="sub" id="verdict-sub">
+                  A recommendation, not a religious ruling.
+                </p>
+              </div>
+              <span class="step">03</span>
+            </div>
+            <div class="result-body" id="result">
+              <div class="plate" aria-hidden="true">
+                <div class="hummus"></div>
+              </div>
+              <h3 class="empty-title">A plate full of possibility.</h3>
+              <p class="empty-copy">
+                Give the council your brief.<br />We'll turn your preferences
+                into lunch, with an unreasonable amount of explanation.
+              </p>
+              <div class="quote">
+                “I used to make my own decisions.<br />Then I discovered
+                committees.”<small
+                  >AN ENTIRELY FICTIONAL SATISFIED CUSTOMER</small
+                >
+              </div>
+            </div>
+          </section>
+        </div>
+        <footer class="bottom-note">
+          <span
+            ><b>Real blog links. Playful rules. No artificial chickpeas.</b
+            ><br />9 curated restaurants · 3 sources · current opening status
+            unknown</span
+          ><button id="sources-button" class="text-button">
+            Open the evidence cupboard ↗
+          </button>
+        </footer>
+      </main>
+    </div>
+    <dialog id="info" aria-labelledby="dialog-title">
+      <div class="dialog-head">
+        <h2 id="dialog-title">The evidence cupboard</h2>
+        <button
+          class="small-button"
+          id="close-info"
+          aria-label="Close information"
+        >
+          Close ×
+        </button>
+      </div>
+      <div id="dialog-body"></div>
+    </dialog>
+    <script id="decision-engine">
+      "use strict";
+      const SOURCES = {
+        humus101: {
+          name: "Hummus for the Masses",
+          url: "https://humus101.com/75",
+        },
+        hummusai: {
+          name: "The Hummusai",
+          url: "https://hummusai.wordpress.com/",
+        },
+        foodout: { name: "Eating Out", url: "https://food-out.blogspot.com/" },
+      };
+      // Each profile summarizes the linked author's historical review, not reader comments.
+      // Style tags are demo interpretations of those descriptions, not nutritional measurements.
+      const RESTAURANTS = [
+        {
+          id: "abu-hassan",
+          name: "Abu Hassan",
+          he: "אבו חסן",
+          city: "tel-aviv",
+          place: "Jaffa · Dolphin Street branch",
+          tags: ["chunky"],
+          source: "humus101",
+          date: "2007-04-14",
+          url: "https://humus101.com/89",
+          note: "The author especially praises the warm, generously seasoned masabacha, and describes a crowded, fast-paced setting.",
+        },
+        {
+          id: "616",
+          name: "Hummus 616",
+          he: "חומוס 616",
+          city: "tel-aviv",
+          place: "Tel Aviv · Yehuda HaMaccabi",
+          tags: ["light", "rich"],
+          source: "humus101",
+          date: "2024-11-26",
+          url: "https://humus101.com/9695",
+          note: "The author describes a less-thick texture with a distinct tahini taste, plus warm, thick ful. Light texture and rich tahini are separate demo tags.",
+        },
+        {
+          id: "lina",
+          name: "Lina",
+          he: "לינא",
+          city: "jerusalem",
+          place: "Jerusalem · Old City",
+          tags: ["light"],
+          source: "humus101",
+          date: "2007-03-26",
+          url: "https://humus101.com/83",
+          note: "The author describes delicate, lightly sour hummus, soft chickpeas and light masabacha.",
+        },
+        {
+          id: "abu-maron",
+          name: "Abu Maron",
+          he: "אבו מרון",
+          city: "haifa",
+          place: "Haifa",
+          tags: ["light", "rich", "chunky"],
+          source: "humus101",
+          date: "2008-11-22",
+          url: "https://humus101.com/552",
+          note: "The review contrasts delicate, smooth hummus with thick, richly flavoured mashawsha. Choose the dish that fits your preference.",
+        },
+        {
+          id: "khalil",
+          name: "Khalil",
+          he: "חליל",
+          city: "ramla",
+          place: "Ramla",
+          tags: [],
+          source: "hummusai",
+          date: "2013-09-06",
+          url: "https://hummusai.wordpress.com/2013/09/06/חליל-רמלה/",
+          note: "The reviewer praises the texture and sides, but finds the hummus sweeter than some diners might like. No light/rich texture tag inferred.",
+        },
+        {
+          id: "el-sheikh",
+          name: "El Sheikh",
+          he: "אל שייך",
+          city: "nazareth",
+          place: "Nazareth",
+          tags: ["chunky", "rich"],
+          source: "hummusai",
+          date: "2013-09-27",
+          url: "https://hummusai.wordpress.com/2013/09/27/חומוס-אל-שייך-נצרת/",
+          note: "The review describes tangy, grainy hummus and masabacha with abundant olive oil and lemon. The author prefers the plain hummus or chickpea topping.",
+        },
+        {
+          id: "petra",
+          name: "Petra",
+          he: "פטרה",
+          city: "ness-ziona",
+          place: "Ness Ziona",
+          tags: ["light"],
+          source: "hummusai",
+          date: "2013-09-13",
+          url: "https://hummusai.wordpress.com/2013/09/13/פטרה-נס-ציונה/",
+          note: "The author describes an airy texture, enjoyable toppings and a restaurant offering more than hummus.",
+        },
+        {
+          id: "basha",
+          name: "Basha",
+          he: "באשה",
+          city: "kafr-qasim",
+          place: "Kafr Qasim",
+          tags: [],
+          source: "hummusai",
+          date: "2013-09-05",
+          url: "https://hummusai.wordpress.com/2013/09/05/כגכגכ/",
+          note: "The reviewer strongly recommends the hummus and praises its texture, without enough detail to assign a light, rich or chunky tag.",
+        },
+        {
+          id: "asa",
+          name: "Pondak Asa",
+          he: "פונדק אסא",
+          city: "beit-dagan",
+          place: "Beit Dagan / HaShiva interchange area",
+          tags: ["rich"],
+          source: "foodout",
+          date: "2019-05-15",
+          url: "https://food-out.blogspot.com/2019/05/pondak-asa.html",
+          note: "The author enjoys plain hummus with tahini at this grill restaurant. The tahini-style tag is a demo interpretation; the review does not establish calorie content.",
+        },
+      ];
+      function seasonFor(date) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(date))
+          throw new Error(
+            "Choose a valid lunch date. The chickpeas cannot read minds.",
+          );
+        const parsed = new Date(date + "T12:00:00Z");
+        if (
+          !Number.isFinite(parsed.getTime()) ||
+          parsed.toISOString().slice(0, 10) !== date
+        )
+          throw new Error("That date does not exist. Even for hummus.");
+        const month = Number(date.slice(5, 7));
+        return month >= 6 && month <= 9
+          ? "summer"
+          : month === 12 || month <= 2
+            ? "winter"
+            : "mild";
+      }
+      function decide(input) {
+        const season = seasonFor(input.date);
+        if (!input.sources.length)
+          throw new Error(
+            "Choose at least one blog. Even a committee needs evidence.",
+          );
+        const urgent = input.hunger >= 4;
+        const weights = urgent
+          ? { location: 55, taste: 20, season: 15, evidence: 10 }
+          : { location: 40, taste: 30, season: 20, evidence: 10 };
+        const sourced = RESTAURANTS.filter((r) =>
+          input.sources.includes(r.source),
+        );
+        const eligible = sourced.filter(
+          (r) => input.travel === "any" || r.city === input.city,
+        );
+        const rows = eligible
+          .map((r) => {
+            const local = r.city === input.city;
+            const preference =
+              input.taste === "any"
+                ? 1
+                : r.tags.includes(input.taste)
+                  ? 1
+                  : r.tags.length
+                    ? 0
+                    : 0.5;
+            const target = season === "summer" ? "light" : "rich";
+            const seasonal =
+              !input.seasonal || season === "mild"
+                ? 0.5
+                : r.tags.includes(target)
+                  ? 1
+                  : r.tags.length
+                    ? 0
+                    : 0.5;
+            // Recency is a small evidence weight, never an assertion that a place is open.
+            const recent = r.date >= "2020-01-01";
+            const parts = {
+              location: local ? weights.location : 0,
+              taste: Math.round(weights.taste * preference),
+              season: Math.round(weights.season * seasonal),
+              evidence: recent ? 10 : 5,
+            };
+            return {
+              ...r,
+              local,
+              parts,
+              score: Object.values(parts).reduce((a, b) => a + b, 0),
+            };
+          })
+          .sort(
+            (a, b) => b.score - a.score || a.name.localeCompare(b.name, "en"),
+          );
+        return { season, weights, rows, sourced: sourced.length, urgent };
+      }
+    </script>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const form = $("brief"),
+        layers = [...document.querySelectorAll(".layer")];
+      const initialResult = $("result").innerHTML;
+      let running = false;
+      const escapeHtml = (value) =>
+        String(value).replace(
+          /[&<>"']/g,
+          (c) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[c],
+        );
+      function localDate(date) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+      }
+      $("date").value = localDate(new Date());
+      function readInput() {
+        return {
+          city: $("city").value,
+          date: $("date").value,
+          travel: $("travel").value,
+          taste: form.elements.taste.value,
+          hunger: Number($("hunger").value),
+          seasonal: $("seasonal").checked,
+          sources: [...form.querySelectorAll("[name=sources]:checked")].map(
+            (e) => e.value,
+          ),
+        };
+      }
+      function refresh() {
+        if (running) return;
+        const labels = [
+          "A little peckish",
+          "Could eat",
+          "Politely hungry",
+          "Hangry",
+          "Table looks edible",
+        ];
+        $("hunger-label").textContent = labels[Number($("hunger").value) - 1];
+        $("hunger").setAttribute(
+          "aria-valuetext",
+          labels[Number($("hunger").value) - 1],
+        );
+        try {
+          const s = seasonFor($("date").value);
+          $("season-label").textContent = {
+            summer: "☀ Summer: lighter-dip season",
+            winter: "☂ Winter: comfort-dip season",
+            mild: "✿ Mild season: all dips welcome",
+          }[s];
+        } catch {
+          $("season-label").textContent = "Choose your lunch date";
+        }
+        $("state").textContent = "Ready for a vote";
+        $("progress").style.width = "0%";
+        $("result").innerHTML = initialResult;
+        $("form-error").hidden = true;
+        layers.forEach((layer) => {
+          layer.classList.remove("done", "active");
+          layer.querySelector(".layer-mark").textContent = "+";
+        });
+        $("minutes").textContent =
+          "Brief updated. Previous verdict dismissed. The pita demands a fresh vote.";
+      }
+      form.addEventListener("input", refresh);
+      function setBusy(busy) {
+        running = busy;
+        $("inputs").disabled = busy;
+        $("summer").disabled = busy;
+        $("winter").disabled = busy;
+        $("verdict").setAttribute("aria-busy", String(busy));
+      }
+      function renderResult(result, input) {
+        const winner = result.rows[0];
+        if (!winner) {
+          $("result").innerHTML =
+            '<div class="plate" aria-hidden="true"><div class="hummus"></div></div><h3 class="empty-title">The council has no quorum.</h3><p class="empty-copy">No reviewed restaurants match this city and your selected blogs. Add another source or allow other listed cities. We refuse to invent a hummus place. Our standards are low, but not that low.</p>';
+          $("minutes").textContent =
+            "No match in this small snapshot. Your city may have excellent hummus; our cupboard is simply understocked.";
+          return;
+        }
+        const names = {
+          location: "Location",
+          taste: "Your taste",
+          season: "Season",
+          evidence: "Evidence",
+        };
+        const bars = Object.entries(winner.parts)
+          .map(
+            ([key, value]) =>
+              `<div class="bar-row"><span>${names[key]}</span><span class="bar"><i style="width:${(value / result.weights[key]) * 100}%"></i></span><b>${value}/${result.weights[key]}</b></div>`,
+          )
+          .join("");
+        const order =
+          input.taste === "chunky"
+            ? "Ask about masabacha. You voted for chickpeas with a personality."
+            : input.seasonal && result.season === "summer"
+              ? "Ask about a smaller, lighter-textured portion. Summer already brings enough drama."
+              : input.taste === "rich" ||
+                  (input.seasonal && result.season === "winter")
+                ? "Ask about tahini or ful. This lunch is applying for comfort-food status."
+                : "Ask what is freshly prepared. Let the chickpeas do the talking.";
+        const matchText =
+          input.taste === "any"
+            ? "You gave all textures equal taste points."
+            : winner.tags.includes(input.taste)
+              ? "Its curated style tags match your taste."
+              : winner.tags.length
+                ? "Its tagged style does not match your chosen taste; other factors won."
+                : "The review does not establish your chosen texture, so taste gets half credit.";
+        const alternatives = result.rows
+          .slice(1, 4)
+          .map(
+            (r) =>
+              `<div class="alt"><div>${escapeHtml(r.name)}<small>${escapeHtml(r.place)} · L ${r.parts.location} / T ${r.parts.taste} / S ${r.parts.season} / E ${r.parts.evidence}</small></div><strong>${r.score}/100</strong></div>`,
+          )
+          .join("");
+        $("result").innerHTML =
+          `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(winner.name)}</h3><div class="winner-city"><span lang="he">${escapeHtml(winner.he)}</span> · ${escapeHtml(winner.place)}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself."} ${matchText}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">Historical review summary: ${escapeHtml(winner.note)}<br><br>${escapeHtml(SOURCES[winner.source].name)} · published ${winner.date}</div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
+        $("minutes").textContent =
+          `${winner.name} wins with ${winner.score}/100. ${result.rows.length} candidate${result.rows.length === 1 ? "" : "s"} considered. The committee will now adjourn directly into a pita.`;
+      }
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if (running) return;
+        const input = readInput();
+        let result;
+        try {
+          result = decide(input);
+        } catch (error) {
+          $("form-error").textContent = error.message;
+          $("form-error").hidden = false;
+          return;
+        }
+        $("form-error").hidden = true;
+        setBusy(true);
+        if (matchMedia("(max-width: 650px)").matches)
+          document.querySelector(".council").scrollIntoView({ block: "start" });
+        $("result").innerHTML =
+          '<div class="plate" aria-hidden="true"><div class="hummus"></div></div><h3 class="empty-title">Please hold your pita.</h3><p class="empty-copy">Four fictional experts are having very real opinions about your settings.</p>';
+        layers.forEach((layer) => {
+          layer.classList.remove("done", "active");
+          layer.querySelector(".layer-mark").textContent = "+";
+        });
+        const messages = [
+          `${input.travel === "local" ? "City-only rule enforced." : "Intercity travel permitted."} Location has ${result.weights.location} points. ${result.urgent ? "Hunger emergency: geography has seized extra voting power." : "No cross-country expedition has been ordered. Yet."}`,
+          `${input.sources.length} selected blogs → ${result.sourced} archived profiles → ${result.rows.length} eligible candidates. Dusting off reviews, not checking live kitchens.`,
+          !input.seasonal
+            ? "Seasonal voting disabled. The sun has been asked to leave the meeting. Everyone gets half the season points."
+            : result.season === "summer"
+              ? "Summer rule: lighter-textured profiles get a bonus. The weather is heavy enough."
+              : result.season === "winter"
+                ? "Winter rule: rich profiles get a bonus. Your sweater has approved this message."
+                : "Mild-season rule: equal season points. The calendar refuses to take sides.",
+          `Taste gets ${result.weights.taste} points. Adding location + taste + season + evidence. This is arithmetic wearing a tiny chef hat.`,
+        ];
+        try {
+          for (let i = 0; i < layers.length; i++) {
+            $("state").textContent = `Layer ${i + 1} of 4`;
+            layers[i].classList.add("active");
+            $("minutes").textContent = messages[i];
+            await new Promise((resolve) =>
+              setTimeout(
+                resolve,
+                matchMedia("(prefers-reduced-motion: reduce)").matches
+                  ? 0
+                  : 850,
+              ),
+            );
+            layers[i].classList.remove("active");
+            layers[i].classList.add("done");
+            layers[i].querySelector(".layer-mark").textContent = "✓";
+            $("progress").style.width = `${(i + 1) * 25}%`;
+          }
+          renderResult(result, input);
+          $("state").textContent = result.rows.length
+            ? "Lunch, resolved."
+            : "No matching profiles";
+          if (matchMedia("(max-width: 650px)").matches)
+            $("verdict").scrollIntoView({ block: "start" });
+        } finally {
+          setBusy(false);
+        }
+      });
+      function preset(month) {
+        if (running) return;
+        const today = new Date();
+        let year = today.getFullYear();
+        if (today.getMonth() + 1 > month) year++;
+        $("date").value = `${year}-${String(month).padStart(2, "0")}-15`;
+        $("seasonal").checked = true;
+        refresh();
+        $("minutes").textContent =
+          month === 7
+            ? "Summer scenario loaded. Same preferences, sunnier politics. Convene the council to compare."
+            : "Winter scenario loaded. Same preferences, sweater weather. Convene the council to compare.";
+      }
+      $("summer").onclick = () => preset(7);
+      $("winter").onclick = () => preset(1);
+      const method = `<p>A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected blogs determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li><li>Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
+      function openInfo(showSources) {
+        $("dialog-title").textContent = showSources
+          ? "The evidence cupboard"
+          : "How a chickpea becomes a decision";
+        $("dialog-body").innerHTML =
+          method +
+          (showSources
+            ? "<h2>Curated review snapshot</h2><p>Compiled 2 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the blogs’ ratings. Every profile below has one source.</p>" +
+              RESTAURANTS.map(
+                (r) =>
+                  `<article><h3>${escapeHtml(r.name)} · ${escapeHtml(r.place)}</h3><p>${escapeHtml(r.note)}</p><p class="source-detail">${escapeHtml(SOURCES[r.source].name)} · ${r.date} · tags: ${r.tags.join(", ") || "unknown"}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.url)}</a></article>`,
+              ).join("")
+            : "");
+        $("info").showModal();
+      }
+      $("sources-button").onclick = () => openInfo(true);
+      $("about-button").onclick = () => openInfo(false);
+      $("close-info").onclick = () => $("info").close();
+      refresh();
+      $("minutes").textContent =
+        "“We could just eat somewhere.” Motion rejected. We have a process.";
+    </script>
+  </body>
+</html>
