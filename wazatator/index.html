@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Wazatator: Evaluate Agent Skills with Claude Code</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b1020;
+  --panel: #131a2e;
+  --panel2: #1a2340;
+  --line: #2a3558;
+  --text: #e8ecf8;
+  --muted: #9aa6c7;
+  --amber: #ffb547;
+  --teal: #3ee0c5;
+  --red: #ff6b6b;
+  --green: #4ade80;
+  --violet: #a78bfa;
+  --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; }
+body { user-select: none; -webkit-user-select: none; }
+pre, code, .term { user-select: text; -webkit-user-select: text; }
+
+.deck { display: flex; height: 100vh; width: 100vw; transition: transform .55s cubic-bezier(.65,.05,.25,1); }
+.slide { flex: 0 0 100vw; height: 100vh; overflow-y: auto; padding: clamp(24px, 5vh, 56px) clamp(18px, 6vw, 96px) 80px;
+  display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2.2vh, 24px);
+  background: radial-gradient(1200px 600px at 85% -10%, rgba(62,224,197,.08), transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, rgba(255,181,71,.07), transparent 60%); }
+.slide > * { max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto; }
+
+h1 { font-size: clamp(2.2rem, 6vw, 4.6rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.03; }
+h2 { font-size: clamp(1.5rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+h3 { font-size: clamp(1rem, 1.7vw, 1.2rem); font-weight: 700; }
+p, li { font-size: clamp(.95rem, 1.55vw, 1.15rem); line-height: 1.55; color: var(--muted); }
+strong { color: var(--text); }
+.kicker { font-size: clamp(.72rem, 1.1vw, .85rem); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); }
+.grad { background: linear-gradient(90deg, var(--amber), var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 860px; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 24px); }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.6vw, 18px); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: clamp(14px, 2vw, 22px); }
+.card p { font-size: clamp(.88rem, 1.3vw, 1rem); margin-top: 6px; }
+.card .tag { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 999px; margin-bottom: 8px; }
+.t-red { background: rgba(255,107,107,.14); color: var(--red); }
+.t-green { background: rgba(74,222,128,.14); color: var(--green); }
+.t-amber { background: rgba(255,181,71,.14); color: var(--amber); }
+.t-teal { background: rgba(62,224,197,.14); color: var(--teal); }
+.t-violet { background: rgba(167,139,250,.16); color: var(--violet); }
+
+pre { background: #0a0f1d; border: 1px solid var(--line); border-radius: 12px; padding: clamp(12px, 1.8vw, 18px);
+  font-family: var(--mono); font-size: clamp(.72rem, 1.15vw, .9rem); line-height: 1.6; overflow-x: auto; color: #cdd6f4; font-variant-ligatures: none; }
+pre .k { color: var(--teal); } pre .s { color: var(--amber); } pre .c { color: #6b7699; font-style: italic; }
+pre .n { color: var(--violet); } pre .add { color: var(--green); } pre .del { color: var(--red); }
+.file { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin-bottom: -6px; }
+
+.flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
+.flow .step { flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; position: relative; }
+.flow .step b { display: block; color: var(--text); font-size: clamp(.9rem, 1.4vw, 1.05rem); margin-bottom: 4px; }
+.flow .step span { font-size: clamp(.8rem, 1.2vw, .92rem); color: var(--muted); line-height: 1.45; display: block; }
+.flow .step .num { position: absolute; top: -10px; left: 12px; background: var(--amber); color: #1a1200; font-weight: 800;
+  font-size: .75rem; border-radius: 999px; padding: 1px 8px; }
+.arrow { align-self: center; color: var(--teal); font-size: 1.4rem; }
+
+table { width: 100%; border-collapse: collapse; font-size: clamp(.82rem, 1.3vw, 1rem); }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--teal); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+td { color: var(--muted); } td strong { color: var(--text); }
+.pass { color: var(--green); font-weight: 700; } .fail { color: var(--red); font-weight: 700; }
+
+.big-stats { display: flex; gap: clamp(10px, 2vw, 22px); flex-wrap: wrap; }
+.stat { flex: 1 1 140px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.stat .v { font-size: clamp(1.6rem, 3.6vw, 2.6rem); font-weight: 800; }
+.stat .l { font-size: .85rem; color: var(--muted); }
+
+/* demo terminal */
+.term { background: #070b16; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.term-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: #10172b; border-bottom: 1px solid var(--line); }
+.dot { width: 11px; height: 11px; border-radius: 50%; } .d1 { background: #ff5f57; } .d2 { background: #febc2e; } .d3 { background: #28c840; }
+.term-title { margin-left: 8px; font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+.term-body { font-family: var(--mono); font-size: clamp(.7rem, 1.1vw, .86rem); line-height: 1.6; padding: 14px 16px;
+  height: clamp(260px, 46vh, 430px); overflow-y: auto; white-space: pre-wrap; color: #cdd6f4; font-variant-ligatures: none; }
+.term-body .p { color: var(--teal); } .term-body .ok { color: var(--green); } .term-body .bad { color: var(--red); }
+.term-body .dim { color: #6b7699; } .term-body .hl { color: var(--amber); }
+.term-body::-webkit-scrollbar, pre::-webkit-scrollbar, .slide::-webkit-scrollbar { width: 8px; height: 8px; }
+.term-body::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb, .slide::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+.term-body::-webkit-scrollbar-track, pre::-webkit-scrollbar-track, .slide::-webkit-scrollbar-track { background: transparent; }
+.term-body, pre, .slide { scrollbar-color: var(--line) transparent; }
+.cursor { display: inline-block; width: 8px; height: 1em; background: var(--teal); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { background: var(--panel2); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 9px 16px;
+  font: 600 .9rem "Inter", sans-serif; cursor: pointer; }
+.btn:hover { border-color: var(--teal); }
+.btn.primary { background: linear-gradient(90deg, var(--amber), #ffcf7a); color: #1a1200; border: none; }
+
+.bars .row { display: grid; grid-template-columns: 150px 1fr 40px; gap: 10px; align-items: center; margin: 7px 0; font-size: .92rem; color: var(--muted); }
+.bars .track { height: 10px; background: var(--panel2); border-radius: 999px; overflow: hidden; }
+.bars .fill { height: 100%; background: linear-gradient(90deg, var(--amber), var(--teal)); border-radius: 999px; }
+
+.pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill { font-size: .8rem; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+
+/* navigation chrome */
+.nav { position: fixed; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(19,26,46,.85); border: 1px solid var(--line); color: var(--text); font-size: 1.7rem; line-height: 1;
+  cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
+.nav:hover { border-color: var(--teal); color: var(--teal); }
+.nav.prev { left: 14px; } .nav.next { right: 14px; }
+.nav.hidden { opacity: 0; pointer-events: none; }
+.progress { position: fixed; bottom: 0; left: 0; height: 4px; width: 100%; background: rgba(42,53,88,.6); z-index: 10; }
+.progress .bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--amber), var(--teal)); transition: width .45s; }
+.counter { position: fixed; bottom: 14px; right: 18px; font-size: .85rem; color: var(--muted); z-index: 10; font-variant-numeric: tabular-nums; }
+.hint { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); font-size: .9rem; color: var(--teal);
+  z-index: 10; animation: hint 1.8s ease-in-out infinite; transition: opacity .4s; }
+.hint.gone { opacity: 0; pointer-events: none; }
+@keyframes hint { 0%,100% { transform: translateX(-50%); } 50% { transform: translateX(calc(-50% + 8px)); } }
+
+@media (max-width: 820px) {
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+  .arrow { display: none; }
+  .nav { width: 40px; height: 40px; font-size: 1.4rem; }
+  .bars .row { grid-template-columns: 110px 1fr 34px; }
+  .slide { justify-content: flex-start; padding-top: 28px; }
+}
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+<!-- 1. Title -->
+<section class="slide">
+  <div class="kicker">Agent Skills · Claude Code · Evals</div>
+  <h1><span class="grad">Wazatator</span><br>the spectator for your skills</h1>
+  <p class="lead">Wazatator watches Claude Code use your <strong>SKILL.md</strong>: every prompt, tool call, and file. Then it scores the run, so you know whether a skill edit helped instead of guessing.</p>
+  <div class="pill-row">
+    <span class="pill">Open source · MIT</span>
+    <span class="pill">Windows · macOS · Linux</span>
+    <span class="pill">Claude Code plugin</span>
+    <span class="pill">v0.1.0</span>
+  </div>
+</section>
+
+<!-- 2. Problem -->
+<section class="slide">
+  <div class="kicker">The problem</div>
+  <h2>You edit a SKILL.md with no proof the edit helped</h2>
+  <div class="grid3">
+    <div class="card"><span class="tag t-red">Silent</span><h3>Does the skill even fire?</h3><p>Claude might answer from general knowledge and never invoke your skill. Nothing tells you.</p></div>
+    <div class="card"><span class="tag t-amber">Fragile</span><h3>Vague prompts break it</h3><p>"Explain this code" with no snippet: does the skill look for the file, or ask the user to paste it?</p></div>
+    <div class="card"><span class="tag t-violet">Unmeasured</span><h3>Was v2 better than v1?</h3><p>Without repeatable tasks and graders, every change is a vibe check.</p></div>
+  </div>
+</section>
+
+<!-- 3. What it is -->
+<section class="slide">
+  <div class="kicker">What it is</div>
+  <h2>A test runner for Agent Skills, driven by real Claude Code sessions</h2>
+  <div class="grid2">
+    <div class="card"><h3>Like a spectator at a match</h3>
+      <table>
+        <tr><th>Spectator</th><th>Wazatator</th></tr>
+        <tr><td>Watches the game</td><td><strong>Watches the full Claude run</strong>: transcript, tools, files</td></tr>
+        <tr><td>Sees every move</td><td><strong>Records each tool call</strong> (Skill, Read, Write, MCP)</td></tr>
+        <tr><td>Judges the play</td><td><strong>Graders and LLM judges</strong> give pass/fail and a score</td></tr>
+        <tr><td>Never plays</td><td><strong>Doesn't change your skill</strong>; it measures it</td></tr>
+      </table>
+    </div>
+    <div class="card"><h3>What's inside</h3>
+      <p><strong>CLI:</strong> <code>wazatator</code>, a fork of Microsoft Waza (MIT) with a new <strong>Claude Code executor</strong>.</p>
+      <p><strong>Plugin:</strong> <code>/wazatator:new-eval</code>, <code>/wazatator:eval</code>, <code>/wazatator:quality</code> inside Claude Code.</p>
+      <p><strong>Graders:</strong> text, regex, files, tool calls, skill invocation, token budget, trigger precision, and LLM-as-judge.</p>
+      <p><strong>Output:</strong> <code>results.json</code>, a terminal report, model comparison, and a CI exit code.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 4. How it works -->
+<section class="slide">
+  <div class="kicker">How it works</div>
+  <h2>From eval.yaml to a score in five steps</h2>
+  <div class="flow">
+    <div class="step"><span class="num">1</span><b>Workspace</b><span>Fresh temp folder per task with your fixture files</span></div>
+    <div class="arrow">›</div>
+    <div class="step"><span class="num">2</span><b>Install skill</b><span>Copies SKILL.md to <code>.claude/skills/</code> so Claude discovers it natively</span></div>
+    <div class="arrow">›</div>
+    <div class="step"><span class="num">3</span><b>Run Claude</b><span><code>claude -p --output-format stream-json</code> with personal plugins and MCP turned off</span></div>
+    <div class="arrow">›</div>
+    <div class="step"><span class="num">4</span><b>Record</b><span>Messages, tool calls, skill invocations, files, tokens, cost</span></div>
+    <div class="arrow">›</div>
+    <div class="step"><span class="num">5</span><b>Grade</b><span>Rules plus an LLM judge that resumes the same session</span></div>
+  </div>
+  <div class="file">internal/execution/claude.go (the core of the Claude Code executor)</div>
+<pre><span class="n">args</span> := []<span class="k">string</span>{<span class="s">"-p"</span>, <span class="s">"--output-format"</span>, <span class="s">"stream-json"</span>, <span class="s">"--verbose"</span>,
+    <span class="s">"--permission-mode"</span>, <span class="s">"bypassPermissions"</span>,
+    <span class="c">// results depend on the skill under test, not on this machine's setup</span>
+    <span class="s">"--setting-sources"</span>, <span class="s">"project,local"</span>, <span class="s">"--strict-mcp-config"</span>}
+<span class="k">if</span> req.SessionID != <span class="s">""</span> { args = append(args, <span class="s">"--resume"</span>, req.SessionID) } <span class="c">// follow-ups and judges</span>
+<span class="k">if</span> len(req.Tools) &gt; <span class="n">0</span> { bridge, _ := startClaudeToolBridge(req.Tools) } <span class="c">// judge tools over local MCP</span></pre>
+</section>
+
+<!-- 5. eval.yaml -->
+<section class="slide">
+  <div class="kicker">Code sample 1</div>
+  <h2>An eval suite is one small YAML file</h2>
+  <div class="grid2">
+    <div>
+      <div class="file">evals/code-explainer/eval.yaml</div>
+<pre><span class="k">name</span>: <span class="s">code-explainer-eval</span>
+<span class="k">skill</span>: <span class="s">code-explainer</span>
+<span class="k">config</span>:
+  <span class="k">executor</span>: <span class="s">claude-cli</span>        <span class="c"># run through Claude Code</span>
+  <span class="k">model</span>: <span class="s">sonnet</span>
+  <span class="k">trials_per_task</span>: <span class="n">3</span>        <span class="c"># repeat to catch flakiness</span>
+  <span class="k">timeout_seconds</span>: <span class="n">300</span>
+  <span class="k">inject_skill_body</span>: <span class="n">false</span>  <span class="c"># Claude must find the skill itself</span>
+<span class="k">graders</span>:                  <span class="c"># apply to every task</span>
+  - <span class="k">type</span>: <span class="s">text</span>
+    <span class="k">name</span>: <span class="s">no_errors</span>
+    <span class="k">config</span>:
+      <span class="k">regex_not_match</span>: [<span class="s">"(?i)fatal error|crashed"</span>]
+<span class="k">tasks</span>:
+  - <span class="s">"tasks/*.yaml"</span></pre>
+    </div>
+    <div class="card">
+      <h3>Why these settings matter</h3>
+      <p><strong>executor: claude-cli</strong>: real Claude Code sessions, the same way your users run the skill.</p>
+      <p><strong>trials_per_task</strong>: models vary from run to run. Three trials show whether a pass is reliable.</p>
+      <p><strong>inject_skill_body: false</strong>: tests real discovery. If the skill's description is weak, Claude won't pick it, and the eval shows that.</p>
+      <p><strong>Exit codes</strong>: 0 = pass, 1 = test failure, 2 = config error, ready for CI.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6. task -->
+<section class="slide">
+  <div class="kicker">Code sample 2</div>
+  <h2>A task: a prompt, input files, and graders</h2>
+  <div class="grid2">
+    <div>
+      <div class="file">tasks/explain-recursion.yaml</div>
+<pre><span class="k">id</span>: <span class="s">explain-python-recursion-001</span>
+<span class="k">inputs</span>:
+  <span class="k">prompt</span>: <span class="s">"Explain this code to me"</span>   <span class="c"># deliberately vague</span>
+  <span class="k">files</span>:
+    - <span class="k">path</span>: <span class="s">factorial.py</span>
+<span class="k">expected</span>:
+  <span class="k">output_contains</span>: [<span class="s">"recursive"</span>, <span class="s">"factorial"</span>]
+<span class="k">graders</span>:
+  - <span class="k">name</span>: <span class="s">used-skill</span>
+    <span class="k">type</span>: <span class="s">skill_invocation</span>
+    <span class="k">config</span>:
+      <span class="k">required_skills</span>: [<span class="s">code-explainer</span>]
+      <span class="k">mode</span>: <span class="s">any_order</span>
+  - <span class="k">name</span>: <span class="s">judge</span>
+    <span class="k">type</span>: <span class="s">prompt</span>                    <span class="c"># LLM-as-judge</span>
+    <span class="k">config</span>:
+      <span class="k">model</span>: <span class="s">haiku</span>
+      <span class="k">continue_session</span>: <span class="n">true</span>      <span class="c"># judge reads the real conversation</span>
+      <span class="k">prompt</span>: <span class="s">|-</span>
+        <span class="s">If the answer explains the recursion and base case,</span>
+        <span class="s">call set_waza_grade_pass, otherwise set_waza_grade_fail.</span></pre>
+    </div>
+    <div class="card">
+      <h3>Three layers of checking</h3>
+      <p><span class="tag t-teal">Rules</span><br><strong>output_contains</strong>, regex, JSON schema, file contents and diffs: fast, free and deterministic.</p>
+      <p><span class="tag t-violet">Behavior</span><br><strong>skill_invocation</strong>, tool-call sequences, token and turn budgets: did Claude do the right things?</p>
+      <p><span class="tag t-amber">Judgment</span><br><strong>prompt</strong> graders: a second Claude session reviews quality that keywords can't capture, and gives its reason.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 7. triggers -->
+<section class="slide">
+  <div class="kicker">Code sample 3</div>
+  <h2>Trigger tests: does the skill fire only when it should?</h2>
+  <div class="grid2">
+    <div>
+      <div class="file">trigger_tests.yaml</div>
+<pre><span class="k">skill</span>: <span class="s">pirate-greeter</span>
+<span class="k">should_trigger_prompts</span>:
+  - <span class="k">prompt</span>: <span class="s">"Hello!"</span>
+  - <span class="k">prompt</span>: <span class="s">"Say hello to my team"</span>
+  - <span class="k">prompt</span>: <span class="s">"Good morning, how about a greeting?"</span>
+<span class="k">should_not_trigger_prompts</span>:   <span class="c"># near-misses</span>
+  - <span class="k">prompt</span>: <span class="s">"Translate this paragraph into Spanish"</span>
+  - <span class="k">prompt</span>: <span class="s">"Tell me a pirate joke about coffee"</span>
+  - <span class="k">prompt</span>: <span class="s">"Proofread this email for typos"</span></pre>
+    </div>
+    <div class="card">
+      <h3>Real output</h3>
+<pre>TRIGGER ACCURACY
+  Accuracy:  <span class="add">100.0%</span>
+  Precision: <span class="add">100.0%</span>  Recall: <span class="add">100.0%</span>  F1: <span class="add">100.0%</span>
+  TP: 4  FP: 0  FN: 0  TN: 5</pre>
+      <p><strong>Precision</strong> catches a skill that grabs requests it shouldn't (the pirate <em>joke</em>). <strong>Recall</strong> catches a skill Claude never picks. Each trigger run stops as soon as the skill fires, which saves tokens.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 8. what it finds -->
+<section class="slide">
+  <div class="kicker">What it can find</div>
+  <h2>Real findings from real runs</h2>
+  <div class="grid3">
+    <div class="card"><span class="tag t-red">Skill weakness</span><h3>Asks instead of acting</h3><p>"Explain this code to me" got <em>"I don't see any code in your message yet"</em>, even though <code>factorial.py</code> was right there.</p></div>
+    <div class="card"><span class="tag t-red">Skill weakness</span><h3>Ignores the input file</h3><p>Judge: <em>"fails to greet Priya… asks for clarification about who the person is."</em> The name was in <code>newcomer.txt</code>.</p></div>
+    <div class="card"><span class="tag t-amber">Discovery</span><h3>Skill never invoked</h3><p>Trigger recall <strong>0%</strong>: with the skill pasted into the prompt, Claude answered without ever calling its Skill tool.</p></div>
+    <div class="card"><span class="tag t-violet">Safety</span><h3>Tool-policy violations</h3><p>A read-only agent (<code>tools: ["read"]</code>) was asked to write a file. Only <strong>Read</strong> was available; any other call fails the run.</p></div>
+    <div class="card"><span class="tag t-teal">Integration</span><h3>MCP tool usage</h3><p>Mocked GitHub MCP server: Claude called <code>mcp__github__list_issues</code> and reported issue <strong>#363</strong>. Wrong arguments fail loudly.</p></div>
+    <div class="card"><span class="tag t-green">Cost</span><h3>Tokens and dollars</h3><p>5 tasks + judges + 9 trigger prompts: <strong>72 s</strong>, 2,685 output tokens, about <strong>$0.31</strong> on Sonnet.</p></div>
+  </div>
+</section>
+
+<!-- 9. deep dive: asks for code -->
+<section class="slide">
+  <div class="kicker">Finding → fix → proof</div>
+  <h2>"I don't see any code": fixed in the skill, proven by a re-run</h2>
+  <div class="grid2">
+    <div>
+      <div class="file">code-explainer/SKILL.md (the fix)</div>
+<pre><span class="add">+ ## Finding the Code</span>
+<span class="add">+ If the user refers to "this code" but no snippet is in</span>
+<span class="add">+ the message, do not ask for the code right away:</span>
+<span class="add">+ 1. Use code from the conversation or attached files.</span>
+<span class="add">+ 2. Otherwise list the working directory. If there is</span>
+<span class="add">+    exactly one source file, read and explain it, and</span>
+<span class="add">+    say which file you explained.</span>
+<span class="add">+ 3. Ask only when there is no candidate or several</span>
+<span class="add">+    equally likely ones.</span></pre>
+    </div>
+    <div>
+      <table>
+        <tr><th>Task</th><th>Before</th><th>After (3 trials)</th></tr>
+        <tr><td><strong>"Explain this code to me"</strong></td><td class="fail">✗ asked for code</td><td class="pass">✓ 3/3</td></tr>
+        <tr><td><strong>"Explain the code in factorial.py"</strong></td><td class="pass">✓</td><td class="pass">✓ 3/3</td></tr>
+      </table>
+<pre><span class="dim">tools:</span> Skill → Glob → Glob → Read
+<span class="dim">output:</span> "I explained `factorial.py`, since it's the only
+        source file in the working directory. ..."</pre>
+      <p>The fix went into the <strong>skill</strong>, not the test, so real users benefit too.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 10. Demo -->
+<section class="slide" id="demo-slide">
+  <div class="kicker">Demo</div>
+  <h2>A real run, replayed</h2>
+  <div class="term">
+    <div class="term-bar"><span class="dot d1"></span><span class="dot d2"></span><span class="dot d3"></span><span class="term-title">pirate-greeter: wazatator run</span></div>
+    <div class="term-body" id="term"></div>
+  </div>
+  <div class="btns">
+    <button class="btn primary" id="demo-run">▶ Run demo</button>
+    <button class="btn" id="demo-skip">Skip to results</button>
+  </div>
+  <p style="font-size:.85rem">Replay of an actual run on 2 Oct 2026 (Sonnet runs the tasks, Haiku judges). Output is abridged; timings are compressed.</p>
+</section>
+
+<!-- 11. Plugin -->
+<section class="slide">
+  <div class="kicker">Inside Claude Code</div>
+  <h2>The plugin: ask Claude to test your skill</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Three slash commands</h3>
+<pre><span class="k">/wazatator:new-eval</span> pirate-greeter
+  <span class="c"># writes eval.yaml, 5 tasks, fixtures, trigger tests</span>
+
+<span class="k">/wazatator:eval</span> evals/pirate-greeter/eval.yaml
+  <span class="c"># runs it, explains failures, proposes SKILL.md fixes,</span>
+  <span class="c"># re-runs and compares old vs new results</span>
+
+<span class="k">/wazatator:quality</span> skills/code-explainer
+  <span class="c"># static check + LLM review of the SKILL.md itself</span></pre>
+      <p>Tested live: Claude Code ran the plugin, which ran Wazatator, which ran its own Claude Code sessions.</p>
+    </div>
+    <div class="card">
+      <h3><code>/wazatator:quality</code> on code-explainer: <span class="grad">3.8 / 5</span></h3>
+      <div class="bars">
+        <div class="row"><span>clarity</span><div class="track"><div class="fill" style="width:80%"></div></div><span>4</span></div>
+        <div class="row"><span>completeness</span><div class="track"><div class="fill" style="width:80%"></div></div><span>4</span></div>
+        <div class="row"><span>trigger precision</span><div class="track"><div class="fill" style="width:80%"></div></div><span>4</span></div>
+        <div class="row"><span>scope coverage</span><div class="track"><div class="fill" style="width:60%"></div></div><span>3</span></div>
+        <div class="row"><span>anti-patterns</span><div class="track"><div class="fill" style="width:80%"></div></div><span>4</span></div>
+      </div>
+      <p><em>"Primary weaknesses are fuzzy scope boundaries around code complexity/type and ambiguous guidance about when to invoke versus use file tools directly."</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- 12. Get started -->
+<section class="slide">
+  <div class="kicker">Get started</div>
+  <h2>Install in two commands</h2>
+  <div class="grid2">
+    <div>
+      <div class="file">1. CLI (Windows PowerShell)</div>
+<pre>irm https://raw.githubusercontent.com/zuwasi/wazatator/main/install.ps1 | iex</pre>
+      <div class="file">1. CLI (macOS / Linux)</div>
+<pre>curl -fsSL https://raw.githubusercontent.com/zuwasi/wazatator/main/install.sh | bash</pre>
+      <div class="file">2. Plugin (inside Claude Code)</div>
+<pre>/plugin marketplace add zuwasi/wazatator
+/plugin install wazatator@wazatator</pre>
+    </div>
+    <div class="card">
+      <h3>Requirements</h3>
+      <p>Claude Code installed and logged in. Every task and judge is a real session on your account, so keep <code>trials_per_task: 1</code> while iterating.</p>
+      <h3 style="margin-top:14px">Also works with</h3>
+      <p>MCP servers and hermetic MCP mocks, <code>.agent.md</code> tool policies, follow-up turns, reasoning effort, CI gating, and side-by-side model comparison with <code>wazatator compare</code>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13. Credits -->
+<section class="slide">
+  <div class="kicker">Open source</div>
+  <h2>Wazatator</h2>
+  <p class="lead">Repository and releases: <strong>github.com/zuwasi/wazatator</strong></p>
+  <div class="big-stats">
+    <div class="stat"><div class="v grad">6</div><div class="l">platform binaries (Windows, macOS, Linux; x64 + ARM)</div></div>
+    <div class="stat"><div class="v grad">3</div><div class="l">plugin skills: new-eval, eval, quality</div></div>
+    <div class="stat"><div class="v grad">12</div><div class="l">grader types, from regex to LLM judge</div></div>
+  </div>
+  <p>Based on <strong>Microsoft Waza</strong> (MIT License). Wazatator adds the Claude Code executor and plugin. It is not affiliated with or endorsed by Microsoft.</p>
+</section>
+
+</div>
+
+<button class="nav prev hidden" id="prev" aria-label="Previous slide">‹</button>
+<button class="nav next" id="next" aria-label="Next slide">›</button>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="counter" id="counter"></div>
+<div class="hint" id="hint">← Swipe to navigate →</div>
+
+<script>
+(function () {
+  const deck = document.getElementById('deck');
+  const slides = deck.children;
+  const total = slides.length;
+  const prev = document.getElementById('prev');
+  const next = document.getElementById('next');
+  const bar = document.getElementById('bar');
+  const counter = document.getElementById('counter');
+  const hint = document.getElementById('hint');
+  const demoIndex = Array.prototype.indexOf.call(slides, document.getElementById('demo-slide'));
+  let idx = 0, demoPlayed = false;
+
+  function go(i) {
+    idx = Math.max(0, Math.min(total - 1, i));
+    deck.style.transform = 'translateX(' + (-idx * 100) + 'vw)';
+    prev.classList.toggle('hidden', idx === 0);
+    next.classList.toggle('hidden', idx === total - 1);
+    bar.style.width = ((idx + 1) / total * 100) + '%';
+    counter.textContent = (idx + 1) + ' / ' + total;
+    if (idx > 0) hint.classList.add('gone');
+    if (idx === demoIndex && !demoPlayed) { demoPlayed = true; setTimeout(runDemo, 500); }
+  }
+  prev.onclick = function () { go(idx - 1); };
+  next.onclick = function () { go(idx + 1); };
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(idx + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx - 1); }
+  });
+
+  let tx = null;
+  document.addEventListener('touchstart', function (e) { tx = e.changedTouches[0].clientX; }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (tx === null) return;
+    const dx = e.changedTouches[0].clientX - tx; tx = null;
+    if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+  });
+
+  let mx = null;
+  document.addEventListener('mousedown', function (e) {
+    if (e.target.closest('button, pre, .term, a')) return;
+    mx = e.clientX;
+  });
+  document.addEventListener('mouseup', function (e) {
+    if (mx === null) return;
+    const dx = e.clientX - mx; mx = null;
+    if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+  });
+
+  // ---- Demo: replay of a real run (output abridged, timings compressed) ----
+  const term = document.getElementById('term');
+  const script = [
+    ['cmd', 'wazatator run evals/pirate-greeter/eval.yaml -o results.json'],
+    ['out', '<span class="dim">Running benchmark: pirate-greeter-eval   Engine: claude-cli   Model: sonnet</span>'],
+    ['out', ''],
+    ['out', '<span class="ok">✓</span> [1/5] Explicit greeting request      <span class="dim">Skill → "Ahoy, matey, and a fine mornin\' to ye! ..."</span>'],
+    ['out', '<span class="ok">✓</span> [2/5] Plain hello                    <span class="dim">Skill → "Ahoy there, matey! ..."</span>'],
+    ['out', '<span class="ok">✓</span> [3/5] Translation must not use skill <span class="dim">Glob, Read (no skill, correct)</span>'],
+    ['out', '<span class="bad">✗</span> [4/5] Vague request with a file      <span class="dim">Skill only, never read newcomer.txt</span>'],
+    ['out', '<span class="ok">✓</span> [5/5] General writing must not use skill'],
+    ['out', ''],
+    ['out', '<span class="hl">Failed Tests:</span>'],
+    ['out', '  - Vague request with a file'],
+    ['out', '    • _output_contains: matched 1/2 required strings; missing: [Priya]'],
+    ['out', '    • judge: <span class="bad">fail</span>: The response fails to greet Priya in pirate speak. Instead of'],
+    ['out', '      greeting Priya, it asks for clarification about who the person is.'],
+    ['out', ''],
+    ['out', '<span class="hl">TRIGGER ACCURACY</span>'],
+    ['out', '  Accuracy: <span class="ok">100.0%</span>   Precision: <span class="ok">100.0%</span>   Recall: <span class="ok">100.0%</span>'],
+    ['out', ''],
+    ['out', '<span class="hl">SUMMARY</span>   Success rate: 80% (4/5)   Duration: 72s   Cost: ~$0.31'],
+    ['out', '<span class="dim">Results saved to: results.json   exit code 1 (one test failed)</span>']
+  ];
+  let timer = null;
+
+  function render(lines, typing) {
+    term.innerHTML = lines.join('\n') + (typing !== undefined ? typing : '') + '<span class="cursor"></span>';
+    term.scrollTop = term.scrollHeight;
+  }
+
+  function runDemo() {
+    clearTimeout(timer);
+    const done = [];
+    let line = 0;
+    function step() {
+      if (line >= script.length) { render(done); return; }
+      const [kind, text] = script[line];
+      if (kind === 'cmd') {
+        let c = 0;
+        (function type() {
+          if (c <= text.length) {
+            render(done, '<span class="p">$</span> ' + text.slice(0, c));
+            c++; timer = setTimeout(type, 28);
+          } else {
+            done.push('<span class="p">$</span> ' + text);
+            line++; timer = setTimeout(step, 450);
+          }
+        })();
+      } else {
+        done.push(text); render(done); line++;
+        timer = setTimeout(step, text === '' ? 120 : 320);
+      }
+    }
+    step();
+  }
+
+  function skipDemo() {
+    clearTimeout(timer);
+    render(script.map(function (s) { return s[0] === 'cmd' ? '<span class="p">$</span> ' + s[1] : s[1]; }));
+  }
+
+  document.getElementById('demo-run').onclick = function () { demoPlayed = true; runDemo(); };
+  document.getElementById('demo-skip').onclick = function () { demoPlayed = true; skipDemo(); };
+  render([]);
+  go(0);
+})();
+</script>
+</body>
+</html>
