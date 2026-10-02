@@ -69,8 +69,10 @@
         padding: 0 42px;
       }
       .topbar {
-        height: 86px;
+        min-height: 86px;
+        padding-block: 14px;
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: space-between;
         border-bottom: 1px solid var(--line);
@@ -389,7 +391,7 @@
         content: "↓";
         position: absolute;
         top: -23px;
-        left: 27px;
+        inset-inline-start: 27px;
         color: #a2ab97;
         font-size: 16px;
       }
@@ -445,7 +447,7 @@
         margin-top: 2px;
       }
       .layer-mark {
-        margin-left: auto;
+        margin-inline-start: auto;
         color: #8b947e;
         font-size: 12px;
       }
@@ -453,7 +455,8 @@
         font-size: 11px;
         color: var(--muted);
         margin: 0;
-        padding: 0 15px 14px 61px;
+        padding: 0 15px 14px;
+        padding-inline-start: 61px;
       }
       .console {
         margin-top: 22px;
@@ -659,7 +662,9 @@
       }
       .bar-row b {
         font: 10px monospace;
-        text-align: right;
+        text-align: end;
+        direction: ltr;
+        unicode-bidi: isolate;
       }
       .result-links {
         display: flex;
@@ -765,6 +770,30 @@
         font-size: 10px;
         color: var(--muted);
       }
+      #hunger-label {
+        float: inline-end;
+        color: var(--orange);
+      }
+      [dir="rtl"] .eyebrow,
+      [dir="rtl"] .brand,
+      [dir="rtl"] .brand small,
+      [dir="rtl"] h1,
+      [dir="rtl"] .layer-title small,
+      [dir="rtl"] .console-label,
+      [dir="rtl"] .tag {
+        letter-spacing: normal;
+      }
+      [dir="rtl"] h1 {
+        line-height: 1.15;
+      }
+      [dir="rtl"] .source-name [lang="he"] {
+        display: none;
+      }
+      input[type="date"],
+      .alt strong {
+        direction: ltr;
+        unicode-bidi: isolate;
+      }
       [hidden] {
         display: none !important;
       }
@@ -799,7 +828,7 @@
           padding: 0 16px;
         }
         .topbar {
-          height: 74px;
+          min-height: 74px;
         }
         .brand {
           font-size: 16px;
@@ -862,6 +891,14 @@
           </div>
         </div>
         <nav class="nav" aria-label="About this demo">
+          <a
+            class="text-button"
+            id="language-link"
+            href="?lang=he"
+            lang="he"
+            dir="rtl"
+            >עברית</a
+          >
           <button class="text-button" id="about-button">How it works ↗</button
           ><span class="tag"><span class="dot"></span> DEMO KITCHEN</span>
         </nav>
@@ -948,11 +985,7 @@
                 <div class="field">
                   <label for="hunger"
                     >Hunger level
-                    <span
-                      id="hunger-label"
-                      style="float: right; color: var(--orange)"
-                      >Politely hungry</span
-                    ></label
+                    <span id="hunger-label">Politely hungry</span></label
                   ><input
                     id="hunger"
                     name="hunger"
@@ -1372,6 +1405,273 @@
         return { season, weights, rows, sourced: sourced.length, urgent };
       }
     </script>
+    <script id="localization">
+      const hebrew = new URLSearchParams(location.search).get("lang") === "he";
+      const HE = {
+        "The Hummus Council": "מועצת החומוס",
+        "DEPARTMENT OF IMPORTANT DIPS": "המשרד לענייני ניגוב",
+        "How it works ↗": "איך זה עובד ↗",
+        "About this demo": "על ההדגמה",
+        "DEMO KITCHEN": "מטבח ניסיוני",
+        "Less overthinking. More olive oil.": "פחות התלבטויות. יותר שמן זית.",
+        "Big decisions.": "החלטות גדולות.",
+        "Small chickpeas.": "גרגירים קטנים.",
+        "Your lunch deserves a committee. Unfortunately, we made one.":
+          "לארוחת הצהריים שלך מגיעה ועדה. לצערנו, הקמנו אחת.",
+        "100% opinions.": "100% דעות.",
+        "0% actual": "0% גרגירים",
+        "chickpeas.": "אמיתיים.",
+        "EST. FIVE MINUTES AGO": "נוסדה לפני חמש דקות",
+        "The briefing": "התדריך",
+        "Tell us your situation.": "מה המצב שלך?",
+        "Be honest. The pita can tell.": "רק את האמת. הפיתה מרגישה.",
+        "Where are you?": "איפה אוכלים?",
+        "Tel Aviv / Jaffa": "תל אביב / יפו",
+        Jerusalem: "ירושלים",
+        Haifa: "חיפה",
+        Ramla: "רמלה",
+        Nazareth: "נצרת",
+        "Ness Ziona": "נס ציונה",
+        "Kafr Qasim": "כפר קאסם",
+        "Beit Dagan area": "אזור בית דגן",
+        "Date of the dip": "תאריך הניגוב",
+        "How far will you go for hummus?": "כמה רחוק נוסעים בשביל חומוס?",
+        "My city only. I have a life.": "רק בעיר שלי. יש לי חיים.",
+        "Any listed city. This IS my life.": "כל עיר ברשימה. אלה החיים שלי.",
+        "City-level matching, not GPS or driving-time estimates.":
+          "התאמה לפי עיר, בלי מעקב מיקום ובלי הערכת זמן נסיעה.",
+        "Your hummus personality": "מה אישיות החומוס שלך?",
+        "Light & silky": "קליל וחלק",
+        "Rich & tahini-ish": "עשיר וטחינתי",
+        "Team masabacha": "נבחרת המסבחה",
+        "I trust the chickpea": "סומכים על הגרגיר",
+        "Hunger level": "מדד הרעב",
+        "A little peckish": "רק משהו קטן",
+        "Could eat": "יש מקום לניגוב",
+        "Politely hungry": "רעב, אבל בנימוס",
+        Hangry: "רעב ועצבני",
+        "Table looks edible": "השולחן נראה אכיל",
+        "1: a little peckish · 5: the table looks edible":
+          "1: רק משהו קטן · 5: השולחן נראה אכיל",
+        "Let the season have an opinion": "גם לעונה מותר להביע דעה",
+        "Who gets a seat at the table?": "מי מקבל כיסא בוועדה?",
+        "Hummus for the Masses": "חומוס להמונים",
+        "The Hummusai": "החומוסאי",
+        "Eating Out": "אוכל בחוץ",
+        "4 reviews": "4 ביקורות",
+        "1 review": "ביקורת אחת",
+        "Curated review snapshot. No live blog scraping.":
+          "לקט ביקורות שמור. אין שליפה חיה מהבלוגים.",
+        "Convene the council": "לכנס את המועצה",
+        "→": "←",
+        "No sign-up. No tracking. Just questionable priorities.":
+          "בלי הרשמה. בלי מעקב. רק סדר עדיפויות מפוקפק.",
+        "The deliberation": "הדיון הגורלי",
+        "Four layers. One lunch.": "ארבע שכבות. ארוחה אחת.",
+        "An unnecessarily transparent decision.": "החלטה שקופה ברמה מוגזמת.",
+        "Inside the chickpea brain": "בתוך הראש של הגרגיר",
+        "Awaiting your brief": "ממתינים לתדריך",
+        "The Logistics Minister": "שר הלוגיסטיקה",
+        "LAYER 01 · LOCATION & HUNGER": "שכבה 01 · מיקום ורעב",
+        "Can we get lunch without turning it into a pilgrimage? Same-city candidates get more points. Very hungry people give geography more voting power.":
+          "אפשר לאכול בלי להפוך את זה למסע עלייה לרגל? מקומות בעיר שלך מקבלים יותר נקודות. כשהרעב גובר, הגאוגרפיה מקבלת יותר כוח הצבעה.",
+        "The Blog Archaeologist": "ארכאולוג הבלוגים",
+        "LAYER 02 · SOURCE EVIDENCE": "שכבה 02 · ראיות מהמקורות",
+        "Only restaurants covered by your selected sources enter the vote. Old reviews are evidence of an old visit, not proof of today's lunch.":
+          "רק מקומות שסוקרו במקורות שבחרת נכנסים להצבעה. ביקורת ישנה מוכיחה שמישהו אכל פעם, לא שיש היום מה לנגב.",
+        "The Seasonal Philosopher": "פילוסוף העונות",
+        "LAYER 03 · DATE & APPETITE": "שכבה 03 · תאריך ותיאבון",
+        "June through September: a lighter dip gets a bonus. December through February: rich hummus gets its moment. This is a playful preference rule, not nutrition advice.":
+          "מיוני עד ספטמבר: חומוס קליל מקבל בונוס. מדצמבר עד פברואר: החומוס העשיר מקבל את הבמה. זה כלל משעשע להעדפות, לא ייעוץ תזונתי.",
+        "Your Inner Chickpea": "הגרגיר הפנימי שלך",
+        "LAYER 04 · TASTE & FINAL SCORE": "שכבה 04 · טעם וציון סופי",
+        "Your chosen texture gets the biggest taste bonus. The council adds up the visible points. Ties go alphabetically, because arm-wrestling chickpeas is impractical.":
+          "המרקם שבחרת מקבל את מלוא נקודות הטעם. המועצה מחברת את הנקודות המוצגות. תיקו מוכרע לפי השם באנגלית, כי הורדת ידיים בין גרגירים זה לא מעשי.",
+        "COUNCIL MINUTES": "פרוטוקול המועצה",
+        "“We could just eat somewhere.”": "״אפשר פשוט לאכול איפשהו.״",
+        "Motion rejected. We have a process.": "ההצעה נדחתה. יש פה נוהל.",
+        "“We could just eat somewhere.” Motion rejected. We have a process.":
+          "״אפשר פשוט לאכול איפשהו.״ ההצעה נדחתה. יש פה נוהל.",
+        "Try a plot twist:": "טוויסט בעלילה:",
+        "☀ Summer lunch": "☀ ניגוב קיצי",
+        "☂ Winter comfort": "☂ נחמה חורפית",
+        "The verdict": "פסק הניגוב",
+        "Your next great dip.": "הניגוב הבא שלך.",
+        "A recommendation, not a religious ruling.": "המלצה בלבד. לא פסק הלכה.",
+        "A plate full of possibility.": "צלחת מלאה באפשרויות.",
+        "Give the council your brief.": "קודם ממלאים את התדריך.",
+        "We'll turn your preferences into lunch, with an unreasonable amount of explanation.":
+          "נהפוך את ההעדפות שלך לארוחה, עם כמות לא סבירה של הסברים.",
+        "“I used to make my own decisions.": "״פעם קיבלתי החלטות בעצמי.",
+        "Then I discovered committees.”": "ואז גיליתי ועדות.״",
+        "AN ENTIRELY FICTIONAL SATISFIED CUSTOMER":
+          "לקוח מרוצה שלא היה ולא נברא",
+        "Real blog links. Playful rules. No artificial chickpeas.":
+          "בלוגים אמיתיים. חוקים משעשעים. בלי גרגירים מלאכותיים.",
+        "9 curated restaurants · 3 sources · current opening status unknown":
+          "9 מקומות בלקט · 3 מקורות · לא ידוע אם פתוח כעת",
+        "Open the evidence cupboard ↗": "לפתוח את ארון הראיות ↗",
+        "The evidence cupboard": "ארון הראיות",
+        "Close ×": "סגירה ×",
+        "Close information": "סגירת המידע",
+        "Choose a valid lunch date. The chickpeas cannot read minds.":
+          "צריך לבחור תאריך תקין לארוחה. הגרגירים לא קוראים מחשבות.",
+        "That date does not exist. Even for hummus.":
+          "התאריך הזה לא קיים. אפילו בשביל חומוס.",
+        "Choose at least one blog. Even a committee needs evidence.":
+          "צריך לבחור לפחות בלוג אחד. אפילו ועדה צריכה ראיות.",
+        "☀ Summer: lighter-dip season": "☀ קיץ: עונת הניגוב הקליל",
+        "☂ Winter: comfort-dip season": "☂ חורף: עונת הניגוב המנחם",
+        "✿ Mild season: all dips welcome": "✿ עונת מעבר: כל ניגוב מתקבל",
+        "Choose your lunch date": "צריך לבחור תאריך לניגוב",
+        "Ready for a vote": "מוכנים להצבעה",
+        "Brief updated. Previous verdict dismissed. The pita demands a fresh vote.":
+          "התדריך עודכן. ההחלטה הקודמת בוטלה. הפיתה דורשת הצבעה חדשה.",
+        "The council has no quorum.": "אין קוורום לניגוב.",
+        "No reviewed restaurants match this city and your selected blogs. Add another source or allow other listed cities. We refuse to invent a hummus place. Our standards are low, but not that low.":
+          "אין בלקט מקום שמתאים לעיר ולבלוגים שבחרת. אפשר להוסיף מקור או לאפשר ערים נוספות. לא נמציא חומוסייה. הסטנדרטים שלנו נמוכים, אבל לא עד כדי כך.",
+        "No match in this small snapshot. Your city may have excellent hummus; our cupboard is simply understocked.":
+          "אין התאמה בלקט הקטן שלנו. אולי יש בעיר שלך חומוס מעולה; פשוט חסר מלאי בארון הראיות.",
+        Location: "מיקום",
+        "Your taste": "הטעם שלך",
+        Season: "עונה",
+        Evidence: "ראיות",
+        "Ask about masabacha. You voted for chickpeas with a personality.":
+          "כדאי לשאול על מסבחה. הצבעת בעד גרגירים עם אישיות.",
+        "Ask about a smaller, lighter-textured portion. Summer already brings enough drama.":
+          "כדאי לשאול על מנה קטנה יותר ובמרקם קליל. הקיץ כבר מספק מספיק דרמה.",
+        "Ask about tahini or ful. This lunch is applying for comfort-food status.":
+          "כדאי לשאול על טחינה או פול. הארוחה הזאת הגישה בקשה למעמד של אוכל מנחם.",
+        "Ask what is freshly prepared. Let the chickpeas do the talking.":
+          "כדאי לשאול מה הוכן עכשיו. שהגרגירים ידברו.",
+        "You gave all textures equal taste points.":
+          "נתת לכל המרקמים ניקוד טעם זהה.",
+        "Its curated style tags match your taste.":
+          "תגיות הסגנון בלקט מתאימות לטעם שלך.",
+        "Its tagged style does not match your chosen taste; other factors won.":
+          "הסגנון המתויג לא תואם לטעם שבחרת; שיקולים אחרים הכריעו.",
+        "The review does not establish your chosen texture, so taste gets half credit.":
+          "הביקורת לא מאשרת את המרקם שבחרת, ולכן ניתן חצי מניקוד הטעם.",
+        "✓ MOTION DELICIOUSLY CARRIED": "✓ ההצעה התקבלה בתיאבון",
+        "Council fit / 100": "התאמה למועצה מתוך 100",
+        "A demo score, not a restaurant rating.": "ציון הדגמה, לא דירוג מסעדה.",
+        "In your chosen city.": "בעיר שבחרת.",
+        "An out-of-city option; check the journey yourself.":
+          "אפשרות מחוץ לעיר; כדאי לבדוק את הדרך בעצמך.",
+        "The recommended maneuver": "תמרון הניגוב המומלץ",
+        "Historical review summary:": "תקציר ביקורת היסטורית:",
+        published: "פורסם בתאריך",
+        "Read the original ↗": "לביקורת המקורית ↗",
+        "Check on Maps ↗": "לבדיקה במפות ↗",
+        "Before you grab the car keys:": "לפני שחוטפים את המפתחות:",
+        "this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.":
+          "זה לקט ביקורות מתוארך, לא שירות המלצות בזמן אמת. יש לבדוק ישירות את הסניף, שעות הפתיחה, התפריט וההתאמה לדרישות תזונתיות. כללי העונות מתארים העדפות, לא יתרונות בריאותיים.",
+        "The loyal opposition": "האופוזיציה הנאמנה",
+        "No other matching candidates": "אין מועמדים מתאימים נוספים",
+        "Only one entry matches. This is not a comparison with every restaurant in the city.":
+          "רק רשומה אחת מתאימה. זו לא השוואה לכל המסעדות בעיר.",
+        "Please hold your pita.": "נא להחזיק את הפיתה בהמתנה.",
+        "Four fictional experts are having very real opinions about your settings.":
+          "ארבעה מומחים דמיוניים מגבשים דעות מאוד נחרצות על הבחירות שלך.",
+        "Seasonal voting disabled. The sun has been asked to leave the meeting. Everyone gets half the season points.":
+          "ההצבעה העונתית בוטלה. השמש התבקשה לצאת מהישיבה. כולם מקבלים חצי מניקוד העונה.",
+        "Summer rule: lighter-textured profiles get a bonus. The weather is heavy enough.":
+          "כלל הקיץ: מרקם קליל מקבל בונוס. מזג האוויר כבר כבד מספיק.",
+        "Winter rule: rich profiles get a bonus. Your sweater has approved this message.":
+          "כלל החורף: סגנון עשיר מקבל בונוס. הסוודר שלך אישר את ההודעה.",
+        "Mild-season rule: equal season points. The calendar refuses to take sides.":
+          "כלל עונת המעבר: ניקוד עונתי שווה. לוח השנה מסרב לתפוס צד.",
+        "Lunch, resolved.": "סוגיית הצהריים הוכרעה.",
+        "No matching profiles": "אין רשומות מתאימות",
+        "Summer scenario loaded. Same preferences, sunnier politics. Convene the council to compare.":
+          "תרחיש הקיץ נטען. אותן העדפות, פוליטיקה עם יותר שמש. אפשר לכנס את המועצה להשוואה.",
+        "Winter scenario loaded. Same preferences, sweater weather. Convene the council to compare.":
+          "תרחיש החורף נטען. אותן העדפות, מזג אוויר לסוודר. אפשר לכנס את המועצה להשוואה.",
+        "How a chickpea becomes a decision": "איך גרגיר הופך להחלטה",
+        "A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.":
+          "בוחר ארוחת צהריים מסובך בכוונה. שכבות המועצה בדיוניות ואינן מימוש של מסגרת החלטה חיצונית מאומתת. אין שימוש בשירות בינה מלאכותית, שליפת מידע חיה, שירות מזג אוויר או איתור מיקום. הנתונים שלך נשארים בדפדפן הזה.",
+        "The rules are simple and visible:": "הכללים פשוטים וגלויים:",
+        "Selected blogs determine eligibility. “My city only” is a hard filter.":
+          "הבלוגים שנבחרו קובעים מי נכנס להצבעה. ״רק בעיר שלי״ הוא סינון מחייב.",
+        "Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.":
+          "משקלים רגילים: מיקום 40, טעם 30, עונה 20, ראיות 10. ברמת רעב 4 או 5 המשקלים הם: מיקום 55, טעם 20, עונה 15, ראיות 10.",
+        "Location: full points in your city, zero elsewhere. No road-distance estimates.":
+          "מיקום: מלוא הנקודות בעיר שלך, אפס מחוצה לה. אין אומדן של מרחק נסיעה.",
+        "Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.":
+          "טעם: מלוא הנקודות לתגית תואמת או ללא העדפה; חצי כשהסגנון לא ידוע; אפס כשאין התאמה.",
+        "Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.":
+          "בקיץ (יוני עד ספטמבר) תגיות קלילות מקבלות בונוס. בחורף (דצמבר עד פברואר) תגיות עשירות מקבלות בונוס. בחודשים אחרים, כשההצבעה העונתית כבויה או כשהסגנון לא ידוע, ניתן חצי מהניקוד, בעיגול כלפי מעלה לפי הצורך.",
+        "Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.":
+          "ראיות: ביקורות משנת 2020 ואילך מקבלות 10 נקודות; ישנות יותר מקבלות 5. זה סף קבוע לצורכי הדגמה, לא הבטחה לעדכניות.",
+        "Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.":
+          "הציון הכולל הגבוה ביותר מנצח. תיקו מוכרע לפי סדר השמות באנגלית, בשתי השפות. תגיות עשויות לתאר מנות שונות באותו מקום.",
+        "What the demo does not know:": "מה ההדגמה לא יודעת:",
+        "current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.":
+          "אם המקום פעיל כיום, שעות בחגים, תורים, מחירים, מזג אוויר, אלרגיות, תעודת כשרות או זמינות מנות. התאריך קובע העדפה עונתית ולא בודק זמינות בעבר או בעתיד. ״קליל״ מתאר העדפת מרקם וגודל מנה, לא קלוריות או בטיחות מזון.",
+        "Curated review snapshot": "לקט הביקורות",
+        "Compiled 2 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the blogs’ ratings. Every profile below has one source.":
+          "הלקט נערך ב־2 באוקטובר 2026. התקצירים מבוססים על דברי הכותבים, לא על תגובות הקוראים. תגיות הסגנון וכל הניקוד הם פרשנות לצורך ההדגמה, לא ציוני הבלוגים. לכל רשומה למטה יש מקור אחד.",
+        "tags:": "תגיות:",
+        unknown: "לא ידוע",
+        light: "קליל",
+        rich: "עשיר",
+        chunky: "גרגירי / מסבחה",
+        "Jaffa · Dolphin Street branch": "יפו · סניף רחוב הדולפין",
+        "Tel Aviv · Yehuda HaMaccabi": "תל אביב · יהודה המכבי",
+        "Jerusalem · Old City": "ירושלים · העיר העתיקה",
+        "Beit Dagan / HaShiva interchange area": "אזור בית דגן / מחלף השבעה",
+        "The author especially praises the warm, generously seasoned masabacha, and describes a crowded, fast-paced setting.":
+          "הכותב משבח במיוחד את המסבחה החמה והמתובלת בנדיבות, ומתאר מקום צפוף עם קצב מהיר.",
+        "The author describes a less-thick texture with a distinct tahini taste, plus warm, thick ful. Light texture and rich tahini are separate demo tags.":
+          "הכותב מתאר מרקם פחות סמיך עם טעם טחינה מובחן, לצד פול חם וסמיך. מרקם קליל וטחינה עשירה הם תגיות נפרדות בהדגמה.",
+        "The author describes delicate, lightly sour hummus, soft chickpeas and light masabacha.":
+          "הכותב מתאר חומוס עדין וחמצמץ קלות, גרגירים רכים ומסבחה קלילה.",
+        "The review contrasts delicate, smooth hummus with thick, richly flavoured mashawsha. Choose the dish that fits your preference.":
+          "הביקורת משווה בין חומוס עדין וחלק לבין משאושה סמיכה ועשירת טעם. כדאי לבחור את המנה שמתאימה להעדפה שלך.",
+        "The reviewer praises the texture and sides, but finds the hummus sweeter than some diners might like. No light/rich texture tag inferred.":
+          "הכותב משבח את המרקם והתוספות, אך מוצא שהחומוס מתוק יותר מכפי שחלק מהסועדים יאהבו. לא הוסקה תגית של מרקם קליל או עשיר.",
+        "The review describes tangy, grainy hummus and masabacha with abundant olive oil and lemon. The author prefers the plain hummus or chickpea topping.":
+          "הביקורת מתארת חומוס חמצמץ וגרגירי ומסבחה עם הרבה שמן זית ולימון. הכותב מעדיף חומוס רגיל או תוספת גרגירים.",
+        "The author describes an airy texture, enjoyable toppings and a restaurant offering more than hummus.":
+          "הכותב מתאר מרקם אוורירי, תוספות מוצלחות ומסעדה שמציעה יותר מחומוס.",
+        "The reviewer strongly recommends the hummus and praises its texture, without enough detail to assign a light, rich or chunky tag.":
+          "הכותב ממליץ בחום על החומוס ומשבח את מרקמו, בלי פירוט שמספיק לקביעת תגית קלילה, עשירה או גרגירית.",
+        "The author enjoys plain hummus with tahini at this grill restaurant. The tahini-style tag is a demo interpretation; the review does not establish calorie content.":
+          "הכותב נהנה מחומוס רגיל עם טחינה במסעדת הגריל. תגית הסגנון הטחינתי היא פרשנות לצורך ההדגמה; הביקורת אינה קובעת ערך קלורי.",
+      };
+      const tr = (text) => (hebrew ? (HE[text] ?? text) : text);
+      const restaurantName = (r) => (hebrew ? r.he : r.name);
+      // Translate text nodes, never markup, input values, URLs or source data.
+      function localize(root) {
+        if (!hebrew) return;
+        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+        while (walker.nextNode()) {
+          const node = walker.currentNode;
+          if (node.parentElement.closest("script, style, #language-link"))
+            continue;
+          const key = node.textContent.replace(/\s+/g, " ").trim();
+          if (HE[key])
+            node.textContent = node.textContent.replace(
+              /\S[\s\S]*\S|\S/,
+              HE[key],
+            );
+        }
+      }
+      document.documentElement.lang = hebrew ? "he" : "en";
+      document.documentElement.dir = hebrew ? "rtl" : "ltr";
+      if (hebrew) {
+        document.title = "מועצת החומוס | החלטת צהריים רצינית מאוד";
+        const link = document.getElementById("language-link");
+        link.href = "?lang=en";
+        link.lang = "en";
+        link.dir = "ltr";
+        link.textContent = "English";
+        document.querySelectorAll("[aria-label]").forEach((el) => {
+          el.setAttribute("aria-label", tr(el.getAttribute("aria-label")));
+        });
+        localize(document.body);
+      }
+    </script>
     <script>
       const $ = (id) => document.getElementById(id);
       const form = $("brief"),
@@ -1416,22 +1716,26 @@
           "Hangry",
           "Table looks edible",
         ];
-        $("hunger-label").textContent = labels[Number($("hunger").value) - 1];
+        $("hunger-label").textContent = tr(
+          labels[Number($("hunger").value) - 1],
+        );
         $("hunger").setAttribute(
           "aria-valuetext",
-          labels[Number($("hunger").value) - 1],
+          tr(labels[Number($("hunger").value) - 1]),
         );
         try {
           const s = seasonFor($("date").value);
-          $("season-label").textContent = {
-            summer: "☀ Summer: lighter-dip season",
-            winter: "☂ Winter: comfort-dip season",
-            mild: "✿ Mild season: all dips welcome",
-          }[s];
+          $("season-label").textContent = tr(
+            {
+              summer: "☀ Summer: lighter-dip season",
+              winter: "☂ Winter: comfort-dip season",
+              mild: "✿ Mild season: all dips welcome",
+            }[s],
+          );
         } catch {
-          $("season-label").textContent = "Choose your lunch date";
+          $("season-label").textContent = tr("Choose your lunch date");
         }
-        $("state").textContent = "Ready for a vote";
+        $("state").textContent = tr("Ready for a vote");
         $("progress").style.width = "0%";
         $("result").innerHTML = initialResult;
         $("form-error").hidden = true;
@@ -1439,8 +1743,9 @@
           layer.classList.remove("done", "active");
           layer.querySelector(".layer-mark").textContent = "+";
         });
-        $("minutes").textContent =
-          "Brief updated. Previous verdict dismissed. The pita demands a fresh vote.";
+        $("minutes").textContent = tr(
+          "Brief updated. Previous verdict dismissed. The pita demands a fresh vote.",
+        );
       }
       form.addEventListener("input", refresh);
       function setBusy(busy) {
@@ -1455,8 +1760,10 @@
         if (!winner) {
           $("result").innerHTML =
             '<div class="plate" aria-hidden="true"><div class="hummus"></div></div><h3 class="empty-title">The council has no quorum.</h3><p class="empty-copy">No reviewed restaurants match this city and your selected blogs. Add another source or allow other listed cities. We refuse to invent a hummus place. Our standards are low, but not that low.</p>';
-          $("minutes").textContent =
-            "No match in this small snapshot. Your city may have excellent hummus; our cupboard is simply understocked.";
+          localize($("result"));
+          $("minutes").textContent = tr(
+            "No match in this small snapshot. Your city may have excellent hummus; our cupboard is simply understocked.",
+          );
           return;
         }
         const names = {
@@ -1492,13 +1799,15 @@
           .slice(1, 4)
           .map(
             (r) =>
-              `<div class="alt"><div>${escapeHtml(r.name)}<small>${escapeHtml(r.place)} · L ${r.parts.location} / T ${r.parts.taste} / S ${r.parts.season} / E ${r.parts.evidence}</small></div><strong>${r.score}/100</strong></div>`,
+              `<div class="alt"><div>${escapeHtml(restaurantName(r))}<small>${escapeHtml(tr(r.place))} · ${hebrew ? `מיקום ${r.parts.location} / טעם ${r.parts.taste} / עונה ${r.parts.season} / ראיות ${r.parts.evidence}` : `L ${r.parts.location} / T ${r.parts.taste} / S ${r.parts.season} / E ${r.parts.evidence}`}</small></div><strong>${r.score}/100</strong></div>`,
           )
           .join("");
         $("result").innerHTML =
-          `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(winner.name)}</h3><div class="winner-city"><span lang="he">${escapeHtml(winner.he)}</span> · ${escapeHtml(winner.place)}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself."} ${matchText}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">Historical review summary: ${escapeHtml(winner.note)}<br><br>${escapeHtml(SOURCES[winner.source].name)} · published ${winner.date}</div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
-        $("minutes").textContent =
-          `${winner.name} wins with ${winner.score}/100. ${result.rows.length} candidate${result.rows.length === 1 ? "" : "s"} considered. The committee will now adjourn directly into a pita.`;
+          `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(restaurantName(winner))}</h3><div class="winner-city">${hebrew ? "" : `<span lang="he">${escapeHtml(winner.he)}</span> · `}${escapeHtml(tr(winner.place))}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${tr(winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself.")} ${tr(matchText)}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">${tr("Historical review summary:")} ${escapeHtml(tr(winner.note))}<br><br>${escapeHtml(tr(SOURCES[winner.source].name))} · ${tr("published")} <bdi>${winner.date}</bdi></div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
+        localize($("result"));
+        $("minutes").textContent = hebrew
+          ? `${winner.he} זוכה בציון ${winner.score} מתוך 100. נבדקו ${result.rows.length} מקומות. הוועדה יוצאת להפסקה, היישר לתוך פיתה.`
+          : `${winner.name} wins with ${winner.score}/100. ${result.rows.length} candidate${result.rows.length === 1 ? "" : "s"} considered. The committee will now adjourn directly into a pita.`;
       }
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -1508,7 +1817,7 @@
         try {
           result = decide(input);
         } catch (error) {
-          $("form-error").textContent = error.message;
+          $("form-error").textContent = tr(error.message);
           $("form-error").hidden = false;
           return;
         }
@@ -1518,13 +1827,18 @@
           document.querySelector(".council").scrollIntoView({ block: "start" });
         $("result").innerHTML =
           '<div class="plate" aria-hidden="true"><div class="hummus"></div></div><h3 class="empty-title">Please hold your pita.</h3><p class="empty-copy">Four fictional experts are having very real opinions about your settings.</p>';
+        localize($("result"));
         layers.forEach((layer) => {
           layer.classList.remove("done", "active");
           layer.querySelector(".layer-mark").textContent = "+";
         });
         const messages = [
-          `${input.travel === "local" ? "City-only rule enforced." : "Intercity travel permitted."} Location has ${result.weights.location} points. ${result.urgent ? "Hunger emergency: geography has seized extra voting power." : "No cross-country expedition has been ordered. Yet."}`,
-          `${input.sources.length} selected blogs → ${result.sourced} archived profiles → ${result.rows.length} eligible candidates. Dusting off reviews, not checking live kitchens.`,
+          hebrew
+            ? `${input.travel === "local" ? "הוגבל לעיר שנבחרה." : "אושרו מסעות בין־עירוניים."} למיקום יש ${result.weights.location} נקודות. ${result.urgent ? "מצב חירום של רעב: הגאוגרפיה השתלטה על עוד כוח הצבעה." : "עדיין לא הוזמנה משלחת לחציית הארץ. עדיין."}`
+            : `${input.travel === "local" ? "City-only rule enforced." : "Intercity travel permitted."} Location has ${result.weights.location} points. ${result.urgent ? "Hunger emergency: geography has seized extra voting power." : "No cross-country expedition has been ordered. Yet."}`,
+          hebrew
+            ? `${input.sources.length} בלוגים שנבחרו ← ${result.sourced} רשומות מהארכיון ← ${result.rows.length} מועמדים מתאימים. מנערים אבק מביקורות, לא בודקים מטבחים בזמן אמת.`
+            : `${input.sources.length} selected blogs → ${result.sourced} archived profiles → ${result.rows.length} eligible candidates. Dusting off reviews, not checking live kitchens.`,
           !input.seasonal
             ? "Seasonal voting disabled. The sun has been asked to leave the meeting. Everyone gets half the season points."
             : result.season === "summer"
@@ -1532,13 +1846,17 @@
               : result.season === "winter"
                 ? "Winter rule: rich profiles get a bonus. Your sweater has approved this message."
                 : "Mild-season rule: equal season points. The calendar refuses to take sides.",
-          `Taste gets ${result.weights.taste} points. Adding location + taste + season + evidence. This is arithmetic wearing a tiny chef hat.`,
+          hebrew
+            ? `לטעם יש ${result.weights.taste} נקודות. מחברים מיקום + טעם + עונה + ראיות. זאת אריתמטיקה עם כובע שף קטנטן.`
+            : `Taste gets ${result.weights.taste} points. Adding location + taste + season + evidence. This is arithmetic wearing a tiny chef hat.`,
         ];
         try {
           for (let i = 0; i < layers.length; i++) {
-            $("state").textContent = `Layer ${i + 1} of 4`;
+            $("state").textContent = hebrew
+              ? `שכבה ${i + 1} מתוך 4`
+              : `Layer ${i + 1} of 4`;
             layers[i].classList.add("active");
-            $("minutes").textContent = messages[i];
+            $("minutes").textContent = tr(messages[i]);
             await new Promise((resolve) =>
               setTimeout(
                 resolve,
@@ -1553,9 +1871,9 @@
             $("progress").style.width = `${(i + 1) * 25}%`;
           }
           renderResult(result, input);
-          $("state").textContent = result.rows.length
-            ? "Lunch, resolved."
-            : "No matching profiles";
+          $("state").textContent = tr(
+            result.rows.length ? "Lunch, resolved." : "No matching profiles",
+          );
           if (matchMedia("(max-width: 650px)").matches)
             $("verdict").scrollIntoView({ block: "start" });
         } finally {
@@ -1570,35 +1888,40 @@
         $("date").value = `${year}-${String(month).padStart(2, "0")}-15`;
         $("seasonal").checked = true;
         refresh();
-        $("minutes").textContent =
+        $("minutes").textContent = tr(
           month === 7
             ? "Summer scenario loaded. Same preferences, sunnier politics. Convene the council to compare."
-            : "Winter scenario loaded. Same preferences, sweater weather. Convene the council to compare.";
+            : "Winter scenario loaded. Same preferences, sweater weather. Convene the council to compare.",
+        );
       }
       $("summer").onclick = () => preset(7);
       $("winter").onclick = () => preset(1);
       const method = `<p>A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected blogs determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li><li>Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
       function openInfo(showSources) {
-        $("dialog-title").textContent = showSources
-          ? "The evidence cupboard"
-          : "How a chickpea becomes a decision";
+        $("dialog-title").textContent = tr(
+          showSources
+            ? "The evidence cupboard"
+            : "How a chickpea becomes a decision",
+        );
         $("dialog-body").innerHTML =
           method +
           (showSources
             ? "<h2>Curated review snapshot</h2><p>Compiled 2 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the blogs’ ratings. Every profile below has one source.</p>" +
               RESTAURANTS.map(
                 (r) =>
-                  `<article><h3>${escapeHtml(r.name)} · ${escapeHtml(r.place)}</h3><p>${escapeHtml(r.note)}</p><p class="source-detail">${escapeHtml(SOURCES[r.source].name)} · ${r.date} · tags: ${r.tags.join(", ") || "unknown"}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(r.url)}</a></article>`,
+                  `<article><h3>${escapeHtml(restaurantName(r))} · ${escapeHtml(tr(r.place))}</h3><p>${escapeHtml(tr(r.note))}</p><p class="source-detail">${escapeHtml(tr(SOURCES[r.source].name))} · <bdi>${r.date}</bdi> · ${tr("tags:")} ${r.tags.map(tr).join(", ") || tr("unknown")}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">${escapeHtml(r.url)}</bdi></a></article>`,
               ).join("")
             : "");
+        localize($("dialog-body"));
         $("info").showModal();
       }
       $("sources-button").onclick = () => openInfo(true);
       $("about-button").onclick = () => openInfo(false);
       $("close-info").onclick = () => $("info").close();
       refresh();
-      $("minutes").textContent =
-        "“We could just eat somewhere.” Motion rejected. We have a process.";
+      $("minutes").textContent = tr(
+        "“We could just eat somewhere.” Motion rejected. We have a process.",
+      );
     </script>
   </body>
 </html>
