@@ -725,6 +725,22 @@
         font-weight: 400;
         color: var(--ink);
       }
+      .jev-credit {
+        align-self: center;
+        border: 1px solid #bac9aa;
+        border-radius: 9px;
+        background: #eef1e5;
+        padding: 9px 16px;
+        text-align: center;
+        font-weight: 700;
+      }
+      .jev-credit small {
+        display: block;
+        margin-top: 3px;
+        font-size: 10px;
+        font-weight: 400;
+        color: var(--muted);
+      }
       dialog {
         border: 1px solid var(--line);
         background: var(--paper);
@@ -1186,7 +1202,18 @@
             ><b>Real blog links. Playful rules. No artificial chickpeas.</b
             ><br />9 curated restaurants · 3 sources · current opening status
             unknown</span
-          ><button id="sources-button" class="text-button">
+          >
+          <button
+            id="jev-button"
+            class="jev-credit"
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls="info"
+          >
+            <span dir="ltr">Powered by Jev</span>
+            <small>Concept demo · no live API</small>
+          </button>
+          <button id="sources-button" class="text-button">
             Open the evidence cupboard ↗
           </button>
         </footer>
@@ -1408,6 +1435,30 @@
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
+        "Concept demo · no live API": "הדגמה רעיונית · ללא חיבור חי",
+        "Jev, meet the chickpeas": "Jev, תכיר את הגרגירים",
+        "Demo, not a live Jev integration.": "הדגמה בלבד, לא חיבור חי ל־Jev.",
+        "The credit refers to Jev's decision-layer idea. This app does not call Jev or its API. All filtering, points and verdicts run locally in your browser; no inputs are sent to TypeSafe AI.":
+          "הקרדיט מתייחס לרעיון שכבת ההחלטה של Jev. האפליקציה לא מפעילה את Jev ולא קוראת לממשק שלו. הסינון, הניקוד והתוצאות מחושבים מקומית בדפדפן; שום קלט לא נשלח ל־TypeSafe AI.",
+        "What is Jev?": "מה זה Jev?",
+        "Jev is TypeSafe AI's System One model: give it context and focused, typed questions, and it returns structured answers and probabilities. Questions can be evaluated independently in parallel; application code combines the answers. Jev does not generate the council's jokes or explanations.":
+          "Jev הוא מודל System One של TypeSafe AI: מספקים לו הקשר ושאלות ממוקדות עם סוגי תשובות מוגדרים, והוא מחזיר תשובות מובנות והסתברויות. אפשר להעריך שאלות עצמאיות במקביל; קוד האפליקציה משלב את התשובות. Jev אינו מייצר את הבדיחות או ההסברים של המועצה.",
+        "The idea, served in four layers": "הרעיון, מוגש בארבע שכבות",
+        "Our council illustrates separating a big decision into small factors, then combining them in code. These characters are not Jev's internal stages. Their dramatic pauses are animation, not measured model latency.":
+          "המועצה ממחישה פירוק של החלטה גדולה לשיקולים קטנים ושילובם בקוד. הדמויות אינן שלבים פנימיים של Jev. ההפסקות הדרמטיות הן אנימציה, לא מדידה של זמן תגובת המודל.",
+        "Logistics: your city and travel setting filter candidates; hunger changes how much location matters. Geography gets louder when your stomach does.":
+          "לוגיסטיקה: העיר והנכונות לנסוע מסננות מועמדים; הרעב משנה את משקל המיקום. כשהבטן מרימה קול, גם הגאוגרפיה.",
+        "Evidence: selected blogs limit the shortlist. Dated, manually curated reviews supply style tags, not live opening hours. The archaeologist brought a bibliography, not a reservation.":
+          "ראיות: הבלוגים שנבחרו מצמצמים את הרשימה. ביקורות מתוארכות שנבחרו ידנית מספקות תגיות סגנון, לא שעות פתיחה בזמן אמת. הארכאולוג הביא ביבליוגרפיה, לא הזמנה לשולחן.",
+        "Season: calendar rules reward lighter textures in summer and richer styles in winter. A sweater is a preference, not a medical degree.":
+          "עונה: כללי לוח השנה נותנים בונוס למרקם קליל בקיץ ולסגנון עשיר בחורף. סוודר הוא העדפה, לא תואר ברפואה.",
+        "Taste and verdict: match your preference to the curated tags, add the visible points and rank the candidates. The 0–100 total is a local fit score, not Jev confidence or a probability.":
+          "טעם ותוצאה: משווים את ההעדפה שלך לתגיות שבלקט, מחברים את הנקודות הגלויות ומדרגים את המועמדים. הציון בין 0 ל־100 הוא ציון התאמה מקומי, לא רמת ביטחון של Jev ולא הסתברות.",
+        "What a live Jev version could add": "מה חיבור חי ל־Jev יכול להוסיף",
+        "For example: Choice could classify a review's texture description; Score could assess review relevance against a defined rubric; Noul could assess whether a review supports a specific claim. Those are possible future model questions, not API calls implemented here. City filters and final scoring would still belong to the app.":
+          "לדוגמה: Choice יכול לסווג תיאור מרקם בביקורת; Score יכול להעריך רלוונטיות של ביקורת לפי סולם מוגדר; Noul יכול להעריך אם ביקורת תומכת בטענה מסוימת. אלה שאלות אפשריות למודל בעתיד, לא קריאות שמומשו כאן. סינון לפי עיר והניקוד הסופי עדיין יהיו באחריות האפליקציה.",
+        "The committee has a framework. You still have to bring the pita.":
+          "לוועדה יש מסגרת החלטה. את הפיתה עדיין צריך להביא לבד.",
         "The Hummus Council": "מועצת החומוס",
         "DEPARTMENT OF IMPORTANT DIPS": "המשרד לענייני ניגוב",
         "How it works ↗": "איך זה עובד ↗",
@@ -1917,6 +1968,29 @@
       }
       $("sources-button").onclick = () => openInfo(true);
       $("about-button").onclick = () => openInfo(false);
+      $("jev-button").onclick = () => {
+        $("dialog-title").textContent = tr("Jev, meet the chickpeas");
+        $("dialog-body").innerHTML = `
+          <div class="caution"><strong>Demo, not a live Jev integration.</strong>
+            <p>The credit refers to Jev's decision-layer idea. This app does not call Jev or its API. All filtering, points and verdicts run locally in your browser; no inputs are sent to TypeSafe AI.</p>
+          </div>
+          <h3>What is Jev?</h3>
+          <p>Jev is TypeSafe AI's System One model: give it context and focused, typed questions, and it returns structured answers and probabilities. Questions can be evaluated independently in parallel; application code combines the answers. Jev does not generate the council's jokes or explanations.</p>
+          <h3>The idea, served in four layers</h3>
+          <p>Our council illustrates separating a big decision into small factors, then combining them in code. These characters are not Jev's internal stages. Their dramatic pauses are animation, not measured model latency.</p>
+          <ol>
+            <li>Logistics: your city and travel setting filter candidates; hunger changes how much location matters. Geography gets louder when your stomach does.</li>
+            <li>Evidence: selected blogs limit the shortlist. Dated, manually curated reviews supply style tags, not live opening hours. The archaeologist brought a bibliography, not a reservation.</li>
+            <li>Season: calendar rules reward lighter textures in summer and richer styles in winter. A sweater is a preference, not a medical degree.</li>
+            <li>Taste and verdict: match your preference to the curated tags, add the visible points and rank the candidates. The 0–100 total is a local fit score, not Jev confidence or a probability.</li>
+          </ol>
+          <h3>What a live Jev version could add</h3>
+          <p>For example: Choice could classify a review's texture description; Score could assess review relevance against a defined rubric; Noul could assess whether a review supports a specific claim. Those are possible future model questions, not API calls implemented here. City filters and final scoring would still belong to the app.</p>
+          <p><em>The committee has a framework. You still have to bring the pita.</em></p>
+          <p><a href="https://docs.typesafe.ai/introduction" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">https://docs.typesafe.ai/introduction</bdi></a></p>`;
+        localize($("dialog-body"));
+        $("info").showModal();
+      };
       $("close-info").onclick = () => $("info").close();
       refresh();
       $("minutes").textContent = tr(
