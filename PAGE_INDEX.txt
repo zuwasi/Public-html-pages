@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-01
+Last updated: 2026-10-02
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -298,6 +298,9 @@ Last updated: 2026-10-01
 
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
+
+• hummus-council
+  https://zuwasi.github.io/Public-html-pages/hummus-council
 
 • interrupts-vs-polling
   https://zuwasi.github.io/Public-html-pages/interrupts-vs-polling
