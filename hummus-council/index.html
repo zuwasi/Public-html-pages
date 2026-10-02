@@ -140,6 +140,12 @@
         align-items: center;
         gap: 24px;
       }
+      .hero-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 8px 20px;
+      }
       .eyebrow {
         font-size: 10px;
         letter-spacing: 2.3px;
@@ -149,10 +155,10 @@
       }
       h1 {
         font:
-          clamp(37px, 4.1vw, 62px) / 1.02 Georgia,
+          clamp(28px, 2.4vw, 34px) / 1.15 Georgia,
           serif;
-        letter-spacing: -2px;
-        margin: 12px 0 16px;
+        letter-spacing: -1px;
+        margin: 12px 0;
         font-weight: 400;
       }
       h1 em {
@@ -727,12 +733,21 @@
       }
       .jev-credit {
         align-self: center;
+        display: flex;
+        align-items: center;
+        gap: 10px;
         border: 1px solid #bac9aa;
         border-radius: 9px;
         background: #eef1e5;
         padding: 9px 16px;
         text-align: center;
         font-weight: 700;
+      }
+      .jev-credit img {
+        width: 44px;
+        height: 44px;
+        object-fit: contain;
+        border-radius: 6px;
       }
       .jev-credit small {
         display: block;
@@ -812,6 +827,15 @@
       }
       [hidden] {
         display: none !important;
+      }
+      @media (min-width: 1200px) {
+        .hero-line {
+          flex-wrap: nowrap;
+          white-space: nowrap;
+        }
+        .hero p {
+          font-size: clamp(11px, 1vw, 14px);
+        }
       }
       @media (min-width: 1500px) {
         .hero {
@@ -906,6 +930,19 @@
             The Hummus Council<small>DEPARTMENT OF IMPORTANT DIPS</small>
           </div>
         </div>
+        <button
+          id="jev-button"
+          class="jev-credit"
+          type="button"
+          aria-haspopup="dialog"
+          aria-controls="info"
+        >
+          <img src="jev-logo.png" alt="" width="44" height="44" />
+          <span>
+            <span dir="ltr">Powered by Jev</span>
+            <small>Concept demo · no live API</small>
+          </span>
+        </button>
         <nav class="nav" aria-label="About this demo">
           <a
             class="text-button"
@@ -923,8 +960,12 @@
         <section class="hero">
           <div>
             <div class="eyebrow">Less overthinking. More olive oil.</div>
-            <h1>Big decisions.<br /><em>Small chickpeas.</em></h1>
-            <p>Your lunch deserves a committee. Unfortunately, we made one.</p>
+            <div class="hero-line">
+              <h1>Big decisions. <em>Small chickpeas.</em></h1>
+              <p>
+                Your lunch deserves a committee. Unfortunately, we made one.
+              </p>
+            </div>
           </div>
           <div class="hero-note" aria-hidden="true">
             100% opinions.<br />0% actual<br />chickpeas.<span
@@ -1203,16 +1244,6 @@
             ><br />9 curated restaurants · 3 sources · current opening status
             unknown</span
           >
-          <button
-            id="jev-button"
-            class="jev-credit"
-            type="button"
-            aria-haspopup="dialog"
-            aria-controls="info"
-          >
-            <span dir="ltr">Powered by Jev</span>
-            <small>Concept demo · no live API</small>
-          </button>
           <button id="sources-button" class="text-button">
             Open the evidence cupboard ↗
           </button>
