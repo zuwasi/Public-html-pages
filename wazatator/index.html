@@ -15,8 +15,9 @@
   --line: #2a3558;
   --text: #e8ecf8;
   --muted: #9aa6c7;
-  --amber: #ffb547;
-  --teal: #3ee0c5;
+  /* ESL brand: orange and blue from the ESL logo */
+  --amber: #ffbf3f;
+  --teal: #3595ff;
   --red: #ff6b6b;
   --green: #4ade80;
   --violet: #a78bfa;
@@ -31,8 +32,23 @@ pre, code, .term { user-select: text; -webkit-user-select: text; }
 .deck { display: flex; height: 100vh; width: 100vw; transition: transform .55s cubic-bezier(.65,.05,.25,1); }
 .slide { flex: 0 0 100vw; height: 100vh; overflow-y: auto; padding: clamp(24px, 5vh, 56px) clamp(18px, 6vw, 96px) 80px;
   display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2.2vh, 24px);
-  background: radial-gradient(1200px 600px at 85% -10%, rgba(62,224,197,.08), transparent 60%),
-              radial-gradient(900px 500px at -10% 110%, rgba(255,181,71,.07), transparent 60%); }
+  padding-top: clamp(76px, 10vh, 96px);
+  background: radial-gradient(1200px 600px at 85% -10%, rgba(53,149,255,.10), transparent 60%),
+              radial-gradient(900px 500px at -10% 110%, rgba(255,191,63,.08), transparent 60%); }
+
+/* ESL brand bar */
+.brandbar { position: fixed; top: 0; left: 0; right: 0; z-index: 11; display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding: 10px clamp(12px, 3vw, 28px); background: linear-gradient(180deg, rgba(11,16,32,.96), rgba(11,16,32,.6) 70%, transparent); }
+.brand-logo { display: inline-flex; align-items: center; background: #fff; border-radius: 10px; padding: 5px 10px; box-shadow: 0 2px 12px rgba(0,0,0,.35); }
+.brand-logo img { height: clamp(26px, 4.2vh, 38px); width: auto; display: block; }
+.partner { display: inline-flex; align-items: center; gap: 8px; font-size: clamp(.72rem, 1.1vw, .86rem); font-weight: 700;
+  color: var(--text); border: 1px solid rgba(255,191,63,.55); background: rgba(255,191,63,.10); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
+.partner::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px var(--amber); }
+.esl-foot { position: fixed; bottom: 14px; left: 18px; font-size: .8rem; color: var(--muted); z-index: 10; }
+.esl-foot a, .contact a { color: var(--teal); text-decoration: none; }
+.esl-foot a:hover, .contact a:hover { text-decoration: underline; }
+.contact { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin-top: 10px; font-size: clamp(.9rem, 1.4vw, 1.05rem); color: var(--muted); }
+.contact b { color: var(--text); font-weight: 600; }
 .slide > * { max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto; }
 
 h1 { font-size: clamp(2.2rem, 6vw, 4.6rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.03; }
@@ -42,7 +58,7 @@ p, li { font-size: clamp(.95rem, 1.55vw, 1.15rem); line-height: 1.55; color: var
 strong { color: var(--text); }
 .kicker { font-size: clamp(.72rem, 1.1vw, .85rem); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); }
 .grad { background: linear-gradient(90deg, var(--amber), var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.lead { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); max-width: 860px; }
+.lead { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 24px); }
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.6vw, 18px); }
@@ -125,6 +141,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 @keyframes hint { 0%,100% { transform: translateX(-50%); } 50% { transform: translateX(calc(-50% + 8px)); } }
 
 @media (max-width: 820px) {
+  .esl-foot { display: none; }
   .grid2, .grid3 { grid-template-columns: 1fr; }
   .arrow { display: none; }
   .nav { width: 40px; height: 40px; font-size: 1.4rem; }
@@ -135,6 +152,11 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </head>
 <body>
 
+<header class="brandbar">
+  <a class="brand-logo" href="https://eswlab.com/" target="_blank" rel="noopener noreferrer" aria-label="ESL Engineering Software Lab"><img src="esl-logo.png" alt="ESL Engineering Software Lab"></a>
+  <span class="partner">Anthropic Partner</span>
+</header>
+
 <div class="deck" id="deck">
 
 <!-- 1. Title -->
@@ -142,6 +164,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
   <div class="kicker">Agent Skills · Claude Code · Evals</div>
   <h1><span class="grad">Wazatator</span><br>the spectator for your skills</h1>
   <p class="lead">Wazatator watches Claude Code use your <strong>SKILL.md</strong>: every prompt, tool call, and file. Then it scores the run, so you know whether a skill edit helped instead of guessing.</p>
+  <p>Presented by <strong>ESL (Engineering Software Lab)</strong>, an <strong>Anthropic partner</strong>.</p>
   <div class="pill-row">
     <span class="pill">Open source · MIT</span>
     <span class="pill">Windows · macOS · Linux</span>
@@ -435,12 +458,36 @@ td { color: var(--muted); } td strong { color: var(--text); }
   <p>Based on <strong>Microsoft Waza</strong> (MIT License). Wazatator adds the Claude Code executor and plugin. It is not affiliated with or endorsed by Microsoft.</p>
 </section>
 
+<!-- 14. ESL contact -->
+<section class="slide">
+  <div class="kicker">ESL · Engineering Software Lab · Anthropic Partner</div>
+  <h2>Great Software Tools, <span class="grad">Excellent Service</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>Who we are</h3>
+      <p>Since 2005, ESL has helped Israeli software teams adopt and get the most out of leading development tools: code analysis, testing, version control, compliance, and AI coding agents. As an <strong>Anthropic partner</strong>, we help teams adopt Claude and Claude Code, and build open tools like Wazatator to make AI agents measurable.</p>
+    </div>
+    <div class="card">
+      <h3>Talk to us</h3>
+      <div class="contact">
+        <b>Web</b><a href="https://eswlab.com/" target="_blank" rel="noopener noreferrer">eswlab.com</a>
+        <b>Email</b><a href="mailto:sales@eswlab.com">sales@eswlab.com</a>
+        <b>Phone</b><a href="tel:+97298855803">+972 9 885 5803</a>
+        <b>LinkedIn</b><a href="https://www.linkedin.com/company/engineering-software-lab-esl-" target="_blank" rel="noopener noreferrer">Engineering Software Lab (ESL)</a>
+        <b>Wazatator</b><a href="https://github.com/zuwasi/wazatator" target="_blank" rel="noopener noreferrer">github.com/zuwasi/wazatator</a>
+        <b>Office</b><span>Ha-Nagar 24 A, Hod Hasharon, Israel</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 </div>
 
 <button class="nav prev hidden" id="prev" aria-label="Previous slide">‹</button>
 <button class="nav next" id="next" aria-label="Next slide">›</button>
 <div class="progress"><div class="bar" id="bar"></div></div>
 <div class="counter" id="counter"></div>
+<div class="esl-foot">ESL · <a href="https://eswlab.com/" target="_blank" rel="noopener noreferrer">eswlab.com</a> · Anthropic Partner</div>
 <div class="hint" id="hint">← Swipe to navigate →</div>
 
 <script>
