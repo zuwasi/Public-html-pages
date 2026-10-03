@@ -6,8 +6,8 @@ const html = fs.readFileSync(`${__dirname}/index.html`, "utf8");
 const engine = html.match(
   /<script id="decision-engine">([\s\S]*?)<\/script>/,
 )[1];
-const { decide, seasonFor } = vm.runInNewContext(
-  `${engine}\n({decide, seasonFor})`,
+const { decide, seasonFor, DANIEL_REVIEWS, SOURCES } = vm.runInNewContext(
+  `${engine}\n({decide, seasonFor, DANIEL_REVIEWS, SOURCES})`,
 );
 const base = {
   city: "tel-aviv",
@@ -16,7 +16,7 @@ const base = {
   taste: "light",
   hunger: 3,
   seasonal: true,
-  sources: ["humus101", "hummusai", "foodout"],
+  sources: ["humus101", "hummusai", "foodout", "daniel"],
 };
 
 test("city and source are hard filters, including a genuinely empty shortlist", () => {
@@ -31,7 +31,7 @@ test("city and source are hard filters, including a genuinely empty shortlist", 
     ["asa"],
   );
   assert.equal(food[0].parts.location, 0);
-  assert.throws(() => decide({ ...base, sources: [] }), /at least one blog/);
+  assert.throws(() => decide({ ...base, sources: [] }), /at least one source/);
 });
 test("taste changes the winner and exact component scores", () => {
   const light = decide(base).rows[0];
@@ -79,6 +79,39 @@ test("unknown style receives half credit, not a fabricated match", () => {
   assert.equal(neutral.parts.season, 10);
   assert.equal(neutral.score, 90);
 });
+test("Daniel's historical mention is selectable without turning anecdotes into restaurant evidence", () => {
+  const input = { ...base, city: "haifa", sources: ["daniel"] };
+  const result = decide(input);
+  assert.equal(result.sourced, 1);
+  assert.deepEqual(
+    Array.from(result.rows, (r) => r.id),
+    ["el-sham"],
+  );
+  const row = result.rows[0];
+  assert.equal(row.score, 75); // 40 local + 15 unknown taste + 10 unknown season + 10 dated evidence
+  assert.equal(row.tags.length, 0);
+  assert.equal(row.date, "2022-08-12");
+  assert.equal(row.url, "https://www.facebook.com/groups/Msabbaha");
+  assert.equal(row.url, SOURCES.daniel.url);
+  assert.equal(row.note, DANIEL_REVIEWS.elSham.note);
+  assert.equal(decide({ ...input, date: "2026-01-15" }).rows[0].score, 75);
+  assert.equal(decide({ ...input, hunger: 5 }).rows[0].score, 83);
+  assert.equal(decide({ ...input, city: "tel-aviv" }).rows.length, 0);
+  assert.equal(decide({ ...input, travel: "any" }).rows.length, 1);
+  assert.ok(
+    decide({ ...input, sources: ["humus101"] }).rows.every(
+      (r) => r.id !== "el-sham",
+    ),
+  );
+  assert.equal(Object.keys(DANIEL_REVIEWS).length, 6);
+  assert.equal(DANIEL_REVIEWS.milos.date, null);
+  assert.match(DANIEL_REVIEWS.hotel.note, /not a hummus menu price/);
+  assert.match(DANIEL_REVIEWS.taha.note, /ful, not hummus/);
+  assert.doesNotMatch(
+    html,
+    /723089582|facebook-visible-ocr|C:\\Amp_demos|C:\\Users\\danie\\Downloads/,
+  );
+});
 test("all supported input combinations preserve filters, bounded additive scores and neutral-season invariance", () => {
   const cities = [
     "tel-aviv",
@@ -90,13 +123,13 @@ test("all supported input combinations preserve filters, bounded additive scores
     "kafr-qasim",
     "beit-dagan",
   ];
-  const sources = ["humus101", "hummusai", "foodout"];
+  const sources = ["humus101", "hummusai", "foodout", "daniel"];
   for (const city of cities)
     for (const taste of ["light", "rich", "chunky", "any"])
       for (const hunger of [1, 3, 4, 5])
         for (const travel of ["local", "any"])
           for (const date of ["2026-01-15", "2026-07-15", "2026-10-15"])
-            for (let mask = 1; mask < 8; mask++) {
+            for (let mask = 1; mask < 1 << sources.length; mask++) {
               const input = {
                 ...base,
                 city,

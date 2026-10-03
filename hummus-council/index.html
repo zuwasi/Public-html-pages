@@ -1090,10 +1090,32 @@
                     /><span class="source-name"
                       >Eating Out <span lang="he">אוכל בחוץ</span></span
                     ><small>1 review</small></label
+                  ><label class="source-row"
+                    ><input
+                      type="checkbox"
+                      name="sources"
+                      value="daniel"
+                      checked
+                    /><span class="source-name">Daniel's own reviews</span
+                    ><small>6 posts · 1 candidate</small></label
                   >
                   <div class="hint">
-                    Curated review snapshot. No live blog scraping.
+                    Curated review snapshot. No live scraping.
                   </div>
+                  <div class="hint" id="daniel-credit">
+                    <span>Based on personal reviews by</span>
+                    <bdi>Daniel Liezrowice</bdi>
+                    <span>in the Facebook group</span>
+                    <a
+                      href="https://www.facebook.com/groups/Msabbaha"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      ><bdi lang="he">החומוסולוגים</bdi> ↗</a
+                    >.
+                  </div>
+                  <button type="button" class="text-button" id="daniel-button">
+                    Read Daniel's 6 posts ↗
+                  </button>
                 </fieldset>
                 <div id="form-error" class="error" role="alert" hidden></div>
                 <button class="primary" type="submit" id="run">
@@ -1240,8 +1262,8 @@
         </div>
         <footer class="bottom-note">
           <span
-            ><b>Real blog links. Playful rules. No artificial chickpeas.</b
-            ><br />9 curated restaurants · 3 sources · current opening status
+            ><b>Real source links. Playful rules. No artificial chickpeas.</b
+            ><br />10 curated places · 4 sources · current opening status
             unknown</span
           >
           <button id="sources-button" class="text-button">
@@ -1275,6 +1297,49 @@
           url: "https://hummusai.wordpress.com/",
         },
         foodout: { name: "Eating Out", url: "https://food-out.blogspot.com/" },
+        daniel: {
+          name: "Daniel's own reviews",
+          url: "https://www.facebook.com/groups/Msabbaha",
+        },
+      };
+      // Approved summaries only. The private PDF, OCR and other people's comments are not published.
+      const DANIEL_REVIEWS = {
+        elSham: {
+          title: "Hummus El-Sham · Haifa",
+          date: "2022-08-12",
+          pages: "63",
+          note: "Daniel mentions Hummus El-Sham in Wadi Nisnas, Haifa, and his difficulty eating in summer heat and humidity. The visible excerpt does not establish texture, lightness or a food rating. His cold-spring method is hidden behind See more. Historical mention only; style remains unknown.",
+        },
+        milos: {
+          title: "Milos · the unnamed hummus",
+          date: null,
+          pages: "1–2",
+          note: "A Milos post mentions hummus, but the visible fragments name no restaurant. September 5 is visible; the year is not. The council declines to nominate an entire island for lunch.",
+        },
+        taha: {
+          title: "Taha · Rashid, near Alexandria",
+          date: "2025-04-21",
+          pages: "25",
+          note: "Daniel praises Taha's ful medames with samna and says the standard survived the founder's death. This is praise for ful, not hummus. Filed under food inspiration, not an Israeli lunch candidate.",
+        },
+        oliveOil: {
+          title: "Olive oil · an ingredient gets the floor",
+          date: "2023-01-01",
+          pages: "53",
+          note: "Daniel describes olive oil from a Qalqilya press as very good, strongly flavored and slightly bitter, suitable for hummus and labneh. An ingredient preference, not a restaurant rating. The oil has a voice, but no voting seat.",
+        },
+        tahini: {
+          title: "Tahini · the bird-identification committee",
+          date: "2022-09-20",
+          pages: "60",
+          note: "Daniel argues that the bird on the blue Dove Tahini package is a stone-curlew, not a dove. This is his observation about the label, not an independently verified identification or taste review. The remaining text is hidden.",
+        },
+        hotel: {
+          title: "Mitzpe Hayamim · hummus with a hotel attached",
+          date: "2022-09-11",
+          pages: "61",
+          note: "Daniel jokes about two hummus portions for NIS 5,000, explicitly including two hotel nights and spa treatments. A hotel-package joke, not a hummus menu price. The rest is hidden. The finance minister may breathe again.",
+        },
       };
       // Each profile summarizes the linked author's historical review, not reader comments.
       // Style tags are demo interpretations of those descriptions, not nutritional measurements.
@@ -1387,6 +1452,18 @@
           url: "https://food-out.blogspot.com/2019/05/pondak-asa.html",
           note: "The author enjoys plain hummus with tahini at this grill restaurant. The tahini-style tag is a demo interpretation; the review does not establish calorie content.",
         },
+        {
+          id: "el-sham",
+          name: "Hummus El-Sham",
+          he: "חומוס אלשאם",
+          city: "haifa",
+          place: "Haifa · Wadi Nisnas",
+          tags: [],
+          source: "daniel",
+          date: DANIEL_REVIEWS.elSham.date,
+          url: SOURCES.daniel.url,
+          note: DANIEL_REVIEWS.elSham.note,
+        },
       ];
       function seasonFor(date) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(date))
@@ -1410,7 +1487,7 @@
         const season = seasonFor(input.date);
         if (!input.sources.length)
           throw new Error(
-            "Choose at least one blog. Even a committee needs evidence.",
+            "Choose at least one source. Even a committee needs evidence.",
           );
         const urgent = input.hunger >= 4;
         const weights = urgent
@@ -1466,6 +1543,40 @@
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
+        "Daniel's own reviews": "הביקורות האישיות של דניאל",
+        "6 posts · 1 candidate": "6 פוסטים · מועמד אחד",
+        "Based on personal reviews by": "מבוסס על ביקורות אישיות של",
+        "in the Facebook group": "בקבוצת הפייסבוק",
+        "Read Daniel's 6 posts ↗": "לקריאת 6 הפוסטים של דניאל ↗",
+        "Visit the Facebook group ↗": "לקבוצת הפייסבוק ↗",
+        "Visible excerpts supplied by Daniel, not a live group feed. Only El-Sham enters the lunch shortlist, with unknown style. The other five posts are background, not scoring evidence. Hidden text, the original PDF and other people's comments are not published. The group link is not an individual post link; Facebook may require sign-in.":
+          "קטעים גלויים שסיפק דניאל, לא עדכון חי מהקבוצה. רק אלשאם נכנס לרשימת המועמדים לארוחה, בסגנון לא ידוע. חמשת הפוסטים האחרים הם רקע ולא ראיות לניקוד. הטקסט המוסתר, קובץ המקור ותגובות של אנשים אחרים לא מפורסמים. הקישור מוביל לקבוצה, לא לפוסט מסוים; ייתכן שפייסבוק ידרוש התחברות.",
+        "Group link, not an individual post. Visible excerpt: PDF page 63.":
+          "קישור לקבוצה, לא לפוסט מסוים. הקטע הגלוי: עמוד 63 בקובץ שסיפק דניאל.",
+        "PDF pages:": "עמודים בקובץ המקור:",
+        "September 5 · year unknown": "5 בספטמבר · השנה לא ידועה",
+        "Hummus El-Sham · Haifa": "חומוס אלשאם · חיפה",
+        "Haifa · Wadi Nisnas": "חיפה · ואדי ניסנאס",
+        "Daniel mentions Hummus El-Sham in Wadi Nisnas, Haifa, and his difficulty eating in summer heat and humidity. The visible excerpt does not establish texture, lightness or a food rating. His cold-spring method is hidden behind See more. Historical mention only; style remains unknown.":
+          "דניאל מזכיר את חומוס אלשאם בוואדי ניסנאס בחיפה ואת הקושי שלו לאכול בחום ובלחות של הקיץ. הקטע הגלוי אינו קובע מרקם, קלילות או ציון לאוכל. ההסבר לשיטת המעיין הקר מוסתר מאחורי ״ראה עוד״. זהו אזכור היסטורי בלבד; הסגנון נשאר לא ידוע.",
+        "Milos · the unnamed hummus": "מילוס · החומוס ללא שם",
+        "A Milos post mentions hummus, but the visible fragments name no restaurant. September 5 is visible; the year is not. The council declines to nominate an entire island for lunch.":
+          "פוסט ממילוס מזכיר חומוס, אך בקטעים הגלויים אין שם מסעדה. התאריך 5 בספטמבר גלוי; השנה לא. המועצה מסרבת להעמיד אי שלם לבחירה לארוחת צהריים.",
+        "Taha · Rashid, near Alexandria": "טהא · ראשיד, ליד אלכסנדריה",
+        "Daniel praises Taha's ful medames with samna and says the standard survived the founder's death. This is praise for ful, not hummus. Filed under food inspiration, not an Israeli lunch candidate.":
+          "דניאל משבח את הפול מדמס עם סמנא של טהא ומספר שהרמה נשמרה אחרי מות המייסד. זה שבח לפול, לא לחומוס. מתויק כהשראה קולינרית, לא כמועמד לארוחת צהריים בישראל.",
+        "Olive oil · an ingredient gets the floor":
+          "שמן זית · חומר גלם מקבל זכות דיבור",
+        "Daniel describes olive oil from a Qalqilya press as very good, strongly flavored and slightly bitter, suitable for hummus and labneh. An ingredient preference, not a restaurant rating. The oil has a voice, but no voting seat.":
+          "דניאל מתאר שמן זית מבית בד בקלקיליה כטוב מאוד, בעל טעם דומיננטי ומעט מריר, ומתאים לחומוס וללבנה. זו העדפה לחומר גלם, לא דירוג מסעדה. לשמן יש קול, אבל אין זכות הצבעה.",
+        "Tahini · the bird-identification committee":
+          "טחינה · הוועדה לזיהוי ציפורים",
+        "Daniel argues that the bird on the blue Dove Tahini package is a stone-curlew, not a dove. This is his observation about the label, not an independently verified identification or taste review. The remaining text is hidden.":
+          "דניאל טוען שהציפור על אריזת טחינת היונה הכחולה היא כרוון ולא יונה. זו ההבחנה שלו לגבי האיור, לא זיהוי שאומת בנפרד ולא ביקורת טעם. יתר הטקסט מוסתר.",
+        "Mitzpe Hayamim · hummus with a hotel attached":
+          "מצפה הימים · חומוס עם מלון בצד",
+        "Daniel jokes about two hummus portions for NIS 5,000, explicitly including two hotel nights and spa treatments. A hotel-package joke, not a hummus menu price. The rest is hidden. The finance minister may breathe again.":
+          "דניאל מתבדח על שתי מנות חומוס ב־5,000 שקל, כולל במפורש שני לילות במלון וטיפולי ספא. זו בדיחה על חבילת נופש, לא מחיר מנת חומוס בתפריט. ההמשך מוסתר. שר האוצר רשאי לחזור לנשום.",
         "Concept demo · no live API": "הדגמה רעיונית · ללא חיבור חי",
         "Jev, meet the chickpeas": "Jev, תכיר את הגרגירים",
         "Demo, not a live Jev integration.": "הדגמה בלבד, לא חיבור חי ל־Jev.",
@@ -1479,8 +1590,8 @@
           "המועצה ממחישה פירוק של החלטה גדולה לשיקולים קטנים ושילובם בקוד. הדמויות אינן שלבים פנימיים של Jev. ההפסקות הדרמטיות הן אנימציה, לא מדידה של זמן תגובת המודל.",
         "Logistics: your city and travel setting filter candidates; hunger changes how much location matters. Geography gets louder when your stomach does.":
           "לוגיסטיקה: העיר והנכונות לנסוע מסננות מועמדים; הרעב משנה את משקל המיקום. כשהבטן מרימה קול, גם הגאוגרפיה.",
-        "Evidence: selected blogs limit the shortlist. Dated, manually curated reviews supply style tags, not live opening hours. The archaeologist brought a bibliography, not a reservation.":
-          "ראיות: הבלוגים שנבחרו מצמצמים את הרשימה. ביקורות מתוארכות שנבחרו ידנית מספקות תגיות סגנון, לא שעות פתיחה בזמן אמת. הארכאולוג הביא ביבליוגרפיה, לא הזמנה לשולחן.",
+        "Evidence: selected sources limit the shortlist. Dated, manually curated reviews supply style tags where supported, not live opening hours. The archaeologist brought a bibliography, not a reservation.":
+          "ראיות: המקורות שנבחרו מצמצמים את הרשימה. ביקורות מתוארכות שנבחרו ידנית מספקות תגיות סגנון כשיש להן ביסוס, לא שעות פתיחה בזמן אמת. הארכאולוג הביא ביבליוגרפיה, לא הזמנה לשולחן.",
         "Season: calendar rules reward lighter textures in summer and richer styles in winter. A sweater is a preference, not a medical degree.":
           "עונה: כללי לוח השנה נותנים בונוס למרקם קליל בקיץ ולסגנון עשיר בחורף. סוודר הוא העדפה, לא תואר ברפואה.",
         "Taste and verdict: match your preference to the curated tags, add the visible points and rank the candidates. The 0–100 total is a local fit score, not Jev confidence or a probability.":
@@ -1542,8 +1653,8 @@
         "Eating Out": "אוכל בחוץ",
         "4 reviews": "4 ביקורות",
         "1 review": "ביקורת אחת",
-        "Curated review snapshot. No live blog scraping.":
-          "לקט ביקורות שמור. אין שליפה חיה מהבלוגים.",
+        "Curated review snapshot. No live scraping.":
+          "לקט ביקורות שמור. אין שליפה חיה מהמקורות.",
         "Convene the council": "לכנס את המועצה",
         "→": "←",
         "No sign-up. No tracking. Just questionable priorities.":
@@ -1588,10 +1699,10 @@
         "Then I discovered committees.”": "ואז גיליתי ועדות.״",
         "AN ENTIRELY FICTIONAL SATISFIED CUSTOMER":
           "לקוח מרוצה שלא היה ולא נברא",
-        "Real blog links. Playful rules. No artificial chickpeas.":
-          "בלוגים אמיתיים. חוקים משעשעים. בלי גרגירים מלאכותיים.",
-        "9 curated restaurants · 3 sources · current opening status unknown":
-          "9 מקומות בלקט · 3 מקורות · לא ידוע אם פתוח כעת",
+        "Real source links. Playful rules. No artificial chickpeas.":
+          "מקורות אמיתיים. חוקים משעשעים. בלי גרגירים מלאכותיים.",
+        "10 curated places · 4 sources · current opening status unknown":
+          "10 מקומות בלקט · 4 מקורות · לא ידוע אם פתוח כעת",
         "Open the evidence cupboard ↗": "לפתוח את ארון הראיות ↗",
         "The evidence cupboard": "ארון הראיות",
         "Close ×": "סגירה ×",
@@ -1600,8 +1711,8 @@
           "צריך לבחור תאריך תקין לארוחה. הגרגירים לא קוראים מחשבות.",
         "That date does not exist. Even for hummus.":
           "התאריך הזה לא קיים. אפילו בשביל חומוס.",
-        "Choose at least one blog. Even a committee needs evidence.":
-          "צריך לבחור לפחות בלוג אחד. אפילו ועדה צריכה ראיות.",
+        "Choose at least one source. Even a committee needs evidence.":
+          "צריך לבחור לפחות מקור אחד. אפילו ועדה צריכה ראיות.",
         "☀ Summer: lighter-dip season": "☀ קיץ: עונת הניגוב הקליל",
         "☂ Winter: comfort-dip season": "☂ חורף: עונת הניגוב המנחם",
         "✿ Mild season: all dips welcome": "✿ עונת מעבר: כל ניגוב מתקבל",
@@ -1610,8 +1721,8 @@
         "Brief updated. Previous verdict dismissed. The pita demands a fresh vote.":
           "התדריך עודכן. ההחלטה הקודמת בוטלה. הפיתה דורשת הצבעה חדשה.",
         "The council has no quorum.": "אין קוורום לניגוב.",
-        "No reviewed restaurants match this city and your selected blogs. Add another source or allow other listed cities. We refuse to invent a hummus place. Our standards are low, but not that low.":
-          "אין בלקט מקום שמתאים לעיר ולבלוגים שבחרת. אפשר להוסיף מקור או לאפשר ערים נוספות. לא נמציא חומוסייה. הסטנדרטים שלנו נמוכים, אבל לא עד כדי כך.",
+        "No listed restaurants match this city and your selected sources. Add another source or allow other listed cities. We refuse to invent a hummus place. Our standards are low, but not that low.":
+          "אין בלקט מקום שמתאים לעיר ולמקורות שבחרת. אפשר להוסיף מקור או לאפשר ערים נוספות. לא נמציא חומוסייה. הסטנדרטים שלנו נמוכים, אבל לא עד כדי כך.",
         "No match in this small snapshot. Your city may have excellent hummus; our cupboard is simply understocked.":
           "אין התאמה בלקט הקטן שלנו. אולי יש בעיר שלך חומוס מעולה; פשוט חסר מלאי בארון הראיות.",
         Location: "מיקום",
@@ -1673,8 +1784,8 @@
         "A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.":
           "בוחר ארוחת צהריים מסובך בכוונה. שכבות המועצה בדיוניות ואינן מימוש של מסגרת החלטה חיצונית מאומתת. אין שימוש בשירות בינה מלאכותית, שליפת מידע חיה, שירות מזג אוויר או איתור מיקום. הנתונים שלך נשארים בדפדפן הזה.",
         "The rules are simple and visible:": "הכללים פשוטים וגלויים:",
-        "Selected blogs determine eligibility. “My city only” is a hard filter.":
-          "הבלוגים שנבחרו קובעים מי נכנס להצבעה. ״רק בעיר שלי״ הוא סינון מחייב.",
+        "Selected sources determine eligibility. “My city only” is a hard filter.":
+          "המקורות שנבחרו קובעים מי נכנס להצבעה. ״רק בעיר שלי״ הוא סינון מחייב.",
         "Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.":
           "משקלים רגילים: מיקום 40, טעם 30, עונה 20, ראיות 10. ברמת רעב 4 או 5 המשקלים הם: מיקום 55, טעם 20, עונה 15, ראיות 10.",
         "Location: full points in your city, zero elsewhere. No road-distance estimates.":
@@ -1691,8 +1802,8 @@
         "current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.":
           "אם המקום פעיל כיום, שעות בחגים, תורים, מחירים, מזג אוויר, אלרגיות, תעודת כשרות או זמינות מנות. התאריך קובע העדפה עונתית ולא בודק זמינות בעבר או בעתיד. ״קליל״ מתאר העדפת מרקם וגודל מנה, לא קלוריות או בטיחות מזון.",
         "Curated review snapshot": "לקט הביקורות",
-        "Compiled 2 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the blogs’ ratings. Every profile below has one source.":
-          "הלקט נערך ב־2 באוקטובר 2026. התקצירים מבוססים על דברי הכותבים, לא על תגובות הקוראים. תגיות הסגנון וכל הניקוד הם פרשנות לצורך ההדגמה, לא ציוני הבלוגים. לכל רשומה למטה יש מקור אחד.",
+        "Updated 3 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the authors' ratings. Each candidate has one source; unknown styles stay unknown.":
+          "עודכן ב־3 באוקטובר 2026. התקצירים מבוססים על דברי הכותבים, לא על תגובות הקוראים. תגיות הסגנון וכל הניקוד הם פרשנות לצורך ההדגמה, לא ציוני הכותבים. לכל מועמד יש מקור אחד; סגנון לא ידוע נשאר לא ידוע.",
         "tags:": "תגיות:",
         unknown: "לא ידוע",
         light: "קליל",
@@ -1841,7 +1952,7 @@
         const winner = result.rows[0];
         if (!winner) {
           $("result").innerHTML =
-            '<div class="plate" aria-hidden="true"><div class="hummus"></div></div><h3 class="empty-title">The council has no quorum.</h3><p class="empty-copy">No reviewed restaurants match this city and your selected blogs. Add another source or allow other listed cities. We refuse to invent a hummus place. Our standards are low, but not that low.</p>';
+            '<div class="plate" aria-hidden="true"><div class="hummus"></div></div><h3 class="empty-title">The council has no quorum.</h3><p class="empty-copy">No listed restaurants match this city and your selected sources. Add another source or allow other listed cities. We refuse to invent a hummus place. Our standards are low, but not that low.</p>';
           localize($("result"));
           $("minutes").textContent = tr(
             "No match in this small snapshot. Your city may have excellent hummus; our cupboard is simply understocked.",
@@ -1887,6 +1998,16 @@
         $("result").innerHTML =
           `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(restaurantName(winner))}</h3><div class="winner-city">${hebrew ? "" : `<span lang="he">${escapeHtml(winner.he)}</span> · `}${escapeHtml(tr(winner.place))}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${tr(winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself.")} ${tr(matchText)}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">${tr("Historical review summary:")} ${escapeHtml(tr(winner.note))}<br><br>${escapeHtml(tr(SOURCES[winner.source].name))} · ${tr("published")} <bdi>${winner.date}</bdi></div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
         localize($("result"));
+        if (winner.source === "daniel") {
+          $("result").querySelector(".result-links a").textContent = tr(
+            "Visit the Facebook group ↗",
+          );
+          const detail = document.createElement("p");
+          detail.textContent = tr(
+            "Group link, not an individual post. Visible excerpt: PDF page 63.",
+          );
+          $("result").querySelector(".source-detail").append(detail);
+        }
         $("minutes").textContent = hebrew
           ? `${winner.he} זוכה בציון ${winner.score} מתוך 100. נבדקו ${result.rows.length} מקומות. הוועדה יוצאת להפסקה, היישר לתוך פיתה.`
           : `${winner.name} wins with ${winner.score}/100. ${result.rows.length} candidate${result.rows.length === 1 ? "" : "s"} considered. The committee will now adjourn directly into a pita.`;
@@ -1919,8 +2040,8 @@
             ? `${input.travel === "local" ? "הוגבל לעיר שנבחרה." : "אושרו מסעות בין־עירוניים."} למיקום יש ${result.weights.location} נקודות. ${result.urgent ? "מצב חירום של רעב: הגאוגרפיה השתלטה על עוד כוח הצבעה." : "עדיין לא הוזמנה משלחת לחציית הארץ. עדיין."}`
             : `${input.travel === "local" ? "City-only rule enforced." : "Intercity travel permitted."} Location has ${result.weights.location} points. ${result.urgent ? "Hunger emergency: geography has seized extra voting power." : "No cross-country expedition has been ordered. Yet."}`,
           hebrew
-            ? `${input.sources.length} בלוגים שנבחרו ← ${result.sourced} רשומות מהארכיון ← ${result.rows.length} מועמדים מתאימים. מנערים אבק מביקורות, לא בודקים מטבחים בזמן אמת.`
-            : `${input.sources.length} selected blogs → ${result.sourced} archived profiles → ${result.rows.length} eligible candidates. Dusting off reviews, not checking live kitchens.`,
+            ? `${input.sources.length} מקורות שנבחרו ← ${result.sourced} רשומות מהארכיון ← ${result.rows.length} מועמדים מתאימים. מנערים אבק מביקורות, לא בודקים מטבחים בזמן אמת.`
+            : `${input.sources.length} selected sources → ${result.sourced} archived profiles → ${result.rows.length} eligible candidates. Dusting off reviews, not checking live kitchens.`,
           !input.seasonal
             ? "Seasonal voting disabled. The sun has been asked to leave the meeting. Everyone gets half the season points."
             : result.season === "summer"
@@ -1978,7 +2099,17 @@
       }
       $("summer").onclick = () => preset(7);
       $("winter").onclick = () => preset(1);
-      const method = `<p>A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected blogs determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li><li>Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
+      const method = `<p>A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected sources determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li><li>Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
+      function danielEvidence() {
+        return `<section id="daniel-evidence"><p>${$("daniel-credit").innerHTML}</p><p class="caution">${tr("Visible excerpts supplied by Daniel, not a live group feed. Only El-Sham enters the lunch shortlist, with unknown style. The other five posts are background, not scoring evidence. Hidden text, the original PDF and other people's comments are not published. The group link is not an individual post link; Facebook may require sign-in.")}</p>${Object.values(
+          DANIEL_REVIEWS,
+        )
+          .map(
+            (r) =>
+              `<article><h3>${escapeHtml(tr(r.title))}</h3><p class="source-detail"><bdi>${r.date || tr("September 5 · year unknown")}</bdi> · ${tr("PDF pages:")} <bdi>${r.pages}</bdi></p><p>${escapeHtml(tr(r.note))}</p></article>`,
+          )
+          .join("")}</section>`;
+      }
       function openInfo(showSources) {
         $("dialog-title").textContent = tr(
           showSources
@@ -1988,17 +2119,26 @@
         $("dialog-body").innerHTML =
           method +
           (showSources
-            ? "<h2>Curated review snapshot</h2><p>Compiled 2 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the blogs’ ratings. Every profile below has one source.</p>" +
-              RESTAURANTS.map(
-                (r) =>
-                  `<article><h3>${escapeHtml(restaurantName(r))} · ${escapeHtml(tr(r.place))}</h3><p>${escapeHtml(tr(r.note))}</p><p class="source-detail">${escapeHtml(tr(SOURCES[r.source].name))} · <bdi>${r.date}</bdi> · ${tr("tags:")} ${r.tags.map(tr).join(", ") || tr("unknown")}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">${escapeHtml(r.url)}</bdi></a></article>`,
-              ).join("")
+            ? `<h2>${tr("Daniel's own reviews")}</h2>` +
+              danielEvidence() +
+              "<h2>Curated review snapshot</h2><p>Updated 3 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the authors' ratings. Each candidate has one source; unknown styles stay unknown.</p>" +
+              RESTAURANTS.filter((r) => r.source !== "daniel")
+                .map(
+                  (r) =>
+                    `<article><h3>${escapeHtml(restaurantName(r))} · ${escapeHtml(tr(r.place))}</h3><p>${escapeHtml(tr(r.note))}</p><p class="source-detail">${escapeHtml(tr(SOURCES[r.source].name))} · <bdi>${r.date}</bdi> · ${tr("tags:")} ${r.tags.map(tr).join(", ") || tr("unknown")}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">${escapeHtml(r.url)}</bdi></a></article>`,
+                )
+                .join("")
             : "");
         localize($("dialog-body"));
         $("info").showModal();
       }
       $("sources-button").onclick = () => openInfo(true);
       $("about-button").onclick = () => openInfo(false);
+      $("daniel-button").onclick = () => {
+        $("dialog-title").textContent = tr("Daniel's own reviews");
+        $("dialog-body").innerHTML = danielEvidence();
+        $("info").showModal();
+      };
       $("jev-button").onclick = () => {
         $("dialog-title").textContent = tr("Jev, meet the chickpeas");
         $("dialog-body").innerHTML = `
@@ -2011,7 +2151,7 @@
           <p>Our council illustrates separating a big decision into small factors, then combining them in code. These characters are not Jev's internal stages. Their dramatic pauses are animation, not measured model latency.</p>
           <ol>
             <li>Logistics: your city and travel setting filter candidates; hunger changes how much location matters. Geography gets louder when your stomach does.</li>
-            <li>Evidence: selected blogs limit the shortlist. Dated, manually curated reviews supply style tags, not live opening hours. The archaeologist brought a bibliography, not a reservation.</li>
+            <li>Evidence: selected sources limit the shortlist. Dated, manually curated reviews supply style tags where supported, not live opening hours. The archaeologist brought a bibliography, not a reservation.</li>
             <li>Season: calendar rules reward lighter textures in summer and richer styles in winter. A sweater is a preference, not a medical degree.</li>
             <li>Taste and verdict: match your preference to the curated tags, add the visible points and rank the candidates. The 0–100 total is a local fit score, not Jev confidence or a probability.</li>
           </ol>
