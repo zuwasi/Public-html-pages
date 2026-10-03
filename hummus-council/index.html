@@ -1006,6 +1006,9 @@
                       <option value="ness-ziona">Ness Ziona</option>
                       <option value="kafr-qasim">Kafr Qasim</option>
                       <option value="beit-dagan">Beit Dagan area</option>
+                      <option value="fureidis">Fureidis</option>
+                      <option value="rameh">Rameh</option>
+                      <option value="al-lubban">Al-Lubban al-Gharbi</option>
                     </select>
                   </div>
                   <div class="field">
@@ -1106,7 +1109,7 @@
                       value="daniel"
                       checked
                     /><span class="source-name">Daniel's own reviews</span
-                    ><small>6 posts · 1 candidate</small></label
+                    ><small>14 posts · 7 candidates</small></label
                   >
                   <div class="hint">
                     Curated review snapshot. No live scraping.
@@ -1123,7 +1126,7 @@
                     >.
                   </div>
                   <button type="button" class="text-button" id="daniel-button">
-                    Read Daniel's 6 posts ↗
+                    Read Daniel's 14 posts ↗
                   </button>
                 </fieldset>
                 <p class="fineprint">
@@ -1267,7 +1270,7 @@
         <footer class="bottom-note">
           <span
             ><b>Real source links. Playful rules. No artificial chickpeas.</b
-            ><br />10 curated places · 4 sources · current opening status
+            ><br />15 curated places · 4 sources · current opening status
             unknown</span
           >
           <button id="sources-button" class="text-button">
@@ -1306,30 +1309,42 @@
           url: "https://www.facebook.com/groups/Msabbaha",
         },
       };
-      // Approved summaries only. The private PDF, OCR and other people's comments are not published.
+      // Approved summaries only. Private exports and other people's comments are not published.
+      // HTML post numbers follow Daniel-authored feed headers, not nested shared posts or comments.
       const DANIEL_REVIEWS = {
         elSham: {
           title: "Hummus El-Sham · Haifa",
           date: "2022-08-12",
           pages: "63",
           note: "Daniel mentions Hummus El-Sham in Wadi Nisnas, Haifa, and his difficulty eating in summer heat and humidity. The visible excerpt does not establish texture, lightness or a food rating. His cold-spring method is hidden behind See more. Historical mention only; style remains unknown.",
+          restaurant: {
+            id: "el-sham",
+            name: "Hummus El-Sham",
+            he: "חומוס אלשאם",
+            city: "haifa",
+            place: "Haifa · Wadi Nisnas",
+            tags: [],
+          },
         },
         milos: {
-          title: "Milos · the unnamed hummus",
+          title: "Milos · hummus by the sea",
           date: null,
           pages: "1–2",
-          note: "A Milos post mentions hummus, but the visible fragments name no restaurant. September 5 is visible; the year is not. The council declines to nominate an entire island for lunch.",
+          htmlPost: 1,
+          note: "The HTML identifies Suleiman al-Issa on the beach in Milos and describes hummus called masabacha, with olive oil and dried-pepper paste. No confirmed business name or address. September 5 is visible without a year. Travel inspiration, not a lunch candidate: the council has no ferry budget.",
         },
         taha: {
           title: "Taha · Rashid, near Alexandria",
           date: "2025-04-21",
           pages: "25",
+          htmlPost: 4,
           note: "Daniel praises Taha's ful medames with samna and says the standard survived the founder's death. This is praise for ful, not hummus. Filed under food inspiration, not an Israeli lunch candidate.",
         },
         oliveOil: {
           title: "Olive oil · an ingredient gets the floor",
           date: "2023-01-01",
           pages: "53",
+          htmlPost: 11,
           note: "Daniel describes olive oil from a Qalqilya press as very good, strongly flavored and slightly bitter, suitable for hummus and labneh. An ingredient preference, not a restaurant rating. The oil has a voice, but no voting seat.",
         },
         tahini: {
@@ -1343,6 +1358,102 @@
           date: "2022-09-11",
           pages: "61",
           note: "Daniel jokes about two hummus portions for NIS 5,000, explicitly including two hotel nights and spa treatments. A hotel-package joke, not a hummus menu price. The rest is hidden. The finance minister may breathe again.",
+        },
+        abuHassan: {
+          title: "Abu Hassan · takeaway diplomacy",
+          date: null,
+          htmlPost: 2,
+          note: "Daniel enjoys Abu Hassan's masabacha brought home by visitors and describes the Dolphin Street branch as small. The chunky tag interprets the named dish, not a nutritional claim. The council endorses takeaway, not invitations to Daniel's home.",
+          restaurant: {
+            id: "abu-hassan",
+            name: "Abu Hassan",
+            he: "אבו חסן",
+            city: "tel-aviv",
+            place: "Jaffa · Dolphin Street branch",
+            tags: ["chunky"],
+          },
+        },
+        harvest: {
+          title: "Green chickpeas · the harvest committee",
+          date: null,
+          htmlPost: 3,
+          note: "Daniel describes green chickpeas near harvest and mentions fire-roasted green chickpeas. The excerpt stops at See more. Seasonal food background, not a restaurant or permission to enter a field. The chickpeas have not yet applied for a serving licence.",
+        },
+        iftar: {
+          title: "Homemade hummus · the iftar table",
+          date: null,
+          htmlPost: 5,
+          note: "Daniel describes homemade hummus and fresh taboon bread at an iftar meal in Khan al-Ahmar, reflecting on the variety of home cooking. A private hospitality story, not a public restaurant listing. The council cannot issue invitations on the hosts' behalf.",
+        },
+        asumi: {
+          title: "Asumi · the truncated expedition",
+          date: null,
+          htmlPost: 6,
+          note: "The visible excerpt places Hummus Asumi in Al-Lubban al-Gharbi and describes a visit after passing the Rantis checkpoint. It stops before the food assessment: style and rating remain unknown. Check current access, legal entry requirements and safety before considering travel; this app is not a route adviser.",
+          restaurant: {
+            id: "asumi",
+            name: "Hummus Asumi",
+            he: "חומוס עסומי",
+            city: "al-lubban",
+            place: "Al-Lubban al-Gharbi",
+            tags: [],
+          },
+        },
+        abuAlAbed: {
+          title: "Abu al-Abed · mud, masabacha and a clean pickup",
+          date: null,
+          htmlPost: 7,
+          note: "After a muddy outing near Kafr Qasim, Daniel describes masabacha at Abu al-Abed opposite the car wash and gives it 8 on his Abu Hassan scale. The named dish supports a chunky demo tag. His personal rating is not the council's fit score. The pickup got a wash; the pita got a purpose.",
+          restaurant: {
+            id: "abu-al-abed",
+            name: "Abu al-Abed",
+            he: "אבו אל עבד",
+            city: "kafr-qasim",
+            place: "Kafr Qasim",
+            tags: ["chunky"],
+          },
+        },
+        hamza: {
+          title: "Hamza · the tahini caucus",
+          date: null,
+          htmlPost: 8,
+          note: "Daniel describes tahini-heavy hummus at Hamza, 70 Al-Sultani Street, Kafr Qasim. He personally prefers other styles; his companion enjoyed it. He mentions fresh vegetables and homemade pickles. Two portions and two drinks cost NIS 70 on that visit, not a current price. Rich is a style tag, not an endorsement from Daniel.",
+          restaurant: {
+            id: "hamza",
+            name: "Hamza",
+            he: "חמזה",
+            city: "kafr-qasim",
+            place: "Kafr Qasim · 70 Al-Sultani Street",
+            tags: ["rich"],
+          },
+        },
+        abuQassem: {
+          title: "Abu Qassem · the olive delegation",
+          date: null,
+          htmlPost: 9,
+          note: "Daniel praises Abu Qassem in Fureidis, especially the homemade olives, and says the hummus is not drowned in oil. That does not establish a light texture. He reports NIS 30 with two pitas and complimentary coffee on that visit. Refills were speculation, not a confirmed policy. The olives may campaign, but cannot promise free refills.",
+          restaurant: {
+            id: "abu-qassem",
+            name: "Abu Qassem",
+            he: "אבו קאסם",
+            city: "fureidis",
+            place: "Fureidis",
+            tags: [],
+          },
+        },
+        abuRami: {
+          title: "Abu Rami · honeymoon hummus",
+          date: null,
+          htmlPost: 10,
+          note: "In a post about a song and romantic hummus dates, Daniel recalls visiting Abu Rami in Rameh on his honeymoon. A named historical visit, not a texture review or current availability check. The romance minister votes yes; the evidence minister leaves the style unknown.",
+          restaurant: {
+            id: "abu-rami",
+            name: "Abu Rami",
+            he: "אבו ראמי",
+            city: "rameh",
+            place: "Rameh",
+            tags: [],
+          },
         },
       };
       // Each profile summarizes the linked author's historical review, not reader comments.
@@ -1456,18 +1567,15 @@
           url: "https://food-out.blogspot.com/2019/05/pondak-asa.html",
           note: "The author enjoys plain hummus with tahini at this grill restaurant. The tahini-style tag is a demo interpretation; the review does not establish calorie content.",
         },
-        {
-          id: "el-sham",
-          name: "Hummus El-Sham",
-          he: "חומוס אלשאם",
-          city: "haifa",
-          place: "Haifa · Wadi Nisnas",
-          tags: [],
-          source: "daniel",
-          date: DANIEL_REVIEWS.elSham.date,
-          url: SOURCES.daniel.url,
-          note: DANIEL_REVIEWS.elSham.note,
-        },
+        ...Object.values(DANIEL_REVIEWS)
+          .filter((review) => review.restaurant)
+          .map((review) => ({
+            ...review.restaurant,
+            source: "daniel",
+            date: review.date,
+            url: SOURCES.daniel.url,
+            note: review.note,
+          })),
       ];
       function seasonFor(date) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(date))
@@ -1497,8 +1605,11 @@
         const weights = urgent
           ? { location: 55, taste: 20, season: 15, evidence: 10 }
           : { location: 40, taste: 30, season: 20, evidence: 10 };
+        // One seat per restaurant. When both are selected, keep the existing blog profile.
         const sourced = RESTAURANTS.filter((r) =>
           input.sources.includes(r.source),
+        ).filter(
+          (r, i, rows) => rows.findIndex((other) => other.id === r.id) === i,
         );
         const eligible = sourced.filter(
           (r) => input.travel === "any" || r.city === input.city,
@@ -1548,24 +1659,29 @@
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
         "Daniel's own reviews": "הביקורות האישיות של דניאל",
-        "6 posts · 1 candidate": "6 פוסטים · מועמד אחד",
+        "14 posts · 7 candidates": "14 פוסטים · 7 מועמדים",
         "Based on personal reviews by": "מבוסס על ביקורות אישיות של",
         "in the Facebook group": "בקבוצת הפייסבוק",
-        "Read Daniel's 6 posts ↗": "לקריאת 6 הפוסטים של דניאל ↗",
+        "Read Daniel's 14 posts ↗": "לקריאת 14 הפוסטים של דניאל ↗",
         "Visit the Facebook group ↗": "לקבוצת הפייסבוק ↗",
-        "Visible excerpts supplied by Daniel, not a live group feed. Only El-Sham enters the lunch shortlist, with unknown style. The other five posts are background, not scoring evidence. Hidden text, the original PDF and other people's comments are not published. The group link is not an individual post link; Facebook may require sign-in.":
-          "קטעים גלויים שסיפק דניאל, לא עדכון חי מהקבוצה. רק אלשאם נכנס לרשימת המועמדים לארוחה, בסגנון לא ידוע. חמשת הפוסטים האחרים הם רקע ולא ראיות לניקוד. הטקסט המוסתר, קובץ המקור ותגובות של אנשים אחרים לא מפורסמים. הקישור מוביל לקבוצה, לא לפוסט מסוים; ייתכן שפייסבוק ידרוש התחברות.",
-        "Group link, not an individual post. Visible excerpt: PDF page 63.":
-          "קישור לקבוצה, לא לפוסט מסוים. הקטע הגלוי: עמוד 63 בקובץ שסיפק דניאל.",
+        "11 HTML posts + 6 PDF posts, with 3 overlaps: 14 distinct posts and 7 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.":
+          "11 פוסטים ב־HTML ועוד 6 ב־PDF, עם 3 חפיפות: 14 פוסטים שונים ו־7 מועמדים לארוחה. היתר הם רקע, לא ראיות לניקוד. התקצירים מבוססים רק על טקסט גלוי שכתב דניאל; טקסט מוסתר, קובצי המקור ותגובות של אחרים אינם מפורסמים. תאריכים וסגנונות לא ידועים נשארים לא ידועים. מחירים היסטוריים אינם הצעות עדכניות. זה אינו עדכון חי מהקבוצה.",
+        "Group link, not an individual post. Facebook may require sign-in. Read Daniel's posts for export provenance and limitations.":
+          "קישור לקבוצה, לא לפוסט מסוים. ייתכן שפייסבוק ידרוש התחברות. מקור הקטע ומגבלותיו מופיעים בחלון הפוסטים של דניאל.",
         "PDF pages:": "עמודים בקובץ המקור:",
-        "September 5 · year unknown": "5 בספטמבר · השנה לא ידועה",
+        "Saved HTML post:": "פוסט בקובץ HTML השמור:",
+        "Date unknown": "התאריך לא ידוע",
+        "Lunch candidate": "מועמד לארוחה",
+        "Background only": "רקע בלבד",
+        "One seat per restaurant. When both sources cover Abu Hassan, the existing blog profile is used; select Daniel alone to use his account. Older or undated reviews receive 5 evidence points.":
+          "כיסא אחד לכל מסעדה. כששני המקורות מכסים את אבו חסן, נעשה שימוש בפרופיל הקיים מהבלוג; בחרו רק בדניאל כדי להשתמש בתיאור שלו. ביקורות ישנות או ללא תאריך מקבלות 5 נקודות ראיות.",
         "Hummus El-Sham · Haifa": "חומוס אלשאם · חיפה",
         "Haifa · Wadi Nisnas": "חיפה · ואדי ניסנאס",
         "Daniel mentions Hummus El-Sham in Wadi Nisnas, Haifa, and his difficulty eating in summer heat and humidity. The visible excerpt does not establish texture, lightness or a food rating. His cold-spring method is hidden behind See more. Historical mention only; style remains unknown.":
           "דניאל מזכיר את חומוס אלשאם בוואדי ניסנאס בחיפה ואת הקושי שלו לאכול בחום ובלחות של הקיץ. הקטע הגלוי אינו קובע מרקם, קלילות או ציון לאוכל. ההסבר לשיטת המעיין הקר מוסתר מאחורי ״ראה עוד״. זהו אזכור היסטורי בלבד; הסגנון נשאר לא ידוע.",
-        "Milos · the unnamed hummus": "מילוס · החומוס ללא שם",
-        "A Milos post mentions hummus, but the visible fragments name no restaurant. September 5 is visible; the year is not. The council declines to nominate an entire island for lunch.":
-          "פוסט ממילוס מזכיר חומוס, אך בקטעים הגלויים אין שם מסעדה. התאריך 5 בספטמבר גלוי; השנה לא. המועצה מסרבת להעמיד אי שלם לבחירה לארוחת צהריים.",
+        "Milos · hummus by the sea": "מילוס · חומוס על החוף",
+        "The HTML identifies Suleiman al-Issa on the beach in Milos and describes hummus called masabacha, with olive oil and dried-pepper paste. No confirmed business name or address. September 5 is visible without a year. Travel inspiration, not a lunch candidate: the council has no ferry budget.":
+          "קובץ ה־HTML מזהה את סולימן אל עיסא על החוף במילוס ומתאר חומוס שנקרא מסבחה, עם שמן זית וממרח פלפלים מיובשים. אין שם עסק או כתובת מאומתים. 5 בספטמבר מופיע ללא שנה. השראה לטיול, לא מועמד לארוחה: למועצה אין תקציב למעבורת.",
         "Taha · Rashid, near Alexandria": "טהא · ראשיד, ליד אלכסנדריה",
         "Daniel praises Taha's ful medames with samna and says the standard survived the founder's death. This is praise for ful, not hummus. Filed under food inspiration, not an Israeli lunch candidate.":
           "דניאל משבח את הפול מדמס עם סמנא של טהא ומספר שהרמה נשמרה אחרי מות המייסד. זה שבח לפול, לא לחומוס. מתויק כהשראה קולינרית, לא כמועמד לארוחת צהריים בישראל.",
@@ -1581,6 +1697,35 @@
           "מצפה הימים · חומוס עם מלון בצד",
         "Daniel jokes about two hummus portions for NIS 5,000, explicitly including two hotel nights and spa treatments. A hotel-package joke, not a hummus menu price. The rest is hidden. The finance minister may breathe again.":
           "דניאל מתבדח על שתי מנות חומוס ב־5,000 שקל, כולל במפורש שני לילות במלון וטיפולי ספא. זו בדיחה על חבילת נופש, לא מחיר מנת חומוס בתפריט. ההמשך מוסתר. שר האוצר רשאי לחזור לנשום.",
+        "Abu Hassan · takeaway diplomacy": "אבו חסן · דיפלומטיית הטייק אוויי",
+        "Daniel enjoys Abu Hassan's masabacha brought home by visitors and describes the Dolphin Street branch as small. The chunky tag interprets the named dish, not a nutritional claim. The council endorses takeaway, not invitations to Daniel's home.":
+          "דניאל נהנה מהמסבחה של אבו חסן שאורחים מביאים הביתה ומתאר את סניף הדולפין כקטן. תגית המסבחה היא פרשנות למנה המוזכרת, לא טענה תזונתית. המועצה ממליצה על טייק אוויי, לא מחלקת הזמנות לבית של דניאל.",
+        "Green chickpeas · the harvest committee": "חומוס ירוק · ועדת הקציר",
+        "Daniel describes green chickpeas near harvest and mentions fire-roasted green chickpeas. The excerpt stops at See more. Seasonal food background, not a restaurant or permission to enter a field. The chickpeas have not yet applied for a serving licence.":
+          "דניאל מתאר חומוס ירוק סמוך לקציר ומזכיר חומוס ירוק קלוי על האש. הקטע נקטע ב״ראה עוד״. זהו רקע עונתי על מזון, לא מסעדה ולא היתר להיכנס לשדה. הגרגירים טרם הגישו בקשה לרישיון הגשה.",
+        "Homemade hummus · the iftar table": "חומוס ביתי · שולחן האיפטר",
+        "Daniel describes homemade hummus and fresh taboon bread at an iftar meal in Khan al-Ahmar, reflecting on the variety of home cooking. A private hospitality story, not a public restaurant listing. The council cannot issue invitations on the hosts' behalf.":
+          "דניאל מתאר חומוס ביתי ופיתות טריות מהטאבון בארוחת איפטר בחאן אל אחמר, ומספר על המגוון בבישול הביתי. זהו סיפור אירוח פרטי, לא רישום של מסעדה לציבור. המועצה אינה מוסמכת להזמין בשם המארחים.",
+        "Asumi · the truncated expedition": "עסומי · המשלחת שנקטעה",
+        "The visible excerpt places Hummus Asumi in Al-Lubban al-Gharbi and describes a visit after passing the Rantis checkpoint. It stops before the food assessment: style and rating remain unknown. Check current access, legal entry requirements and safety before considering travel; this app is not a route adviser.":
+          "הקטע הגלוי ממקם את חומוס עסומי בא־לובאן אל־ע׳רבי ומתאר ביקור לאחר מעבר במחסום רנתיס. הוא נקטע לפני הערכת האוכל: הסגנון והציון נשארים לא ידועים. לפני ששוקלים נסיעה יש לבדוק גישה עדכנית, כללי כניסה חוקיים ובטיחות; האפליקציה אינה יועצת מסלולים.",
+        "Abu al-Abed · mud, masabacha and a clean pickup":
+          "אבו אל עבד · בוץ, מסבחה וטנדר נקי",
+        "After a muddy outing near Kafr Qasim, Daniel describes masabacha at Abu al-Abed opposite the car wash and gives it 8 on his Abu Hassan scale. The named dish supports a chunky demo tag. His personal rating is not the council's fit score. The pickup got a wash; the pita got a purpose.":
+          "אחרי טיול בוצי ליד כפר קאסם, דניאל מתאר מסבחה באבו אל עבד מול שטיפת הרכב ונותן לה 8 בסולם אבו חסן שלו. המנה המוזכרת תומכת בתגית מסבחה בהדגמה. הציון האישי שלו אינו ציון ההתאמה של המועצה. הטנדר קיבל שטיפה; הפיתה קיבלה ייעוד.",
+        "Hamza · the tahini caucus": "חמזה · סיעת הטחינה",
+        "Daniel describes tahini-heavy hummus at Hamza, 70 Al-Sultani Street, Kafr Qasim. He personally prefers other styles; his companion enjoyed it. He mentions fresh vegetables and homemade pickles. Two portions and two drinks cost NIS 70 on that visit, not a current price. Rich is a style tag, not an endorsement from Daniel.":
+          "דניאל מתאר חומוס עתיר טחינה אצל חמזה, ברחוב א־סולטאני 70 בכפר קאסם. הוא אישית מעדיף סגנונות אחרים; חברו נהנה. הוא מזכיר ירקות טריים וחמוצים תוצרת בית. שתי מנות ושתי שתייה עלו 70 שקל באותו ביקור, לא מחיר עדכני. ״עשיר״ היא תגית סגנון, לא המלצה של דניאל.",
+        "Abu Qassem · the olive delegation": "אבו קאסם · משלחת הזיתים",
+        "Daniel praises Abu Qassem in Fureidis, especially the homemade olives, and says the hummus is not drowned in oil. That does not establish a light texture. He reports NIS 30 with two pitas and complimentary coffee on that visit. Refills were speculation, not a confirmed policy. The olives may campaign, but cannot promise free refills.":
+          "דניאל משבח את אבו קאסם בפוריידיס, במיוחד את הזיתים תוצרת הבית, וכותב שהחומוס לא טובע בשמן. זה לא קובע שהמרקם קליל. הוא מדווח על 30 שקל עם שתי פיתות וקפה על חשבון הבית באותו ביקור. הריפיל היה השערה, לא מדיניות מאומתת. הזיתים רשאים לנהל קמפיין, אבל לא להבטיח מילוי חינם.",
+        "Abu Rami · honeymoon hummus": "אבו ראמי · חומוס ירח דבש",
+        "In a post about a song and romantic hummus dates, Daniel recalls visiting Abu Rami in Rameh on his honeymoon. A named historical visit, not a texture review or current availability check. The romance minister votes yes; the evidence minister leaves the style unknown.":
+          "בפוסט על שיר ודייטים רומנטיים על חומוס, דניאל נזכר בביקור אצל אבו ראמי בראמה בירח הדבש. זהו ביקור היסטורי במקום מזוהה, לא ביקורת מרקם או בדיקת זמינות עדכנית. שר הרומנטיקה מצביע בעד; שר הראיות משאיר את הסגנון לא ידוע.",
+        Fureidis: "פוריידיס",
+        Rameh: "ראמה",
+        "Al-Lubban al-Gharbi": "א־לובאן אל־ע׳רבי",
+        "Kafr Qasim · 70 Al-Sultani Street": "כפר קאסם · א־סולטאני 70",
         "Concept demo · no live API": "הדגמה רעיונית · ללא חיבור חי",
         "Jev, meet the chickpeas": "Jev, תכיר את הגרגירים",
         "Demo, not a live Jev integration.": "הדגמה בלבד, לא חיבור חי ל־Jev.",
@@ -1705,8 +1850,8 @@
           "לקוח מרוצה שלא היה ולא נברא",
         "Real source links. Playful rules. No artificial chickpeas.":
           "מקורות אמיתיים. חוקים משעשעים. בלי גרגירים מלאכותיים.",
-        "10 curated places · 4 sources · current opening status unknown":
-          "10 מקומות בלקט · 4 מקורות · לא ידוע אם פתוח כעת",
+        "15 curated places · 4 sources · current opening status unknown":
+          "15 מקומות בלקט · 4 מקורות · לא ידוע אם פתוח כעת",
         "Open the evidence cupboard ↗": "לפתוח את ארון הראיות ↗",
         "The evidence cupboard": "ארון הראיות",
         "Close ×": "סגירה ×",
@@ -2001,7 +2146,7 @@
           )
           .join("");
         $("result").innerHTML =
-          `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(restaurantName(winner))}</h3><div class="winner-city">${hebrew ? "" : `<span lang="he">${escapeHtml(winner.he)}</span> · `}${escapeHtml(tr(winner.place))}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${tr(winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself.")} ${tr(matchText)}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">${tr("Historical review summary:")} ${escapeHtml(tr(winner.note))}<br><br>${escapeHtml(tr(SOURCES[winner.source].name))} · ${tr("published")} <bdi>${winner.date}</bdi></div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
+          `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(restaurantName(winner))}</h3><div class="winner-city">${hebrew ? "" : `<span lang="he">${escapeHtml(winner.he)}</span> · `}${escapeHtml(tr(winner.place))}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${tr(winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself.")} ${tr(matchText)}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">${tr("Historical review summary:")} ${escapeHtml(tr(winner.note))}<br><br>${escapeHtml(tr(SOURCES[winner.source].name))} · ${winner.date ? tr("published") : ""} <bdi>${winner.date || tr("Date unknown")}</bdi></div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
         localize($("result"));
         if (winner.source === "daniel") {
           $("result").querySelector(".result-links a").textContent = tr(
@@ -2009,7 +2154,7 @@
           );
           const detail = document.createElement("p");
           detail.textContent = tr(
-            "Group link, not an individual post. Visible excerpt: PDF page 63.",
+            "Group link, not an individual post. Facebook may require sign-in. Read Daniel's posts for export provenance and limitations.",
           );
           $("result").querySelector(".source-detail").append(detail);
         }
@@ -2106,15 +2251,17 @@
       $("winter").onclick = () => preset(1);
       const method = `<p>A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected sources determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li><li>Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
       function danielEvidence() {
-        return `<section id="daniel-evidence"><p>${$("daniel-credit").innerHTML}</p><p class="caution">${tr("Visible excerpts supplied by Daniel, not a live group feed. Only El-Sham enters the lunch shortlist, with unknown style. The other five posts are background, not scoring evidence. Hidden text, the original PDF and other people's comments are not published. The group link is not an individual post link; Facebook may require sign-in.")}</p>${Object.values(
+        return `<section id="daniel-evidence"><p>${$("daniel-credit").innerHTML}</p><p class="caution">${tr("11 HTML posts + 6 PDF posts, with 3 overlaps: 14 distinct posts and 7 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.")}</p><p>${tr(sourcePolicy)}</p>${Object.values(
           DANIEL_REVIEWS,
         )
           .map(
             (r) =>
-              `<article><h3>${escapeHtml(tr(r.title))}</h3><p class="source-detail"><bdi>${r.date || tr("September 5 · year unknown")}</bdi> · ${tr("PDF pages:")} <bdi>${r.pages}</bdi></p><p>${escapeHtml(tr(r.note))}</p></article>`,
+              `<article><h3>${escapeHtml(tr(r.title))}</h3><p class="source-detail"><bdi>${r.date || tr("Date unknown")}</bdi>${r.pages ? ` · ${tr("PDF pages:")} <bdi>${r.pages}</bdi>` : ""}${r.htmlPost ? ` · ${tr("Saved HTML post:")} <bdi>${r.htmlPost}</bdi>` : ""} · ${tr(r.restaurant ? "Lunch candidate" : "Background only")}</p><p>${escapeHtml(tr(r.note))}</p></article>`,
           )
           .join("")}</section>`;
       }
+      const sourcePolicy =
+        "One seat per restaurant. When both sources cover Abu Hassan, the existing blog profile is used; select Daniel alone to use his account. Older or undated reviews receive 5 evidence points.";
       function openInfo(showSources) {
         $("dialog-title").textContent = tr(
           showSources
@@ -2133,7 +2280,7 @@
                     `<article><h3>${escapeHtml(restaurantName(r))} · ${escapeHtml(tr(r.place))}</h3><p>${escapeHtml(tr(r.note))}</p><p class="source-detail">${escapeHtml(tr(SOURCES[r.source].name))} · <bdi>${r.date}</bdi> · ${tr("tags:")} ${r.tags.map(tr).join(", ") || tr("unknown")}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">${escapeHtml(r.url)}</bdi></a></article>`,
                 )
                 .join("")
-            : "");
+            : `<p>${tr(sourcePolicy)}</p>`);
         localize($("dialog-body"));
         $("info").showModal();
       }
