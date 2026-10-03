@@ -96,7 +96,14 @@ table { width: 100%; border-collapse: collapse; font-size: clamp(.82rem, 1.3vw, 
 th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { color: var(--blue); font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; }
 td { color: var(--muted); } td strong { color: var(--ink); }
-.pass { color: var(--green); font-weight: 700; } .fail { color: var(--red); font-weight: 700; }
+.pass { color: var(--green); font-weight: 700; }
+.yes { color: var(--green); font-weight: 800; }
+.no { color: #a39d95; font-weight: 700; }
+table.vs td:first-child { color: var(--ink); font-weight: 600; }
+table.vs td:nth-child(3) { background: rgba(232,131,95,.07); }
+table.vs th:nth-child(3) { color: var(--coral-dark); }
+.oneliner { font-size: clamp(.95rem, 1.5vw, 1.12rem); color: var(--ink); border-left: 4px solid var(--orange); padding: 8px 14px; background: var(--white); border-radius: 4px; }
+.small-note { font-size: .82rem; color: var(--muted); } .fail { color: var(--red); font-weight: 700; }
 
 .big-stats { display: flex; gap: clamp(10px, 2vw, 22px); flex-wrap: wrap; }
 .stat { flex: 1 1 140px; background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--blue); border-radius: 6px; padding: 16px; }
@@ -452,6 +459,32 @@ td { color: var(--muted); } td strong { color: var(--ink); }
   </div>
 </section>
 
+<!-- Real collision test -->
+<section class="slide" data-stage="test">
+  <div class="kicker">Real collision test</div>
+  <h2>One of our own skills vs. our real <span class="grad">49-skill</span> library</h2>
+  <div class="grid2">
+    <div>
+      <p>Target: <code>parasoft-static-analysis-misra-c-2023</code>. Same eval, run alone and then with every other skill on this machine loaded via <code>--skill-library</code>, including its near-twin <code>parasoft-static-analysis</code>.</p>
+      <table>
+        <tr><th>Metric</th><th>Skill alone</th><th>With 48 other skills</th></tr>
+        <tr><td><strong>Trigger recall</strong></td><td>50%</td><td class="fail">25%</td></tr>
+        <tr><td><strong>Trigger precision</strong></td><td class="pass">100%</td><td class="pass">100%</td></tr>
+        <tr><td><strong>MISRA prompts missed</strong></td><td>2 of 4</td><td class="fail">3 of 4</td></tr>
+        <tr><td><strong>MISRA review task (scale.c)</strong></td><td class="pass">✓ passed</td><td class="pass">✓ passed</td></tr>
+      </table>
+      <p class="small-note">Claude Code, Sonnet, one run per prompt, 3 Oct 2026. Treat single runs as signals, not verdicts.</p>
+    </div>
+    <div class="card">
+      <h3>What it found</h3>
+      <p><span class="tag t-red">Lost when crowded</span><br>"Check this C function against MISRA C:2023…" used the skill alone, but <strong>not</strong> once the library was installed.</p>
+      <p><span class="tag t-amber">Never attracted</span><br>Rule questions ("signed/unsigned conversions", "switch without default") were answered from Claude's memory in both runs. The description doesn't claim rule-knowledge questions.</p>
+      <p><span class="tag t-green">Correct routing</span><br>AUTOSAR C++14 went to the sibling <code>parasoft-static-analysis</code>; libFuzzer went to <code>libfuzzer</code>. No false triggers.</p>
+      <p><strong>Action:</strong> sharpen the description to claim MISRA C:2023 rule questions and to say how it differs from <code>parasoft-static-analysis</code>, then re-run both modes.</p>
+    </div>
+  </div>
+</section>
+
 <!-- 10. Demo -->
 <section class="slide" data-stage="test" id="demo-slide">
   <div class="kicker">Demo</div>
@@ -497,6 +530,26 @@ td { color: var(--muted); } td strong { color: var(--ink); }
       <p><em>"Primary weaknesses are fuzzy scope boundaries around code complexity/type and ambiguous guidance about when to invoke versus use file tools directly."</em></p>
     </div>
   </div>
+</section>
+
+<!-- Versus claude plugin eval -->
+<section class="slide" data-stage="review">
+  <div class="kicker">Why Wazatator</div>
+  <h2>Anthropic tests <em>plugins</em>. Wazatator tests <span class="grad">skills</span>.</h2>
+  <table class="vs">
+    <tr><th>Capability</th><th>claude plugin eval</th><th>Wazatator</th></tr>
+    <tr><td>What it tests</td><td>A plugin; the suite lives in the plugin's <code>evals/</code></td><td>Any <code>SKILL.md</code>, wherever it lives; no packaging</td></tr>
+    <tr><td>Agents</td><td>Claude Code</td><td><span class="yes">✓</span> Claude Code and GitHub Copilot from one eval</td></tr>
+    <tr><td>Score with vs. without the skill</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span> <code>--baseline</code></td></tr>
+    <tr><td>Collisions with your other skills</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>--skill-library</code>, prompts stolen per skill</td></tr>
+    <tr><td>Trigger precision / recall / F1</td><td>Per-case "skill fired" check</td><td><span class="yes">✓</span> should / should-not suites, confusion matrix</td></tr>
+    <tr><td>Custom-code graders</td><td><span class="no">–</span> "no custom-code graders"</td><td><span class="yes">✓</span> code, program, JSON schema, file diff</td></tr>
+    <tr><td>Lint the SKILL.md itself</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>check</code> (token budget, compliance), <code>quality</code> (LLM rubric)</td></tr>
+    <tr><td>Prompt-injection / adversarial packs</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>adversarial</code></td></tr>
+    <tr><td>Compare models in one run</td><td>One model per run</td><td><span class="yes">✓</span> <code>--model</code> × N, <code>compare</code></td></tr>
+    <tr><td>Built in, zero install</td><td><span class="yes">✓</span></td><td><span class="no">–</span> CLI + Claude Code plugin</td></tr>
+  </table>
+  <p class="oneliner"><strong>claude plugin eval</strong> tells you whether your plugin helps Claude. <strong>Wazatator</strong> tells you whether your skill is well written, triggers precisely, survives your other skills and attacks, and works across agents and models. Use both.</p>
 </section>
 
 <!-- 12. Get started -->
