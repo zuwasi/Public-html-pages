@@ -33,7 +33,7 @@ const answer = () => ({
       type: "choice",
       choice: "abu-hassan",
       confidence: 0.7,
-      probabilities: { 616: 0.1, "abu-hassan": 0.9 },
+      probabilities: { 616: 0.1, "abu-hassan": 0.9, "shlomo-doron": 0 },
     },
   },
 });
@@ -91,11 +91,13 @@ test("proxy reconstructs approved candidates and discards client-supplied eviden
   assert.deepEqual(request.state.candidates.map((r) => r.id).sort(), [
     "616",
     "abu-hassan",
+    "shlomo-doron",
   ]);
   assert.equal(request.questions.lunch.type, "choice");
   assert.deepEqual(Object.keys(request.questions.lunch.criteria).sort(), [
     "616",
     "abu-hassan",
+    "shlomo-doron",
   ]);
   assert.ok(
     request.state.candidates.every((r) => r.city === "tel-aviv" && r.review),
@@ -115,6 +117,36 @@ test("proxy reconstructs approved candidates and discards client-supplied eviden
     { taste: "sweet" },
   ])
     assert.throws(() => validateInput({ ...base, ...override }));
+});
+
+test("Jev receives the added city and sources with approved review evidence", () => {
+  for (const [city, source, ids] of [
+    ["tel-aviv", "tripadvisor", ["ashkara"]],
+    ["tel-aviv", "humus101", ["616", "abu-hassan", "shlomo-doron"]],
+    ["qalansuwa", "facebook", ["abu-ras", "afif"]],
+  ]) {
+    const { input, result } = validateInput({
+      ...base,
+      city,
+      sources: [source],
+    });
+    const request = plain(buildRequest(input, result));
+    assert.deepEqual(Object.keys(request.questions.lunch.criteria).sort(), ids);
+    assert.deepEqual(request.state.candidates.map((r) => r.id).sort(), ids);
+    assert.ok(
+      request.state.candidates.every((r) => r.city === city && r.review),
+    );
+    if (source === "facebook") {
+      assert.match(
+        request.state.candidates.find((r) => r.id === "afif").review,
+        /Ori Baratz/,
+      );
+      assert.match(
+        request.state.candidates.find((r) => r.id === "abu-ras").review,
+        /Rami Moscovich/,
+      );
+    }
+  }
 });
 
 test("Jev's choice overrides the higher rule score without mutating rule evidence", () => {
@@ -188,7 +220,9 @@ test("probability distributions preserve all options and sort by probability for
   ]) {
     const body = answer();
     edit(body);
-    assert.throws(() => validateAnswer(body, ["616", "abu-hassan"]));
+    assert.throws(() =>
+      validateAnswer(body, ["616", "abu-hassan", "shlomo-doron"]),
+    );
   }
 });
 

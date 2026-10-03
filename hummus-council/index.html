@@ -1212,6 +1212,7 @@
                       <option value="nazareth">Nazareth</option>
                       <option value="ness-ziona">Ness Ziona</option>
                       <option value="kafr-qasim">Kafr Qasim</option>
+                      <option value="qalansuwa">Qalansuwa</option>
                       <option value="beit-dagan">Beit Dagan area</option>
                       <option value="fureidis">Fureidis</option>
                       <option value="rameh">Rameh</option>
@@ -1290,7 +1291,7 @@
                     /><span class="source-name"
                       >Hummus for the Masses
                       <span lang="he">חומוס להמונים</span></span
-                    ><small>4 reviews</small></label
+                    ><small>5 reviews</small></label
                   ><label class="source-row"
                     ><input
                       type="checkbox"
@@ -1317,6 +1318,23 @@
                       checked
                     /><span class="source-name">Daniel's own reviews</span
                     ><small>14 posts · 7 candidates</small></label
+                  ><label class="source-row"
+                    ><input
+                      type="checkbox"
+                      name="sources"
+                      value="tripadvisor"
+                      checked
+                    /><span class="source-name">Tripadvisor</span
+                    ><small>1 review</small></label
+                  ><label class="source-row"
+                    ><input
+                      type="checkbox"
+                      name="sources"
+                      value="facebook"
+                      checked
+                    /><span class="source-name"
+                      >Hummusologists · community reviews</span
+                    ><small>2 reviews</small></label
                   >
                   <div class="hint">
                     Curated review snapshot. No live scraping.
@@ -1478,7 +1496,7 @@
         <footer class="bottom-note">
           <span
             ><b>Real source links. Playful rules. No artificial chickpeas.</b
-            ><br />15 curated places · 4 sources · current opening status
+            ><br />19 curated places · 6 sources · current opening status
             unknown</span
           >
           <button id="sources-button" class="text-button">
@@ -1514,6 +1532,14 @@
         foodout: { name: "Eating Out", url: "https://food-out.blogspot.com/" },
         daniel: {
           name: "Daniel's own reviews",
+          url: "https://www.facebook.com/groups/Msabbaha",
+        },
+        tripadvisor: {
+          name: "Tripadvisor",
+          url: "https://www.tripadvisor.co.il/Restaurant_Review-g293984-d807968-Reviews-Hummus_Ashkara-Tel_Aviv_Tel_Aviv_District.html",
+        },
+        facebook: {
+          name: "Hummusologists · community reviews",
           url: "https://www.facebook.com/groups/Msabbaha",
         },
       };
@@ -1774,6 +1800,54 @@
           date: "2019-05-15",
           url: "https://food-out.blogspot.com/2019/05/pondak-asa.html",
           note: "The author enjoys plain hummus with tahini at this grill restaurant. The tahini-style tag is a demo interpretation; the review does not establish calorie content.",
+        },
+        {
+          id: "ashkara",
+          name: "Hummus Ashkara",
+          he: "חומוס אשכרה",
+          city: "tel-aviv",
+          place: "Tel Aviv · 45 Yirmiyahu Street",
+          tags: [],
+          source: "tripadvisor",
+          date: "2020-02-21",
+          url: SOURCES.tripadvisor.url,
+          note: "Talik Foodie's Tripadvisor review calls Ashkara a legend and praises its hummus and falafel. Other reviewers disagree; no texture tag is established here. Historical review, not a current opening-hours check. The legend gets a chair, not an automatic victory.",
+        },
+        {
+          id: "shlomo-doron",
+          name: "Shlomo & Doron",
+          he: "שלמה ודורון",
+          city: "tel-aviv",
+          place: "Tel Aviv · 29 Yishkon Street, Kerem HaTeimanim",
+          tags: ["chunky"],
+          source: "humus101",
+          date: "2007-12-15",
+          url: "https://humus101.com/251",
+          note: "The 2007 review highlights hummus-ful and describes thick, coarse hummus with cumin, lemon and paprika, surprisingly not heavy. Chunky refers to the coarse texture, not a claim that this is masabacha or low-calorie. The ful minister has requested a permanent seat.",
+        },
+        {
+          id: "afif",
+          name: "Hummus Afif",
+          he: "חומוס עפיף",
+          city: "qalansuwa",
+          place: "Qalansuwa · Al-Quds Street, near the southern entrance",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2025-02-21",
+          url: "https://www.facebook.com/groups/Msabbaha/posts/1544271516214446/",
+          note: "Ori Baratz recommends Afif in Qalansuwa, praises the owner and staff, and describes enjoying masabacha on this visit. The named dish supports the chunky tag, not a lightness claim. This is a community member's review, not Daniel's. The masabacha delegation has arrived.",
+        },
+        {
+          id: "abu-ras",
+          name: "Abu Ras",
+          he: "אבו ראס",
+          city: "qalansuwa",
+          place: "Qalansuwa",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2025-05-24",
+          url: "https://www.facebook.com/groups/Msabbaha/posts/1607683863206544/",
+          note: "Rami Moscovich recommends a hummus-ful-masabacha plate in Qalansuwa, adding chili for a kick. He reports NIS 25 and an offered refill on that visit, not current promises. The named masabacha supports the chunky tag. This is his review, not Daniel's. The chili amendment passed.",
         },
         ...Object.values(DANIEL_REVIEWS)
           .filter((review) => review.restaurant)
@@ -2111,7 +2185,11 @@
         "Hummus for the Masses": "חומוס להמונים",
         "The Hummusai": "החומוסאי",
         "Eating Out": "אוכל בחוץ",
+        Tripadvisor: "טריפאדוויזר",
+        "Hummusologists · community reviews": "חומוסולוגים · ביקורות הקהילה",
+        "5 reviews": "5 ביקורות",
         "4 reviews": "4 ביקורות",
+        "2 reviews": "2 ביקורות",
         "1 review": "ביקורת אחת",
         "Curated review snapshot. No live scraping.":
           "לקט ביקורות שמור. אין שליפה חיה מהמקורות.",
@@ -2159,8 +2237,8 @@
           "לקוח מרוצה שלא היה ולא נברא",
         "Real source links. Playful rules. No artificial chickpeas.":
           "מקורות אמיתיים. חוקים משעשעים. בלי גרגירים מלאכותיים.",
-        "15 curated places · 4 sources · current opening status unknown":
-          "15 מקומות בלקט · 4 מקורות · לא ידוע אם פתוח כעת",
+        "19 curated places · 6 sources · current opening status unknown":
+          "19 מקומות בלקט · 6 מקורות · לא ידוע אם פתוח כעת",
         "Open the evidence cupboard ↗": "לפתוח את ארון הראיות ↗",
         "The evidence cupboard": "ארון הראיות",
         "Close ×": "סגירה ×",
@@ -2265,6 +2343,20 @@
         chunky: "גרגירי / מסבחה",
         "Jaffa · Dolphin Street branch": "יפו · סניף רחוב הדולפין",
         "Tel Aviv · Yehuda HaMaccabi": "תל אביב · יהודה המכבי",
+        Qalansuwa: "קלנסווה",
+        "Tel Aviv · 45 Yirmiyahu Street": "תל אביב · ירמיהו 45",
+        "Tel Aviv · 29 Yishkon Street, Kerem HaTeimanim":
+          "תל אביב · ישכון 29, כרם התימנים",
+        "Qalansuwa · Al-Quds Street, near the southern entrance":
+          "קלנסווה · רחוב אלקודס, ליד הכניסה הדרומית",
+        "Talik Foodie's Tripadvisor review calls Ashkara a legend and praises its hummus and falafel. Other reviewers disagree; no texture tag is established here. Historical review, not a current opening-hours check. The legend gets a chair, not an automatic victory.":
+          "בביקורת של Talik Foodie בטריפאדוויזר אשכרה מתוארת כאגדה, עם שבחים לחומוס ולפלאפל. מבקרים אחרים חולקים על כך; לא נקבעה כאן תגית מרקם. זו ביקורת היסטורית, לא בדיקת שעות פתיחה עדכנית. האגדה מקבלת כיסא, לא ניצחון אוטומטי.",
+        "The 2007 review highlights hummus-ful and describes thick, coarse hummus with cumin, lemon and paprika, surprisingly not heavy. Chunky refers to the coarse texture, not a claim that this is masabacha or low-calorie. The ful minister has requested a permanent seat.":
+          "הביקורת מ־2007 מדגישה את החומוס־פול ומתארת חומוס סמיך וגס עם כמון, לימון ופפריקה, שבמפתיע אינו כבד. התגית הגרגירית מתייחסת למרקם הגס, לא לטענה שזו מסבחה או מנה דלת קלוריות. שר הפול ביקש כיסא קבוע.",
+        "Ori Baratz recommends Afif in Qalansuwa, praises the owner and staff, and describes enjoying masabacha on this visit. The named dish supports the chunky tag, not a lightness claim. This is a community member's review, not Daniel's. The masabacha delegation has arrived.":
+          "אורי ברץ ממליץ על עפיף בקלנסווה, משבח את הבעלים והצוות ומתאר מסבחה שממנה נהנה בביקור. שם המנה תומך בתגית גרגירית, לא בטענה לקלילות. זו ביקורת של חבר בקהילה, לא של דניאל. משלחת המסבחה הגיעה.",
+        "Rami Moscovich recommends a hummus-ful-masabacha plate in Qalansuwa, adding chili for a kick. He reports NIS 25 and an offered refill on that visit, not current promises. The named masabacha supports the chunky tag. This is his review, not Daniel's. The chili amendment passed.":
+          "רמי מוסקוביץ ממליץ על צלחת חומוס־פול־מסבחה בקלנסווה, עם תוספת חריף לשפיץ. הוא מציין 25 ש״ח והצעת מילוי חוזר באותו ביקור, לא הבטחות עדכניות. המסבחה תומכת בתגית גרגירית. זו הביקורת שלו, לא של דניאל. התיקון בנושא החריף אושר.",
         "Jerusalem · Old City": "ירושלים · העיר העתיקה",
         "Beit Dagan / HaShiva interchange area": "אזור בית דגן / מחלף השבעה",
         "The author especially praises the warm, generously seasoned masabacha, and describes a crowded, fast-paced setting.":

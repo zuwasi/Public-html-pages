@@ -22,7 +22,7 @@ const base = {
 test("city and source are hard filters, including a genuinely empty shortlist", () => {
   assert.deepEqual(
     Array.from(decide(base).rows, (r) => r.id),
-    ["616", "abu-hassan"],
+    ["616", "abu-hassan", "shlomo-doron"],
   );
   assert.equal(decide({ ...base, sources: ["hummusai"] }).rows.length, 0);
   const food = decide({ ...base, travel: "any", sources: ["foodout"] }).rows;
@@ -145,13 +145,63 @@ test("HTML evidence changes taste choices without inventing lightness, dates or 
   assert.equal(daniel[0].id, "abu-hassan");
   assert.equal(daniel[0].note, DANIEL_REVIEWS.abuHassan.note);
   const combined = decide({ ...base, travel: "any" });
-  assert.equal(combined.sourced, 15);
+  assert.equal(combined.sourced, 16);
   assert.equal(combined.rows.filter((r) => r.id === "abu-hassan").length, 1);
   assert.equal(
     combined.rows.find((r) => r.id === "abu-hassan").source,
     "humus101",
   );
   assert.equal(decide({ ...input, sources: ["hummusai"] }).rows[0].id, "basha");
+});
+test("added reviews preserve attribution, dates and source/city restrictions", () => {
+  const ashkara = decide({ ...base, sources: ["tripadvisor"] }).rows;
+  assert.equal(ashkara.length, 1);
+  assert.equal(ashkara[0].id, "ashkara");
+  assert.equal(ashkara[0].date, "2020-02-21");
+  assert.equal(ashkara[0].tags.length, 0);
+  assert.equal(ashkara[0].score, 75); // Unknown texture is not a full taste or summer match.
+  assert.match(ashkara[0].url, /d807968-Reviews-Hummus_Ashkara/);
+  const shlomo = decide({ ...base, sources: ["humus101"] }).rows.find(
+    (r) => r.id === "shlomo-doron",
+  );
+  assert.equal(shlomo.date, "2007-12-15");
+  assert.equal(shlomo.url, "https://humus101.com/251");
+  assert.equal(shlomo.parts.evidence, 5);
+  assert.equal(shlomo.tags.join(), "chunky");
+  const community = {
+    ...base,
+    city: "qalansuwa",
+    sources: ["facebook"],
+    taste: "chunky",
+  };
+  const rows = decide(community).rows;
+  assert.deepEqual(
+    Array.from(rows, (r) => [r.id, r.date, r.score]),
+    [
+      ["abu-ras", "2025-05-24", 80],
+      ["afif", "2025-02-21", 80],
+    ],
+  );
+  assert.match(rows[0].note, /Rami Moscovich/);
+  assert.match(rows[1].note, /Ori Baratz/);
+  assert.equal(
+    rows[0].url,
+    "https://www.facebook.com/groups/Msabbaha/posts/1607683863206544/",
+  );
+  assert.equal(
+    rows[1].url,
+    "https://www.facebook.com/groups/Msabbaha/posts/1544271516214446/",
+  );
+  assert.equal(decide({ ...community, sources: ["daniel"] }).rows.length, 0);
+  assert.equal(decide({ ...community, city: "tel-aviv" }).rows.length, 0);
+  assert.equal(
+    decide({ ...community, city: "tel-aviv", travel: "any" }).rows.length,
+    2,
+  );
+  assert.equal(
+    decide({ ...base, travel: "any", sources: Object.keys(SOURCES) }).sourced,
+    19,
+  );
 });
 test("all supported input combinations preserve filters, bounded additive scores and neutral-season invariance", () => {
   const cities = [
@@ -162,12 +212,20 @@ test("all supported input combinations preserve filters, bounded additive scores
     "nazareth",
     "ness-ziona",
     "kafr-qasim",
+    "qalansuwa",
     "beit-dagan",
     "fureidis",
     "rameh",
     "al-lubban",
   ];
-  const sources = ["humus101", "hummusai", "foodout", "daniel"];
+  const sources = [
+    "humus101",
+    "hummusai",
+    "foodout",
+    "daniel",
+    "tripadvisor",
+    "facebook",
+  ];
   for (const city of cities)
     for (const taste of ["light", "rich", "chunky", "any"])
       for (const hunger of [1, 3, 4, 5])
