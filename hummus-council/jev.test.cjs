@@ -230,6 +230,39 @@ test("history keeps only the newest 12 valid timings, strips extra data and is i
   assert.deepEqual(plain(retainJevRuns({})), []);
 });
 
+test("history preserves winner IDs across retention and reload without inventing winners for old entries", () => {
+  const at = "2026-10-03T12:00:00Z";
+  for (let count = 1; count <= 30; count++) {
+    const runs = Array.from({ length: count }, (_, i) => ({
+      ms: 100 + i,
+      at,
+      winnerId: i % 2 ? "abu-hassan" : "616",
+      unwanted: "discard",
+    }));
+    const kept = plain(retainJevRuns(runs));
+    assert.deepEqual(
+      kept,
+      runs.slice(-12).map(({ unwanted, ...r }) => r),
+    );
+    assert.deepEqual(
+      plain(retainJevRuns(JSON.parse(JSON.stringify(kept)))),
+      kept,
+    );
+  }
+  for (const winnerId of [
+    undefined,
+    null,
+    616,
+    {},
+    "",
+    "<img src=x>",
+    "x".repeat(81),
+  ])
+    assert.deepEqual(plain(retainJevRuns([{ ms: 154, at, winnerId }])), [
+      { ms: 154, at },
+    ]);
+});
+
 test("health, invalid input, authorization, origin and empty shortlist never call the provider", async (t) => {
   let calls = 0;
   const app = await setup(t, {

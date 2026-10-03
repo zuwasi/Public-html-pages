@@ -1004,24 +1004,26 @@
       }
       .jev-chart {
         display: grid;
-        grid-template-columns: repeat(12, minmax(0, 1fr));
-        align-items: end;
-        gap: 5px;
-        height: 108px;
+        grid-auto-flow: column;
+        grid-auto-columns: 84px;
+        justify-content: start;
+        align-items: start;
+        gap: 8px;
+        overflow-x: auto;
         direction: ltr;
         border-bottom: 1px solid var(--line);
-        padding-top: 15px;
+        padding: 15px 0 8px;
       }
       .jev-column {
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
+        display: grid;
+        grid-template-rows: 80px auto auto;
         align-items: center;
-        height: 100%;
+        text-align: center;
         min-width: 0;
       }
       .jev-column i {
         display: block;
+        align-self: end;
         width: 100%;
         min-height: 3px;
         background: #698354;
@@ -1033,6 +1035,16 @@
       .jev-column small {
         font: 10px monospace;
         padding-top: 4px;
+      }
+      .jev-winner {
+        font-size: 11px;
+        line-height: 1.4;
+        padding-top: 5px;
+        overflow-wrap: anywhere;
+      }
+      .jev-winner span {
+        display: block;
+        color: var(--muted);
       }
       #jev-result-note {
         border-inline-start: 3px solid #698354;
@@ -1163,8 +1175,10 @@
               id="jev-chart"
               class="jev-chart"
               role="img"
+              tabindex="0"
               aria-label="No measured Jev requests yet"
             ></div>
+            <p>Scroll the chart to see all runs.</p>
             <p id="jev-timing">
               Server-to-Jev round trip, including network time. Not pure model
               inference time. No animation delays or invented samples.
@@ -1863,7 +1877,14 @@
               Number.isFinite(Date.parse(r.at)),
           )
           .slice(-12)
-          .map(({ ms, at }) => ({ ms, at }));
+          .map(({ ms, at, winnerId }) => ({
+            ms,
+            at,
+            ...(typeof winnerId === "string" &&
+            /^[a-z0-9-]{1,80}$/.test(winnerId)
+              ? { winnerId }
+              : {}),
+          }));
       }
       function applyJevChoice(result, answer) {
         const ids = result.rows.map((r) => r.id);
@@ -1992,6 +2013,10 @@
         "Median · ms": "חציון · מילישניות",
         "Successful calls": "קריאות מוצלחות",
         "No measured Jev requests yet": "עדיין אין קריאות Jev שנמדדו",
+        "Winner not recorded": "הזוכה לא נשמר",
+        "Town not recorded": "היישוב לא נשמר",
+        "Scroll the chart to see all runs.":
+          "גללו את הגרף כדי לראות את כל הריצות.",
         "Server-to-Jev round trip, including network time. Not pure model inference time. No animation delays or invented samples.":
           "זמן הלוך ושוב מהשרת ל־Jev, כולל תקשורת. לא זמן חישוב נטו של המודל. ללא עיכובי אנימציה וללא דגימות מומצאות.",
         "Exact timings": "המדידות המדויקות",
@@ -2333,22 +2358,37 @@
           : "∅";
         $("jev-count").textContent = `${count} / 12`;
         const max = Math.max(1, ...sorted);
-        $("jev-chart").innerHTML = jevRuns
+        const labeledRuns = jevRuns.map((r) => {
+          const winner = RESTAURANTS.find(
+            (candidate) => candidate.id === r.winnerId,
+          );
+          return {
+            ...r,
+            name: winner ? restaurantName(winner) : tr("Winner not recorded"),
+            town: winner
+              ? [...$("city").options].find(
+                  (option) => option.value === winner.city,
+                ).textContent
+              : tr("Town not recorded"),
+          };
+        });
+        $("jev-chart").innerHTML = labeledRuns
           .map(
             (r, i) =>
-              `<div class="jev-column" title="${r.ms} ms"><i style="height:${Math.max(3, (r.ms / max) * 80)}px"></i><small>${i + 1}</small></div>`,
+              `<div class="jev-column" title="${escapeHtml(`${r.name} · ${r.town} · ${r.ms} ms`)}"><i style="height:${Math.max(3, (r.ms / max) * 80)}px"></i><small>${i + 1} · ${r.ms} ms</small><div class="jev-winner" dir="${hebrew ? "rtl" : "ltr"}"><b>${escapeHtml(r.name)}</b><span>${escapeHtml(r.town)}</span></div></div>`,
           )
           .join("");
+        $("jev-chart").scrollLeft = $("jev-chart").scrollWidth;
         $("jev-chart").setAttribute(
           "aria-label",
           count
-            ? `${tr("Last 12 Jev runs")}: ${jevRuns.map((r) => `${r.ms} ms`).join(", ")}`
+            ? `${tr("Last 12 Jev runs")}: ${labeledRuns.map((r) => `${r.name} · ${r.town} · ${r.ms} ms`).join(", ")}`
             : tr("No measured Jev requests yet"),
         );
-        $("jev-run-list").innerHTML = jevRuns
+        $("jev-run-list").innerHTML = labeledRuns
           .map(
             (r) =>
-              `<li><bdi>${new Date(r.at).toLocaleTimeString(hebrew ? "he-IL" : "en-GB")}</bdi>: <bdi>${r.ms} ms</bdi></li>`,
+              `<li><bdi>${new Date(r.at).toLocaleTimeString(hebrew ? "he-IL" : "en-GB")}</bdi>: <bdi>${r.ms} ms</bdi> · ${escapeHtml(r.name)} · ${escapeHtml(r.town)}</li>`,
           )
           .join("");
       }
@@ -2433,7 +2473,11 @@
         const decision = applyJevChoice(result, answer);
         jevRuns = retainJevRuns([
           ...jevRuns,
-          { ms: answer.upstreamMs, at: new Date().toISOString() },
+          {
+            ms: answer.upstreamMs,
+            at: new Date().toISOString(),
+            winnerId: answer.choice,
+          },
         ]);
         try {
           localStorage.setItem(historyKey, JSON.stringify(jevRuns));
