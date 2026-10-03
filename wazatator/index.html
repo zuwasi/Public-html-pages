@@ -480,7 +480,44 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
       <p><span class="tag t-red">Lost when crowded</span><br>"Check this C function against MISRA C:2023…" used the skill alone, but <strong>not</strong> once the library was installed.</p>
       <p><span class="tag t-amber">Never attracted</span><br>Rule questions ("signed/unsigned conversions", "switch without default") were answered from Claude's memory in both runs. The description doesn't claim rule-knowledge questions.</p>
       <p><span class="tag t-green">Correct routing</span><br>AUTOSAR C++14 went to the sibling <code>parasoft-static-analysis</code>; libFuzzer went to <code>libfuzzer</code>. No false triggers.</p>
-      <p><strong>Action:</strong> sharpen the description to claim MISRA C:2023 rule questions and to say how it differs from <code>parasoft-static-analysis</code>, then re-run both modes.</p>
+      <p><strong>Action:</strong> sharpen the description to claim MISRA C:2023 rule questions and to say how it differs from <code>parasoft-static-analysis</code>, then re-run both modes. <strong>Result on the next slide.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- Collision fix proof -->
+<section class="slide" data-stage="code">
+  <div class="kicker">Finding → fix → proof</div>
+  <h2>One description change: recall <span class="grad">25% → 100%</span>, even in a crowd</h2>
+  <div class="grid2">
+    <div>
+      <div class="file">parasoft-static-analysis-misra-c-2023/SKILL.md (frontmatter only)</div>
+<pre><span class="del">- description: "Analyzes C/C++ code using Parasoft C/C++test</span>
+<span class="del">-   static analysis rules combined with MISRA C:2023 standard.</span>
+<span class="del">-   Covers MISRA-C:2023, CERT-C, AUTOSAR, CWE, ... Use when</span>
+<span class="del">-   reviewing code for MISRA C:2023 compliance ..."</span>
+<span class="add">+ description: "MISRA C:2023 expert with the matching Parasoft</span>
+<span class="add">+   C/C++test checkers. Use for ANY request that names MISRA</span>
+<span class="add">+   C:2023: what a rule requires, whether a construct violates</span>
+<span class="add">+   it (goto, switch without default, signed/unsigned or</span>
+<span class="add">+   narrowing conversions), rule numbers such as Rule 10.4 ...</span>
+<span class="add">+   Prefer this over parasoft-static-analysis whenever MISRA</span>
+<span class="add">+   C:2023 is named; use parasoft-static-analysis for AUTOSAR,</span>
+<span class="add">+   CERT, or older MISRA editions."</span></pre>
+      <p class="small-note">Same 9 trigger prompts and review task, Claude Code, Sonnet, one run per prompt, 3 Oct 2026.</p>
+    </div>
+    <div>
+      <table>
+        <tr><th>Trigger recall</th><th>Before</th><th>After</th></tr>
+        <tr><td><strong>Skill alone</strong></td><td class="fail">50%</td><td class="pass">100%</td></tr>
+        <tr><td><strong>With 48 other skills</strong></td><td class="fail">25%</td><td class="pass">100%</td></tr>
+        <tr><td><strong>Precision (both modes)</strong></td><td class="pass">100%</td><td class="pass">100%</td></tr>
+        <tr><td><strong>MISRA review task</strong></td><td class="pass">✓</td><td class="pass">✓</td></tr>
+      </table>
+      <div class="card" style="margin-top:14px">
+        <h3>Why it worked</h3>
+        <p>The old description listed standards; the new one <strong>claims the questions users actually ask</strong> and <strong>draws the line</strong> against its near-twin. AUTOSAR still routes to <code>parasoft-static-analysis</code> and libFuzzer to <code>libfuzzer</code>: the fix didn't steal anyone else's prompts.</p>
+      </div>
     </div>
   </div>
 </section>
