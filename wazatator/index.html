@@ -236,7 +236,7 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
     <span class="pill">Open source · MIT</span>
     <span class="pill">Windows · macOS · Linux</span>
     <span class="pill">Claude Code plugin</span>
-    <span class="pill">v0.1.0</span>
+    <span class="pill">v0.2.0</span>
   </div>
 </section>
 
@@ -587,6 +587,25 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
     <tr><td>Built in, zero install</td><td><span class="yes">✓</span></td><td><span class="no">–</span> CLI + Claude Code plugin</td></tr>
   </table>
   <p class="oneliner"><strong>claude plugin eval</strong> tells you whether your plugin helps Claude. <strong>Wazatator</strong> tells you whether your skill is well written, triggers precisely, survives your other skills and attacks, and works across agents and models. Use both.</p>
+</section>
+
+<!-- Versus prompt-audit -->
+<section class="slide" data-stage="review">
+  <div class="kicker">Q&amp;A: does it overlap with prompt-audit?</div>
+  <h2>prompt-audit <em>reads</em> your instructions. Wazatator <span class="grad">runs</span> them.</h2>
+  <p>Lance Martin's <code>/claude-api prompt-audit</code> (also <code>/checkup prompt-audit</code>) scans CLAUDE.md, AGENTS.md, skills and prompts for six anti-patterns newer models no longer need: verification rituals, emphasis boosters, mandatory scaffolds, stale few-shot examples, contradictory rules, and dated configuration.</p>
+  <table class="vs">
+    <tr><th></th><th>prompt-audit</th><th>Wazatator</th></tr>
+    <tr><td>Method</td><td>Static review of the instruction text</td><td>Runs real Claude Code sessions and grades them</td></tr>
+    <tr><td>Scope</td><td>CLAUDE.md, AGENTS.md, skills, agents, prompts</td><td>Skills and <code>.agent.md</code> agents</td></tr>
+    <tr><td>Finds</td><td>Wording that <em>may</em> hurt performance</td><td>Behavior that <em>does</em>: missed triggers, collisions, wrong answers, policy violations, cost</td></tr>
+    <tr><td>Proves a change helped</td><td><span class="no">–</span> advice</td><td><span class="yes">✓</span> before/after, <code>--baseline</code>, <code>compare</code></td></tr>
+    <tr><td>Overlap</td><td colspan="2">Static review only: <code>wazatator quality</code> also scores an <code>anti_patterns</code> dimension</td></tr>
+  </table>
+  <div class="grid2">
+    <div class="card"><h3>Complementary, not competing</h3><p>prompt-audit says "delete this rule". It can't tell you whether deleting it breaks the skill; Wazatator measures exactly that. The MISRA skill's text looked fine, yet only running it showed 25% recall in a crowded library.</p></div>
+    <div class="card"><h3>Audit it, then prove it</h3><p>1. Run prompt-audit and apply its suggestions.<br>2. Re-run <code>wazatator run --baseline</code> and <code>--skill-library</code>.<br>3. Keep the change only if the scores hold or improve.</p></div>
+  </div>
 </section>
 
 <!-- 12. Get started -->
