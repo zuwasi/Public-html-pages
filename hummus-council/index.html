@@ -924,6 +924,128 @@
           scroll-behavior: auto !important;
         }
       }
+      .jev-dashboard {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 24px;
+      }
+      .jev-widget {
+        padding: 22px;
+        min-width: 0;
+      }
+      .jev-widget h2 {
+        font-size: 19px;
+        margin: 8px 0;
+      }
+      .jev-widget p {
+        font-size: 12px;
+        line-height: 1.6;
+        color: var(--muted);
+      }
+      .jev-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .jev-status::before {
+        content: "";
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #a37322;
+        flex-shrink: 0;
+      }
+      .jev-status[data-state="success"]::before {
+        background: #4a7049;
+      }
+      .jev-status[data-state="error"]::before {
+        background: #b54834;
+      }
+      .jev-access {
+        display: flex;
+        gap: 8px;
+        align-items: end;
+        flex-wrap: wrap;
+        margin-top: 14px;
+      }
+      .jev-access .field {
+        flex: 1;
+        min-width: 150px;
+        margin-bottom: 0;
+      }
+      #access-code {
+        width: 100%;
+        min-width: 0;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: transparent;
+        font: inherit;
+      }
+      .jev-metrics {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin: 12px 0;
+      }
+      .jev-metrics strong {
+        display: block;
+        font-size: 24px;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+        direction: ltr;
+      }
+      .jev-metrics span {
+        font-size: 11px;
+        color: var(--muted);
+      }
+      .jev-chart {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        align-items: end;
+        gap: 5px;
+        height: 108px;
+        direction: ltr;
+        border-bottom: 1px solid var(--line);
+        padding-top: 15px;
+      }
+      .jev-column {
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        align-items: center;
+        height: 100%;
+        min-width: 0;
+      }
+      .jev-column i {
+        display: block;
+        width: 100%;
+        min-height: 3px;
+        background: #698354;
+        border-radius: 4px 4px 0 0;
+      }
+      .jev-column:last-child i {
+        background: #d78344;
+      }
+      .jev-column small {
+        font: 10px monospace;
+        padding-top: 4px;
+      }
+      #jev-result-note {
+        border-inline-start: 3px solid #698354;
+        padding-inline-start: 12px;
+      }
+      @media (max-width: 650px) {
+        .jev-dashboard {
+          grid-template-columns: 1fr;
+        }
+        .jev-widget {
+          padding: 16px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -945,7 +1067,7 @@
           <img src="jev-logo.png" alt="" width="44" height="44" />
           <span>
             <span dir="ltr">Powered by Jev</span>
-            <small>Concept demo · no live API</small>
+            <small>Live decision API</small>
           </span>
         </button>
         <nav class="nav" aria-label="About this demo">
@@ -980,6 +1102,77 @@
             100% opinions.<br />0% actual<br />chickpeas.<span
               >EST. FIVE MINUTES AGO</span
             >
+          </div>
+        </section>
+        <section class="jev-dashboard" aria-label="Jev connection and speed">
+          <div class="panel jev-widget">
+            <div class="eyebrow">THE CHICKPEA CONNECTION</div>
+            <h2>Jev is on the council.</h2>
+            <div
+              id="jev-status"
+              class="jev-status"
+              role="status"
+              aria-live="polite"
+            >
+              Checking the proxy…
+            </div>
+            <p>
+              Jev chooses among eligible restaurants using your preferences and
+              the curated reviews. City/source filters and the visible rule
+              points stay in our code.
+            </p>
+            <p id="jev-detail">
+              A ready proxy is not proof of a successful Jev call.
+            </p>
+            <div class="jev-access">
+              <div class="field">
+                <label for="access-code"
+                  >Demo access code (not your API key)</label
+                ><input
+                  id="access-code"
+                  type="password"
+                  autocomplete="off"
+                  maxlength="200"
+                />
+              </div>
+              <button id="jev-check" class="small-button" type="button">
+                Check connection
+              </button>
+            </div>
+            <p>
+              Your brief and eligible review summaries are sent to TypeSafe AI.
+              The API key stays on the server. The access code is not saved.
+            </p>
+          </div>
+          <div class="panel jev-widget">
+            <div class="eyebrow">FASTER THAN ARGUING ABOUT TAHINI</div>
+            <h2>Last 12 Jev runs</h2>
+            <div class="jev-metrics">
+              <div>
+                <strong id="jev-last">∅</strong><span>Latest · ms</span>
+              </div>
+              <div>
+                <strong id="jev-median">∅</strong><span>Median · ms</span>
+              </div>
+              <div>
+                <strong id="jev-count">0 / 12</strong
+                ><span>Successful calls</span>
+              </div>
+            </div>
+            <div
+              id="jev-chart"
+              class="jev-chart"
+              role="img"
+              aria-label="No measured Jev requests yet"
+            ></div>
+            <p id="jev-timing">
+              Server-to-Jev round trip, including network time. Not pure model
+              inference time. No animation delays or invented samples.
+            </p>
+            <details>
+              <summary>Exact timings</summary>
+              <ol id="jev-run-list"></ol>
+            </details>
           </div>
         </section>
         <div class="workspace">
@@ -1203,14 +1396,15 @@
                     <span class="avatar" aria-hidden="true">♡</span
                     ><span class="layer-title"
                       >Your Inner Chickpea<small
-                        >LAYER 04 · TASTE &amp; FINAL SCORE</small
+                        >LAYER 04 · JEV'S FINAL CHOICE</small
                       ></span
                     ><span class="layer-mark">+</span>
                   </summary>
                   <p>
-                    Your chosen texture gets the biggest taste bonus. The
-                    council adds up the visible points. Ties go alphabetically,
-                    because arm-wrestling chickpeas is impractical.
+                    Jev reads the eligible reviews and your preferences, then
+                    chooses lunch. The visible points explain our rule baseline,
+                    not Jev's internal reasoning. The chickpeas declined an
+                    interview.
                   </p>
                 </details>
               </div>
@@ -1655,6 +1849,58 @@
         return { season, weights, rows, sourced: sourced.length, urgent };
       }
     </script>
+    <script id="jev-client">
+      // The public page calls the owner's Railway proxy; credentials stay on that server.
+      const JEV_PROXY = "https://jev-proxy-production-474e.up.railway.app";
+      function retainJevRuns(runs) {
+        return (Array.isArray(runs) ? runs : [])
+          .filter(
+            (r) =>
+              Number.isFinite(r?.ms) &&
+              r.ms >= 0 &&
+              r.ms < 60000 &&
+              typeof r.at === "string" &&
+              Number.isFinite(Date.parse(r.at)),
+          )
+          .slice(-12)
+          .map(({ ms, at }) => ({ ms, at }));
+      }
+      function applyJevChoice(result, answer) {
+        const ids = result.rows.map((r) => r.id);
+        if (
+          !ids.includes(answer?.choice) ||
+          !Number.isFinite(answer.upstreamMs) ||
+          answer.upstreamMs < 0 ||
+          answer.upstreamMs >= 60000 ||
+          !Number.isFinite(answer.confidence) ||
+          answer.confidence < 0 ||
+          answer.confidence > 1 ||
+          typeof answer.model !== "string" ||
+          !answer.model.startsWith("jev-") ||
+          ids.some(
+            (id) =>
+              !Number.isFinite(answer.probabilities?.[id]) ||
+              answer.probabilities[id] < 0 ||
+              answer.probabilities[id] > 1,
+          )
+        )
+          throw new Error(
+            "Jev could not complete this request. No rule-only fallback was used.",
+          );
+        return {
+          ...result,
+          jev: answer,
+          rows: [...result.rows].sort((a, b) =>
+            a.id === answer.choice
+              ? -1
+              : b.id === answer.choice
+                ? 1
+                : answer.probabilities[b.id] - answer.probabilities[a.id] ||
+                  a.name.localeCompare(b.name, "en"),
+          ),
+        };
+      }
+    </script>
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
@@ -1726,28 +1972,68 @@
         Rameh: "ראמה",
         "Al-Lubban al-Gharbi": "א־לובאן אל־ע׳רבי",
         "Kafr Qasim · 70 Al-Sultani Street": "כפר קאסם · א־סולטאני 70",
-        "Concept demo · no live API": "הדגמה רעיונית · ללא חיבור חי",
+        "Live decision API": "ממשק החלטות חי",
         "Jev, meet the chickpeas": "Jev, תכיר את הגרגירים",
-        "Demo, not a live Jev integration.": "הדגמה בלבד, לא חיבור חי ל־Jev.",
-        "The credit refers to Jev's decision-layer idea. This app does not call Jev or its API. All filtering, points and verdicts run locally in your browser; no inputs are sent to TypeSafe AI.":
-          "הקרדיט מתייחס לרעיון שכבת ההחלטה של Jev. האפליקציה לא מפעילה את Jev ולא קוראת לממשק שלו. הסינון, הניקוד והתוצאות מחושבים מקומית בדפדפן; שום קלט לא נשלח ל־TypeSafe AI.",
+        "Jev connection and speed": "החיבור ל־Jev ומהירות ההחלטה",
+        "THE CHICKPEA CONNECTION": "הקו החם לגרגירים",
+        "Jev is on the council.": "Jev מצטרף למועצה.",
+        "Checking the proxy…": "בודקים את שרת החיבור…",
+        "Jev chooses among eligible restaurants using your preferences and the curated reviews. City/source filters and the visible rule points stay in our code.":
+          "Jev בוחר בין המסעדות המתאימות לפי ההעדפות שלך ולקט הביקורות. הסינון לפי עיר ומקורות והנקודות הגלויות מחושבים בקוד שלנו.",
+        "A ready proxy is not proof of a successful Jev call.":
+          "שרת חיבור מוכן אינו אישור שהקריאה ל־Jev הצליחה.",
+        "Demo access code (not your API key)": "קוד גישה להדגמה (לא מפתח API)",
+        "Check connection": "בדיקת חיבור",
+        "Your brief and eligible review summaries are sent to TypeSafe AI. The API key stays on the server. The access code is not saved.":
+          "ההעדפות שלך ותקצירי הביקורות המתאימים נשלחים ל־TypeSafe AI. מפתח ה־API נשאר בשרת. קוד הגישה אינו נשמר.",
+        "FASTER THAN ARGUING ABOUT TAHINI": "יותר מהר מוויכוח על טחינה",
+        "Last 12 Jev runs": "12 הריצות האחרונות של Jev",
+        "Latest · ms": "האחרונה · מילישניות",
+        "Median · ms": "חציון · מילישניות",
+        "Successful calls": "קריאות מוצלחות",
+        "No measured Jev requests yet": "עדיין אין קריאות Jev שנמדדו",
+        "Server-to-Jev round trip, including network time. Not pure model inference time. No animation delays or invented samples.":
+          "זמן הלוך ושוב מהשרת ל־Jev, כולל תקשורת. לא זמן חישוב נטו של המודל. ללא עיכובי אנימציה וללא דגימות מומצאות.",
+        "Exact timings": "המדידות המדויקות",
+        "Proxy ready · Jev not checked": "השרת מוכן · Jev טרם נבדק",
+        "Server setup required": "נדרשת הגדרת השרת",
+        "Proxy unavailable": "שרת החיבור אינו זמין",
+        "Calling Jev…": "Jev מתלבט…",
+        "Last Jev call succeeded": "הקריאה האחרונה ל־Jev הצליחה",
+        "Jev request failed": "הקריאה ל־Jev נכשלה",
+        "No verdict was produced. Check the connection and try again.":
+          "לא התקבלה החלטה. בדקו את החיבור ונסו שוב.",
+        "Enter the demo access code, not a provider API key.":
+          "הזינו קוד גישה להדגמה, לא מפתח API של הספק.",
+        "The demo access code was rejected.": "קוד הגישה להדגמה נדחה.",
+        "The server's Jev key was rejected. Ask the owner to check it.":
+          "מפתח Jev שבשרת נדחה. יש לפנות לבעל ההדגמה.",
+        "Jev credits are exhausted.": "יתרת הקרדיטים של Jev אזלה.",
+        "The server's call allowance is exhausted.": "מכסת הקריאות בשרת מוצתה.",
+        "Please wait a few seconds before another vote.":
+          "יש להמתין כמה שניות לפני הצבעה נוספת.",
+        "Jev could not complete this request. No rule-only fallback was used.":
+          "Jev לא הצליח להשלים את הבקשה. לא הופעלה חלופה שמבוססת רק על חוקים.",
+        "Jev reads the eligible reviews and your preferences, then chooses lunch. The visible points explain our rule baseline, not Jev's internal reasoning. The chickpeas declined an interview.":
+          "Jev קורא את הביקורות המתאימות ואת ההעדפות שלך ובוחר ארוחה. הנקודות הגלויות מסבירות את בסיס החוקים שלנו, לא את השיקולים הפנימיים של Jev. הגרגירים סירבו להתראיין.",
+        "Rule fit / 100": "התאמה לחוקים מתוך 100",
+        "One call. One typed choice. Zero invented restaurants.":
+          "קריאה אחת. בחירה מובנית אחת. אפס מסעדות מומצאות.",
+        "The server rebuilds the shortlist from approved reviews, then calls TypeSafe's Jev Choice API. Jev selects the winner; its option probabilities order the alternatives. The 0–100 rule score is shown separately, not as model confidence.":
+          "השרת בונה מחדש את הרשימה מהביקורות המאושרות וקורא לממשק Choice של Jev מבית TypeSafe. Jev בוחר את הזוכה; הסתברויות האפשרויות מסדרות את החלופות. ציון החוקים בין 0 ל־100 מוצג בנפרד, ולא כרמת ביטחון של המודל.",
+        "The connection indicator reports proxy readiness or the last actual request, not continuous provider availability. Failed calls produce no verdict and no histogram bar. Timings are the last 12 successful server-to-Jev round trips in this browser; network time is included. A single eligible option is not a meaningful comparison.":
+          "מחוון החיבור מדווח על מוכנות השרת או על הבקשה האחרונה שבוצעה, לא על זמינות רציפה של הספק. קריאה שנכשלה אינה מפיקה החלטה או עמודה בגרף. המדידות הן 12 הקריאות המוצלחות האחרונות מהשרת ל־Jev בדפדפן זה, כולל זמן תקשורת. מועמד יחיד אינו השוואה משמעותית.",
+        "If the provider fails, the council adjourns. It does not impersonate Jev.":
+          "אם הספק נכשל, המועצה נועלת את הישיבה. היא לא מתחזה ל־Jev.",
         "What is Jev?": "מה זה Jev?",
         "Jev is TypeSafe AI's System One model: give it context and focused, typed questions, and it returns structured answers and probabilities. Questions can be evaluated independently in parallel; application code combines the answers. Jev does not generate the council's jokes or explanations.":
           "Jev הוא מודל System One של TypeSafe AI: מספקים לו הקשר ושאלות ממוקדות עם סוגי תשובות מוגדרים, והוא מחזיר תשובות מובנות והסתברויות. אפשר להעריך שאלות עצמאיות במקביל; קוד האפליקציה משלב את התשובות. Jev אינו מייצר את הבדיחות או ההסברים של המועצה.",
-        "The idea, served in four layers": "הרעיון, מוגש בארבע שכבות",
-        "Our council illustrates separating a big decision into small factors, then combining them in code. These characters are not Jev's internal stages. Their dramatic pauses are animation, not measured model latency.":
-          "המועצה ממחישה פירוק של החלטה גדולה לשיקולים קטנים ושילובם בקוד. הדמויות אינן שלבים פנימיים של Jev. ההפסקות הדרמטיות הן אנימציה, לא מדידה של זמן תגובת המודל.",
         "Logistics: your city and travel setting filter candidates; hunger changes how much location matters. Geography gets louder when your stomach does.":
           "לוגיסטיקה: העיר והנכונות לנסוע מסננות מועמדים; הרעב משנה את משקל המיקום. כשהבטן מרימה קול, גם הגאוגרפיה.",
         "Evidence: selected sources limit the shortlist. Dated, manually curated reviews supply style tags where supported, not live opening hours. The archaeologist brought a bibliography, not a reservation.":
           "ראיות: המקורות שנבחרו מצמצמים את הרשימה. ביקורות מתוארכות שנבחרו ידנית מספקות תגיות סגנון כשיש להן ביסוס, לא שעות פתיחה בזמן אמת. הארכאולוג הביא ביבליוגרפיה, לא הזמנה לשולחן.",
         "Season: calendar rules reward lighter textures in summer and richer styles in winter. A sweater is a preference, not a medical degree.":
           "עונה: כללי לוח השנה נותנים בונוס למרקם קליל בקיץ ולסגנון עשיר בחורף. סוודר הוא העדפה, לא תואר ברפואה.",
-        "Taste and verdict: match your preference to the curated tags, add the visible points and rank the candidates. The 0–100 total is a local fit score, not Jev confidence or a probability.":
-          "טעם ותוצאה: משווים את ההעדפה שלך לתגיות שבלקט, מחברים את הנקודות הגלויות ומדרגים את המועמדים. הציון בין 0 ל־100 הוא ציון התאמה מקומי, לא רמת ביטחון של Jev ולא הסתברות.",
-        "What a live Jev version could add": "מה חיבור חי ל־Jev יכול להוסיף",
-        "For example: Choice could classify a review's texture description; Score could assess review relevance against a defined rubric; Noul could assess whether a review supports a specific claim. Those are possible future model questions, not API calls implemented here. City filters and final scoring would still belong to the app.":
-          "לדוגמה: Choice יכול לסווג תיאור מרקם בביקורת; Score יכול להעריך רלוונטיות של ביקורת לפי סולם מוגדר; Noul יכול להעריך אם ביקורת תומכת בטענה מסוימת. אלה שאלות אפשריות למודל בעתיד, לא קריאות שמומשו כאן. סינון לפי עיר והניקוד הסופי עדיין יהיו באחריות האפליקציה.",
         "The committee has a framework. You still have to bring the pita.":
           "לוועדה יש מסגרת החלטה. את הפיתה עדיין צריך להביא לבד.",
         "The Hummus Council": "מועצת גדולי החומוס",
@@ -1826,9 +2112,7 @@
         "June through September: a lighter dip gets a bonus. December through February: rich hummus gets its moment. This is a playful preference rule, not nutrition advice.":
           "מיוני עד ספטמבר: חומוס קליל מקבל בונוס. מדצמבר עד פברואר: החומוס העשיר מקבל את הבמה. זה כלל משעשע להעדפות, לא ייעוץ תזונתי.",
         "Your Inner Chickpea": "הגרגיר הפנימי שלך",
-        "LAYER 04 · TASTE & FINAL SCORE": "שכבה 04 · טעם וציון סופי",
-        "Your chosen texture gets the biggest taste bonus. The council adds up the visible points. Ties go alphabetically, because arm-wrestling chickpeas is impractical.":
-          "המרקם שבחרת מקבל את מלוא נקודות הטעם. המועצה מחברת את הנקודות המוצגות. תיקו מוכרע לפי השם באנגלית, כי הורדת ידיים בין גרגירים זה לא מעשי.",
+        "LAYER 04 · JEV'S FINAL CHOICE": "שכבה 04 · הבחירה הסופית של Jev",
         "COUNCIL MINUTES": "פרוטוקול המועצה",
         "“We could just eat somewhere.”": "״אפשר פשוט לאכול איפשהו.״",
         "Motion rejected. We have a process.": "ההצעה נדחתה. יש פה נוהל.",
@@ -1890,8 +2174,8 @@
           "נתת לכל המרקמים ניקוד טעם זהה.",
         "Its curated style tags match your taste.":
           "תגיות הסגנון בלקט מתאימות לטעם שלך.",
-        "Its tagged style does not match your chosen taste; other factors won.":
-          "הסגנון המתויג לא תואם לטעם שבחרת; שיקולים אחרים הכריעו.",
+        "Its tagged style does not match your chosen taste, despite Jev's selection.":
+          "הסגנון המתויג לא תואם לטעם שבחרת, למרות הבחירה של Jev.",
         "The review does not establish your chosen texture, so taste gets half credit.":
           "הביקורת לא מאשרת את המרקם שבחרת, ולכן ניתן חצי מניקוד הטעם.",
         "✓ MOTION DELICIOUSLY CARRIED": "✓ ההצעה התקבלה בתיאבון",
@@ -1930,8 +2214,6 @@
         "Winter scenario loaded. Same preferences, sweater weather. Convene the council to compare.":
           "תרחיש החורף נטען. אותן העדפות, מזג אוויר לסוודר. אפשר לכנס את המועצה להשוואה.",
         "How a chickpea becomes a decision": "איך גרגיר הופך להחלטה",
-        "A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.":
-          "בוחר ארוחת צהריים מסובך בכוונה. שכבות המועצה בדיוניות ואינן מימוש של מסגרת החלטה חיצונית מאומתת. אין שימוש בשירות בינה מלאכותית, שליפת מידע חיה, שירות מזג אוויר או איתור מיקום. הנתונים שלך נשארים בדפדפן הזה.",
         "The rules are simple and visible:": "הכללים פשוטים וגלויים:",
         "Selected sources determine eligibility. “My city only” is a hard filter.":
           "המקורות שנבחרו קובעים מי נכנס להצבעה. ״רק בעיר שלי״ הוא סינון מחייב.",
@@ -1945,8 +2227,6 @@
           "בקיץ (יוני עד ספטמבר) תגיות קלילות מקבלות בונוס. בחורף (דצמבר עד פברואר) תגיות עשירות מקבלות בונוס. בחודשים אחרים, כשההצבעה העונתית כבויה או כשהסגנון לא ידוע, ניתן חצי מהניקוד, בעיגול כלפי מעלה לפי הצורך.",
         "Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.":
           "ראיות: ביקורות משנת 2020 ואילך מקבלות 10 נקודות; ישנות יותר מקבלות 5. זה סף קבוע לצורכי הדגמה, לא הבטחה לעדכניות.",
-        "Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.":
-          "הציון הכולל הגבוה ביותר מנצח. תיקו מוכרע לפי סדר השמות באנגלית, בשתי השפות. תגיות עשויות לתאר מנות שונות באותו מקום.",
         "What the demo does not know:": "מה ההדגמה לא יודעת:",
         "current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.":
           "אם המקום פעיל כיום, שעות בחגים, תורים, מחירים, מזג אוויר, אלרגיות, תעודת כשרות או זמינות מנות. התאריך קובע העדפה עונתית ולא בודק זמינות בעבר או בעתיד. ״קליל״ מתאר העדפת מרקם וגודל מנה, לא קלוריות או בטיחות מזון.",
@@ -2019,6 +2299,9 @@
       const form = $("brief"),
         layers = [...document.querySelectorAll(".layer")];
       const initialResult = $("result").innerHTML;
+      const initialLayers = layers.map(
+        (layer) => layer.querySelector("p").textContent,
+      );
       let running = false;
       const escapeHtml = (value) =>
         String(value).replace(
@@ -2032,6 +2315,140 @@
               "'": "&#39;",
             })[c],
         );
+      const historyKey = `hummus.jev.runs.v1:${JEV_PROXY}`;
+      let jevRuns = [];
+      try {
+        jevRuns = retainJevRuns(JSON.parse(localStorage.getItem(historyKey)));
+      } catch {}
+      function renderJevRuns() {
+        const sorted = jevRuns.map((r) => r.ms).sort((a, b) => a - b);
+        const count = sorted.length;
+        $("jev-last").textContent = count ? jevRuns[count - 1].ms : "∅";
+        $("jev-median").textContent = count
+          ? Math.round(
+              (sorted[Math.floor((count - 1) / 2)] +
+                sorted[Math.floor(count / 2)]) /
+                2,
+            )
+          : "∅";
+        $("jev-count").textContent = `${count} / 12`;
+        const max = Math.max(1, ...sorted);
+        $("jev-chart").innerHTML = jevRuns
+          .map(
+            (r, i) =>
+              `<div class="jev-column" title="${r.ms} ms"><i style="height:${Math.max(3, (r.ms / max) * 80)}px"></i><small>${i + 1}</small></div>`,
+          )
+          .join("");
+        $("jev-chart").setAttribute(
+          "aria-label",
+          count
+            ? `${tr("Last 12 Jev runs")}: ${jevRuns.map((r) => `${r.ms} ms`).join(", ")}`
+            : tr("No measured Jev requests yet"),
+        );
+        $("jev-run-list").innerHTML = jevRuns
+          .map(
+            (r) =>
+              `<li><bdi>${new Date(r.at).toLocaleTimeString(hebrew ? "he-IL" : "en-GB")}</bdi>: <bdi>${r.ms} ms</bdi></li>`,
+          )
+          .join("");
+      }
+      function setConnection(state, message, detail) {
+        $("jev-status").dataset.state = state;
+        $("jev-status").textContent = tr(message);
+        $("jev-detail").textContent =
+          detail || tr("A ready proxy is not proof of a successful Jev call.");
+      }
+      let connectionVersion = 0;
+      async function checkConnection() {
+        const version = ++connectionVersion;
+        $("jev-check").disabled = true;
+        setConnection("checking", "Checking the proxy…");
+        try {
+          const response = await fetch(`${JEV_PROXY}/api/jev/status`, {
+            signal: AbortSignal.timeout(5000),
+            cache: "no-store",
+            credentials: "omit",
+          });
+          if (!response.ok) throw new Error();
+          const status = await response.json();
+          if (
+            typeof status.configured !== "boolean" ||
+            !Number.isInteger(status.remaining)
+          )
+            throw new Error();
+          if (version !== connectionVersion) return;
+          setConnection(
+            "ready",
+            status.configured
+              ? "Proxy ready · Jev not checked"
+              : "Server setup required",
+            hebrew
+              ? `מכסת קריאות שנותרה: ${status.remaining}. הבדיקה אינה מפעילה את Jev ואינה מחויבת.`
+              : `Calls remaining: ${status.remaining}. This check does not call Jev or incur inference charges.`,
+          );
+        } catch {
+          if (version === connectionVersion)
+            setConnection("error", "Proxy unavailable");
+        } finally {
+          if (version === connectionVersion) $("jev-check").disabled = running;
+        }
+      }
+      async function requestJev(input, result) {
+        connectionVersion++;
+        const code = $("access-code").value;
+        if (
+          code.length < 16 ||
+          code.startsWith("apikey_") ||
+          code.startsWith("sk-") ||
+          code.startsWith("jv_live_")
+        )
+          throw new Error(
+            "Enter the demo access code, not a provider API key.",
+          );
+        setConnection("calling", "Calling Jev…");
+        const response = await fetch(`${JEV_PROXY}/api/jev/decide`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${code}`,
+          },
+          body: JSON.stringify(input),
+          signal: AbortSignal.timeout(20000),
+          credentials: "omit",
+        });
+        const answer = await response.json();
+        if (!response.ok)
+          throw new Error(
+            {
+              access_code: "The demo access code was rejected.",
+              not_configured: "Server setup required",
+              provider_auth:
+                "The server's Jev key was rejected. Ask the owner to check it.",
+              provider_credit: "Jev credits are exhausted.",
+              budget: "The server's call allowance is exhausted.",
+              rate_limit: "Please wait a few seconds before another vote.",
+            }[answer.error] ||
+              "Jev could not complete this request. No rule-only fallback was used.",
+          );
+        const decision = applyJevChoice(result, answer);
+        jevRuns = retainJevRuns([
+          ...jevRuns,
+          { ms: answer.upstreamMs, at: new Date().toISOString() },
+        ]);
+        try {
+          localStorage.setItem(historyKey, JSON.stringify(jevRuns));
+        } catch {}
+        renderJevRuns();
+        setConnection(
+          "success",
+          "Last Jev call succeeded",
+          `${answer.model} · ${answer.upstreamMs} ms · ${new Date().toLocaleTimeString(hebrew ? "he-IL" : "en-GB")}`,
+        );
+        return decision;
+      }
+      $("jev-check").onclick = checkConnection;
+      renderJevRuns();
+      checkConnection();
       function localDate(date) {
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
       }
@@ -2081,9 +2498,10 @@
         $("progress").style.width = "0%";
         $("result").innerHTML = initialResult;
         $("form-error").hidden = true;
-        layers.forEach((layer) => {
+        layers.forEach((layer, i) => {
           layer.classList.remove("done", "active");
           layer.querySelector(".layer-mark").textContent = "+";
+          layer.querySelector("p").textContent = initialLayers[i];
         });
         $("minutes").textContent = tr(
           "Brief updated. Previous verdict dismissed. The pita demands a fresh vote.",
@@ -2093,6 +2511,8 @@
       function setBusy(busy) {
         running = busy;
         $("run").disabled = busy;
+        $("access-code").disabled = busy;
+        $("jev-check").disabled = busy;
         $("inputs").disabled = busy;
         $("summer").disabled = busy;
         $("winter").disabled = busy;
@@ -2136,18 +2556,29 @@
             : winner.tags.includes(input.taste)
               ? "Its curated style tags match your taste."
               : winner.tags.length
-                ? "Its tagged style does not match your chosen taste; other factors won."
+                ? "Its tagged style does not match your chosen taste, despite Jev's selection."
                 : "The review does not establish your chosen texture, so taste gets half credit.";
         const alternatives = result.rows
           .slice(1, 4)
           .map(
             (r) =>
-              `<div class="alt"><div>${escapeHtml(restaurantName(r))}<small>${escapeHtml(tr(r.place))} · ${hebrew ? `מיקום ${r.parts.location} / טעם ${r.parts.taste} / עונה ${r.parts.season} / ראיות ${r.parts.evidence}` : `L ${r.parts.location} / T ${r.parts.taste} / S ${r.parts.season} / E ${r.parts.evidence}`}</small></div><strong>${r.score}/100</strong></div>`,
+              `<div class="alt"><div>${escapeHtml(restaurantName(r))}<small>${escapeHtml(tr(r.place))} · ${hebrew ? `מיקום ${r.parts.location} / טעם ${r.parts.taste} / עונה ${r.parts.season} / ראיות ${r.parts.evidence}` : `L ${r.parts.location} / T ${r.parts.taste} / S ${r.parts.season} / E ${r.parts.evidence}`}</small></div><strong>${Math.round(result.jev.probabilities[r.id] * 100)}% Jev<small>${hebrew ? "חוקים" : "Rule fit"}: ${r.score}/100</small></strong></div>`,
           )
           .join("");
         $("result").innerHTML =
           `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(restaurantName(winner))}</h3><div class="winner-city">${hebrew ? "" : `<span lang="he">${escapeHtml(winner.he)}</span> · `}${escapeHtml(tr(winner.place))}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${tr(winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself.")} ${tr(matchText)}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">${tr("Historical review summary:")} ${escapeHtml(tr(winner.note))}<br><br>${escapeHtml(tr(SOURCES[winner.source].name))} · ${winner.date ? tr("published") : ""} <bdi>${winner.date || tr("Date unknown")}</bdi></div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
         localize($("result"));
+        $("result").querySelector(".score-label").firstChild.textContent =
+          tr("Rule fit / 100");
+        const jevNote = document.createElement("p");
+        jevNote.id = "jev-result-note";
+        jevNote.className = "reason";
+        const chance = Math.round(result.jev.probabilities[winner.id] * 100);
+        const confidence = Math.round(result.jev.confidence * 100);
+        jevNote.textContent = hebrew
+          ? `בחירת Jev: ${winner.he}. הסתברות האפשרות: ${chance}%. מדד ביטחון המודל: ${confidence}%. הנקודות למטה הן חישוב החוקים שלנו, לא הסבר של Jev.${result.rows.length === 1 ? " מועמד יחיד: זו אינה השוואה בין מסעדות." : ""}`
+          : `Jev chose ${winner.name}. Option probability: ${chance}%. Model confidence: ${confidence}%. Points below are our rule calculation, not a Jev explanation.${result.rows.length === 1 ? " Only one eligible option: this is not a restaurant comparison." : ""}`;
+        $("result").querySelector(".score-block").before(jevNote);
         if (winner.source === "daniel") {
           $("result").querySelector(".result-links a").textContent = tr(
             "Visit the Facebook group ↗",
@@ -2159,8 +2590,8 @@
           $("result").querySelector(".source-detail").append(detail);
         }
         $("minutes").textContent = hebrew
-          ? `${winner.he} זוכה בציון ${winner.score} מתוך 100. נבדקו ${result.rows.length} מקומות. הוועדה יוצאת להפסקה, היישר לתוך פיתה.`
-          : `${winner.name} wins with ${winner.score}/100. ${result.rows.length} candidate${result.rows.length === 1 ? "" : "s"} considered. The committee will now adjourn directly into a pita.`;
+          ? `Jev בחר ב${winner.he} מתוך ${result.rows.length} מועמדים. זמן קריאת API: ${result.jev.upstreamMs} מילישניות. הוועדה יוצאת להפסקה בתוך פיתה.`
+          : `Jev selected ${winner.name} from ${result.rows.length} candidates. API round trip: ${result.jev.upstreamMs} ms. The committee adjourns into a pita.`;
       }
       form.addEventListener("submit", async (event) => {
         event.preventDefault();
@@ -2175,6 +2606,11 @@
           return;
         }
         $("form-error").hidden = true;
+        if (!result.rows.length) {
+          renderResult(result, input);
+          $("state").textContent = tr("No matching profiles");
+          return;
+        }
         setBusy(true);
         if (matchMedia("(max-width: 650px)").matches)
           document.querySelector(".council").scrollIntoView({ block: "start" });
@@ -2199,25 +2635,15 @@
               : result.season === "winter"
                 ? "Winter rule: rich profiles get a bonus. Your sweater has approved this message."
                 : "Mild-season rule: equal season points. The calendar refuses to take sides.",
-          hebrew
-            ? `לטעם יש ${result.weights.taste} נקודות. מחברים מיקום + טעם + עונה + ראיות. זאת אריתמטיקה עם כובע שף קטנטן.`
-            : `Taste gets ${result.weights.taste} points. Adding location + taste + season + evidence. This is arithmetic wearing a tiny chef hat.`,
+          "One call. One typed choice. Zero invented restaurants.",
         ];
         try {
+          $("state").textContent = tr("Calling Jev…");
+          $("minutes").textContent = tr("Calling Jev…");
+          layers[3].classList.add("active");
+          result = await requestJev(input, result);
           for (let i = 0; i < layers.length; i++) {
-            $("state").textContent = hebrew
-              ? `שכבה ${i + 1} מתוך 4`
-              : `Layer ${i + 1} of 4`;
-            layers[i].classList.add("active");
-            $("minutes").textContent = tr(messages[i]);
-            await new Promise((resolve) =>
-              setTimeout(
-                resolve,
-                matchMedia("(prefers-reduced-motion: reduce)").matches
-                  ? 0
-                  : 850,
-              ),
-            );
+            layers[i].querySelector("p").textContent = tr(messages[i]);
             layers[i].classList.remove("active");
             layers[i].classList.add("done");
             layers[i].querySelector(".layer-mark").textContent = "✓";
@@ -2229,6 +2655,21 @@
           );
           if (matchMedia("(max-width: 650px)").matches)
             $("verdict").scrollIntoView({ block: "start" });
+        } catch (error) {
+          const message = Object.hasOwn(HE, error.message)
+            ? error.message
+            : "Jev could not complete this request. No rule-only fallback was used.";
+          setConnection("error", "Jev request failed", tr(message));
+          $("form-error").textContent = tr(message);
+          $("form-error").hidden = false;
+          $("result").textContent = tr(
+            "No verdict was produced. Check the connection and try again.",
+          );
+          $("state").textContent = tr("Jev request failed");
+          $("minutes").textContent = tr(
+            "If the provider fails, the council adjourns. It does not impersonate Jev.",
+          );
+          layers.forEach((layer) => layer.classList.remove("active"));
         } finally {
           setBusy(false);
         }
@@ -2249,7 +2690,7 @@
       }
       $("summer").onclick = () => preset(7);
       $("winter").onclick = () => preset(1);
-      const method = `<p>A deliberately over-engineered lunch picker. These are fictional council layers, not an implementation of a verified external decision framework. No AI API, live scraping, weather service or geolocation is used. Your inputs stay in this browser.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected sources determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li><li>Highest total wins. Ties sort by English restaurant name. Tags may describe different dishes at the same restaurant.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
+      const method = `<p>The server rebuilds the shortlist from approved reviews, then calls TypeSafe's Jev Choice API. Jev selects the winner; its option probabilities order the alternatives. The 0–100 rule score is shown separately, not as model confidence.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected sources determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
       function danielEvidence() {
         return `<section id="daniel-evidence"><p>${$("daniel-credit").innerHTML}</p><p class="caution">${tr("11 HTML posts + 6 PDF posts, with 3 overlaps: 14 distinct posts and 7 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.")}</p><p>${tr(sourcePolicy)}</p>${Object.values(
           DANIEL_REVIEWS,
@@ -2294,21 +2735,20 @@
       $("jev-button").onclick = () => {
         $("dialog-title").textContent = tr("Jev, meet the chickpeas");
         $("dialog-body").innerHTML = `
-          <div class="caution"><strong>Demo, not a live Jev integration.</strong>
-            <p>The credit refers to Jev's decision-layer idea. This app does not call Jev or its API. All filtering, points and verdicts run locally in your browser; no inputs are sent to TypeSafe AI.</p>
+          <div class="caution"><strong>One call. One typed choice. Zero invented restaurants.</strong>
+            <p>The server rebuilds the shortlist from approved reviews, then calls TypeSafe's Jev Choice API. Jev selects the winner; its option probabilities order the alternatives. The 0–100 rule score is shown separately, not as model confidence.</p>
           </div>
           <h3>What is Jev?</h3>
           <p>Jev is TypeSafe AI's System One model: give it context and focused, typed questions, and it returns structured answers and probabilities. Questions can be evaluated independently in parallel; application code combines the answers. Jev does not generate the council's jokes or explanations.</p>
-          <h3>The idea, served in four layers</h3>
-          <p>Our council illustrates separating a big decision into small factors, then combining them in code. These characters are not Jev's internal stages. Their dramatic pauses are animation, not measured model latency.</p>
           <ol>
             <li>Logistics: your city and travel setting filter candidates; hunger changes how much location matters. Geography gets louder when your stomach does.</li>
             <li>Evidence: selected sources limit the shortlist. Dated, manually curated reviews supply style tags where supported, not live opening hours. The archaeologist brought a bibliography, not a reservation.</li>
             <li>Season: calendar rules reward lighter textures in summer and richer styles in winter. A sweater is a preference, not a medical degree.</li>
-            <li>Taste and verdict: match your preference to the curated tags, add the visible points and rank the candidates. The 0–100 total is a local fit score, not Jev confidence or a probability.</li>
+            <li>Jev reads the eligible reviews and your preferences, then chooses lunch. The visible points explain our rule baseline, not Jev's internal reasoning. The chickpeas declined an interview.</li>
           </ol>
-          <h3>What a live Jev version could add</h3>
-          <p>For example: Choice could classify a review's texture description; Score could assess review relevance against a defined rubric; Noul could assess whether a review supports a specific claim. Those are possible future model questions, not API calls implemented here. City filters and final scoring would still belong to the app.</p>
+          <p>The connection indicator reports proxy readiness or the last actual request, not continuous provider availability. Failed calls produce no verdict and no histogram bar. Timings are the last 12 successful server-to-Jev round trips in this browser; network time is included. A single eligible option is not a meaningful comparison.</p>
+          <p>Your brief and eligible review summaries are sent to TypeSafe AI. The API key stays on the server. The access code is not saved.</p>
+          <p>If the provider fails, the council adjourns. It does not impersonate Jev.</p>
           <p><em>The committee has a framework. You still have to bring the pita.</em></p>
           <p><a href="https://docs.typesafe.ai/introduction" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">https://docs.typesafe.ai/introduction</bdi></a></p>`;
         localize($("dialog-body"));
