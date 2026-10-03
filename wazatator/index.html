@@ -8,145 +8,188 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+/* ESL identity: logo blue, logo orange, logo charcoal, on an engineering-paper background */
 :root {
-  --bg: #0b1020;
-  --panel: #131a2e;
-  --panel2: #1a2340;
-  --line: #2a3558;
-  --text: #e8ecf8;
-  --muted: #9aa6c7;
-  /* ESL brand: orange and blue from the ESL logo */
-  --amber: #ffbf3f;
-  --teal: #3595ff;
-  --red: #ff6b6b;
-  --green: #4ade80;
-  --violet: #a78bfa;
+  --paper: #f5f6f8;
+  --white: #ffffff;
+  --ink: #262a31;
+  --muted: #5b6370;
+  --line: #dfe3e9;
+  --blue: #2f8cf5;
+  --blue-soft: #e8f2fe;
+  --orange: #f5a623;
+  --orange-soft: #fef3e0;
+  --code-bg: #1f2329;
+  --red: #d64545;
+  --green: #1f9d55;
   --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--text);
+html, body { height: 100%; overflow: hidden; background: var(--paper); color: var(--ink);
   font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; }
 body { user-select: none; -webkit-user-select: none; }
 pre, code, .term { user-select: text; -webkit-user-select: text; }
+code { font-family: var(--mono); font-size: .92em; background: var(--blue-soft); color: #1d5fae; padding: 1px 5px; border-radius: 4px; }
 
 .deck { display: flex; height: 100vh; width: 100vw; transition: transform .55s cubic-bezier(.65,.05,.25,1); }
-.slide { flex: 0 0 100vw; height: 100vh; overflow-y: auto; padding: clamp(24px, 5vh, 56px) clamp(18px, 6vw, 96px) 80px;
+.slide { position: relative; flex: 0 0 100vw; height: 100vh; overflow-y: auto; overflow-x: hidden;
+  padding: clamp(84px, 11vh, 104px) clamp(18px, 6vw, 96px) 80px;
   display: flex; flex-direction: column; justify-content: center; gap: clamp(12px, 2.2vh, 24px);
-  padding-top: clamp(76px, 10vh, 96px);
-  background: radial-gradient(1200px 600px at 85% -10%, rgba(53,149,255,.10), transparent 60%),
-              radial-gradient(900px 500px at -10% 110%, rgba(255,191,63,.08), transparent 60%); }
+  /* engineering grid paper */
+  background-color: var(--paper);
+  background-image: linear-gradient(rgba(47,140,245,.07) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(47,140,245,.07) 1px, transparent 1px);
+  background-size: 32px 32px; }
+/* the ESL interlocking squares, as a quiet watermark */
+.slide::before, .slide::after { content: ""; position: absolute; width: clamp(140px, 18vw, 240px); aspect-ratio: 1;
+  border: clamp(14px, 1.8vw, 22px) solid; border-radius: 8px; pointer-events: none; z-index: 0; }
+.slide::before { right: clamp(30px, 6vw, 110px); bottom: clamp(60px, 12vh, 130px); border-color: rgba(47,140,245,.06); }
+.slide::after { right: clamp(-10px, 2vw, 40px); bottom: clamp(10px, 4vh, 50px); border-color: rgba(245,166,35,.09); }
+.slide > * { position: relative; z-index: 1; max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto; }
 
-/* ESL brand bar */
-.brandbar { position: fixed; top: 0; left: 0; right: 0; z-index: 11; display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; padding: 10px clamp(12px, 3vw, 28px); background: linear-gradient(180deg, rgba(11,16,32,.96), rgba(11,16,32,.6) 70%, transparent); }
-.brand-logo { display: inline-flex; align-items: center; background: #fff; border-radius: 10px; padding: 5px 10px; box-shadow: 0 2px 12px rgba(0,0,0,.35); }
-.brand-logo img { height: clamp(26px, 4.2vh, 38px); width: auto; display: block; }
-.partner { display: inline-flex; align-items: center; gap: 8px; font-size: clamp(.72rem, 1.1vw, .86rem); font-weight: 700;
-  color: var(--text); border: 1px solid rgba(255,191,63,.55); background: rgba(255,191,63,.10); border-radius: 999px; padding: 6px 12px; white-space: nowrap; }
-.partner::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--amber); box-shadow: 0 0 10px var(--amber); }
-.esl-foot { position: fixed; bottom: 14px; left: 18px; font-size: .8rem; color: var(--muted); z-index: 10; }
-.esl-foot a, .contact a { color: var(--teal); text-decoration: none; }
-.esl-foot a:hover, .contact a:hover { text-decoration: underline; }
-.contact { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin-top: 10px; font-size: clamp(.9rem, 1.4vw, 1.05rem); color: var(--muted); }
-.contact b { color: var(--text); font-weight: 600; }
-.slide > * { max-width: 1180px; width: 100%; margin-left: auto; margin-right: auto; }
-
-h1 { font-size: clamp(2.2rem, 6vw, 4.6rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.03; }
-h2 { font-size: clamp(1.5rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
-h3 { font-size: clamp(1rem, 1.7vw, 1.2rem); font-weight: 700; }
+h1 { font-size: clamp(2.2rem, 6vw, 4.6rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.03; color: var(--ink); }
+h2 { font-size: clamp(1.5rem, 3.6vw, 2.6rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.12; color: var(--ink); }
+h3 { font-size: clamp(1rem, 1.7vw, 1.2rem); font-weight: 700; color: var(--ink); }
 p, li { font-size: clamp(.95rem, 1.55vw, 1.15rem); line-height: 1.55; color: var(--muted); }
-strong { color: var(--text); }
-.kicker { font-size: clamp(.72rem, 1.1vw, .85rem); font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); }
-.grad { background: linear-gradient(90deg, var(--amber), var(--teal)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+strong { color: var(--ink); }
+/* highlighter-marker emphasis instead of glowing gradients */
+.grad { color: var(--blue); background: linear-gradient(transparent 68%, rgba(245,166,35,.38) 68%); padding: 0 .08em; }
+.kicker { display: inline-flex; align-items: center; gap: 10px; font-size: clamp(.72rem, 1.1vw, .85rem); font-weight: 800;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--blue); }
+.kicker::before { content: ""; width: 12px; height: 12px; border: 3px solid var(--blue); border-radius: 2px;
+  box-shadow: 5px 5px 0 -1px var(--paper), 5px 5px 0 2px var(--orange); flex: none; }
 .lead { font-size: clamp(1.05rem, 2vw, 1.4rem); color: var(--muted); }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(12px, 2vw, 24px); }
 .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 1.6vw, 18px); }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: clamp(14px, 2vw, 22px); }
+.card { background: var(--white); border: 1px solid var(--line); border-top: 4px solid var(--blue); border-radius: 6px;
+  padding: clamp(14px, 2vw, 22px); box-shadow: 0 1px 2px rgba(20,30,50,.04), 0 6px 18px rgba(20,30,50,.05); }
+.grid2 > .card:nth-child(2), .grid3 > .card:nth-child(even) { border-top-color: var(--orange); }
 .card p { font-size: clamp(.88rem, 1.3vw, 1rem); margin-top: 6px; }
-.card .tag { display: inline-block; font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  padding: 3px 8px; border-radius: 999px; margin-bottom: 8px; }
-.t-red { background: rgba(255,107,107,.14); color: var(--red); }
-.t-green { background: rgba(74,222,128,.14); color: var(--green); }
-.t-amber { background: rgba(255,181,71,.14); color: var(--amber); }
-.t-teal { background: rgba(62,224,197,.14); color: var(--teal); }
-.t-violet { background: rgba(167,139,250,.16); color: var(--violet); }
+.card .tag { display: inline-block; font-size: .7rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 3px; margin-bottom: 8px; }
+.t-red { background: #fde8e8; color: var(--red); }
+.t-green { background: #e3f6ec; color: var(--green); }
+.t-amber { background: var(--orange-soft); color: #b36d00; }
+.t-teal { background: var(--blue-soft); color: #1d5fae; }
+.t-violet { background: #eceaf5; color: #4b4f63; }
 
-pre { background: #0a0f1d; border: 1px solid var(--line); border-radius: 12px; padding: clamp(12px, 1.8vw, 18px);
-  font-family: var(--mono); font-size: clamp(.72rem, 1.15vw, .9rem); line-height: 1.6; overflow-x: auto; color: #cdd6f4; font-variant-ligatures: none; }
-pre .k { color: var(--teal); } pre .s { color: var(--amber); } pre .c { color: #6b7699; font-style: italic; }
-pre .n { color: var(--violet); } pre .add { color: var(--green); } pre .del { color: var(--red); }
-.file { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin-bottom: -6px; }
+pre { background: var(--code-bg); border: 1px solid #2c323b; border-left: 4px solid var(--orange); border-radius: 6px;
+  padding: clamp(12px, 1.8vw, 18px); font-family: var(--mono); font-size: clamp(.72rem, 1.15vw, .9rem); line-height: 1.6;
+  overflow-x: auto; color: #e3e6ea; font-variant-ligatures: none; }
+pre code { background: none; color: inherit; padding: 0; }
+pre .k { color: #7ab8ff; } pre .s { color: #ffd27a; } pre .c { color: #8a929e; font-style: italic; }
+pre .n { color: #ffa94d; } pre .add { color: #7ee2a8; } pre .del { color: #ff8a8a; } pre .dim { color: #8a929e; }
+.file { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin-bottom: 4px; }
 
 .flow { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap; }
-.flow .step { flex: 1 1 150px; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; position: relative; }
-.flow .step b { display: block; color: var(--text); font-size: clamp(.9rem, 1.4vw, 1.05rem); margin-bottom: 4px; }
+.flow .step { flex: 1 1 150px; background: var(--white); border: 1px solid var(--line); border-radius: 6px; padding: 16px 14px 14px; position: relative; }
+.flow .step b { display: block; color: var(--ink); font-size: clamp(.9rem, 1.4vw, 1.05rem); margin-bottom: 4px; }
 .flow .step span { font-size: clamp(.8rem, 1.2vw, .92rem); color: var(--muted); line-height: 1.45; display: block; }
-.flow .step .num { position: absolute; top: -10px; left: 12px; background: var(--amber); color: #1a1200; font-weight: 800;
-  font-size: .75rem; border-radius: 999px; padding: 1px 8px; }
-.arrow { align-self: center; color: var(--teal); font-size: 1.4rem; }
+.flow .step .num { position: absolute; top: -11px; left: 12px; background: var(--orange); color: #fff; font-weight: 800;
+  font-size: .75rem; border-radius: 3px; padding: 2px 8px; }
+.arrow { align-self: center; color: var(--blue); font-size: 1.5rem; font-weight: 700; }
 
 table { width: 100%; border-collapse: collapse; font-size: clamp(.82rem, 1.3vw, 1rem); }
 th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
-th { color: var(--teal); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
-td { color: var(--muted); } td strong { color: var(--text); }
+th { color: var(--blue); font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; }
+td { color: var(--muted); } td strong { color: var(--ink); }
 .pass { color: var(--green); font-weight: 700; } .fail { color: var(--red); font-weight: 700; }
 
 .big-stats { display: flex; gap: clamp(10px, 2vw, 22px); flex-wrap: wrap; }
-.stat { flex: 1 1 140px; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.stat { flex: 1 1 140px; background: var(--white); border: 1px solid var(--line); border-left: 4px solid var(--blue); border-radius: 6px; padding: 16px; }
+.stat:nth-child(2) { border-left-color: var(--orange); }
 .stat .v { font-size: clamp(1.6rem, 3.6vw, 2.6rem); font-weight: 800; }
 .stat .l { font-size: .85rem; color: var(--muted); }
 
-/* demo terminal */
-.term { background: #070b16; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.term-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: #10172b; border-bottom: 1px solid var(--line); }
+/* demo terminal stays dark, like a real terminal */
+.term { background: var(--code-bg); border: 1px solid #2c323b; border-radius: 8px; overflow: hidden; box-shadow: 0 10px 30px rgba(20,30,50,.18); }
+.term-bar { display: flex; align-items: center; gap: 7px; padding: 10px 14px; background: #2a2f37; border-bottom: 1px solid #343a44; }
 .dot { width: 11px; height: 11px; border-radius: 50%; } .d1 { background: #ff5f57; } .d2 { background: #febc2e; } .d3 { background: #28c840; }
-.term-title { margin-left: 8px; font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+.term-title { margin-left: 8px; font-family: var(--mono); font-size: .78rem; color: #aab2bf; }
 .term-body { font-family: var(--mono); font-size: clamp(.7rem, 1.1vw, .86rem); line-height: 1.6; padding: 14px 16px;
-  height: clamp(260px, 46vh, 430px); overflow-y: auto; white-space: pre-wrap; color: #cdd6f4; font-variant-ligatures: none; }
-.term-body .p { color: var(--teal); } .term-body .ok { color: var(--green); } .term-body .bad { color: var(--red); }
-.term-body .dim { color: #6b7699; } .term-body .hl { color: var(--amber); }
+  height: clamp(260px, 44vh, 420px); overflow-y: auto; white-space: pre-wrap; color: #e3e6ea; font-variant-ligatures: none; }
+.term-body .p { color: #7ab8ff; } .term-body .ok { color: #7ee2a8; } .term-body .bad { color: #ff8a8a; }
+.term-body .dim { color: #8a929e; } .term-body .hl { color: #ffd27a; }
 .term-body::-webkit-scrollbar, pre::-webkit-scrollbar, .slide::-webkit-scrollbar { width: 8px; height: 8px; }
-.term-body::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb, .slide::-webkit-scrollbar-thumb { background: var(--line); border-radius: 8px; }
+.term-body::-webkit-scrollbar-thumb, pre::-webkit-scrollbar-thumb { background: #4a515c; border-radius: 8px; }
+.slide::-webkit-scrollbar-thumb { background: #c9cfd8; border-radius: 8px; }
 .term-body::-webkit-scrollbar-track, pre::-webkit-scrollbar-track, .slide::-webkit-scrollbar-track { background: transparent; }
-.term-body, pre, .slide { scrollbar-color: var(--line) transparent; }
-.cursor { display: inline-block; width: 8px; height: 1em; background: var(--teal); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
+.cursor { display: inline-block; width: 8px; height: 1em; background: var(--orange); vertical-align: text-bottom; animation: blink 1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 .btns { display: flex; gap: 10px; flex-wrap: wrap; }
-.btn { background: var(--panel2); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 9px 16px;
-  font: 600 .9rem "Inter", sans-serif; cursor: pointer; }
-.btn:hover { border-color: var(--teal); }
-.btn.primary { background: linear-gradient(90deg, var(--amber), #ffcf7a); color: #1a1200; border: none; }
+.btn { background: var(--white); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 9px 16px;
+  font: 700 .9rem "Inter", sans-serif; cursor: pointer; }
+.btn:hover { border-color: var(--blue); color: var(--blue); }
+.btn.primary { background: var(--orange); color: #fff; border-color: var(--orange); }
+.btn.primary:hover { background: #e0950f; color: #fff; }
 
 .bars .row { display: grid; grid-template-columns: 150px 1fr 40px; gap: 10px; align-items: center; margin: 7px 0; font-size: .92rem; color: var(--muted); }
-.bars .track { height: 10px; background: var(--panel2); border-radius: 999px; overflow: hidden; }
-.bars .fill { height: 100%; background: linear-gradient(90deg, var(--amber), var(--teal)); border-radius: 999px; }
+.bars .track { height: 10px; background: #e8ebf0; border-radius: 3px; overflow: hidden; }
+.bars .fill { height: 100%; background: var(--blue); border-radius: 3px; }
+.bars .row:nth-child(4) .fill { background: var(--orange); }
 
 .pill-row { display: flex; gap: 8px; flex-wrap: wrap; }
-.pill { font-size: .8rem; padding: 5px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.pill { font-size: .8rem; font-weight: 600; padding: 5px 10px; border-radius: 4px; border: 1px solid var(--line); background: var(--white); color: var(--muted); }
+
+/* ESL brand bar with the AI-SDLC rail */
+.brandbar { position: fixed; top: 0; left: 0; right: 0; z-index: 11; display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 10px clamp(12px, 3vw, 28px); background: rgba(255,255,255,.94); border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(6px); }
+.brand-logo { display: inline-flex; align-items: center; }
+.brand-logo img { height: clamp(28px, 4.4vh, 40px); width: auto; display: block; }
+.partner { display: inline-flex; align-items: center; gap: 8px; font-size: clamp(.72rem, 1.1vw, .84rem); font-weight: 800;
+  color: #8a5a00; border: 1.5px solid var(--orange); background: var(--orange-soft); border-radius: 4px; padding: 6px 12px; white-space: nowrap; }
+.partner::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--orange); }
+.sdlc { display: flex; align-items: center; gap: 4px; font-size: .72rem; font-weight: 700; color: var(--muted); }
+.sdlc .label { margin-right: 6px; letter-spacing: .12em; color: var(--ink); }
+.sdlc .st { padding: 5px 9px; border-radius: 4px; border: 1px solid var(--line); background: var(--white); position: relative; transition: all .3s; }
+.sdlc .st.wz::after { content: ""; position: absolute; top: -4px; right: -4px; width: 8px; height: 8px; border-radius: 2px; background: var(--orange); }
+.sdlc .st.on { background: var(--blue); border-color: var(--blue); color: #fff; }
+.sdlc .sep { color: #b8c0cc; }
+
+/* AI-SDLC lifecycle slide */
+.life { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.life .stage { background: var(--white); border: 1px solid var(--line); border-top: 4px solid #c7ced8; border-radius: 6px; padding: 12px 10px; }
+.life .stage .sn { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); }
+.life .stage b { display: block; font-size: clamp(.8rem, 1.2vw, .95rem); margin: 4px 0 6px; color: var(--ink); }
+.life .stage span { display: block; font-size: clamp(.72rem, 1.05vw, .84rem); color: var(--muted); line-height: 1.45; }
+.life .stage.hot { border-top-color: var(--orange); background: linear-gradient(180deg, var(--orange-soft), var(--white) 60%); }
+.life .stage .wzt { display: inline-block; margin-top: 8px; font-size: .68rem; font-weight: 800; color: #fff; background: var(--orange); border-radius: 3px; padding: 2px 6px; }
+.loop { font-size: .85rem; color: var(--muted); text-align: center; }
+.loop b { color: var(--blue); }
+
+.esl-foot { position: fixed; bottom: 14px; left: 18px; font-size: .8rem; color: var(--muted); z-index: 10; }
+.esl-foot a, .contact a { color: var(--blue); text-decoration: none; font-weight: 600; }
+.esl-foot a:hover, .contact a:hover { text-decoration: underline; }
+.contact { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin-top: 10px; font-size: clamp(.9rem, 1.4vw, 1.05rem); color: var(--muted); }
+.contact b { color: var(--ink); font-weight: 700; }
 
 /* navigation chrome */
-.nav { position: fixed; top: 50%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%;
-  background: rgba(19,26,46,.85); border: 1px solid var(--line); color: var(--text); font-size: 1.7rem; line-height: 1;
-  cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(6px); }
-.nav:hover { border-color: var(--teal); color: var(--teal); }
+.nav { position: fixed; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 6px;
+  background: var(--white); border: 1px solid var(--line); color: var(--ink); font-size: 1.7rem; line-height: 1;
+  cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 14px rgba(20,30,50,.08); }
+.nav:hover { border-color: var(--blue); color: var(--blue); }
 .nav.prev { left: 14px; } .nav.next { right: 14px; }
 .nav.hidden { opacity: 0; pointer-events: none; }
-.progress { position: fixed; bottom: 0; left: 0; height: 4px; width: 100%; background: rgba(42,53,88,.6); z-index: 10; }
-.progress .bar { height: 100%; width: 0; background: linear-gradient(90deg, var(--amber), var(--teal)); transition: width .45s; }
-.counter { position: fixed; bottom: 14px; right: 18px; font-size: .85rem; color: var(--muted); z-index: 10; font-variant-numeric: tabular-nums; }
-.hint { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); font-size: .9rem; color: var(--teal);
+.progress { position: fixed; bottom: 0; left: 0; height: 5px; width: 100%; background: #e3e7ed; z-index: 10; }
+.progress .bar { height: 100%; width: 0; background: var(--blue); border-right: 6px solid var(--orange); transition: width .45s; }
+.counter { position: fixed; bottom: 14px; right: 18px; font-size: .85rem; font-weight: 600; color: var(--muted); z-index: 10; font-variant-numeric: tabular-nums; }
+.hint { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); font-size: .9rem; font-weight: 600; color: var(--blue);
   z-index: 10; animation: hint 1.8s ease-in-out infinite; transition: opacity .4s; }
 .hint.gone { opacity: 0; pointer-events: none; }
 @keyframes hint { 0%,100% { transform: translateX(-50%); } 50% { transform: translateX(calc(-50% + 8px)); } }
 
+@media (max-width: 1100px) { .sdlc .label, .sdlc .sep { display: none; } }
+@media (max-width: 980px) { .life { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 820px) {
-  .esl-foot { display: none; }
+  .sdlc, .esl-foot { display: none; }
   .grid2, .grid3 { grid-template-columns: 1fr; }
   .arrow { display: none; }
-  .nav { width: 40px; height: 40px; font-size: 1.4rem; }
+  .nav { width: 38px; height: 38px; font-size: 1.4rem; }
   .bars .row { grid-template-columns: 110px 1fr 34px; }
-  .slide { justify-content: flex-start; padding-top: 28px; }
+  .slide { justify-content: flex-start; }
+  .slide::before, .slide::after { display: none; }
 }
 </style>
 </head>
@@ -154,13 +197,23 @@ td { color: var(--muted); } td strong { color: var(--text); }
 
 <header class="brandbar">
   <a class="brand-logo" href="https://eswlab.com/" target="_blank" rel="noopener noreferrer" aria-label="ESL Engineering Software Lab"><img src="esl-logo.png" alt="ESL Engineering Software Lab"></a>
+  <nav class="sdlc" id="sdlc" aria-label="ESL AI-SDLC stage">
+    <span class="label">ESL AI-SDLC</span>
+    <span class="st" data-st="plan">Plan</span><span class="sep">›</span>
+    <span class="st" data-st="code">Code</span><span class="sep">›</span>
+    <span class="st" data-st="build">Build</span><span class="sep">›</span>
+    <span class="st wz" data-st="test">Test</span><span class="sep">›</span>
+    <span class="st wz" data-st="review">Review</span><span class="sep">›</span>
+    <span class="st" data-st="release">Release</span><span class="sep">›</span>
+    <span class="st" data-st="operate">Operate</span>
+  </nav>
   <span class="partner">Anthropic Partner</span>
 </header>
 
 <div class="deck" id="deck">
 
 <!-- 1. Title -->
-<section class="slide">
+<section class="slide" data-stage="test">
   <div class="kicker">Agent Skills · Claude Code · Evals</div>
   <h1><span class="grad">Wazatator</span><br>the spectator for your skills</h1>
   <p class="lead">Wazatator watches Claude Code use your <strong>SKILL.md</strong>: every prompt, tool call, and file. Then it scores the run, so you know whether a skill edit helped instead of guessing.</p>
@@ -174,7 +227,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 2. Problem -->
-<section class="slide">
+<section class="slide" data-stage="code">
   <div class="kicker">The problem</div>
   <h2>You edit a SKILL.md with no proof the edit helped</h2>
   <div class="grid3">
@@ -185,7 +238,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 3. What it is -->
-<section class="slide">
+<section class="slide" data-stage="test">
   <div class="kicker">What it is</div>
   <h2>A test runner for Agent Skills, driven by real Claude Code sessions</h2>
   <div class="grid2">
@@ -207,8 +260,25 @@ td { color: var(--muted); } td strong { color: var(--text); }
   </div>
 </section>
 
+<!-- AI-SDLC -->
+<section class="slide" data-stage="test">
+  <div class="kicker">The ESL AI-SDLC</div>
+  <h2>Agent skills are software. They need a <span class="grad">lifecycle</span> too.</h2>
+  <p class="lead">AI agents now plan, write, review and test code. The skills that steer them deserve the same discipline: a spec, tests, review, and a release gate. Wazatator covers the <strong>Test</strong> and <strong>Review</strong> stages for agent skills.</p>
+  <div class="life">
+    <div class="stage"><div class="sn">Plan</div><b>Specs and tasks</b><span>AI-assisted planning and tracking. monday.com</span></div>
+    <div class="stage"><div class="sn">Code</div><b>AI coding agents</b><span>Claude Code, Amp, Sourcegraph code search</span></div>
+    <div class="stage"><div class="sn">Build</div><b>Versioning and CI</b><span>Perforce, CloudBees</span></div>
+    <div class="stage hot"><div class="sn">Test</div><b>Code and skill testing</b><span>Parasoft static and unit testing, plus evals of agent skills</span><span class="wzt">Wazatator</span></div>
+    <div class="stage hot"><div class="sn">Review</div><b>Quality and policy gates</b><span>Parasoft compliance, LLM judges, tool-policy checks</span><span class="wzt">Wazatator</span></div>
+    <div class="stage"><div class="sn">Release</div><b>Supply chain</b><span>Sonatype, ESL SBOMator, CI exit codes</span></div>
+    <div class="stage"><div class="sn">Operate</div><b>Monitor and support</b><span>Instana, Atera</span></div>
+  </div>
+  <p class="loop">Findings loop back: <b>Review</b> → fix the SKILL.md in <b>Code</b> → re-run in <b>Test</b> → compare.</p>
+</section>
+
 <!-- 4. How it works -->
-<section class="slide">
+<section class="slide" data-stage="test">
   <div class="kicker">How it works</div>
   <h2>From eval.yaml to a score in five steps</h2>
   <div class="flow">
@@ -232,7 +302,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 5. eval.yaml -->
-<section class="slide">
+<section class="slide" data-stage="plan">
   <div class="kicker">Code sample 1</div>
   <h2>An eval suite is one small YAML file</h2>
   <div class="grid2">
@@ -265,7 +335,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 6. task -->
-<section class="slide">
+<section class="slide" data-stage="test">
   <div class="kicker">Code sample 2</div>
   <h2>A task: a prompt, input files, and graders</h2>
   <div class="grid2">
@@ -303,7 +373,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 7. triggers -->
-<section class="slide">
+<section class="slide" data-stage="test">
   <div class="kicker">Code sample 3</div>
   <h2>Trigger tests: does the skill fire only when it should?</h2>
   <div class="grid2">
@@ -331,7 +401,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 8. what it finds -->
-<section class="slide">
+<section class="slide" data-stage="review">
   <div class="kicker">What it can find</div>
   <h2>Real findings from real runs</h2>
   <div class="grid3">
@@ -345,7 +415,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 9. deep dive: asks for code -->
-<section class="slide">
+<section class="slide" data-stage="code">
   <div class="kicker">Finding → fix → proof</div>
   <h2>"I don't see any code": fixed in the skill, proven by a re-run</h2>
   <div class="grid2">
@@ -376,7 +446,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 10. Demo -->
-<section class="slide" id="demo-slide">
+<section class="slide" data-stage="test" id="demo-slide">
   <div class="kicker">Demo</div>
   <h2>A real run, replayed</h2>
   <div class="term">
@@ -391,7 +461,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 11. Plugin -->
-<section class="slide">
+<section class="slide" data-stage="code">
   <div class="kicker">Inside Claude Code</div>
   <h2>The plugin: ask Claude to test your skill</h2>
   <div class="grid2">
@@ -423,7 +493,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 12. Get started -->
-<section class="slide">
+<section class="slide" data-stage="release">
   <div class="kicker">Get started</div>
   <h2>Install in two commands</h2>
   <div class="grid2">
@@ -446,7 +516,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 13. Credits -->
-<section class="slide">
+<section class="slide" data-stage="release">
   <div class="kicker">Open source</div>
   <h2>Wazatator</h2>
   <p class="lead">Repository and releases: <strong>github.com/zuwasi/wazatator</strong></p>
@@ -459,7 +529,7 @@ td { color: var(--muted); } td strong { color: var(--text); }
 </section>
 
 <!-- 14. ESL contact -->
-<section class="slide">
+<section class="slide" data-stage="operate">
   <div class="kicker">ESL · Engineering Software Lab · Anthropic Partner</div>
   <h2>Great Software Tools, <span class="grad">Excellent Service</span></h2>
   <div class="grid2">
@@ -510,6 +580,8 @@ td { color: var(--muted); } td strong { color: var(--text); }
     next.classList.toggle('hidden', idx === total - 1);
     bar.style.width = ((idx + 1) / total * 100) + '%';
     counter.textContent = (idx + 1) + ' / ' + total;
+    const stage = slides[idx].dataset.stage;
+    document.querySelectorAll('#sdlc .st').forEach(function (el) { el.classList.toggle('on', el.dataset.st === stage); });
     if (idx > 0) hint.classList.add('gone');
     if (idx === demoIndex && !demoPlayed) { demoPlayed = true; setTimeout(runDemo, 500); }
   }
