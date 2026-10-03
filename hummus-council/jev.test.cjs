@@ -23,9 +23,24 @@ const base = {
   hunger: 3,
   seasonal: true,
   date: "2026-07-15",
-  sources: ["humus101", "hummusai", "foodout", "daniel"],
+  sources: ["humus101", "foodout", "daniel"],
 };
 const accessCode = "test-only-access-code";
+const telAvivIds = [
+  "616",
+  "abu-hassan",
+  "asli-jaffa",
+  "fawzi-hashamen",
+  "gargiros",
+  "george-shikun-dan",
+  "haachim-herzl",
+  "habikta-salame",
+  "hakerem-harakevet",
+  "hamudi-yehuda-halevi",
+  "sharon-ful",
+  "shlomo-doron",
+  "uganda-tel-aviv",
+];
 const answer = () => ({
   model: "jev-test",
   answers: {
@@ -33,7 +48,11 @@ const answer = () => ({
       type: "choice",
       choice: "abu-hassan",
       confidence: 0.7,
-      probabilities: { 616: 0.1, "abu-hassan": 0.9, "shlomo-doron": 0 },
+      probabilities: {
+        ...Object.fromEntries(telAvivIds.map((id) => [id, 0])),
+        616: 0.1,
+        "abu-hassan": 0.9,
+      },
     },
   },
 });
@@ -88,17 +107,15 @@ test("proxy reconstructs approved candidates and discards client-supplied eviden
   });
   const request = plain(buildRequest(input, result));
   assert.deepEqual(request.state.preferences, base);
-  assert.deepEqual(request.state.candidates.map((r) => r.id).sort(), [
-    "616",
-    "abu-hassan",
-    "shlomo-doron",
-  ]);
+  assert.deepEqual(
+    request.state.candidates.map((r) => r.id).sort(),
+    telAvivIds,
+  );
   assert.equal(request.questions.lunch.type, "choice");
-  assert.deepEqual(Object.keys(request.questions.lunch.criteria).sort(), [
-    "616",
-    "abu-hassan",
-    "shlomo-doron",
-  ]);
+  assert.deepEqual(
+    Object.keys(request.questions.lunch.criteria).sort(),
+    telAvivIds,
+  );
   assert.ok(
     request.state.candidates.every((r) => r.city === "tel-aviv" && r.review),
   );
@@ -112,6 +129,7 @@ test("proxy reconstructs approved candidates and discards client-supplied eviden
     { sources: [] },
     { sources: ["daniel", "daniel"] },
     { sources: ["unknown"] },
+    { sources: ["hummusai"] },
     { seasonal: "true" },
     { travel: "nearby" },
     { taste: "sweet" },
@@ -122,8 +140,11 @@ test("proxy reconstructs approved candidates and discards client-supplied eviden
 test("Jev receives the added city and sources with approved review evidence", () => {
   for (const [city, source, ids] of [
     ["tel-aviv", "tripadvisor", ["ashkara"]],
-    ["tel-aviv", "humus101", ["616", "abu-hassan", "shlomo-doron"]],
+    ["tel-aviv", "humus101", telAvivIds],
+    ["bat-yam", "humus101", ["roni-ful-bat-yam"]],
+    ["shilat", "humus101", ["falafel-ramla-shilat"]],
     ["qalansuwa", "facebook", ["abu-ras", "afif"]],
+    ["ramla", "facebook", ["salim-ramla"]],
   ]) {
     const { input, result } = validateInput({
       ...base,
@@ -136,7 +157,11 @@ test("Jev receives the added city and sources with approved review evidence", ()
     assert.ok(
       request.state.candidates.every((r) => r.city === city && r.review),
     );
-    if (source === "facebook") {
+    if (city === "ramla") {
+      assert.match(request.state.candidates[0].review, /Naor Barak/);
+      assert.equal(request.state.candidates[0].date, null);
+    }
+    if (city === "qalansuwa") {
       assert.match(
         request.state.candidates.find((r) => r.id === "afif").review,
         /Ori Baratz/,
@@ -151,7 +176,7 @@ test("Jev receives the added city and sources with approved review evidence", ()
 
 test("Jev's choice overrides the higher rule score without mutating rule evidence", () => {
   const { result } = validateInput(base);
-  assert.equal(result.rows[0].id, "616");
+  assert.equal(result.rows[0].id, "fawzi-hashamen");
   const selected = validateAnswer(
     answer(),
     result.rows.map((r) => r.id),
@@ -161,7 +186,10 @@ test("Jev's choice overrides the higher rule score without mutating rule evidenc
   assert.equal(ranked.rows[0].id, "abu-hassan");
   assert.ok(ranked.rows[0].score < ranked.rows[1].score);
   assert.deepEqual(plain(result), original);
-  assert.deepEqual(plain(ranked.rows[0]), original.rows[1]);
+  assert.deepEqual(
+    plain(ranked.rows[0]),
+    original.rows.find((r) => r.id === "abu-hassan"),
+  );
 });
 
 test("probability distributions preserve all options and sort by probability for generated valid choices", () => {
@@ -220,9 +248,7 @@ test("probability distributions preserve all options and sort by probability for
   ]) {
     const body = answer();
     edit(body);
-    assert.throws(() =>
-      validateAnswer(body, ["616", "abu-hassan", "shlomo-doron"]),
-    );
+    assert.throws(() => validateAnswer(body, telAvivIds));
   }
 });
 
@@ -321,9 +347,10 @@ test("health, invalid input, authorization, origin and empty shortlist never cal
     415,
   );
   assert.equal((await app.post({ ...base, hunger: 6 })).status, 400);
+  assert.equal((await app.post({ ...base, sources: ["foodout"] })).status, 422);
   assert.equal(
     (await app.post({ ...base, sources: ["hummusai"] })).status,
-    422,
+    400,
   );
   assert.equal(
     (await app.post({ ...base, junk: "x".repeat(5000) })).status,

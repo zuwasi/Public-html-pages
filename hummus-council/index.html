@@ -1209,10 +1209,10 @@
                       <option value="jerusalem">Jerusalem</option>
                       <option value="haifa">Haifa</option>
                       <option value="ramla">Ramla</option>
-                      <option value="nazareth">Nazareth</option>
-                      <option value="ness-ziona">Ness Ziona</option>
                       <option value="kafr-qasim">Kafr Qasim</option>
                       <option value="qalansuwa">Qalansuwa</option>
+                      <option value="bat-yam">Bat Yam</option>
+                      <option value="shilat">Shilat</option>
                       <option value="beit-dagan">Beit Dagan area</option>
                       <option value="fureidis">Fureidis</option>
                       <option value="rameh">Rameh</option>
@@ -1291,16 +1291,7 @@
                     /><span class="source-name"
                       >Hummus for the Masses
                       <span lang="he">חומוס להמונים</span></span
-                    ><small>5 reviews</small></label
-                  ><label class="source-row"
-                    ><input
-                      type="checkbox"
-                      name="sources"
-                      value="hummusai"
-                      checked
-                    /><span class="source-name"
-                      >The Hummusai <span lang="he">החומוסאי</span></span
-                    ><small>4 reviews</small></label
+                    ><small>17 reviews</small></label
                   ><label class="source-row"
                     ><input
                       type="checkbox"
@@ -1334,10 +1325,23 @@
                       checked
                     /><span class="source-name"
                       >Hummusologists · community reviews</span
-                    ><small>2 reviews</small></label
+                    ><small>3 reviews</small></label
                   >
                   <div class="hint">
                     Curated review snapshot. No live scraping.
+                  </div>
+                  <div class="hint">
+                    <a
+                      href="https://zuwasi.github.io/Public-html-pages/hummus-council/humus101-index.json"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >Crawl index: 296 posts ↗</a
+                    >
+                    <span
+                      >20 posts from 2020 onward reviewed; 12 new candidates.
+                      Older posts are indexed, not automatically admitted. The
+                      committee reads before it eats.</span
+                    >
                   </div>
                   <div class="hint" id="daniel-credit">
                     <span>Based on personal reviews by</span>
@@ -1496,7 +1500,7 @@
         <footer class="bottom-note">
           <span
             ><b>Real source links. Playful rules. No artificial chickpeas.</b
-            ><br />19 curated places · 6 sources · current opening status
+            ><br />28 curated places · 5 sources · current opening status
             unknown</span
           >
           <button id="sources-button" class="text-button">
@@ -1524,10 +1528,6 @@
         humus101: {
           name: "Hummus for the Masses",
           url: "https://humus101.com/75",
-        },
-        hummusai: {
-          name: "The Hummusai",
-          url: "https://hummusai.wordpress.com/",
         },
         foodout: { name: "Eating Out", url: "https://food-out.blogspot.com/" },
         daniel: {
@@ -1742,54 +1742,6 @@
           note: "The review contrasts delicate, smooth hummus with thick, richly flavoured mashawsha. Choose the dish that fits your preference.",
         },
         {
-          id: "khalil",
-          name: "Khalil",
-          he: "חליל",
-          city: "ramla",
-          place: "Ramla",
-          tags: [],
-          source: "hummusai",
-          date: "2013-09-06",
-          url: "https://hummusai.wordpress.com/2013/09/06/חליל-רמלה/",
-          note: "The reviewer praises the texture and sides, but finds the hummus sweeter than some diners might like. No light/rich texture tag inferred.",
-        },
-        {
-          id: "el-sheikh",
-          name: "El Sheikh",
-          he: "אל שייך",
-          city: "nazareth",
-          place: "Nazareth",
-          tags: ["chunky", "rich"],
-          source: "hummusai",
-          date: "2013-09-27",
-          url: "https://hummusai.wordpress.com/2013/09/27/חומוס-אל-שייך-נצרת/",
-          note: "The review describes tangy, grainy hummus and masabacha with abundant olive oil and lemon. The author prefers the plain hummus or chickpea topping.",
-        },
-        {
-          id: "petra",
-          name: "Petra",
-          he: "פטרה",
-          city: "ness-ziona",
-          place: "Ness Ziona",
-          tags: ["light"],
-          source: "hummusai",
-          date: "2013-09-13",
-          url: "https://hummusai.wordpress.com/2013/09/13/פטרה-נס-ציונה/",
-          note: "The author describes an airy texture, enjoyable toppings and a restaurant offering more than hummus.",
-        },
-        {
-          id: "basha",
-          name: "Basha",
-          he: "באשה",
-          city: "kafr-qasim",
-          place: "Kafr Qasim",
-          tags: [],
-          source: "hummusai",
-          date: "2013-09-05",
-          url: "https://hummusai.wordpress.com/2013/09/05/כגכגכ/",
-          note: "The reviewer strongly recommends the hummus and praises its texture, without enough detail to assign a light, rich or chunky tag.",
-        },
-        {
           id: "asa",
           name: "Pondak Asa",
           he: "פונדק אסא",
@@ -1848,6 +1800,162 @@
           date: "2025-05-24",
           url: "https://www.facebook.com/groups/Msabbaha/posts/1607683863206544/",
           note: "Rami Moscovich recommends a hummus-ful-masabacha plate in Qalansuwa, adding chili for a kick. He reports NIS 25 and an offered refill on that visit, not current promises. The named masabacha supports the chunky tag. This is his review, not Daniel's. The chili amendment passed.",
+        },
+        {
+          id: "salim-ramla",
+          name: "Hummus Salim",
+          he: "חומוס סלים",
+          city: "ramla",
+          place: "Ramla",
+          tags: ["chunky"],
+          source: "facebook",
+          date: null,
+          url: "https://www.facebook.com/groups/Msabbaha/permalink/1990927588215501/",
+          note: "Naor Barak praises Salim's hummus and masabacha in Ramla, recommends takeaway and says he has eaten there for over a decade with improving taste. His number-one claim is personal opinion, not a comparative rating. Masabacha supports the chunky tag; no lightness, address or current hours are established. Facebook showed only a relative timestamp when read on 3 October 2026, so the publication date remains unconfirmed. This is his review, not Daniel's. A decade of dipping earns a seat, not a veto.",
+        },
+        {
+          id: "fawzi-hashamen",
+          name: "Fawzi Ful · HaHummus Shel HaShamen",
+          he: "פאוזי פול · החומוס של השמן",
+          city: "tel-aviv",
+          place: "Tel Aviv · 19 HaSadna Street",
+          tags: ["light", "chunky"],
+          source: "humus101",
+          date: "2026-01-05",
+          url: "https://humus101.com/9761",
+          note: "The 2026 comeback review praises smooth hummus, warm thick ful and masabacha at HaSadna 19. It recalls the light, gently seasoned recipe and finds the new komplet even better. This is the new location, not the closed Abarbanel or Jaffa Road premises.",
+        },
+        {
+          id: "uganda-tel-aviv",
+          name: "Uganda",
+          he: "אוגנדה",
+          city: "tel-aviv",
+          place: "Tel Aviv · 5 Beit HaBad Alley",
+          tags: ["rich"],
+          source: "humus101",
+          date: "2025-10-18",
+          url: "https://humus101.com/8720",
+          note: "The 2025 review says the warm-ground hummus remains tasty but is heavier and less consistent than before, with larger portions and Friday crowds. Rich here means a heavier style, not proven tahini content. The older light description is not used as a current style tag.",
+        },
+        {
+          id: "roni-ful-bat-yam",
+          name: "Roni Ful · Bat Yam",
+          he: "רוני פול · בת ים",
+          city: "bat-yam",
+          place: "Bat Yam · 41 Anielewicz Street",
+          tags: ["light", "chunky"],
+          source: "humus101",
+          date: "2025-05-04",
+          url: "https://humus101.com/8462",
+          note: "Updated in May 2025, the review praises the triple plate, masabacha and thick warm ful. The hummus is described as less thick and less sour than Abu Hassan's. Light is a relative texture interpretation. This Bat Yam branch is distinct from Sharon Ful in Tel Aviv.",
+        },
+        {
+          id: "hamudi-yehuda-halevi",
+          name: "Hummus Hamudi · Yehuda HaLevi",
+          he: "חומוס חמודי · יהודה הלוי",
+          city: "tel-aviv",
+          place: "Tel Aviv · 93 Yehuda HaLevi Street",
+          tags: ["chunky"],
+          source: "humus101",
+          date: "2022-11-05",
+          url: "https://humus101.com/9598",
+          note: "The author praises a balanced, slightly spicy triple plate: smooth, mildly sour hummus, thick warm masabacha and soft ful. Smooth alone does not establish lightness. This review is of the Yehuda HaLevi branch, not the Walter Moses branch mentioned as background.",
+        },
+        {
+          id: "falafel-ramla-shilat",
+          name: "Falafel Ramla · Shilat",
+          he: "פלאפל רמלה · שילת",
+          city: "shilat",
+          place: "Shilat · industrial area",
+          tags: ["chunky"],
+          source: "humus101",
+          date: "2022-08-06",
+          url: "https://humus101.com/9513",
+          note: "Despite its name, this place is in Shilat, not Ramla. The author prefers the generous hummus-ful komplet and soft chickpeas to the masabacha, which impressed him less. The review praises the sides and kubbeh; the masabacha tag denotes a reviewed dish, not an endorsement of it.",
+        },
+        {
+          id: "george-shikun-dan",
+          name: "Hummus George",
+          he: "חומוס ג׳ורג׳",
+          city: "tel-aviv",
+          place: "Tel Aviv · 9 Harugei Malkhut Street",
+          tags: ["chunky"],
+          source: "humus101",
+          date: "2022-07-22",
+          url: "https://humus101.com/9479",
+          note: "The Shikun Dan review praises creamy hummus, thick masabacha, good olive oil and olives in a triple plate. The food is described as not too heavy, but no thin or airy texture is established. This is George, not the older closed Abu George listing.",
+        },
+        {
+          id: "haachim-herzl",
+          name: "Hummus HaAchim · Herzl",
+          he: "חומוס האחים · הרצל",
+          city: "tel-aviv",
+          place: "Tel Aviv · 20 Herzl Street",
+          tags: ["rich"],
+          source: "humus101",
+          date: "2022-03-28",
+          url: "https://humus101.com/9278",
+          note: "The author calls the hot hummus tasty but somewhat heavy, preferring the thick ful. He notes a large portion and room to improve service and falafel. Rich denotes the heavier style, not measured nutrition or tahini content. This is the Herzl branch, not Ramat Gan.",
+        },
+        {
+          id: "sharon-ful",
+          name: "Sharon Ful",
+          he: "שרון פול",
+          city: "tel-aviv",
+          place: "Tel Aviv · 22 Eilat Street",
+          tags: ["light", "chunky"],
+          source: "humus101",
+          date: "2021-07-24",
+          url: "https://humus101.com/9127",
+          note: "The review describes smooth, not-too-thick hummus, tangy masabacha and dark thick ful, with good results over repeated visits. Light describes the hummus texture, not the whole plate. This business replaced Roni Ful at Eilat 22; it is not the Roni Ful branch in Bat Yam.",
+        },
+        {
+          id: "asli-jaffa",
+          name: "Merkaz HaHummus HaAsli",
+          he: "מרכז החומוס האסלי",
+          city: "tel-aviv",
+          place: "Jaffa · 73 Yefet Street",
+          tags: [],
+          source: "humus101",
+          date: "2021-06-02",
+          url: "https://humus101.com/9057",
+          note: "The May 2021 visit praises a triple plate, hummus-tahini, lamb-topped hummus and generous sides. It does not establish a light, rich or chunky texture for the base hummus. Historic prices and delivery details are not current offers.",
+        },
+        {
+          id: "habikta-salame",
+          name: "HaBikta · Salame",
+          he: "הבקתה · סלמה",
+          city: "tel-aviv",
+          place: "Tel Aviv · 44 Derekh Shlomo",
+          tags: ["chunky"],
+          source: "humus101",
+          date: "2021-04-09",
+          url: "https://humus101.com/8860",
+          note: "The review covers the Salame location after a move: pale, slightly thick hummus described as not heavy. The mashawsha-like masabacha impressed the author less than the hummus and mushroom dish. No duplicate entry is created for the old Shlavim location.",
+        },
+        {
+          id: "gargiros",
+          name: "Gargiros",
+          he: "גרגירוס",
+          city: "tel-aviv",
+          place: "Tel Aviv · 87 Allenby Street",
+          tags: ["light", "chunky"],
+          source: "humus101",
+          date: "2020-08-16",
+          url: "https://humus101.com/8677",
+          note: "The author praises a large triple plate with smooth, not-too-thick hummus and tender, balanced ful and masabacha. Light describes texture, not a small portion or low calories. The review also praises fresh hot falafel, green chili and olives.",
+        },
+        {
+          id: "hakerem-harakevet",
+          name: "Hummus HaKerem · HaRakevet",
+          he: "חומוס הכרם · הרכבת",
+          city: "tel-aviv",
+          place: "Tel Aviv · 28 HaRakevet Street",
+          tags: ["rich"],
+          source: "humus101",
+          date: "2020-06-09",
+          url: "https://humus101.com/8599",
+          note: "The author describes very smooth, tahini-rich hummus and exceptionally generous tahini topping at this self-service branch. The food was tasty, but quality could vary and the ful and egg needed improvement. The branch is kept separate from HaKerem's other locations.",
         },
         ...Object.values(DANIEL_REVIEWS)
           .filter((review) => review.restaurant)
@@ -1999,6 +2107,47 @@
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
+        "Bat Yam": "בת ים",
+        Shilat: "שילת",
+        "Tel Aviv · 19 HaSadna Street": "תל אביב · הסדנה 19",
+        "Tel Aviv · 5 Beit HaBad Alley": "תל אביב · סמטת בית הבד 5",
+        "Bat Yam · 41 Anielewicz Street": "בת ים · אנילביץ׳ 41",
+        "Tel Aviv · 93 Yehuda HaLevi Street": "תל אביב · יהודה הלוי 93",
+        "Shilat · industrial area": "שילת · אזור התעשייה",
+        "Tel Aviv · 9 Harugei Malkhut Street": "תל אביב · הרוגי מלכות 9",
+        "Tel Aviv · 20 Herzl Street": "תל אביב · הרצל 20",
+        "Tel Aviv · 22 Eilat Street": "תל אביב · אילת 22",
+        "Jaffa · 73 Yefet Street": "יפו · יפת 73",
+        "Tel Aviv · 44 Derekh Shlomo": "תל אביב · דרך שלמה 44",
+        "Tel Aviv · 87 Allenby Street": "תל אביב · אלנבי 87",
+        "Tel Aviv · 28 HaRakevet Street": "תל אביב · הרכבת 28",
+        "Crawl index: 296 posts ↗": "אינדקס הסריקה: 296 פוסטים ↗",
+        "20 posts from 2020 onward reviewed; 12 new candidates. Older posts are indexed, not automatically admitted. The committee reads before it eats.":
+          "נבדקו 20 פוסטים משנת 2020 ואילך; נוספו 12 מועמדים. פוסטים ישנים יותר מופיעים באינדקס, אך אינם מצורפים אוטומטית. הוועדה קוראת לפני שהיא מנגבת.",
+        "The 2026 comeback review praises smooth hummus, warm thick ful and masabacha at HaSadna 19. It recalls the light, gently seasoned recipe and finds the new komplet even better. This is the new location, not the closed Abarbanel or Jaffa Road premises.":
+          "ביקורת הקאמבק מ־2026 משבחת חומוס חלק, פול חמים וסמיך ומסבחה בהסדנה 19. היא מזכירה את המתכון הקליל והמתובל בעדינות ומוצאת את הקומפלט החדש אפילו טוב יותר. זה המקום החדש, לא המקומות שנסגרו באברבנאל או בדרך יפו.",
+        "The 2025 review says the warm-ground hummus remains tasty but is heavier and less consistent than before, with larger portions and Friday crowds. Rich here means a heavier style, not proven tahini content. The older light description is not used as a current style tag.":
+          "הביקורת מ־2025 מתארת חומוס שנטחן חם ועדיין טעים, אך כבד יותר ופחות עקבי מבעבר, עם מנות גדולות יותר וצפיפות בשישי. ״עשיר״ כאן מציין סגנון כבד יותר, לא תכולת טחינה מוכחת. התיאור הקליל מהעבר אינו משמש כתגית סגנון עדכנית.",
+        "Updated in May 2025, the review praises the triple plate, masabacha and thick warm ful. The hummus is described as less thick and less sour than Abu Hassan's. Light is a relative texture interpretation. This Bat Yam branch is distinct from Sharon Ful in Tel Aviv.":
+          "הביקורת שעודכנה במאי 2025 משבחת את המשולשת, המסבחה והפול החמים והסמיך. החומוס מתואר כפחות סמיך ופחות חמוץ מזה של אבו חסן. קלילות היא פרשנות יחסית למרקם. הסניף בבת ים נפרד משרון פול בתל אביב.",
+        "The author praises a balanced, slightly spicy triple plate: smooth, mildly sour hummus, thick warm masabacha and soft ful. Smooth alone does not establish lightness. This review is of the Yehuda HaLevi branch, not the Walter Moses branch mentioned as background.":
+          "הכותב משבח משולשת מאוזנת וחריפה מעט: חומוס חלק וחמצמץ קלות, מסבחה סמיכה וחמימה ופול רך. חלק אינו בהכרח קליל. זו ביקורת על סניף יהודה הלוי, לא על סניף וולטר מוזס שמוזכר כרקע.",
+        "Despite its name, this place is in Shilat, not Ramla. The author prefers the generous hummus-ful komplet and soft chickpeas to the masabacha, which impressed him less. The review praises the sides and kubbeh; the masabacha tag denotes a reviewed dish, not an endorsement of it.":
+          "למרות השם, המקום בשילת ולא ברמלה. הכותב מעדיף את קומפלט החומוס־פול הנדיב והגרגרים הרכים על המסבחה שהרשימה אותו פחות. התוספות והקובה זוכות לשבחים; תגית המסבחה מציינת מנה שנבדקה, לא המלצה עליה.",
+        "The Shikun Dan review praises creamy hummus, thick masabacha, good olive oil and olives in a triple plate. The food is described as not too heavy, but no thin or airy texture is established. This is George, not the older closed Abu George listing.":
+          "הביקורת על המקום בשיכון דן משבחת חומוס משחתי, מסבחה סמיכה, שמן זית טוב וזיתים במשולשת. האוכל מתואר כלא כבד מדי, אך לא נקבע מרקם דליל או אוורירי. זה ג׳ורג׳, לא אבו ג׳ורג׳ הישן שנסגר.",
+        "The author calls the hot hummus tasty but somewhat heavy, preferring the thick ful. He notes a large portion and room to improve service and falafel. Rich denotes the heavier style, not measured nutrition or tahini content. This is the Herzl branch, not Ramat Gan.":
+          "הכותב מתאר חומוס חם טעים אך כבד מעט ומעדיף את הפול הסמיך. הוא מציין מנה גדולה ומקום לשיפור בשירות ובפלאפל. ״עשיר״ מציין סגנון כבד יותר, לא מדידה תזונתית או תכולת טחינה. זה סניף הרצל, לא רמת גן.",
+        "The review describes smooth, not-too-thick hummus, tangy masabacha and dark thick ful, with good results over repeated visits. Light describes the hummus texture, not the whole plate. This business replaced Roni Ful at Eilat 22; it is not the Roni Ful branch in Bat Yam.":
+          "הביקורת מתארת חומוס חלק ולא סמיך מדי, מסבחה חמצמצה ופול כהה וסמיך, עם תוצאות טובות בביקורים חוזרים. קלילות מתארת את מרקם החומוס, לא את כל הצלחת. העסק החליף את רוני פול באילת 22; הוא אינו הסניף של רוני פול בבת ים.",
+        "The May 2021 visit praises a triple plate, hummus-tahini, lamb-topped hummus and generous sides. It does not establish a light, rich or chunky texture for the base hummus. Historic prices and delivery details are not current offers.":
+          "הביקור במאי 2021 משבח משולשת, חומוס־טחינה, חומוס עם כבש ותוספות נדיבות. הוא אינו קובע מרקם קליל, עשיר או גרגירי לחומוס הבסיסי. מחירים ופרטי משלוחים היסטוריים אינם הצעות עדכניות.",
+        "The review covers the Salame location after a move: pale, slightly thick hummus described as not heavy. The mashawsha-like masabacha impressed the author less than the hummus and mushroom dish. No duplicate entry is created for the old Shlavim location.":
+          "הביקורת עוסקת במקום בסלמה לאחר המעבר: חומוס בהיר, סמיך מעט אך לא כבד. המסבחה שדמתה למשאוושה הרשימה את הכותב פחות מהחומוס וממנת הפטריות. לא נוצרה רשומה כפולה למיקום הישן ברחוב שלבים.",
+        "The author praises a large triple plate with smooth, not-too-thick hummus and tender, balanced ful and masabacha. Light describes texture, not a small portion or low calories. The review also praises fresh hot falafel, green chili and olives.":
+          "הכותב משבח משולשת גדולה עם חומוס חלק ולא סמיך מדי ופול ומסבחה נימוחים ומאוזנים. קלילות מתארת מרקם, לא מנה קטנה או מעט קלוריות. גם הפלאפל הטרי והחם, הסחוג הירוק והזיתים זוכים לשבחים.",
+        "The author describes very smooth, tahini-rich hummus and exceptionally generous tahini topping at this self-service branch. The food was tasty, but quality could vary and the ful and egg needed improvement. The branch is kept separate from HaKerem's other locations.":
+          "הכותב מתאר חומוס חלק מאוד ועשיר בטחינה ותוספת טחינה נדיבה במיוחד בסניף בשירות עצמי. האוכל היה טעים, אך הרמה לא תמיד יציבה והפול והביצה דרשו שיפור. הסניף נשמר בנפרד מהסניפים האחרים של הכרם.",
         "Daniel's own reviews": "הביקורות האישיות של דניאל",
         "14 posts · 7 candidates": "14 פוסטים · 7 מועמדים",
         "Based on personal reviews by": "מבוסס על ביקורות אישיות של",
@@ -2183,13 +2332,11 @@
         "Let the season have an opinion": "גם לעונה מותר להביע דעה",
         "Who gets a seat at the table?": "מי מקבל כיסא בוועדה?",
         "Hummus for the Masses": "חומוס להמונים",
-        "The Hummusai": "החומוסאי",
         "Eating Out": "אוכל בחוץ",
         Tripadvisor: "טריפאדוויזר",
         "Hummusologists · community reviews": "חומוסולוגים · ביקורות הקהילה",
-        "5 reviews": "5 ביקורות",
-        "4 reviews": "4 ביקורות",
-        "2 reviews": "2 ביקורות",
+        "17 reviews": "17 ביקורות",
+        "3 reviews": "3 ביקורות",
         "1 review": "ביקורת אחת",
         "Curated review snapshot. No live scraping.":
           "לקט ביקורות שמור. אין שליפה חיה מהמקורות.",
@@ -2237,8 +2384,8 @@
           "לקוח מרוצה שלא היה ולא נברא",
         "Real source links. Playful rules. No artificial chickpeas.":
           "מקורות אמיתיים. חוקים משעשעים. בלי גרגירים מלאכותיים.",
-        "19 curated places · 6 sources · current opening status unknown":
-          "19 מקומות בלקט · 6 מקורות · לא ידוע אם פתוח כעת",
+        "28 curated places · 5 sources · current opening status unknown":
+          "28 מקומות בלקט · 5 מקורות · לא ידוע אם פתוח כעת",
         "Open the evidence cupboard ↗": "לפתוח את ארון הראיות ↗",
         "The evidence cupboard": "ארון הראיות",
         "Close ×": "סגירה ×",
@@ -2357,6 +2504,8 @@
           "אורי ברץ ממליץ על עפיף בקלנסווה, משבח את הבעלים והצוות ומתאר מסבחה שממנה נהנה בביקור. שם המנה תומך בתגית גרגירית, לא בטענה לקלילות. זו ביקורת של חבר בקהילה, לא של דניאל. משלחת המסבחה הגיעה.",
         "Rami Moscovich recommends a hummus-ful-masabacha plate in Qalansuwa, adding chili for a kick. He reports NIS 25 and an offered refill on that visit, not current promises. The named masabacha supports the chunky tag. This is his review, not Daniel's. The chili amendment passed.":
           "רמי מוסקוביץ ממליץ על צלחת חומוס־פול־מסבחה בקלנסווה, עם תוספת חריף לשפיץ. הוא מציין 25 ש״ח והצעת מילוי חוזר באותו ביקור, לא הבטחות עדכניות. המסבחה תומכת בתגית גרגירית. זו הביקורת שלו, לא של דניאל. התיקון בנושא החריף אושר.",
+        "Naor Barak praises Salim's hummus and masabacha in Ramla, recommends takeaway and says he has eaten there for over a decade with improving taste. His number-one claim is personal opinion, not a comparative rating. Masabacha supports the chunky tag; no lightness, address or current hours are established. Facebook showed only a relative timestamp when read on 3 October 2026, so the publication date remains unconfirmed. This is his review, not Daniel's. A decade of dipping earns a seat, not a veto.":
+          "נאור ברק משבח את החומוס והמסבחה של סלים ברמלה, ממליץ לקחת הביתה ומספר שהוא אוכל שם כבר יותר מעשור ושהטעם משתבח. הטענה שלו למקום הראשון היא דעה אישית, לא דירוג השוואתי. המסבחה תומכת בתגית גרגירית; אין מידע מבוסס על קלילות, כתובת או שעות פתיחה עדכניות. בעת הקריאה ב־3 באוקטובר 2026 פייסבוק הציג רק זמן יחסי, ולכן תאריך הפרסום אינו מאומת. זו הביקורת שלו, לא של דניאל. עשור של ניגובים מקנה כיסא, לא זכות וטו.",
         "Jerusalem · Old City": "ירושלים · העיר העתיקה",
         "Beit Dagan / HaShiva interchange area": "אזור בית דגן / מחלף השבעה",
         "The author especially praises the warm, generously seasoned masabacha, and describes a crowded, fast-paced setting.":
@@ -2367,14 +2516,6 @@
           "הכותב מתאר חומוס עדין וחמצמץ קלות, גרגירים רכים ומסבחה קלילה.",
         "The review contrasts delicate, smooth hummus with thick, richly flavoured mashawsha. Choose the dish that fits your preference.":
           "הביקורת משווה בין חומוס עדין וחלק לבין משאושה סמיכה ועשירת טעם. כדאי לבחור את המנה שמתאימה להעדפה שלך.",
-        "The reviewer praises the texture and sides, but finds the hummus sweeter than some diners might like. No light/rich texture tag inferred.":
-          "הכותב משבח את המרקם והתוספות, אך מוצא שהחומוס מתוק יותר מכפי שחלק מהסועדים יאהבו. לא הוסקה תגית של מרקם קליל או עשיר.",
-        "The review describes tangy, grainy hummus and masabacha with abundant olive oil and lemon. The author prefers the plain hummus or chickpea topping.":
-          "הביקורת מתארת חומוס חמצמץ וגרגירי ומסבחה עם הרבה שמן זית ולימון. הכותב מעדיף חומוס רגיל או תוספת גרגירים.",
-        "The author describes an airy texture, enjoyable toppings and a restaurant offering more than hummus.":
-          "הכותב מתאר מרקם אוורירי, תוספות מוצלחות ומסעדה שמציעה יותר מחומוס.",
-        "The reviewer strongly recommends the hummus and praises its texture, without enough detail to assign a light, rich or chunky tag.":
-          "הכותב ממליץ בחום על החומוס ומשבח את מרקמו, בלי פירוט שמספיק לקביעת תגית קלילה, עשירה או גרגירית.",
         "The author enjoys plain hummus with tahini at this grill restaurant. The tahini-style tag is a demo interpretation; the review does not establish calorie content.":
           "הכותב נהנה מחומוס רגיל עם טחינה במסעדת הגריל. תגית הסגנון הטחינתי היא פרשנות לצורך ההדגמה; הביקורת אינה קובעת ערך קלורי.",
       };
@@ -2854,7 +2995,7 @@
               RESTAURANTS.filter((r) => r.source !== "daniel")
                 .map(
                   (r) =>
-                    `<article><h3>${escapeHtml(restaurantName(r))} · ${escapeHtml(tr(r.place))}</h3><p>${escapeHtml(tr(r.note))}</p><p class="source-detail">${escapeHtml(tr(SOURCES[r.source].name))} · <bdi>${r.date}</bdi> · ${tr("tags:")} ${r.tags.map(tr).join(", ") || tr("unknown")}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">${escapeHtml(r.url)}</bdi></a></article>`,
+                    `<article><h3>${escapeHtml(restaurantName(r))} · ${escapeHtml(tr(r.place))}</h3><p>${escapeHtml(tr(r.note))}</p><p class="source-detail">${escapeHtml(tr(SOURCES[r.source].name))} · <bdi>${r.date || tr("Date unknown")}</bdi> · ${tr("tags:")} ${r.tags.map(tr).join(", ") || tr("unknown")}</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">${escapeHtml(r.url)}</bdi></a></article>`,
                 )
                 .join("")
             : `<p>${tr(sourcePolicy)}</p>`);

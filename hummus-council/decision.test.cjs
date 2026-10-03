@@ -16,15 +16,18 @@ const base = {
   taste: "light",
   hunger: 3,
   seasonal: true,
-  sources: ["humus101", "hummusai", "foodout", "daniel"],
+  sources: ["humus101", "foodout", "daniel"],
 };
 
 test("city and source are hard filters, including a genuinely empty shortlist", () => {
   assert.deepEqual(
-    Array.from(decide(base).rows, (r) => r.id),
-    ["616", "abu-hassan", "shlomo-doron"],
+    Array.from(
+      decide({ ...base, city: "bat-yam", sources: ["humus101"] }).rows,
+      (r) => r.id,
+    ),
+    ["roni-ful-bat-yam"],
   );
-  assert.equal(decide({ ...base, sources: ["hummusai"] }).rows.length, 0);
+  assert.equal(decide({ ...base, sources: ["foodout"] }).rows.length, 0);
   const food = decide({ ...base, travel: "any", sources: ["foodout"] }).rows;
   assert.deepEqual(
     Array.from(food, (r) => r.id),
@@ -34,12 +37,14 @@ test("city and source are hard filters, including a genuinely empty shortlist", 
   assert.throws(() => decide({ ...base, sources: [] }), /at least one source/);
 });
 test("taste changes the winner and exact component scores", () => {
-  const light = decide(base).rows[0];
-  assert.equal(light.id, "616");
+  const light = decide(base).rows.find((r) => r.id === "616");
   assert.equal(light.score, 100); // 40 local + 30 taste + 20 summer + 10 evidence
-  const chunky = decide({ ...base, taste: "chunky" }).rows[0];
-  assert.equal(chunky.id, "abu-hassan");
+  const chunky = decide({ ...base, taste: "chunky" }).rows.find(
+    (r) => r.id === "abu-hassan",
+  );
   assert.equal(chunky.score, 75); // 40 local + 30 taste + 0 summer + 5 old review
+  assert.equal(decide(base).rows[0].id, "fawzi-hashamen");
+  assert.equal(decide({ ...base, taste: "rich" }).rows[0].id, "616");
 });
 test("changing only the date can change the verdict", () => {
   const trip = { ...base, city: "jerusalem", travel: "any", taste: "rich" };
@@ -70,8 +75,8 @@ test("season boundaries and invalid dates are not timezone-dependent", () => {
     assert.throws(() => seasonFor(date));
 });
 test("unknown style receives half credit, not a fabricated match", () => {
-  const unknown = decide({ ...base, city: "ramla" }).rows[0];
-  assert.equal(unknown.id, "khalil");
+  const unknown = decide({ ...base, city: "fureidis" }).rows[0];
+  assert.equal(unknown.id, "abu-qassem");
   assert.equal(unknown.parts.taste, 15);
   assert.equal(unknown.parts.season, 10);
   assert.equal(unknown.score, 70);
@@ -145,13 +150,12 @@ test("HTML evidence changes taste choices without inventing lightness, dates or 
   assert.equal(daniel[0].id, "abu-hassan");
   assert.equal(daniel[0].note, DANIEL_REVIEWS.abuHassan.note);
   const combined = decide({ ...base, travel: "any" });
-  assert.equal(combined.sourced, 16);
+  assert.equal(combined.sourced, 24);
   assert.equal(combined.rows.filter((r) => r.id === "abu-hassan").length, 1);
   assert.equal(
     combined.rows.find((r) => r.id === "abu-hassan").source,
     "humus101",
   );
-  assert.equal(decide({ ...input, sources: ["hummusai"] }).rows[0].id, "basha");
 });
 test("added reviews preserve attribution, dates and source/city restrictions", () => {
   const ashkara = decide({ ...base, sources: ["tripadvisor"] }).rows;
@@ -196,12 +200,97 @@ test("added reviews preserve attribution, dates and source/city restrictions", (
   assert.equal(decide({ ...community, city: "tel-aviv" }).rows.length, 0);
   assert.equal(
     decide({ ...community, city: "tel-aviv", travel: "any" }).rows.length,
-    2,
+    3,
   );
   assert.equal(
     decide({ ...base, travel: "any", sources: Object.keys(SOURCES) }).sourced,
-    19,
+    28,
   );
+});
+test("Salim uses Naor's community review without inventing a date or Daniel attribution", () => {
+  const input = {
+    ...base,
+    city: "ramla",
+    sources: ["facebook"],
+    taste: "chunky",
+  };
+  const rows = decide(input).rows;
+  assert.equal(rows.length, 1);
+  assert.equal(rows[0].id, "salim-ramla");
+  assert.equal(rows[0].date, null);
+  assert.equal(rows[0].tags.join(), "chunky");
+  assert.equal(rows[0].score, 75); // 40 local + 30 masabacha + 0 summer + 5 unconfirmed date
+  assert.match(rows[0].note, /Naor Barak/);
+  assert.match(rows[0].note, /personal opinion/);
+  assert.equal(
+    rows[0].url,
+    "https://www.facebook.com/groups/Msabbaha/permalink/1990927588215501/",
+  );
+  assert.equal(decide({ ...input, sources: ["daniel"] }).rows.length, 0);
+  assert.equal(decide({ ...input, sources: ["humus101"] }).rows.length, 0);
+});
+test("retired Hummusai source and its four unsupported profiles are absent", () => {
+  assert.equal(Object.keys(SOURCES).length, 5);
+  assert.equal(Object.hasOwn(SOURCES, "hummusai"), false);
+  assert.doesNotMatch(html, /hummusai|The Hummusai/i);
+  const rows = decide({
+    ...base,
+    travel: "any",
+    sources: Object.keys(SOURCES),
+  }).rows;
+  for (const id of ["khalil", "el-sheikh", "petra", "basha"])
+    assert.ok(!rows.some((r) => r.id === id));
+});
+test("crawl separates complete indexing from curated candidates and closure notices", () => {
+  const index = JSON.parse(
+    fs.readFileSync(`${__dirname}/humus101-index.json`, "utf8"),
+  );
+  assert.equal(index.complete, true);
+  assert.equal(index.expectedPosts, 296);
+  assert.equal(index.fetchedPosts, 296);
+  assert.equal(index.posts.length, 296);
+  assert.equal(new Set(index.posts.map((p) => p.url)).size, 296);
+  assert.equal(index.posts.filter((p) => p.date >= "2020").length, 20);
+  assert.ok(
+    index.posts.every(
+      (p) => Object.keys(p).sort().join() === "date,id,modified,title,url",
+    ),
+  );
+  const rows = decide({ ...base, travel: "any", sources: ["humus101"] }).rows;
+  assert.equal(rows.length, 17);
+  const urls = rows.map((r) => r.url);
+  for (const id of [9730, 9674, 9652, 9222, 75, 8625, 8571]) {
+    assert.ok(index.posts.some((p) => p.id === id));
+    assert.ok(!urls.includes(`https://humus101.com/${id}`));
+  }
+  for (const id of [
+    9761, 8720, 8462, 9598, 9513, 9479, 9278, 9127, 9057, 8860, 8677, 8599,
+  ]) {
+    const row = rows.find((r) => r.url === `https://humus101.com/${id}`);
+    assert.ok(row);
+    assert.equal(
+      row.date,
+      index.posts.find((p) => p.id === id).date.slice(0, 10),
+    );
+  }
+  assert.equal(
+    decide({ ...base, city: "shilat" }).rows[0].id,
+    "falafel-ramla-shilat",
+  );
+  assert.ok(
+    !decide({ ...base, city: "ramla" }).rows.some(
+      (r) => r.id === "falafel-ramla-shilat",
+    ),
+  );
+  assert.equal(
+    rows.find((r) => r.id === "uganda-tel-aviv").tags.join(),
+    "rich",
+  );
+  assert.equal(rows.find((r) => r.id === "asli-jaffa").tags.length, 0);
+  // Comparable recent light-texture evidence now exists without altering 616's tags or points.
+  const summer = decide(base).rows;
+  for (const id of ["fawzi-hashamen", "gargiros", "sharon-ful", "616"])
+    assert.equal(summer.find((r) => r.id === id).score, 100);
 });
 test("all supported input combinations preserve filters, bounded additive scores and neutral-season invariance", () => {
   const cities = [
@@ -209,23 +298,16 @@ test("all supported input combinations preserve filters, bounded additive scores
     "jerusalem",
     "haifa",
     "ramla",
-    "nazareth",
-    "ness-ziona",
     "kafr-qasim",
     "qalansuwa",
+    "bat-yam",
+    "shilat",
     "beit-dagan",
     "fureidis",
     "rameh",
     "al-lubban",
   ];
-  const sources = [
-    "humus101",
-    "hummusai",
-    "foodout",
-    "daniel",
-    "tripadvisor",
-    "facebook",
-  ];
+  const sources = ["humus101", "foodout", "daniel", "tripadvisor", "facebook"];
   for (const city of cities)
     for (const taste of ["light", "rich", "chunky", "any"])
       for (const hunger of [1, 3, 4, 5])
