@@ -353,6 +353,11 @@
       .primary:hover {
         background: #315d47;
       }
+      .hero .primary {
+        width: min(100%, 320px);
+        margin-top: 14px;
+        gap: 24px;
+      }
       .fineprint {
         font-size: 9px;
         color: var(--muted);
@@ -966,6 +971,10 @@
                 Your lunch deserves a committee. Unfortunately, we made one.
               </p>
             </div>
+            <button class="primary" type="submit" form="brief" id="run">
+              <span>Convene the council</span><span aria-hidden="true">→</span>
+            </button>
+            <div id="form-error" class="error" role="alert" hidden></div>
           </div>
           <div class="hero-note" aria-hidden="true">
             100% opinions.<br />0% actual<br />chickpeas.<span
@@ -1117,11 +1126,6 @@
                     Read Daniel's 6 posts ↗
                   </button>
                 </fieldset>
-                <div id="form-error" class="error" role="alert" hidden></div>
-                <button class="primary" type="submit" id="run">
-                  <span>Convene the council</span
-                  ><span aria-hidden="true">→</span>
-                </button>
                 <p class="fineprint">
                   No sign-up. No tracking. Just questionable priorities.
                 </p>
@@ -1943,6 +1947,7 @@
       form.addEventListener("input", refresh);
       function setBusy(busy) {
         running = busy;
+        $("run").disabled = busy;
         $("inputs").disabled = busy;
         $("summer").disabled = busy;
         $("winter").disabled = busy;
