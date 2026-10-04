@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<meta name="description" content="Customer review: six Apollo PRs, Jenkins, Parasoft, Incredibuild, DTP, and an AI-assisted 100-finding remediation demonstration.">
+<meta name="referrer" content="no-referrer">
+<title>Apollo | Parallel analysis. Verified improvement.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#fff;--panel:#fff;--line:#cddfe9;--muted:#536974;--cyan:#076793;--green:#087454;--amber:#875012;--white:#00385f;--blue:#0a93d2}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,sans-serif;overflow:hidden}button,a,input{touch-action:manipulation}button{font:inherit;color:inherit;cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:4px}a{color:var(--cyan)}button{border:1px solid var(--line);background:var(--panel);border-radius:10px}button:hover{border-color:var(--cyan)}button[aria-pressed="true"]{border-color:var(--cyan);background:#17364a}button:disabled{cursor:default;opacity:.45}.top{position:fixed;inset:0 0 auto;z-index:5;height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 5vw;border-bottom:1px solid var(--line);background:#07101df5;gap:18px}.brand{font-weight:800;letter-spacing:3px;font-size:19px}.brand span{color:var(--cyan)}.top-right{display:flex;align-items:center;gap:16px}.proposal{font-size:10px;font-weight:700;letter-spacing:1.8px;color:var(--amber)}#ibToggle{font-size:12px;padding:10px 14px;border-color:#387c71;color:var(--green)}.tabs{display:flex;gap:6px}.tabs button{border:0;background:none;color:var(--muted);padding:9px;font-size:12px}.tabs button[aria-current="page"]{color:var(--cyan);background:#10283b}.deck{display:flex;transition:transform .45s cubic-bezier(.2,.7,.2,1)}.slide{flex:0 0 100vw;width:100vw;height:100vh;padding:103px 6.5vw 70px;overflow-y:auto;overflow-x:hidden;background:radial-gradient(ellipse at 70% 5%,#12344970,transparent 58%)}.content{max-width:1500px;margin:auto}.eyebrow{font-size:11px;color:var(--cyan);letter-spacing:2px;text-transform:uppercase;font-weight:700;margin:0 0 14px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:26px;margin-bottom:24px}h1,h2{font-size:clamp(30px,3.6vw,58px);line-height:1.08;letter-spacing:-2px;margin:0;font-weight:700}h1 em,h2 em{font-style:normal;color:var(--cyan)}.lead{color:var(--muted);font-size:clamp(13px,1.05vw,17px);line-height:1.6;margin:12px 0 0;max-width:740px}.small{font-size:12px;line-height:1.6;color:var(--muted)}.statline{display:flex;gap:24px;flex-shrink:0}.statline strong{font-size:34px;display:block;color:var(--white)}.statline span{display:block;font-size:10px;color:var(--muted);letter-spacing:1px;margin-top:4px}.label{font-size:10px;letter-spacing:1.7px;font-weight:700;color:var(--muted)}.pipeline{display:grid;grid-template-columns:1fr 25px 1fr 25px 2.6fr 25px 1fr;align-items:stretch;margin-top:12px}.node{padding:20px 15px;text-align:left;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:9px;min-width:0}.node strong{font-size:clamp(16px,1.5vw,23px);font-weight:600}.node small{color:var(--muted);line-height:1.5;font-size:12px}.symbol{font-size:26px;color:var(--cyan);margin-bottom:6px;font-weight:500}.arrow{display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:23px}.farm{border:1px solid #386278;border-radius:12px;background:#11273980;padding:16px}.farm-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.farm-head strong{font-size:14px}.farm-head span{font-size:10px;color:var(--cyan)}.servers{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}.server{padding:13px 3px;text-align:center;border-radius:7px;background:#0b1a29;font-size:12px}.server i{display:block;width:26px;height:18px;margin:0 auto 10px;border:1px solid var(--cyan);border-radius:3px;position:relative}.server i:after{content:'';position:absolute;left:4px;right:4px;top:7px;border-top:1px solid var(--cyan)}.server small{display:block;font-size:9px;color:var(--muted);margin-top:7px}.accel{border:1px solid #347c6b;border-radius:7px;margin-top:12px;padding:10px 12px;background:#13382e70;color:var(--green);display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px}.accel span{font-size:10px}.fallback .accel{border-color:#786343;color:var(--amber);background:#382b1870}.fallback #ibToggle{color:var(--amber);border-color:#786343}.underflow{display:flex;justify-content:space-between;gap:15px;margin:12px 0 22px;font-size:11px;color:var(--muted)}.loop{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:12px}.step{text-align:left;padding:15px;position:relative;min-width:0}.step b{display:block;font-size:11px;color:var(--green);margin-bottom:8px;letter-spacing:1px}.step strong{font-size:14px;display:block;line-height:1.4}.step small{display:block;color:var(--muted);font-size:11px;line-height:1.5;margin-top:6px}.outcomes{display:flex;justify-content:space-between;align-items:center;gap:15px;border-top:1px solid var(--line);padding-top:16px;margin-top:22px}.outcomes strong{font-size:11px;color:var(--green);font-weight:600}.outcomes .label{color:var(--amber)}.hint{font-size:11px;color:var(--muted);text-align:center;margin-top:22px;animation:hint 2.5s infinite}.hint.hidden{visibility:hidden}@keyframes hint{50%{opacity:.5;transform:translateX(4px)}}.nav-arrow{position:fixed;top:50%;width:42px;height:42px;border-radius:50%;font-size:27px;z-index:6;background:#102438}#prev{left:12px}#next{right:12px}.nav-arrow[hidden]{display:none}.footer{position:fixed;inset:auto 0 5px;display:flex;justify-content:space-between;align-items:center;padding:14px 5vw;background:#07101df5;z-index:5;font-size:10px;color:var(--muted);letter-spacing:1px}.footer a{text-decoration:none}.progress{position:fixed;inset:auto 0 0;height:4px;background:#172335;z-index:7}.progress div{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));transition:width .4s}.two-col{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin-top:26px}.card{border:1px solid var(--line);border-radius:14px;background:#101f31b0;padding:26px}.card h3{margin:0 0 14px;font-size:22px;letter-spacing:-.5px}.card p{line-height:1.65;color:var(--muted);font-size:14px}.lane-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.lane{padding:24px 15px;text-align:left}.lane b{display:block;color:var(--cyan);font-size:24px;margin-bottom:10px}.lane span{font-size:12px;color:var(--muted)}.detail-line{display:flex;justify-content:space-between;gap:15px;border-top:1px solid var(--line);padding:13px 0;font-size:13px}.detail-line span{color:var(--muted)}.detail-line strong{font-weight:500;text-align:right}.callout{border-left:3px solid var(--cyan);padding:12px 16px;background:#12293b;margin-top:20px;color:var(--muted);font-size:13px;line-height:1.6}.callout.amber{border-color:var(--amber);background:#30281980}.pill{display:inline-block;padding:5px 9px;background:#173b32;color:var(--green);border-radius:6px;font-size:10px;letter-spacing:1px;margin-bottom:15px}.cycle-steps{display:flex;flex-direction:column;gap:9px}.cycle-steps button{text-align:left;padding:15px 18px;display:flex;align-items:center;gap:16px;font-size:14px}.cycle-steps b{color:var(--green);font-size:12px}.target-chart{display:flex;align-items:center;justify-content:space-around;padding:20px 0}.target-chart strong{font-size:64px;letter-spacing:-4px;display:block}.target-chart span{display:block;color:var(--muted);font-size:12px;margin-top:4px}.target-chart .to{font-size:30px;color:var(--muted)}.target-chart .zero{color:var(--green)}.checks{display:grid;gap:12px;margin-top:18px}.check{display:flex;align-items:flex-start;gap:12px;padding:15px;border:1px solid var(--line);border-radius:9px;cursor:pointer;font-size:13px;line-height:1.6}.check input{accent-color:var(--green);width:18px;height:18px;flex-shrink:0;margin-top:2px}.check:has(input:checked){border-color:#368772;background:#14382e60}.check strong{display:block;color:var(--white)}.check span{color:var(--muted)}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.primary{background:var(--cyan);color:#06141e;border-color:var(--cyan);font-weight:700;padding:12px 18px;font-size:13px}.secondary{padding:12px 18px;font-size:13px}.status{min-height:25px;font-size:12px;color:var(--green);margin-top:14px}.approval-note{font-size:11px;color:var(--amber);line-height:1.6;margin-top:12px}.approval-total{font-size:clamp(34px,4vw,64px);letter-spacing:-2px;color:var(--cyan);font-weight:700;margin:15px 0}.approval-total span{color:var(--muted);font-size:15px;letter-spacing:0}dialog{background:#101f31;color:var(--white);border:1px solid #3c647d;border-radius:16px;padding:30px;width:min(560px,90vw);box-shadow:0 25px 100px #0008}dialog::backdrop{background:#030810bb;backdrop-filter:blur(5px)}dialog h3{font-size:26px;margin:18px 0}dialog p{font-size:15px;color:var(--muted);line-height:1.7}dialog .close{float:right;padding:6px 12px}dialog .label{color:var(--cyan)}.nowrap{white-space:nowrap}
+@media(min-width:1500px){.pipeline{margin-top:20px}.node{padding:28px 20px}.server{padding:22px 4px}.step{padding:22px}.underflow{margin-bottom:28px}.loop{margin-top:18px}.outcomes{padding-top:24px;margin-top:30px}}
+@media(max-width:1050px){.tabs{display:none}.heading{align-items:flex-start}.statline{gap:15px}.statline strong{font-size:28px}.pipeline{grid-template-columns:1fr 18px 1fr 18px 2.7fr 18px 1fr}.farm{padding:10px}.node{padding:14px 10px}.farm-head span{display:none}.server{font-size:10px}.server i{width:20px}.accel{display:block}.accel span{display:block;margin-top:5px}.outcomes{flex-wrap:wrap}.two-col{gap:16px}.card{padding:20px}}
+@media(max-width:720px){.top{height:66px;padding:0 20px}.brand{font-size:16px}.proposal{display:none}.top-right{gap:6px}#ibToggle{font-size:10px;padding:9px}.slide{padding:90px 28px 90px}.heading{display:block;margin-bottom:22px}h1,h2{letter-spacing:-1.2px}.statline{margin-top:20px;gap:28px}.statline strong{font-size:26px}.statline span{font-size:9px}.pipeline{grid-template-columns:1fr;gap:6px}.arrow{height:20px;transform:rotate(90deg)}.node{padding:16px;display:grid;grid-template-columns:34px 1fr;gap:4px 12px}.node .symbol{grid-row:1/3;margin:0;align-self:center}.node small{grid-column:2}.farm{padding:16px}.farm-head span{display:block}.server{padding:17px 3px}.accel{display:flex}.accel span{margin:0}.underflow{display:block;font-size:10px;line-height:1.8}.underflow span{display:block}.loop{grid-template-columns:1fr}.step{display:grid;grid-template-columns:28px 1fr;gap:3px 8px;padding:14px}.step b{grid-row:1/3;margin:2px 0}.step small{grid-column:2;margin-top:0}.outcomes{display:grid;grid-template-columns:1fr 1fr;line-height:1.6}.outcomes .label{grid-column:1/-1}.hint{line-height:1.8}.nav-arrow{width:26px;height:36px;font-size:23px}#prev{left:0}#next{right:0}.footer{padding:12px 20px;font-size:8px}.footer .footer-middle{display:none}.two-col{grid-template-columns:1fr}.lane-grid{gap:8px}.lane{padding:18px 12px}.lane b{font-size:22px}.lane span{font-size:10px}.card{padding:20px}.detail-line{font-size:12px}.target-chart strong{font-size:54px}.eyebrow{font-size:10px;line-height:1.7}.callout{font-size:12px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{body{overflow:visible;background:white;color:black}.top,.footer,.nav-arrow,.progress,.tabs,.hint,.actions{display:none!important}.deck{display:block;transform:none!important}.slide{height:auto;min-height:95vh;width:100%;padding:25px;overflow:visible;break-after:page;background:#07101d;color:#edf5fc;print-color-adjust:exact}.slide[inert]{display:block}.heading{display:block}.two-col{grid-template-columns:1fr 1fr}}
+
+/* Palette sampled from Parasoft's C/C++test product page. */
+.top,.footer{background:#fff}.brand{letter-spacing:1px}.brand span{font-weight:500}
+.proposal{color:var(--muted);letter-spacing:1px}.top-right{gap:8px}.tabs{gap:2px}.tabs button{padding:9px 7px}
+.slide{background:linear-gradient(145deg,#e5f4fa 0%,#f3fafd 25%,#fff 66%)}
+button[aria-pressed="true"],.tabs button[aria-current="page"]{background:#e2f3fb}
+.farm{background:#f3fafd;border-color:#8fc7df}.server,.card,dialog{background:white;box-shadow:0 8px 24px #00385f08}
+.accel{background:linear-gradient(100deg,#dcfced,#e3f8ff);border-color:#85d9b8}
+.fallback .accel,.callout.amber{background:#fff6e7;border-color:#d6a453}
+.nav-arrow{background:white;color:var(--white);box-shadow:0 3px 15px #00385f14}
+.callout{background:#eaf5fb}.pill{background:#e5f7ef}.check:has(input:checked){background:#ecfaf3;border-color:#65b695}
+.primary{background:linear-gradient(100deg,#00e99c,#a0ecff);color:#002743;border-color:transparent;border-radius:24px}
+.progress{background:#e4eef4}.progress div{background:linear-gradient(90deg,#0a93d2,#00ce92)}
+dialog{border-color:#8fc7df}dialog::backdrop{background:#00274380}
+#motionToggle{padding:10px 12px;font-size:12px;white-space:nowrap;border-color:#8fc7df}
+.intro-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;margin-top:24px}
+.intro-metric{background:var(--white);color:white;border-radius:16px;padding:28px;position:relative;overflow:hidden}
+.intro-metric:after{content:'C++';position:absolute;right:-8px;top:10px;font-size:130px;font-weight:800;opacity:.06;pointer-events:none}
+.intro-metric .label,.intro-metric .small{color:#c4e5f5}.intro-metric .big{display:block;font-size:clamp(48px,5.2vw,78px);letter-spacing:-3px;line-height:1.2;margin:8px 0}
+.intro-metric p{margin:8px 0;line-height:1.5}.metric-pairs{display:flex;gap:28px;margin-top:20px}.metric-pairs b{font-size:24px;display:block}.metric-pairs span{font-size:11px;color:#c4e5f5}
+.intro-stack{display:grid;gap:14px}.intro-stack .card{padding:20px}.intro-stack h3{font-size:18px;margin-bottom:8px}.intro-stack p{margin:0;font-size:13px}
+.vehicle-flow{display:flex;align-items:center;gap:12px;margin-top:22px}.vehicle-flow strong{flex:1;background:#eaf5fb;border:1px solid #b7dbea;border-radius:8px;padding:14px 10px;text-align:center;font-size:13px}.vehicle-flow .arrow{flex:none}
+.intro-source{font-size:10px;line-height:1.7;color:var(--muted);margin-top:14px}.intro-source a{overflow-wrap:anywhere}
+.walkthrough{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;background:#00385f;color:white;border-radius:12px;padding:18px 22px;margin-top:18px;min-height:115px}
+.walkthrough .phase-index{font-size:36px;color:#92eaff;font-weight:700;letter-spacing:-1px}.walkthrough .label{color:#b7dfee;font-size:9px}.walkthrough h3{margin:5px 0;font-size:18px}.walkthrough p{margin:0;color:#e1f1f8;font-size:12px;line-height:1.6;max-width:900px}.phase-controls{display:flex;gap:6px}.phase-controls button{background:#fff;color:#00385f;padding:9px 13px;border-color:#92c6dc;font-size:17px}
+.is-active{outline:3px solid var(--blue);outline-offset:3px;box-shadow:0 0 0 8px #0a93d20e!important;transition:outline-color .3s,box-shadow .3s}
+.arrow{position:relative}.arrow:after{content:'';position:absolute;width:5px;height:5px;background:var(--blue);border-radius:50%;animation:flow 1.5s linear infinite}
+@keyframes flow{0%{translate:-10px 0;opacity:0}25%{opacity:1}100%{translate:10px 0;opacity:0}}
+.step.is-active b,.server i{animation:signal 2s ease-in-out infinite}.server:nth-child(2n) i{animation-delay:.4s}.server:nth-child(3n) i{animation-delay:.8s}
+@keyframes signal{50%{opacity:.4}}
+.cycle-steps button:after{content:'↓';margin-left:auto;color:var(--blue);font-size:18px}.cycle-steps button:last-of-type:after{content:'↺'}
+.cycle-steps [aria-pressed="true"]{box-shadow:inset 4px 0 var(--blue)}
+.motion-paused *{animation-play-state:paused!important}.slide[inert] *{animation-play-state:paused!important}
+.motion-paused *::after,.slide[inert] *::after{animation-play-state:paused!important}
+.walk-note{font-size:11px;color:var(--muted);margin:14px 0 0}.hint{margin-top:16px}
+@media(max-width:1200px){.proposal{display:none}.top{gap:10px}.tabs button{font-size:11px}}
+@media(max-width:720px){.brand{font-size:13px}.top{padding:0 14px;gap:6px}#motionToggle{font-size:10px;padding:9px 7px}#ibToggle{padding:9px 7px}.intro-grid{grid-template-columns:1fr}.intro-metric{padding:22px}.metric-pairs{gap:20px}.vehicle-flow{flex-direction:column;gap:6px}.vehicle-flow strong{width:100%}.walkthrough{grid-template-columns:auto 1fr;padding:18px;gap:12px}.phase-controls{grid-column:2}.walkthrough h3{font-size:16px}.walkthrough p{font-size:12px}.walkthrough .phase-index{font-size:28px}.intro-source{font-size:10px}.accel{flex-wrap:wrap}}
+@media(min-width:1051px) and (max-height:1050px){
+  .slide{padding-top:90px;padding-bottom:55px}.eyebrow{margin-bottom:10px}h1,h2{font-size:36px}.lead{font-size:13px;line-height:1.5;margin-top:10px}.heading{margin-bottom:12px}
+  .pipeline{margin-top:10px}.node{padding:15px}
+  .farm{padding:12px}.farm-head{margin-bottom:8px}.server{padding:8px 3px}.server i{height:12px;margin-bottom:6px}.server i:after{top:5px}.server small{margin-top:4px}.accel{padding:7px 8px;margin-top:8px}
+  .underflow{margin:8px 0 12px}.loop{margin-top:8px}.step{padding:10px}.step b{margin-bottom:5px}.step strong{font-size:13px}.step small{font-size:10px;margin-top:4px}.outcomes{margin-top:12px;padding-top:10px}.outcomes strong{font-size:10px}
+  .walkthrough{min-height:86px;margin-top:12px;padding:12px 18px}.walkthrough h3{font-size:16px}.walkthrough p{font-size:11px}
+  .intro-grid{margin-top:14px;gap:18px}.intro-stack{gap:10px}.intro-stack .card{padding:14px}.intro-stack h3{font-size:16px;margin-bottom:6px}.intro-stack p{font-size:12px;line-height:1.5}.intro-metric{padding:20px}.intro-metric .big{font-size:60px;margin:6px 0}.intro-metric p{font-size:13px}.intro-metric .small{font-size:11px}.metric-pairs{margin-top:12px}.metric-pairs b{font-size:22px}
+  .vehicle-flow{margin-top:14px}.vehicle-flow strong{padding:10px}.callout{margin-top:14px;padding:10px 14px;font-size:12px;line-height:1.5}.intro-source{margin:10px 0;font-size:9px}.hint{margin-top:10px;font-size:10px}
+  .two-col{margin-top:18px}.card{padding:18px}.card p{font-size:13px;line-height:1.5;margin:10px 0}.card h3{font-size:20px;margin-bottom:10px}.detail-line{padding:10px 0;font-size:12px}.lane{padding:20px 14px}.pill{margin-bottom:10px}
+  .cycle-steps button{padding:13px 16px}.target-chart{padding:10px 0}.target-chart strong{font-size:52px}.checks{margin-top:0;gap:8px}.check{padding:11px;font-size:12px;line-height:1.5}.approval-total{font-size:46px;margin:10px 0}.actions{margin-top:12px}.approval-note{font-size:10px!important}.status{min-height:20px}
+}
+@media(prefers-reduced-motion:reduce){*::before,*::after{animation:none!important;transition:none!important}}
+@media print{.slide{background:#fff;color:#00385f}.top,.phase-controls{display:none!important}.walkthrough,.intro-metric{print-color-adjust:exact}.is-active{outline:none}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">PARASOFT<span> / ESL</span></div>
+  <nav class="tabs" aria-label="Presentation sections">
+    <button data-slide="0" aria-current="page">01 Apollo</button><button data-slide="1">02 Workflow</button><button data-slide="2">03 Parallel scans</button><button data-slide="3">04 Fix &amp; verify</button><button data-slide="4">05 Approval</button>
+  </nav>
+  <div class="top-right"><span class="proposal">DEMONSTRATION PLAN</span><button id="motionToggle" aria-pressed="true" aria-label="Toggle walkthrough animation">Pause motion</button><button id="ibToggle" aria-pressed="true">● Incredibuild: ON</button></div>
+</header>
+<main class="deck" id="deck">
+  <section class="slide" aria-label="Apollo project introduction">
+    <div class="content">
+      <p class="eyebrow">Apollo / Autonomous driving / Customer demonstration proposal</p>
+      <h1>A real automotive codebase.<br><em>A measurable quality journey.</em></h1>
+      <p class="lead">Apollo is Baidu's open-source autonomous-driving platform: perception, localization, prediction, planning, and control, connected through Cyber RT middleware.</p>
+      <div class="intro-grid">
+        <div class="intro-metric">
+          <span class="label">LOCAL C / C++ SOURCE INVENTORY</span><strong class="big">471,310</strong>
+          <p>lines of code, excluding comments and blank lines</p>
+          <div class="metric-pairs"><div><b>4,313</b><span>C / C++ source &amp; header files</span></div><div><b>449,643</b><span>code lines excluding third_party</span></div></div>
+          <p class="small">C++: 447,579 code lines · C: 23,731 code lines<br>703,440 physical lines, including blanks and comments.</p>
+        </div>
+        <div class="intro-stack">
+          <div class="card"><h3>Languages &amp; roles</h3><p><strong>C++ / C</strong> for native components; <strong>Python / Shell</strong> for tools and automation; <strong>JavaScript / TypeScript</strong> for Dreamview UI; <strong>Protocol Buffers</strong> for message schemas. This LOC count covers C/C++ only.</p></div>
+          <div class="card"><h3>Build &amp; analysis setup</h3><p><strong>Linux + Docker + Bazel.</strong> Capture compiler invocations with Parasoft <code>cpptesttrace</code>, then analyze the agreed targets. The prior local scan used <code>//cyber/...</code>, not the entire repository. GPU dependencies vary with the selected modules.</p></div>
+        </div>
+      </div>
+      <div class="vehicle-flow" aria-label="Simplified autonomous driving flow"><strong>Sense &amp; localize</strong><span class="arrow" aria-hidden="true">→</span><strong>Predict &amp; plan</strong><span class="arrow" aria-hidden="true">→</span><strong>Control the vehicle</strong><span class="arrow" aria-hidden="true">→</span><strong>Test &amp; improve</strong></div>
+      <div class="callout amber"><strong>Readiness gate:</strong> this checkout defaults to <strong>C++14</strong> in <code>tools/bazel.rc</code>; a C++17 configuration also exists. Confirm effective compiler flags and language-mode alignment for MISRA C++:2023 before the baseline. Agree a separate ruleset for C sources.</div>
+      <p class="intro-source">Inventory: local checkout, 04 October 2026, scc 4.1.0; C/C++ source and header extensions; repository ignores respected; .git and .cache excluded. Repository inventory is not scan coverage.<br>Sources: Apollo README, <code>tools/bazel.rc</code>, local LOC measurement · <a href="https://github.com/zuwasi/apollo" target="_blank" rel="noopener noreferrer">https://github.com/zuwasi/apollo</a></p>
+      <p class="hint" id="hint">← Swipe to navigate → &nbsp; · &nbsp; Arrow keys / Space &nbsp; · &nbsp; Next: the animated demonstration workflow</p>
+    </div>
+  </section>
+  <section class="slide" aria-label="Overview" inert>
+    <div class="content">
+      <p class="eyebrow">Customer review / Demonstration plan / 04 October 2026</p>
+      <div class="heading">
+        <div><h1>Parallel analysis.<br><em>Verified improvement.</em></h1><p class="lead">Six Apollo pull requests. One controlled cycle from MISRA findings<br class="desktop-break"> to AI-assisted fixes, tested code, and visible results.</p></div>
+        <div class="statline"><div><strong>6</strong><span>PRs / SERVERS</span></div><div><strong>1</strong><span>DTP SERVER</span></div><div><strong>100</strong><span>FINDINGS TO FIX</span></div></div>
+      </div>
+      <div class="label">01 / ANALYZE IN PARALLEL <span style="color:var(--cyan)"> · SELECT ANY COMPONENT TO EXPLORE</span></div>
+      <div class="pipeline">
+        <button class="node" data-info="apollo"><span class="symbol">⑂</span><strong>Apollo</strong><small>6 independent PRs<br>Exact source revisions</small></button><div class="arrow" aria-hidden="true">→</div>
+        <button class="node" data-info="jenkins"><span class="symbol">▤</span><strong>Jenkins</strong><small>Schedule &amp; orchestrate<br>Isolated workspaces</small></button><div class="arrow" aria-hidden="true">→</div>
+        <div class="farm"><div class="farm-head"><strong>Parasoft C/C++test</strong><span>MISRA C++:2023</span></div><div class="servers">
+          <button class="server" data-pr="1" aria-label="Explore PR 1 on server 1"><i aria-hidden="true"></i>PR 1<small>SERVER 1</small></button>
+          <button class="server" data-pr="2" aria-label="Explore PR 2 on server 2"><i aria-hidden="true"></i>PR 2<small>SERVER 2</small></button>
+          <button class="server" data-pr="3" aria-label="Explore PR 3 on server 3"><i aria-hidden="true"></i>PR 3<small>SERVER 3</small></button>
+          <button class="server" data-pr="4" aria-label="Explore PR 4 on server 4"><i aria-hidden="true"></i>PR 4<small>SERVER 4</small></button>
+          <button class="server" data-pr="5" aria-label="Explore PR 5 on server 5"><i aria-hidden="true"></i>PR 5<small>SERVER 5</small></button>
+          <button class="server" data-pr="6" aria-label="Explore PR 6 on server 6"><i aria-hidden="true"></i>PR 6<small>SERVER 6</small></button>
+        </div><div class="accel"><strong class="ib-name">↗ Incredibuild acceleration</strong><span class="ib-caption">Shared coordinator + helpers</span></div></div><div class="arrow" aria-hidden="true">→</div>
+        <button class="node" data-info="dtp"><span class="symbol">▥</span><strong>DTP</strong><small>Central reporting<br>Separate PR histories</small></button>
+      </div>
+      <div class="underflow"><span>Each server analyzes its PR's full agreed scope, not one-sixth of the code.</span><span class="mode-note">IB is planned; the same demo can run without acceleration.</span></div>
+      <div class="label">02 / REMEDIATE, TEST &amp; MEASURE</div>
+      <div class="loop">
+        <button class="step" data-cycle="0"><b>01 →</b><strong>Select 100 findings</strong><small>Distinct findings total across the six PRs</small></button>
+        <button class="step" data-cycle="1"><b>02 →</b><strong>Amp + MISRA skill</strong><small>Small, reviewable C++:2023 fixes</small></button>
+        <button class="step" data-cycle="2"><b>03 →</b><strong>Build &amp; unit tests</strong><small>Parasoft tests + relevant regressions</small></button>
+        <button class="step" data-cycle="3"><b>04 →</b><strong>Rescan the same scope</strong><small>Same rules, targets, and exclusions</small></button>
+        <button class="step" data-cycle="4"><b>05 ↺</b><strong>Compare in DTP</strong><small>Before / after evidence for every PR</small></button>
+      </div>
+      <div class="outcomes"><span class="label">ACCEPTANCE TARGETS</span><strong>100 selected findings resolved</strong><strong>No new findings</strong><strong>Tests pass</strong><strong>Same analysis scope</strong></div>
+      <div class="walkthrough" role="region" aria-label="Animated workflow explanation">
+        <div class="phase-index" id="phase-number">01</div>
+        <div><span class="label">GUIDED WALKTHROUGH · NOT LIVE EXECUTION</span><h3 id="phase-title">Freeze six independent PR revisions</h3><p id="phase-body">Apollo supplies six exact PR revisions. Agree the build targets, compiler mode, and exclusions so every before/after comparison uses the same scope.</p></div>
+        <div class="phase-controls"><button id="phase-prev" aria-label="Previous workflow phase">‹</button><button id="phase-next" aria-label="Next workflow phase">›</button></div>
+      </div>
+    </div>
+  </section>
+  <section class="slide" aria-label="Six independent analysis pipelines" inert>
+    <div class="content">
+      <p class="eyebrow">01 / Parallel execution</p><h2>Six independent PRs.<br><em>One consistent process.</em></h2><p class="lead">Jenkins assigns each PR to a Parasoft automation server. Each run has its own checkout, build capture, report identity, and quality gates.</p>
+      <div class="two-col">
+        <div><div class="lane-grid" aria-label="Select a PR">
+          <button class="lane" data-lane="1" aria-pressed="true"><b>PR 01</b><span>Analysis server 01</span></button><button class="lane" data-lane="2" aria-pressed="false"><b>PR 02</b><span>Analysis server 02</span></button><button class="lane" data-lane="3" aria-pressed="false"><b>PR 03</b><span>Analysis server 03</span></button><button class="lane" data-lane="4" aria-pressed="false"><b>PR 04</b><span>Analysis server 04</span></button><button class="lane" data-lane="5" aria-pressed="false"><b>PR 05</b><span>Analysis server 05</span></button><button class="lane" data-lane="6" aria-pressed="false"><b>PR 06</b><span>Analysis server 06</span></button>
+        </div><div class="accel"><strong class="ib-name">↗ Incredibuild acceleration</strong><span class="ib-caption">Shared coordinator + helpers</span></div><div class="callout">Concurrency increases throughput across PRs. Incredibuild accelerates the supported workload. The demonstration measures actual timings; no speedup factor is promised.</div></div>
+        <div class="card" aria-live="polite"><span class="pill">PLANNED PIPELINE</span><h3 id="lane-title">PR 01 → Server 01</h3><div class="detail-line"><span>Input</span><strong>Exact PR revision</strong></div><div class="detail-line"><span>Analysis</span><strong>MISRA C++:2023</strong></div><div class="detail-line"><span>Scope</span><strong>Complete agreed build targets</strong></div><div class="detail-line"><span>DTP history</span><strong id="lane-history">PR 01 / before &amp; after</strong></div><div class="detail-line"><span>Run identity</span><strong>PR + commit + Jenkins run</strong></div><p>All six publish to one DTP server. PR-specific views keep branch results separate; shared findings are not counted six times as unique defects.</p></div>
+      </div><div class="callout amber">Readiness check: six concurrent analysis licenses, unit-test entitlements, suitable server capacity, and an agreed Apollo build scope. If IB is unavailable, continue on the six Parasoft servers without it.</div>
+    </div>
+  </section>
+  <section class="slide" aria-label="Remediation and verification" inert>
+    <div class="content">
+      <p class="eyebrow">02 / The improvement loop</p><h2>Fix the finding.<br><em>Keep the behavior.</em></h2><p class="lead">Amp assists with remediation. Builds, tests, static analysis, and human review determine whether a change is accepted.</p>
+      <p class="walk-note">Animated explanation, not scan results. Select a phase to read it at your own pace, or use the motion control above.</p>
+      <div class="two-col">
+        <div class="cycle-steps" aria-label="Explore remediation stages"><button data-stage="0" aria-pressed="true"><b>01</b> Select 100 distinct findings</button><button data-stage="1" aria-pressed="false"><b>02</b> Apply targeted fixes with Amp</button><button data-stage="2" aria-pressed="false"><b>03</b> Rebuild and run Parasoft tests</button><button data-stage="3" aria-pressed="false"><b>04</b> Rescan the same analysis scope</button><button data-stage="4" aria-pressed="false"><b>05</b> Compare and review in DTP</button><div class="callout amber">If a build, test, or scan gate fails, return to the fix stage. Do not accept or merge the change merely because the finding count is lower.</div></div>
+        <div class="card" aria-live="polite"><span class="pill">TARGET, NOT A MEASURED RESULT</span><h3 id="stage-title">Select 100 distinct findings</h3><p id="stage-body">Choose 100 actionable findings total across the six PRs. Record each rule ID, source location, baseline revision, and assigned PR. Prefer non-overlapping files and confirm the test baseline before editing.</p><div class="target-chart"><div><strong>100</strong><span>selected findings</span></div><div class="to" aria-hidden="true">→</div><div><strong class="zero">0</strong><span>selected findings remaining</span></div></div><p class="small">This is the target for the selected set, not a claim that Apollo has only 100 violations or will become violation-free.</p><div class="detail-line"><span>Also required</span><strong>No new findings + passing tests</strong></div><div class="detail-line"><span>Comparison control</span><strong>Same rules + analysis scope</strong></div></div>
+      </div>
+    </div>
+  </section>
+  <section class="slide" aria-label="Customer approval scope" inert>
+    <div class="content">
+      <p class="eyebrow">03 / Customer decision</p><h2>Agree the scope.<br><em>Then run the demonstration.</em></h2><p class="lead">Review these four items together. Download the review summary and return it through your normal approval process.</p>
+      <div class="two-col">
+        <div class="checks">
+          <label class="check"><input type="checkbox" value="scope"><span><strong>Six PRs, six analysis servers, one DTP</strong>Confirm the Apollo revision, build targets, C++ language mode, exclusions, and reporting views before execution.</span></label>
+          <label class="check"><input type="checkbox" value="findings"><span><strong>100 distinct findings in total</strong>Select actionable MISRA C++:2023 findings, use Amp with rule-specific skill guidance, and review the fixes.</span></label>
+          <label class="check"><input type="checkbox" value="gates"><span><strong>Evidence-based acceptance</strong>Passing builds and relevant tests, all selected findings resolved, no new findings, unchanged scan scope, and a combined integration check.</span></label>
+          <label class="check"><input type="checkbox" value="fallback"><span><strong>Incredibuild is planned, not a prerequisite</strong>If unavailable, run the same six-server demonstration without acceleration. Record the execution mode and actual timings.</span></label>
+        </div>
+        <div class="card"><span class="pill">PROPOSAL / AWAITING CUSTOMER APPROVAL</span><h3>The deliverable is evidence.</h3><div class="approval-total">6 / 6 / 1 <span>PRs / servers / DTP</span></div><p>Per-PR baseline and final reports, reviewed patches, test results, actual timings, and a traceable summary of the 100 selected findings.</p><div class="detail-line"><span>Current presentation mode</span><strong id="approval-mode">With Incredibuild</strong></div><div class="detail-line"><span>Items reviewed</span><strong id="review-count">0 of 4</strong></div><div class="actions"><button class="primary" id="download">Download review summary</button><button class="secondary" id="reset">Reset checklist</button></div><p class="status" id="review-status" role="status">Review selections are local to this page.</p><p class="approval-note">This page does not submit or record customer approval. No personal information is collected. A successful demo is not a claim of full MISRA compliance or production safety certification.</p></div>
+      </div><p class="small">Project: <a href="https://github.com/zuwasi/apollo" target="_blank" rel="noopener noreferrer">https://github.com/zuwasi/apollo</a> · Presented by ESL, Engineering Software Lab.</p>
+    </div>
+  </section>
+</main>
+<button class="nav-arrow" id="prev" aria-label="Previous slide" hidden>‹</button><button class="nav-arrow" id="next" aria-label="Next slide">›</button>
+<footer class="footer"><span>ESL / ENGINEERING SOFTWARE LAB</span><span class="footer-middle">PROPOSED DEMO · <a href="overview.png" download>DOWNLOAD OVERVIEW IMAGE</a></span><span id="counter" aria-live="polite">1 / 5</span></footer><div class="progress" role="progressbar" aria-label="Presentation progress" aria-valuemin="1" aria-valuemax="5" aria-valuenow="1"><div id="progress-fill" style="width:20%"></div></div>
+<dialog id="info-dialog" aria-labelledby="info-title"><button class="close" id="close-dialog" aria-label="Close details">Close ×</button><span class="label">WORKFLOW COMPONENT</span><h3 id="info-title"></h3><p id="info-body"></p></dialog>
+<script>
+'use strict';
+const slides = [...document.querySelectorAll('.slide')];
+const dialog = document.getElementById('info-dialog');
+let current = 0;
+let ibEnabled = true;
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let motionEnabled = !reducedMotion.matches;
+let phase = 0;
+let stage = 0;
+const stages = [
+  ['Select 100 distinct findings', 'Choose 100 actionable findings total across the six PRs. Record each rule ID, source location, baseline revision, and assigned PR. Prefer non-overlapping files and confirm the test baseline before editing.'],
+  ['Apply targeted fixes with Amp', 'Provide Amp with the exact diagnostics and verified MISRA C++:2023 rule guidance through the skill. Make small, reviewable changes that preserve intended behavior. Suppressing a warning or disabling a rule does not count as fixing it.'],
+  ['Rebuild and run Parasoft tests', 'Rebuild the changed code and run relevant Parasoft unit tests plus regression tests. Add meaningful assertions for changed behavior where needed. Test failures return the work to remediation; passing tests are necessary but not proof of complete behavioral equivalence.'],
+  ['Rescan the same analysis scope', 'Run Parasoft again with the same version, compiler configuration, rules, build targets, and exclusions. Check for setup errors and missing files before interpreting a reduction. Any new finding must be investigated and resolved.'],
+  ['Compare and review in DTP', 'Publish a new build identity for each revised PR and compare it with that PR’s baseline. Verify that all 100 selected findings are resolved and no new findings appear. Human review and a combined integration build, test, and scan precede merging.']
+];
+const components = {
+  apollo: ['Apollo / six independent PRs', 'The proposed source repository is github.com/zuwasi/apollo. Each PR uses an exact revision and the same agreed analysis scope. Freeze the build targets, compiler, C++ language mode, and exclusions before establishing the baseline. C sources need a separately agreed C ruleset.'],
+  jenkins: ['Jenkins / workflow orchestration', 'Jenkins schedules six independent pipelines, one per analysis server. Each has an isolated source checkout, build capture, artifacts, and reporting identity. Build or test failures stop acceptance and send the change back for correction.'],
+  dtp: ['DTP / one reporting destination', 'One DTP server receives the six PR result sets and test evidence. PR-specific histories and unique build IDs support before/after comparison. Findings from different branches are not summed as unique project defects. The dashboard presents collected results, not proof of complete MISRA compliance.']
+};
+function goTo(index) {
+  const next = Math.max(0, Math.min(slides.length - 1, index));
+  if (next !== current) document.getElementById('hint').classList.add('hidden');
+  const focusedSlide = document.activeElement.closest('.slide');
+  if (focusedSlide && focusedSlide !== slides[next]) document.activeElement.blur();
+  current = next;
+  document.getElementById('deck').style.transform = `translateX(-${current * 100}vw)`;
+  slides.forEach((slide, i) => { slide.inert = i !== current; });
+  document.querySelectorAll('[data-slide]').forEach(button => {
+    if (Number(button.dataset.slide) === current) button.setAttribute('aria-current', 'page');
+    else button.removeAttribute('aria-current');
+  });
+  document.getElementById('prev').hidden = current === 0;
+  document.getElementById('next').hidden = current === slides.length - 1;
+  document.getElementById('counter').textContent = `${current + 1} / ${slides.length}`;
+  document.getElementById('progress-fill').style.width = `${(current + 1) / slides.length * 100}%`;
+  document.querySelector('.progress').setAttribute('aria-valuenow', current + 1);
+}
+function selectLane(pr) {
+  const id = String(pr).padStart(2, '0');
+  document.getElementById('lane-title').textContent = `PR ${id} → Server ${id}`;
+  document.getElementById('lane-history').textContent = `PR ${id} / before & after`;
+  document.querySelectorAll('[data-lane]').forEach(button => button.setAttribute('aria-pressed', Number(button.dataset.lane) === pr));
+}
+function selectStage(index) {
+  stage = index;
+  document.getElementById('stage-title').textContent = stages[index][0];
+  document.getElementById('stage-body').textContent = stages[index][1];
+  document.querySelectorAll('[data-stage]').forEach(button => button.setAttribute('aria-pressed', Number(button.dataset.stage) === index));
+}
+const phases = [
+  ['[data-info="apollo"]', 'Freeze six independent PR revisions', 'Apollo supplies six exact PR revisions. Agree the build targets, compiler mode, and exclusions so every before/after comparison uses the same scope.'],
+  ['[data-info="jenkins"]', 'Jenkins dispatches six isolated jobs', 'One controller routes each PR to its assigned Parasoft automation server. Each job keeps its own checkout, build capture, artifacts, and run identity.'],
+  ['.farm', 'Six servers analyze in parallel', 'Each server runs MISRA C++:2023 analysis on its PR\'s complete agreed scope. Incredibuild accelerates the supported workload; this is six PR scans, not one scan split into six.'],
+  ['[data-info="dtp"]', 'DTP gathers the baseline results', 'The six servers publish to one DTP. Separate PR histories and unique build IDs preserve traceability. Review all reported findings in scope; do not count a shared defect six times.'],
+  ...stages.map((entry, index) => [`[data-cycle="${index}"]`, ...entry])
+];
+function selectPhase(index) {
+  phase = (index + phases.length) % phases.length;
+  document.querySelectorAll('.is-active').forEach(el => el.classList.remove('is-active'));
+  document.querySelector(phases[phase][0]).classList.add('is-active');
+  document.getElementById('phase-number').textContent = String(phase + 1).padStart(2, '0');
+  document.getElementById('phase-title').textContent = phases[phase][1];
+  document.getElementById('phase-body').textContent = phase === 2 && !ibEnabled
+    ? 'Each of the same six Parasoft servers analyzes its assigned PR without Incredibuild. Rules, scope, test gates, and DTP reporting stay unchanged. Record this mode and measure actual timings.'
+    : phases[phase][2];
+}
+function setMotion(enabled) {
+  motionEnabled = enabled;
+  document.body.classList.toggle('motion-paused', !enabled);
+  document.getElementById('motionToggle').setAttribute('aria-pressed', enabled);
+  document.getElementById('motionToggle').textContent = enabled ? 'Pause motion' : 'Play motion';
+}
+document.getElementById('motionToggle').addEventListener('click', () => setMotion(!motionEnabled));
+reducedMotion.addEventListener('change', () => setMotion(!reducedMotion.matches));
+document.getElementById('phase-prev').addEventListener('click', () => { setMotion(false); selectPhase(phase - 1); });
+document.getElementById('phase-next').addEventListener('click', () => { setMotion(false); selectPhase(phase + 1); });
+setInterval(() => {
+  if (!motionEnabled || document.hidden || dialog.open) return;
+  if (current === 1) selectPhase(phase + 1);
+  if (current === 3) selectStage((stage + 1) % stages.length);
+}, 6500);
+setMotion(motionEnabled);
+selectPhase(0);
+document.querySelectorAll('[data-slide]').forEach(button => button.addEventListener('click', () => goTo(Number(button.dataset.slide))));
+document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+document.querySelectorAll('[data-pr]').forEach(button => button.addEventListener('click', () => { selectLane(Number(button.dataset.pr)); goTo(2); }));
+document.querySelectorAll('[data-lane]').forEach(button => button.addEventListener('click', () => selectLane(Number(button.dataset.lane))));
+document.querySelectorAll('[data-cycle]').forEach(button => button.addEventListener('click', () => { setMotion(false); selectStage(Number(button.dataset.cycle)); goTo(3); }));
+document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => { setMotion(false); selectStage(Number(button.dataset.stage)); }));
+document.querySelectorAll('[data-info]').forEach(button => button.addEventListener('click', () => {
+  const info = components[button.dataset.info];
+  document.getElementById('info-title').textContent = info[0];
+  document.getElementById('info-body').textContent = info[1];
+  dialog.showModal();
+}));
+document.getElementById('close-dialog').addEventListener('click', () => dialog.close());
+document.getElementById('ibToggle').addEventListener('click', () => {
+  ibEnabled = !ibEnabled;
+  document.body.classList.toggle('fallback', !ibEnabled);
+  const toggle = document.getElementById('ibToggle');
+  toggle.setAttribute('aria-pressed', ibEnabled);
+  toggle.textContent = ibEnabled ? '● Incredibuild: ON' : '○ Incredibuild: OFF';
+  document.querySelectorAll('.ib-name').forEach(el => { el.textContent = ibEnabled ? '↗ Incredibuild acceleration' : '↗ Standard execution / no IB'; });
+  document.querySelectorAll('.ib-caption').forEach(el => { el.textContent = ibEnabled ? 'Shared coordinator + helpers' : 'Same six Parasoft servers'; });
+  document.querySelector('.mode-note').textContent = ibEnabled ? 'IB is planned; the same demo can run without acceleration.' : 'Fallback mode: same scope and gates; timings may differ.';
+  document.getElementById('approval-mode').textContent = ibEnabled ? 'With Incredibuild' : 'Without Incredibuild (fallback)';
+  selectPhase(phase);
+});
+document.addEventListener('keydown', event => {
+  if (dialog.open || event.altKey || event.ctrlKey || event.metaKey || event.target.closest('input, textarea, select')) return;
+  if (event.key === ' ' && event.target.closest('button, a')) return;
+  if (['ArrowRight', 'ArrowLeft', ' '].includes(event.key)) {
+    event.preventDefault();
+    goTo(current + (event.key === 'ArrowLeft' ? -1 : 1));
+  }
+});
+let touchStart = null;
+let mouseStart = null;
+function finishSwipe(start, x, y) {
+  if (!start || dialog.open) return;
+  const dx = x - start.x;
+  if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(y - start.y) * 1.5) goTo(current + (dx < 0 ? 1 : -1));
+}
+document.addEventListener('touchstart', event => {
+  touchStart = event.target.closest('button, input, label, a, dialog') || event.touches.length !== 1 ? null : { x: event.touches[0].clientX, y: event.touches[0].clientY };
+}, { passive: true });
+document.addEventListener('touchend', event => { finishSwipe(touchStart, event.changedTouches[0].clientX, event.changedTouches[0].clientY); touchStart = null; }, { passive: true });
+document.addEventListener('touchcancel', () => { touchStart = null; });
+document.addEventListener('mousedown', event => { mouseStart = event.button !== 0 || event.target.closest('button, input, label, a, dialog') ? null : { x: event.clientX, y: event.clientY }; });
+document.addEventListener('mouseup', event => { finishSwipe(mouseStart, event.clientX, event.clientY); mouseStart = null; });
+const checks = [...document.querySelectorAll('.check input')];
+function updateReview() {
+  const count = checks.filter(input => input.checked).length;
+  document.getElementById('review-count').textContent = `${count} of 4`;
+  document.getElementById('review-status').textContent = count === 4 ? 'All items reviewed. Download and send for formal approval.' : 'Review selections are local to this page.';
+}
+checks.forEach(input => input.addEventListener('change', updateReview));
+document.getElementById('reset').addEventListener('click', () => { checks.forEach(input => { input.checked = false; }); updateReview(); });
+document.getElementById('download').addEventListener('click', () => {
+  const text = [
+    'APOLLO / CUSTOMER DEMONSTRATION REVIEW', 'Proposal version: 04 October 2026',
+    'Project: https://github.com/zuwasi/apollo',
+    'Local inventory: 471,310 C/C++ code lines; 4,313 source/header files; comments and blank lines excluded. This is not analyzed scope.',
+    'Build readiness: Linux/Docker/Bazel. Checkout defaults to C++14; confirm effective compiler flags and MISRA C++:2023 language-mode alignment before the baseline.',
+    'Scope: 6 independent PRs; 6 Parasoft analysis servers; 1 Jenkins controller; 1 DTP server.',
+    'Target: fix 100 distinct MISRA C++:2023 findings total using Amp with rule-specific skill guidance.',
+    `Selected execution mode: ${ibEnabled ? 'With Incredibuild' : 'Without Incredibuild (fallback)'}.`,
+    'Fallback: if IB is unavailable, run the same demo without acceleration. Measure actual timings.',
+    'Acceptance: selected findings resolved; no new findings; builds and relevant tests pass; unchanged analysis scope; human review and combined integration check.',
+    '', 'CHECKLIST:', ...checks.map(input => `${input.checked ? '[Reviewed]' : '[Not yet reviewed]'} ${input.closest('label').innerText.replace(/\s+/g, ' ').trim()}`),
+    '', 'This is a review summary, not recorded approval. Return your decision through the agreed approval process.',
+    'Decision (complete outside this page):', 'Approver / date:', 'Conditions or changes:',
+    '', 'No speedup factor, full MISRA compliance, or production safety certification is promised.'
+  ].join('\n');
+  const url = URL.createObjectURL(new Blob([text], { type: 'text/plain;charset=utf-8' }));
+  const anchor = document.createElement('a');
+  anchor.href = url; anchor.download = 'apollo-demo-review.txt'; anchor.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+  document.getElementById('review-status').textContent = 'Review summary downloaded. No approval has been submitted.';
+});
+</script>
+</body>
+</html>
