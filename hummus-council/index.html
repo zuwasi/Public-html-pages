@@ -1197,6 +1197,8 @@
                       <option value="netanya">Netanya</option>
                       <option value="kafr-qara">Kafr Qara</option>
                       <option value="hod-hasharon">Hod HaSharon</option>
+                      <option value="tira">Tira</option>
+                      <option value="shefa-amr">Shefa-'Amr</option>
                     </select>
                   </div>
                   <div class="field">
@@ -1305,7 +1307,7 @@
                       checked
                     /><span class="source-name"
                       >Hummusologists · community reviews</span
-                    ><small>18 posts · 15 candidates</small></label
+                    ><small>22 posts · 19 candidates</small></label
                   >
                   <div class="hint">
                     Curated review snapshot. No live scraping.
@@ -1656,10 +1658,10 @@
           },
         },
         abuRami: {
-          title: "Abu Rami · honeymoon hummus",
+          title: "Abu Rami · Daniel's personal favourite · honeymoon hummus",
           date: null,
           htmlPost: 10,
-          note: "In a post about a song and romantic hummus dates, Daniel recalls visiting Abu Rami in Rameh on his honeymoon. A named historical visit, not a texture review or current availability check. The romance minister votes yes; the evidence minister leaves the style unknown.",
+          note: "In his saved post, Daniel recalls visiting Abu Rami in Rameh on his honeymoon. In a direct update to this demo on 4 October 2026, he confirms it is his personal favourite and that he went there with his wife. This personal endorsement is separate from Sarit Elberg's Facebook review; the original post date and texture remain unknown. No bonus rule points for romance. The honeymoon minister has declared a delicious conflict of interest.",
           restaurant: {
             id: "abu-rami",
             name: "Abu Rami",
@@ -1944,6 +1946,54 @@
           note: "Shay Iluz enjoyed slightly tangy Jerusalem-style hummus with chickpeas and excellent masabacha, but liked the hummus-ful less. He reports NIS 57 for a shared spread, not a single-plate price or current offer. Masabacha supports the chunky tag. The ful delegation filed a minority report.",
         },
         {
+          id: "lul-tira",
+          name: "Hummus Lul",
+          he: "חומוס לול",
+          city: "tira",
+          place: "Tira",
+          tags: [],
+          source: "facebook",
+          date: "2025-06-16",
+          url: "https://www.facebook.com/groups/Msabbaha/permalink/1623580184950245/",
+          note: "Eran Mosseri recommends Lul's hummus-ful, praising its taste and smooth texture. He reports NIS 30 including free refills, pickles, freshly cut vegetables, two pitas and a drink on that visit, not a current offer. Smooth does not establish lightness. The refill committee has requested a larger table.",
+        },
+        {
+          id: "al-hawam-shefa-amr",
+          name: "Hummus Al-Hawam",
+          he: "חומוס אל חוואם",
+          city: "shefa-amr",
+          place: "Shefa-'Amr",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2026-09-19",
+          url: "https://www.facebook.com/groups/Msabbaha/permalink/1979265396048387/",
+          note: "Ilan Ronen enjoyed gently seasoned, garlicky mashawsha topped with very hot chickpeas, crisp herb falafel and mild tatbila. He noticed chickpea skins but says they did not spoil the taste. Mashawsha supports chunky, not lightness. NIS 35 for the plate, falafel and a drink was his visit price, not a current promise. No street address is given. The garlic delegation arrived in force.",
+        },
+        {
+          id: "nader-hagadol-tel-aviv",
+          name: "Nader HaGadol",
+          he: "נאדר הגדול",
+          city: "tel-aviv",
+          place: "Tel Aviv · Ben Zvi Road",
+          tags: [],
+          source: "facebook",
+          date: "2026-09-05",
+          url: "https://www.facebook.com/groups/Msabbaha/permalink/1967895890518671/",
+          note: "Rami Levi found the hummus-ful tasty but reports an ordering and billing dispute on his first visit. He says fries and falafel arrived unrequested and were returned, yet he was asked for NIS 48 for a complete meal. This is his account of one visit, not an independently verified finding or an established pattern. A mixed review, not an unqualified recommendation; confirm the order and price. Texture is not established. The council recommends reading the menu before approving the minutes.",
+        },
+        {
+          id: "abu-rami",
+          name: "Abu Rami",
+          he: "אבו ראמי",
+          city: "rameh",
+          place: "Rameh",
+          tags: [],
+          source: "facebook",
+          date: "2026-09-12",
+          url: "https://www.facebook.com/groups/Msabbaha/permalink/1973682316606695/",
+          note: "Sarit Elberg praises Abu Rami's hummus, generous dishes and good service in Rameh. Her meal included chickpea-topped and meat-topped hummus, tabbouleh, mujaddara, lemonade and a surprising watermelon-cake dessert. NIS 200 was the total for that meal, not a single plate or current offer. Toppings and portion size do not establish base texture. This is Sarit's review, not Daniel's honeymoon account. Dessert has applied for council membership.",
+        },
+        {
           id: "fawzi-hashamen",
           name: "Fawzi Ful · HaHummus Shel HaShamen",
           he: "פאוזי פול · החומוס של השמן",
@@ -2125,7 +2175,7 @@
         const weights = urgent
           ? { location: 55, taste: 20, season: 15, evidence: 10 }
           : { location: 40, taste: 30, season: 20, evidence: 10 };
-        // One seat per restaurant. When both are selected, keep the existing blog profile.
+        // One seat per restaurant. Blog/community profiles precede Daniel's personal accounts.
         const sourced = RESTAURANTS.filter((r) =>
           input.sources.includes(r.source),
         ).filter(
@@ -2237,6 +2287,17 @@
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
+        "Sarit Elberg praises Abu Rami's hummus, generous dishes and good service in Rameh. Her meal included chickpea-topped and meat-topped hummus, tabbouleh, mujaddara, lemonade and a surprising watermelon-cake dessert. NIS 200 was the total for that meal, not a single plate or current offer. Toppings and portion size do not establish base texture. This is Sarit's review, not Daniel's honeymoon account. Dessert has applied for council membership.":
+          "שרית אלברג משבחת את החומוס של אבו ראמי בראמה, את המנות הנדיבות ואת השירות הטוב. הארוחה כללה חומוס גרגרים, חומוס בשר, טאבולה, מג׳דרה, לימונדה וקינוח מפתיע של עוגת אבטיח. 200 ש״ח היו המחיר הכולל לארוחה ההיא, לא לצלחת אחת ולא כהצעה עדכנית. התוספות וגודל המנות אינם קובעים את מרקם הבסיס. זו ביקורת של שרית, לא סיפור ירח הדבש של דניאל. הקינוח הגיש מועמדות למועצה.",
+        Tira: "טירה",
+        "Shefa-'Amr": "שפרעם",
+        "Tel Aviv · Ben Zvi Road": "תל אביב · דרך בן צבי",
+        "Eran Mosseri recommends Lul's hummus-ful, praising its taste and smooth texture. He reports NIS 30 including free refills, pickles, freshly cut vegetables, two pitas and a drink on that visit, not a current offer. Smooth does not establish lightness. The refill committee has requested a larger table.":
+          "ערן מוסרי ממליץ על החומוס־פול של לול ומשבח את הטעם והמרקם החלק. הוא מדווח על 30 ש״ח כולל מילוי חוזר חופשי, חמוצים, ירקות שנחתכו במקום, שתי פיתות ושתייה בביקור ההוא, לא כהצעה עדכנית. מרקם חלק אינו מעיד על קלילות. ועדת המילוי החוזר ביקשה שולחן גדול יותר.",
+        "Ilan Ronen enjoyed gently seasoned, garlicky mashawsha topped with very hot chickpeas, crisp herb falafel and mild tatbila. He noticed chickpea skins but says they did not spoil the taste. Mashawsha supports chunky, not lightness. NIS 35 for the plate, falafel and a drink was his visit price, not a current promise. No street address is given. The garlic delegation arrived in force.":
+          "אילן רונן נהנה ממשאושה בתיבול עדין עם שום בנדיבות וגרגרים חמים מאוד, מפלאפל פריך עם עשבי תיבול ומטביילה לא חריפה מדי. הוא הבחין בקליפות גרגרים אך לדבריו הן לא פגעו בטעם. המשאושה תומכת בתגית גרגרית, לא בקלילות. 35 ש״ח לצלחת, לפלאפל ולשתייה היו המחיר בביקורו, לא הבטחה עדכנית. לא נמסרה כתובת רחוב. משלחת השום הגיעה בהרכב מלא.",
+        "Rami Levi found the hummus-ful tasty but reports an ordering and billing dispute on his first visit. He says fries and falafel arrived unrequested and were returned, yet he was asked for NIS 48 for a complete meal. This is his account of one visit, not an independently verified finding or an established pattern. A mixed review, not an unqualified recommendation; confirm the order and price. Texture is not established. The council recommends reading the menu before approving the minutes.":
+          "רמי לוי מצא שהחומוס־פול טעים, אך מדווח על מחלוקת בנוגע להזמנה ולחשבון בביקורו הראשון. לדבריו הגיעו צ׳יפס ופלאפל שלא הזמין והוחזרו, ובכל זאת התבקש לשלם 48 ש״ח על קומפלט. זהו תיאור שלו מביקור אחד, לא ממצא שאומת באופן עצמאי או דפוס מוכח. ביקורת מעורבת, לא המלצה גורפת; כדאי לוודא מראש מה מזמינים ומה המחיר. המרקם לא תואר. המועצה ממליצה לקרוא את התפריט לפני אישור הפרוטוקול.",
         "Baqa al-Gharbiyye": "באקה אל־גרבייה",
         Sakhnin: "סח׳נין",
         "Kafr Yasif": "כפר יאסיף",
@@ -2255,9 +2316,9 @@
         "Hod HaSharon · 2 Sokolov Street": "הוד השרון · סוקולוב 2",
         "Jerusalem · 10 Salah al-Din Street": "ירושלים · צלאח אלדין 10",
         "Additional review ↗": "ביקורת נוספת ↗",
-        "18 posts · 15 candidates": "18 פוסטים · 15 מועמדים",
-        "Community evidence: 18 posts, 15 restaurant candidates and one unnamed visit kept as background. Multiple reviews share one restaurant seat. These are the named members' reviews, not Daniel's. New post dates were verified from Facebook's public post metadata. Historical prices and refills are not current promises.":
-          "ראיות מהקהילה: 18 פוסטים, 15 מועמדים וביקור אחד ללא שם מסעדה שנשמר כרקע. כמה ביקורות על אותה מסעדה חולקות כיסא אחד. אלה ביקורות של חברי הקבוצה המצוינים בשמם, לא של דניאל. תאריכי הפוסטים החדשים אומתו מנתוני הפרסום הציבוריים של פייסבוק. מחירים ומילויים חוזרים מהעבר אינם הבטחה להיום.",
+        "22 posts · 19 candidates": "22 פוסטים · 19 מועמדים",
+        "Community evidence: 22 posts, 19 restaurant candidates and one unnamed visit kept as background. Multiple reviews share one restaurant seat. These are the named members' reviews, not Daniel's. New post dates were verified from Facebook's public post metadata. Historical prices and refills are not current promises.":
+          "ראיות מהקהילה: 22 פוסטים, 19 מועמדים וביקור אחד ללא שם מסעדה שנשמר כרקע. כמה ביקורות על אותה מסעדה חולקות כיסא אחד. אלה ביקורות של חברי הקבוצה המצוינים בשמם, לא של דניאל. תאריכי הפוסטים החדשים אומתו מנתוני הפרסום הציבוריים של פייסבוק. מחירים ומילויים חוזרים מהעבר אינם הבטחה להיום.",
         "Unnamed restaurant · Beer Sheva": "מסעדה ללא שם · באר שבע",
         "Tzahi Granot enjoyed tangy hummus with generous olive oil and good value, but found the chickpeas slightly too firm. The visible author text names Beer Sheva, not the restaurant. Background only, excluded from Jev's shortlist until the business is identified. The council cannot send you to a mystery plate.":
           "צחי גרנות נהנה מחומוס חמצמץ עם שמן זית בנדיבות ומתמורה טובה למחיר, אך הגרגרים היו מעט קשים מדי לטעמו. הטקסט הגלוי של הכותב מציין באר שבע, בלי שם המסעדה. רקע בלבד, מחוץ לרשימת המועמדים של Jev עד לזיהוי העסק. המועצה לא תשלח אתכם לצלחת מסתורית.",
@@ -2341,8 +2402,8 @@
         "Date unknown": "התאריך לא ידוע",
         "Lunch candidate": "מועמד לארוחה",
         "Background only": "רקע בלבד",
-        "One seat per restaurant. When both sources cover Abu Hassan, the existing blog profile is used; select Daniel alone to use his account. Older or undated reviews receive 5 evidence points.":
-          "כיסא אחד לכל מסעדה. כששני המקורות מכסים את אבו חסן, נעשה שימוש בפרופיל הקיים מהבלוג; בחרו רק בדניאל כדי להשתמש בתיאור שלו. ביקורות ישנות או ללא תאריך מקבלות 5 נקודות ראיות.",
+        "One seat per restaurant. When sources overlap, Abu Hassan uses the blog profile and Abu Rami uses Sarit's community review; select Daniel alone to use his personal accounts. Older or undated reviews receive 5 evidence points.":
+          "כיסא אחד לכל מסעדה. כשיש חפיפה בין המקורות, אבו חסן משתמש בפרופיל מהבלוג ואבו ראמי בביקורת הקהילה של שרית; בחרו רק בדניאל כדי להשתמש בתיאורים האישיים שלו. ביקורות ישנות או ללא תאריך מקבלות 5 נקודות ראיות.",
         "Hummus El-Sham · Haifa": "חומוס אלשאם · חיפה",
         "Haifa · Wadi Nisnas": "חיפה · ואדי ניסנאס",
         "Daniel mentions Hummus El-Sham in Wadi Nisnas, Haifa, and his difficulty eating in summer heat and humidity. The visible excerpt does not establish texture, lightness or a food rating. His cold-spring method is hidden behind See more. Historical mention only; style remains unknown.":
@@ -2387,9 +2448,10 @@
         "Abu Qassem · the olive delegation": "אבו קאסם · משלחת הזיתים",
         "Daniel praises Abu Qassem in Fureidis, especially the homemade olives, and says the hummus is not drowned in oil. That does not establish a light texture. He reports NIS 30 with two pitas and complimentary coffee on that visit. Refills were speculation, not a confirmed policy. The olives may campaign, but cannot promise free refills.":
           "דניאל משבח את אבו קאסם בפוריידיס, במיוחד את הזיתים תוצרת הבית, וכותב שהחומוס לא טובע בשמן. זה לא קובע שהמרקם קליל. הוא מדווח על 30 שקל עם שתי פיתות וקפה על חשבון הבית באותו ביקור. הריפיל היה השערה, לא מדיניות מאומתת. הזיתים רשאים לנהל קמפיין, אבל לא להבטיח מילוי חינם.",
-        "Abu Rami · honeymoon hummus": "אבו ראמי · חומוס ירח דבש",
-        "In a post about a song and romantic hummus dates, Daniel recalls visiting Abu Rami in Rameh on his honeymoon. A named historical visit, not a texture review or current availability check. The romance minister votes yes; the evidence minister leaves the style unknown.":
-          "בפוסט על שיר ודייטים רומנטיים על חומוס, דניאל נזכר בביקור אצל אבו ראמי בראמה בירח הדבש. זהו ביקור היסטורי במקום מזוהה, לא ביקורת מרקם או בדיקת זמינות עדכנית. שר הרומנטיקה מצביע בעד; שר הראיות משאיר את הסגנון לא ידוע.",
+        "Abu Rami · Daniel's personal favourite · honeymoon hummus":
+          "אבו ראמי · האהוב על דניאל · חומוס ירח דבש",
+        "In his saved post, Daniel recalls visiting Abu Rami in Rameh on his honeymoon. In a direct update to this demo on 4 October 2026, he confirms it is his personal favourite and that he went there with his wife. This personal endorsement is separate from Sarit Elberg's Facebook review; the original post date and texture remain unknown. No bonus rule points for romance. The honeymoon minister has declared a delicious conflict of interest.":
+          "בפוסט השמור שלו דניאל נזכר בביקור אצל אבו ראמי בראמה בירח הדבש. בעדכון ישיר לדמו ב־4 באוקטובר 2026 הוא מאשר שזה החומוס האהוב עליו ושהגיע לשם עם אשתו. ההמלצה האישית הזאת נפרדת מביקורת הפייסבוק של שרית אלברג; תאריך הפוסט המקורי והמרקם עדיין אינם ידועים. אין נקודות בונוס על רומנטיקה. שר ירח הדבש הכריז על ניגוד עניינים טעים במיוחד.",
         Fureidis: "פוריידיס",
         Rameh: "ראמה",
         "Al-Lubban al-Gharbi": "א־לובאן אל־ע׳רבי",
@@ -3150,7 +3212,7 @@
           .join("")}</section>`;
       }
       const sourcePolicy =
-        "One seat per restaurant. When both sources cover Abu Hassan, the existing blog profile is used; select Daniel alone to use his account. Older or undated reviews receive 5 evidence points.";
+        "One seat per restaurant. When sources overlap, Abu Hassan uses the blog profile and Abu Rami uses Sarit's community review; select Daniel alone to use his personal accounts. Older or undated reviews receive 5 evidence points.";
       function openInfo(showSources) {
         $("dialog-title").textContent = tr(
           showSources
@@ -3163,7 +3225,7 @@
             ? `<h2>${tr("Daniel's own reviews")}</h2>` +
               danielEvidence() +
               "<h2>Curated review snapshot</h2><p>Updated 4 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the authors' ratings. Unknown styles stay unknown. Profiles with multiple reviews show the latest publication date; the summary identifies each author.</p>" +
-              "<p class=\"caution\">Community evidence: 18 posts, 15 restaurant candidates and one unnamed visit kept as background. Multiple reviews share one restaurant seat. These are the named members' reviews, not Daniel's. New post dates were verified from Facebook's public post metadata. Historical prices and refills are not current promises.</p>" +
+              "<p class=\"caution\">Community evidence: 22 posts, 19 restaurant candidates and one unnamed visit kept as background. Multiple reviews share one restaurant seat. These are the named members' reviews, not Daniel's. New post dates were verified from Facebook's public post metadata. Historical prices and refills are not current promises.</p>" +
               '<article id="community-background"><h3>Unnamed restaurant · Beer Sheva</h3><p class="source-detail"><span>Background only</span> · <bdi>2026-09-27</bdi></p><p>Tzahi Granot enjoyed tangy hummus with generous olive oil and good value, but found the chickpeas slightly too firm. The visible author text names Beer Sheva, not the restaurant. Background only, excluded from Jev\'s shortlist until the business is identified. The council cannot send you to a mystery plate.</p><a href="https://www.facebook.com/groups/Msabbaha/permalink/1986335968674663/" target="_blank" rel="noopener noreferrer">Read the original ↗</a></article>' +
               RESTAURANTS.filter((r) => r.source !== "daniel")
                 .map(

@@ -198,14 +198,17 @@ test("added reviews preserve attribution, dates and source/city restrictions", (
     "https://www.facebook.com/groups/Msabbaha/posts/1544271516214446/",
   );
   assert.equal(decide({ ...community, sources: ["daniel"] }).rows.length, 0);
-  assert.equal(decide({ ...community, city: "tel-aviv" }).rows.length, 0);
+  assert.deepEqual(
+    Array.from(decide({ ...community, city: "tel-aviv" }).rows, (r) => r.id),
+    ["nader-hagadol-tel-aviv"],
+  );
   assert.equal(
     decide({ ...community, city: "tel-aviv", travel: "any" }).rows.length,
-    15,
+    19,
   );
   assert.equal(
     decide({ ...base, travel: "any", sources: Object.keys(SOURCES) }).sourced,
-    40,
+    43,
   );
 });
 test("new community evidence preserves places, dates and conservative style tags", () => {
@@ -234,6 +237,9 @@ test("new community evidence preserves places, dates and conservative style tags
     ["abu-adam-qalansuwa", "qalansuwa", "2026-09-26", "", "Rami Moscovich"],
     ["neri-hod-hasharon", "hod-hasharon", "2026-06-23", "chunky", "Noam Atlas"],
     ["abu-ali-jerusalem", "jerusalem", "2026-09-28", "chunky", "Shay Iluz"],
+    ["lul-tira", "tira", "2025-06-16", "", "Eran Mosseri"],
+    ["al-hawam-shefa-amr", "shefa-amr", "2026-09-19", "chunky", "Ilan Ronen"],
+    ["nader-hagadol-tel-aviv", "tel-aviv", "2026-09-05", "", "Rami Levi"],
   ];
   for (const [id, city, date, tags, author] of expected) {
     const input = { ...base, city, sources: ["facebook"] };
@@ -249,15 +255,15 @@ test("new community evidence preserves places, dates and conservative style tags
       !decide({ ...input, sources: ["daniel"] }).rows.some((r) => r.id === id),
     );
     assert.ok(
-      !decide({ ...input, city: "tel-aviv" }).rows.some((r) => r.id === id),
+      !decide({ ...input, city: "haifa" }).rows.some((r) => r.id === id),
     );
     assert.match(html, new RegExp(`<option value="${city}">`));
   }
 });
 test("repeated community reviews keep both authors and links but only one seat", () => {
   const rows = decide({ ...base, travel: "any", sources: ["facebook"] }).rows;
-  assert.equal(rows.length, 15);
-  assert.equal(new Set(rows.map((r) => r.id)).size, 15);
+  assert.equal(rows.length, 19);
+  assert.equal(new Set(rows.map((r) => r.id)).size, 19);
   for (const [id, author, primary, additional] of [
     ["arafat-jerusalem", "Ronen Amit", "1989046911736902", "1987231548585105"],
     [
@@ -278,7 +284,7 @@ test("repeated community reviews keep both authors and links but only one seat",
     ]);
   }
   const links = rows.flatMap((r) => [r.url, ...(r.additionalUrls || [])]);
-  assert.equal(new Set(links).size, 17);
+  assert.equal(new Set(links).size, 21);
   assert.ok(!links.some((url) => url.includes("1986335968674663")));
   assert.match(html, /id="community-background"/);
   assert.match(html, /permalink\/1986335968674663\//);
@@ -290,6 +296,45 @@ test("repeated community reviews keep both authors and links but only one seat",
     rows.find((r) => r.id === "abu-ali-jerusalem").note,
     /liked the hummus-ful less/,
   );
+});
+test("latest links preserve mixed reviews and separate the honeymoon endorsement", () => {
+  const rows = decide({ ...base, travel: "any", sources: ["facebook"] }).rows;
+  for (const [id, post] of [
+    ["lul-tira", "1623580184950245"],
+    ["al-hawam-shefa-amr", "1979265396048387"],
+    ["nader-hagadol-tel-aviv", "1967895890518671"],
+    ["abu-rami", "1973682316606695"],
+  ]) {
+    assert.equal(
+      rows.find((r) => r.id === id).url,
+      `https://www.facebook.com/groups/Msabbaha/permalink/${post}/`,
+    );
+  }
+  const nader = rows.find((r) => r.id === "nader-hagadol-tel-aviv");
+  assert.match(nader.note, /tasty but reports an ordering and billing dispute/);
+  assert.match(nader.note, /not an independently verified finding/);
+  const personal = decide({ ...base, city: "rameh", sources: ["daniel"] }).rows;
+  assert.equal(personal.length, 1);
+  assert.equal(personal[0].id, "abu-rami");
+  assert.match(personal[0].note, /personal favourite/);
+  assert.match(personal[0].note, /with his wife/);
+  assert.equal(personal[0].date, null);
+  assert.equal(personal[0].score, 70); // 40 city + 15 unknown taste + 10 unknown season + 5 undated, no romance bonus.
+  for (const sources of [
+    ["facebook"],
+    ["daniel", "facebook"],
+    ["facebook", "daniel"],
+  ]) {
+    const combined = decide({ ...base, city: "rameh", sources }).rows;
+    assert.equal(combined.length, 1);
+    assert.equal(combined[0].id, "abu-rami");
+    assert.equal(combined[0].source, "facebook");
+    assert.equal(combined[0].date, "2026-09-12");
+    assert.equal(combined[0].tags.length, 0); // Toppings are not texture evidence.
+    assert.equal(combined[0].score, 75); // Only dated evidence adds 5 points.
+    assert.match(combined[0].note, /Sarit Elberg/);
+    assert.match(combined[0].note, /not a single plate or current offer/);
+  }
 });
 test("Salim uses Naor's community review without inventing a date or Daniel attribution", () => {
   const input = {
@@ -399,6 +444,8 @@ test("all supported input combinations preserve filters, bounded additive scores
     "netanya",
     "kafr-qara",
     "hod-hasharon",
+    "tira",
+    "shefa-amr",
   ];
   const sources = ["humus101", "foodout", "daniel", "tripadvisor", "facebook"];
   for (const city of cities)

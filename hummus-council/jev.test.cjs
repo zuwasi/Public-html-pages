@@ -152,6 +152,11 @@ test("Jev receives the added city and sources with approved review evidence", ()
     ["netanya", "facebook", ["uzi-netanya"]],
     ["kafr-qara", "facebook", ["abu-jamal-kafr-qara"]],
     ["hod-hasharon", "facebook", ["neri-hod-hasharon"]],
+    ["tira", "facebook", ["lul-tira"]],
+    ["shefa-amr", "facebook", ["al-hawam-shefa-amr"]],
+    ["tel-aviv", "facebook", ["nader-hagadol-tel-aviv"]],
+    ["rameh", "facebook", ["abu-rami"]],
+    ["rameh", "daniel", ["abu-rami"]],
   ]) {
     const { input, result } = validateInput({
       ...base,
@@ -190,6 +195,24 @@ test("Jev receives the added city and sources with approved review evidence", ()
       assert.match(request.state.candidates[0].review, /Anan the locksmith/);
       assert.match(request.state.candidates[0].review, /Idan Stiklaru/);
       assert.deepEqual(request.state.candidates[0].tags, []);
+    }
+    if (city === "tel-aviv" && source === "facebook") {
+      assert.match(request.state.candidates[0].review, /Rami Levi/);
+      assert.match(request.state.candidates[0].review, /billing dispute/);
+      assert.match(
+        request.state.candidates[0].review,
+        /not an independently verified finding/,
+      );
+    }
+    if (city === "rameh") {
+      assert.match(
+        request.state.candidates[0].review,
+        source === "facebook" ? /Sarit Elberg praises/ : /personal favourite/,
+      );
+      assert.equal(
+        request.state.candidates[0].date,
+        source === "facebook" ? "2026-09-12" : null,
+      );
     }
   }
 });
