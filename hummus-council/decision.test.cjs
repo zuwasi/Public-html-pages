@@ -184,6 +184,7 @@ test("added reviews preserve attribution, dates and source/city restrictions", (
     [
       ["abu-ras", "2025-05-24", 80],
       ["afif", "2025-02-21", 80],
+      ["abu-adam-qalansuwa", "2026-09-26", 75],
     ],
   );
   assert.match(rows[0].note, /Rami Moscovich/);
@@ -200,11 +201,94 @@ test("added reviews preserve attribution, dates and source/city restrictions", (
   assert.equal(decide({ ...community, city: "tel-aviv" }).rows.length, 0);
   assert.equal(
     decide({ ...community, city: "tel-aviv", travel: "any" }).rows.length,
-    3,
+    15,
   );
   assert.equal(
     decide({ ...base, travel: "any", sources: Object.keys(SOURCES) }).sourced,
-    28,
+    40,
+  );
+});
+test("new community evidence preserves places, dates and conservative style tags", () => {
+  const expected = [
+    ["abu-ihsan-baqa", "baqa", "2026-09-23", "", "Nimrod Saidof"],
+    ["madames-sakhnin", "sakhnin", "2026-09-25", "", "Ori Baratz"],
+    [
+      "abu-adham-kafr-yasif",
+      "kafr-yasif",
+      "2026-09-26",
+      "chunky",
+      "Ilan Ronen",
+    ],
+    ["zina-zarzir", "zarzir", "2026-10-02", "", "Idan Stiklaru"],
+    ["arafat-jerusalem", "jerusalem", "2026-09-30", "chunky", "Roy Levy"],
+    ["al-amir-tarshiha", "tarshiha", "2026-10-03", "", "Lior Peri"],
+    ["al-sheikh-nazareth", "nazareth", "2026-10-03", "light", "Ori Baratz"],
+    ["uzi-netanya", "netanya", "2026-10-02", "", "Noam Yarkoni"],
+    [
+      "abu-jamal-kafr-qara",
+      "kafr-qara",
+      "2026-08-19",
+      "light,chunky",
+      "Alex Sternick",
+    ],
+    ["abu-adam-qalansuwa", "qalansuwa", "2026-09-26", "", "Rami Moscovich"],
+    ["neri-hod-hasharon", "hod-hasharon", "2026-06-23", "chunky", "Noam Atlas"],
+    ["abu-ali-jerusalem", "jerusalem", "2026-09-28", "chunky", "Shay Iluz"],
+  ];
+  for (const [id, city, date, tags, author] of expected) {
+    const input = { ...base, city, sources: ["facebook"] };
+    const row = decide(input).rows.find((r) => r.id === id);
+    assert.ok(row, id);
+    assert.equal(row.date, date);
+    assert.equal(row.tags.join(), tags);
+    assert.ok(row.note.includes(author));
+    assert.equal(row.parts.evidence, 10);
+    assert.equal(row.parts.taste, tags.includes("light") ? 30 : tags ? 0 : 15);
+    assert.equal(row.parts.season, tags.includes("light") ? 20 : tags ? 0 : 10);
+    assert.ok(
+      !decide({ ...input, sources: ["daniel"] }).rows.some((r) => r.id === id),
+    );
+    assert.ok(
+      !decide({ ...input, city: "tel-aviv" }).rows.some((r) => r.id === id),
+    );
+    assert.match(html, new RegExp(`<option value="${city}">`));
+  }
+});
+test("repeated community reviews keep both authors and links but only one seat", () => {
+  const rows = decide({ ...base, travel: "any", sources: ["facebook"] }).rows;
+  assert.equal(rows.length, 15);
+  assert.equal(new Set(rows.map((r) => r.id)).size, 15);
+  for (const [id, author, primary, additional] of [
+    ["arafat-jerusalem", "Ronen Amit", "1989046911736902", "1987231548585105"],
+    [
+      "zina-zarzir",
+      "Anan the locksmith",
+      "1991146224860304",
+      "1990922528216007",
+    ],
+  ]) {
+    const row = rows.find((r) => r.id === id);
+    assert.ok(row.note.includes(author));
+    assert.equal(
+      row.url,
+      `https://www.facebook.com/groups/Msabbaha/permalink/${primary}/`,
+    );
+    assert.deepEqual(Array.from(row.additionalUrls), [
+      `https://www.facebook.com/groups/Msabbaha/permalink/${additional}/`,
+    ]);
+  }
+  const links = rows.flatMap((r) => [r.url, ...(r.additionalUrls || [])]);
+  assert.equal(new Set(links).size, 17);
+  assert.ok(!links.some((url) => url.includes("1986335968674663")));
+  assert.match(html, /id="community-background"/);
+  assert.match(html, /permalink\/1986335968674663\//);
+  assert.match(
+    rows.find((r) => r.id === "abu-adam-qalansuwa").note,
+    /one-off curiosity/,
+  );
+  assert.match(
+    rows.find((r) => r.id === "abu-ali-jerusalem").note,
+    /liked the hummus-ful less/,
   );
 });
 test("Salim uses Naor's community review without inventing a date or Daniel attribution", () => {
@@ -306,6 +390,15 @@ test("all supported input combinations preserve filters, bounded additive scores
     "fureidis",
     "rameh",
     "al-lubban",
+    "baqa",
+    "sakhnin",
+    "kafr-yasif",
+    "zarzir",
+    "tarshiha",
+    "nazareth",
+    "netanya",
+    "kafr-qara",
+    "hod-hasharon",
   ];
   const sources = ["humus101", "foodout", "daniel", "tripadvisor", "facebook"];
   for (const city of cities)

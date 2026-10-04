@@ -140,8 +140,18 @@ test("Jev receives the added city and sources with approved review evidence", ()
     ["tel-aviv", "humus101", telAvivIds],
     ["bat-yam", "humus101", ["roni-ful-bat-yam"]],
     ["shilat", "humus101", ["falafel-ramla-shilat"]],
-    ["qalansuwa", "facebook", ["abu-ras", "afif"]],
+    ["qalansuwa", "facebook", ["abu-adam-qalansuwa", "abu-ras", "afif"]],
     ["ramla", "facebook", ["salim-ramla"]],
+    ["baqa", "facebook", ["abu-ihsan-baqa"]],
+    ["sakhnin", "facebook", ["madames-sakhnin"]],
+    ["kafr-yasif", "facebook", ["abu-adham-kafr-yasif"]],
+    ["zarzir", "facebook", ["zina-zarzir"]],
+    ["jerusalem", "facebook", ["abu-ali-jerusalem", "arafat-jerusalem"]],
+    ["tarshiha", "facebook", ["al-amir-tarshiha"]],
+    ["nazareth", "facebook", ["al-sheikh-nazareth"]],
+    ["netanya", "facebook", ["uzi-netanya"]],
+    ["kafr-qara", "facebook", ["abu-jamal-kafr-qara"]],
+    ["hod-hasharon", "facebook", ["neri-hod-hasharon"]],
   ]) {
     const { input, result } = validateInput({
       ...base,
@@ -167,6 +177,19 @@ test("Jev receives the added city and sources with approved review evidence", ()
         request.state.candidates.find((r) => r.id === "abu-ras").review,
         /Rami Moscovich/,
       );
+    }
+    if (city === "jerusalem") {
+      const review = request.state.candidates.find(
+        (r) => r.id === "arafat-jerusalem",
+      ).review;
+      assert.match(review, /Ronen Amit/);
+      assert.match(review, /Roy Levy/);
+      assert.match(review, /portions small/);
+    }
+    if (city === "zarzir") {
+      assert.match(request.state.candidates[0].review, /Anan the locksmith/);
+      assert.match(request.state.candidates[0].review, /Idan Stiklaru/);
+      assert.deepEqual(request.state.candidates[0].tags, []);
     }
   }
 });
