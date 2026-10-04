@@ -167,18 +167,26 @@ function createServer({
         provider: "TypeSafe AI",
         model: "jev-latest",
       });
+    const images = {
+      "/jev-logo.png": "image/png",
+      "/abu-hassan-portrait.png": "image/png",
+      "/abu-hassan-hummus.jpg": "image/jpeg",
+    };
     if (
       req.method === "GET" &&
-      ["/", "/index.html", "/jev-logo.png"].includes(url.pathname)
+      (["/", "/index.html"].includes(url.pathname) ||
+        Object.hasOwn(images, url.pathname))
     ) {
-      const logo = url.pathname === "/jev-logo.png";
+      const image = images[url.pathname];
       res.writeHead(200, {
-        "Content-Type": logo ? "image/png" : "text/html; charset=utf-8",
+        "Content-Type": image || "text/html; charset=utf-8",
         "Cache-Control": "no-store",
         "X-Content-Type-Options": "nosniff",
       });
       return res.end(
-        logo ? fs.readFileSync(path.join(__dirname, "jev-logo.png")) : html,
+        image
+          ? fs.readFileSync(path.join(__dirname, url.pathname.slice(1)))
+          : html,
       );
     }
     if (req.method !== "POST" || url.pathname !== "/api/jev/decide")

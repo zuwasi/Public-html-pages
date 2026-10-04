@@ -366,6 +366,27 @@ test("history preserves winner IDs across retention and reload without inventing
     ]);
 });
 
+test("public images serve exact files with correct types and no arbitrary file access", async (t) => {
+  const app = await setup(t, {
+    fetchImpl: async () => assert.fail("Static assets must not call Jev"),
+  });
+  for (const [file, type] of [
+    ["jev-logo.png", "image/png"],
+    ["abu-hassan-portrait.png", "image/png"],
+    ["abu-hassan-hummus.jpg", "image/jpeg"],
+  ]) {
+    const response = await fetch(`${app.url}/${file}`);
+    assert.equal(response.status, 200);
+    assert.equal(response.headers.get("content-type"), type);
+    assert.deepEqual(
+      Buffer.from(await response.arrayBuffer()),
+      fs.readFileSync(path.join(__dirname, file)),
+    );
+  }
+  for (const file of ["server.cjs", "missing.png", "%2e%2e%2fserver.cjs"])
+    assert.equal((await fetch(`${app.url}/${file}`)).status, 404);
+});
+
 test("public health, invalid input, origin and empty shortlist never call the provider", async (t) => {
   let calls = 0;
   const app = await setup(t, {

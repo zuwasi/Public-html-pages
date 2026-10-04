@@ -135,10 +135,44 @@
       }
       .hero {
         padding: 39px 0 31px;
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
         align-items: center;
         gap: 24px;
+      }
+      .hero-copy {
+        grid-column: 1 / -1;
+      }
+      .memorial {
+        justify-self: center;
+        max-width: 600px;
+        text-align: center;
+      }
+      .memorial h2 {
+        margin: 0 0 18px;
+        font-size: clamp(18px, 2vw, 24px);
+      }
+      .memorial-photos {
+        display: grid;
+        grid-template-columns: minmax(0, 270px) minmax(0, 135px);
+        align-items: start;
+        justify-content: center;
+        gap: 20px;
+      }
+      .memorial figure {
+        margin: 0;
+      }
+      .memorial img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 6px;
+      }
+      .memorial figcaption {
+        margin-top: 12px;
+        font:
+          20px/1.8 Arial,
+          sans-serif;
       }
       .hero-line {
         display: flex;
@@ -867,6 +901,9 @@
         .hero-note {
           display: none;
         }
+        .memorial {
+          grid-column: 1 / -1;
+        }
       }
       @media (max-width: 650px) {
         .shell {
@@ -889,6 +926,13 @@
         }
         .hero {
           padding: 28px 0;
+        }
+        .memorial-photos {
+          grid-template-columns: minmax(0, 270px);
+        }
+        .memorial-photos > img {
+          width: 135px;
+          justify-self: center;
         }
         .hero p {
           font-size: 12px;
@@ -1076,7 +1120,7 @@
       </header>
       <main>
         <section class="hero">
-          <div>
+          <div class="hero-copy">
             <div class="eyebrow">Less overthinking. More olive oil.</div>
             <div class="hero-line">
               <h1>Big decisions. <em>Small chickpeas.</em></h1>
@@ -1089,6 +1133,34 @@
             </button>
             <div id="form-error" class="error" role="alert" hidden></div>
           </div>
+          <section class="memorial" dir="rtl" aria-labelledby="memorial-title">
+            <h2 id="memorial-title" lang="he">
+              לזכרו של עלי קארוון, אבו חאסן הגדול מכולם
+            </h2>
+            <div class="memorial-photos">
+              <figure>
+                <img
+                  src="abu-hassan-portrait.png"
+                  alt="עלי קארוון, אבו חאסן, מגיש חומוס"
+                  lang="he"
+                  width="502"
+                  height="337"
+                />
+                <figcaption lang="ar" dir="rtl">
+                  إنا لله وإنا إليه راجعون<br />
+                  رحمه الله وأسكنه فسيح جناته<br />
+                  الفاتحة لروحه
+                </figcaption>
+              </figure>
+              <img
+                src="abu-hassan-hummus.jpg"
+                alt="צלחת חומוס ופיתות אצל אבו חאסן"
+                lang="he"
+                width="480"
+                height="640"
+              />
+            </div>
+          </section>
           <div class="hero-note" aria-hidden="true">
             100% opinions.<br />0% actual<br />chickpeas.<span
               >EST. FIVE MINUTES AGO</span
