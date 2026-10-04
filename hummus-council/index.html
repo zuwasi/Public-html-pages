@@ -68,6 +68,33 @@
         margin: auto;
         padding: 0 42px;
       }
+      .esl-credit {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .esl-credit img {
+        display: block;
+        width: 120px;
+        height: auto;
+        border-radius: 6px;
+      }
+      .esl-credit p {
+        margin: 0;
+        font-weight: 700;
+      }
+      .esl-credit a {
+        border: 1px solid var(--green);
+        border-radius: 8px;
+        padding: 10px 18px;
+        text-decoration: none;
+      }
+      .esl-credit a:hover {
+        background: #e7eddf;
+      }
       .topbar {
         min-height: 86px;
         padding-block: 14px;
@@ -909,6 +936,13 @@
         .shell {
           padding: 0 16px;
         }
+        .esl-credit {
+          grid-template-columns: auto minmax(0, 1fr);
+        }
+        .esl-credit a {
+          grid-column: 1 / -1;
+          justify-self: center;
+        }
         .topbar {
           min-height: 74px;
         }
@@ -1085,6 +1119,16 @@
   </head>
   <body>
     <div class="shell">
+      <div class="esl-credit" lang="en" dir="ltr">
+        <img
+          src="esl-logo.png"
+          alt="ESL - Engineering Software Lab"
+          width="760"
+          height="499"
+        />
+        <p>brought to you by ESL - The AI SDLC Experts</p>
+        <a href="https://eswlab.com/contact-us/">Contact us</a>
+      </div>
       <header class="topbar">
         <div class="brand">
           <div class="logo" aria-hidden="true">◡</div>
@@ -1562,6 +1606,16 @@
           </button>
         </footer>
       </main>
+      <div class="esl-credit" lang="en" dir="ltr">
+        <img
+          src="esl-logo.png"
+          alt="ESL - Engineering Software Lab"
+          width="760"
+          height="499"
+        />
+        <p>brought to you by ESL - The AI SDLC Experts</p>
+        <a href="https://eswlab.com/contact-us/">Contact us</a>
+      </div>
     </div>
     <dialog id="info" aria-labelledby="dialog-title">
       <div class="dialog-head">

@@ -171,6 +171,7 @@ function createServer({
       "/jev-logo.png": "image/png",
       "/abu-hassan-portrait.png": "image/png",
       "/abu-hassan-hummus.jpg": "image/jpeg",
+      "/esl-logo.png": "image/png",
     };
     if (
       req.method === "GET" &&

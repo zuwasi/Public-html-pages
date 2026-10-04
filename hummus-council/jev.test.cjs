@@ -374,6 +374,7 @@ test("public images serve exact files with correct types and no arbitrary file a
     ["jev-logo.png", "image/png"],
     ["abu-hassan-portrait.png", "image/png"],
     ["abu-hassan-hummus.jpg", "image/jpeg"],
+    ["esl-logo.png", "image/png"],
   ]) {
     const response = await fetch(`${app.url}/${file}`);
     assert.equal(response.status, 200);
