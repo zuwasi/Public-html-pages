@@ -236,7 +236,7 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
     <span class="pill">Open source · MIT</span>
     <span class="pill">Windows · macOS · Linux</span>
     <span class="pill">Claude Code plugin</span>
-    <span class="pill">v0.2.0</span>
+    <span class="pill">v0.3.0</span>
   </div>
 </section>
 
@@ -522,6 +522,69 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
   </div>
 </section>
 
+<!-- WikiSkill research -->
+<section class="slide" data-stage="review">
+  <div class="kicker">Research backing: Google's WikiSkill (arXiv 2608.27454)</div>
+  <h2>Google Research measured what skills <em>do</em>. Triggering was <span class="grad">out of scope</span>.</h2>
+  <div class="grid2">
+    <div>
+      <div class="card">
+        <h3>From the paper's Limitations section</h3>
+        <p><em>"Our study follows prior work by directly injecting active skills into the agent prompt. This setup does not evaluate skill retrieval or triggering, which becomes important as the number of available skills grows."</em></p>
+        <p class="small-note">Tang et al., Google Research and Virginia Tech, Aug 2026.</p>
+      </div>
+      <p style="margin-top:14px">In Claude Code a skill has to <strong>win the routing decision</strong> against every other installed skill before it can help. That's exactly what <code>--skill-library</code> measures: our MISRA skill fell to <strong>25% recall</strong> in a 49-skill library, then reached 100% after one description change.</p>
+    </div>
+    <div>
+      <table>
+        <tr><th>WikiSkill method</th><th>Now in Wazatator v0.3.0</th></tr>
+        <tr><td>Paired bootstrap, 1,000 resamples, p &lt; 0.05</td><td><strong>Significance</strong> in <code>--baseline</code> and <code>compare</code></td></tr>
+        <tr><td>Cross-model transfer table, negative transfer</td><td><strong>Skill transfer matrix</strong> per <code>--model</code></td></tr>
+        <tr><td>Gating and rollback on validation score</td><td><code>gate</code> + keep-or-revert loop in the plugin</td></tr>
+        <tr><td><code>skill-impact.md</code> history tracker</td><td><code>--impact-log skill-impact.md</code></td></tr>
+        <tr><td>Train / validation / test splits</td><td>Held-out tasks: <code>--tags '!holdout'</code></td></tr>
+        <tr><td>5 failing + 3 passing traces, 15k chars each</td><td>Failure diagnosis in <code>/wazatator:eval</code></td></tr>
+        <tr><td>"When to Apply / When NOT to Apply"; 45 to 143-line skills</td><td><code>check</code>: boundary sections, <code>skill-too-long</code>, <code>low-level-steps</code></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Evidence loop -->
+<section class="slide" data-stage="test">
+  <div class="kicker">v0.3.0 live run: the evidence loop</div>
+  <h2>Gate it, log it, check the <span class="grad">holdout</span>, trust only significant gains</h2>
+  <div class="grid2">
+    <div>
+<pre><span class="c"># 1. tune on visible tasks, log every attempt</span>
+<span class="k">wazatator run</span> eval.yaml --model haiku <span class="n">--tags '!holdout'</span> \
+    -o new.json <span class="n">--impact-log</span> skill-impact.md
+<span class="c"># 2. keep the SKILL.md edit only if this exits 0</span>
+<span class="k">wazatator gate</span> --baseline old.json --current new.json
+<span class="add">  pass rate: 33.3% -&gt; 100.0%   outcome: PASS (exit 0)</span>
+<span class="k">wazatator compare</span> old.json new.json
+<span class="hl s">  Significance: +50.0 pp, 95% CI [+0, +100], p = 0.15</span>
+<span class="dim">  -&gt; not significant: add tasks or trials</span>
+<span class="c"># 3. final run: holdout included, both models</span>
+<span class="k">wazatator run</span> eval.yaml <span class="n">--baseline --model haiku --model sonnet</span></pre>
+      <p class="small-note">pirate-greeter demo skill, Claude Code, 4 tasks, 2 to 3 trials per task, 4 Oct 2026.</p>
+    </div>
+    <div>
+      <table>
+        <tr><th>Skill transfer matrix</th><th>With</th><th>Without</th><th>Δ (95% CI)</th><th>p</th></tr>
+        <tr><td><strong>haiku</strong></td><td>66.7%</td><td>25.0%</td><td>+41.7 pp [+0, +92]</td><td>0.13</td></tr>
+        <tr><td><strong>sonnet</strong></td><td>75.0%</td><td>25.0%</td><td>+50.0 pp [+0, +100]</td><td>0.12</td></tr>
+      </table>
+      <div class="card" style="margin-top:14px">
+        <h3>What the loop caught</h3>
+        <p><span class="tag t-green">Gate passed</span><br>A description fix took Haiku from 33% to 100% on the tuning tasks. Logged and kept.</p>
+        <p><span class="tag t-red">Holdout failed</span><br>"Say hi to this person" still failed on <strong>both</strong> models: the skill fired, but never read <code>newcomer.txt</code> to find the name. Tuning alone would have shipped that gap.</p>
+        <p><span class="tag t-amber">Honest stats</span><br>Gains are real but not yet significant with 4 tasks. Wazatator says so instead of declaring victory.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 10. Demo -->
 <section class="slide" data-stage="test" id="demo-slide">
   <div class="kicker">Demo</div>
@@ -549,7 +612,7 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
 
 <span class="k">/wazatator:eval</span> evals/pirate-greeter/eval.yaml
   <span class="c"># runs it, explains failures, proposes SKILL.md fixes,</span>
-  <span class="c"># re-runs and compares old vs new results</span>
+  <span class="c"># keeps a fix only if the gate passes, logs it, checks holdout</span>
 
 <span class="k">/wazatator:quality</span> skills/code-explainer
   <span class="c"># static check + LLM review of the SKILL.md itself</span></pre>
@@ -584,6 +647,9 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
     <tr><td>Lint the SKILL.md itself</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>check</code> (token budget, compliance), <code>quality</code> (LLM rubric)</td></tr>
     <tr><td>Prompt-injection / adversarial packs</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>adversarial</code></td></tr>
     <tr><td>Compare models in one run</td><td>One model per run</td><td><span class="yes">✓</span> <code>--model</code> × N, <code>compare</code></td></tr>
+    <tr><td>Skill transfer / negative transfer</td><td><span class="no">–</span></td><td><span class="yes">✓</span> per-model with/without matrix, flags models the skill hurts</td></tr>
+    <tr><td>Statistical significance</td><td>Mean Δ only</td><td><span class="yes">✓</span> paired bootstrap: 95% CI and p-value</td></tr>
+    <tr><td>Regression gate vs. last version</td><td>Absolute score threshold</td><td><span class="yes">✓</span> <code>gate</code> vs. previous results, <code>--impact-log</code>, held-out tasks</td></tr>
     <tr><td>Built in, zero install</td><td><span class="yes">✓</span></td><td><span class="no">–</span> CLI + Claude Code plugin</td></tr>
   </table>
   <p class="oneliner"><strong>claude plugin eval</strong> tells you whether your plugin helps Claude. <strong>Wazatator</strong> tells you whether your skill is well written, triggers precisely, survives your other skills and attacks, and works across agents and models. Use both.</p>
