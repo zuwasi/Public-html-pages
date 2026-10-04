@@ -239,9 +239,6 @@ Last updated: 2026-10-04
 • ampcode-classiq-research-orchestrator
   https://zuwasi.github.io/Public-html-pages/ampcode-classiq-research-orchestrator
 
-• apollo-misra-demo
-  https://zuwasi.github.io/Public-html-pages/apollo-misra-demo
-
 • assets
   https://zuwasi.github.io/Public-html-pages/assets
 
