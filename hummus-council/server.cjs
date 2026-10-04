@@ -1,12 +1,12 @@
 "use strict";
 
 // Node 22+: node hummus-council/server.cjs (default http://127.0.0.1:8780).
-// Supply TYPESAFE_API_KEY and a separate random HUMMUS_ACCESS_CODE (16+ characters)
-// using the host's secret settings, never public HTML or a committed config file.
+// Supply TYPESAFE_API_KEY using the host's secret settings, never public HTML
+// or a committed config file. This showcase accepts unauthenticated visitors.
 // Hosting: one process/replica, HTTPS, HOST=0.0.0.0, PORT set by the host,
 // and JEV_USAGE_FILE on a persistent volume. Do not delete/reset the usage ledger.
-// JEV_MAX_CALLS defaults to 100 lifetime attempts, including failed provider calls.
-// This call cap is NOT a USD cap; also set a spending limit with the provider.
+// No local call cap: spending limits and prepaid credit are enforced by the provider.
+// Disable automatic recharge there to stop when the showcase credit is exhausted.
 // Set JEV_PROXY in index.html to the deployed HTTPS URL before publishing on Pages.
 // HUMMUS_ORIGIN defaults to https://zuwasi.github.io. No paid health probes/retries.
 
@@ -15,7 +15,6 @@ const fs = require("node:fs");
 const path = require("node:path");
 const os = require("node:os");
 const vm = require("node:vm");
-const { timingSafeEqual } = require("node:crypto");
 
 // Share the curated data and hard filters with the standalone page, not client-supplied reviews.
 const html = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
@@ -115,21 +114,17 @@ function validateAnswer(body, ids) {
 
 function createServer({
   apiKey = process.env.TYPESAFE_API_KEY,
-  accessCode = process.env.HUMMUS_ACCESS_CODE,
   allowedOrigin = process.env.HUMMUS_ORIGIN || "https://zuwasi.github.io",
   usageFile = process.env.JEV_USAGE_FILE ||
     path.join(os.homedir(), ".hummus-council", "usage.json"),
-  maxCalls = Number(process.env.JEV_MAX_CALLS || 100),
   fetchImpl = fetch,
 } = {}) {
-  if (!Number.isInteger(maxCalls) || maxCalls < 1 || maxCalls > 1000)
-    throw new Error("JEV_MAX_CALLS must be an integer from 1 to 1000");
-  const configured = Boolean(apiKey && accessCode && accessCode.length >= 16);
+  const configured = Boolean(apiKey);
   let used = 0;
   if (fs.existsSync(usageFile)) {
     used = JSON.parse(fs.readFileSync(usageFile, "utf8")).attempts;
     if (!Number.isSafeInteger(used) || used < 0)
-      throw new Error("Invalid usage ledger; refusing to reset budget");
+      throw new Error("Invalid usage ledger; refusing to reset attempt count");
   }
   let busy = false;
   let lastAttempt = -Infinity;
@@ -161,14 +156,14 @@ function createServer({
     if (req.method === "OPTIONS" && url.pathname.startsWith("/api/jev/")) {
       res.writeHead(204, {
         "Access-Control-Allow-Methods": "GET, POST",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Headers": "Content-Type",
       });
       return res.end();
     }
     if (req.method === "GET" && url.pathname === "/api/jev/status")
       return send(200, {
         configured,
-        remaining: Math.max(0, maxCalls - used),
+        attempts: used,
         provider: "TypeSafe AI",
         model: "jev-latest",
       });
@@ -189,10 +184,6 @@ function createServer({
     if (req.method !== "POST" || url.pathname !== "/api/jev/decide")
       return send(404, { error: "not_found" });
     if (!configured) return send(503, { error: "not_configured" });
-    const token = Buffer.from(req.headers.authorization || "");
-    const expected = Buffer.from(`Bearer ${accessCode}`);
-    if (token.length !== expected.length || !timingSafeEqual(token, expected))
-      return send(401, { error: "access_code" });
     if (!req.headers["content-type"]?.startsWith("application/json"))
       return send(415, { error: "json_required" });
     let input, result;
@@ -208,7 +199,6 @@ function createServer({
       return send(400, { error: "invalid_brief" });
     }
     if (!result.rows.length) return send(422, { error: "no_candidates" });
-    if (used >= maxCalls) return send(429, { error: "budget" });
     if (busy || performance.now() - lastAttempt < 3000)
       return send(429, { error: "rate_limit" });
     busy = true;
@@ -249,7 +239,7 @@ function createServer({
         body,
         result.rows.map((r) => r.id),
       );
-      return send(200, { ...answer, upstreamMs, remaining: maxCalls - used });
+      return send(200, { ...answer, upstreamMs });
     } catch {
       // Never return upstream error bodies, credentials or request headers.
       return send(502, { error: "request_failed" });

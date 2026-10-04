@@ -25,7 +25,6 @@ const base = {
   date: "2026-07-15",
   sources: ["humus101", "foodout", "daniel"],
 };
-const accessCode = "test-only-access-code";
 const telAvivIds = [
   "616",
   "abu-hassan",
@@ -71,7 +70,6 @@ async function setup(t, options = {}) {
   async function start(extra = {}) {
     const server = createServer({
       apiKey: "test-provider-key",
-      accessCode,
       usageFile,
       fetchImpl: async () => Response.json(answer()),
       ...options,
@@ -87,7 +85,6 @@ async function setup(t, options = {}) {
         fetch(url + "/api/jev/decide", {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${accessCode}`,
             "Content-Type": "application/json",
             ...headers,
           },
@@ -323,7 +320,7 @@ test("history preserves winner IDs across retention and reload without inventing
     ]);
 });
 
-test("health, invalid input, authorization, origin and empty shortlist never call the provider", async (t) => {
+test("public health, invalid input, origin and empty shortlist never call the provider", async (t) => {
   let calls = 0;
   const app = await setup(t, {
     fetchImpl: async () => {
@@ -333,11 +330,8 @@ test("health, invalid input, authorization, origin and empty shortlist never cal
   });
   const status = await (await fetch(app.url + "/api/jev/status")).json();
   assert.equal(status.configured, true);
-  assert.equal(status.remaining, 100);
-  assert.equal(
-    (await app.post(base, { Authorization: "Bearer wrong" })).status,
-    401,
-  );
+  assert.equal(status.attempts, 0);
+  assert.equal(Object.hasOwn(status, "remaining"), false);
   assert.equal(
     (await app.post(base, { Origin: "https://untrusted.example" })).status,
     403,
@@ -368,10 +362,9 @@ test("health, invalid input, authorization, origin and empty shortlist never cal
   assert.equal((await fetch(app.url + "/server.cjs")).status, 404);
 });
 
-test("successful calls use the documented endpoint, return measured timing and persist the attempt cap across restart", async (t) => {
+test("anonymous calls keep the provider key server-side and work past 100 persisted attempts", async (t) => {
   let calls = 0;
   const app = await setup(t, {
-    maxCalls: 1,
     fetchImpl: async (url, options) => {
       calls++;
       assert.equal(url, "https://api.typesafe.ai/v1/systemone");
@@ -392,16 +385,26 @@ test("successful calls use the documented endpoint, return measured timing and p
   const body = await response.json();
   assert.equal(body.choice, "abu-hassan");
   assert.ok(body.upstreamMs >= 20 && body.upstreamMs < 15000);
-  assert.equal(body.remaining, 0);
+  assert.equal(Object.hasOwn(body, "remaining"), false);
   assert.ok(!JSON.stringify(body).includes("test-provider-key"));
+  assert.deepEqual(JSON.parse(fs.readFileSync(app.usageFile)), { attempts: 1 });
   app.server.closeAllConnections();
   await new Promise((resolve) => app.server.close(resolve));
+  fs.writeFileSync(app.usageFile, JSON.stringify({ attempts: 100 }));
   const restarted = await app.start();
-  const blocked = await restarted.post();
-  assert.equal(blocked.status, 429);
-  assert.equal((await blocked.json()).error, "budget");
-  assert.equal(calls, 1);
-  assert.deepEqual(JSON.parse(fs.readFileSync(app.usageFile)), { attempts: 1 });
+  assert.equal(
+    (await (await fetch(restarted.url + "/api/jev/status")).json()).attempts,
+    100,
+  );
+  assert.equal((await restarted.post()).status, 200);
+  assert.equal(calls, 2);
+  assert.deepEqual(JSON.parse(fs.readFileSync(app.usageFile)), {
+    attempts: 101,
+  });
+  assert.doesNotMatch(
+    html,
+    /access-code|type="password"|Authorization|Calls remaining/,
+  );
 });
 
 test("in-flight and cooldown guards allow only one upstream attempt", async (t) => {
@@ -434,6 +437,11 @@ test("in-flight and cooldown guards allow only one upstream attempt", async (t) 
 test("provider failures are sanitized, consume an attempt, and never return a rule-only verdict", async (t) => {
   for (const [fetchImpl, error] of [
     [
+      async () =>
+        new Response("private upstream credit balance", { status: 402 }),
+      "provider_credit",
+    ],
+    [
       async () => new Response("private upstream body", { status: 401 }),
       "provider_auth",
     ],
@@ -463,7 +471,7 @@ test("provider failures are sanitized, consume an attempt, and never return a ru
   }
 });
 
-test("invalid durable ledger fails closed rather than resetting the allowance", (t) => {
+test("invalid durable ledger fails closed rather than resetting the attempt count", (t) => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "hummus-ledger-test-"));
   t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
   const usageFile = path.join(dir, "usage.json");

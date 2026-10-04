@@ -964,27 +964,6 @@
       .jev-status[data-state="error"]::before {
         background: #b54834;
       }
-      .jev-access {
-        display: flex;
-        gap: 8px;
-        align-items: end;
-        flex-wrap: wrap;
-        margin-top: 14px;
-      }
-      .jev-access .field {
-        flex: 1;
-        min-width: 150px;
-        margin-bottom: 0;
-      }
-      #access-code {
-        width: 100%;
-        min-width: 0;
-        padding: 10px;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: transparent;
-        font: inherit;
-      }
       .jev-metrics {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1136,24 +1115,16 @@
             <p id="jev-detail">
               A ready proxy is not proof of a successful Jev call.
             </p>
-            <div class="jev-access">
-              <div class="field">
-                <label for="access-code"
-                  >Demo access code (not your API key)</label
-                ><input
-                  id="access-code"
-                  type="password"
-                  autocomplete="off"
-                  maxlength="200"
-                />
-              </div>
-              <button id="jev-check" class="small-button" type="button">
-                Check connection
-              </button>
-            </div>
+            <button id="jev-check" class="small-button" type="button">
+              Check connection
+            </button>
+            <p>
+              Public showcase. No password. Available while provider credit
+              lasts.
+            </p>
             <p>
               Your brief and eligible review summaries are sent to TypeSafe AI.
-              The API key stays on the server. The access code is not saved.
+              The API key stays on the server.
             </p>
           </div>
           <div class="panel jev-widget">
@@ -2226,10 +2197,11 @@
           "Jev בוחר בין המסעדות המתאימות לפי ההעדפות שלך ולקט הביקורות. הסינון לפי עיר ומקורות והנקודות הגלויות מחושבים בקוד שלנו.",
         "A ready proxy is not proof of a successful Jev call.":
           "שרת חיבור מוכן אינו אישור שהקריאה ל־Jev הצליחה.",
-        "Demo access code (not your API key)": "קוד גישה להדגמה (לא מפתח API)",
         "Check connection": "בדיקת חיבור",
-        "Your brief and eligible review summaries are sent to TypeSafe AI. The API key stays on the server. The access code is not saved.":
-          "ההעדפות שלך ותקצירי הביקורות המתאימים נשלחים ל־TypeSafe AI. מפתח ה־API נשאר בשרת. קוד הגישה אינו נשמר.",
+        "Public showcase. No password. Available while provider credit lasts.":
+          "הדגמה פתוחה לכולם. בלי סיסמה. פועלת כל עוד יש קרדיט אצל הספק.",
+        "Your brief and eligible review summaries are sent to TypeSafe AI. The API key stays on the server.":
+          "ההעדפות שלך ותקצירי הביקורות המתאימים נשלחים ל־TypeSafe AI. מפתח ה־API נשאר בשרת.",
         "FASTER THAN ARGUING ABOUT TAHINI": "יותר מהר מוויכוח על טחינה",
         "Last 12 Jev runs": "12 הריצות האחרונות של Jev",
         "Latest · ms": "האחרונה · מילישניות",
@@ -2251,13 +2223,10 @@
         "Jev request failed": "הקריאה ל־Jev נכשלה",
         "No verdict was produced. Check the connection and try again.":
           "לא התקבלה החלטה. בדקו את החיבור ונסו שוב.",
-        "Enter the demo access code, not a provider API key.":
-          "הזינו קוד גישה להדגמה, לא מפתח API של הספק.",
-        "The demo access code was rejected.": "קוד הגישה להדגמה נדחה.",
         "The server's Jev key was rejected. Ask the owner to check it.":
           "מפתח Jev שבשרת נדחה. יש לפנות לבעל ההדגמה.",
-        "Jev credits are exhausted.": "יתרת הקרדיטים של Jev אזלה.",
-        "The server's call allowance is exhausted.": "מכסת הקריאות בשרת מוצתה.",
+        "The chickpea fund is empty. Jev credits are exhausted.":
+          "קופת הגרגירים התרוקנה. יתרת הקרדיטים של Jev אזלה.",
         "Please wait a few seconds before another vote.":
           "יש להמתין כמה שניות לפני הצבעה נוספת.",
         "Jev could not complete this request. No rule-only fallback was used.":
@@ -2646,7 +2615,8 @@
           const status = await response.json();
           if (
             typeof status.configured !== "boolean" ||
-            !Number.isInteger(status.remaining)
+            !Number.isSafeInteger(status.attempts) ||
+            status.attempts < 0
           )
             throw new Error();
           if (version !== connectionVersion) return;
@@ -2656,8 +2626,8 @@
               ? "Proxy ready · Jev not checked"
               : "Server setup required",
             hebrew
-              ? `מכסת קריאות שנותרה: ${status.remaining}. הבדיקה אינה מפעילה את Jev ואינה מחויבת.`
-              : `Calls remaining: ${status.remaining}. This check does not call Jev or incur inference charges.`,
+              ? `ניסיונות קריאה בשרת: ${status.attempts}. יתרת הקרדיט מנוהלת אצל הספק. הבדיקה אינה מפעילה את Jev ואינה מחויבת.`
+              : `Server call attempts: ${status.attempts}. Credit balance is managed by the provider. This check does not call Jev or incur inference charges.`,
           );
         } catch {
           if (version === connectionVersion)
@@ -2668,22 +2638,11 @@
       }
       async function requestJev(input, result) {
         connectionVersion++;
-        const code = $("access-code").value;
-        if (
-          code.length < 16 ||
-          code.startsWith("apikey_") ||
-          code.startsWith("sk-") ||
-          code.startsWith("jv_live_")
-        )
-          throw new Error(
-            "Enter the demo access code, not a provider API key.",
-          );
         setConnection("calling", "Calling Jev…");
         const response = await fetch(`${JEV_PROXY}/api/jev/decide`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${code}`,
           },
           body: JSON.stringify(input),
           signal: AbortSignal.timeout(20000),
@@ -2693,12 +2652,11 @@
         if (!response.ok)
           throw new Error(
             {
-              access_code: "The demo access code was rejected.",
               not_configured: "Server setup required",
               provider_auth:
                 "The server's Jev key was rejected. Ask the owner to check it.",
-              provider_credit: "Jev credits are exhausted.",
-              budget: "The server's call allowance is exhausted.",
+              provider_credit:
+                "The chickpea fund is empty. Jev credits are exhausted.",
               rate_limit: "Please wait a few seconds before another vote.",
             }[answer.error] ||
               "Jev could not complete this request. No rule-only fallback was used.",
@@ -2788,7 +2746,6 @@
       function setBusy(busy) {
         running = busy;
         $("run").disabled = busy;
-        $("access-code").disabled = busy;
         $("jev-check").disabled = busy;
         $("inputs").disabled = busy;
         $("summer").disabled = busy;
@@ -3024,7 +2981,7 @@
             <li>Jev reads the eligible reviews and your preferences, then chooses lunch. The visible points explain our rule baseline, not Jev's internal reasoning. The chickpeas declined an interview.</li>
           </ol>
           <p>The connection indicator reports proxy readiness or the last actual request, not continuous provider availability. Failed calls produce no verdict and no histogram bar. Timings are the last 12 successful server-to-Jev round trips in this browser; network time is included. A single eligible option is not a meaningful comparison.</p>
-          <p>Your brief and eligible review summaries are sent to TypeSafe AI. The API key stays on the server. The access code is not saved.</p>
+          <p>Your brief and eligible review summaries are sent to TypeSafe AI. The API key stays on the server.</p>
           <p>If the provider fails, the council adjourns. It does not impersonate Jev.</p>
           <p><em>The committee has a framework. You still have to bring the pita.</em></p>
           <p><a href="https://docs.typesafe.ai/introduction" target="_blank" rel="noopener noreferrer"><bdi dir="ltr">https://docs.typesafe.ai/introduction</bdi></a></p>`;
