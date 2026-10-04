@@ -15,7 +15,7 @@
 @media(min-width:1500px){.pipeline{margin-top:20px}.node{padding:28px 20px}.server{padding:22px 4px}.step{padding:22px}.underflow{margin-bottom:28px}.loop{margin-top:18px}.outcomes{padding-top:24px;margin-top:30px}}
 @media(max-width:1050px){.tabs{display:none}.heading{align-items:flex-start}.statline{gap:15px}.statline strong{font-size:28px}.pipeline{grid-template-columns:1fr 18px 1fr 18px 2.7fr 18px 1fr}.farm{padding:10px}.node{padding:14px 10px}.farm-head span{display:none}.server{font-size:10px}.server i{width:20px}.accel{display:block}.accel span{display:block;margin-top:5px}.outcomes{flex-wrap:wrap}.two-col{gap:16px}.card{padding:20px}}
 @media(max-width:720px){.top{height:66px;padding:0 20px}.brand{font-size:16px}.proposal{display:none}.top-right{gap:6px}#ibToggle{font-size:10px;padding:9px}.slide{padding:90px 28px 90px}.heading{display:block;margin-bottom:22px}h1,h2{letter-spacing:-1.2px}.statline{margin-top:20px;gap:28px}.statline strong{font-size:26px}.statline span{font-size:9px}.pipeline{grid-template-columns:1fr;gap:6px}.arrow{height:20px;transform:rotate(90deg)}.node{padding:16px;display:grid;grid-template-columns:34px 1fr;gap:4px 12px}.node .symbol{grid-row:1/3;margin:0;align-self:center}.node small{grid-column:2}.farm{padding:16px}.farm-head span{display:block}.server{padding:17px 3px}.accel{display:flex}.accel span{margin:0}.underflow{display:block;font-size:10px;line-height:1.8}.underflow span{display:block}.loop{grid-template-columns:1fr}.step{display:grid;grid-template-columns:28px 1fr;gap:3px 8px;padding:14px}.step b{grid-row:1/3;margin:2px 0}.step small{grid-column:2;margin-top:0}.outcomes{display:grid;grid-template-columns:1fr 1fr;line-height:1.6}.outcomes .label{grid-column:1/-1}.hint{line-height:1.8}.nav-arrow{width:26px;height:36px;font-size:23px}#prev{left:0}#next{right:0}.footer{padding:12px 20px;font-size:8px}.footer .footer-middle{display:none}.two-col{grid-template-columns:1fr}.lane-grid{gap:8px}.lane{padding:18px 12px}.lane b{font-size:22px}.lane span{font-size:10px}.card{padding:20px}.detail-line{font-size:12px}.target-chart strong{font-size:54px}.eyebrow{font-size:10px;line-height:1.7}.callout{font-size:12px}}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){body:not(.motion-enabled) *{animation:none!important;transition:none!important}}
 @media print{body{overflow:visible;background:white;color:black}.top,.footer,.nav-arrow,.progress,.tabs,.hint,.actions{display:none!important}.deck{display:block;transform:none!important}.slide{height:auto;min-height:95vh;width:100%;padding:25px;overflow:visible;break-after:page;background:#07101d;color:#edf5fc;print-color-adjust:exact}.slide[inert]{display:block}.heading{display:block}.two-col{grid-template-columns:1fr 1fr}}
 
 /* Palette sampled from Parasoft's C/C++test product page. */
@@ -31,7 +31,10 @@ button[aria-pressed="true"],.tabs button[aria-current="page"]{background:#e2f3fb
 .primary{background:linear-gradient(100deg,#00e99c,#a0ecff);color:#002743;border-color:transparent;border-radius:24px}
 .progress{background:#e4eef4}.progress div{background:linear-gradient(90deg,#0a93d2,#00ce92)}
 dialog{border-color:#8fc7df}dialog::backdrop{background:#00274380}
-#motionToggle{padding:10px 12px;font-size:12px;white-space:nowrap;border-color:#8fc7df}
+#motionToggle{display:flex;align-items:center;gap:8px;padding:10px 14px;font-size:12px;font-weight:800;white-space:nowrap;background:#00df91;color:#002f24;border:2px solid #008b60;box-shadow:0 3px 12px #008b6026}
+#motionToggle:hover{background:#2aefa9}#motionToggle[aria-pressed="true"]{background:#087454;color:#fff;border-color:#065b42}
+#motionIcon{width:14px;height:16px;display:block;flex-shrink:0;background:currentColor;clip-path:polygon(8% 0,100% 50%,8% 100%)}
+#motionToggle[aria-pressed="true"] #motionIcon{clip-path:none;background:none;border-left:5px solid currentColor;border-right:5px solid currentColor}
 .intro-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:24px;margin-top:24px}
 .intro-metric{background:var(--white);color:white;border-radius:16px;padding:28px;position:relative;overflow:hidden}
 .intro-metric:after{content:'C++';position:absolute;right:-8px;top:10px;font-size:130px;font-weight:800;opacity:.06;pointer-events:none}
@@ -43,10 +46,18 @@ dialog{border-color:#8fc7df}dialog::backdrop{background:#00274380}
 .walkthrough{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;background:#00385f;color:white;border-radius:12px;padding:18px 22px;margin-top:18px;min-height:115px}
 .walkthrough .phase-index{font-size:36px;color:#92eaff;font-weight:700;letter-spacing:-1px}.walkthrough .label{color:#b7dfee;font-size:9px}.walkthrough h3{margin:5px 0;font-size:18px}.walkthrough p{margin:0;color:#e1f1f8;font-size:12px;line-height:1.6;max-width:900px}.phase-controls{display:flex;gap:6px}.phase-controls button{background:#fff;color:#00385f;padding:9px 13px;border-color:#92c6dc;font-size:17px}
 .is-active{outline:3px solid var(--blue);outline-offset:3px;box-shadow:0 0 0 8px #0a93d20e!important;transition:outline-color .3s,box-shadow .3s}
-.arrow{position:relative}.arrow:after{content:'';position:absolute;width:5px;height:5px;background:var(--blue);border-radius:50%;animation:flow 1.5s linear infinite}
-@keyframes flow{0%{translate:-10px 0;opacity:0}25%{opacity:1}100%{translate:10px 0;opacity:0}}
+.arrow{position:relative}.arrow:after{content:'';position:absolute;width:8px;height:8px;background:#00c884;box-shadow:0 0 10px #00c884aa;border-radius:50%;animation:flow 1.2s linear infinite}
+@keyframes flow{0%{translate:-12px 0;opacity:0;scale:.5}25%{opacity:1;scale:1}100%{translate:12px 0;opacity:0;scale:.5}}
 .step.is-active b,.server i{animation:signal 2s ease-in-out infinite}.server:nth-child(2n) i{animation-delay:.4s}.server:nth-child(3n) i{animation-delay:.8s}
 @keyframes signal{50%{opacity:.4}}
+.farm{position:relative}.farm:after{content:'';position:absolute;top:-2px;left:0;width:30%;height:4px;border-radius:4px;background:linear-gradient(90deg,transparent,#00df91,var(--blue),transparent);animation:scan-sweep 2.4s ease-in-out infinite}
+@keyframes scan-sweep{0%,100%{left:0;opacity:.3}50%{left:70%;opacity:1}}
+.is-active{animation:active-phase 1.8s ease-in-out infinite}.server{animation:server-lift 2.4s ease-in-out infinite}.server:nth-child(2){animation-delay:.2s}.server:nth-child(3){animation-delay:.4s}.server:nth-child(4){animation-delay:.6s}.server:nth-child(5){animation-delay:.8s}.server:nth-child(6){animation-delay:1s}
+@keyframes active-phase{50%{outline-color:#00b77c;filter:drop-shadow(0 5px 8px #0a93d233)}}
+@keyframes server-lift{50%{translate:0 -5px;border-color:#00a873}}
+.cycle-steps [aria-pressed="true"],.lane[aria-pressed="true"]{animation:stage-glow 1.8s ease-in-out infinite}
+@keyframes stage-glow{50%{background:#d2f7e9;translate:5px 0}}
+.walkthrough{position:relative;overflow:hidden}.walkthrough:after{content:'';position:absolute;bottom:0;left:0;height:3px;width:30%;background:linear-gradient(90deg,transparent,#00df91,#92eaff,transparent);animation:scan-sweep 2.4s ease-in-out infinite}
 .cycle-steps button:after{content:'↓';margin-left:auto;color:var(--blue);font-size:18px}.cycle-steps button:last-of-type:after{content:'↺'}
 .cycle-steps [aria-pressed="true"]{box-shadow:inset 4px 0 var(--blue)}
 .motion-paused *{animation-play-state:paused!important}.slide[inert] *{animation-play-state:paused!important}
@@ -65,7 +76,7 @@ dialog{border-color:#8fc7df}dialog::backdrop{background:#00274380}
   .two-col{margin-top:18px}.card{padding:18px}.card p{font-size:13px;line-height:1.5;margin:10px 0}.card h3{font-size:20px;margin-bottom:10px}.detail-line{padding:10px 0;font-size:12px}.lane{padding:20px 14px}.pill{margin-bottom:10px}
   .cycle-steps button{padding:13px 16px}.target-chart{padding:10px 0}.target-chart strong{font-size:52px}.checks{margin-top:0;gap:8px}.check{padding:11px;font-size:12px;line-height:1.5}.approval-total{font-size:46px;margin:10px 0}.actions{margin-top:12px}.approval-note{font-size:10px!important}.status{min-height:20px}
 }
-@media(prefers-reduced-motion:reduce){*::before,*::after{animation:none!important;transition:none!important}}
+@media(prefers-reduced-motion:reduce){body:not(.motion-enabled) *::before,body:not(.motion-enabled) *::after{animation:none!important;transition:none!important}}
 @media print{.slide{background:#fff;color:#00385f}.top,.phase-controls{display:none!important}.walkthrough,.intro-metric{print-color-adjust:exact}.is-active{outline:none}}
 </style>
 </head>
@@ -75,7 +86,7 @@ dialog{border-color:#8fc7df}dialog::backdrop{background:#00274380}
   <nav class="tabs" aria-label="Presentation sections">
     <button data-slide="0" aria-current="page">01 Apollo</button><button data-slide="1">02 Workflow</button><button data-slide="2">03 Parallel scans</button><button data-slide="3">04 Fix &amp; verify</button><button data-slide="4">05 Approval</button>
   </nav>
-  <div class="top-right"><span class="proposal">DEMONSTRATION PLAN</span><button id="motionToggle" aria-pressed="true" aria-label="Toggle walkthrough animation">Pause motion</button><button id="ibToggle" aria-pressed="true">● Incredibuild: ON</button></div>
+  <div class="top-right"><span class="proposal">DEMONSTRATION PLAN</span><button id="motionToggle" aria-pressed="false" aria-label="Play animated walkthrough"><span id="motionIcon" aria-hidden="true"></span><span id="motionLabel">Play</span></button><button id="ibToggle" aria-pressed="true">● Incredibuild: ON</button></div>
 </header>
 <main class="deck" id="deck">
   <section class="slide" aria-label="Apollo project introduction">
@@ -185,7 +196,8 @@ const dialog = document.getElementById('info-dialog');
 let current = 0;
 let ibEnabled = true;
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-let motionEnabled = !reducedMotion.matches;
+let motionEnabled = false;
+let motionTimer;
 let phase = 0;
 let stage = 0;
 const stages = [
@@ -206,6 +218,7 @@ function goTo(index) {
   const focusedSlide = document.activeElement.closest('.slide');
   if (focusedSlide && focusedSlide !== slides[next]) document.activeElement.blur();
   current = next;
+  if (current === 0 || current === 4) setMotion(false);
   document.getElementById('deck').style.transform = `translateX(-${current * 100}vw)`;
   slides.forEach((slide, i) => { slide.inert = i !== current; });
   document.querySelectorAll('[data-slide]').forEach(button => {
@@ -247,28 +260,43 @@ function selectPhase(index) {
     ? 'Each of the same six Parasoft servers analyzes its assigned PR without Incredibuild. Rules, scope, test gates, and DTP reporting stay unchanged. Record this mode and measure actual timings.'
     : phases[phase][2];
 }
+function advanceMotion() {
+  if (document.hidden || dialog.open) return;
+  if (current === 1) selectPhase(phase + 1);
+  if (current === 2) selectLane(Number(document.querySelector('[data-lane][aria-pressed="true"]').dataset.lane) % 6 + 1);
+  if (current === 3) selectStage((stage + 1) % stages.length);
+}
 function setMotion(enabled) {
   motionEnabled = enabled;
+  clearInterval(motionTimer);
+  document.body.classList.toggle('motion-enabled', enabled);
   document.body.classList.toggle('motion-paused', !enabled);
   document.getElementById('motionToggle').setAttribute('aria-pressed', enabled);
-  document.getElementById('motionToggle').textContent = enabled ? 'Pause motion' : 'Play motion';
+  document.getElementById('motionToggle').setAttribute('aria-label', enabled ? 'Pause animated walkthrough' : 'Play animated walkthrough');
+  document.getElementById('motionLabel').textContent = enabled ? 'Pause' : 'Play';
+  if (enabled) motionTimer = setInterval(advanceMotion, 6500);
 }
-document.getElementById('motionToggle').addEventListener('click', () => setMotion(!motionEnabled));
-reducedMotion.addEventListener('change', () => setMotion(!reducedMotion.matches));
+document.getElementById('motionToggle').addEventListener('click', () => {
+  if (motionEnabled) { setMotion(false); return; }
+  setMotion(true);
+  if (current === 0 || current === 4) { goTo(1); selectPhase(0); }
+  else advanceMotion();
+  if (innerWidth <= 720) {
+    const slide = slides[current];
+    const panel = slide.querySelector(current === 1 ? '.walkthrough' : '.card');
+    slide.scrollTop += panel.getBoundingClientRect().top - slide.getBoundingClientRect().top - 90;
+  }
+});
+reducedMotion.addEventListener('change', () => { if (reducedMotion.matches) setMotion(false); });
 document.getElementById('phase-prev').addEventListener('click', () => { setMotion(false); selectPhase(phase - 1); });
 document.getElementById('phase-next').addEventListener('click', () => { setMotion(false); selectPhase(phase + 1); });
-setInterval(() => {
-  if (!motionEnabled || document.hidden || dialog.open) return;
-  if (current === 1) selectPhase(phase + 1);
-  if (current === 3) selectStage((stage + 1) % stages.length);
-}, 6500);
 setMotion(motionEnabled);
 selectPhase(0);
 document.querySelectorAll('[data-slide]').forEach(button => button.addEventListener('click', () => goTo(Number(button.dataset.slide))));
 document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
 document.getElementById('next').addEventListener('click', () => goTo(current + 1));
 document.querySelectorAll('[data-pr]').forEach(button => button.addEventListener('click', () => { selectLane(Number(button.dataset.pr)); goTo(2); }));
-document.querySelectorAll('[data-lane]').forEach(button => button.addEventListener('click', () => selectLane(Number(button.dataset.lane))));
+document.querySelectorAll('[data-lane]').forEach(button => button.addEventListener('click', () => { setMotion(false); selectLane(Number(button.dataset.lane)); }));
 document.querySelectorAll('[data-cycle]').forEach(button => button.addEventListener('click', () => { setMotion(false); selectStage(Number(button.dataset.cycle)); goTo(3); }));
 document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => { setMotion(false); selectStage(Number(button.dataset.stage)); }));
 document.querySelectorAll('[data-info]').forEach(button => button.addEventListener('click', () => {
