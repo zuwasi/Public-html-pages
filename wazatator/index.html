@@ -639,20 +639,19 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
   <table class="vs">
     <tr><th>Capability</th><th>claude plugin eval</th><th>Wazatator</th></tr>
     <tr><td>What it tests</td><td>A plugin; the suite lives in the plugin's <code>evals/</code></td><td>Any <code>SKILL.md</code>, wherever it lives; no packaging</td></tr>
-    <tr><td>Agents</td><td>Claude Code</td><td><span class="yes">✓</span> Claude Code and GitHub Copilot from one eval</td></tr>
+    <tr><td>Cheapest Claude model that does the job</td><td>One model per run; compare by hand</td><td><span class="yes">✓</span> Haiku, Sonnet, Opus with and without the skill in one run: does it make Haiku good enough?</td></tr>
     <tr><td>Score with vs. without the skill</td><td><span class="yes">✓</span></td><td><span class="yes">✓</span> <code>--baseline</code></td></tr>
     <tr><td>Collisions with your other skills</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>--skill-library</code>, prompts stolen per skill</td></tr>
     <tr><td>Trigger precision / recall / F1</td><td>Per-case "skill fired" check</td><td><span class="yes">✓</span> should / should-not suites, confusion matrix</td></tr>
     <tr><td>Custom-code graders</td><td><span class="no">–</span> "no custom-code graders"</td><td><span class="yes">✓</span> code, program, JSON schema, file diff</td></tr>
     <tr><td>Lint the SKILL.md itself</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>check</code> (token budget, compliance), <code>quality</code> (LLM rubric)</td></tr>
     <tr><td>Prompt-injection / adversarial packs</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>adversarial</code></td></tr>
-    <tr><td>Compare models in one run</td><td>One model per run</td><td><span class="yes">✓</span> <code>--model</code> × N, <code>compare</code></td></tr>
     <tr><td>Skill transfer / negative transfer</td><td><span class="no">–</span></td><td><span class="yes">✓</span> per-model with/without matrix, flags models the skill hurts</td></tr>
     <tr><td>Statistical significance</td><td>Mean Δ only</td><td><span class="yes">✓</span> paired bootstrap: 95% CI and p-value</td></tr>
     <tr><td>Regression gate vs. last version</td><td>Absolute score threshold</td><td><span class="yes">✓</span> <code>gate</code> vs. previous results, <code>--impact-log</code>, held-out tasks</td></tr>
     <tr><td>Built in, zero install</td><td><span class="yes">✓</span></td><td><span class="no">–</span> CLI + Claude Code plugin</td></tr>
   </table>
-  <p class="oneliner"><strong>claude plugin eval</strong> tells you whether your plugin helps Claude. <strong>Wazatator</strong> tells you whether your skill is well written, triggers precisely, survives your other skills and attacks, and works across agents and models. Use both.</p>
+  <p class="oneliner"><strong>claude plugin eval</strong> tells you whether your plugin helps Claude. <strong>Wazatator</strong> tells you whether your skill is well written, triggers precisely, survives your other skills and attacks, and which Claude model it needs. Use both.</p>
 </section>
 
 <!-- Versus prompt-audit -->
