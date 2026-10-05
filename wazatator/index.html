@@ -565,21 +565,22 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
 <span class="k">wazatator compare</span> old.json new.json
 <span class="hl s">  Significance: +50.0 pp, 95% CI [+0, +100], p = 0.15</span>
 <span class="dim">  -&gt; not significant: add tasks or trials</span>
-<span class="c"># 3. final run: holdout included, both models</span>
-<span class="k">wazatator run</span> eval.yaml <span class="n">--baseline --model haiku --model sonnet</span></pre>
-      <p class="small-note">pirate-greeter demo skill, Claude Code, 4 tasks, 2 to 3 trials per task, 4 Oct 2026.</p>
+<span class="c"># 3. final run: holdout included, three Claude models</span>
+<span class="k">wazatator run</span> eval.yaml <span class="n">--baseline --model haiku --model sonnet --model opus</span></pre>
+      <p class="small-note">pirate-greeter demo skill, Claude Code. Steps 1-2: 2 trials per task, 4 Oct 2026. Step 3: one run, 4 tasks, 3 trials per task, 5 Oct 2026; cost is what Claude Code reported for the 12 with-skill task runs.</p>
     </div>
     <div>
-      <table>
-        <tr><th>Skill transfer matrix</th><th>With</th><th>Without</th><th>Δ (95% CI)</th><th>p</th></tr>
-        <tr><td><strong>haiku</strong></td><td>66.7%</td><td>25.0%</td><td>+41.7 pp [+0, +92]</td><td>0.13</td></tr>
-        <tr><td><strong>sonnet</strong></td><td>75.0%</td><td>25.0%</td><td>+50.0 pp [+0, +100]</td><td>0.12</td></tr>
+      <table style="font-size:clamp(.78rem,1.15vw,.92rem);white-space:nowrap">
+        <tr><th>Model</th><th>With</th><th>Without</th><th>Δ pp (95% CI)</th><th>p</th><th>Cost</th></tr>
+        <tr><td><strong>haiku</strong></td><td>66.7%</td><td>25.0%</td><td>+41.7 [+0, +83]</td><td>0.12</td><td>$0.26</td></tr>
+        <tr><td><strong>sonnet</strong></td><td>75.0%</td><td>25.0%</td><td>+50.0 [+0, +100]</td><td>0.12</td><td>$0.39</td></tr>
+        <tr><td><strong>opus</strong></td><td class="pass">100%</td><td>25.0%</td><td class="pass">+75.0 [+25, +100]</td><td class="pass">0.01 *</td><td>$0.74</td></tr>
       </table>
       <div class="card" style="margin-top:14px">
         <h3>What the loop caught</h3>
         <p><span class="tag t-green">Gate passed</span><br>A description fix took Haiku from 33% to 100% on the tuning tasks. Logged and kept.</p>
-        <p><span class="tag t-red">Holdout failed</span><br>"Say hi to this person" still failed on <strong>both</strong> models: the skill fired, but never read <code>newcomer.txt</code> to find the name. Tuning alone would have shipped that gap.</p>
-        <p><span class="tag t-amber">Honest stats</span><br>Gains are real but not yet significant with 4 tasks. Wazatator says so instead of declaring victory.</p>
+        <p><span class="tag t-red">Holdout failed</span><br>"Say hi to this person" failed on Haiku and Sonnet: the skill fired, but they never read <code>newcomer.txt</code> to find the name. Only Opus did. Tuning alone would have shipped that gap.</p>
+        <p><span class="tag t-amber">Which model?</span><br>Only Opus is significant (p = 0.01), at 2.8× Haiku's cost. Fix the skill to read the file and re-run before paying for Opus; Wazatator shows the trade-off instead of guessing.</p>
       </div>
     </div>
   </div>
