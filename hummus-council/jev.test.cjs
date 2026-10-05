@@ -148,15 +148,31 @@ test("Jev receives the added city and sources with approved review evidence", ()
     ["zarzir", "facebook", ["zina-zarzir"]],
     ["jerusalem", "facebook", ["abu-ali-jerusalem", "arafat-jerusalem"]],
     ["tarshiha", "facebook", ["al-amir-tarshiha"]],
-    ["nazareth", "facebook", ["al-sheikh-nazareth"]],
+    ["nazareth", "facebook", ["al-sheikh-nazareth", "imad-nazareth"]],
     ["netanya", "facebook", ["uzi-netanya"]],
     ["kafr-qara", "facebook", ["abu-jamal-kafr-qara"]],
     ["hod-hasharon", "facebook", ["neri-hod-hasharon"]],
-    ["tira", "facebook", ["lul-tira"]],
+    ["tira", "facebook", ["al-mansour-tira", "lul-tira"]],
     ["shefa-amr", "facebook", ["al-hawam-shefa-amr"]],
-    ["tel-aviv", "facebook", ["nader-hagadol-tel-aviv"]],
+    [
+      "tel-aviv",
+      "facebook",
+      [
+        "abu-hassan",
+        "abu-hassan-shivtei-israel-west",
+        "akram-shenkin",
+        "asli-jaffa",
+        "hamudi-yehuda-halevi",
+        "nader-hagadol-tel-aviv",
+        "shlomo-doron",
+      ],
+    ],
     ["rameh", "facebook", ["abu-rami"]],
     ["rameh", "daniel", ["abu-rami"]],
+    ["pardes-hanna", "facebook", ["hagibor-pardes-hanna"]],
+    ["tayibe", "facebook", ["abu-muhammad-tayibe"]],
+    ["acre", "facebook", ["said-acre"]],
+    ["jerusalem", "daniel", ["abu-shukri-beit-hanina"]],
   ]) {
     const { input, result } = validateInput({
       ...base,
@@ -183,7 +199,7 @@ test("Jev receives the added city and sources with approved review evidence", ()
         /Rami Moscovich/,
       );
     }
-    if (city === "jerusalem") {
+    if (city === "jerusalem" && source === "facebook") {
       const review = request.state.candidates.find(
         (r) => r.id === "arafat-jerusalem",
       ).review;
@@ -197,12 +213,12 @@ test("Jev receives the added city and sources with approved review evidence", ()
       assert.deepEqual(request.state.candidates[0].tags, []);
     }
     if (city === "tel-aviv" && source === "facebook") {
-      assert.match(request.state.candidates[0].review, /Rami Levi/);
-      assert.match(request.state.candidates[0].review, /billing dispute/);
-      assert.match(
-        request.state.candidates[0].review,
-        /not an independently verified finding/,
+      const nader = request.state.candidates.find(
+        (r) => r.id === "nader-hagadol-tel-aviv",
       );
+      assert.match(nader.review, /Rami Levi/);
+      assert.match(nader.review, /billing dispute/);
+      assert.match(nader.review, /not an independently verified finding/);
     }
     if (city === "rameh") {
       assert.match(
@@ -215,6 +231,34 @@ test("Jev receives the added city and sources with approved review evidence", ()
       );
     }
   }
+});
+
+test("Jev receives conflicting selected reviews, not only the first profile", () => {
+  const { input, result } = validateInput({
+    ...base,
+    sources: ["humus101", "facebook", "daniel"],
+  });
+  const request = buildRequest(input, result);
+  const abuHassan = request.state.candidates.filter(
+    (r) => r.id === "abu-hassan",
+  );
+  assert.equal(abuHassan.length, 1);
+  assert.match(abuHassan[0].review, /warm, generously seasoned/);
+  assert.match(abuHassan[0].review, /only decent, not exceptional/);
+  assert.match(abuHassan[0].review, /Daniel enjoys/);
+  assert.doesNotMatch(abuHassan[0].review, /Avi Levy/); // Different branch.
+  const hamudi = request.state.candidates.find(
+    (r) => r.id === "hamudi-yehuda-halevi",
+  );
+  assert.match(hamudi.review, /no reason to return/);
+  const withoutFacebook = validateInput(base);
+  assert.doesNotMatch(
+    buildRequest(
+      withoutFacebook.input,
+      withoutFacebook.result,
+    ).state.candidates.find((r) => r.id === "hamudi-yehuda-halevi").review,
+    /Nadav Kahn Cohen/,
+  );
 });
 
 test("Jev's choice overrides the higher rule score without mutating rule evidence", () => {

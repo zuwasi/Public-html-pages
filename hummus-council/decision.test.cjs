@@ -47,7 +47,13 @@ test("taste changes the winner and exact component scores", () => {
   assert.equal(decide({ ...base, taste: "rich" }).rows[0].id, "616");
 });
 test("changing only the date can change the verdict", () => {
-  const trip = { ...base, city: "jerusalem", travel: "any", taste: "rich" };
+  const trip = {
+    ...base,
+    city: "jerusalem",
+    travel: "any",
+    taste: "rich",
+    sources: ["humus101"],
+  };
   const summer = decide(trip).rows[0];
   const winter = decide({ ...trip, date: "2026-01-15" }).rows[0];
   assert.equal(summer.id, "lina");
@@ -87,7 +93,7 @@ test("unknown style receives half credit, not a fabricated match", () => {
 test("Daniel's historical mentions stay selectable without turning anecdotes into restaurant evidence", () => {
   const input = { ...base, city: "haifa", sources: ["daniel"] };
   const result = decide(input);
-  assert.equal(result.sourced, 7);
+  assert.equal(result.sourced, 8);
   assert.deepEqual(
     Array.from(result.rows, (r) => r.id),
     ["el-sham"],
@@ -101,14 +107,17 @@ test("Daniel's historical mentions stay selectable without turning anecdotes int
   assert.equal(row.note, DANIEL_REVIEWS.elSham.note);
   assert.equal(decide({ ...input, date: "2026-01-15" }).rows[0].score, 75);
   assert.equal(decide({ ...input, hunger: 5 }).rows[0].score, 83);
-  assert.equal(decide({ ...input, city: "jerusalem" }).rows.length, 0);
-  assert.equal(decide({ ...input, travel: "any" }).rows.length, 7);
+  assert.equal(
+    decide({ ...input, city: "jerusalem" }).rows[0].id,
+    "abu-shukri-beit-hanina",
+  );
+  assert.equal(decide({ ...input, travel: "any" }).rows.length, 8);
   assert.ok(
     decide({ ...input, sources: ["humus101"] }).rows.every(
       (r) => r.id !== "el-sham",
     ),
   );
-  assert.equal(Object.keys(DANIEL_REVIEWS).length, 14);
+  assert.equal(Object.keys(DANIEL_REVIEWS).length, 16);
   assert.equal(Object.values(DANIEL_REVIEWS).filter((r) => r.pages).length, 6);
   assert.deepEqual(
     Object.values(DANIEL_REVIEWS)
@@ -150,7 +159,7 @@ test("HTML evidence changes taste choices without inventing lightness, dates or 
   assert.equal(daniel[0].id, "abu-hassan");
   assert.equal(daniel[0].note, DANIEL_REVIEWS.abuHassan.note);
   const combined = decide({ ...base, travel: "any" });
-  assert.equal(combined.sourced, 24);
+  assert.equal(combined.sourced, 25);
   assert.equal(combined.rows.filter((r) => r.id === "abu-hassan").length, 1);
   assert.equal(
     combined.rows.find((r) => r.id === "abu-hassan").source,
@@ -199,16 +208,27 @@ test("added reviews preserve attribution, dates and source/city restrictions", (
   );
   assert.equal(decide({ ...community, sources: ["daniel"] }).rows.length, 0);
   assert.deepEqual(
-    Array.from(decide({ ...community, city: "tel-aviv" }).rows, (r) => r.id),
-    ["nader-hagadol-tel-aviv"],
+    Array.from(
+      decide({ ...community, city: "tel-aviv" }).rows,
+      (r) => r.id,
+    ).sort(),
+    [
+      "abu-hassan",
+      "abu-hassan-shivtei-israel-west",
+      "akram-shenkin",
+      "asli-jaffa",
+      "hamudi-yehuda-halevi",
+      "nader-hagadol-tel-aviv",
+      "shlomo-doron",
+    ],
   );
   assert.equal(
     decide({ ...community, city: "tel-aviv", travel: "any" }).rows.length,
-    19,
+    34,
   );
   assert.equal(
     decide({ ...base, travel: "any", sources: Object.keys(SOURCES) }).sourced,
-    43,
+    53,
   );
 });
 test("new community evidence preserves places, dates and conservative style tags", () => {
@@ -262,8 +282,8 @@ test("new community evidence preserves places, dates and conservative style tags
 });
 test("repeated community reviews keep both authors and links but only one seat", () => {
   const rows = decide({ ...base, travel: "any", sources: ["facebook"] }).rows;
-  assert.equal(rows.length, 19);
-  assert.equal(new Set(rows.map((r) => r.id)).size, 19);
+  assert.equal(rows.length, 34);
+  assert.equal(new Set(rows.map((r) => r.id)).size, 34);
   for (const [id, author, primary, additional] of [
     ["arafat-jerusalem", "Ronen Amit", "1989046911736902", "1987231548585105"],
     [
@@ -284,7 +304,7 @@ test("repeated community reviews keep both authors and links but only one seat",
     ]);
   }
   const links = rows.flatMap((r) => [r.url, ...(r.additionalUrls || [])]);
-  assert.equal(new Set(links).size, 21);
+  assert.equal(new Set(links).size, 34);
   assert.ok(!links.some((url) => url.includes("1986335968674663")));
   assert.match(html, /id="community-background"/);
   assert.match(html, /permalink\/1986335968674663\//);
@@ -297,6 +317,123 @@ test("repeated community reviews keep both authors and links but only one seat",
     /liked the hummus-ful less/,
   );
 });
+test("downloaded links preserve unknown years, branches and Daniel attribution", () => {
+  const rows = decide({ ...base, travel: "any", sources: ["facebook"] }).rows;
+  for (const [id, city, date, tags] of [
+    ["haben-shel-hasuri-bat-yam", "bat-yam", null, ["light"]],
+    ["hagibor-pardes-hanna", "pardes-hanna", null, ["chunky"]],
+    ["asli-jaffa", "tel-aviv", null, []],
+    ["shlomo-doron", "tel-aviv", null, []],
+    ["akram-shenkin", "tel-aviv", "2024-11-06", ["chunky"]],
+    ["imad-nazareth", "nazareth", "2022-02-15", []],
+    ["said-acre", "acre", "2022-02-15", []],
+    ["abu-muhammad-tayibe", "tayibe", "2025-10-04", []],
+    ["al-jumaa-kafr-qasim", "kafr-qasim", "2025-10-19", ["chunky"]],
+    ["al-mansour-tira", "tira", "2023-07-08", []],
+    ["abu-hassan-shivtei-israel-west", "tel-aviv", "2024-02-19", ["chunky"]],
+  ]) {
+    const row = rows.find((r) => r.id === id);
+    assert.equal(row.city, city);
+    assert.equal(row.date, date);
+    assert.deepEqual(Array.from(row.tags), tags);
+  }
+  const personal = decide({
+    ...base,
+    city: "jerusalem",
+    sources: ["daniel"],
+  }).rows;
+  assert.equal(personal.length, 1);
+  assert.equal(personal[0].id, "abu-shukri-beit-hanina");
+  assert.equal(personal[0].date, "2025-07-10");
+  assert.equal(personal[0].score, 75); // 40 city + 15 unknown taste + 10 unknown season + 10 date.
+  assert.equal(personal[0].tags.length, 0); // Looking at masabacha is not tasting it.
+  assert.equal(personal[0].url, "https://www.facebook.com/share/p/1CLZKFypeY/");
+  assert.equal(DANIEL_REVIEWS.abuHassanSpice.restaurant, undefined);
+  assert.match(DANIEL_REVIEWS.abuHassanSpice.note, /no cause or branch/);
+  assert.ok(!rows.some((r) => r.note.includes("Daniel Mizrahi")));
+  assert.match(html, /id="arafat-unconfirmed"/);
+  for (const token of [
+    "1CMQwFpyp2",
+    "14qawNgq2m5",
+    "18b3t5RFKH",
+    "14sYPDWgUWA",
+    "19rJw4G6Sg",
+    "1HQLPojatC",
+    "19HrhbQi3D",
+    "1BZuQfiUnv",
+    "17B335JoTM",
+    "1CJ1pxHzi6",
+    "1C4SLuF4fc",
+    "1CLZKFypeY",
+    "1DZGZrBZD7",
+    "18jimDkE71",
+    "1DeijJoZW8",
+    "1EoD9MCRaj",
+  ])
+    assert.ok(html.includes(`https://www.facebook.com/share/p/${token}/`));
+});
+
+test("selected overlapping sources retain dissent without duplicate seats or score bonuses", () => {
+  const sources = ["humus101", "facebook", "daniel"];
+  const markers = [
+    "warm, generously seasoned",
+    "Liron Shitrit",
+    "Daniel enjoys",
+  ];
+  for (let mask = 1; mask < 8; mask++) {
+    const enabled = sources.filter((_, i) => mask & (1 << i));
+    const input = { ...base, taste: "chunky", sources: enabled };
+    const rows = decide(input).rows.filter((r) => r.id === "abu-hassan");
+    assert.equal(rows.length, 1);
+    const row = rows[0];
+    assert.equal(row.score, enabled[0] === "facebook" ? 80 : 75);
+    for (let i = 0; i < markers.length; i++)
+      assert.equal(row.note.includes(markers[i]), !!(mask & (1 << i)));
+    assert.equal(row.note.split("\n\n").length, enabled.length);
+    assert.equal(
+      new Set([row.url, ...row.additionalUrls]).size,
+      enabled.length,
+    );
+    assert.equal(
+      row.note,
+      decide({ ...input, sources: [...enabled].reverse() }).rows.find(
+        (r) => r.id === "abu-hassan",
+      ).note,
+    );
+    assert.equal(
+      decide({ ...input, sources: [enabled[0]] }).rows.find(
+        (r) => r.id === "abu-hassan",
+      ).score,
+      row.score,
+    );
+  }
+});
+
+test("new review summaries and merged evidence translate into Hebrew", () => {
+  const localization = html.match(
+    /<script id="localization">([\s\S]*?)<\/script>/,
+  )[1];
+  const { tr } = vm.runInNewContext(
+    localization.split("const restaurantName")[0] + "\n({tr})",
+    { location: { search: "?lang=he" }, URLSearchParams },
+  );
+  const rows = decide({ ...base, travel: "any", sources: ["facebook"] }).rows;
+  for (const row of rows.filter((r) => r.url.includes("/share/p/"))) {
+    assert.match(tr(row.note), /[\u0590-\u05ff]/);
+    assert.notEqual(tr(row.note), row.note);
+    assert.notEqual(tr(row.place), row.place);
+  }
+  for (const key of ["abuHassanSpice", "abuShukriBeitHanina"])
+    assert.notEqual(tr(DANIEL_REVIEWS[key].note), DANIEL_REVIEWS[key].note);
+  const merged = decide({
+    ...base,
+    sources: ["humus101", "facebook", "daniel"],
+  }).rows.find((r) => r.id === "abu-hassan");
+  const translated = tr(merged.note).split("\n\n");
+  assert.equal(translated.length, 3);
+  assert.ok(translated.every((part) => /[\u0590-\u05ff]/.test(part)));
+});
+
 test("latest links preserve mixed reviews and separate the honeymoon endorsement", () => {
   const rows = decide({ ...base, travel: "any", sources: ["facebook"] }).rows;
   for (const [id, post] of [
@@ -446,6 +583,9 @@ test("all supported input combinations preserve filters, bounded additive scores
     "hod-hasharon",
     "tira",
     "shefa-amr",
+    "pardes-hanna",
+    "tayibe",
+    "acre",
   ];
   const sources = ["humus101", "foodout", "daniel", "tripadvisor", "facebook"];
   for (const city of cities)

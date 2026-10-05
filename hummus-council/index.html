@@ -1315,6 +1315,9 @@
                       <option value="hod-hasharon">Hod HaSharon</option>
                       <option value="tira">Tira</option>
                       <option value="shefa-amr">Shefa-'Amr</option>
+                      <option value="pardes-hanna">Pardes Hanna</option>
+                      <option value="tayibe">Tayibe</option>
+                      <option value="acre">Acre</option>
                     </select>
                   </div>
                   <div class="field">
@@ -1406,7 +1409,7 @@
                       value="daniel"
                       checked
                     /><span class="source-name">Daniel's own reviews</span
-                    ><small>14 posts · 7 candidates</small></label
+                    ><small>16 posts · 8 candidates</small></label
                   ><label class="source-row"
                     ><input
                       type="checkbox"
@@ -1422,8 +1425,8 @@
                       value="facebook"
                       checked
                     /><span class="source-name"
-                      >Hummusologists · community reviews</span
-                    ><small>22 posts · 19 candidates</small></label
+                      >Facebook · community reviews</span
+                    ><small>36 posts · 34 candidates</small></label
                   >
                   <div class="hint">
                     Curated review snapshot. No live scraping.
@@ -1453,7 +1456,7 @@
                     >.
                   </div>
                   <button type="button" class="text-button" id="daniel-button">
-                    Read Daniel's 14 posts ↗
+                    Read Daniel's 16 posts ↗
                   </button>
                 </fieldset>
                 <p class="fineprint">
@@ -1598,7 +1601,7 @@
         <footer class="bottom-note">
           <span
             ><b>Real source links. Playful rules. No artificial chickpeas.</b
-            ><br />40 curated places · 5 sources · current opening status
+            ><br />53 curated places · 5 sources · current opening status
             unknown</span
           >
           <button id="sources-button" class="text-button">
@@ -1647,13 +1650,33 @@
           url: "https://www.tripadvisor.co.il/Restaurant_Review-g293984-d807968-Reviews-Hummus_Ashkara-Tel_Aviv_Tel_Aviv_District.html",
         },
         facebook: {
-          name: "Hummusologists · community reviews",
+          name: "Facebook · community reviews",
           url: "https://www.facebook.com/groups/Msabbaha",
         },
       };
       // Approved summaries only. Private exports and other people's comments are not published.
       // HTML post numbers follow Daniel-authored feed headers, not nested shared posts or comments.
       const DANIEL_REVIEWS = {
+        abuShukriBeitHanina: {
+          title: "Abu Shukri · Beit Hanina",
+          date: "2025-07-10",
+          url: "https://www.facebook.com/share/p/1CLZKFypeY/",
+          note: "Daniel's 10 July 2025 Hummusologists post praises tasty Jerusalem-style hummus, not too sour, at Abu Shukri in Beit Hanina opposite Jaafar Sweets. He only says the masabacha looks interesting, not that he tasted it; texture stays unknown. He also notes jars of pickled stuffed baby eggplants. This is not an Old City branch. The pickles have formed a subcommittee.",
+          restaurant: {
+            id: "abu-shukri-beit-hanina",
+            name: "Abu Shukri · Beit Hanina",
+            he: "אבו שוקרי · בית חנינא",
+            city: "jerusalem",
+            place: "Jerusalem · Beit Hanina, opposite Jaafar Sweets",
+            tags: [],
+          },
+        },
+        abuHassanSpice: {
+          title: "Abu Hassan · the chili inquiry",
+          date: "2024-10-05",
+          url: "https://www.facebook.com/share/p/17B335JoTM/",
+          note: "In his 5 October 2024 Hummusologists post, Daniel asks why Abu Hassan's takeaway masabacha tastes much hotter than before, recalling visits since 1981. He suspects tatbila but establishes no cause or branch. This brand-level observation is background, not a separate restaurant or a claim about today's recipe. The chili minister has been summoned.",
+        },
         elSham: {
           title: "Hummus El-Sham · Haifa",
           date: "2022-08-12",
@@ -2263,13 +2286,193 @@
           url: "https://humus101.com/8599",
           note: "The author describes very smooth, tahini-rich hummus and exceptionally generous tahini topping at this self-service branch. The food was tasty, but quality could vary and the ful and egg needed improvement. The branch is kept separate from HaKerem's other locations.",
         },
+        {
+          id: "haben-shel-hasuri-bat-yam",
+          name: "HaBen Shel HaSuri",
+          he: "הבן של הסורי",
+          city: "bat-yam",
+          place: "Bat Yam · 8 Metsudat Beitar Street",
+          tags: ["light"],
+          source: "facebook",
+          date: null,
+          url: "https://www.facebook.com/share/p/1CMQwFpyp2/",
+          note: "Ben Amit in Where Is Good Hummus praises the seasoning, gentle heat, ground ful and thin pitas, but finds the runny hummus awkward to scoop from a flat plate. Light means runny texture, not calories. January 30 is visible without a year. The plate-design committee has received a complaint.",
+        },
+        {
+          id: "asli-jaffa",
+          name: "Merkaz HaHummus HaAsli",
+          he: "מרכז החומוס האסלי",
+          city: "tel-aviv",
+          place: "Jaffa · 73 Yefet Street",
+          tags: [],
+          source: "facebook",
+          date: null,
+          url: "https://www.facebook.com/share/p/14qawNgq2m5/",
+          note: "Ben Amit in Where Is Good Hummus enjoyed tangy, room-temperature hummus, partly ground ful and fried cauliflower. He reports a wait and felt prices were high and not displayed. This is his visit account, not a verified current pricing policy. June 20 has no visible year; temperature does not establish lightness. The finance minister requests a menu.",
+        },
+        {
+          id: "hagibor-pardes-hanna",
+          name: "Hummus HaGibor",
+          he: "חומוס הגיבור",
+          city: "pardes-hanna",
+          place: "Pardes Hanna",
+          tags: ["chunky"],
+          source: "facebook",
+          date: null,
+          url: "https://www.facebook.com/share/p/18b3t5RFKH/",
+          note: "Shmil Walder in Where Is Good Hummus highly recommends the masabacha and shakshuka. Masabacha supports the chunky tag. The post says 15:30 closing, but that is not a current-hours check. September 4 has no visible year. Even heroes need you to check opening hours.",
+        },
+        {
+          id: "shlomo-doron",
+          name: "Shlomo & Doron",
+          he: "שלמה ודורון",
+          city: "tel-aviv",
+          place: "Tel Aviv · 29 Yishkon Street, Kerem HaTeimanim",
+          tags: [],
+          source: "facebook",
+          date: null,
+          url: "https://www.facebook.com/share/p/14sYPDWgUWA/",
+          note: "Ben Amit in Where Is Good Hummus praises creative toppings at Shlomo & Doron: cool hummus with warm bulgur and mushrooms, spices, salad and seeds. He finds it fresh and tasty. Toppings and temperature do not establish base texture. February 26 has no visible year. The mushroom lobby has a creative department.",
+        },
+        {
+          id: "abu-qassem",
+          name: "Abu Qassem",
+          he: "אבו קאסם",
+          city: "fureidis",
+          place: "Fureidis",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2024-10-01",
+          url: "https://www.facebook.com/share/p/19rJw4G6Sg/",
+          note: "Liron Raines' 1 October 2024 Hummusologists review enjoyed Abu Qassem's smooth cold hummus and excellent masabacha despite preferring warm hummus. He liked the falafel's taste but not its oval shape. NIS 81 covered two dishes, salad and one drink then, not today's plate price. Cold is not a lightness tag. The geometry committee objects to the falafel.",
+        },
+        {
+          id: "abu-hassan",
+          name: "Abu Hassan",
+          he: "אבו חסן",
+          city: "tel-aviv",
+          place: "Jaffa · Dolphin Street branch",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2025-09-10",
+          url: "https://www.facebook.com/share/p/1HQLPojatC/",
+          note: "Liron Shitrit's 10 September 2025 Hummusologists review of Dolphin 1 finds the masabacha's texture good but the cold hummus only decent, not exceptional. He missed pickles and tomato and preferred other Jaffa places. NIS 38 included soda on that visit. This is a mixed personal review, not unanimous praise. The legend has received a minority report.",
+        },
+        {
+          id: "akram-shenkin",
+          name: "Hummus Akram",
+          he: "חומוס אכרם",
+          city: "tel-aviv",
+          place: "Tel Aviv · Shenkin Street",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2024-11-06",
+          url: "https://www.facebook.com/share/p/19HrhbQi3D/",
+          note: "Benny Israeli's 6 November 2024 Hummusologists review praises cold, slightly sweet hummus-masabacha with smooth texture, melting chickpeas, dominant olive oil, tatbila and thin pita. Masabacha supports chunky; smoothness does not prove lightness. His NIS 30 is historical. The olive oil has taken the microphone.",
+        },
+        {
+          id: "el-sham",
+          name: "Hummus El-Sham",
+          he: "חומוס אלשאם",
+          city: "haifa",
+          place: "Haifa · Wadi Nisnas",
+          tags: [],
+          source: "facebook",
+          date: "2022-02-15",
+          url: "https://www.facebook.com/share/p/1BZuQfiUnv/",
+          note: "Avraham Bryds' 15 February 2022 Hummusologists post ranks El-Sham in Haifa first for chickpea-topped hummus. His personal list is not a council score. Chickpea toppings do not establish base texture, and he advises repeat visits before judging. The other list entries without cities are not assigned to guessed branches.",
+        },
+        {
+          id: "imad-nazareth",
+          name: "Hummus Imad",
+          he: "חומוס עימאד",
+          city: "nazareth",
+          place: "Nazareth",
+          tags: [],
+          source: "facebook",
+          date: "2022-02-15",
+          url: "https://www.facebook.com/share/p/1BZuQfiUnv/",
+          note: "Avraham Bryds' 15 February 2022 Hummusologists list places Imad in Nazareth second for chickpea-topped hummus. It gives no street address or base-texture description. Personal historical ranking, not a current comparison or automatic rule-score bonus. Second on his list still means one chair here.",
+        },
+        {
+          id: "said-acre",
+          name: "Hummus Said",
+          he: "חומוס סעיד",
+          city: "acre",
+          place: "Acre",
+          tags: [],
+          source: "facebook",
+          date: "2022-02-15",
+          url: "https://www.facebook.com/share/p/1BZuQfiUnv/",
+          note: "Avraham Bryds' 15 February 2022 Hummusologists list places Said in Acre third for chickpea-topped hummus. No street address or base texture is established. This is one author's historical preference, not the council's ranking. The bronze chickpea carries no extra votes.",
+        },
+        {
+          id: "hamudi-yehuda-halevi",
+          name: "Hummus Hamudi · Yehuda HaLevi",
+          he: "חומוס חמודי · יהודה הלוי",
+          city: "tel-aviv",
+          place: "Tel Aviv · 93 Yehuda HaLevi Street",
+          tags: ["light", "chunky"],
+          source: "facebook",
+          date: "2025-09-18",
+          url: "https://www.facebook.com/share/p/1CJ1pxHzi6/",
+          note: "Nadav Kahn Cohen's 18 September 2025 Hummusologists review praises fresh salad, hot falafel and generous portions at Hamudi by Nahmani and Yehuda HaLevi, but finds the hummus bland, masabacha runny and pita poor, with no reason to return. Light describes runniness, not approval. NIS 52 was his meal deal, not today's price. The pita minister abstains.",
+        },
+        {
+          id: "abu-muhammad-tayibe",
+          name: "Hummus Abu Muhammad",
+          he: "חומוס אבו מוחמד",
+          city: "tayibe",
+          place: "Tayibe",
+          tags: [],
+          source: "facebook",
+          date: "2025-10-04",
+          url: "https://www.facebook.com/share/p/1C4SLuF4fc/",
+          note: "Ahmad al-Hamed Zwayani's 4 October 2025 Hummusologists post praises Abu Muhammad in Tayibe, recalling visits since 1984. NIS 30 for a large portion was his historical report. No texture or street address is supplied. Forty-one years of enthusiasm earns a citation, not forty-one votes.",
+        },
+        {
+          id: "al-jumaa-kafr-qasim",
+          name: "Hummus Al-Jumaa",
+          he: "חומוס אלג׳ומעה",
+          city: "kafr-qasim",
+          place: "Kafr Qasim · beside Shufan Bakery",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2025-10-19",
+          url: "https://www.facebook.com/share/p/1DZGZrBZD7/",
+          note: "Dror Abramov's 19 October 2025 Hummusologists review finds Al-Jumaa's warm, coarsely ground masabacha pleasant but not outstanding, with excellent crisp falafel and quick service. No refill was offered. NIS 25 was that visit's masabacha price. Basha was planned but never visited, so is not reviewed here. The detour committee met on a quiet street.",
+        },
+        {
+          id: "al-mansour-tira",
+          name: "Hummus Ful Al-Mansour",
+          he: "חומוס פול אל מנסור",
+          city: "tira",
+          place: "Tira · eastern approach from Kokhav Yair",
+          tags: [],
+          source: "facebook",
+          date: "2023-07-08",
+          url: "https://www.facebook.com/share/p/18jimDkE71/",
+          note: "Dror Kaveh's 8 July 2023 Hummusologists review praises Al-Mansour's hummus-ful, hot falafel and fresh vegetables. NIS 30 with soda was historical; no texture is described. He found the navigation spelling Al-Mantzour helpful then. The temporary renovation of another restaurant in that post is not a current closure notice. Even the map needed a spelling committee.",
+        },
+        {
+          id: "abu-hassan-shivtei-israel-west",
+          name: "Abu Hassan · Shivtei Israel west",
+          he: "אבו חסן · שבטי ישראל מערב",
+          city: "tel-aviv",
+          place: "Jaffa · west side of Shivtei Israel Street, beside a cafe",
+          tags: ["chunky"],
+          source: "facebook",
+          date: "2024-02-19",
+          url: "https://www.facebook.com/share/p/1DeijJoZW8/",
+          note: "Avi Levy's 19 February 2024 Hummusologists review of the west-side Shivtei Israel branch describes masabacha with ful, ordered without oil, as bland and his worst Abu Hassan visit. A negative personal account, not a verified pattern. Kept separate from Dolphin Street. The memorial is not a veto over criticism.",
+        },
         ...Object.values(DANIEL_REVIEWS)
           .filter((review) => review.restaurant)
           .map((review) => ({
             ...review.restaurant,
             source: "daniel",
             date: review.date,
-            url: SOURCES.daniel.url,
+            url: review.url || SOURCES.daniel.url,
             note: review.note,
           })),
       ];
@@ -2301,12 +2504,29 @@
         const weights = urgent
           ? { location: 55, taste: 20, season: 15, evidence: 10 }
           : { location: 40, taste: 30, season: 20, evidence: 10 };
-        // One seat per restaurant. Blog/community profiles precede Daniel's personal accounts.
-        const sourced = RESTAURANTS.filter((r) =>
+        // Keep the first profile's rule baseline, but do not discard other selected evidence.
+        const selected = RESTAURANTS.filter((r) =>
           input.sources.includes(r.source),
-        ).filter(
-          (r, i, rows) => rows.findIndex((other) => other.id === r.id) === i,
         );
+        const sourced = selected
+          .filter(
+            (r, i, rows) => rows.findIndex((other) => other.id === r.id) === i,
+          )
+          .map((r) => {
+            const reviews = selected.filter((other) => other.id === r.id);
+            return {
+              ...r,
+              note: reviews.map((review) => review.note).join("\n\n"),
+              additionalUrls: [
+                ...new Set(
+                  reviews.flatMap((review) => [
+                    review.url,
+                    ...(review.additionalUrls || []),
+                  ]),
+                ),
+              ].filter((url) => url !== r.url),
+            };
+          });
         const eligible = sourced.filter(
           (r) => input.travel === "any" || r.city === input.city,
         );
@@ -2413,6 +2633,71 @@
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
+        "Pardes Hanna": "פרדס חנה",
+        Tayibe: "טייבה",
+        Acre: "עכו",
+        "Bat Yam · 8 Metsudat Beitar Street": "בת ים · מצודת בית״ר 8",
+        "Tel Aviv · Shenkin Street": "תל אביב · רחוב שינקין",
+        "Jerusalem · Beit Hanina, opposite Jaafar Sweets":
+          "ירושלים · בית חנינא, מול ממתקי ג׳עאפר",
+        "Kafr Qasim · beside Shufan Bakery": "כפר קאסם · ליד מאפיית שופאן",
+        "Tira · eastern approach from Kokhav Yair":
+          "טירה · הכניסה המזרחית מכיוון כוכב יאיר",
+        "Jaffa · west side of Shivtei Israel Street, beside a cafe":
+          "יפו · הצד המערבי של רחוב שבטי ישראל, ליד בית קפה",
+        "Facebook · community reviews": "פייסבוק · ביקורות הקהילות",
+        "16 posts · 8 candidates": "16 פוסטים · 8 מועמדים",
+        "36 posts · 34 candidates": "36 פוסטים · 34 מועמדים",
+        "53 curated places · 5 sources · current opening status unknown":
+          "53 מקומות בלקט · 5 מקורות · לא ידוע אם פתוח כעת",
+        "Abu Shukri · Beit Hanina": "אבו שוקרי · בית חנינא",
+        "Abu Hassan · the chili inquiry": "אבו חסן · ועדת החקירה לענייני חריף",
+        "Daniel's 10 July 2025 Hummusologists post praises tasty Jerusalem-style hummus, not too sour, at Abu Shukri in Beit Hanina opposite Jaafar Sweets. He only says the masabacha looks interesting, not that he tasted it; texture stays unknown. He also notes jars of pickled stuffed baby eggplants. This is not an Old City branch. The pickles have formed a subcommittee.":
+          "בפוסט שלו בחומוסולוגים מ־10 ביולי 2025 דניאל משבח חומוס ירושלמי טעים ולא חמוץ מדי אצל אבו שוקרי בבית חנינא, מול ממתקי ג׳עאפר. הוא רק אומר שהמסבחה נראית מעניינת, לא שטעם אותה; המרקם נשאר לא ידוע. הוא מציין גם צנצנות של חצילים קטנים ממולאים ומוחמצים. זה אינו סניף בעיר העתיקה. החמוצים הקימו ועדת משנה.",
+        "In his 5 October 2024 Hummusologists post, Daniel asks why Abu Hassan's takeaway masabacha tastes much hotter than before, recalling visits since 1981. He suspects tatbila but establishes no cause or branch. This brand-level observation is background, not a separate restaurant or a claim about today's recipe. The chili minister has been summoned.":
+          "בפוסט בחומוסולוגים מ־5 באוקטובר 2024 דניאל שואל מדוע המסבחה בטייק אוויי של אבו חסן חריפה הרבה יותר מבעבר, ומזכיר שהוא אוכל שם מאז 1981. הוא חושד בתטבילה, אך אינו קובע סיבה או סניף. זו תצפית כללית כרקע, לא מסעדה נוספת ולא טענה לגבי המתכון כיום. שר החריף זומן לבירור.",
+        "Ben Amit in Where Is Good Hummus praises the seasoning, gentle heat, ground ful and thin pitas, but finds the runny hummus awkward to scoop from a flat plate. Light means runny texture, not calories. January 30 is visible without a year. The plate-design committee has received a complaint.":
+          "בן עמית בקבוצת ״איפה יש חומוס טוב?״ משבח את התיבול, החריפות העדינה, הפול הטחון והפיתות הדקות, אך מתקשה לנגב את החומוס הנוזלי מהצלחת השטוחה. קליל מתייחס למרקם נוזלי, לא לקלוריות. מופיע 30 בינואר ללא שנה. ועדת עיצוב הצלחות קיבלה תלונה.",
+        "Ben Amit in Where Is Good Hummus enjoyed tangy, room-temperature hummus, partly ground ful and fried cauliflower. He reports a wait and felt prices were high and not displayed. This is his visit account, not a verified current pricing policy. June 20 has no visible year; temperature does not establish lightness. The finance minister requests a menu.":
+          "בן עמית בקבוצת ״איפה יש חומוס טוב?״ נהנה מחומוס חמצמץ בטמפרטורת החדר, פול טחון חלקית וכרובית מטוגנת. הוא מדווח על המתנה ועל תחושה שהמחירים גבוהים ואינם מוצגים. זהו תיאור ביקורו, לא מדיניות מחירים עדכנית שאומתה. מופיע 20 ביוני ללא שנה; הטמפרטורה אינה מעידה על קלילות. שר האוצר מבקש תפריט.",
+        "Shmil Walder in Where Is Good Hummus highly recommends the masabacha and shakshuka. Masabacha supports the chunky tag. The post says 15:30 closing, but that is not a current-hours check. September 4 has no visible year. Even heroes need you to check opening hours.":
+          "שמיל ולדר בקבוצת ״איפה יש חומוס טוב?״ ממליץ בחום על המסבחה והשקשוקה. המסבחה תומכת בתגית גרגרית. בפוסט מצוינת סגירה ב־15:30, אך זו אינה בדיקת שעות עדכנית. מופיע 4 בספטמבר ללא שנה. גם אצל גיבורים כדאי לבדוק שעות פתיחה.",
+        "Ben Amit in Where Is Good Hummus praises creative toppings at Shlomo & Doron: cool hummus with warm bulgur and mushrooms, spices, salad and seeds. He finds it fresh and tasty. Toppings and temperature do not establish base texture. February 26 has no visible year. The mushroom lobby has a creative department.":
+          "בן עמית בקבוצת ״איפה יש חומוס טוב?״ משבח את התוספות היצירתיות בשלמה ודורון: חומוס קריר עם בורגול ופטריות חמות, תבלינים, סלט וג׳עלה. הוא מתאר אוכל טרי וטעים. התוספות והטמפרטורה אינן קובעות את מרקם הבסיס. מופיע 26 בפברואר ללא שנה. לשדולת הפטריות יש מחלקת קריאייטיב.",
+        "Liron Raines' 1 October 2024 Hummusologists review enjoyed Abu Qassem's smooth cold hummus and excellent masabacha despite preferring warm hummus. He liked the falafel's taste but not its oval shape. NIS 81 covered two dishes, salad and one drink then, not today's plate price. Cold is not a lightness tag. The geometry committee objects to the falafel.":
+          "לירון ריינס בביקורת בחומוסולוגים מ־1 באוקטובר 2024 נהנה מהחומוס הקר והחלק ומהמסבחה המצוינת באבו קאסם, למרות העדפתו לחומוס חם. טעם הפלאפל מצא חן בעיניו, צורתו האליפטית פחות. 81 ש״ח היו לשתי מנות, סלט ושתייה אחת באותו ביקור, לא מחיר מנה כיום. קור אינו תגית קלילות. ועדת הגאומטריה מתנגדת לפלאפל.",
+        "Liron Shitrit's 10 September 2025 Hummusologists review of Dolphin 1 finds the masabacha's texture good but the cold hummus only decent, not exceptional. He missed pickles and tomato and preferred other Jaffa places. NIS 38 included soda on that visit. This is a mixed personal review, not unanimous praise. The legend has received a minority report.":
+          "לירון שטרית בביקורת בחומוסולוגים מ־10 בספטמבר 2025 על הדולפין 1 מצא מרקם טוב במסבחה, אך חומוס קר וסביר בלבד, לא יוצא דופן. חסרו לו חמוצים ועגבנייה והוא העדיף מקומות אחרים ביפו. 38 ש״ח כללו סודה באותו ביקור. זו ביקורת אישית מעורבת, לא שבח פה אחד. האגדה קיבלה דעת מיעוט.",
+        "Benny Israeli's 6 November 2024 Hummusologists review praises cold, slightly sweet hummus-masabacha with smooth texture, melting chickpeas, dominant olive oil, tatbila and thin pita. Masabacha supports chunky; smoothness does not prove lightness. His NIS 30 is historical. The olive oil has taken the microphone.":
+          "בני ישראלי בביקורת בחומוסולוגים מ־6 בנובמבר 2024 משבח חומוס־מסבחה קר ומתקתק מעט, מרקם חלק, גרגרים נמסים, שמן זית דומיננטי, תטבילה ופיתה דקה. המסבחה תומכת בתגית גרגרית; חלקות אינה מוכיחה קלילות. 30 ש״ח הם מחיר היסטורי. שמן הזית השתלט על המיקרופון.",
+        "Avraham Bryds' 15 February 2022 Hummusologists post ranks El-Sham in Haifa first for chickpea-topped hummus. His personal list is not a council score. Chickpea toppings do not establish base texture, and he advises repeat visits before judging. The other list entries without cities are not assigned to guessed branches.":
+          "אברהם ברידס בפוסט בחומוסולוגים מ־15 בפברואר 2022 מדרג את אלשאם בחיפה ראשון בחומוס גרגרים. זו רשימה אישית, לא ציון המועצה. גרגרים כתוספת אינם קובעים את מרקם הבסיס, והוא ממליץ על ביקורים חוזרים לפני גיבוש דעה. מקומות אחרים ברשימה שלא צוינה בהם עיר אינם משויכים לסניפים בניחוש.",
+        "Avraham Bryds' 15 February 2022 Hummusologists list places Imad in Nazareth second for chickpea-topped hummus. It gives no street address or base-texture description. Personal historical ranking, not a current comparison or automatic rule-score bonus. Second on his list still means one chair here.":
+          "אברהם ברידס ברשימת חומוסולוגים מ־15 בפברואר 2022 מציב את עימאד בנצרת במקום השני לחומוס גרגרים. לא נמסרו כתובת רחוב או תיאור מרקם הבסיס. זהו דירוג אישי היסטורי, לא השוואה עדכנית או בונוס אוטומטי בניקוד. שני ברשימה שלו עדיין מקבל כאן כיסא אחד.",
+        "Avraham Bryds' 15 February 2022 Hummusologists list places Said in Acre third for chickpea-topped hummus. No street address or base texture is established. This is one author's historical preference, not the council's ranking. The bronze chickpea carries no extra votes.":
+          "אברהם ברידס ברשימת חומוסולוגים מ־15 בפברואר 2022 מציב את סעיד בעכו במקום השלישי לחומוס גרגרים. לא נמסרו כתובת רחוב או מרקם בסיס. זו העדפה היסטורית של כותב אחד, לא דירוג המועצה. גרגר הארד אינו מקנה קולות נוספים.",
+        "Nadav Kahn Cohen's 18 September 2025 Hummusologists review praises fresh salad, hot falafel and generous portions at Hamudi by Nahmani and Yehuda HaLevi, but finds the hummus bland, masabacha runny and pita poor, with no reason to return. Light describes runniness, not approval. NIS 52 was his meal deal, not today's price. The pita minister abstains.":
+          "נדב כהן בביקורת בחומוסולוגים מ־18 בספטמבר 2025 משבח סלט טרי, פלאפל חם ומנות נדיבות בחמודי שבפינת נחמני ויהודה הלוי, אך מתאר חומוס אנמי, מסבחה נוזלית ופיתה גרועה, ללא סיבה לחזור. קליל מתייחס לנוזליות, לא להמלצה. 52 ש״ח היו מחיר העסקית בביקורו, לא המחיר כיום. שר הפיתה נמנע.",
+        "Ahmad al-Hamed Zwayani's 4 October 2025 Hummusologists post praises Abu Muhammad in Tayibe, recalling visits since 1984. NIS 30 for a large portion was his historical report. No texture or street address is supplied. Forty-one years of enthusiasm earns a citation, not forty-one votes.":
+          "אחמד אלחאמד זויאני בפוסט בחומוסולוגים מ־4 באוקטובר 2025 משבח את אבו מוחמד בטייבה ומספר על ביקורים מאז 1984. 30 ש״ח למנה גדולה הם דיווחו ההיסטורי. לא תוארו מרקם או כתובת רחוב. 41 שנות התלהבות מקנות ציטוט, לא 41 קולות.",
+        "Dror Abramov's 19 October 2025 Hummusologists review finds Al-Jumaa's warm, coarsely ground masabacha pleasant but not outstanding, with excellent crisp falafel and quick service. No refill was offered. NIS 25 was that visit's masabacha price. Basha was planned but never visited, so is not reviewed here. The detour committee met on a quiet street.":
+          "דרור אברמוב בביקורת בחומוסולוגים מ־19 באוקטובר 2025 מצא באלג׳ומעה מסבחה חמימה וגרוסה גס, חביבה אך לא יוצאת דופן, לצד פלאפל פריך מצוין ושירות מהיר. לא הוצע מילוי חוזר. 25 ש״ח היו מחיר המסבחה באותו ביקור. באשה היה בתכנון אך לא נבדק, ולכן אינו מסוקר כאן. ועדת העיקוף התכנסה ברחוב שקט.",
+        "Dror Kaveh's 8 July 2023 Hummusologists review praises Al-Mansour's hummus-ful, hot falafel and fresh vegetables. NIS 30 with soda was historical; no texture is described. He found the navigation spelling Al-Mantzour helpful then. The temporary renovation of another restaurant in that post is not a current closure notice. Even the map needed a spelling committee.":
+          "דרור קווה בביקורת בחומוסולוגים מ־8 ביולי 2023 משבח את החומוס־פול, הפלאפל החם והירקות הטריים באל מנסור. 30 ש״ח עם סודה הם מחיר היסטורי; המרקם לא תואר. הכתיב ״אל מנצור״ עזר לו אז בניווט. השיפוץ הזמני במסעדה אחרת שהוזכר בפוסט אינו הודעת סגירה עדכנית. אפילו המפה נזקקה לוועדת איות.",
+        "Avi Levy's 19 February 2024 Hummusologists review of the west-side Shivtei Israel branch describes masabacha with ful, ordered without oil, as bland and his worst Abu Hassan visit. A negative personal account, not a verified pattern. Kept separate from Dolphin Street. The memorial is not a veto over criticism.":
+          "אבי לוי בביקורת בחומוסולוגים מ־19 בפברואר 2024 על הסניף בצד המערבי של שבטי ישראל מתאר מסבחה עם פול, שהזמין ללא שמן, כתפלה וכביקורו הגרוע ביותר באבו חסן. זו חוויה אישית שלילית, לא דפוס שאומת. הסניף נשמר בנפרד מרחוב הדולפין. ההנצחה אינה וטו על ביקורת.",
+        "Arafat · location unconfirmed": "ערפאת · המיקום לא אומת",
+        "Daniel Mizrahi (not Daniel Liezrowice) praises a place called Arafat, its service and a NIS 20 spread in Hummusologists. August 9 is visible without a year. The author supplies no city or branch, so this is background only, not merged with Arafat in Jerusalem or sent to Jev. His personal safety reassurance is not verified travel advice.":
+          "דניאל מזרחי (לא דניאל ליזרוביץ) משבח בחומוסולוגים מקום בשם ערפאת, את השירות וארוחה ב־20 ש״ח. מופיע 9 באוגוסט ללא שנה. הכותב אינו מציין עיר או סניף, ולכן זהו רקע בלבד, שאינו ממוזג עם ערפאת בירושלים ואינו נשלח ל־Jev. ההרגעה האישית שלו לגבי בטיחות אינה המלצת נסיעה מאומתת.",
+        "11 HTML posts + 6 PDF posts, with 3 overlaps, plus 2 public posts: 16 distinct posts and 8 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.":
+          "11 פוסטים מה־HTML ועוד 6 מה־PDF, עם 3 חפיפות, ועוד 2 פוסטים ציבוריים: 16 פוסטים נפרדים ו־8 מועמדים לארוחה. היתר הם רקע ולא ראיות לניקוד. מסוכם רק הטקסט הגלוי שדניאל כתב; טקסט מוסתר, קבצים פרטיים ותגובות של אחרים אינם מתפרסמים. תאריכים וסגנונות לא ידועים נשארים לא ידועים. מחירים היסטוריים אינם הצעות עדכניות. זה אינו פיד חי של הקבוצה.",
+        "One seat per restaurant. The first selected profile supplies the rule baseline; all selected reviews and their links are retained for Jev and the verdict, including conflicting opinions. Blog profiles precede community profiles, which precede Daniel's accounts. Older or undated baseline reviews receive 5 evidence points. Extra reviews add no bonus points.":
+          "כיסא אחד לכל מסעדה. הפרופיל הראשון שנבחר קובע את בסיס הניקוד; כל הביקורות והקישורים מהמקורות שנבחרו נשמרים עבור Jev והתוצאה, כולל דעות סותרות. פרופילי בלוג קודמים לפרופילי קהילה, שקודמים לסיפוריו של דניאל. ביקורת בסיס ישנה או ללא תאריך מקבלת 5 נקודות ראיות. ביקורות נוספות אינן מעניקות בונוס.",
+        "Updated 5 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the authors' ratings. Unknown styles stay unknown. Dates belong to the cited reviews, not a current business-status check.":
+          "עודכן ב־5 באוקטובר 2026. התקצירים מסכמים את הכותבים, לא את המגיבים. תגיות הסגנון והניקוד הם פרשנות ההדגמה שלנו, לא ציוני הכותבים. סגנונות לא ידועים נשארים לא ידועים. התאריכים שייכים לביקורות המקושרות, לא לבדיקת מצב העסק כיום.",
+        "Community evidence: 36 posts, 34 restaurant candidates and two unresolved visits kept as background. Sources include Hummusologists and Where Is Good Hummus; each new summary names its group and author. These are not Daniel's own reviews. Missing publication years stay unknown. Historical prices, hours and refills are not current promises.":
+          "ראיות הקהילה: 36 פוסטים, 34 מועמדים למסעדות ושני ביקורים שלא זוהו במלואם ונשמרו כרקע. המקורות כוללים את חומוסולוגים ואת איפה יש חומוס טוב; בכל תקציר חדש מצוינים הקבוצה והכותב. אלו אינן ביקורותיו האישיות של דניאל. שנות פרסום חסרות נשארות לא ידועות. מחירים, שעות ומילויים חוזרים מהעבר אינם הבטחה עדכנית.",
+        "Where Is Good Hummus": "איפה יש חומוס טוב?",
         "In Memory Of Ali Karwan, Abu Hassan, The Greatest of them all":
           "לזכרו של עלי קארוון, אבו חאסן הגדול מכולם",
         "Sarit Elberg praises Abu Rami's hummus, generous dishes and good service in Rameh. Her meal included chickpea-topped and meat-topped hummus, tabbouleh, mujaddara, lemonade and a surprising watermelon-cake dessert. NIS 200 was the total for that meal, not a single plate or current offer. Toppings and portion size do not establish base texture. This is Sarit's review, not Daniel's honeymoon account. Dessert has applied for council membership.":
@@ -2519,7 +2804,7 @@
         "14 posts · 7 candidates": "14 פוסטים · 7 מועמדים",
         "Based on personal reviews by": "מבוסס על ביקורות אישיות של",
         "in the Facebook group": "בקבוצת הפייסבוק",
-        "Read Daniel's 14 posts ↗": "לקריאת 14 הפוסטים של דניאל ↗",
+        "Read Daniel's 16 posts ↗": "לקריאת 16 הפוסטים של דניאל ↗",
         "Visit the Facebook group ↗": "לקבוצת הפייסבוק ↗",
         "11 HTML posts + 6 PDF posts, with 3 overlaps: 14 distinct posts and 7 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.":
           "11 פוסטים ב־HTML ועוד 6 ב־PDF, עם 3 חפיפות: 14 פוסטים שונים ו־7 מועמדים לארוחה. היתר הם רקע, לא ראיות לניקוד. התקצירים מבוססים רק על טקסט גלוי שכתב דניאל; טקסט מוסתר, קובצי המקור ותגובות של אחרים אינם מפורסמים. תאריכים וסגנונות לא ידועים נשארים לא ידועים. מחירים היסטוריים אינם הצעות עדכניות. זה אינו עדכון חי מהקבוצה.",
@@ -2884,7 +3169,13 @@
         "The author enjoys plain hummus with tahini at this grill restaurant. The tahini-style tag is a demo interpretation; the review does not establish calorie content.":
           "הכותב נהנה מחומוס רגיל עם טחינה במסעדת הגריל. תגית הסגנון הטחינתי היא פרשנות לצורך ההדגמה; הביקורת אינה קובעת ערך קלורי.",
       };
-      const tr = (text) => (hebrew ? (HE[text] ?? text) : text);
+      const tr = (text) =>
+        hebrew
+          ? text
+              .split("\n\n")
+              .map((part) => HE[part] ?? part)
+              .join("\n\n")
+          : text;
       const restaurantName = (r) => (hebrew ? r.he : r.name);
       // Translate text nodes, never markup, input values, URLs or source data.
       function localize(root) {
@@ -3217,7 +3508,7 @@
           ? `בחירת Jev: ${winner.he}. הסתברות האפשרות: ${chance}%. מדד ביטחון המודל: ${confidence}%. הנקודות למטה הן חישוב החוקים שלנו, לא הסבר של Jev.${result.rows.length === 1 ? " מועמד יחיד: זו אינה השוואה בין מסעדות." : ""}`
           : `Jev chose ${winner.name}. Option probability: ${chance}%. Model confidence: ${confidence}%. Points below are our rule calculation, not a Jev explanation.${result.rows.length === 1 ? " Only one eligible option: this is not a restaurant comparison." : ""}`;
         $("result").querySelector(".score-block").before(jevNote);
-        if (winner.source === "daniel") {
+        if (winner.source === "daniel" && winner.url === SOURCES.daniel.url) {
           $("result").querySelector(".result-links a").textContent = tr(
             "Visit the Facebook group ↗",
           );
@@ -3330,17 +3621,17 @@
       $("winter").onclick = () => preset(1);
       const method = `<p>The server rebuilds the shortlist from approved reviews, then calls TypeSafe's Jev Choice API. Jev selects the winner; its option probabilities order the alternatives. The 0–100 rule score is shown separately, not as model confidence.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected sources determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
       function danielEvidence() {
-        return `<section id="daniel-evidence"><p>${$("daniel-credit").innerHTML}</p><p class="caution">${tr("11 HTML posts + 6 PDF posts, with 3 overlaps: 14 distinct posts and 7 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.")}</p><p>${tr(sourcePolicy)}</p>${Object.values(
+        return `<section id="daniel-evidence"><p>${$("daniel-credit").innerHTML}</p><p class="caution">${tr("11 HTML posts + 6 PDF posts, with 3 overlaps, plus 2 public posts: 16 distinct posts and 8 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.")}</p><p>${tr(sourcePolicy)}</p>${Object.values(
           DANIEL_REVIEWS,
         )
           .map(
             (r) =>
-              `<article><h3>${escapeHtml(tr(r.title))}</h3><p class="source-detail"><bdi>${r.date || tr("Date unknown")}</bdi>${r.pages ? ` · ${tr("PDF pages:")} <bdi>${r.pages}</bdi>` : ""}${r.htmlPost ? ` · ${tr("Saved HTML post:")} <bdi>${r.htmlPost}</bdi>` : ""} · ${tr(r.restaurant ? "Lunch candidate" : "Background only")}</p><p>${escapeHtml(tr(r.note))}</p></article>`,
+              `<article><h3>${escapeHtml(tr(r.title))}</h3><p class="source-detail"><bdi>${r.date || tr("Date unknown")}</bdi>${r.pages ? ` · ${tr("PDF pages:")} <bdi>${r.pages}</bdi>` : ""}${r.htmlPost ? ` · ${tr("Saved HTML post:")} <bdi>${r.htmlPost}</bdi>` : ""} · ${tr(r.restaurant ? "Lunch candidate" : "Background only")}</p><p>${escapeHtml(tr(r.note))}</p>${r.url ? `<a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">${tr("Read the original ↗")}</a>` : ""}</article>`,
           )
           .join("")}</section>`;
       }
       const sourcePolicy =
-        "One seat per restaurant. When sources overlap, Abu Hassan uses the blog profile and Abu Rami uses Sarit's community review; select Daniel alone to use his personal accounts. Older or undated reviews receive 5 evidence points.";
+        "One seat per restaurant. The first selected profile supplies the rule baseline; all selected reviews and their links are retained for Jev and the verdict, including conflicting opinions. Blog profiles precede community profiles, which precede Daniel's accounts. Older or undated baseline reviews receive 5 evidence points. Extra reviews add no bonus points.";
       function openInfo(showSources) {
         $("dialog-title").textContent = tr(
           showSources
@@ -3352,8 +3643,10 @@
           (showSources
             ? `<h2>${tr("Daniel's own reviews")}</h2>` +
               danielEvidence() +
-              "<h2>Curated review snapshot</h2><p>Updated 4 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the authors' ratings. Unknown styles stay unknown. Profiles with multiple reviews show the latest publication date; the summary identifies each author.</p>" +
-              "<p class=\"caution\">Community evidence: 22 posts, 19 restaurant candidates and one unnamed visit kept as background. Multiple reviews share one restaurant seat. These are the named members' reviews, not Daniel's. New post dates were verified from Facebook's public post metadata. Historical prices and refills are not current promises.</p>" +
+              "<h2>Curated review snapshot</h2><p>Updated 5 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the authors' ratings. Unknown styles stay unknown. Dates belong to the cited reviews, not a current business-status check.</p>" +
+              '<p class="caution">Community evidence: 36 posts, 34 restaurant candidates and two unresolved visits kept as background. Sources include Hummusologists and Where Is Good Hummus; each new summary names its group and author. These are not Daniel\'s own reviews. Missing publication years stay unknown. Historical prices, hours and refills are not current promises.</p>' +
+              '<p><a href="https://www.facebook.com/groups/473240306044809/" target="_blank" rel="noopener noreferrer">Where Is Good Hummus</a></p>' +
+              '<article id="arafat-unconfirmed"><h3>Arafat · location unconfirmed</h3><p>Daniel Mizrahi (not Daniel Liezrowice) praises a place called Arafat, its service and a NIS 20 spread in Hummusologists. August 9 is visible without a year. The author supplies no city or branch, so this is background only, not merged with Arafat in Jerusalem or sent to Jev. His personal safety reassurance is not verified travel advice.</p><a href="https://www.facebook.com/share/p/1EoD9MCRaj/" target="_blank" rel="noopener noreferrer">Read the original ↗</a></article>' +
               '<article id="community-background"><h3>Unnamed restaurant · Beer Sheva</h3><p class="source-detail"><span>Background only</span> · <bdi>2026-09-27</bdi></p><p>Tzahi Granot enjoyed tangy hummus with generous olive oil and good value, but found the chickpeas slightly too firm. The visible author text names Beer Sheva, not the restaurant. Background only, excluded from Jev\'s shortlist until the business is identified. The council cannot send you to a mystery plate.</p><a href="https://www.facebook.com/groups/Msabbaha/permalink/1986335968674663/" target="_blank" rel="noopener noreferrer">Read the original ↗</a></article>' +
               RESTAURANTS.filter((r) => r.source !== "daniel")
                 .map(
