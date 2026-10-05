@@ -674,6 +674,26 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
   </div>
 </section>
 
+<!-- Versus Skillify -->
+<section class="slide" data-stage="review">
+  <div class="kicker">Q&amp;A: isn't this the same as Skillify?</div>
+  <h2>Skillify <em>writes</em> a skill from your session. Wazatator <span class="grad">proves</span> it works.</h2>
+  <p><code>claude-skillify</code> (0xMH, MIT) ports Anthropic's internal <code>/skillify</code>: at the end of a session it analyzes the conversation, interviews you, and generates a <code>SKILL.md</code> with steps and success criteria. It doesn't run or test the skill it writes.</p>
+  <table class="vs">
+    <tr><th></th><th>Skillify</th><th>Wazatator</th></tr>
+    <tr><td>Job</td><td>Author: turn a workflow you just did into a skill</td><td>Test: measure how a skill behaves, then improve it</td></tr>
+    <tr><td>Input</td><td>The current conversation + your answers</td><td>Any <code>SKILL.md</code> + an eval suite of realistic tasks</td></tr>
+    <tr><td>Output</td><td>A new <code>SKILL.md</code></td><td>Scores, failures with reasons, gated fixes, <code>skill-impact.md</code></td></tr>
+    <tr><td>Does the skill fire? Collisions?</td><td><span class="no">–</span></td><td><span class="yes">✓</span> trigger precision / recall, <code>--skill-library</code></td></tr>
+    <tr><td>Better than no skill? On every model?</td><td><span class="no">–</span></td><td><span class="yes">✓</span> <code>--baseline</code>, significance, transfer matrix</td></tr>
+    <tr><td>Overlap</td><td colspan="2">Small: <code>wazatator new skill</code> scaffolds an empty template; it doesn't mine your session</td></tr>
+  </table>
+  <div class="grid2">
+    <div class="card"><h3>Complementary, not competing</h3><p>A skill generated from one session encodes what worked <em>once</em>, for one model, often as detailed steps. That's where WikiSkill saw negative transfer, and where trigger collisions hide. Skillify gives you the draft; Wazatator tells you whether to trust it.</p></div>
+    <div class="card"><h3>Skillify it, then prove it</h3><p>1. <code>/skillify</code> at the end of the session.<br>2. <code>/wazatator:new-eval</code>: its per-step success criteria make good graders.<br>3. <code>/wazatator:eval</code> with <code>--baseline</code> and <code>--skill-library</code>.<br>4. Keep the skill, and every later edit, only if the scores hold.</p></div>
+  </div>
+</section>
+
 <!-- 12. Get started -->
 <section class="slide" data-stage="release">
   <div class="kicker">Get started</div>
