@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'self'; img-src data: blob:; media-src blob:; font-src data:; frame-src 'self' blob:; base-uri 'none'; form-action 'none'">
+  <title>Jahalin-reports</title>
+  <style>
+    :root { color-scheme: light; font-family: system-ui, sans-serif; color: #3d1f1f; background: #f2eee5; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    [hidden] { display: none !important; }
+    #gate { min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; padding: 20px; }
+    .card { width: 100%; max-width: 420px; background: #fff; border: 1px solid #ddd2bf; border-radius: 18px; padding: clamp(24px, 6vw, 38px); box-shadow: 0 12px 48px #3d1f1f0a; }
+    h1 { margin: 0 0 30px; font-size: clamp(25px, 6vw, 32px); letter-spacing: -.04em; }
+    label { display: block; margin-bottom: 9px; font-size: 15px; font-weight: 600; }
+    input, button { font: inherit; border-radius: 8px; min-height: 48px; }
+    input { width: 100%; border: 1px solid #aa9d8c; padding: 12px; color: #3d1f1f; background: #fff; }
+    button { border: 0; background: #3d1f1f; color: #fff; cursor: pointer; padding: 12px 22px; font-weight: 600; }
+    #unlock { width: 100%; margin-top: 16px; }
+    button:disabled { opacity: .65; cursor: wait; }
+    :focus-visible { outline: 3px solid #b77700; outline-offset: 4px; }
+    #status { font-size: 14px; line-height: 1.5; min-height: 21px; margin: 18px 0 0; }
+    #viewer { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 16px; background: #fff; border-bottom: 1px solid #ddd2bf; }
+    header strong { font-size: 16px; }
+    iframe { width: 100%; flex: 1; min-height: 0; border: 0; background: #f2eee5; }
+    noscript { display: block; margin-top: 20px; }
+  </style>
+  <script src="viewer.js" defer></script>
+</head>
+<body>
+  <main id="gate">
+    <div class="card">
+      <h1>Jahalin-reports</h1>
+      <form id="form">
+        <label for="password">Password</label>
+        <input id="password" type="password" required autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="status">
+        <button id="unlock" type="submit">Unlock</button>
+      </form>
+      <p id="status" role="status" aria-live="polite"></p>
+      <noscript>JavaScript is required to unlock this page.</noscript>
+    </div>
+  </main>
+  <section id="viewer" hidden aria-label="Unlocked content">
+    <header><strong>Jahalin-reports</strong><button id="lock" type="button">Lock</button></header>
+    <iframe id="report" title="Jahalin-reports" referrerpolicy="no-referrer"></iframe>
+  </section>
+</body>
+</html>
