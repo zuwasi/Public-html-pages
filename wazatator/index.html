@@ -694,6 +694,24 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
   </div>
 </section>
 
+<!-- Versus tw93 Waza -->
+<section class="slide" data-stage="review">
+  <div class="kicker">Q&amp;A: is this the same as tw93's Waza?</div>
+  <h2>Waza gives Claude engineering habits. Wazatator <span class="grad">measures</span> whether a skill works.</h2>
+  <p><code>tw93/Waza</code> (MIT, 7k+ stars) is a pack of eight skills: <code>/think</code>, <code>/ui</code>, <code>/check</code>, <code>/hunt</code>, <code>/write</code>, <code>/learn</code>, <code>/read</code>, <code>/health</code>. Same root word, different projects: Wazatator is a fork of <strong>Microsoft Waza</strong>, an eval framework, and has no relation to tw93's skill pack.</p>
+  <table class="vs">
+    <tr><th></th><th>tw93/Waza</th><th>Wazatator</th></tr>
+    <tr><td>What it is</td><td>A skill pack: things Claude does</td><td>A test harness: measures what a skill does</td></tr>
+    <tr><td>Output</td><td>Plans, reviews, root-cause debugging, polished prose</td><td>Pass rates, trigger precision / recall, collisions, with vs. without skill, significance</td></tr>
+    <tr><td>Evidence its skills help</td><td>"Refined through 300+ sessions"; repo tests</td><td>That evidence is the product: <code>--baseline</code>, transfer matrix, <code>gate</code></td></tr>
+    <tr><td>Overlap</td><td colspan="2">Small: <code>/health</code> audits an agent's setup statically; <code>wazatator check</code> / <code>quality</code> review one <code>SKILL.md</code> statically</td></tr>
+  </table>
+  <div class="grid2">
+    <div class="card"><h3>Shared philosophy</h3><p>Waza's rule, "state the outcome, the red lines, and how it's verified, then step back", matches WikiSkill's finding: general procedures transfer across models, while low-level workarounds can hurt them. Wazatator's <code>low-level-steps</code> check warns about exactly that.</p></div>
+    <div class="card"><h3>Test any skill pack, including Waza</h3><p><code>--baseline</code>: does <code>/hunt</code> beat plain Claude?<br><code>--skill-library</code>: do <code>/check</code> and <code>/health</code>, or <code>/read</code> and <code>/learn</code>, compete for the same prompts?<br><code>--model</code> × 3: which Claude model each skill needs.</p></div>
+  </div>
+</section>
+
 <!-- 12. Get started -->
 <section class="slide" data-stage="release">
   <div class="kicker">Get started</div>
