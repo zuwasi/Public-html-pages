@@ -26,6 +26,8 @@
     #viewer { height: 100vh; height: 100dvh; display: flex; flex-direction: column; }
     header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 16px; background: #fff; border-bottom: 1px solid #ddd2bf; }
     header strong { font-size: 16px; }
+    header nav { display: flex; gap: 8px; }
+    header button { padding: 10px 14px; }
     iframe { width: 100%; flex: 1; min-height: 0; border: 0; background: #f2eee5; }
     noscript { display: block; margin-top: 20px; }
   </style>
@@ -45,7 +47,7 @@
     </div>
   </main>
   <section id="viewer" hidden aria-label="Unlocked content">
-    <header><strong>Jahalin-reports</strong><button id="lock" type="button">Lock</button></header>
+    <header><strong>Jahalin-reports</strong><nav aria-label="Report navigation"><button id="home" type="button">Home</button><button id="lock" type="button">Lock</button></nav></header>
     <iframe id="report" title="Jahalin-reports" referrerpolicy="no-referrer"></iframe>
   </section>
 </body>
