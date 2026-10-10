@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-09
+Last updated: 2026-10-10
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -385,6 +385,9 @@ Last updated: 2026-10-09
 
 • tools
   https://zuwasi.github.io/Public-html-pages/tools
+
+• tx5-upgrade
+  https://zuwasi.github.io/Public-html-pages/tx5-upgrade
 
 • wazatator
   https://zuwasi.github.io/Public-html-pages/wazatator
