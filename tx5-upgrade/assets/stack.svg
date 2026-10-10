@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 470" role="img"><rect width="1120" height="470" fill="#0b1424"/>
+<text x="28" y="46" fill="#eaf1fc" font-family="sans-serif" font-size="28">Observed LED thread stack high-water</text>
+<text x="28" y="119" fill="#eaf1fc" font-family="sans-serif" font-size="25">M4</text>
+<rect x="195" y="94" width="117.01766304347827" height="42" fill="#58c7fa"/>
+<text x="327.01766304347825" y="119" fill="#eaf1fc" font-family="sans-serif" font-size="23">212 B</text>
+<text x="28" y="211" fill="#eaf1fc" font-family="sans-serif" font-size="25">M55</text>
+<rect x="195" y="186" width="192.08559782608697" height="42" fill="#78e1b3"/>
+<text x="402.085597826087" y="211" fill="#eaf1fc" font-family="sans-serif" font-size="23">348 B</text>
+<text x="28" y="303" fill="#eaf1fc" font-family="sans-serif" font-size="25">Reserved</text>
+<rect x="195" y="278" width="565.2173913043479" height="42" fill="#fdc573"/>
+<text x="775.2173913043479" y="303" fill="#eaf1fc" font-family="sans-serif" font-size="23">1,024 B</text>
+<text x="28" y="426" fill="#a7b8d2" font-family="sans-serif" font-size="19">ThreadX stack-check samples in this workload. M85 was not run; no M85 stack value.</text>
+</svg>

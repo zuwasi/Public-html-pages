@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 520" role="img"><rect width="1120" height="520" fill="#0b1424"/>
+<text x="28" y="47" fill="#eaf1fc" font-family="sans-serif" font-size="27">The executed path: real ThreadX, virtual board outputs</text>
+<rect x="35" y="112" width="325" height="100" fill="#182840"/>
+<text x="50" y="152" fill="#58c7fa" font-family="sans-serif" font-size="24">Application</text>
+<text x="50" y="190" fill="#eaf1fc" font-family="sans-serif" font-size="18">LED latch + RTOS services</text>
+<rect x="397" y="112" width="325" height="100" fill="#182840"/>
+<text x="412" y="152" fill="#58c7fa" font-family="sans-serif" font-size="24">ThreadX common</text>
+<text x="412" y="190" fill="#eaf1fc" font-family="sans-serif" font-size="18">ready lists / tick / IPC</text>
+<rect x="759" y="112" width="325" height="100" fill="#182840"/>
+<text x="774" y="152" fill="#58c7fa" font-family="sans-serif" font-size="24">CPU port</text>
+<text x="774" y="190" fill="#eaf1fc" font-family="sans-serif" font-size="18">PendSV + task context</text>
+<text x="363" y="168" fill="#78e1b3" font-family="sans-serif" font-size="28">&gt;</text>
+<text x="725" y="168" fill="#78e1b3" font-family="sans-serif" font-size="28">&gt;</text>
+<rect x="150" y="279" width="810" height="100" fill="#182840"/>
+<text x="175" y="316" fill="#78e1b3" font-family="sans-serif" font-size="24">QEMU: Cortex-M4 or M55, NVIC, SysTick and memory</text>
+<text x="175" y="358" fill="#eaf1fc" font-family="sans-serif" font-size="21">Semihost adapter emits LED states; no physical GPIO driver</text>
+<path d="M555,215 L555,270" stroke="#78e1b3" stroke-width="2"/>
+<text x="28" y="446" fill="#a7b8d2" font-family="sans-serif" font-size="19">Port + core model execute real firmware instructions. HTML replay uses saved console evidence.</text>
+</svg>

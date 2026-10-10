@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 470" role="img"><rect width="1120" height="470" fill="#0b1424"/>
+<text x="28" y="46" fill="#eaf1fc" font-family="sans-serif" font-size="28">Linked ROM footprint (bytes)</text>
+<text x="28" y="119" fill="#eaf1fc" font-family="sans-serif" font-size="25">M4</text>
+<rect x="195" y="94" width="556.7929964539009" height="42" fill="#58c7fa"/>
+<text x="766.7929964539009" y="119" fill="#eaf1fc" font-family="sans-serif" font-size="23">17,779 B</text>
+<text x="28" y="211" fill="#eaf1fc" font-family="sans-serif" font-size="25">M55</text>
+<rect x="195" y="186" width="543.2951742214" height="42" fill="#78e1b3"/>
+<text x="753.2951742214" y="211" fill="#eaf1fc" font-family="sans-serif" font-size="23">17,348 B</text>
+<text x="28" y="303" fill="#eaf1fc" font-family="sans-serif" font-size="25">M85*</text>
+<rect x="195" y="278" width="565.2173913043479" height="42" fill="#fdc573"/>
+<text x="775.2173913043479" y="303" fill="#eaf1fc" font-family="sans-serif" font-size="23">18,048 B</text>
+<text x="28" y="426" fill="#a7b8d2" font-family="sans-serif" font-size="19">* M85: compile/link only. All three images use ThreadX 6.5.2.202603.</text>
+</svg>
