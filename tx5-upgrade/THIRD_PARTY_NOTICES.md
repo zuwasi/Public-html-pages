@@ -8,16 +8,22 @@ The ThreadX source is included as a Git submodule at
 the MIT License. Its license text is in `third_party/threadx/LICENSE.txt`.
 The license applies to ThreadX, not to this project's original files.
 
-## WICED SDK 3.1.0 reference
+## WICED SDK 3.1.0 (external ThreadX 5.6 kernel)
 
-The historical reference is
 [`wwwllllllll/bcm-wiced-sdk`](https://github.com/wwwllllllll/bcm-wiced-sdk),
-release 3.1.0. Its `apps/snip/gpio/gpio.c` and `gpio.mk` identify themselves
-as unpublished proprietary Broadcom source. The SDK README also states that
-its ThreadX/NetX binaries are free for use with WICED only. Neither those
-files nor those binaries are included or copied here. This project recreates
-the documented GPIO behavior independently and retains this citation only
-to identify the behavior being demonstrated.
+release 3.1.0, commit `0886ec932a063e12db768cd09428e8a8ab555bce`, is an
+external build dependency of the Stage 1 (`tx5-m4`) image only. That stage
+compiles against the SDK's ThreadX 5.6 headers and links its prebuilt
+`WICED/RTOS/ThreadX/ThreadX.ARM_CM4.release.a` from a separate checkout given
+by `TX5_ROOT`. The SDK README states that its ThreadX/NetX binaries are free
+for use with WICED only, and its `apps/snip/gpio/gpio.c` and `gpio.mk` identify
+themselves as unpublished proprietary Broadcom source.
+
+No SDK file is included or copied in this repository or on the published
+site. A built `tx5-m4` ELF contains ThreadX 5.6 object code from the archive
+and must not be redistributed; it stays in the git-ignored `build/` directory
+and CI does not upload build artifacts. The GPIO behaviour is recreated
+independently; the SDK's GPIO snippet is cited only to identify that behaviour.
 
 ## QEMU
 

@@ -1,5 +1,22 @@
 [
   {
+    "title": "ESL \u2013 Engineering Software Lab",
+    "subtitle": "Embedded software consultancy \u00b7 optimizing and migrating embedded projects",
+    "blocks": [
+      {
+        "kind": "esl-intro",
+        "about": [
+          "Embedded software consultancy specializing in optimizing and migrating embedded projects.",
+          "Parasoft and Perforce partner in Israel for over 20 years.",
+          "This proof was designed and built by ESL to show a migration path with evidence, not just a plan."
+        ],
+        "name": "Daniel Liezrowice",
+        "role": "CTO, ESL",
+        "fact": "Has used ThreadX for over 25 years."
+      }
+    ]
+  },
+  {
     "title": "ThreadX 5.6 \u2192 6.5, Cortex-M4 \u2192 M85",
     "subtitle": "One application, three migration stages, executable evidence",
     "blocks": [
@@ -39,7 +56,7 @@
       },
       {
         "kind": "note",
-        "text": "Use \u2190 / \u2192, touch arrows, or swipe. Home returns here."
+        "text": "Use \u2190 / \u2192, touch arrows, or swipe. Home returns to the start."
       },
       {
         "kind": "toc"
@@ -90,6 +107,51 @@
       {
         "kind": "note",
         "text": "The float ABI change in stage 1 \u2192 2 is forced by the TX5 archive, not chosen. It is called out as its own diff later."
+      }
+    ]
+  },
+  {
+    "title": "The challenges of this project",
+    "subtitle": "What we did not have, and how each gap was closed",
+    "blocks": [
+      {
+        "kind": "table",
+        "heads": [
+          "Challenge",
+          "Why it matters",
+          "How ESL handled it"
+        ],
+        "rows": [
+          [
+            "No ThreadX 5 source code: only a prebuilt binary archive",
+            "The port contract, ABI and configuration cannot be read from source or rebuilt",
+            "Recovered them from build attributes, symbols and disassembly of the 192 archive objects"
+          ],
+          [
+            "No real target hardware: no M4 board, no M85 silicon",
+            "No physical GPIO, clocks, interrupts or cycle-accurate timing",
+            "QEMU MPS2 AN386 (M4) and MPS3 AN547 (M55), virtual LEDs and buttons, deterministic icount time"
+          ],
+          [
+            "No Cortex-M85 emulator available",
+            "Stage 3 cannot execute anywhere in this setup",
+            "Ran the closest Armv8.1-M core (M55); M85 verified by build attributes and a full link"
+          ],
+          [
+            "TX5 binary licence restrictions and a fixed soft-float ABI",
+            "The kernel cannot be redistributed, and every object must match its ABI",
+            "Linked from an external checkout only; Stage 1 built soft-float with packed enums; TCB size asserted"
+          ],
+          [
+            "Compiler change from GCC to Clang",
+            "The TX5 archive was built by GCC; Clang has different defaults and assembler behaviour",
+            "Matched the archive ABI explicitly; fixed a flag-dependent startup loop found by QEMU trace"
+          ]
+        ]
+      },
+      {
+        "kind": "note",
+        "text": "Each gap that could not be closed without hardware is listed again on the acceptance-gate slide, so nothing is silently assumed."
       }
     ]
   },
@@ -918,6 +980,15 @@
       {
         "kind": "note",
         "text": "Source and licence inventory checked on 2026-10-11. Runtime evidence records the exact compiler, emulator version, image and archive hashes and the virtual-time model."
+      }
+    ]
+  },
+  {
+    "title": "Planning an embedded migration?",
+    "subtitle": "Talk to ESL about optimizing or migrating your embedded project",
+    "blocks": [
+      {
+        "kind": "contact"
       }
     ]
   }

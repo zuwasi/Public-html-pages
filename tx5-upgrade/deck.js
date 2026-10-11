@@ -59,11 +59,13 @@
     }
   }, {passive: true});
   const toc = document.getElementById("toc");
-  slides.slice(1).forEach((slide, i) => {
+  const tocSlide = toc.closest(".slide");
+  slides.forEach((slide, i) => {
+    if (slide === tocSlide) return;
     const link = document.createElement("a");
-    link.href = `#slide-${i + 2}`;
-    link.textContent = `${String(i + 2).padStart(2, "0")} · ${slide.querySelector("h1").textContent}`;
-    link.addEventListener("click", (event) => {event.preventDefault(); show(i + 1);});
+    link.href = `#slide-${i + 1}`;
+    link.textContent = `${String(i + 1).padStart(2, "0")} · ${slide.querySelector("h1").textContent}`;
+    link.addEventListener("click", (event) => {event.preventDefault(); show(i);});
     toc.append(link);
   });
   const rows = JSON.parse(document.getElementById("recorded-run").textContent);
@@ -103,5 +105,7 @@
   });
   document.documentElement.classList.add("ready");
   show(fromHash(), false);
+  // A deep link's native anchor jump can land after show(); keep the top bar visible.
+  window.addEventListener("load", () => window.scrollTo({top: 0, behavior: "instant"}));
   renderReplay();
 })();
