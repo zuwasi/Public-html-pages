@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A 30-slide ThreadX Win32 static-analysis comparison: 50 planted C defects, Parasoft Flow Analysis Aggressive run on clean and bugged states, and SonarQube CLI code analysis unavailable (403, Vortex not entitled).">
+<meta name="description" content="A 30-slide ThreadX Win32 static-analysis comparison: 50 planted C defects, Parasoft all-Flow Thorough scans on clean and bugged states (21 of 50 strict detections; MISRA C:2025 adds none), and SonarQube CLI code analysis unavailable pending license (403, Vortex not entitled).">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
 <title>Parasoft C/C++test vs SonarQube CLI — 50 planted defects on ThreadX Win32</title>
@@ -120,7 +120,7 @@
       </div>
       <div class="col panel">
         <div class="panel-t">Headline</div>
-        <p class="small" style="margin:0;">Parasoft completed the flow analysis on both states: <b>15 of 50</b> defects reported. SonarQube CLI authenticated, but its code engine returned <b>403</b> and skipped every file, so it has no code result at all.</p>
+        <p class="small" style="margin:0;">Latest Parasoft result: <b>21 of 50</b> valid defects with all Flow rules enabled at explicit Thorough depth. MISRA C:2025 added no further strict detections. SonarQube code analysis remains unavailable pending its license.</p>
       </div>
     </div>
   </div>
@@ -156,12 +156,12 @@
     <div class="flow">
       <div class="step"><div class="step-n">01</div><h4>Plant defects</h4><p>52 marked candidates added between two signed tags.</p></div>
       <div class="step"><div class="step-n">02</div><h4>Build both states</h4><p>azure_rtos.sln, Release|Win32, MSVC v145 build data.</p></div>
-      <div class="step"><div class="step-n">03</div><h4>Scan</h4><p>Parasoft: flow analysis on both states. SonarQube CLI: change-set and whole-file code analysis.</p></div>
+      <div class="step"><div class="step-n">03</div><h4>Scan</h4><p>Parasoft: paired clean/bugged follow-ups, all Flow rules and Flow + MISRA. SonarQube: earlier DEEP requests were rejected.</p></div>
       <div class="step"><div class="step-n">04</div><h4>Adjudicate</h4><p>Every finding mapped to a catalog entry by line and message.</p></div>
       <div class="step"><div class="step-n">05</div><h4>Audit the benchmark</h4><p>Two candidates were invalidated; one real issue found in the "clean" baseline.</p></div>
     </div>
     <div class="callout-warn" style="margin-top:10px;">
-      <b>Read the SonarQube column carefully.</b> Its requests were rejected with HTTP 403 before any file was analyzed. A rejected scan is not a scan that found nothing, and this deck never scores it as one.
+      <b>Read the SonarQube column carefully.</b> The earlier requests were rejected with HTTP 403 before any code file was analyzed. The code comparison is still pending an active license; a rejected scan is not a zero-finding result.
     </div>
   </div>
   <div class="ftr"><span>evaluation/COMPARISON_REPORT.md · evaluation/reports/adjudication/DETECTION_MATRIX.csv</span><span>02 / 30</span></div>
@@ -182,7 +182,7 @@
           <tr><td>Host</td><td>Windows 11 (10.0.26200) x64, machine id <span class="mono">WIN32-2037c5fc</span></td></tr>
           <tr><td>Compiler</td><td>Visual Studio Professional 2026 (VC toolset <b>v145</b>), passed to the tool as <span class="mono">-compiler vc_14_5</span></td></tr>
           <tr><td>Input</td><td>Build data collected from <span class="mono">azure_rtos.sln@Release|Win32</span></td></tr>
-          <tr><td>Output</td><td>XML report per run (111 and 36 findings on the bugged state), normalized to CSV in the repository</td></tr>
+          <tr><td>Output</td><td>Native HTML/XML reports per run, normalized findings CSVs, source-linked adjudication matrix and hashes</td></tr>
           <tr><td>Isolation</td><td>Separate worktree per tag, separate tool workspace per run — no state carries between runs</td></tr>
         </table>
       </div>
@@ -193,16 +193,16 @@
         </div>
         <div class="panel">
           <div class="panel-t">Test configuration used</div>
-          <p class="small" style="margin:0 0 4px;"><span class="mono">builtin://Flow Analysis Aggressive</span> — every flow-analysis rule family at aggressive depth, with aggressive mode and reporting of unvalidated violations switched on. This is the deepest flow analysis the product offers, and it is the only Parasoft configuration scored in this deck.</p>
-          <p class="small" style="margin:0;">Because this configuration reports violations it could not prove, a finding here is a signal from the analyzer itself rather than a rule the maintainers tuned to stay quiet.</p>
+          <p class="small" style="margin:0 0 4px;"><b>Original scan:</b> <span class="mono">builtin://Flow Analysis Aggressive</span>, 15/50; the preset did not explicitly set Thorough depth. <b>Latest:</b> all 144 Flow checkers, explicit Thorough depth (4), 240-second hotspot limit and the same TX API model.</p>
+          <p class="small" style="margin:0;">A separate profile added all 388 shipped MISRA C:2025 checkers. It produced more compliance diagnostics but no additional strict planted-defect TP.</p>
         </div>
       </div>
     </div>
     <div class="callout-info" style="margin-top:9px;">
-      Both Parasoft runs exited 0. The XML findings and UTC timestamps are in <span class="mono">evaluation/reports/parasoft/</span>; the raw reports stay outside the repository and are pinned by SHA-256.
+      All four latest runs exited 0 and checked 214 files; 183–210 Flow-analysis timeouts remain. Native reports and UTC metadata are retained with raw-report hashes.
     </div>
   </div>
-  <div class="ftr"><span>evaluation/SCAN_PROTOCOL.md §1, §3, §5 · evaluation/reports/parasoft/run-log.txt</span><span>03 / 30</span></div>
+  <div class="ftr"><span>evaluation/SCAN_PROTOCOL.md §1, §3, §5 · threadx-allflow-misra-240/run-summary.csv</span><span>03 / 30</span></div>
 </section>
 <section data-n="4" class="slide" id="s04">
   <div class="hdr">
@@ -664,7 +664,7 @@
 <section data-n="15" class="slide" id="s15">
   <div class="hdr">
     <div><span class="kicker">14 · Code, defect, verdict</span><h2>BUG-023 · the locked function is right above it</h2></div>
-    <div class="hdr-r">harness_concurrency.c:37<br><span class="chip chip-fn">Parasoft: miss</span></div>
+    <div class="hdr-r">harness_concurrency.c:39<br><span class="chip chip-tp">Latest Flow profile: TP</span></div>
   </div>
   <div class="body">
     <div class="cols">
@@ -688,12 +688,13 @@
       </div>
       <div class="col c40">
         <div class="panel" style="margin-bottom:8px;">
-          <div class="panel-t">Parasoft verdict — strict miss</div>
-          <p class="small" style="margin:0;">No race finding in this file. None of the eight concurrency candidates was reported, including this pair where the correct and incorrect versions of the same update sit eight lines apart.</p>
+          <div class="panel-t">New finding — BD-TRS-MLOCK</div>
+          <p class="small" style="margin:0 0 5px;">“The <span class="mono">g_stats</span> variable is used when locks are not held on <span class="mono">stats_mutex</span>.” At line 39 the read-modify-write omits the mutex used by its sibling function. This is the newly counted BUG-023 TP.</p>
+          <p class="small" style="margin:0;">The clean state also reports an unlocked <span class="mono">g_stats</span> callback at <span class="mono">harness_init.c:65</span>; that is a separate, unplanted baseline concern and is disclosed in the clean review.</p>
         </div>
         <div class="panel" style="margin-bottom:8px;">
           <div class="panel-t">Why it is a fair test</div>
-          <p class="small" style="margin:0;">This is not a tool without race rules. The thread-safety family fired <b>67 times</b> in this run — 58 of them "global variable used without holding a lock" — but every one of those landed in upstream ThreadX kernel files. None landed in the harness, where the four threads, the mutex and the shared field all exist in the scanned code.</p>
+          <p class="small" style="margin:0;">This latest profile enabled every installed Flow checker, including <span class="mono">BD-TRS-MLOCK</span>, and used the TX API model. The earlier shipped Aggressive preset missed this site; the full-rule follow-up reports it at the planted update.</p>
         </div>
         <div class="panel">
           <div class="panel-t">SonarQube on this defect</div>
@@ -702,7 +703,7 @@
       </div>
     </div>
   </div>
-  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-023 = FN · concurrency family 0 / 8 detected</span><span>15 / 30</span></div>
+  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-023 = TP · BD-TRS-MLOCK at harness_concurrency.c:39</span><span>15 / 30</span></div>
 </section>
 <section data-n="16" class="slide" id="s16">
   <div class="hdr">
@@ -804,15 +805,15 @@
       </div>
     </div>
     <div class="callout-ok" style="margin-top:8px;">
-      Both count as true positives. The uninitialized family scored 2 of 6 — these two, and nothing for the pooled-memory or partial-header plants.
+      Both are true positives. The Thorough follow-up also detected BUG-048 with BD-PB-NOTINIT, bringing this family's score to 3 of 6.
     </div>
   </div>
   <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-049 = TP, BUG-050 = TP</span><span>17 / 30</span></div>
 </section>
 <section data-n="18" class="slide" id="s18">
   <div class="hdr">
-    <div><span class="kicker">17 · Process</span><h2>How Parasoft was run — the flow-analysis scan on both states</h2></div>
-    <div class="hdr-r">both runs exited 0<br>~2 minutes per run</div>
+    <div><span class="kicker">17 · Process</span><h2>How Parasoft was run — the original Aggressive scan on both states</h2></div>
+    <div class="hdr-r">original run pair · both exited 0<br>follow-up profiles on slide 20</div>
   </div>
   <div class="body">
     <div class="code" style="font-size:10px;margin-bottom:8px;">
@@ -836,7 +837,7 @@
         </div>
         <div class="panel">
           <div class="panel-t">Evidence retained</div>
-          <p class="small" style="margin:0;">Two flow-analysis XML reports, the run log with UTC timestamps and exit codes, normalized CSV exports in the repository, and SHA-256 hashes of the raw report files. The raw reports themselves stay outside the repository.</p>
+          <p class="small" style="margin:0;">Two XML reports for this original pair — plus four more from the latest all-Flow and MISRA profiles — with run logs, UTC timestamps, exit codes, normalized CSV exports in the repository, and SHA-256 hashes of every raw report. The raw reports themselves stay outside the repository.</p>
         </div>
       </div>
     </div>
@@ -886,90 +887,88 @@
 </section>
 <section data-n="20" class="slide" id="s20">
   <div class="hdr">
-    <div><span class="kicker">19 · Rule sets</span><h2>What "Flow Analysis Aggressive" actually enables</h2></div>
-    <div class="hdr-r">Flow Analysis Aggressive<br>only Parasoft configuration shown</div>
+    <div><span class="kicker">19 · Follow-up method</span><h2>Four controlled scans: all Flow rules, then MISRA</h2></div>
+    <div class="hdr-r">same source tags · compiler · TX model<br>fresh workspaces · 214 files</div>
   </div>
   <div class="body">
-    <div class="cols" style="margin-bottom:9px;">
-      <div class="col">
-        <div class="panel" style="margin-bottom:8px;height:100%;">
-          <div class="panel-t">Configuration in use — <span class="mono">builtin://Flow Analysis Aggressive</span></div>
-          <p class="small" style="margin:0 0 5px;">Enables all flow-analysis rule families at aggressive depth, with aggressive mode and reporting of unvalidated violations switched on:</p>
-          <table class="grid" style="font-size:9.4px;">
-            <tr><th style="width:96px;">Family</th><th>What it analyses, read from the messages it emitted</th><th>Bugged-state findings</th></tr>
-            <tr><td class="mono">BD-PB-*</td><td>Path and bounds — array index, buffer read and write, null dereference, uninitialized use, allocation-return check, contract check, integer wrap, pointer comparison and subtraction</td><td>36 · of which <b>19 in the harness</b></td></tr>
-            <tr><td class="mono">BD-RES-*</td><td>Resource lifetime — use of a freed resource, invalid free, memory not deallocated, allocation not checked</td><td>8 · <b>all 8 in the harness</b></td></tr>
-            <tr><td class="mono">BD-TRS-*</td><td>Thread safety — global variable used without holding a lock (<span class="mono">THRDR</span>, 58), unreleased lock (<span class="mono">LOCK</span>, 4), release without acquire (<span class="mono">REVLOCK</span>, 2), blocking call inside a critical section (<span class="mono">TSHL</span>, 3)</td><td>67 · <b>none in the harness</b> — all in upstream ThreadX kernel files</td></tr>
-            <tr><td class="mono">SECURITY-*, CO-*, API-*</td><td>Enabled by this configuration</td><td>No findings in either state</td></tr>
+    <div class="cols" style="margin-bottom:8px;">
+      <div class="col c55">
+        <div class="panel" style="height:100%;">
+          <div class="panel-t">Held constant across the latest clean/bugged pair</div>
+          <table class="grid" style="font-size:9.3px;">
+            <tr><td style="width:116px;">Source</td><td><span class="mono">harness-clean</span> 844260e1 vs <span class="mono">bugged</span> 9d699595</td></tr>
+            <tr><td>Target</td><td><span class="mono">azure_rtos.sln@Release|Win32</span> · MSVC v145 / <span class="mono">vc_14_5</span></td></tr>
+            <tr><td>Scope</td><td>214 files · isolated CLI workspace for every scan</td></tr>
+            <tr><td>Flow rules</td><td>All <b>144</b> installed checker IDs; 25 aggressive/unvalidated options plus two NOTINIT options</td></tr>
+            <tr><td>Depth / time</td><td>Thorough (<span class="mono">depthOfAnalysis=4</span>) · 240-second hotspot limit</td></tr>
+            <tr><td>RTOS semantics</td><td>Same custom ThreadX multithreading API model in both profiles</td></tr>
+            <tr><td>Second profile</td><td>All <b>388</b> shipped MISRA C:2025 checkers added; other settings held constant</td></tr>
           </table>
         </div>
       </div>
-      <div class="col">
-        <div class="panel" style="margin-bottom:8px;">
-          <div class="panel-t">Where the 111 findings landed</div>
-          <table class="grid" style="font-size:9.6px;">
-            <tr><th>Scope of the finding</th><th class="num">Findings</th><th>Read as</th></tr>
-            <tr><td>Harness code — the defect sites</td><td class="num"><b>27</b></td><td>Candidate detections, adjudicated one by one</td></tr>
-            <tr><td>Upstream ThreadX kernel</td><td class="num">84</td><td>Real findings in untouched project code, never counted as benchmark false positives</td></tr>
-            <tr><td>of which thread-safety rules in the kernel</td><td class="num">67</td><td>The race rules fired here, not on the harness races — see slide 15</td></tr>
-          </table>
-        </div>
+      <div class="col c45">
         <div class="panel">
-          <div class="panel-t">Read this while looking at the numbers</div>
-          <p class="small" style="margin:0;">Not every finding is a detection. Of the 27 harness findings, several describe code shapes rather than planted defects — for example "call to memcpy may be optimized out" on a scratch copy whose destination is never read. Each finding is adjudicated on slide 23 and disclosed again on slide 25, so any headline count can be traced back to the message that produced it.</p>
+          <div class="panel-t">Latest Parasoft follow-up · total / harness findings</div>
+          <table class="grid" style="font-size:8.8px;">
+            <tr><th>Profile</th><th class="num">Clean</th><th class="num">Bugged</th><th class="num">TP</th><th class="num">Timeouts C/B</th></tr>
+            <tr><td>All Flow</td><td class="num">324 / 26</td><td class="num">354 / 49</td><td class="num"><b>21</b></td><td class="num">187 / 183</td></tr>
+            <tr><td>Flow + MISRA C:2025</td><td class="num">4,661 / 558</td><td class="num">4,745 / 615</td><td class="num"><b>21</b></td><td class="num">210 / 206</td></tr>
+          </table>
+          <p class="small" style="margin:6px 0 0;">Clean/bugged counts are total XML findings and harness entries. MISRA aliases and compliance diagnostics are not additional planted-defect TPs.</p>
         </div>
       </div>
     </div>
-    <div class="callout-info">
-      <b>Why this matters for fairness.</b> This is Parasoft's own shipped configuration, not one tuned for this harness. The deck reports a single analyzer run at its maximum depth, and every detection number that follows comes from that run pair.
+    <div class="callout-warn">
+      <b>Limit:</b> all runs exited 0, but still reported 183–210 hotspot timeouts. These are completed CLI reports, not exhaustive path analysis. Full commands and native report paths are in <span class="mono">PARASOFT_RUN_GUIDE.md</span>.
     </div>
   </div>
-  <div class="ftr"><span>evaluation/SCAN_PROTOCOL.md §3 · evaluation/COMPARISON_REPORT.md</span><span>20 / 30</span></div>
+  <div class="ftr"><span>evaluation/THREADX_ALLFLOW_MISRA_240_REPORT.md · threadx-allflow-misra-240/run-summary.csv</span><span>20 / 30</span></div>
 </section>
 <section data-n="21" class="slide" id="s21">
   <div class="hdr">
-    <div><span class="kicker">20 · Result</span><h2>What Parasoft found: 15 of the 50 planted defects</h2></div>
-    <div class="hdr-r">detection target: tag bugged 9d699595<br>50 valid candidates</div>
+    <div><span class="kicker">20 · Result</span><h2>Latest all-Flow profile: 21 of 50 planted defects</h2></div>
+    <div class="hdr-r">42% strict recall · 29 strict misses<br>50 valid candidates</div>
   </div>
   <div class="body">
     <div class="cols" style="margin-bottom:9px;">
       <div class="col panel" style="text-align:center;">
-        <div class="kpi" style="color:#0F6B33;">15 / 50</div>
+        <div class="kpi" style="color:#0F6B33;">21 / 50</div>
         <div class="kpi-l">Strict true positives</div>
-        <div class="tbar" style="margin-top:7px;"><span style="width:30%;background:#0F6B33;"></span></div>
-        <p class="small" style="margin:6px 0 0;">30% strict recall on the emphasized set</p>
+        <div class="tbar" style="margin-top:7px;"><span style="width:42%;background:#0F6B33;"></span></div>
+        <p class="small" style="margin:6px 0 0;">42% strict recall · explicit Thorough depth</p>
       </div>
       <div class="col panel" style="text-align:center;">
-        <div class="kpi" style="color:#A3231B;">35</div>
+        <div class="kpi" style="color:#A3231B;">29</div>
         <div class="kpi-l">Strict false negatives</div>
-        <div class="tbar" style="margin-top:7px;"><span style="width:70%;background:#A3231B;"></span></div>
-        <p class="small" style="margin:6px 0 0;">33 direct misses plus one partial and one indirect finding</p>
+        <div class="tbar" style="margin-top:7px;"><span style="width:58%;background:#A3231B;"></span></div>
+        <p class="small" style="margin:6px 0 0;">27 direct misses · one partial · one indirect</p>
       </div>
       <div class="col panel" style="text-align:center;">
-        <div class="kpi" style="color:#0063A6;">27</div>
-        <div class="kpi-l">Findings in the harness code</div>
-        <div class="tbar" style="margin-top:7px;"><span style="width:24%;background:#0063A6;"></span></div>
-        <p class="small" style="margin:6px 0 0;">of 111 findings in the report; the other 84 are upstream ThreadX code</p>
+        <div class="kpi" style="color:#0063A6;">49</div>
+        <div class="kpi-l">Bugged harness finding entries</div>
+        <div class="tbar" style="margin-top:7px;"><span style="width:49%;background:#0063A6;"></span></div>
+        <p class="small" style="margin:6px 0 0;">Findings are not unique defects; each TP was adjudicated at its source site.</p>
       </div>
       <div class="col panel" style="text-align:center;">
         <div class="kpi" style="color:#6B7885;">N/A</div>
         <div class="kpi-l">SonarQube code result</div>
         <div class="tbar" style="margin-top:7px;"><span style="width:100%;background:#C9D3DD;"></span></div>
-        <p class="small" style="margin:6px 0 0;">No code analysis executed — 403 on every request</p>
+        <p class="small" style="margin:6px 0 0;">Pending license entitlement; prior code requests returned 403</p>
       </div>
     </div>
     <div class="cols">
       <div class="col c55">
         <table class="grid" style="font-size:9.8px;">
-          <tr><th>Run</th><th class="num">XML findings</th><th class="num">Harness findings</th><th class="num">Strict TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th></tr>
-          <tr><td>Flow analysis on <span class="mono">bugged</span></td><td class="num">111</td><td class="num">27</td><td class="num"><b>15</b></td><td class="num">1 / 1</td><td class="num">35</td></tr>
-          <tr style="background:#F6F8FA;"><td>Flow analysis on <span class="mono">harness-clean</span> — false-positive baseline</td><td class="num">90</td><td class="num">6</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+          <tr><th>Profile</th><th class="num">Bugged total / harness</th><th class="num">Strict TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th></tr>
+          <tr><td>Initial builtin Aggressive (depth not explicit)</td><td class="num">111 / 27</td><td class="num">15</td><td class="num">1 / 1</td><td class="num">35</td></tr>
+          <tr><td>All 144 Flow · Thorough / 240s</td><td class="num">354 / 49</td><td class="num"><b>21</b></td><td class="num">1 / 1</td><td class="num">29</td></tr>
+          <tr><td>All Flow + 388 MISRA C:2025 rules</td><td class="num">4,745 / 615</td><td class="num"><b>21</b></td><td class="num">1 / 1</td><td class="num">29</td></tr>
         </table>
       </div>
       <div class="col c45">
         <div class="panel">
-          <div class="panel-t">The two signals that were not counted as detections</div>
-          <p class="small" style="margin:0;"><b>BUG-021 (partial):</b> the scan reported a lost resource at the second alias assignment — related to the defect, not the double free it causes. <b>BUG-035 (indirect):</b> <span class="mono">BD-PB-CC</span> says the later null check is always false; it hints at the dereference without reporting one.</p>
+          <div class="panel-t">Partial and indirect signals remain separate</div>
+          <p class="small" style="margin:0;"><b>BUG-021 (partial):</b> a lost-resource signal, not the planted double free. <b>BUG-035 (indirect):</b> <span class="mono">BD-PB-CC</span> flags the late null check, not the dereference. Both remain strict misses.</p>
         </div>
       </div>
     </div>
@@ -979,7 +978,7 @@
 <section data-n="22" class="slide" id="s22">
   <div class="hdr">
     <div><span class="kicker">21 · Result</span><h2>Recall by defect family — where the misses cluster</h2></div>
-    <div class="hdr-r">TP + FN = 50<br>families with 0 detections in red</div>
+    <div class="hdr-r">TP + FN = 50<br>latest all-Flow Thorough/240s profile</div>
   </div>
   <div class="body">
     <table class="grid" style="font-size:10px;">
@@ -988,26 +987,26 @@
         <th class="num">True positives</th><th class="num">Partial / indirect</th><th class="num">Direct misses</th>
         <th>What the scan saw</th>
       </tr>
-      <tr><td><b>Size arithmetic</b></td><td class="num">11</td><td class="num">2</td><td class="num">0</td><td class="num">9</td><td>The two ring and raw buffer bounds; nothing for truncation, wrap, masked length or sizeof misuse</td></tr>
-      <tr><td><b>Memory lifecycle</b></td><td class="num">10</td><td class="num">3</td><td class="num">1 partial</td><td class="num">6</td><td>The use-after-free, the interior free and the retry leak; nothing for the double release, the wrong pool or the timer</td></tr>
-      <tr style="background:#FBEAE8;"><td><b>Concurrency</b></td><td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num">8</td><td><b>No race or lock-order finding in the harness at all</b></td></tr>
-      <tr><td><b>NULL / validation</b></td><td class="num">7</td><td class="num">5</td><td class="num">1 indirect</td><td class="num">1</td><td>The strongest family — unchecked lookup, malloc, out-param and deep NULL propagation</td></tr>
-      <tr><td><b>Taint / bounds</b></td><td class="num">8</td><td class="num">3</td><td class="num">0</td><td class="num">5</td><td>Fired on buffer bounds, not on indices, format strings or allocation size</td></tr>
-      <tr><td><b>Uninitialized</b></td><td class="num">6</td><td class="num">2</td><td class="num">0</td><td class="num">4</td><td>Caught the ignored-contract pair; missed pooled memory and partial headers</td></tr>
-      <tr style="background:#F6F8FA;"><td><b>Total</b></td><td class="num"><b>50</b></td><td class="num"><b>15</b></td><td class="num"><b>1 / 1</b></td><td class="num"><b>33</b></td><td></td></tr>
+      <tr><td><b>Size arithmetic</b></td><td class="num">11</td><td class="num">2</td><td class="num">0</td><td class="num">9</td><td>Ring and raw-buffer bounds; truncation, wrap, masked length and sizeof misuse remain missed</td></tr>
+      <tr><td><b>Memory lifecycle</b></td><td class="num">10</td><td class="num">3</td><td class="num">1 partial</td><td class="num">6</td><td>Use-after-free, interior free and retry leak; no root-cause finding for six other candidates</td></tr>
+      <tr><td><b>Concurrency</b></td><td class="num">8</td><td class="num">5</td><td class="num">0</td><td class="num">3</td><td>New <span class="mono">BD-TRS-MLOCK</span> finding for BUG-023; BUG-024, 027 and 030 remain missed</td></tr>
+      <tr><td><b>NULL / validation</b></td><td class="num">7</td><td class="num">5</td><td class="num">1 indirect</td><td class="num">1</td><td>Unchecked lookup, allocation, out-param and deep NULL propagation</td></tr>
+      <tr><td><b>Taint / bounds</b></td><td class="num">8</td><td class="num">3</td><td class="num">0</td><td class="num">5</td><td>Buffer overflow and table bounds; indices, format string and allocation size remain missed</td></tr>
+      <tr><td><b>Uninitialized</b></td><td class="num">6</td><td class="num">3</td><td class="num">0</td><td class="num">3</td><td>Thorough follow-up adds BUG-048; pooled memory and partial-array cases remain missed</td></tr>
+      <tr style="background:#F6F8FA;"><td><b>Total</b></td><td class="num"><b>50</b></td><td class="num"><b>21</b></td><td class="num"><b>1 / 1</b></td><td class="num"><b>27 direct</b></td><td><b>29 strict FN</b>, including partial and indirect</td></tr>
     </table>
     <div class="cols" style="margin-top:9px;">
       <div class="col panel">
         <div class="panel-t">The honest reading of this table</div>
-        <p class="small" style="margin:0;">The scan is strongest exactly where a defect is a local, checkable condition — a NULL that is dereferenced, a pointer that was never assigned, an index against a known array size. It goes quiet where the defect requires arithmetic reasoning about a value's range, or reasoning about two threads.</p>
+        <p class="small" style="margin:0;">The all-Flow profile adds one race detection without closing the remaining size-arithmetic, memory-contract, or queue/list concurrency gaps. The score is source-adjudicated, not a count of all emitted warnings.</p>
       </div>
       <div class="col panel">
         <div class="panel-t">The emphasized family scored 2 of 11</div>
         <p class="small" style="margin:0;">Size arithmetic was the stated focus of this evaluation, and it produced the largest miss block: truncation, wrap, signed-to-unsigned conversion, masked bounds and <span class="mono">sizeof(pointer)</span> misuse all went unreported.</p>
       </div>
       <div class="col panel">
-        <div class="panel-t">Concurrency: 0 of 8</div>
-        <p class="small" style="margin:0;">Not partially — completely, and while the thread-safety rules fired 67 times elsewhere in this same build. It is the most interesting negative result in the run, and it is the family where the planted defects were designed to require thread modeling.</p>
+        <div class="panel-t">Concurrency: 5 of 8</div>
+        <p class="small" style="margin:0;">The five root-cause findings require the ThreadX API model and the full Flow checker set. Three planted races/queue defects still have no matching finding.</p>
       </div>
     </div>
   </div>
@@ -1015,11 +1014,11 @@
 </section>
 <section data-n="23" class="slide" id="s23">
   <div class="hdr">
-    <div><span class="kicker">22 · Evidence</span><h2>The rule, the line and the message behind every reported defect</h2></div>
-    <div class="hdr-r">messages quoted from the XML findings<br>exported to CSV in the repository</div>
+    <div><span class="kicker">22 · Evidence</span><h2>Parasoft rule messages behind the strict detections</h2></div>
+    <div class="hdr-r">initial detections plus Thorough follow-up<br>full exports and matrix in the repository</div>
   </div>
   <div class="body">
-    <table class="grid" style="font-size:8.6px;">
+    <table class="grid dense" style="font-size:8px;">
       <tr><th style="width:112px;">Rule</th><th style="width:136px;">Location</th><th>Message as emitted by Parasoft</th><th style="width:96px;">Catalog</th></tr>
       <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">sizearith.c:68</td><td>Possibly accessing array "log_ring" out of bounds at index [0...32]. Correct index(es): [0...31]</td><td class="mono">BUG-003</td></tr>
       <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">sizearith.c:259</td><td>Possibly accessing array "raw" out of bounds at index [2...64]. Correct index(es): [0...63]</td><td class="mono">BUG-010</td></tr>
@@ -1038,28 +1037,34 @@
       <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">taint.c:104</td><td>Possibly accessing array "slot_values" out of bounds at index [0...7]. Correct index(es): [0...3]</td><td class="mono">BUG-042</td></tr>
       <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">taint.c:182</td><td>Possibly accessing array "handlers" out of bounds at index [0...15]. Correct index(es): [0...11]</td><td class="mono">BUG-046</td></tr>
       <tr style="background:#FDF2E3;"><td class="mono">BD-RES-LEAKS</td><td class="mono">memory.c:244, :260</td><td>Memory not deallocated: base · Memory not deallocated: ((FRAME_STRUCT[2])frame_cache)[1]</td><td class="mono">BUG-021 · partial</td></tr>
+      <tr style="background:#EDF5FB;"><td class="mono">BD-TRS-MLOCK</td><td class="mono">concurrency.c:39</td><td>The "g_stats" variable is used when locks are not held on "stats_mutex"</td><td class="mono">BUG-023 · new TP</td></tr>
+      <tr style="background:#EDF5FB;"><td class="mono">BD-TRS-ORDER</td><td class="mono">concurrency.c:75</td><td>Possible deadlock - acquiring locks "net_mutex_2", "net_mutex_1" in different orders</td><td class="mono">BUG-025</td></tr>
+      <tr style="background:#EDF5FB;"><td class="mono">BD-TRS-THRDR</td><td class="mono">concurrency.c:111</td><td>The global variable "g_ready" is used without holding a lock</td><td class="mono">BUG-026</td></tr>
+      <tr style="background:#EDF5FB;"><td class="mono">BD-TRS-REVLOCK</td><td class="mono">concurrency.c:155</td><td>The "net_mutex_1" lock is released, but it has not been acquired</td><td class="mono">BUG-028</td></tr>
+      <tr style="background:#EDF5FB;"><td class="mono">BD-TRS-THRDR</td><td class="mono">concurrency.c:166</td><td>The global variable "g_inited" is used without holding a lock</td><td class="mono">BUG-029</td></tr>
+      <tr style="background:#EDF5FB;"><td class="mono">BD-PB-NOTINIT</td><td class="mono">uninit.c:69</td><td>Non-initialized "h.flags" is used</td><td class="mono">BUG-048</td></tr>
     </table>
-    <p class="small" style="margin-top:7px;">Four more diagnostics from the same scan land in the harness but describe code shapes rather than planted defects — three <span class="mono">BD-PB-MEMOPT</span> on scratch copies whose destination is never read, and one <span class="mono">BD-PB-VOVR</span> on a status value overwritten before use. They are disclosed on slide 25 as context-appropriate findings, not detections and not benchmark false positives.</p>
+    <p class="small" style="margin-top:5px;">Light-blue rows were absent from the original Aggressive run: BUG-025…029 first appeared with the ThreadX API model at Thorough depth, BUG-048 with the added NOTINIT options, and only BUG-023 needed the full all-Flow profile. MISRA C:2025 repeats the BUG-023 site as MISRAC2025-DIR_5_1-a and is counted once, not as another detection.</p>
   </div>
-  <div class="ftr"><span>evaluation/reports/parasoft/bugged-builtin-Flow-Analysis-Aggressive-findings.csv · DETECTION_MATRIX.csv</span><span>23 / 30</span></div>
+  <div class="ftr"><span>evaluation/reports/threadx-allflow-misra-240/flow-bugged-findings.csv · DETECTION_MATRIX.csv</span><span>23 / 30</span></div>
 </section>
 <section data-n="24" class="slide" id="s24">
   <div class="hdr">
     <div><span class="kicker">23 · Evidence</span><h2>What went unreported, and two candidates that are not defects</h2></div>
-    <div class="hdr-r">35 strict misses on the flow analysis<br>2 of 52 markers invalidated</div>
+    <div class="hdr-r">29 strict misses: 27 direct + 2 related signals<br>2 of 52 markers invalidated</div>
   </div>
   <div class="body">
     <div class="cols">
       <div class="col c60">
-        <div class="panel-t">Strict misses by class — 35 total</div>
+        <div class="panel-t">Strict misses by class — 29 total</div>
         <table class="grid" style="font-size:9.2px;">
           <tr><th style="width:132px;">Class</th><th>Candidates</th></tr>
-          <tr><td><b>Concurrency — all 8</b></td><td class="mono">BUG-023 … BUG-030</td></tr>
+          <tr><td><b>Concurrency — 3 direct</b></td><td class="mono">BUG-024 · BUG-027 · BUG-030 (BUG-023, 025, 026, 028, 029 detected)</td></tr>
           <tr><td>Size arithmetic</td><td class="mono">BUG-001 truncation · 002 signed/unsigned · 004 sizeof(pointer) · 006 truncated stored length · 007 unchecked column · 008 sizeof(pointer) config · 009 wrapped pool arithmetic · 011 masked length · 012 unvalidated pad</td></tr>
-          <tr><td>Memory lifecycle</td><td class="mono">BUG-013 write after release · 014 double release · 015 early-return leak · 016 wrong pool release · 017 release-then-success · 019 timer leaked on abort</td></tr>
+          <tr><td>Memory lifecycle</td><td class="mono">BUG-013 write after release · 014 double release · 015 early-return leak · 016 wrong pool release · 017 release-then-success · 019 timer leak · 021 partial signal</td></tr>
           <tr><td>Taint / bounds</td><td class="mono">BUG-039 unmasked index · 041 strcpy into 16-byte label · 043 unclamped loop · 044 format string · 045 legacy allocation without terminator</td></tr>
-          <tr><td>Uninitialized</td><td class="mono">BUG-047 pooled memory · 048 partial stack header · 051 fill loop stops one short · 052 snapshot read before zeroing</td></tr>
-          <tr><td>NULL paths</td><td class="mono">BUG-036 unchecked callback (the family's single direct miss)</td></tr>
+          <tr><td>Uninitialized</td><td class="mono">BUG-047 pooled memory · 051 fill loop stops one short · 052 snapshot read before zeroing</td></tr>
+          <tr><td>NULL paths</td><td class="mono">BUG-036 unchecked callback · BUG-035 remains an indirect signal</td></tr>
         </table>
       </div>
       <div class="col c40">
@@ -1081,8 +1086,8 @@
 </section>
 <section data-n="25" class="slide" id="s25">
   <div class="hdr">
-    <div><span class="kicker">24 · Evidence</span><h2>The "clean" baseline was not clean, and the tool said so</h2></div>
-    <div class="hdr-r">clean-state harness findings: 6<br>1 genuine issue · 5 scaffold findings</div>
+    <div><span class="kicker">24 · Evidence</span><h2>The clean reference contains unplanted issues too</h2></div>
+    <div class="hdr-r">all-Flow clean: 26 harness entries<br>Flow + MISRA clean: 558</div>
   </div>
   <div class="body">
     <div class="cols">
@@ -1113,7 +1118,7 @@
       </div>
       <div class="col c45">
         <div class="panel" style="margin-bottom:8px;">
-          <div class="panel-t">The other clean-state findings, classified</div>
+          <div class="panel-t">Other clean-state findings reviewed (9 of 26)</div>
           <table class="grid" style="font-size:9.2px;">
             <tr><th>Rule</th><th>Location</th><th>Review outcome</th></tr>
             <tr><td class="mono">BD-PB-MEMOPT</td><td class="mono">sizearith.c:51</td><td>Scratch copy with no observable output — intentional</td></tr>
@@ -1121,20 +1126,24 @@
             <tr><td class="mono">BD-PB-MEMOPT</td><td class="mono">sizearith.c:277</td><td>Scratch copy — intentional</td></tr>
             <tr><td class="mono">BD-PB-VOVR</td><td class="mono">memory.c:61</td><td>Initial value overwritten before any read</td></tr>
             <tr><td class="mono">BD-PB-MEMOPT</td><td class="mono">taint.c:71</td><td>Scratch copy — intentional</td></tr>
+            <tr><td class="mono">BD-TRS-MLOCK</td><td class="mono">init.c:65</td><td>Unplanted: clean callback updates g_stats without stats_mutex</td></tr>
+            <tr><td class="mono">BD-TRS-THRDR</td><td class="mono">init.c:215</td><td>ThreadX-managed queue receive, not an app data race</td></tr>
+            <tr><td class="mono">BD-TRS-THRDR</td><td class="mono">sizearith.c:66–68, 84</td><td>File-static ring used only by the logger thread</td></tr>
+            <tr><td class="mono">BD-API-STRSIZE</td><td class="mono">sizearith.c:161</td><td>Duplicate of the known source-buffer over-read</td></tr>
           </table>
         </div>
         <div class="panel">
           <div class="panel-t">What this does to the comparison</div>
-          <p class="small" style="margin:0;">The intended false-positive baseline is contaminated: one of the six clean-state harness findings is real. The report records it separately, keeps the five scaffold findings out of the FP column, and never counts the baseline issue as a detection of a planted candidate. In the bugged state that same function produced no finding at all — see slide 12.</p>
+          <p class="small" style="margin:0;">The clean reference already has a real 128-byte source over-read and a separate unlocked callback. They are not planted TPs. Some concurrency warnings are contextual or assumption-dependent; MISRA also emits compliance diagnostics. The 558 MISRA clean entries are not 558 unique defects.</p>
         </div>
       </div>
     </div>
   </div>
-  <div class="ftr"><span>evaluation/reports/adjudication/CLEAN_FINDING_REVIEW.csv · evaluation/COMPARISON_REPORT.md § Clean-state findings</span><span>25 / 30</span></div>
+  <div class="ftr"><span>evaluation/reports/threadx-allflow-misra-240/CLEAN_FLOW_REVIEW.csv · original review: reports/adjudication/CLEAN_FINDING_REVIEW.csv</span><span>25 / 30</span></div>
 </section>
 <section data-n="26" class="slide" id="s26">
   <div class="hdr">
-    <div><span class="kicker">25 · The SonarQube result</span><h2>SonarQube found nothing on this code because it never ran</h2></div>
+    <div><span class="kicker">25 · The SonarQube result</span><h2>SonarQube code analysis is pending license entitlement</h2></div>
     <div class="hdr-r"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAA3AAAAE9CAYAAABKs4BMAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAADm9SURBVHhe7d2HtxzFte/x91+8e5/TNWCMiSYZMBgbDLbBJgiTQWByBpOMMJiMQMiABNgmCAFCQpGgCAogIYSQEMo55xyO4jnK9dZu38Fzdk2o6jAzNfP9rLXXvUbd1XPCnKlfV3XV/zEAAAAAgCD8H/0fAAAAAAC1iQAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAKDh7Nyzz9zXf46ZsXqb/iegphHgAAAA0HC6TVhpzn1jYlQvfb7EbN+1Vx8C1CQCHAAAABrKum27TJsu/w5vubqq+1QzdnGTPhSoOQQ4AAAAZOrRj+ebF0YuNl8taYqmLlbbU8MWtApv+fX4J/NNU/NufQpQMwhwAAAAyIxMTcwPSBd2nWTaD1toRs7fWLVpi88MX2gFt/y67J0pZvSCTfo0oCYQ4AAAAJCZzxdssgJSfj328XzzxcLKh6UxizaZK7pNsV5Pfr0xdrnZt1+fCVQXAQ4AAACZef6zxVYwKlRXd59quk9YadZvr9z0xc3Nu82TQ4tPp5RqN2BOdBxQKwhwAAAAyMT+/fvNpW9PtkJRqTrvf0flxi3ZXLHRL5kuWWo0TsLl/PU79GlAVRDgAAAAkImtO/eahwbNtQKRa/2pxzQzZNZ63WwmNjfviRYw0a8hv4bN2aBPAyqOAAcAAIBMbWnZY4bMWmf+OmhuNMKmg1G5uua9aWbQjHVm997sh+QGzlhnXT+//jVmqT4FqCgCHAAAACpmU/OeKCQ9MGCOFY7KVdvuU6Nzd2Uc5Bau32Gu7zndun6u/jZ4Xk1sh4DGRIADAABAVazcstO8PX5FFMx0SCpVV7471Xw0ba1uLlXNu/aaZ0tsN3DX+7PMph0sboLKI8ABAAAEZPzSzeaDqWuiKYmfzttovlzUZCYu32Jmrt5mFm5oNis27zQbd+yu2h5rcchiJV8v3RztD9emix2WitUNvaab0Qs3mSzH4+QZvAvenGRdW+qaHtPMiqYWfQqQKQIcAABAQF76fIkVJErVVd2nRtMVnx+52Lw3cVUU+mat2V6zUwBlMZHu36z0Wr3yng9nm2mrtummUiPBWL6P+rpSl7w9Ofp+ApVCgAMAAAiIb4ArVTf2mm6eGb7Q9Jy4KhrZk/BUK1r27DMfTV9bNDgVKtl+QEYgs7Bu2y5zY+8Z1jWlZIRu3JImfQqQCQIcAABAQDqnGOAKlUxLfHHUYvPJ7PVm6aaWTKcnupCVJz+etd5c36v4oiL5JWGq96TVZk8Gm8jJtgh3fzjbumauRsxlmwFkjwAHAAAQkKwDnC5ZMESmX46avzHaDqCahs/ZEL0e/RoL1e39Zmay+XbL7r3Rdgj6elKyRYI8kwdkiQAHAAAQkEoHOF3yvJk8S7dkU3UW75CplbJyZbGFRfLr/C4To2PT3j9ORveeKLLpt1zzq8VMp0R2CHAAAAABqXaAy6/b+s6Mnp+T7QAqbfXWXeapoQus11Sobuo9w8xem+5CI/v274+mmuprSUmIm7xiiz4FSAUBDgAAICDjlmw2Xb5abl4ZvdR0/GyReXLoAvPQ4Hnm3o9mm1v7zjTXvjfNXPbOFCtUZF2yL9qAGWsrvn3BlBVbzS19Ci8uouv9qWv06Ym9PLpwoP5j10lmxqqt+nAgMQIcAABAndqxe5+Zu3a7GbVgYzRS9vxni819/edES9/rwJFmdfx0kZm6snLhRaY0yrROl2mVslKlbNKdlv3795sXRhYeibuw6yQzJ+WRP4AABwAA0IBkQRIJF7IvXLcJK81f+s+xAkjSkqmLMupVqVG5ZZuaS64Smavre043izc269MTee7TRdZ1pC5+a7JZxmbfSBEBDgAAAJFde/dHI2fdJ6yMNv/WYSRJyajcjNXZbbadI8uV9J++1lz0VulRRpniKKtapmXvvv3m8Y8LL2wiWzNsrfIKnqgfBDgAAAAUtG3n3miETjb7lpEkHUzilCx8IlsSZE023m43sPBy//n1yhdL9amx7d67z/xt8DzrGlISiCXkAUkR4AAAAOBk0vIt5rUvl5m2jnuxlao7+s2MFmTJkuQl2UZAX1uX7OuW1jRPGcUsFhxfG7tMHw54I8ABAADA29x1O8y7E1ZGz7npoOJT930020xfle3Uym+WbTaXllm45ebeM6JRuzTs2LW36Pfl07npTdtEYyLAAQAAIJHJK7ZG2xmcVyCwuJZM01y/fbduOjUSzmTUT183v67oNiW1VSPXbN0Ztaev0abLxGhlUCAuAhwAAABSsXbrLvPG2OVlR7tKlWx3INMQs1Js37b8+mLhJn1aLBIGddtSEuw2ZBhWUd8IcAAAAEiVBLAhs9ZF0xJ1eHGpP/WYZsYsatLNpmbA9LVlRwuHzFynT4vly0WbrLalZOqo7CEH+CLAAQAAIDMyvVI2z9YBxqXkvDVb03kuTft66eZoo219zfyS7QjSIKOKum2pPpNX60OBsghwAAAAyNzCDc3mqaELrBBTrmS/tl6TVpndGUyrlM28y62o2f2blfq0WGQfPN221Lx1O/ShQEkEOAAAAFRM3CB3Y6/pZv769MPOhu3lFzf555jke8W17N4bbeit25b/Jv8GuCLAAQAAoOJkgY+7P5hlBZpSdcGbk8yAGelMa8zXvHufeWhQ4b3bciWLnyS1YP2Ogs/evfR58rbROAhwAAAAqAqZFDly/sZo0RIdakrV45/MT23j7Zzde/dF7epr5dcrKYS4Ys/DjV+S3aItqC8EOAAAAFTVzj37TLcJK61QU6queW9atJl4mvbu22/aDys9vfP9qWv0ad5kBUrd7mXvTDEbd7C1AMojwAEAAKAmLNvUbO56331apUypHDQjneX+cyTEPVdkwZFcjU64T5xsKn7RW/ZeebLQCVAOAQ4AAAA1Y99+Yz6ctqbsEv/59ezwhakuBCL7s5Xa8LtNl4lmxqqt+jQvn87bYLUrNW1lsnZR/whwAAAAqDmrt+4yDwyYYwWcYnVLnxlmxeaduplEii39L3XJ25OjbQiSeKLAM3c39Z6hDwNaIcABAACgJslonGym7Toad+nbk83M1dt0M4mU2vJA9pBbvz3+c2sylVKmgep2Zd87oBgCHAAAAGraqs0tBRf+KFQyvXH0go26idhkdcq/lthi4K4PZkWLsMTVe9Jqq00Jdau3pDuaiPpBgAMAAEDNk9G4dz1WqpTl+tMiAe3OEourPD1sgT7F2Z59+wtu8C2hESiEAAcAAIL05ZgvzfMdny9bvXv21qciYBOXb4mW3NeBp1C9OGqxPj22LS17zM29Z1jXyFWSaY9TVm612pMav2SzPhQgwAEAgDD9/bm/m+/83++UrT+e/0d9KgK3Yfsuc6/jlMpHhsxLNMUxnzyzJs/Z6Wvk6qvF8Tfjfmb4Qqu92/rOjFbEBPIR4AAAQJAIcI1Nph6W268tVxL2ZAQtDZNXbLHaz5UstrIk5sqUsol3ocVavlwUPxSiPhHgAABAkAhwEPKsmw49hUqW50+yYmS+Ute8sdd0syvmiF/3b+xn/BiFg0aAAwAAQSLAIWfsok0Fl+PXdX3P6dE0yKQkUP1t8Dyr/Vz9a8wyfYqTbTv3FHy+b8yiTfpQNDACHAAACBIBDvlk/7eL3ir+fFquZCROpismtX3XXnPte9Os9nM1bdVWfYqTQtsKMAqHfAQ4AAAQJAIctHnrtptLSiwykqu0Qtzijc1W27n6U49pZsdu/6mUzbv3FhyF+2Iho3D4NwIcAAAIEgEOhSzc0FwwAOm6pc8Ms23nXn26t/7T11pt56rDiIX6cCf9pqyx2mIUDjkEOAAAECQCHIpZ1tRi2r471QpBuu7rP8fs2ps8FMlWBbrtXI1e4D9yJtseXNHtPyH0oUFzo/3vAEGAAwAAQSLAoZTlTS3mSocQ137YgsQjW5ubdxcd9ZP/LouT+JKRvWdHLDTz1+/Q/4QGR4ADAABBIsChHAlxl+eNZBWrN79ark/1Nn5Jk9Vurv41Zqk+HIiNAAcAAIJEgIMLWWik2OhYfn0ye70+1ZsENd1uruR1AGkgwAEAgCAR4OBKFja5sGv5feJmrdmuT/Uiz65d3b3wtM17PpytDwdiIcABAIAgEeDgY/KKLeb8Lnawyi9Z+KSpOdn2ArJoiW43V8PnbtCHA94IcAAAIEgEOPj6dO4GK1Tpur//HLN3X7JFTdoNnGu1KyUrSzbvSr51ARobAQ4AAASJAIc4uk1YaQUrXW+NX6FP87JkU4vVZq7eHJd8wRQ0NgIcAAAIEgEOcZXaty1XMuUyidfGLrPalJJn8TbuSDZNE42NAAcAAIJEgENcsi/bdT2nW+Eqv2S646YEQUumShbbh07CHRAXAQ4AAASJAIckZFn/C94svTKlPMuWZJPvQTPWWW1KyXUZhUNcBDgAABAkAhySGjl/oxWudPWetFqf5mz33n3m2vemWW1K/ZPNvRETAQ4AAASJAIc0vDhqsRWu8ku2Hli6Kf4m3COKrHwp7a7btksfDpRFgAMAAEEiwCENLbv3muvLPA931wezEm0tcGvfmVabUq+MZhQO/ghwAAAksGzpsqhQeQQ4pGXh+h1lN/nuN2WNPs3ZmEVNVntScs2kG4ej8RDgAKAGzZ0z1wwcMNB0frGzefivD5vbbr7NXHbxZeas35xlTjr+JPOTH/0k6pgedshh5pSTTjHn/eE8c81V15j777nfdOzQ0Xz4wYdm3tx5ulnEJAGtT68+5tGHHzUXtrnQCgi65Bg59o3X3zAzps/QzSElBDik6cNpa6yAlV+y8MiarTv1ac7ufH+W1aZUj29W6UOBkghwaEjbtm0zgwYOMk889kTU0ZIO8QHfP8D60JeSDvIZvzrDXHXFVabd/e3Mq/981UyaOEk3WTXSOZSO5fMdnzfXXn1t9PVI5Tr4Umeefua3/106lXLs2C/Hms2bN+vm6saYL8ZE4eev7f5qbrnpFnPpRZdGnTgp+T7Jz16+b6tW1sYH57Sp08zLnV82F//xYut3MEkdcegR5uknnzbLl4W9ceznoz43Hdp3iH6OJx5/Yquv8eADDjZzZs/RpyQmoU3eL/nvpbh1wnEnRG0R5tKVZYCTn7/8ndR/W/NL/rv8+ycff1LXf08byQMD5lgBK79kVcq4viwyCnd5tynRYieAKwIcGkr/D/ub66+53vpwj1M/+uGPTNvL25rXX3vdzJ83X18qM9KpkLv60nHQrylOSbirRMdy8qTJ3wYo33IJzFOnTDWdO3V2Gh3RJaNX/fr2001m7rNPPzMP3PeA+enhP7VeUxYlQXb6tOn6ZSSif1au9V7393RTFgmd9959r1OAmvjNRH16bBLs5X2hr5FWSdtyDSSXdoCTv68SyOL+/OU8+ftcq2Fu1MhR0Qi9vK+uuvIqc87Z55ifHfszc+D/HBjdxDzup8dFX4N8trV/qr3p26evWTB/gW6mrq1oaim7tcDYxU36NCf79u8vuiLlsDkb9OFAUQQ41L1FixaZRx5+xKkTmKROPuHkaKQjqyAkd3jjhBOfklGCrDqW474aZ13Ptfr27qub+9aQwUPMqSefap0Tpw49+NCoQ9jS0qIvk5qtW7dGHaOsfx9L1e233G42btioX1osum3XkpsGpTz37HPWOaUqjQD38ZCPo/eAbjurkmvJNbMiv8su1bQpXmfU1ysvvWJdu1CtWuU+Ki7H6+9roSoX4L4c86X5851/ts6LW/L+lt/xWghyIz8baW649gZz4A8OtF6na8mot8xmyOrzrdbItgE6YOWXbAC+J+aCJh9MLTxNUxY5AVwR4FC31qxZEz03pD+Isi4JAWmSQFXJTqWUdD7kLnSaZIqgvo5rScdPk5+vdMr0sWnU8cccH03BTJNM233h7y9Evx/6etUomRo8bOgw/TK9HfTDg6y2Xeruu+7WTUWWLVtmzjjtDOv4cvXNhG90U85k1CXrmyOlSq6d9iIo+/bts65TrOQmVyW43rSYONE9jCcNcBKwJGjp49Mq+ZplRK4aer3XK3o8QL+mpHXu78+NAm89k9Umb+9XeNXIXEkQi2PHrr3mwq6FR/imrNiqDwcKIsChLskdxx8f+GPrg6cSJdPU0iAfkHGn8aRVEhzT+qCWaaa6fdfSozXyPNRhPz7MOi7t6vJ6l1bXTeKjDz6y2q+Ferb9s/qlejnqsKOsNl3qxutu1E1FU2Xjvm/jjsBJ51q3Va3q3bO3fnmxEeBaV6EAJ6NJlbo5JiG9UqNxcjPjtFNPs15D2iUzTurZnLXbrYCVX5e8PdlsadmjT3Py6pfLrPaknhm+UB8KFESAQ92R0Rr9QVPJ6v5ud/2SvMnol263mqUDVBwrlq+w2nWtm66/6dt2er7X03z3v75rHZNVtftLO7N/f7ypMvmk86bbrpV6/dXX9ct1FrcDLIuR5JPnbFw7+IXKdwROfh5pPUeaZsk0vjQ6+gS41qUDnIRl19eTVsl7JcspiHv27DEdnulgvvff37OunVXJaNz69ev1S6kbnUYtsUJWfr0xNt7iUKu27LTakmrTZaJp3rVXHw5YCHCoK08+/qT1AVPpStIZko5btUfdipW8riQdyw3rN1htulabc9tEbciCMfrfKlGymmUazjnrHKvtWqm4U0Z/9YtfWW25lHwvcnbs2BE7CObKZwSult9nUknfa4IA17ryA5yEN/3vlSr5HmQR4pp3NJtLLrzEul4l6ugjjq7oQl6VtLl5t7n47clW0MqVLHaybtsufZqThwfPs9qT+mxeOs8no74R4FA3enTvYX2wVLpkNcG45EO9ljuVUvL64nY+tm/fbrXnWrJAzICPBlj/vZLlO8JTiGtnsxolv7tNTf6LWfz2jN9abbnUL0/55bdt3HXHXda/+5brzyftaXNnnnbmtytryv+v/z1uJQ1xBLjWlQtw8vN3fR1ZlVw/zWce5eZYnM+Ow39yeDSCdsetd0Qjd/K9fOqJp8zvf/d769hyJSFu5YqV+qXVhY+mr7VCVn69PHqJPsXJ8DkbrLakHvu4PsMw0kWAQ12YPXu2+f7/+771oVLpkg/COOTDvNqdCtdK0vnQbbmWrJ4m2zbo/17Jks2yk5JRIt1uLdWtN9+qX3JZsgWDbseljj3q2Oh8WdZc/1ucchmBk0CUJLxJQJNOrjwXWipcyftDjpHVb2WJdt2OayUJcQS41iUBTr6Xrq9B6pCDDrG2v0grpCf52eaT1WTlZohuv1id9ZuzoscMli5dqptqRVYmlZHK0395utVGsZLR+CxX8K2mm3vPsIJWfq3e6j8KJ1MlZcqkbuv8LhPNtp3xnq1D4yDAoS784ue/sD5MqlE9e/TUL62sWp/OVajidj50O6GVrCKZVK2sQlmsfKdSxt14XDbfFldedqX1b3Gq3Ahc3PeZdOIliMW9aSFk1CfuKKMsfhEHAa51SfiSn6P+77okcMtx5WYayO+DXDtJQJfnHZOQLUlcP/tkhMz3vZ0jsx/khotus1Cl8bx0LRq9cJMVtPLr+ZGL9SlOnh62wGpL6pPZ9ftcIdJBgEPwXu78svUhUq0qd1ezkGouX56k4nQsf/i9H1rthFQyCihTQZO46YabrHZrqXx/rldceoXVhmvJVhD6v8WtciNwcRYskY58nBsVxUin/5qrrrGuU64kKPgiwLWucteWoB53FVAZbY0b5JKs8iszPnR7hUr+5kjYS0LOd9225evxX+vTgycLWd3Wt/i2Aue9MdGs2bpTn1bWmEWFg+FDg+bqQ4FWCHAI2s6dO2MvO552xXn+zbXzUasli4r4kFEX3UZo9VKnl/SX5cVlAQUJim0vbxtNdfpq7FfRCp75ZNW3WbNmmRHDRpgO7TtEi7zoNpKUtO3qqiuvss53rSThT1epAOfyPc8vmSZXbgQmCem0S2DQ1y1Vvht+E+DcS0ZHkwZ1Od9lhE+XTOmNw/WZ4KSjfJrLe1ZGuuvR2MVNVtDKr1dG+9/A3bV3f7QdgW5LanPMLQrQGAhwCFrfPn2tD484JR2LZ55+xsycOVNfIuo8y75yMjXk7N+ebQ74/gHW+VL3/PkefWpJ0kHUbaRRcidYOiTSsZGOq/xf+d9x7xCXK5+pZZXYuy3rkqAuneO4io06yY0I6QD6dF7zzZ0zN1GYyi95L7i67k/XWedXo4pNofR9vjT3rFTWoimdHs9Tydfg87oIcG4Vd9StGN+bBXFeg/weHHnYkVY7uuS9mTZZ7dLlOVLfrykEMgp31wezrKCVK1mRUlat9NVp1GKrLakRczfoQ4FvEeAQtDjTonRJ8PLpGInx48abhx58yBx2yH8CSb++/fRhJaU9dVI6nuWm48i/u06DcS2fKXfyHIY+P8SSQJ9Efsf9L/f+JfazKYXI5rr69fpW/gqR5cjG9fr8alSxETifvxFyo6PSfJ6Nk4DvigBXvrIKGb4hzncU7oH7HrDa0PXzn/3ctDRns6CI/L3S19N14vEn6tPqQrlRuK7jWs+WcDFmUeE22w9jU28UR4BD0A764UHWB4dP6c1d45BNtyWYrFq1Sv9TUb4f8OXKdyqjT6fRpcoFxxzXB+GTlHSGzjn7nEyv9dgjj+kvzYuELFkNzqej6uPG6260XrNvuY6sysqV+txqVKEROPm91McVq2qEtxyf5+Jcfy4EuNLlE4bj8H1drmFSNrzX5xaqrJ9Dc1l8aNDAQfq0unBLn+IrUl781mSz3XMj7pbde6OVJ3VbF3adZHbvjT/bA/WNAIdgzZs7z/rA8K04q0amwWUKimu5fvBrcZ7XKFauo3DHH3O8dW4a1e7+dmb6tOn6ctEd6E9HfOrU2fCp3/z6N/pSXmSJ7izJdEr9mn2r13u9dLMF3X7L7da51ahCAc51lFtGRKvJZzqla9AkwBWvNG7cuXD9mUq5/g29+667rXN1yQhd1sZ+Oda6rq4spnDWgqFz1lthK78GzFirTynrwYFzrXakJi7fog8FIgQ4BGvE8BHWB4ZvySIQleYzKlCukt5FTnM6pcuiD2kGV6kzfnWGmTnDfm6xkMcffdw6P0nV+n5Hxx19nPWafardX9rpJgtKezRX1yUXXmJe/eerZmD/gVHHftXK1iPdq1evNkMGD7H+u+v7TBYT8Z1CnQV5/7gubOIyCkeAK14uf6vS4Po7mKtyP1eZ5aHPKVTLly3Xp2bimCOPsa6ta8uW+gsgMirW9t2pVtjKlewZ56vflDVWO1L/GlP6dwKNiwCHYA0fOtz6sPCtd956RzebOZ/pUqVKFiVJSjoMrp3GcuUyMnDS8SdZ58UtmYLo2zl46omnrHbilk8nsxouu/gy6zX7lAQnF7LKnT43jZJn65YsWaIv58z1feY6/bcSXMOIy3uNAFe4XL53afK5wVFuKvyLz79onaNLtgyoFLnJo6+v64P3P9Cn1YVigStXs9b4bTezeGOz1YbU1T2m6UOBCAEOwZKFJPSHhW+dfMLJiff18iF3+vVriFtxp05qPh2MUiWds3Lk+63Pi1txO/cy/VG3Fae6v9tdN11Tbrv5Nus1+5QsguDi3rvvtc5NWp98/Im+jBfX91mlptK5ktftckPF5b1GgCtc5Ua50uaz2rDcdCjFZVS9kjckZGsLfX1d8oxsPdrSsse0KfDcWq5eHOW/sfc1PaZF5172zhTzzPCFZsis9WbVFv+95dAYCHAIljzzoj8s4pSM5MjS7pWQ1uIlaYy+5UiHRrcft8p1HpIuOpOrrl266qadDRs6zGovTsniNZUmz33KdMFOL3SKAtq5vz/XnHLiKebQgw+1Xl/SOvAHB+rLF5TmxuRyzUkTJ+lLeHN9n5X7fa0G19debl84Apxd1XrW0XULl1LB3OXz7sD/OdDs3eu3gEYSchNNvwZd9boapZCQpYNbrv7YdZL3YiZfL91s5q7bof8zUBABDsFKYxGTXMnGya+/+npmyy7npDXaVW6qja+0noWTzlQp0sHQ5/iWPHch+/HEtWfPHnPQ/yQPklkvFLBt27YorMl1fBZDSLPkNZST5gIxgwcN1s3H4jJ9stZG3/K5dPjLTQUkwNmV9t9NV3Jd/VqKVbHn8zp26Ggdq6uS0ydz9GsoVE1N2S7aVC3fLNtiBbf8Gs4+bsgQAQ5BS2tEJ1eH/+TwaIn3uNPzyklrEY9iH/Jx+XQwSlW5TnEaP6+kS/iLNDafzmKFNbl7LovzSNs/+M4PrGtWulzeB2kFuCsuvUI3HZtLUEhrCnIWXFaILbd3GAHOrrT/brrymeVQbGT1D2f9wTpWV7d3uunTMudys6HYHo2hkxuJV3cvvpjJYx/P16cAqSHAIWhJF2ooVTK1UqbJzZ+Xzh9h1+dyylWa0ydzfJ7TKFelpBHgRn8+Wjfr7R8v/8Nq17fKhVUfGzdsNC91eimzbRbi1uRJk/VLtbS9vK11XpxKY+qkcP1droWVJ4tx/RpKPc9FgLOrmlyebZQqNotBH1eoqhGUzjy9/OyAvn366tPqRvdvVlrBLb98p1ECrghwCJqsIqk/LLKoNue2Me/3e19f3ovvktLFqtyD7nHp68StUh3jNAJcqfZdpfEc3K9/+WvdrDfZikBuEui2a6VcwnIaI3DH/vRY3WxsLs+QVetZKB8uHf5iozWCANe6srjx5cN1mnqhqbGyVYo+rlB99uln0edMJUtudOrXoevlzi/rL6lurNrcYoW2/GIaJbJCgEPwjjrsKOsDI6s64tAjzAt/f8F7+XqR1jTFYndok3LtYJQr+VAvJmmAk2fo0jBn9hyrbd+SFeGSkE5qrY246fp81Of6ZVvSGIG77577dLOxuXTos3oPpcnledlSXwcBrnWlOWIeR5LX2adXH+u4kOqxvyWf9l7Lbu830wpuuWIaJbJCgEPw3nrzLesDI+uSRU9kTzGfh7NdP8DLVVbP7rgs/OBSpV5f0gAn3/c0yKqjum3fOvqIo3Wzzio1cpy0XAJcGiNwSVYV1Vx+j0v9jtYKl78XBDi375NUoWBUSS5L7hd7nR2e6WAdF1LJirn1rM/k1VZwy9X5XSaalt1Mo0T6CHCoC7LpsP7QqETJ6J/LNDPh0rF0qVIjXEm4doTKValOZdIAJ+enRbftW7IaZhxvvPaG1Vat1qiRo/TLt6QR4GTqV1pcRpKzeg+lyWXEvlBnP4cA17pKfa8qQX7n9GsqVIVep8tobC2XfD7Xs3XbdlnBLb/GLUk+7R/QCHCoC2vXrq3oVEpdDz7woH5JFpeOpUtl1fl07QiVq1IBLuk2AmkFOJ/ObbH66eE/1c2WVY3R4iRVqQA3ftx43WxsLu+zrN5DaXLp8Bfq7Of4/I4T4LLn8vOUKrQXXLVuUKZV5/3hPP0l1Z07Skyj/McXS/XhQGIEONSNZcuWRc8l6Q+PStW9f75Xv6RWXDqWLpVV59O1I1SuCHCFyXTE7/7Xd612arkqFeCmTpmqm43N5X2WxkI4WXPp8JcKJT6/4wS47Ln8PHOlnXPWOdYxIVW9j8CJt8avsIJbrq7pMU0fDiRGgENdkWebTjv1NOsDpFIlKwoW49KxdCkCXHI+ndti5RPgli5dGj2/p9uo9arUM3CVDnDV2g/Mh0uHv1Qo8fkdJ8Blz3VriEIrpLqs9FjLdfONN+svqe5MXbnVCm75taypRZ8CJEKAQ92Rpdnb3d/O+hCpVA0eNFi/pIhLx9KlCHDJ+XRui5VPgDvn7GzvoB98wMHRXXr5HctVGitc1muAy+o9lCaX7RBKhRKf33ECXPZcAnmx1/mbX//GOi6kevzRx/WXVJcuemuyFdxyNWD6Wn04kAgBDnVryOAh0bL/+sMk65KQsXjxYv1ynDqWLpVV59O1I1SuSq3w14gBTvYP1OcmqcN+fFh0R1v2Vhr52UizauUqfcnIs+2ftc71rXoNcKX2T6sVLu/HUjdLfH7HCXDZSxLgzv39udZxhSr/Bk4t1YcffKi/pLr05NAFVnDL1TPDF+rDgUQIcKhrzTuaTedOnZ07DmlVoWWT5YNMHxensgpwjzz8iHWtOFXq9TVigEtr+tMpJ51iur/bPRphdtGoAc6lQ18q+NQKl/djqa/D53ecAJe9JAHu4j9ebB2n6wff+YE+DRXWf/paK7jl6opuU/ThQCIEODQEWbRAPuhl7y79wZdVrV69utVrcO1olKtSnbYk0gqYpZ4varQAN3PmTOs83zr8J4ebXu/10k2X1agBzmX5fdnSo9adcNwJ1uvWVepmic/v+Px5ldlsuJEDnOvrLPT3/eq2V1vHFapt27bpU1FB89btsIJbfq3cslOfAsRGgEPDkX3b/nznn80B3z/A+gBMs2SKWz6XjqVLZdX5dO1clatSGi3AuXbaipXcVZ80aZJu1kn7p9pb7flWiKtQuo501PJKlMuWLrNeb6GS40rRxxer6dOm61MzIdN/9bUL1eRJk/WpRbm+x6od4FxGVKUKBbh7777XOq5QLZi/QJ+KCtq3f7+5sOskK7jlavjcDfoUIDYCHBqWTK8c2H+g891N37ri0itaXc+1Y1muzjzdXqUsKdcOY7n62bE/00230mgB7ndn/s46z6e6dumqm3T2zNPPWO35VogBTuj2C1UtPwfncrOn3HtNfO+/v2edV6i+Hv+1PjUTrjeJ6nEETv5u69dUqAqNqr7w9xes4wrV2C/H6lNRYQ8NmmsFt1y9PHqJPhyIjQAH/O9G4B07dIwCgv5QjFuybHw+ueOvj4lb5e68+3JZ8c6l7rrjLt10K40W4PQ5PvXzn/1cN+cljQAX4hRK4TIduNzvajVd2OZC6/XqchmJd926wuXnnAbX9389jsDp11OsCo0M9+nVxzquUPXt01efigrrPmGlFdxydc+Hs/XhQGwEOCBP06Ymc8etd1gfjHFr+bLlrdqXu+b6mDhVaqXHOKQzqK8Rp2TkoBTXDlyxCinAzZs7zzrHp/QUXF8P//Vhq03fcunY12KAcxnBkkr7RkgaXEfqXf4GHHaI25TFOM9Y+tq+fbt13WKVxQicPFNYLa4/02KjqjLFVR9bqO687U59Kips3JLNVnDL1QVvxpsODxRCgAMKeOWlV6wPxzg14esJrdqVu/76mDgld+jTkubIYKkFTEQjBbgvRn9hneNTH33wkW7Sy03X32S16VuhBjjXKcHXXn2tPrXqXEbfpAqN1GgyiqvPK1TPPfucPjV1S5Yssa5brLIYgZNy+Z5lwfX5t2KjwvL3Sp6H1cfrOuSgQ8z+/fv16aigtVt3WcEtv1jIBGkhwAFFtDm3jfUB6VvyjF0+ee5GHxO3Cj0rEYdPB6hUFbt7nK+RAtyIYSOsc3xqzBdjdJNeTjv1NKtN3wo1wAmXaZRSab2P0uA6lblYR1+74LwLrHML1a0336pPTZ3P374sRuCkXEYts+D67F+p1+f6eTTxG/fvHbJRakPvsYub9OFALAQ4oIhX//mq9eHoW4U2MJW7pPq4OJXGKJzckXbtXJSrQqunaY0U4IZ+MtQ6x6dkI/q4ZCRUtxenQl3ERLiGoSwWBYrD573oGjplSp0+t1Cd8asz9Kmp85nSm9UIXDV+1q6/h1KlRgg7v9jZOr5QPfHYE/pUVNgDA+ZYwS1XPSeu0ocDsRDggCKkA60/HH3rq7Ff6WZTm0YpVeqOrQvXqT0u5fI8USMFuG8mfGOd41OdXuikm3TmOg2vXIUc4ITrM6fyPqg211UKzzzNPYTIwkz6/GK1bt06fXqqXKdzSmUV4KTKTfNOm+t7sdyiNK7Pwcn2OKtWERKq6V9jllnBLVcdP1ukDwdiIcAheLLoSBYP4b/z1jvWh6NvLV68WDfr/HyOS8kd+7gdEp87w+WqXOcjp5ECXNKf8+9/93vdpJPu73a32opbsmdiObUc4Hx+x5PeDElC9qXUr6dYuY6+iUEDB1nnF6u+vbNbwdB3OvGkie6LPfgGuDRmLrjy+f1z+bmecuIp1nmF6u677tanooIGzFhrBbdc3d9/jj4ciIUAh+Ad+IN/h4Ljjj4u2jdr27Zt+pBYzj/nfOuD0bdamlt0sxHX53NcKk6I8+lYuJRL50M0UoBraWmxzvEt32XBe/boabWRpEJ+Bi5HRqz09YpVNULcow8/ar2OYuW7FL7cQNJtFKurrrxKn54a19HFXGUZ4KQqsQegz5RYl+eHRbe3u1nnFivfzwSkZ3yJlSiv6p7d3zo0FgIcgiZTFPUHl4SEm2+82XR7p5uZO2euPqWsrVu3Oj87UqpkAYFiXJeV9qk3Xn9DX8YinQqfDqNL+XQqGynACZ/wUKjk5oTLYiZbtmwxDz7woHV+0vp0xKf6UpZaD3C+77XnOz6vm8iEvBdlFUx9/VIVp1N+2I/dthKQmjljpj49sfZPtbeuU658FuKIE+AkWLlM+U7CZ1TV58bB4T853Dq/UJ14/Ilm44aN+nRUwOKNzVZwy6+de/bpUwBvBDgEzeXDWz7wrr/metPl9S7R6mayabfW1NRkxo8bb958481ovyDdRpyStkpJ81m4XEnHRALa2C/HRiVy/790KFzvCLuWLMji0xFqtAAnCwro8+KU/K58Pf7raFQv36KFi6I9z3w66T41YviIVtcrpNYDnPB91lOCVakFJZKSIOY7KuWySFAhPvtaXven6/TpifTr28+6hktlHeCk5Puf1c/YJ7z53AATPlvcnPWbs8zOnSxbX2kS0HRoy69lTYVn5gA+CHAIWhrTHLOqcosCSOchrRUpq1XlNu7WGi3AySIg+rykdfIJJ3t3/uPW8KHD9ZdkCSHACd/RULnZ4TKq7UPe8zLCp69Vrnw7+fn6f9jfaq9UyTOUaRg2dJjVtmvJAkCu4gY4qSxCnE94k3Kdfp4jG6K7btAuJaG8eUezbgYZu+ydKVZwy9XE5Vv04YA3AhyCtWPHDuvDqlbK9U627/SuWirXhUvyNVqA27NnjznmyGOsc0OpgQNa72NYSCgBLu4NExmR79Orj27Oi1xbwmCcEXB5zUlChoza+l7XZdpuKQM+GmC16VPjvhqnmyzKJcCVmu0g35s0nomTmQiuK07mKu7qp7LgjG6rVMkKoJV4j+E/7nx/lhXccjVyPlNbkRwBDsEa+dlI64OqFupHP/xR2dG3fC4dkForGc2I06lstAAnZCqtPjeUkilw5YQS4IRMXYwT4qSkoy+jKxLmXH735VpyrO9zbvklrzXOc2+a7xRSKZmq50vCYhrPYvoEyHJfm3wPRbmFo+Tn5DMdPF+ccO6zHUQh8py3brNcdWjfoeAjBGlYsXyFebnzy9GoZpxnz+vNQ4PnWcEtV/2nZ/MzQGMhwCFYTz3xlPUBVQsl2w/4KnWHuNYqSaeyEQPcrl27zBGHHmGdH0K5TKcLKcCJJCEuv6TDLiMuUhLsJADk/rdvZ75YxX2fadK51m271B/O+oP58IMPdXOWaVOnRUGq3O/57878nfXfCpXL/oM55YJZbvqphDOXn7v8/CR4lwtzn3z8Seznin2fHS5EplKeduppVtsuJc+Ey9YOSU34eoJ57tnnoo3g89t3+btR7zqMWGQFt1y9O2GlPhzwRoBDsM7+7dnWB1O164Zrb9Av01kIIS5JeBONGOBEkueBqlmy8E85oQU4kVaIy7p8nzEt5W8P/c1q37V+fOCPzeWXXB4tiCKLJMmsASm5iXbqyadaxxer2bNnO62i6LJ4To5rgBO+26fI9NlcKM+VPsa3kv4Nzbd06VJz6MGHWtdwLdn0W96/MktAnjucP2/+t7NHmjY1mTmz55gvRn8Rfd86v9jZ3H/P/eaKS68wv/j5L6y28ks+yxpdqc28//HFUn044I0AhyDJ3Uf9oVHtkg82eeYpiXLTgapZMuUn6V3jRg1wQqYv6TayLOkozpo5y/rvPuWypH6IAU5IJ1r239KvpZZKRndcpmu6kO1Rjj7iaOsalarBAwdHr0Oex9L/pks2IHflE+BENf/GphnecuQ9HmcUMMs66fiT9MtsOD2+WWUFt1w9O2KhPhzwRoBDkGT6iv7QqGZddMFF0VS5NMjdzlobHZA7qml0JBs5wAlZ3Ea3k0UdfMDB0ZYZQqbB6X93rYf/+rD+EiyhBjghv9OyGI9+PbVUMjUzLVmsiupSr/7z1W9fgyxtr/9d1/v93m/1ukvxDXCiGrMd5AZY2uEtR0bOjj3qWOua1Syf58Dr0aAZ66zglit5Pg5IigCHICWZDpRmydSi1/71WuKRN01Gusp1TCpREiTTWKEtp9EDnJBpSLqtNEv2hJs+bXoq17v9lttbvfZCQg5wOTJVsdZumuSX71LzpcjfK91+ltX1za6trn/xHy+2jtHVo3uPVueUUu7vZLHVcuVnro/NquQ1pHEDrBTZy/Syiy+zrl2tclnBtp6NXrDJCm65uuv9WfpwwBsBDkGS/anOOesc60OjknXPn+/J/C6jjMZVY5qXdGblGZe0Ox0EuH974e8vWO2lUbIvoixYke+tN9+yjnMtaa+ceghwQn7XqzEy41LyLFaaKrHyrfwNkZkS2o3X3Wgdq8vl2cuccgGu1AboEoyz/Psqbad5A8zFu93e9donLquSZyUb2ZQVW63glqtr35umDwe8EeAQNJmScvddd1fsGQDZIqDdX9qZhQsqN4ddOpZytzjLjkaupNMlz4ikHdxyCHD/IQsQyE0A3W6cktX/iq1++vX4r63jXeuow47SzVnqJcDlyOh3LQa5UkEkDtkiIun7sVi1vbxt0eXq7737Xut4XT5fqz5XV7m25G+dHJPmCKz8rZabb9Wybdu26PnVIw870nptlSgZcfx81Of6ZTWUhRuareCWq0venqwPB7wR4FA3xo8bb55+8unoWQP9gZK0ZLSv2zvdos3Dq0nu5krnMs3OhpR84Faiw9G5U+dvV7CLU3J+WvT3wLdkQYg0SGB4qdNLps25baxrlKvz/nBeNN2spblFN/st6czp76NPlSPPK+lzfGvNmjW62arL3ThJ8++JdOylTfmZx2k36SJC2soVK81NN9xkXSduyXui3NS5xx993DpPl88G1/p3SZfP9FP5G1huRK9Uyd/mSo+4lSPvzwvOu8B6rWmXrAotCzWtWrlKv4SGtGH7biu45de+/fv1KYAXAhzqkqxSKcsiy34+7Z9qHy0eISHs9F+eHk1HkqWsZQll+eCRBR9kNOXkE06OOlXSkZaRERnRmDypdu+UScdEOigSvnxG5yT8SSdFzq21zkYlyfcgSSXZMqKYLVu2mM8+/Sya9vjk409G081y15Nnh+687U7T4ZkOZugnQ82mjZv06ciIBCcJXvJe8wle8r6Uc+RcvYCFvH/18eVKlrHPgiyCIVsE6Ou51tVtrzZDBg/RzRbUt3df672kSzaEriYJ77m/rxLKcq9LfvbyM839b/k335BYLUuWLDGdXuhk/tT2T16fF4VKRvxl5F1G+WRhHPm8he3BgXOLVvPuffpwwAsBDqgj0kmUzkSh0h1IAPHlv7dk5EbK970WZ0n7LG+6yA0Euen14AMPmksvutQcd/Rxra59zJHHRDfB5N86dugYTZMrNfqL2pW7ySkj+M+2fzaa2iornl5y4SXRqKz8DkhAe7vr22Zg/4Fm3FfjokcH5HcEQPUR4AAAqAIZ6fGdDp3m3nAAgDAR4AAAqBIZudMhrVz5PCMGAKg/BDgAAKpInqfSIa1cuU7TBADUHwIcAABVJIuk6IBWrs48/UzdDACgQRDgAACoMlnNUIe0ciWrWwIAGg8BDgCAKpOFSXyXd2dBEwBoTAQ4AABqQJy94WQvMgBAYyHAAQBQI2Tjbx3SylUIG0kDANJDgAMAoEbIgia+e8OdcNwJuhkAQB0jwAEAUEPiLGjCKBwANA4CHAAANebM0860QlqhkuPYEw4AGgsBDgCAGuOyoImM1AEAGg8BDgCAGiQrTOrQxqgbAIAABwBADZI93vSCJo88/Ah7vwFAgyPAAQBQo3r37B0FN9nkm4VKAACCAAcAQA17/bXXGXUDAHyLAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIAhwAAAAABAIAhwAAAAABIIABwAAAACBIMABAAAAQCAIcAAAAAAQCAIcAAAAAASCAAcAAAAAgSDAAQAAAEAgCHAAAAAAEAgCHAAAAAAEggAHAAAAAIEgwAEAAABAIP4/4KlzdLrh10kAAAAASUVORK5CYII=" style="height:19px;" alt="SonarQube"></div>
   </div>
   <div class="body">
@@ -1177,35 +1186,36 @@
       <div class="step"><div class="step-n">Attempt 1</div><h4>Whole-scope DEEP</h4><p>8 files requested → 8 skipped, exit 1</p></div>
       <div class="step"><div class="step-n">Attempt 2</div><h4>Change-set DEEP</h4><p>6 changed files → 6 skipped, exit 1</p></div>
       <div class="step"><div class="step-n">Attempt 3</div><h4>Status check</h4><p>Auth healthy · Vortex not entitled</p></div>
-      <div class="step" style="border-color:#C9A227;background:#FCF6E3;"><div class="step-n" style="color:#7A5B00;">Conclusion</div><h4>No code result</h4><p>Reported as unavailable-403 in every table in this deck</p></div>
+      <div class="step" style="border-color:#C9A227;background:#FCF6E3;"><div class="step-n" style="color:#7A5B00;">Conclusion</div><h4>No code result</h4><p>Every table reports it as pending license, never zero</p></div>
     </div>
   </div>
   <div class="ftr"><span>evaluation/reports/sonarqube/outcomes.csv, system-status.txt, run-log.txt · SCAN_PROTOCOL.md §4</span><span>26 / 30</span></div>
 </section>
 <section data-n="27" class="slide" id="s27">
   <div class="hdr">
-    <div><span class="kicker">26 · Comparison</span><h2>The comparison as it stands today</h2></div>
+    <div><span class="kicker">26 · Comparison</span><h2>Measured results, with the profiles kept separate</h2></div>
     <div class="hdr-r">one harness · one target · one version of each tool<br>not a product ranking</div>
   </div>
   <div class="body">
-    <table class="grid" style="font-size:10px;margin-bottom:9px;">
-      <tr><th>Tool and configuration</th><th class="num">Clean-state findings</th><th class="num">Bugged-state findings</th><th class="num">Valid candidates</th><th class="num">Strict TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th><th>Code-scan status</th></tr>
-      <tr><td><b>Parasoft C/C++test — Flow Analysis Aggressive</b></td><td class="num">90 total · 6 harness</td><td class="num">111 total · 27 harness</td><td class="num">50</td><td class="num"><b>15</b></td><td class="num">1 partial, 1 indirect</td><td class="num">35</td><td>Completed, exit 0</td></tr>
-      <tr style="background:#FCF6E3;"><td><b>SonarQube CLI — DEEP code analysis</b></td><td class="num">N/A</td><td class="num">N/A</td><td class="num">50</td><td class="num">N/A</td><td class="num">N/A</td><td class="num">N/A</td><td><b>Unavailable — 403, all files skipped</b></td></tr>
-      <tr><td>SonarQube CLI — local secrets scanner</td><td class="num">0 secrets</td><td class="num">0 secrets</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>Completed; not a C defect analysis</td></tr>
+    <table class="grid" style="font-size:8.9px;margin-bottom:9px;">
+      <tr><th>Profile / tool</th><th class="num">Clean total / harness</th><th class="num">Bugged total / harness</th><th class="num">Valid</th><th class="num">TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th><th>Status</th></tr>
+      <tr><td>Initial builtin Aggressive · depth not explicit</td><td class="num">90 / 6</td><td class="num">111 / 27</td><td class="num">50</td><td class="num">15</td><td class="num">1 / 1</td><td class="num">35</td><td>Historical baseline</td></tr>
+      <tr><td>All 144 Flow · Thorough / 240s</td><td class="num">324 / 26</td><td class="num">354 / 49</td><td class="num">50</td><td class="num"><b>21</b></td><td class="num">1 / 1</td><td class="num">29</td><td>Completed; timeouts remain</td></tr>
+      <tr><td>All Flow + 388 MISRA C:2025</td><td class="num">4,661 / 558</td><td class="num">4,745 / 615</td><td class="num">50</td><td class="num"><b>21</b></td><td class="num">1 / 1</td><td class="num">29</td><td>No added strict TP</td></tr>
+      <tr style="background:#FCF6E3;"><td>SonarQube CLI · DEEP code analysis</td><td class="num">N/A</td><td class="num">N/A</td><td class="num">50</td><td class="num">N/A</td><td class="num">N/A</td><td class="num">N/A</td><td><b>Pending license; prior 403</b></td></tr>
     </table>
     <div class="cols">
       <div class="col panel">
         <div class="panel-t">What this experiment does claim</div>
-        <p class="small" style="margin:0;">On this ThreadX Win32 harness, at this version and configuration, Parasoft C/C++test reported the root cause of 15 of 50 valid planted defects and missed 35 — including all eight concurrency defects and nine of the eleven size-arithmetic defects that were not invalidated. These numbers are traceable to committed reports, line by line.</p>
+        <p class="small" style="margin:0;">In the latest all-Flow, ThreadX-aware Thorough scan, Parasoft reported 21 of 50 valid planted root causes and missed 29. The new full-rule scan found BUG-023; MISRA C:2025 aliases that same message and added no strict TP.</p>
       </div>
       <div class="col panel">
         <div class="panel-t">What it does not claim</div>
-        <p class="small" style="margin:0;">It is not a general ranking of either product. It covers one target data model (Win32, 32-bit <span class="mono">ULONG</span>), one version of each tool, one analysis configuration, and one organization's subscription entitlements. The SonarQube code column is <b>unavailable</b>, never zero, and must not be quoted as a result.</p>
+        <p class="small" style="margin:0;">This is not a product ranking: one Win32 target, one C/C++test version and TX model, and one entitlement state. All profiles still had Flow timeouts. The SonarQube code result remains <b>unavailable pending license</b>, never zero.</p>
       </div>
       <div class="col panel">
         <div class="panel-t">How to quote it safely</div>
-        <p class="small" style="margin:0;">Say "Parasoft's flow analysis reported 15 of 50 planted defects in this harness" and "SonarQube's code engine could not be evaluated because the connection is not entitled". Those two sentences are both exactly true.</p>
+        <p class="small" style="margin:0;">Quote the profile and settings: “All installed Flow rules at Thorough/240s found 21/50; adding shipped MISRA C:2025 rules did not increase strict detections.” SonarQube is still pending an entitled code scan.</p>
       </div>
     </div>
   </div>
@@ -1219,16 +1229,17 @@
   <div class="body">
     <div class="cols">
       <div class="col c55">
-        <div class="panel-t">Parasoft C/C++test — flow analysis on each state</div>
+        <div class="panel-t">Parasoft C/C++test — latest committed profile on each state</div>
         <div class="code" style="font-size:9.4px;">
 <div><span class="ln"> </span>msbuild ports\win32\vs_2019\example_build\azure_rtos.sln \</div>
 <div><span class="ln"> </span>  /p:Configuration=Release /p:Platform=Win32 /m:1</div>
 <div><span class="ln"> </span></div>
-<div><span class="ln"> </span>cpptestcli -config "builtin://Flow Analysis Aggressive" \</div>
+<div><span class="ln"> </span>cpptestcli -config "TX_All Flow Aggressive Thorough 240s.properties" \</div>
 <div><span class="ln"> </span>  -compiler vc_14_5 \</div>
 <div><span class="ln"> </span>  -input &lt;state&gt;\...\azure_rtos.sln@Release|Win32 \</div>
 <div><span class="ln"> </span>  -report &lt;out&gt; -workspace &lt;isolated&gt;</div>
         </div>
+        <p class="small" style="margin-top:5px;">The MISRA profile swaps the second committed properties file; <span class="mono">run-threadx-allflow-misra-240.ps1</span> drives all four scans and <span class="mono">PARASOFT_RUN_GUIDE.md</span> documents every step.</p>
         <div class="panel-t" style="margin-top:9px;">SonarQube CLI — same eight files, same states</div>
         <div class="code" style="font-size:9.4px;">
 <div><span class="ln"> </span>sonar auth login                       <span class="cmt"># org zuwasi</span></div>
@@ -1236,6 +1247,9 @@
 <div><span class="ln"> </span>sonar analyze --base harness-clean --depth DEEP --format json</div>
 <div><span class="ln"> </span>sonar analyze secrets &lt;8 C files&gt;</div>
 <div><span class="ln"> </span>sonar system status                    <span class="cmt"># shows the Vortex entitlement</span></div>
+        </div>
+        <div class="callout-info" style="margin-top:8px;">
+          <b>Do not build product code from the bugged tree.</b> It is an evaluation fork of Eclipse ThreadX with 52 planted candidates.
         </div>
       </div>
       <div class="col c45">
@@ -1248,23 +1262,19 @@
             <tr><td class="mono">bugged XML</td><td class="mono" style="font-size:8.4px;">b1f32ffd81dfc3b0…e96f8</td></tr>
             <tr><td class="mono">clean XML</td><td class="mono" style="font-size:8.4px;">235fd61d0eafa584…539c3</td></tr>
           </table>
-          <p class="small" style="margin:6px 0 0;">Full SHA-256 for every raw report is in <span class="mono">evaluation/reports/parasoft/SHA256SUMS.txt</span>. Raw XML and HTML stay outside the repository; the normalized CSVs are committed.</p>
+          <p class="small" style="margin:5px 0 0;">Original-pair hashes: <span class="mono">reports/parasoft/SHA256SUMS.txt</span>. Latest four runs: raw-report and console SHA-256 in <span class="mono">threadx-allflow-misra-240/run-summary.csv</span>.</p>
         </div>
         <div class="panel">
           <div class="panel-t">Committed evidence in the repository</div>
-          <table class="grid" style="font-size:9.2px;">
-            <tr><td class="mono">evaluation/PLANTED_BUGS.md</td><td>52 candidates, validity audit, per-defect code and trigger paths</td></tr>
-            <tr><td class="mono">evaluation/SCAN_PROTOCOL.md</td><td>Versions, commands, UTC times, exit codes, Sonar outcomes</td></tr>
-            <tr><td class="mono">evaluation/COMPARISON_REPORT.md</td><td>Results, per-family recall, FP review, limitations</td></tr>
-            <tr><td class="mono">…/adjudication/DETECTION_MATRIX.csv</td><td>Per-candidate verdict for every available analysis</td></tr>
-            <tr><td class="mono">…/parasoft/*-findings.csv</td><td>All 111 and 36 findings with rule, line and message</td></tr>
+          <table class="grid" style="font-size:8.8px;">
+            <tr><td class="mono">PLANTED_BUGS.md</td><td>52 candidates, validity audit, trigger paths</td></tr>
+            <tr><td class="mono">SCAN_PROTOCOL.md · PARASOFT_RUN_GUIDE.md</td><td>Versions, commands, UTC times, exit codes, export steps</td></tr>
+            <tr><td class="mono">…/threadx-allflow-misra-240/</td><td>Latest matrix, four findings CSVs, run summary, clean review</td></tr>
+            <tr><td class="mono">…/adjudication/ · …/parasoft/</td><td>Original Aggressive matrix and its findings exports</td></tr>
             <tr><td class="mono">…/sonarqube/*</td><td>CLI JSON, secrets logs, outcomes, system status</td></tr>
           </table>
         </div>
       </div>
-    </div>
-    <div class="callout-info" style="margin-top:9px;">
-      <b>Do not build product code from the bugged tree.</b> The repository is an evaluation fork of Eclipse ThreadX containing 52 planted candidates. Production use belongs to the pristine upstream project.
     </div>
   </div>
   <div class="ftr"><span>README.md · evaluation/SCAN_PROTOCOL.md · evaluation/reports/SHA256SUMS.txt</span><span>28 / 30</span></div>
@@ -1272,81 +1282,81 @@
 <section data-n="29" class="slide" id="s29">
   <div class="hdr">
     <div><span class="kicker">Appendix A</span><h2>Every candidate, BUG-001 … BUG-026</h2></div>
-    <div class="hdr-r"><span class="chip chip-tp">TP</span> <span class="chip chip-fn">FN</span> <span class="chip chip-part">partial / indirect</span> <span class="chip chip-na">403</span></div>
+    <div class="hdr-r"><span class="chip chip-tp">TP</span> <span class="chip chip-fn">FN</span> <span class="chip chip-part">partial / indirect</span> <span class="chip chip-na">N/A</span><br>Sonar code: no entitled scan (403)</div>
   </div>
   <div class="body">
     <table class="grid dense" style="font-size:8.2px;">
-      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:92px;">Flow analysis</th><th style="width:60px;">Sonar code</th><th>Adjudication note</th></tr>
-      <tr><td class="mono">BUG-001</td><td class="mono">190/787</td><td class="mono">sa:26</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching flow finding</td></tr>
-      <tr><td class="mono">BUG-002</td><td class="mono">197</td><td class="mono">sa:46</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Only an unrelated unused-copy finding near this routine</td></tr>
-      <tr><td class="mono">BUG-003</td><td class="mono">193</td><td class="mono">sa:63</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> reports ring index 32</td></tr>
-      <tr><td class="mono">BUG-004</td><td class="mono">131</td><td class="mono">sa:111</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching partial-initialization finding</td></tr>
-      <tr style="background:#FCF6E3;"><td class="mono">BUG-005</td><td class="mono">190</td><td class="mono">sa:133</td><td><span class="chip chip-part">Invalid</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">UINT16</span> plus 16 cannot wrap 32-bit <span class="mono">ULONG</span></td></tr>
-      <tr><td class="mono">BUG-006</td><td class="mono">197</td><td class="mono">sa:154</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching allocation-versus-copy finding</td></tr>
-      <tr><td class="mono">BUG-007</td><td class="mono">787</td><td class="mono">sa:176</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unchecked-index finding</td></tr>
-      <tr><td class="mono">BUG-008</td><td class="mono">131</td><td class="mono">sa:196</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching partial-configuration-copy finding</td></tr>
-      <tr><td class="mono">BUG-009</td><td class="mono">190/690</td><td class="mono">sa:231</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No overflow or unchecked ThreadX allocation finding</td></tr>
-      <tr><td class="mono">BUG-010</td><td class="mono">170</td><td class="mono">sa:252</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> reports <span class="mono">raw[64]</span></td></tr>
-      <tr><td class="mono">BUG-011</td><td class="mono">704</td><td class="mono">sa:276</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Unused-copy report does not identify the masked-length mismatch</td></tr>
-      <tr><td class="mono">BUG-012</td><td class="mono">190/787</td><td class="mono">sa:295</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching undersized-header-buffer finding</td></tr>
-      <tr><td class="mono">BUG-013</td><td class="mono">416</td><td class="mono">mem:45</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>ThreadX release not treated as invalidating the frame</td></tr>
-      <tr><td class="mono">BUG-014</td><td class="mono">415</td><td class="mono">con:203</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the caller's unconditional second release</td></tr>
-      <tr><td class="mono">BUG-015</td><td class="mono">401</td><td class="mono">mem:85</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching early-return leak finding</td></tr>
-      <tr><td class="mono">BUG-016</td><td class="mono">762</td><td class="mono">mem:125</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Wrong ThreadX pool release not reported</td></tr>
-      <tr><td class="mono">BUG-017</td><td class="mono">415</td><td class="mono">mem:148</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the release-on-success contract</td></tr>
-      <tr><td class="mono">BUG-018</td><td class="mono">416</td><td class="mono">mem:175</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-FREE</span> — use of the freed batch</td></tr>
-      <tr><td class="mono">BUG-019</td><td class="mono">404</td><td class="mono">mem:206</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching ThreadX timer lifecycle finding</td></tr>
-      <tr><td class="mono">BUG-020</td><td class="mono">761</td><td class="mono">mem:233</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-INVFREE</span> — freeing an interior pointer</td></tr>
-      <tr><td class="mono">BUG-021</td><td class="mono">415</td><td class="mono">mem:257</td><td><span class="chip chip-part">Partial</span></td><td><span class="chip chip-na">403</span></td><td>Related lost-resource effect at the alias assignment, not the double free</td></tr>
-      <tr><td class="mono">BUG-022</td><td class="mono">401</td><td class="mono">mem:311</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-LEAKS</span> — failed-retry buffer leaks</td></tr>
-      <tr><td class="mono">BUG-023</td><td class="mono">362</td><td class="mono">con:37</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching race finding</td></tr>
-      <tr><td class="mono">BUG-024</td><td class="mono">366</td><td class="mono">con:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching slot hand-off race finding</td></tr>
-      <tr><td class="mono">BUG-025</td><td class="mono">833</td><td class="mono">con:87</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching lock-order cycle finding</td></tr>
-      <tr><td class="mono">BUG-026</td><td class="mono">364</td><td class="mono">con:108</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unsynchronized-flag finding</td></tr>
+      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:92px;">All-Flow 240s</th><th style="width:60px;">Sonar</th><th>Adjudication note</th></tr>
+      <tr><td class="mono">BUG-001</td><td class="mono">190/787</td><td class="mono">sa:26</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching flow finding</td></tr>
+      <tr><td class="mono">BUG-002</td><td class="mono">197</td><td class="mono">sa:46</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>Only an unrelated unused-copy finding near this routine</td></tr>
+      <tr><td class="mono">BUG-003</td><td class="mono">193</td><td class="mono">sa:63</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-ARRAY</span> reports ring index 32</td></tr>
+      <tr><td class="mono">BUG-004</td><td class="mono">131</td><td class="mono">sa:111</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching partial-initialization finding</td></tr>
+      <tr style="background:#FCF6E3;"><td class="mono">BUG-005</td><td class="mono">190</td><td class="mono">sa:133</td><td><span class="chip chip-part">Invalid</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">UINT16</span> plus 16 cannot wrap 32-bit <span class="mono">ULONG</span></td></tr>
+      <tr><td class="mono">BUG-006</td><td class="mono">197</td><td class="mono">sa:154</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching allocation-versus-copy finding</td></tr>
+      <tr><td class="mono">BUG-007</td><td class="mono">787</td><td class="mono">sa:176</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching unchecked-index finding</td></tr>
+      <tr><td class="mono">BUG-008</td><td class="mono">131</td><td class="mono">sa:196</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching partial-configuration-copy finding</td></tr>
+      <tr><td class="mono">BUG-009</td><td class="mono">190/690</td><td class="mono">sa:231</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No overflow or unchecked ThreadX allocation finding</td></tr>
+      <tr><td class="mono">BUG-010</td><td class="mono">170</td><td class="mono">sa:252</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-ARRAY</span> reports <span class="mono">raw[64]</span></td></tr>
+      <tr><td class="mono">BUG-011</td><td class="mono">704</td><td class="mono">sa:276</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>Unused-copy report does not identify the masked-length mismatch</td></tr>
+      <tr><td class="mono">BUG-012</td><td class="mono">190/787</td><td class="mono">sa:295</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching undersized-header-buffer finding</td></tr>
+      <tr><td class="mono">BUG-013</td><td class="mono">416</td><td class="mono">mem:45</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>ThreadX release not treated as invalidating the frame</td></tr>
+      <tr><td class="mono">BUG-014</td><td class="mono">415</td><td class="mono">con:203</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No finding on the caller's unconditional second release</td></tr>
+      <tr><td class="mono">BUG-015</td><td class="mono">401</td><td class="mono">mem:85</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching early-return leak finding</td></tr>
+      <tr><td class="mono">BUG-016</td><td class="mono">762</td><td class="mono">mem:125</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>Wrong ThreadX pool release not reported</td></tr>
+      <tr><td class="mono">BUG-017</td><td class="mono">415</td><td class="mono">mem:148</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No finding on the release-on-success contract</td></tr>
+      <tr><td class="mono">BUG-018</td><td class="mono">416</td><td class="mono">mem:175</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-RES-FREE</span> — use of the freed batch</td></tr>
+      <tr><td class="mono">BUG-019</td><td class="mono">404</td><td class="mono">mem:206</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching ThreadX timer lifecycle finding</td></tr>
+      <tr><td class="mono">BUG-020</td><td class="mono">761</td><td class="mono">mem:233</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-RES-INVFREE</span> — freeing an interior pointer</td></tr>
+      <tr><td class="mono">BUG-021</td><td class="mono">415</td><td class="mono">mem:257</td><td><span class="chip chip-part">Partial</span></td><td><span class="chip chip-na">N/A</span></td><td>Related lost-resource effect at the alias assignment, not the double free</td></tr>
+      <tr><td class="mono">BUG-022</td><td class="mono">401</td><td class="mono">mem:311</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-RES-LEAKS</span> — failed-retry buffer leaks</td></tr>
+      <tr><td class="mono">BUG-023</td><td class="mono">362</td><td class="mono">con:37</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-TRS-MLOCK</span> — unlocked <span class="mono">g_stats</span> update (con:39)</td></tr>
+      <tr><td class="mono">BUG-024</td><td class="mono">366</td><td class="mono">con:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching TOCTOU report; init.c:225 leak is a different path</td></tr>
+      <tr><td class="mono">BUG-025</td><td class="mono">833</td><td class="mono">con:87</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td>TX model: <span class="mono">BD-TRS-ORDER</span> lock-order deadlock (con:75)</td></tr>
+      <tr><td class="mono">BUG-026</td><td class="mono">364</td><td class="mono">con:108</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td>TX model: <span class="mono">BD-TRS-THRDR</span> on unsynchronized <span class="mono">g_ready</span> (con:111)</td></tr>
     </table>
-    <p class="small" style="margin-top:4px;font-size:9px;">Legend: <span class="mono">sa</span> = harness_sizearith.c · <span class="mono">mem</span> = harness_memory.c · <span class="mono">con</span> = harness_concurrency.c. This is the published <span class="mono">DETECTION_MATRIX.csv</span>, reproduced without editing.</p>
+    <p class="small" style="margin-top:4px;font-size:9px;">Legend: <span class="mono">sa</span> = harness_sizearith.c · <span class="mono">mem</span> = harness_memory.c · <span class="mono">con</span> = harness_concurrency.c. Verdicts reproduce the committed <span class="mono">threadx-allflow-misra-240/DETECTION_MATRIX.csv</span>; the original-run matrix stays in <span class="mono">reports/adjudication/</span>.</p>
   </div>
-  <div class="ftr"><span>evaluation/reports/adjudication/DETECTION_MATRIX.csv</span><span>29 / 30</span></div>
+  <div class="ftr"><span>evaluation/reports/threadx-allflow-misra-240/DETECTION_MATRIX.csv · original: reports/adjudication/</span><span>29 / 30</span></div>
 </section>
 <section data-n="30" class="slide" id="s30">
   <div class="hdr">
     <div><span class="kicker">Appendix B</span><h2>Every candidate, BUG-027 … BUG-052, and where to check all of it</h2></div>
-    <div class="hdr-r">50 valid candidates · 15 true positives<br>Sonar code result: unavailable</div>
+    <div class="hdr-r">50 valid candidates · 21 true positives<br>Sonar code result: unavailable (403)</div>
   </div>
   <div class="body">
     <table class="grid dense" style="font-size:8.2px;">
-      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:92px;">Flow analysis</th><th style="width:60px;">Sonar code</th><th>Adjudication note</th></tr>
-      <tr><td class="mono">BUG-027</td><td class="mono">362</td><td class="mono">con:134</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching list race finding</td></tr>
-      <tr><td class="mono">BUG-028</td><td class="mono">667</td><td class="mono">con:153</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching ThreadX mutex-ownership finding</td></tr>
-      <tr><td class="mono">BUG-029</td><td class="mono">366</td><td class="mono">con:164</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching double-checked-init race finding</td></tr>
-      <tr><td class="mono">BUG-030</td><td class="mono">366</td><td class="mono">con:190</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No queue-status or unchecked-read finding</td></tr>
-      <tr style="background:#FCF6E3;"><td class="mono">BUG-031</td><td class="mono">476</td><td class="mono">np:74</td><td><span class="chip chip-part">Invalid</span></td><td><span class="chip chip-na">403</span></td><td>Same range check means a non-NULL mirror implies a non-NULL primary</td></tr>
-      <tr><td class="mono">BUG-032</td><td class="mono">476</td><td class="mono">np:94</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
-      <tr><td class="mono">BUG-033</td><td class="mono">690</td><td class="mono">np:113</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td>Allocation return-check and null-dereference findings</td></tr>
-      <tr><td class="mono">BUG-034</td><td class="mono">457</td><td class="mono">np:151</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> — use of unassigned frame pointer</td></tr>
-      <tr><td class="mono">BUG-035</td><td class="mono">476</td><td class="mono">np:166</td><td><span class="chip chip-part">Indirect</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-CC</span> flags the late null check as always false; no direct dereference finding</td></tr>
-      <tr><td class="mono">BUG-036</td><td class="mono">690</td><td class="mono">np:184</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unchecked-callback finding</td></tr>
-      <tr><td class="mono">BUG-037</td><td class="mono">476</td><td class="mono">np:200</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> — uninitialized return value</td></tr>
-      <tr><td class="mono">BUG-038</td><td class="mono">476</td><td class="mono">np:224</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
-      <tr><td class="mono">BUG-039</td><td class="mono">129</td><td class="mono">ta:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching calibration-table bounds finding</td></tr>
-      <tr><td class="mono">BUG-040</td><td class="mono">787</td><td class="mono">ta:71</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-OVERFWR</span> — destination overflow</td></tr>
-      <tr><td class="mono">BUG-041</td><td class="mono">120</td><td class="mono">ta:86</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unbounded-string-copy finding</td></tr>
-      <tr><td class="mono">BUG-042</td><td class="mono">129</td><td class="mono">ta:101</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> — index 4 through 7 in a 4-entry table</td></tr>
-      <tr><td class="mono">BUG-043</td><td class="mono">787</td><td class="mono">ta:116</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching accumulator-array bounds finding</td></tr>
-      <tr><td class="mono">BUG-044</td><td class="mono">134</td><td class="mono">ta:133</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching tainted-format-string finding</td></tr>
-      <tr><td class="mono">BUG-045</td><td class="mono">680/787</td><td class="mono">ta:151</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching allocation-size / string-copy finding</td></tr>
-      <tr><td class="mono">BUG-046</td><td class="mono">129</td><td class="mono">ta:179</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> — handler index 12 through 15</td></tr>
-      <tr><td class="mono">BUG-047</td><td class="mono">457</td><td class="mono">un:41</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on pooled frame flags</td></tr>
-      <tr><td class="mono">BUG-048</td><td class="mono">457</td><td class="mono">un:63</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on frame_send_local flags</td></tr>
-      <tr><td class="mono">BUG-049</td><td class="mono">457</td><td class="mono">un:17</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> traces the helper's missing flags initialization</td></tr>
-      <tr><td class="mono">BUG-050</td><td class="mono">457</td><td class="mono">un:127</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td>Uninitialized-use and invalid-free findings at slot_track</td></tr>
-      <tr><td class="mono">BUG-051</td><td class="mono">457</td><td class="mono">un:143</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the uninitialized CRC entry</td></tr>
-      <tr><td class="mono">BUG-052</td><td class="mono">457</td><td class="mono">un:167</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching uninitialized stats-field finding</td></tr>
+      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:92px;">All-Flow 240s</th><th style="width:60px;">Sonar</th><th>Adjudication note</th></tr>
+      <tr><td class="mono">BUG-027</td><td class="mono">362</td><td class="mono">con:134</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching list race finding</td></tr>
+      <tr><td class="mono">BUG-028</td><td class="mono">667</td><td class="mono">con:153</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td>TX model: <span class="mono">BD-TRS-REVLOCK</span> — mutex released unacquired (con:155)</td></tr>
+      <tr><td class="mono">BUG-029</td><td class="mono">366</td><td class="mono">con:164</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td>TX model: <span class="mono">BD-TRS-THRDR</span> on unsynchronized <span class="mono">g_inited</span> (con:166)</td></tr>
+      <tr><td class="mono">BUG-030</td><td class="mono">366</td><td class="mono">con:190</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No queue-status or unchecked-read finding</td></tr>
+      <tr style="background:#FCF6E3;"><td class="mono">BUG-031</td><td class="mono">476</td><td class="mono">np:74</td><td><span class="chip chip-part">Invalid</span></td><td><span class="chip chip-na">N/A</span></td><td>Same range check means a non-NULL mirror implies a non-NULL primary</td></tr>
+      <tr><td class="mono">BUG-032</td><td class="mono">476</td><td class="mono">np:94</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
+      <tr><td class="mono">BUG-033</td><td class="mono">690</td><td class="mono">np:113</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td>Allocation return-check and null-dereference findings</td></tr>
+      <tr><td class="mono">BUG-034</td><td class="mono">457</td><td class="mono">np:151</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-NOTINIT</span> — use of unassigned frame pointer</td></tr>
+      <tr><td class="mono">BUG-035</td><td class="mono">476</td><td class="mono">np:166</td><td><span class="chip chip-part">Indirect</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-CC</span> flags the late null check as always false; no direct dereference finding</td></tr>
+      <tr><td class="mono">BUG-036</td><td class="mono">690</td><td class="mono">np:184</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching unchecked-callback finding</td></tr>
+      <tr><td class="mono">BUG-037</td><td class="mono">476</td><td class="mono">np:200</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-NOTINIT</span> — uninitialized return value</td></tr>
+      <tr><td class="mono">BUG-038</td><td class="mono">476</td><td class="mono">np:224</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
+      <tr><td class="mono">BUG-039</td><td class="mono">129</td><td class="mono">ta:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching calibration-table bounds finding</td></tr>
+      <tr><td class="mono">BUG-040</td><td class="mono">787</td><td class="mono">ta:71</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-OVERFWR</span> — destination overflow</td></tr>
+      <tr><td class="mono">BUG-041</td><td class="mono">120</td><td class="mono">ta:86</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching unbounded-string-copy finding</td></tr>
+      <tr><td class="mono">BUG-042</td><td class="mono">129</td><td class="mono">ta:101</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-ARRAY</span> — index 4 through 7 in a 4-entry table</td></tr>
+      <tr><td class="mono">BUG-043</td><td class="mono">787</td><td class="mono">ta:116</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching accumulator-array bounds finding</td></tr>
+      <tr><td class="mono">BUG-044</td><td class="mono">134</td><td class="mono">ta:133</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching tainted-format-string finding</td></tr>
+      <tr><td class="mono">BUG-045</td><td class="mono">680/787</td><td class="mono">ta:151</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching allocation-size / string-copy finding</td></tr>
+      <tr><td class="mono">BUG-046</td><td class="mono">129</td><td class="mono">ta:179</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-ARRAY</span> — handler index 12 through 15</td></tr>
+      <tr><td class="mono">BUG-047</td><td class="mono">457</td><td class="mono">un:41</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No finding on pooled frame flags</td></tr>
+      <tr><td class="mono">BUG-048</td><td class="mono">457</td><td class="mono">un:63</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-NOTINIT</span> — non-initialized <span class="mono">h.flags</span> (un:69)</td></tr>
+      <tr><td class="mono">BUG-049</td><td class="mono">457</td><td class="mono">un:17</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td><span class="mono">BD-PB-NOTINIT</span> traces the helper's missing flags initialization</td></tr>
+      <tr><td class="mono">BUG-050</td><td class="mono">457</td><td class="mono">un:127</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">N/A</span></td><td>Uninitialized-use and invalid-free findings at slot_track</td></tr>
+      <tr><td class="mono">BUG-051</td><td class="mono">457</td><td class="mono">un:143</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No finding on the uninitialized CRC entry</td></tr>
+      <tr><td class="mono">BUG-052</td><td class="mono">457</td><td class="mono">un:167</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">N/A</span></td><td>No matching uninitialized stats-field finding</td></tr>
     </table>
     <p class="small" style="margin-top:5px;font-size:9px;">Legend: <span class="mono">np</span> = harness_nullpaths.c · <span class="mono">ta</span> = harness_taint.c · <span class="mono">un</span> = harness_uninit.c · <span class="mono">mem</span> = harness_memory.c · <span class="mono">con</span> = harness_concurrency.c.</p>
-    <p class="small" style="margin-top:2px;font-size:9px;">Verify any single row: catalog and trigger paths in <span class="mono">PLANTED_BUGS.md</span> · rule, line and message in the <span class="mono">*-findings.csv</span> exports · verdict in <span class="mono">DETECTION_MATRIX.csv</span> · environment and commands in <span class="mono">SCAN_PROTOCOL.md</span> · report integrity in <span class="mono">SHA256SUMS.txt</span>. Repository: <span class="mono"><a href="https://github.com/zuwasi/parasoft-vs-sonarqube-threadx" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;">github.com/zuwasi/parasoft-vs-sonarqube-threadx</a></span> (MIT). Prepared by Daniel Liezrowice, ESL — Engineering Software Lab, 2026-10-08.</p>
+    <p class="small" style="margin-top:2px;font-size:9px;">Verify any row: <span class="mono">PLANTED_BUGS.md</span> · <span class="mono">*-findings.csv</span> · latest <span class="mono">DETECTION_MATRIX.csv</span> · <span class="mono">PARASOFT_RUN_GUIDE.md</span> · <span class="mono">run-summary.csv</span> hashes. Repository: <span class="mono"><a href="https://github.com/zuwasi/parasoft-vs-sonarqube-threadx" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;">github.com/zuwasi/parasoft-vs-sonarqube-threadx</a></span> (MIT). Prepared by Daniel Liezrowice, ESL — Engineering Software Lab, 2026-10-08.</p>
   </div>
-  <div class="ftr"><span>evaluation/reports/adjudication/DETECTION_MATRIX.csv · evaluation/PLANTED_BUGS.md</span><span>30 / 30</span></div>
+  <div class="ftr"><span>evaluation/reports/threadx-allflow-misra-240/DETECTION_MATRIX.csv · evaluation/PLANTED_BUGS.md</span><span>30 / 30</span></div>
 </section>
 </div>
 <nav class="hud" aria-label="Slide navigation">
