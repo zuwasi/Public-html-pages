@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A 30-slide ThreadX Win32 static-analysis comparison: 50 planted C defects with line-level evidence, four measured Parasoft C/C++test runs, and the SonarQube CLI code scan that could not run (403, Vortex not entitled).">
+<meta name="description" content="A 30-slide ThreadX Win32 static-analysis comparison: 50 planted C defects, Parasoft Flow Analysis Aggressive run on clean and bugged states, and SonarQube CLI code analysis unavailable (403, Vortex not entitled).">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'none'; form-action 'none'; base-uri 'none'; object-src 'none'">
 <title>Parasoft C/C++test vs SonarQube CLI — 50 planted defects on ThreadX Win32</title>
@@ -120,7 +120,7 @@
       </div>
       <div class="col panel">
         <div class="panel-t">Headline</div>
-        <p class="small" style="margin:0;">Parasoft completed 4 scans: <b>15 of 50</b> defects reported. SonarQube CLI authenticated, but its code engine returned <b>403</b> and skipped every file, so it has no code result at all.</p>
+        <p class="small" style="margin:0;">Parasoft completed the flow analysis on both states: <b>15 of 50</b> defects reported. SonarQube CLI authenticated, but its code engine returned <b>403</b> and skipped every file, so it has no code result at all.</p>
       </div>
     </div>
   </div>
@@ -156,7 +156,7 @@
     <div class="flow">
       <div class="step"><div class="step-n">01</div><h4>Plant defects</h4><p>52 marked candidates added between two signed tags.</p></div>
       <div class="step"><div class="step-n">02</div><h4>Build both states</h4><p>azure_rtos.sln, Release|Win32, MSVC v145 build data.</p></div>
-      <div class="step"><div class="step-n">03</div><h4>Scan</h4><p>Parasoft: 2 profiles × 2 states. SonarQube CLI: change-set + whole-file + secrets.</p></div>
+      <div class="step"><div class="step-n">03</div><h4>Scan</h4><p>Parasoft: flow analysis on both states. SonarQube CLI: change-set and whole-file code analysis.</p></div>
       <div class="step"><div class="step-n">04</div><h4>Adjudicate</h4><p>Every finding mapped to a catalog entry by line and message.</p></div>
       <div class="step"><div class="step-n">05</div><h4>Audit the benchmark</h4><p>Two candidates were invalidated; one real issue found in the "clean" baseline.</p></div>
     </div>
@@ -192,14 +192,14 @@
           <p class="small" style="margin:0;">It performs interprocedural flow analysis and models ThreadX API semantics — byte-pool and block-pool lifecycle, mutex ownership rules, kernel-object create/delete. Several planted defects were designed to be reachable <i>only</i> if the analyzer knows what those APIs mean, which is what makes the results on the concurrency and pool families worth reading.</p>
         </div>
         <div class="panel">
-          <div class="panel-t">Profiles used</div>
-          <p class="small" style="margin:0 0 4px;"><b>Primary:</b> <span class="mono">builtin://Flow Analysis Aggressive</span> — every flow-analysis family at aggressive depth, with unvalidated violations reported.</p>
-          <p class="small" style="margin:0;"><b>Supplementary:</b> <span class="mono">builtin://Recommended Rules</span> — curated static and flow rules plus metrics. A comparison profile, <i>not</i> a deeper mode; the two are not additive.</p>
+          <div class="panel-t">Test configuration used</div>
+          <p class="small" style="margin:0 0 4px;"><span class="mono">builtin://Flow Analysis Aggressive</span> — every flow-analysis rule family at aggressive depth, with aggressive mode and reporting of unvalidated violations switched on. This is the deepest flow analysis the product offers, and it is the only Parasoft configuration scored in this deck.</p>
+          <p class="small" style="margin:0;">Because this configuration reports violations it could not prove, a finding here is a signal from the analyzer itself rather than a rule the maintainers tuned to stay quiet.</p>
         </div>
       </div>
     </div>
     <div class="callout-info" style="margin-top:9px;">
-      All four Parasoft runs exited 0. The XML findings and UTC timestamps are in <span class="mono">evaluation/reports/parasoft/</span>; the raw reports stay outside the repository and are pinned by SHA-256.
+      Both Parasoft runs exited 0. The XML findings and UTC timestamps are in <span class="mono">evaluation/reports/parasoft/</span>; the raw reports stay outside the repository and are pinned by SHA-256.
     </div>
   </div>
   <div class="ftr"><span>evaluation/SCAN_PROTOCOL.md §1, §3, §5 · evaluation/reports/parasoft/run-log.txt</span><span>03 / 30</span></div>
@@ -359,7 +359,7 @@
       </div>
     </div>
     <div class="callout-info">
-      <b>Why this matters when reading the results.</b> A defect that a tool misses here is one that needs flow reasoning, not one that is unreachable or hidden behind a constant. The rules and the profiles used to attack the set are on slide 20.
+      <b>Why this matters when reading the results.</b> A defect that a tool misses here is one that needs flow reasoning, not one that is unreachable or hidden behind a constant. The rule set used to attack the set is on slide 20.
     </div>
   </div>
   <div class="ftr"><span>evaluation/PLANTED_BUGS.md §1 (design principles)</span><span>07 / 30</span></div>
@@ -458,7 +458,7 @@
         </div>
         <div class="panel" style="margin-bottom:8px;">
           <div class="panel-t">Parasoft verdict — strict miss</div>
-          <p class="small" style="margin:0;">No finding on either line, and no finding anywhere in this function. The Aggressive profile reported two unrelated diagnostics in this file — one on the unused copy in <span class="mono">sa_copy_checked</span> and one on the ring index at line 68.</p>
+          <p class="small" style="margin:0;">No finding on either line, and no finding anywhere in this function. The scan reported two unrelated diagnostics in this file — one on the unused copy in <span class="mono">sa_copy_checked</span> and one on the ring index at line 68.</p>
         </div>
         <div class="panel">
           <div class="panel-t">SonarQube on this defect</div>
@@ -467,7 +467,7 @@
       </div>
     </div>
   </div>
-  <div class="ftr"><span>PLANTED_BUGS.md §3 · DETECTION_MATRIX.csv: BUG-001 = FN in both profiles</span><span>10 / 30</span></div>
+  <div class="ftr"><span>PLANTED_BUGS.md §3 · DETECTION_MATRIX.csv: BUG-001 = FN</span><span>10 / 30</span></div>
 </section>
 <section data-n="11" class="slide" id="s11">
   <div class="hdr">
@@ -497,7 +497,7 @@
       </div>
       <div class="col c40">
         <div class="panel" style="margin-bottom:8px;">
-          <div class="panel-t">Parasoft finding, Aggressive and Recommended</div>
+          <div class="panel-t">Parasoft finding — flow analysis</div>
           <div class="code" style="font-size:9.4px;"><div><span class="ln">68</span><span class="kw">BD-PB-ARRAY</span></div><div><span class="ln"> </span>Possibly accessing array</div><div><span class="ln"> </span>"log_ring" out of bounds at</div><div><span class="ln"> </span>index [0...32]. Correct</div><div><span class="ln"> </span>index(es): [0...31]</div></div>
           <p class="small" style="margin:6px 0 0;">The message names the exact bound the plant violates, which is why this counts as a root-cause true positive rather than a nearby hint.</p>
         </div>
@@ -512,7 +512,7 @@
       </div>
     </div>
   </div>
-  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-003 = TP in Flow Analysis Aggressive and Recommended Rules</span><span>11 / 30</span></div>
+  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-003 = TP in the flow-analysis scan</span><span>11 / 30</span></div>
 </section>
 <section data-n="12" class="slide" id="s12">
   <div class="hdr">
@@ -565,7 +565,7 @@
       </div>
     </div>
     <div class="callout" style="margin-top:9px;">
-      <span class="chip chip-fn">Strict miss</span> &nbsp;<b>BUG-006 scored as a false negative in both profiles.</b> An allocation sized from a truncated value while the copy uses the full value is exactly the class of defect this evaluation exists to measure, and neither profile reported it.
+      <span class="chip chip-fn">Strict miss</span> &nbsp;<b>BUG-006 scored as a false negative.</b> An allocation sized from a truncated value while the copy uses the full value is exactly the class of defect this evaluation exists to measure, and the scan did not report it.
     </div>
   </div>
   <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-006 = FN · clean-state finding: reports/parasoft/clean-…-Aggressive-findings.csv:161</span><span>12 / 30</span></div>
@@ -596,7 +596,7 @@
       <div class="col c40">
         <div class="panel" style="margin-bottom:8px;">
           <div class="panel-t">Parasoft verdict — strict miss</div>
-          <p class="small" style="margin:0;">The Aggressive profile reports <span class="mono">BD-PB-MEMOPT</span> at line 279 — "call to memcpy may be optimized out as the dst buffer is not used later". That diagnostic is about the unused copy, not about the length mismatch, so it is not credited as a detection of this defect.</p>
+          <p class="small" style="margin:0;">The scan reports <span class="mono">BD-PB-MEMOPT</span> at line 279 — "call to memcpy may be optimized out as the dst buffer is not used later". That diagnostic is about the unused copy, not about the length mismatch, so it is not credited as a detection of this defect.</p>
         </div>
         <div class="panel" style="margin-bottom:8px;">
           <div class="panel-t">Why the distinction is kept</div>
@@ -614,7 +614,7 @@
 <section data-n="14" class="slide" id="s14">
   <div class="hdr">
     <div><span class="kicker">13 · Code, defect, verdict</span><h2>BUG-018 · the loop that keeps using the freed block</h2></div>
-    <div class="hdr-r">harness_memory.c:175<br><span class="chip chip-tp">Aggressive: reported</span> <span class="chip chip-fn">Recommended: miss</span></div>
+    <div class="hdr-r">harness_memory.c:175<br><span class="chip chip-tp">Parasoft: reported</span></div>
   </div>
   <div class="body">
     <div class="cols">
@@ -644,13 +644,13 @@
       </div>
       <div class="col c40">
         <div class="panel" style="margin-bottom:8px;">
-          <div class="panel-t">Parasoft findings, Aggressive profile</div>
+          <div class="panel-t">Parasoft findings — flow analysis</div>
           <div class="code" style="font-size:9.4px;"><div><span class="ln">172</span><span class="kw">BD-RES-FREE</span> Usage of freed</div><div><span class="ln"> </span>resource "batch"</div><div><span class="ln">180</span><span class="kw">BD-RES-FREE</span> Usage of freed</div><div><span class="ln"> </span>resource "batch"</div></div>
           <p class="small" style="margin:6px 0 0;">Two findings, at the failing send and at the unconditional free — the loop-carried use-after-free and the second free it can cause.</p>
         </div>
         <div class="panel" style="margin-bottom:8px;">
-          <div class="panel-t">The profile difference, visible here</div>
-          <p class="small" style="margin:0;">The Recommended Rules profile reported <b>nothing</b> in this function. The same defect, the same build data, a different rule set: 21 harness findings instead of 27, and this one drops out.</p>
+          <div class="panel-t">Why this counts as a clean detection</div>
+          <p class="small" style="margin:0;">The analyzer tracked the block across <span class="mono">free()</span> and reported both later uses — the failing send inside the loop and the unconditional free below it. Nothing in the message needs interpretation: it names the object that was released.</p>
         </div>
         <div class="panel">
           <div class="panel-t">SonarQube on this defect</div>
@@ -659,7 +659,7 @@
       </div>
     </div>
   </div>
-  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-018 = TP (Aggressive) / FN (Recommended)</span><span>14 / 30</span></div>
+  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-018 = TP</span><span>14 / 30</span></div>
 </section>
 <section data-n="15" class="slide" id="s15">
   <div class="hdr">
@@ -689,11 +689,11 @@
       <div class="col c40">
         <div class="panel" style="margin-bottom:8px;">
           <div class="panel-t">Parasoft verdict — strict miss</div>
-          <p class="small" style="margin:0;">No race finding in this file. Neither profile reported any of the eight concurrency candidates, including this pair where the correct and incorrect versions of the same update sit eight lines apart.</p>
+          <p class="small" style="margin:0;">No race finding in this file. None of the eight concurrency candidates was reported, including this pair where the correct and incorrect versions of the same update sit eight lines apart.</p>
         </div>
         <div class="panel" style="margin-bottom:8px;">
           <div class="panel-t">Why it is a fair test</div>
-          <p class="small" style="margin:0;">This is not a tool without race rules. The same profile's thread-safety family fired <b>67 times</b> in this run — 58 of them "global variable used without holding a lock" — but every one of those landed in upstream ThreadX kernel files. None landed in the harness, where the four threads, the mutex and the shared field all exist in the scanned code.</p>
+          <p class="small" style="margin:0;">This is not a tool without race rules. The thread-safety family fired <b>67 times</b> in this run — 58 of them "global variable used without holding a lock" — but every one of those landed in upstream ThreadX kernel files. None landed in the harness, where the four threads, the mutex and the shared field all exist in the scanned code.</p>
         </div>
         <div class="panel">
           <div class="panel-t">SonarQube on this defect</div>
@@ -751,10 +751,10 @@
       </div>
     </div>
     <div class="callout-ok" style="margin-top:8px;">
-      Both are true positives in <b>both</b> profiles. This family produced three detections out of eight, all of them array or buffer bounds — the taint path into the value was not the deciding factor.
+      Both are true positives. This family produced three detections out of eight, all of them array or buffer bounds — the taint path into the value was not the deciding factor.
     </div>
   </div>
-  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-040 = TP, BUG-042 = TP (Aggressive and Recommended)</span><span>16 / 30</span></div>
+  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-040 = TP, BUG-042 = TP</span><span>16 / 30</span></div>
 </section>
 <section data-n="17" class="slide" id="s17">
   <div class="hdr">
@@ -804,32 +804,30 @@
       </div>
     </div>
     <div class="callout-ok" style="margin-top:8px;">
-      Both counts as true positives in <b>both</b> profiles. The uninitialized family scored 2 of 6 — these two, and nothing for the pooled-memory or partial-header plants.
+      Both count as true positives. The uninitialized family scored 2 of 6 — these two, and nothing for the pooled-memory or partial-header plants.
     </div>
   </div>
-  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-049 = TP, BUG-050 = TP (Aggressive and Recommended)</span><span>17 / 30</span></div>
+  <div class="ftr"><span>DETECTION_MATRIX.csv: BUG-049 = TP, BUG-050 = TP</span><span>17 / 30</span></div>
 </section>
 <section data-n="18" class="slide" id="s18">
   <div class="hdr">
-    <div><span class="kicker">17 · Process</span><h2>How Parasoft was run — four scans, two profiles, two states</h2></div>
-    <div class="hdr-r">all four runs exited 0<br>~2 minutes per run</div>
+    <div><span class="kicker">17 · Process</span><h2>How Parasoft was run — the flow-analysis scan on both states</h2></div>
+    <div class="hdr-r">both runs exited 0<br>~2 minutes per run</div>
   </div>
   <div class="body">
     <div class="code" style="font-size:10px;margin-bottom:8px;">
-<div><span class="ln"> </span>cpptestcli -config &lt;PROFILE&gt; -compiler <span class="kw">vc_14_5</span> \</div>
+<div><span class="ln"> </span>cpptestcli -config "builtin://Flow Analysis Aggressive" -compiler <span class="kw">vc_14_5</span> \</div>
 <div><span class="ln"> </span>  -input &lt;worktree&gt;\ports\win32\vs_2019\example_build\azure_rtos.sln@Release|Win32 \</div>
 <div><span class="ln"> </span>  -report &lt;reports&gt;\parasoft\&lt;state&gt; -workspace &lt;isolated workspace&gt;</div>
     </div>
     <div class="cols">
       <div class="col c60">
         <table class="grid" style="font-size:9.6px;">
-          <tr><th>State</th><th>Profile</th><th>UTC start</th><th>UTC end</th><th class="num">XML findings</th><th class="num">Of which harness</th></tr>
-          <tr><td class="mono">clean</td><td class="mono">Flow Analysis Aggressive</td><td class="mono">18:31:58Z</td><td class="mono">18:34:05Z</td><td class="num">90</td><td class="num">6</td></tr>
-          <tr><td class="mono">bugged</td><td class="mono">Flow Analysis Aggressive</td><td class="mono">18:34:06Z</td><td class="mono">18:36:16Z</td><td class="num"><b>111</b></td><td class="num"><b>27</b></td></tr>
-          <tr><td class="mono">clean</td><td class="mono">Recommended Rules</td><td class="mono">18:36:18Z</td><td class="mono">18:38:10Z</td><td class="num">20 + 12 metrics</td><td class="num">5</td></tr>
-          <tr><td class="mono">bugged</td><td class="mono">Recommended Rules</td><td class="mono">18:38:12Z</td><td class="mono">18:40:07Z</td><td class="num">36 + 12 metrics</td><td class="num">21</td></tr>
+          <tr><th>State</th><th>Configuration</th><th>UTC start</th><th>UTC end</th><th class="num">XML findings</th><th class="num">Of which harness</th></tr>
+          <tr><td class="mono">harness-clean</td><td class="mono">builtin://Flow Analysis Aggressive</td><td class="mono">18:31:58Z</td><td class="mono">18:34:05Z</td><td class="num">90</td><td class="num">6</td></tr>
+          <tr><td class="mono">bugged</td><td class="mono">builtin://Flow Analysis Aggressive</td><td class="mono">18:34:06Z</td><td class="mono">18:36:16Z</td><td class="num"><b>111</b></td><td class="num"><b>27</b></td></tr>
         </table>
-        <p class="small" style="margin-top:6px;">The 12 extra Recommended Rules findings in each state are ThreadX complexity and nesting metric violations, not harness defect findings. They are excluded from every detection number in this deck.</p>
+        <p class="small" style="margin-top:6px;">The clean run is the false-positive baseline and the bugged run is the detection target; both use the same configuration, compiler and build data, so the only difference between them is the planted diff.</p>
       </div>
       <div class="col c40">
         <div class="panel" style="margin-bottom:8px;">
@@ -838,7 +836,7 @@
         </div>
         <div class="panel">
           <div class="panel-t">Evidence retained</div>
-          <p class="small" style="margin:0;">Four XML reports, the run log with UTC timestamps and exit codes, normalized CSV exports in the repository, and SHA-256 hashes of the raw report files. The raw reports themselves stay outside the repository.</p>
+          <p class="small" style="margin:0;">Two flow-analysis XML reports, the run log with UTC timestamps and exit codes, normalized CSV exports in the repository, and SHA-256 hashes of the raw report files. The raw reports themselves stay outside the repository.</p>
         </div>
       </div>
     </div>
@@ -889,70 +887,69 @@
 <section data-n="20" class="slide" id="s20">
   <div class="hdr">
     <div><span class="kicker">19 · Rule sets</span><h2>What "Flow Analysis Aggressive" actually enables</h2></div>
-    <div class="hdr-r">two profiles, deliberately different<br>never added together</div>
+    <div class="hdr-r">Flow Analysis Aggressive<br>only Parasoft configuration shown</div>
   </div>
   <div class="body">
     <div class="cols" style="margin-bottom:9px;">
       <div class="col">
         <div class="panel" style="margin-bottom:8px;height:100%;">
-          <div class="panel-t">Primary profile — <span class="mono">builtin://Flow Analysis Aggressive</span></div>
+          <div class="panel-t">Configuration in use — <span class="mono">builtin://Flow Analysis Aggressive</span></div>
           <p class="small" style="margin:0 0 5px;">Enables all flow-analysis rule families at aggressive depth, with aggressive mode and reporting of unvalidated violations switched on:</p>
           <table class="grid" style="font-size:9.4px;">
             <tr><th style="width:96px;">Family</th><th>What it analyses, read from the messages it emitted</th><th>Bugged-state findings</th></tr>
             <tr><td class="mono">BD-PB-*</td><td>Path and bounds — array index, buffer read and write, null dereference, uninitialized use, allocation-return check, contract check, integer wrap, pointer comparison and subtraction</td><td>36 · of which <b>19 in the harness</b></td></tr>
             <tr><td class="mono">BD-RES-*</td><td>Resource lifetime — use of a freed resource, invalid free, memory not deallocated, allocation not checked</td><td>8 · <b>all 8 in the harness</b></td></tr>
             <tr><td class="mono">BD-TRS-*</td><td>Thread safety — global variable used without holding a lock (<span class="mono">THRDR</span>, 58), unreleased lock (<span class="mono">LOCK</span>, 4), release without acquire (<span class="mono">REVLOCK</span>, 2), blocking call inside a critical section (<span class="mono">TSHL</span>, 3)</td><td>67 · <b>none in the harness</b> — all in upstream ThreadX kernel files</td></tr>
-            <tr><td class="mono">SECURITY-*, CO-*, API-*</td><td>Enabled by this profile</td><td>No findings in either state</td></tr>
+            <tr><td class="mono">SECURITY-*, CO-*, API-*</td><td>Enabled by this configuration</td><td>No findings in either state</td></tr>
           </table>
         </div>
       </div>
       <div class="col">
         <div class="panel" style="margin-bottom:8px;">
-          <div class="panel-t">Supplementary profile — <span class="mono">builtin://Recommended Rules</span></div>
-          <p class="small" style="margin:0;">A curated set of static and flow rules plus metrics: what a team would get out of the box. It is a comparison profile, not a deeper analysis mode. It still produced the array, null-path, uninitialized, leak and buffer-write findings, but not the <span class="mono">BD-RES-FREE</span> use-after-free or the <span class="mono">BD-PB-CHECKRETGEN</span> unchecked-allocation finding.</p>
+          <div class="panel-t">Where the 111 findings landed</div>
+          <table class="grid" style="font-size:9.6px;">
+            <tr><th>Scope of the finding</th><th class="num">Findings</th><th>Read as</th></tr>
+            <tr><td>Harness code — the defect sites</td><td class="num"><b>27</b></td><td>Candidate detections, adjudicated one by one</td></tr>
+            <tr><td>Upstream ThreadX kernel</td><td class="num">84</td><td>Real findings in untouched project code, never counted as benchmark false positives</td></tr>
+            <tr><td>of which thread-safety rules in the kernel</td><td class="num">67</td><td>The race rules fired here, not on the harness races — see slide 15</td></tr>
+          </table>
         </div>
         <div class="panel">
           <div class="panel-t">Read this while looking at the numbers</div>
-          <table class="grid" style="font-size:9.6px;">
-            <tr><th>Metric on the bugged state</th><th class="num">Aggressive</th><th class="num">Recommended</th></tr>
-            <tr><td>Harness findings</td><td class="num">27</td><td class="num">21</td></tr>
-            <tr><td>Strict true positives</td><td class="num">15</td><td class="num">14</td></tr>
-            <tr><td>Partial / indirect signals</td><td class="num">1 / 1</td><td class="num">0 / 1</td></tr>
-          </table>
-          <p class="small" style="margin:6px 0 0;">More findings did not mean proportionally more detections: the extra Aggressive findings include speculative diagnostics such as "call to memcpy may be optimized out", which describe real code shapes but not planted defects.</p>
+          <p class="small" style="margin:0;">Not every finding is a detection. Of the 27 harness findings, several describe code shapes rather than planted defects — for example "call to memcpy may be optimized out" on a scratch copy whose destination is never read. Each finding is adjudicated on slide 23 and disclosed again on slide 25, so any headline count can be traced back to the message that produced it.</p>
         </div>
       </div>
     </div>
     <div class="callout-info">
-      <b>Why this matters for fairness.</b> Both profiles are Parasoft's own shipped configurations; neither was tuned for this harness. The Aggressive profile gets every advantage of depth, and it is the profile the headline recall is quoted from.
+      <b>Why this matters for fairness.</b> This is Parasoft's own shipped configuration, not one tuned for this harness. The deck reports a single analyzer run at its maximum depth, and every detection number that follows comes from that run pair.
     </div>
   </div>
   <div class="ftr"><span>evaluation/SCAN_PROTOCOL.md §3 · evaluation/COMPARISON_REPORT.md</span><span>20 / 30</span></div>
 </section>
 <section data-n="21" class="slide" id="s21">
   <div class="hdr">
-    <div><span class="kicker">20 · Result</span><h2>What Parasoft found: 15 of 50, and two profiles that disagree</h2></div>
+    <div><span class="kicker">20 · Result</span><h2>What Parasoft found: 15 of the 50 planted defects</h2></div>
     <div class="hdr-r">detection target: tag bugged 9d699595<br>50 valid candidates</div>
   </div>
   <div class="body">
     <div class="cols" style="margin-bottom:9px;">
       <div class="col panel" style="text-align:center;">
         <div class="kpi" style="color:#0F6B33;">15 / 50</div>
-        <div class="kpi-l">Strict true positives · Aggressive</div>
+        <div class="kpi-l">Strict true positives</div>
         <div class="tbar" style="margin-top:7px;"><span style="width:30%;background:#0F6B33;"></span></div>
         <p class="small" style="margin:6px 0 0;">30% strict recall on the emphasized set</p>
       </div>
       <div class="col panel" style="text-align:center;">
         <div class="kpi" style="color:#A3231B;">35</div>
-        <div class="kpi-l">Strict false negatives · Aggressive</div>
+        <div class="kpi-l">Strict false negatives</div>
         <div class="tbar" style="margin-top:7px;"><span style="width:70%;background:#A3231B;"></span></div>
         <p class="small" style="margin:6px 0 0;">33 direct misses plus one partial and one indirect finding</p>
       </div>
       <div class="col panel" style="text-align:center;">
-        <div class="kpi" style="color:#0063A6;">14 / 50</div>
-        <div class="kpi-l">Strict true positives · Recommended</div>
-        <div class="tbar" style="margin-top:7px;"><span style="width:28%;background:#0063A6;"></span></div>
-        <p class="small" style="margin:6px 0 0;">28% strict recall, one indirect signal, no partial</p>
+        <div class="kpi" style="color:#0063A6;">27</div>
+        <div class="kpi-l">Findings in the harness code</div>
+        <div class="tbar" style="margin-top:7px;"><span style="width:24%;background:#0063A6;"></span></div>
+        <p class="small" style="margin:6px 0 0;">of 111 findings in the report; the other 84 are upstream ThreadX code</p>
       </div>
       <div class="col panel" style="text-align:center;">
         <div class="kpi" style="color:#6B7885;">N/A</div>
@@ -964,15 +961,15 @@
     <div class="cols">
       <div class="col c55">
         <table class="grid" style="font-size:9.8px;">
-          <tr><th>Profile</th><th class="num">Bugged XML findings</th><th class="num">Harness findings</th><th class="num">Strict TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th></tr>
-          <tr><td>Flow Analysis Aggressive</td><td class="num">111</td><td class="num">27</td><td class="num"><b>15</b></td><td class="num">1 / 1</td><td class="num">35</td></tr>
-          <tr><td>Recommended Rules</td><td class="num">36 (+12 metrics)</td><td class="num">21</td><td class="num"><b>14</b></td><td class="num">0 / 1</td><td class="num">36</td></tr>
+          <tr><th>Run</th><th class="num">XML findings</th><th class="num">Harness findings</th><th class="num">Strict TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th></tr>
+          <tr><td>Flow analysis on <span class="mono">bugged</span></td><td class="num">111</td><td class="num">27</td><td class="num"><b>15</b></td><td class="num">1 / 1</td><td class="num">35</td></tr>
+          <tr style="background:#F6F8FA;"><td>Flow analysis on <span class="mono">harness-clean</span> — false-positive baseline</td><td class="num">90</td><td class="num">6</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
         </table>
       </div>
       <div class="col c45">
         <div class="panel">
           <div class="panel-t">The two signals that were not counted as detections</div>
-          <p class="small" style="margin:0;"><b>BUG-021 (partial):</b> the Aggressive profile reported a lost resource at the second alias assignment — related to the defect, not the double free it causes. <b>BUG-035 (indirect):</b> <span class="mono">BD-PB-CC</span> says the later null check is always false; it hints at the dereference without reporting one.</p>
+          <p class="small" style="margin:0;"><b>BUG-021 (partial):</b> the scan reported a lost resource at the second alias assignment — related to the defect, not the double free it causes. <b>BUG-035 (indirect):</b> <span class="mono">BD-PB-CC</span> says the later null check is always false; it hints at the dereference without reporting one.</p>
         </div>
       </div>
     </div>
@@ -982,36 +979,35 @@
 <section data-n="22" class="slide" id="s22">
   <div class="hdr">
     <div><span class="kicker">21 · Result</span><h2>Recall by defect family — where the misses cluster</h2></div>
-    <div class="hdr-r">TP + FN = 50 in each profile<br>families with 0 detections in red</div>
+    <div class="hdr-r">TP + FN = 50<br>families with 0 detections in red</div>
   </div>
   <div class="body">
     <table class="grid" style="font-size:10px;">
       <tr>
         <th>Family</th><th class="num">Valid</th>
-        <th class="num">Aggressive TP</th><th class="num">Aggressive partial / indirect</th><th class="num">Aggressive direct FN</th>
-        <th class="num">Recommended TP</th><th class="num">Recommended indirect</th><th class="num">Recommended direct FN</th>
-        <th>What the profile saw</th>
+        <th class="num">True positives</th><th class="num">Partial / indirect</th><th class="num">Direct misses</th>
+        <th>What the scan saw</th>
       </tr>
-      <tr><td><b>Size arithmetic</b></td><td class="num">11</td><td class="num">2</td><td class="num">0</td><td class="num">9</td><td class="num">2</td><td class="num">0</td><td class="num">9</td><td>The two ring / raw buffer bounds; nothing for truncation, wrap, masked length or sizeof misuse</td></tr>
-      <tr><td><b>Memory lifecycle</b></td><td class="num">10</td><td class="num">3</td><td class="num">1 partial</td><td class="num">6</td><td class="num">2</td><td class="num">0</td><td class="num">8</td><td>Interior free, retry leak (both profiles); use-after-free only in Aggressive</td></tr>
-      <tr style="background:#FBEAE8;"><td><b>Concurrency</b></td><td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num">8</td><td><b>No race or lock-order finding in either profile</b></td></tr>
-      <tr><td><b>NULL / validation</b></td><td class="num">7</td><td class="num">5</td><td class="num">1 indirect</td><td class="num">1</td><td class="num">5</td><td class="num">1 indirect</td><td class="num">1</td><td>The strongest family — unchecked lookup, malloc, out-param and deep NULL propagation</td></tr>
-      <tr><td><b>Taint / bounds</b></td><td class="num">8</td><td class="num">3</td><td class="num">0</td><td class="num">5</td><td class="num">3</td><td class="num">0</td><td class="num">5</td><td>Fired on buffer bounds, not on indices, format strings or allocation size</td></tr>
-      <tr><td><b>Uninitialized</b></td><td class="num">6</td><td class="num">2</td><td class="num">0</td><td class="num">4</td><td class="num">2</td><td class="num">0</td><td class="num">4</td><td>Caught the ignored-contract pair; missed pooled memory and partial headers</td></tr>
-      <tr style="background:#F6F8FA;"><td><b>Total</b></td><td class="num"><b>50</b></td><td class="num"><b>15</b></td><td class="num"><b>1 / 1</b></td><td class="num"><b>33</b></td><td class="num"><b>14</b></td><td class="num"><b>1</b></td><td class="num"><b>35</b></td><td></td></tr>
+      <tr><td><b>Size arithmetic</b></td><td class="num">11</td><td class="num">2</td><td class="num">0</td><td class="num">9</td><td>The two ring and raw buffer bounds; nothing for truncation, wrap, masked length or sizeof misuse</td></tr>
+      <tr><td><b>Memory lifecycle</b></td><td class="num">10</td><td class="num">3</td><td class="num">1 partial</td><td class="num">6</td><td>The use-after-free, the interior free and the retry leak; nothing for the double release, the wrong pool or the timer</td></tr>
+      <tr style="background:#FBEAE8;"><td><b>Concurrency</b></td><td class="num">8</td><td class="num">0</td><td class="num">0</td><td class="num">8</td><td><b>No race or lock-order finding in the harness at all</b></td></tr>
+      <tr><td><b>NULL / validation</b></td><td class="num">7</td><td class="num">5</td><td class="num">1 indirect</td><td class="num">1</td><td>The strongest family — unchecked lookup, malloc, out-param and deep NULL propagation</td></tr>
+      <tr><td><b>Taint / bounds</b></td><td class="num">8</td><td class="num">3</td><td class="num">0</td><td class="num">5</td><td>Fired on buffer bounds, not on indices, format strings or allocation size</td></tr>
+      <tr><td><b>Uninitialized</b></td><td class="num">6</td><td class="num">2</td><td class="num">0</td><td class="num">4</td><td>Caught the ignored-contract pair; missed pooled memory and partial headers</td></tr>
+      <tr style="background:#F6F8FA;"><td><b>Total</b></td><td class="num"><b>50</b></td><td class="num"><b>15</b></td><td class="num"><b>1 / 1</b></td><td class="num"><b>33</b></td><td></td></tr>
     </table>
     <div class="cols" style="margin-top:9px;">
       <div class="col panel">
         <div class="panel-t">The honest reading of this table</div>
-        <p class="small" style="margin:0;">The profile is strongest exactly where a defect is a local, checkable condition — a NULL that is dereferenced, a pointer that was never assigned, an index against a known array size. It goes quiet where the defect requires arithmetic reasoning about a value's range, or reasoning about two threads.</p>
+        <p class="small" style="margin:0;">The scan is strongest exactly where a defect is a local, checkable condition — a NULL that is dereferenced, a pointer that was never assigned, an index against a known array size. It goes quiet where the defect requires arithmetic reasoning about a value's range, or reasoning about two threads.</p>
       </div>
       <div class="col panel">
         <div class="panel-t">The emphasized family scored 2 of 11</div>
         <p class="small" style="margin:0;">Size arithmetic was the stated focus of this evaluation, and it produced the largest miss block: truncation, wrap, signed-to-unsigned conversion, masked bounds and <span class="mono">sizeof(pointer)</span> misuse all went unreported.</p>
       </div>
       <div class="col panel">
-        <div class="panel-t">Concurrency: 0 of 8 in both profiles</div>
-        <p class="small" style="margin:0;">Not partially — completely, and while the same profile's thread-safety rules fired 67 times elsewhere in this build. It is the most interesting negative result in the run, and it is the family where the planted defects were designed to require thread modeling.</p>
+        <div class="panel-t">Concurrency: 0 of 8</div>
+        <p class="small" style="margin:0;">Not partially — completely, and while the thread-safety rules fired 67 times elsewhere in this same build. It is the most interesting negative result in the run, and it is the family where the planted defects were designed to require thread modeling.</p>
       </div>
     </div>
   </div>
@@ -1024,38 +1020,38 @@
   </div>
   <div class="body">
     <table class="grid" style="font-size:8.6px;">
-      <tr><th style="width:104px;">Rule</th><th style="width:126px;">Location</th><th>Message as emitted by Parasoft</th><th style="width:78px;">Catalog</th><th style="width:104px;">Profile</th></tr>
-      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">sizearith.c:68</td><td>Possibly accessing array "log_ring" out of bounds at index [0...32]. Correct index(es): [0...31]</td><td class="mono">BUG-003</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">sizearith.c:259</td><td>Possibly accessing array "raw" out of bounds at index [2...64]. Correct index(es): [0...63]</td><td class="mono">BUG-010</td><td>Both</td></tr>
-      <tr><td class="mono">BD-RES-FREE</td><td class="mono">memory.c:172, :180</td><td>Usage of freed resource "batch"</td><td class="mono">BUG-018</td><td><b>Aggressive only</b></td></tr>
-      <tr><td class="mono">BD-RES-INVFREE</td><td class="mono">memory.c:237</td><td>Invalid memory freeing: "body" does not point to the beginning of a resource in memory</td><td class="mono">BUG-020</td><td>Both</td></tr>
-      <tr><td class="mono">BD-RES-LEAKS</td><td class="mono">memory.c:299, :316</td><td>Memory not deallocated: p</td><td class="mono">BUG-022</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-NP</td><td class="mono">nullpaths.c:96</td><td>"ch" may possibly be null</td><td class="mono">BUG-032</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-CHECKRETGEN<br>BD-PB-NP</td><td class="mono">nullpaths.c:111, :115</td><td>Value returned from method "malloc" should be checked · "s" may possibly be null</td><td class="mono">BUG-033</td><td>NP both · check <b>Aggressive only</b></td></tr>
-      <tr><td class="mono">BD-PB-NOTINIT</td><td class="mono">nullpaths.c:154</td><td>Non-initialized "f" is used</td><td class="mono">BUG-034</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-CC</td><td class="mono">nullpaths.c:170</td><td>Condition "cfg == 0" always evaluates to false</td><td class="mono">BUG-035 · indirect</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-NOTINIT</td><td class="mono">nullpaths.c:211</td><td>Non-initialized "v" is used</td><td class="mono">BUG-037</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-NP</td><td class="mono">nullpaths.c:226 (×2)</td><td>"c" may possibly be null</td><td class="mono">BUG-038</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-NOTINIT</td><td class="mono">uninit.c:88</td><td>Non-initialized "h.flags" is used</td><td class="mono">BUG-049</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-NOTINIT<br>BD-RES-INVFREE</td><td class="mono">uninit.c:130</td><td>Non-initialized "u" is used · Invalid memory freeing: "u" is not initialized in heap memory</td><td class="mono">BUG-050</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-OVERFWR</td><td class="mono">taint.c:75</td><td>Overflow when writing to buffer "dst" (UCHAR[64], 64 bytes large). Number of bytes written 4 &lt;= len &lt;= 128</td><td class="mono">BUG-040</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">taint.c:104</td><td>Possibly accessing array "slot_values" out of bounds at index [0...7]. Correct index(es): [0...3]</td><td class="mono">BUG-042</td><td>Both</td></tr>
-      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">taint.c:182</td><td>Possibly accessing array "handlers" out of bounds at index [0...15]. Correct index(es): [0...11]</td><td class="mono">BUG-046</td><td>Both</td></tr>
-      <tr style="background:#FDF2E3;"><td class="mono">BD-RES-LEAKS</td><td class="mono">memory.c:244, :260</td><td>Memory not deallocated: base · Memory not deallocated: ((FRAME_STRUCT[2])frame_cache)[1]</td><td class="mono">BUG-021 · partial</td><td>Aggressive — recorded as partial, <b>not</b> a true positive</td></tr>
+      <tr><th style="width:112px;">Rule</th><th style="width:136px;">Location</th><th>Message as emitted by Parasoft</th><th style="width:96px;">Catalog</th></tr>
+      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">sizearith.c:68</td><td>Possibly accessing array "log_ring" out of bounds at index [0...32]. Correct index(es): [0...31]</td><td class="mono">BUG-003</td></tr>
+      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">sizearith.c:259</td><td>Possibly accessing array "raw" out of bounds at index [2...64]. Correct index(es): [0...63]</td><td class="mono">BUG-010</td></tr>
+      <tr><td class="mono">BD-RES-FREE</td><td class="mono">memory.c:172, :180</td><td>Usage of freed resource "batch"</td><td class="mono">BUG-018</td></tr>
+      <tr><td class="mono">BD-RES-INVFREE</td><td class="mono">memory.c:237</td><td>Invalid memory freeing: "body" does not point to the beginning of a resource in memory</td><td class="mono">BUG-020</td></tr>
+      <tr><td class="mono">BD-RES-LEAKS</td><td class="mono">memory.c:299, :316</td><td>Memory not deallocated: p</td><td class="mono">BUG-022</td></tr>
+      <tr><td class="mono">BD-PB-NP</td><td class="mono">nullpaths.c:96</td><td>"ch" may possibly be null</td><td class="mono">BUG-032</td></tr>
+      <tr><td class="mono">BD-PB-CHECKRETGEN<br>BD-PB-NP</td><td class="mono">nullpaths.c:111, :115</td><td>Value returned from method "malloc" should be checked · "s" may possibly be null</td><td class="mono">BUG-033</td></tr>
+      <tr><td class="mono">BD-PB-NOTINIT</td><td class="mono">nullpaths.c:154</td><td>Non-initialized "f" is used</td><td class="mono">BUG-034</td></tr>
+      <tr><td class="mono">BD-PB-CC</td><td class="mono">nullpaths.c:170</td><td>Condition "cfg == 0" always evaluates to false</td><td class="mono">BUG-035 · indirect</td></tr>
+      <tr><td class="mono">BD-PB-NOTINIT</td><td class="mono">nullpaths.c:211</td><td>Non-initialized "v" is used</td><td class="mono">BUG-037</td></tr>
+      <tr><td class="mono">BD-PB-NP</td><td class="mono">nullpaths.c:226 (×2)</td><td>"c" may possibly be null</td><td class="mono">BUG-038</td></tr>
+      <tr><td class="mono">BD-PB-NOTINIT</td><td class="mono">uninit.c:88</td><td>Non-initialized "h.flags" is used</td><td class="mono">BUG-049</td></tr>
+      <tr><td class="mono">BD-PB-NOTINIT<br>BD-RES-INVFREE</td><td class="mono">uninit.c:130</td><td>Non-initialized "u" is used · Invalid memory freeing: "u" is not initialized in heap memory</td><td class="mono">BUG-050</td></tr>
+      <tr><td class="mono">BD-PB-OVERFWR</td><td class="mono">taint.c:75</td><td>Overflow when writing to buffer "dst" (UCHAR[64], 64 bytes large). Number of bytes written 4 &lt;= len &lt;= 128</td><td class="mono">BUG-040</td></tr>
+      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">taint.c:104</td><td>Possibly accessing array "slot_values" out of bounds at index [0...7]. Correct index(es): [0...3]</td><td class="mono">BUG-042</td></tr>
+      <tr><td class="mono">BD-PB-ARRAY</td><td class="mono">taint.c:182</td><td>Possibly accessing array "handlers" out of bounds at index [0...15]. Correct index(es): [0...11]</td><td class="mono">BUG-046</td></tr>
+      <tr style="background:#FDF2E3;"><td class="mono">BD-RES-LEAKS</td><td class="mono">memory.c:244, :260</td><td>Memory not deallocated: base · Memory not deallocated: ((FRAME_STRUCT[2])frame_cache)[1]</td><td class="mono">BUG-021 · partial</td></tr>
     </table>
-    <p class="small" style="margin-top:7px;">Four more Aggressive diagnostics land in the harness but describe code shapes rather than planted defects — three <span class="mono">BD-PB-MEMOPT</span> on scratch copies whose destination is never read, and one <span class="mono">BD-PB-VOVR</span> on a status value overwritten before use. They are disclosed on slide 25 as context-appropriate findings, not detections and not benchmark false positives.</p>
+    <p class="small" style="margin-top:7px;">Four more diagnostics from the same scan land in the harness but describe code shapes rather than planted defects — three <span class="mono">BD-PB-MEMOPT</span> on scratch copies whose destination is never read, and one <span class="mono">BD-PB-VOVR</span> on a status value overwritten before use. They are disclosed on slide 25 as context-appropriate findings, not detections and not benchmark false positives.</p>
   </div>
   <div class="ftr"><span>evaluation/reports/parasoft/bugged-builtin-Flow-Analysis-Aggressive-findings.csv · DETECTION_MATRIX.csv</span><span>23 / 30</span></div>
 </section>
 <section data-n="24" class="slide" id="s24">
   <div class="hdr">
     <div><span class="kicker">23 · Evidence</span><h2>What went unreported, and two candidates that are not defects</h2></div>
-    <div class="hdr-r">35 strict misses, Aggressive<br>2 of 52 markers invalidated</div>
+    <div class="hdr-r">35 strict misses on the flow analysis<br>2 of 52 markers invalidated</div>
   </div>
   <div class="body">
     <div class="cols">
       <div class="col c60">
-        <div class="panel-t">Strict misses by class — Aggressive profile, 35 total</div>
+        <div class="panel-t">Strict misses by class — 35 total</div>
         <table class="grid" style="font-size:9.2px;">
           <tr><th style="width:132px;">Class</th><th>Candidates</th></tr>
           <tr><td><b>Concurrency — all 8</b></td><td class="mono">BUG-023 … BUG-030</td></tr>
@@ -1125,7 +1121,6 @@
             <tr><td class="mono">BD-PB-MEMOPT</td><td class="mono">sizearith.c:277</td><td>Scratch copy — intentional</td></tr>
             <tr><td class="mono">BD-PB-VOVR</td><td class="mono">memory.c:61</td><td>Initial value overwritten before any read</td></tr>
             <tr><td class="mono">BD-PB-MEMOPT</td><td class="mono">taint.c:71</td><td>Scratch copy — intentional</td></tr>
-            <tr><td class="mono">CODSTA-82 ×3</td><td class="mono">init.c:168, 236, 255</td><td>Perpetual ThreadX worker loops — intentional (Recommended Rules only)</td></tr>
           </table>
         </div>
         <div class="panel">
@@ -1194,24 +1189,23 @@
   </div>
   <div class="body">
     <table class="grid" style="font-size:10px;margin-bottom:9px;">
-      <tr><th>Tool and profile</th><th class="num">Clean-state findings</th><th class="num">Bugged-state findings</th><th class="num">Valid candidates</th><th class="num">Strict TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th><th>Code-scan status</th></tr>
+      <tr><th>Tool and configuration</th><th class="num">Clean-state findings</th><th class="num">Bugged-state findings</th><th class="num">Valid candidates</th><th class="num">Strict TP</th><th class="num">Partial / indirect</th><th class="num">Strict FN</th><th>Code-scan status</th></tr>
       <tr><td><b>Parasoft C/C++test — Flow Analysis Aggressive</b></td><td class="num">90 total · 6 harness</td><td class="num">111 total · 27 harness</td><td class="num">50</td><td class="num"><b>15</b></td><td class="num">1 partial, 1 indirect</td><td class="num">35</td><td>Completed, exit 0</td></tr>
-      <tr><td><b>Parasoft C/C++test — Recommended Rules</b></td><td class="num">20 + 12 metrics · 5 harness</td><td class="num">36 + 12 metrics · 21 harness</td><td class="num">50</td><td class="num"><b>14</b></td><td class="num">1 indirect</td><td class="num">36</td><td>Completed, exit 0</td></tr>
       <tr style="background:#FCF6E3;"><td><b>SonarQube CLI — DEEP code analysis</b></td><td class="num">N/A</td><td class="num">N/A</td><td class="num">50</td><td class="num">N/A</td><td class="num">N/A</td><td class="num">N/A</td><td><b>Unavailable — 403, all files skipped</b></td></tr>
       <tr><td>SonarQube CLI — local secrets scanner</td><td class="num">0 secrets</td><td class="num">0 secrets</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td>Completed; not a C defect analysis</td></tr>
     </table>
     <div class="cols">
       <div class="col panel">
         <div class="panel-t">What this experiment does claim</div>
-        <p class="small" style="margin:0;">On this ThreadX Win32 harness, at these versions and profiles, Parasoft C/C++test reported the root cause of 15 of 50 valid planted defects and missed 35 — including all eight concurrency defects and nine of the eleven size-arithmetic defects that were not invalidated. These numbers are traceable to committed reports, line by line.</p>
+        <p class="small" style="margin:0;">On this ThreadX Win32 harness, at this version and configuration, Parasoft C/C++test reported the root cause of 15 of 50 valid planted defects and missed 35 — including all eight concurrency defects and nine of the eleven size-arithmetic defects that were not invalidated. These numbers are traceable to committed reports, line by line.</p>
       </div>
       <div class="col panel">
         <div class="panel-t">What it does not claim</div>
-        <p class="small" style="margin:0;">It is not a general ranking of either product. It covers one target data model (Win32, 32-bit <span class="mono">ULONG</span>), one version of each tool, one set of profiles, and one organization's subscription entitlements. The SonarQube code column is <b>unavailable</b>, never zero, and must not be quoted as a result.</p>
+        <p class="small" style="margin:0;">It is not a general ranking of either product. It covers one target data model (Win32, 32-bit <span class="mono">ULONG</span>), one version of each tool, one analysis configuration, and one organization's subscription entitlements. The SonarQube code column is <b>unavailable</b>, never zero, and must not be quoted as a result.</p>
       </div>
       <div class="col panel">
         <div class="panel-t">How to quote it safely</div>
-        <p class="small" style="margin:0;">Say "Parasoft's aggressive flow profile reported 15 of 50 planted defects in this harness" and "SonarQube's code engine could not be evaluated because the connection is not entitled". Those two sentences are both exactly true.</p>
+        <p class="small" style="margin:0;">Say "Parasoft's flow analysis reported 15 of 50 planted defects in this harness" and "SonarQube's code engine could not be evaluated because the connection is not entitled". Those two sentences are both exactly true.</p>
       </div>
     </div>
   </div>
@@ -1225,12 +1219,12 @@
   <div class="body">
     <div class="cols">
       <div class="col c55">
-        <div class="panel-t">Parasoft C/C++test — one run per state and profile</div>
+        <div class="panel-t">Parasoft C/C++test — flow analysis on each state</div>
         <div class="code" style="font-size:9.4px;">
 <div><span class="ln"> </span>msbuild ports\win32\vs_2019\example_build\azure_rtos.sln \</div>
 <div><span class="ln"> </span>  /p:Configuration=Release /p:Platform=Win32 /m:1</div>
 <div><span class="ln"> </span></div>
-<div><span class="ln"> </span>cpptestcli -config builtin://Flow-Analysis-Aggressive \</div>
+<div><span class="ln"> </span>cpptestcli -config "builtin://Flow Analysis Aggressive" \</div>
 <div><span class="ln"> </span>  -compiler vc_14_5 \</div>
 <div><span class="ln"> </span>  -input &lt;state&gt;\...\azure_rtos.sln@Release|Win32 \</div>
 <div><span class="ln"> </span>  -report &lt;out&gt; -workspace &lt;isolated&gt;</div>
@@ -1282,33 +1276,33 @@
   </div>
   <div class="body">
     <table class="grid dense" style="font-size:8.2px;">
-      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:64px;">Aggressive</th><th style="width:66px;">Recommended</th><th style="width:60px;">Sonar code</th><th>Adjudication note</th></tr>
-      <tr><td class="mono">BUG-001</td><td class="mono">190/787</td><td class="mono">sa:26</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching flow finding</td></tr>
-      <tr><td class="mono">BUG-002</td><td class="mono">197</td><td class="mono">sa:46</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Only an unrelated unused-copy finding near this routine</td></tr>
-      <tr><td class="mono">BUG-003</td><td class="mono">193</td><td class="mono">sa:63</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> reports ring index 32</td></tr>
-      <tr><td class="mono">BUG-004</td><td class="mono">131</td><td class="mono">sa:111</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching partial-initialization finding</td></tr>
-      <tr style="background:#FCF6E3;"><td class="mono">BUG-005</td><td class="mono">190</td><td class="mono">sa:133</td><td colspan="2">Invalid on Win32 — not scored</td><td><span class="chip chip-na">403</span></td><td><span class="mono">UINT16</span> plus 16 cannot wrap 32-bit <span class="mono">ULONG</span></td></tr>
-      <tr><td class="mono">BUG-006</td><td class="mono">197</td><td class="mono">sa:154</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching allocation-versus-copy finding</td></tr>
-      <tr><td class="mono">BUG-007</td><td class="mono">787</td><td class="mono">sa:176</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unchecked-index finding</td></tr>
-      <tr><td class="mono">BUG-008</td><td class="mono">131</td><td class="mono">sa:196</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching partial-configuration-copy finding</td></tr>
-      <tr><td class="mono">BUG-009</td><td class="mono">190/690</td><td class="mono">sa:231</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No overflow or unchecked ThreadX allocation finding</td></tr>
-      <tr><td class="mono">BUG-010</td><td class="mono">170</td><td class="mono">sa:252</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> reports <span class="mono">raw[64]</span></td></tr>
-      <tr><td class="mono">BUG-011</td><td class="mono">704</td><td class="mono">sa:276</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Unused-copy report does not identify the masked-length mismatch</td></tr>
-      <tr><td class="mono">BUG-012</td><td class="mono">190/787</td><td class="mono">sa:295</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching undersized-header-buffer finding</td></tr>
-      <tr><td class="mono">BUG-013</td><td class="mono">416</td><td class="mono">mem:45</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>ThreadX release not treated as invalidating the frame</td></tr>
-      <tr><td class="mono">BUG-014</td><td class="mono">415</td><td class="mono">con:203</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the caller's unconditional second release</td></tr>
-      <tr><td class="mono">BUG-015</td><td class="mono">401</td><td class="mono">mem:85</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching early-return leak finding</td></tr>
-      <tr><td class="mono">BUG-016</td><td class="mono">762</td><td class="mono">mem:125</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Wrong ThreadX pool release not reported</td></tr>
-      <tr><td class="mono">BUG-017</td><td class="mono">415</td><td class="mono">mem:148</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the release-on-success contract</td></tr>
-      <tr><td class="mono">BUG-018</td><td class="mono">416</td><td class="mono">mem:175</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-FREE</span> — Aggressive profile only</td></tr>
-      <tr><td class="mono">BUG-019</td><td class="mono">404</td><td class="mono">mem:206</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching ThreadX timer lifecycle finding</td></tr>
-      <tr><td class="mono">BUG-020</td><td class="mono">761</td><td class="mono">mem:233</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-INVFREE</span> — freeing an interior pointer</td></tr>
-      <tr><td class="mono">BUG-021</td><td class="mono">415</td><td class="mono">mem:257</td><td><span class="chip chip-part">Partial</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Related lost-resource effect at the alias assignment, not the double free</td></tr>
-      <tr><td class="mono">BUG-022</td><td class="mono">401</td><td class="mono">mem:311</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-LEAKS</span> — failed-retry buffer leaks</td></tr>
-      <tr><td class="mono">BUG-023</td><td class="mono">362</td><td class="mono">con:37</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching race finding</td></tr>
-      <tr><td class="mono">BUG-024</td><td class="mono">366</td><td class="mono">con:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching slot hand-off race finding</td></tr>
-      <tr><td class="mono">BUG-025</td><td class="mono">833</td><td class="mono">con:87</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching lock-order cycle finding</td></tr>
-      <tr><td class="mono">BUG-026</td><td class="mono">364</td><td class="mono">con:108</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unsynchronized-flag finding</td></tr>
+      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:92px;">Flow analysis</th><th style="width:60px;">Sonar code</th><th>Adjudication note</th></tr>
+      <tr><td class="mono">BUG-001</td><td class="mono">190/787</td><td class="mono">sa:26</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching flow finding</td></tr>
+      <tr><td class="mono">BUG-002</td><td class="mono">197</td><td class="mono">sa:46</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Only an unrelated unused-copy finding near this routine</td></tr>
+      <tr><td class="mono">BUG-003</td><td class="mono">193</td><td class="mono">sa:63</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> reports ring index 32</td></tr>
+      <tr><td class="mono">BUG-004</td><td class="mono">131</td><td class="mono">sa:111</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching partial-initialization finding</td></tr>
+      <tr style="background:#FCF6E3;"><td class="mono">BUG-005</td><td class="mono">190</td><td class="mono">sa:133</td><td><span class="chip chip-part">Invalid</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">UINT16</span> plus 16 cannot wrap 32-bit <span class="mono">ULONG</span></td></tr>
+      <tr><td class="mono">BUG-006</td><td class="mono">197</td><td class="mono">sa:154</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching allocation-versus-copy finding</td></tr>
+      <tr><td class="mono">BUG-007</td><td class="mono">787</td><td class="mono">sa:176</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unchecked-index finding</td></tr>
+      <tr><td class="mono">BUG-008</td><td class="mono">131</td><td class="mono">sa:196</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching partial-configuration-copy finding</td></tr>
+      <tr><td class="mono">BUG-009</td><td class="mono">190/690</td><td class="mono">sa:231</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No overflow or unchecked ThreadX allocation finding</td></tr>
+      <tr><td class="mono">BUG-010</td><td class="mono">170</td><td class="mono">sa:252</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> reports <span class="mono">raw[64]</span></td></tr>
+      <tr><td class="mono">BUG-011</td><td class="mono">704</td><td class="mono">sa:276</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Unused-copy report does not identify the masked-length mismatch</td></tr>
+      <tr><td class="mono">BUG-012</td><td class="mono">190/787</td><td class="mono">sa:295</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching undersized-header-buffer finding</td></tr>
+      <tr><td class="mono">BUG-013</td><td class="mono">416</td><td class="mono">mem:45</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>ThreadX release not treated as invalidating the frame</td></tr>
+      <tr><td class="mono">BUG-014</td><td class="mono">415</td><td class="mono">con:203</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the caller's unconditional second release</td></tr>
+      <tr><td class="mono">BUG-015</td><td class="mono">401</td><td class="mono">mem:85</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching early-return leak finding</td></tr>
+      <tr><td class="mono">BUG-016</td><td class="mono">762</td><td class="mono">mem:125</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>Wrong ThreadX pool release not reported</td></tr>
+      <tr><td class="mono">BUG-017</td><td class="mono">415</td><td class="mono">mem:148</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the release-on-success contract</td></tr>
+      <tr><td class="mono">BUG-018</td><td class="mono">416</td><td class="mono">mem:175</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-FREE</span> — use of the freed batch</td></tr>
+      <tr><td class="mono">BUG-019</td><td class="mono">404</td><td class="mono">mem:206</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching ThreadX timer lifecycle finding</td></tr>
+      <tr><td class="mono">BUG-020</td><td class="mono">761</td><td class="mono">mem:233</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-INVFREE</span> — freeing an interior pointer</td></tr>
+      <tr><td class="mono">BUG-021</td><td class="mono">415</td><td class="mono">mem:257</td><td><span class="chip chip-part">Partial</span></td><td><span class="chip chip-na">403</span></td><td>Related lost-resource effect at the alias assignment, not the double free</td></tr>
+      <tr><td class="mono">BUG-022</td><td class="mono">401</td><td class="mono">mem:311</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-RES-LEAKS</span> — failed-retry buffer leaks</td></tr>
+      <tr><td class="mono">BUG-023</td><td class="mono">362</td><td class="mono">con:37</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching race finding</td></tr>
+      <tr><td class="mono">BUG-024</td><td class="mono">366</td><td class="mono">con:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching slot hand-off race finding</td></tr>
+      <tr><td class="mono">BUG-025</td><td class="mono">833</td><td class="mono">con:87</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching lock-order cycle finding</td></tr>
+      <tr><td class="mono">BUG-026</td><td class="mono">364</td><td class="mono">con:108</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unsynchronized-flag finding</td></tr>
     </table>
     <p class="small" style="margin-top:4px;font-size:9px;">Legend: <span class="mono">sa</span> = harness_sizearith.c · <span class="mono">mem</span> = harness_memory.c · <span class="mono">con</span> = harness_concurrency.c. This is the published <span class="mono">DETECTION_MATRIX.csv</span>, reproduced without editing.</p>
   </div>
@@ -1317,37 +1311,37 @@
 <section data-n="30" class="slide" id="s30">
   <div class="hdr">
     <div><span class="kicker">Appendix B</span><h2>Every candidate, BUG-027 … BUG-052, and where to check all of it</h2></div>
-    <div class="hdr-r">50 valid · 15 TP Aggressive · 14 TP Recommended<br>Sonar code result: unavailable</div>
+    <div class="hdr-r">50 valid candidates · 15 true positives<br>Sonar code result: unavailable</div>
   </div>
   <div class="body">
     <table class="grid dense" style="font-size:8.2px;">
-      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:64px;">Aggressive</th><th style="width:66px;">Recommended</th><th style="width:60px;">Sonar code</th><th>Adjudication note</th></tr>
-      <tr><td class="mono">BUG-027</td><td class="mono">362</td><td class="mono">con:134</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching list race finding</td></tr>
-      <tr><td class="mono">BUG-028</td><td class="mono">667</td><td class="mono">con:153</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching ThreadX mutex-ownership finding</td></tr>
-      <tr><td class="mono">BUG-029</td><td class="mono">366</td><td class="mono">con:164</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching double-checked-init race finding</td></tr>
-      <tr><td class="mono">BUG-030</td><td class="mono">366</td><td class="mono">con:190</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No queue-status or unchecked-read finding</td></tr>
-      <tr style="background:#FCF6E3;"><td class="mono">BUG-031</td><td class="mono">476</td><td class="mono">np:74</td><td colspan="2">Invalid on Win32 — not scored</td><td><span class="chip chip-na">403</span></td><td>Same range check means a non-NULL mirror implies a non-NULL primary</td></tr>
-      <tr><td class="mono">BUG-032</td><td class="mono">476</td><td class="mono">np:94</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
-      <tr><td class="mono">BUG-033</td><td class="mono">690</td><td class="mono">np:113</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td>Allocation return-check and null-dereference findings</td></tr>
-      <tr><td class="mono">BUG-034</td><td class="mono">457</td><td class="mono">np:151</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> — use of unassigned frame pointer</td></tr>
-      <tr><td class="mono">BUG-035</td><td class="mono">476</td><td class="mono">np:166</td><td><span class="chip chip-part">Indirect</span></td><td><span class="chip chip-part">Indirect</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-CC</span> flags the late null check as always false; no direct dereference finding</td></tr>
-      <tr><td class="mono">BUG-036</td><td class="mono">690</td><td class="mono">np:184</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unchecked-callback finding</td></tr>
-      <tr><td class="mono">BUG-037</td><td class="mono">476</td><td class="mono">np:200</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> — uninitialized return value</td></tr>
-      <tr><td class="mono">BUG-038</td><td class="mono">476</td><td class="mono">np:224</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
-      <tr><td class="mono">BUG-039</td><td class="mono">129</td><td class="mono">ta:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching calibration-table bounds finding</td></tr>
-      <tr><td class="mono">BUG-040</td><td class="mono">787</td><td class="mono">ta:71</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-OVERFWR</span> — destination overflow</td></tr>
-      <tr><td class="mono">BUG-041</td><td class="mono">120</td><td class="mono">ta:86</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unbounded-string-copy finding</td></tr>
-      <tr><td class="mono">BUG-042</td><td class="mono">129</td><td class="mono">ta:101</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> — index 4 through 7 in a 4-entry table</td></tr>
-      <tr><td class="mono">BUG-043</td><td class="mono">787</td><td class="mono">ta:116</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching accumulator-array bounds finding</td></tr>
-      <tr><td class="mono">BUG-044</td><td class="mono">134</td><td class="mono">ta:133</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching tainted-format-string finding</td></tr>
-      <tr><td class="mono">BUG-045</td><td class="mono">680/787</td><td class="mono">ta:151</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching allocation-size / string-copy finding</td></tr>
-      <tr><td class="mono">BUG-046</td><td class="mono">129</td><td class="mono">ta:179</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> — handler index 12 through 15</td></tr>
-      <tr><td class="mono">BUG-047</td><td class="mono">457</td><td class="mono">un:41</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on pooled frame flags</td></tr>
-      <tr><td class="mono">BUG-048</td><td class="mono">457</td><td class="mono">un:63</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on frame_send_local flags</td></tr>
-      <tr><td class="mono">BUG-049</td><td class="mono">457</td><td class="mono">un:17</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> traces the helper's missing flags initialization</td></tr>
-      <tr><td class="mono">BUG-050</td><td class="mono">457</td><td class="mono">un:127</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td>Uninitialized-use and invalid-free findings at slot_track</td></tr>
-      <tr><td class="mono">BUG-051</td><td class="mono">457</td><td class="mono">un:143</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the uninitialized CRC entry</td></tr>
-      <tr><td class="mono">BUG-052</td><td class="mono">457</td><td class="mono">un:167</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching uninitialized stats-field finding</td></tr>
+      <tr><th style="width:52px;">ID</th><th style="width:66px;">CWE</th><th style="width:104px;">Site</th><th style="width:92px;">Flow analysis</th><th style="width:60px;">Sonar code</th><th>Adjudication note</th></tr>
+      <tr><td class="mono">BUG-027</td><td class="mono">362</td><td class="mono">con:134</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching list race finding</td></tr>
+      <tr><td class="mono">BUG-028</td><td class="mono">667</td><td class="mono">con:153</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching ThreadX mutex-ownership finding</td></tr>
+      <tr><td class="mono">BUG-029</td><td class="mono">366</td><td class="mono">con:164</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching double-checked-init race finding</td></tr>
+      <tr><td class="mono">BUG-030</td><td class="mono">366</td><td class="mono">con:190</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No queue-status or unchecked-read finding</td></tr>
+      <tr style="background:#FCF6E3;"><td class="mono">BUG-031</td><td class="mono">476</td><td class="mono">np:74</td><td><span class="chip chip-part">Invalid</span></td><td><span class="chip chip-na">403</span></td><td>Same range check means a non-NULL mirror implies a non-NULL primary</td></tr>
+      <tr><td class="mono">BUG-032</td><td class="mono">476</td><td class="mono">np:94</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
+      <tr><td class="mono">BUG-033</td><td class="mono">690</td><td class="mono">np:113</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td>Allocation return-check and null-dereference findings</td></tr>
+      <tr><td class="mono">BUG-034</td><td class="mono">457</td><td class="mono">np:151</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> — use of unassigned frame pointer</td></tr>
+      <tr><td class="mono">BUG-035</td><td class="mono">476</td><td class="mono">np:166</td><td><span class="chip chip-part">Indirect</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-CC</span> flags the late null check as always false; no direct dereference finding</td></tr>
+      <tr><td class="mono">BUG-036</td><td class="mono">690</td><td class="mono">np:184</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unchecked-callback finding</td></tr>
+      <tr><td class="mono">BUG-037</td><td class="mono">476</td><td class="mono">np:200</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> — uninitialized return value</td></tr>
+      <tr><td class="mono">BUG-038</td><td class="mono">476</td><td class="mono">np:224</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NP</span> — possible null channel dereference</td></tr>
+      <tr><td class="mono">BUG-039</td><td class="mono">129</td><td class="mono">ta:56</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching calibration-table bounds finding</td></tr>
+      <tr><td class="mono">BUG-040</td><td class="mono">787</td><td class="mono">ta:71</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-OVERFWR</span> — destination overflow</td></tr>
+      <tr><td class="mono">BUG-041</td><td class="mono">120</td><td class="mono">ta:86</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching unbounded-string-copy finding</td></tr>
+      <tr><td class="mono">BUG-042</td><td class="mono">129</td><td class="mono">ta:101</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> — index 4 through 7 in a 4-entry table</td></tr>
+      <tr><td class="mono">BUG-043</td><td class="mono">787</td><td class="mono">ta:116</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching accumulator-array bounds finding</td></tr>
+      <tr><td class="mono">BUG-044</td><td class="mono">134</td><td class="mono">ta:133</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching tainted-format-string finding</td></tr>
+      <tr><td class="mono">BUG-045</td><td class="mono">680/787</td><td class="mono">ta:151</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching allocation-size / string-copy finding</td></tr>
+      <tr><td class="mono">BUG-046</td><td class="mono">129</td><td class="mono">ta:179</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-ARRAY</span> — handler index 12 through 15</td></tr>
+      <tr><td class="mono">BUG-047</td><td class="mono">457</td><td class="mono">un:41</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on pooled frame flags</td></tr>
+      <tr><td class="mono">BUG-048</td><td class="mono">457</td><td class="mono">un:63</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on frame_send_local flags</td></tr>
+      <tr><td class="mono">BUG-049</td><td class="mono">457</td><td class="mono">un:17</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td><span class="mono">BD-PB-NOTINIT</span> traces the helper's missing flags initialization</td></tr>
+      <tr><td class="mono">BUG-050</td><td class="mono">457</td><td class="mono">un:127</td><td><span class="chip chip-tp">TP</span></td><td><span class="chip chip-na">403</span></td><td>Uninitialized-use and invalid-free findings at slot_track</td></tr>
+      <tr><td class="mono">BUG-051</td><td class="mono">457</td><td class="mono">un:143</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No finding on the uninitialized CRC entry</td></tr>
+      <tr><td class="mono">BUG-052</td><td class="mono">457</td><td class="mono">un:167</td><td><span class="chip chip-fn">FN</span></td><td><span class="chip chip-na">403</span></td><td>No matching uninitialized stats-field finding</td></tr>
     </table>
     <p class="small" style="margin-top:5px;font-size:9px;">Legend: <span class="mono">np</span> = harness_nullpaths.c · <span class="mono">ta</span> = harness_taint.c · <span class="mono">un</span> = harness_uninit.c · <span class="mono">mem</span> = harness_memory.c · <span class="mono">con</span> = harness_concurrency.c.</p>
     <p class="small" style="margin-top:2px;font-size:9px;">Verify any single row: catalog and trigger paths in <span class="mono">PLANTED_BUGS.md</span> · rule, line and message in the <span class="mono">*-findings.csv</span> exports · verdict in <span class="mono">DETECTION_MATRIX.csv</span> · environment and commands in <span class="mono">SCAN_PROTOCOL.md</span> · report integrity in <span class="mono">SHA256SUMS.txt</span>. Repository: <span class="mono"><a href="https://github.com/zuwasi/parasoft-vs-sonarqube-threadx" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none;border-bottom:1px solid currentColor;">github.com/zuwasi/parasoft-vs-sonarqube-threadx</a></span> (MIT). Prepared by Daniel Liezrowice, ESL — Engineering Software Lab, 2026-10-08.</p>
