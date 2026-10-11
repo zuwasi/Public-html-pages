@@ -17,5 +17,5 @@ cycle=7 BTN0=released BTN1=released LED0=OFF LED1=ON tick=175
 cycle=8 BTN0=released BTN1=released LED0=ON LED1=OFF tick=200
 cycle=9 BTN0=released BTN1=released LED0=OFF LED1=ON tick=225
 [metric] led_thread_runs=12
-[metric] led_stack_high_water_bytes=212
+[metric] led_stack_high_water_bytes=224
 [pass] bounded LED sequence completed

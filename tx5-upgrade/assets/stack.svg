@@ -1,13 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 470" role="img"><rect width="1120" height="470" fill="#0b1424"/>
-<text x="28" y="46" fill="#eaf1fc" font-family="sans-serif" font-size="28">Observed LED thread stack high-water</text>
-<text x="28" y="119" fill="#eaf1fc" font-family="sans-serif" font-size="25">M4</text>
-<rect x="195" y="94" width="117.01766304347827" height="42" fill="#58c7fa"/>
-<text x="327.01766304347825" y="119" fill="#eaf1fc" font-family="sans-serif" font-size="23">212 B</text>
-<text x="28" y="211" fill="#eaf1fc" font-family="sans-serif" font-size="25">M55</text>
-<rect x="195" y="186" width="192.08559782608697" height="42" fill="#78e1b3"/>
-<text x="402.085597826087" y="211" fill="#eaf1fc" font-family="sans-serif" font-size="23">348 B</text>
-<text x="28" y="303" fill="#eaf1fc" font-family="sans-serif" font-size="25">Reserved</text>
-<rect x="195" y="278" width="565.2173913043479" height="42" fill="#fdc573"/>
-<text x="775.2173913043479" y="303" fill="#eaf1fc" font-family="sans-serif" font-size="23">1,024 B</text>
-<text x="28" y="426" fill="#a7b8d2" font-family="sans-serif" font-size="19">ThreadX stack-check samples in this workload. M85 was not run; no M85 stack value.</text>
+<text x="28" y="46" fill="#eaf1fc" font-family="sans-serif" font-size="28">Observed LED thread stack high-water (fill-pattern scan)</text>
+<text x="28" y="109.0" fill="#eaf1fc" font-family="sans-serif" font-size="23">TX5 M4</text>
+<rect x="205" y="86.0" width="106.52173913043478" height="41.25" fill="#fdc573"/>
+<text x="326.52173913043475" y="110.0" fill="#eaf1fc" font-family="sans-serif" font-size="22">196 B</text>
+<text x="28" y="184.0" fill="#eaf1fc" font-family="sans-serif" font-size="23">TX6 M4</text>
+<rect x="205" y="161.0" width="121.73913043478262" height="41.25" fill="#58c7fa"/>
+<text x="341.7391304347826" y="185.0" fill="#eaf1fc" font-family="sans-serif" font-size="22">224 B</text>
+<text x="28" y="259.0" fill="#eaf1fc" font-family="sans-serif" font-size="23">TX6 M55+</text>
+<rect x="205" y="236.0" width="195.65217391304347" height="41.25" fill="#c39bf5"/>
+<text x="415.6521739130435" y="260.0" fill="#eaf1fc" font-family="sans-serif" font-size="22">360 B</text>
+<text x="28" y="334.0" fill="#eaf1fc" font-family="sans-serif" font-size="23">Reserved</text>
+<rect x="205" y="311.0" width="556.5217391304349" height="41.25" fill="#5d6f8a"/>
+<text x="776.5217391304349" y="335.0" fill="#eaf1fc" font-family="sans-serif" font-size="22">1,024 B</text>
+<text x="28" y="423" fill="#a7b8d2" font-family="sans-serif" font-size="18">Deepest write below the 0xEF fill in this workload. M85 was not run; no M85 value.</text>
 </svg>

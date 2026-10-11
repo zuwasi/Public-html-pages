@@ -1,0 +1,21 @@
+[boot] ThreadX GPIO behavior demo; LED output is semihosted
+[core] cortex-m4
+[metric] cpuid=1091551808
+Copyright (c) 1996-2013 Express Logic Inc. * ThreadX Cortex-M3/GNU Version G5.6.5.2 SN: 23451-108-0501 *
+[metric] sizeof_TX_THREAD=180
+[metric] led_stack_reserved=1024
+[metric] worker_thread_runs=2
+[selftest] queue/preemption/events/semaphore/mutex/byte-pool PASS
+cycle=0 BTN0=released BTN1=released LED0=ON LED1=ON tick=0
+cycle=1 BTN0=released BTN1=released LED0=OFF LED1=OFF tick=25
+cycle=2 BTN0=PRESSED BTN1=released LED0=ON LED1=ON tick=50
+cycle=3 BTN0=PRESSED BTN1=released LED0=ON LED1=OFF tick=75
+cycle=4 BTN0=released BTN1=released LED0=ON LED1=ON tick=100
+cycle=5 BTN0=released BTN1=PRESSED LED0=OFF LED1=ON tick=125
+cycle=6 BTN0=released BTN1=released LED0=ON LED1=OFF tick=150
+cycle=7 BTN0=released BTN1=released LED0=OFF LED1=ON tick=175
+cycle=8 BTN0=released BTN1=released LED0=ON LED1=OFF tick=200
+cycle=9 BTN0=released BTN1=released LED0=OFF LED1=ON tick=225
+[metric] led_thread_runs=12
+[metric] led_stack_high_water_bytes=196
+[pass] bounded LED sequence completed

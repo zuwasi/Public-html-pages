@@ -1,37 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 470" role="img"><rect width="1120" height="470" fill="#0b1424"/>
-<text x="28" y="42" fill="#eaf1fc" font-family="sans-serif" font-size="27">Host-time histogram: eight alternating runs per core</text>
-<rect x="160" y="330" width="34" height="0" fill="#58c7fa"/>
-<text x="160" y="318" fill="#eaf1fc" font-family="sans-serif" font-size="20">0</text>
-<rect x="202" y="330" width="34" height="0" fill="#78e1b3"/>
-<text x="202" y="318" fill="#eaf1fc" font-family="sans-serif" font-size="20">0</text>
-<text x="155" y="369" fill="#a7b8d2" font-family="sans-serif" font-size="17">0.30-0.35</text>
-<rect x="305" y="285" width="34" height="45" fill="#58c7fa"/>
-<text x="305" y="273" fill="#eaf1fc" font-family="sans-serif" font-size="20">1</text>
-<rect x="347" y="330" width="34" height="0" fill="#78e1b3"/>
-<text x="347" y="318" fill="#eaf1fc" font-family="sans-serif" font-size="20">0</text>
-<text x="300" y="369" fill="#a7b8d2" font-family="sans-serif" font-size="17">0.35-0.40</text>
-<rect x="450" y="105" width="34" height="225" fill="#58c7fa"/>
-<text x="450" y="93" fill="#eaf1fc" font-family="sans-serif" font-size="20">5</text>
-<rect x="492" y="195" width="34" height="135" fill="#78e1b3"/>
-<text x="492" y="183" fill="#eaf1fc" font-family="sans-serif" font-size="20">3</text>
-<text x="445" y="369" fill="#a7b8d2" font-family="sans-serif" font-size="17">0.40-0.45</text>
-<rect x="595" y="240" width="34" height="90" fill="#58c7fa"/>
-<text x="595" y="228" fill="#eaf1fc" font-family="sans-serif" font-size="20">2</text>
-<rect x="637" y="150" width="34" height="180" fill="#78e1b3"/>
-<text x="637" y="138" fill="#eaf1fc" font-family="sans-serif" font-size="20">4</text>
-<text x="590" y="369" fill="#a7b8d2" font-family="sans-serif" font-size="17">0.45-0.50</text>
-<rect x="740" y="330" width="34" height="0" fill="#58c7fa"/>
-<text x="740" y="318" fill="#eaf1fc" font-family="sans-serif" font-size="20">0</text>
-<rect x="782" y="285" width="34" height="45" fill="#78e1b3"/>
-<text x="782" y="273" fill="#eaf1fc" font-family="sans-serif" font-size="20">1</text>
-<text x="735" y="369" fill="#a7b8d2" font-family="sans-serif" font-size="17">0.50-0.55</text>
-<rect x="885" y="330" width="34" height="0" fill="#58c7fa"/>
-<text x="885" y="318" fill="#eaf1fc" font-family="sans-serif" font-size="20">0</text>
-<rect x="927" y="330" width="34" height="0" fill="#78e1b3"/>
-<text x="927" y="318" fill="#eaf1fc" font-family="sans-serif" font-size="20">0</text>
-<text x="880" y="369" fill="#a7b8d2" font-family="sans-serif" font-size="17">0.55-0.60</text>
-<text x="45" y="415" fill="#58c7fa" font-family="sans-serif" font-size="20">M4</text>
-<text x="120" y="415" fill="#78e1b3" font-family="sans-serif" font-size="20">M55</text>
-<text x="260" y="415" fill="#a7b8d2" font-family="sans-serif" font-size="20">Bins in host seconds; count = completed QEMU processes</text>
-<text x="28" y="449" fill="#a7b8d2" font-family="sans-serif" font-size="19">Distribution measures the test harness, not architectural latency or WCET.</text>
+<text x="28" y="42" fill="#eaf1fc" font-family="sans-serif" font-size="27">Host-time histogram: eight interleaved runs per image</text>
+<rect x="150.0" y="120" width="22" height="210" fill="#fdc573"/>
+<text x="154.0" y="111" fill="#eaf1fc" font-family="sans-serif" font-size="17">7</text>
+<text x="146.0" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.10</text>
+<rect x="262.5" y="300" width="22" height="30" fill="#fdc573"/>
+<text x="266.5" y="291" fill="#eaf1fc" font-family="sans-serif" font-size="17">1</text>
+<text x="258.5" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.15</text>
+<text x="371.0" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.20</text>
+<text x="483.5" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.25</text>
+<text x="596.0" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.30</text>
+<text x="708.5" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.35</text>
+<rect x="851.0" y="150" width="22" height="180" fill="#58c7fa"/>
+<text x="855.0" y="141" fill="#eaf1fc" font-family="sans-serif" font-size="17">6</text>
+<rect x="877.0" y="240" width="22" height="90" fill="#c39bf5"/>
+<text x="881.0" y="231" fill="#eaf1fc" font-family="sans-serif" font-size="17">3</text>
+<text x="821.0" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.40</text>
+<rect x="963.5" y="270" width="22" height="60" fill="#58c7fa"/>
+<text x="967.5" y="261" fill="#eaf1fc" font-family="sans-serif" font-size="17">2</text>
+<rect x="989.5" y="180" width="22" height="150" fill="#c39bf5"/>
+<text x="993.5" y="171" fill="#eaf1fc" font-family="sans-serif" font-size="17">5</text>
+<text x="933.5" y="366" fill="#a7b8d2" font-family="sans-serif" font-size="16">0.45</text>
+<text x="40" y="407" fill="#fdc573" font-family="sans-serif" font-size="19">TX5 M4</text>
+<text x="190" y="407" fill="#58c7fa" font-family="sans-serif" font-size="19">TX6 M4</text>
+<text x="340" y="407" fill="#c39bf5" font-family="sans-serif" font-size="19">TX6 M55+</text>
+<text x="500" y="406" fill="#a7b8d2" font-family="sans-serif" font-size="18">Bin start in host seconds; width 0.05 s</text>
+<text x="28" y="448" fill="#a7b8d2" font-family="sans-serif" font-size="18">Distribution measures the test harness, not architectural latency or WCET.</text>
 </svg>

@@ -1,23 +1,23 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 590" role="img"><rect width="1120" height="590" fill="#0b1424"/>
-<text x="24" y="41" fill="#eaf1fc" font-family="sans-serif" font-size="26">Source structure: historical inputs vs public proof</text>
-<text x="25" y="96" fill="#58c7fa" font-family="sans-serif" font-size="20">WICED 3.1.0 reference (not redistributed)</text>
-<text x="25" y="148" fill="#eaf1fc" font-family="monospace" font-size="19">bcm-wiced-sdk/</text>
-<text x="25" y="187" fill="#eaf1fc" font-family="monospace" font-size="19">  apps/snip/gpio/</text>
-<text x="25" y="226" fill="#eaf1fc" font-family="monospace" font-size="19">    gpio.c [proprietary notice]</text>
-<text x="25" y="265" fill="#eaf1fc" font-family="monospace" font-size="19">  WICED/RTOS/ThreadX/</text>
-<text x="25" y="304" fill="#eaf1fc" font-family="monospace" font-size="19">    ver5.6/ [headers]</text>
-<text x="25" y="343" fill="#eaf1fc" font-family="monospace" font-size="19">    ThreadX.ARM_CM4.*.a [binary]</text>
-<text x="25" y="382" fill="#eaf1fc" font-family="monospace" font-size="19">  WICED/platform/MCU/STM32F4xx/</text>
-<text x="25" y="421" fill="#eaf1fc" font-family="monospace" font-size="19">  tools/ARM_GNU/</text>
-<text x="25" y="460" fill="#eaf1fc" font-family="monospace" font-size="19">  LICENSE.txt</text>
-<text x="580" y="96" fill="#78e1b3" font-family="sans-serif" font-size="20">TX5-upgrade (MIT original work)</text>
+<text x="24" y="41" fill="#eaf1fc" font-family="sans-serif" font-size="26">Source structure: external TX5 kernel vs public repository</text>
+<text x="25" y="96" fill="#fdc573" font-family="sans-serif" font-size="20">TX5_ROOT: external WICED SDK checkout</text>
+<text x="25" y="148" fill="#eaf1fc" font-family="monospace" font-size="19">bcm-wiced-sdk/  (sparse, commit 0886ec9)</text>
+<text x="25" y="187" fill="#eaf1fc" font-family="monospace" font-size="19">  WICED/RTOS/ThreadX/</text>
+<text x="25" y="226" fill="#eaf1fc" font-family="monospace" font-size="19">    ver5.6/tx_api.h, tx_user.h ...</text>
+<text x="25" y="265" fill="#eaf1fc" font-family="monospace" font-size="19">    ver5.6/Cortex_M3_M4/GCC/tx_port.h</text>
+<text x="25" y="304" fill="#eaf1fc" font-family="monospace" font-size="19">    ThreadX.ARM_CM4.release.a</text>
+<text x="25" y="343" fill="#eaf1fc" font-family="monospace" font-size="19">      192 objects, soft-float</text>
+<text x="25" y="382" fill="#eaf1fc" font-family="monospace" font-size="19">  (no other SDK component is used)</text>
+<text x="25" y="421" fill="#eaf1fc" font-family="monospace" font-size="19"></text>
+<text x="25" y="460" fill="#eaf1fc" font-family="monospace" font-size="19">never copied into the repository</text>
+<text x="580" y="96" fill="#58c7fa" font-family="sans-serif" font-size="20">TX5-upgrade (MIT original work)</text>
 <text x="580" y="148" fill="#eaf1fc" font-family="monospace" font-size="19">TX5-upgrade/</text>
 <text x="580" y="187" fill="#eaf1fc" font-family="monospace" font-size="19">  src/led_demo.c + rtos_selftest.c</text>
 <text x="580" y="226" fill="#eaf1fc" font-family="monospace" font-size="19">  src/startup.S + qemu_board.c</text>
-<text x="580" y="265" fill="#eaf1fc" font-family="monospace" font-size="19">  boards/qemu.ld</text>
-<text x="580" y="304" fill="#eaf1fc" font-family="monospace" font-size="19">  cmake/clang-arm-none-eabi.cmake</text>
-<text x="580" y="343" fill="#eaf1fc" font-family="monospace" font-size="19">  third_party/threadx/ [pinned MIT]</text>
-<text x="580" y="382" fill="#eaf1fc" font-family="monospace" font-size="19">    common/ + ports/cortex_m{4,55,85}</text>
-<text x="580" y="421" fill="#eaf1fc" font-family="monospace" font-size="19">  tests/ + evidence/ + scripts/</text>
-<text x="580" y="460" fill="#eaf1fc" font-family="monospace" font-size="19">  presentation/ + outputs/ + LICENSE</text>
+<text x="580" y="265" fill="#eaf1fc" font-family="monospace" font-size="19">  src/tx5_wiced_port.c  [TX5 only]</text>
+<text x="580" y="304" fill="#eaf1fc" font-family="monospace" font-size="19">  cmake/tx5-wiced-adapter.cmake</text>
+<text x="580" y="343" fill="#eaf1fc" font-family="monospace" font-size="19">  config/tx6/tx_user.h  [TX6 only]</text>
+<text x="580" y="382" fill="#eaf1fc" font-family="monospace" font-size="19">  third_party/threadx/ [pinned MIT 6.5]</text>
+<text x="580" y="421" fill="#eaf1fc" font-family="monospace" font-size="19">  boards/qemu.ld + tests/ + evidence/</text>
+<text x="580" y="460" fill="#eaf1fc" font-family="monospace" font-size="19">  scripts/ + presentation/ + LICENSE</text>
 </svg>

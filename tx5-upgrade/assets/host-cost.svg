@@ -1,29 +1,40 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1120 470" role="img"><rect width="1120" height="470" fill="#0b1424"/>
 <text x="28" y="42" fill="#eaf1fc" font-family="sans-serif" font-size="27">Test execution cost on the host (not core performance)</text>
-<text x="30" y="144" fill="#eaf1fc" font-family="sans-serif" font-size="26">M4</text>
-<rect x="430.6011877793482" y="125" width="6" height="23" fill="#58c7fa"/>
-<rect x="814.22784566959" y="125" width="6" height="23" fill="#58c7fa"/>
-<rect x="338.8047684675553" y="125" width="6" height="23" fill="#58c7fa"/>
-<rect x="519.5090559521229" y="125" width="6" height="23" fill="#58c7fa"/>
-<rect x="718.9304320219575" y="125" width="6" height="23" fill="#58c7fa"/>
-<rect x="423.4802217287993" y="125" width="6" height="23" fill="#58c7fa"/>
-<rect x="505.85521513214667" y="125" width="6" height="23" fill="#58c7fa"/>
-<rect x="509.9782360550778" y="125" width="6" height="23" fill="#58c7fa"/>
-<path d="M510.9167255936122,107 L510.9167255936122,169" stroke="#eaf1fc" stroke-width="2"/>
-<text x="190" y="196" fill="#a7b8d2" font-family="sans-serif" font-size="22">median 0.423 s | 8 of 8 checks passed</text>
-<text x="30" y="269" fill="#eaf1fc" font-family="sans-serif" font-size="26">M55</text>
-<rect x="500.6115073733243" y="250" width="6" height="23" fill="#78e1b3"/>
-<rect x="753.1806164328609" y="250" width="6" height="23" fill="#78e1b3"/>
-<rect x="562.7702402350733" y="250" width="6" height="23" fill="#78e1b3"/>
-<rect x="646.0954407969579" y="250" width="6" height="23" fill="#78e1b3"/>
-<rect x="912.4170039900952" y="250" width="6" height="23" fill="#78e1b3"/>
-<rect x="635.9861125442768" y="250" width="6" height="23" fill="#78e1b3"/>
-<rect x="658.9372139699628" y="250" width="6" height="23" fill="#78e1b3"/>
-<rect x="599.0338262001196" y="250" width="6" height="23" fill="#78e1b3"/>
-<path d="M644.0407766706173,232 L644.0407766706173,294" stroke="#eaf1fc" stroke-width="2"/>
-<text x="190" y="321" fill="#a7b8d2" font-family="sans-serif" font-size="22">median 0.456 s | 8 of 8 checks passed</text>
-<path d="M190,361 L1030,361" stroke="#a7b8d2" stroke-width="2"/>
-<text x="185" y="390" fill="#a7b8d2" font-family="sans-serif" font-size="20">0.34 s</text>
-<text x="940" y="390" fill="#a7b8d2" font-family="sans-serif" font-size="20">0.55 s</text>
-<text x="28" y="442" fill="#a7b8d2" font-family="sans-serif" font-size="19">Windows host; QEMU icount 128 ns/instruction. No silicon speedup inference.</text>
+<text x="28" y="111" fill="#eaf1fc" font-family="sans-serif" font-size="23">TX5 M4</text>
+<rect x="302.4369326665071" y="95" width="6" height="22" fill="#fdc573"/>
+<rect x="277.2709886175008" y="95" width="6" height="22" fill="#fdc573"/>
+<rect x="249.53537650328587" y="95" width="6" height="22" fill="#fdc573"/>
+<rect x="246.871744730228" y="95" width="6" height="22" fill="#fdc573"/>
+<rect x="239.49380370808453" y="95" width="6" height="22" fill="#fdc573"/>
+<rect x="234.7364937999473" y="95" width="6" height="22" fill="#fdc573"/>
+<rect x="241.65855191336522" y="95" width="6" height="22" fill="#fdc573"/>
+<rect x="272.99703426137216" y="95" width="6" height="22" fill="#fdc573"/>
+<path d="M251.20356061675693,81 L251.20356061675693,133" stroke="#eaf1fc" stroke-width="2"/>
+<text x="200" y="152" fill="#a7b8d2" font-family="sans-serif" font-size="19">median 0.133 s | 8 of 8 checks passed</text>
+<text x="28" y="206" fill="#eaf1fc" font-family="sans-serif" font-size="23">TX6 M4</text>
+<rect x="967.7695175460459" y="190" width="6" height="22" fill="#58c7fa"/>
+<rect x="822.4098826383154" y="190" width="6" height="22" fill="#58c7fa"/>
+<rect x="838.286958708787" y="190" width="6" height="22" fill="#58c7fa"/>
+<rect x="831.7371720385123" y="190" width="6" height="22" fill="#58c7fa"/>
+<rect x="826.1949070511743" y="190" width="6" height="22" fill="#58c7fa"/>
+<rect x="849.6916023833027" y="190" width="6" height="22" fill="#58c7fa"/>
+<rect x="840.4998831148665" y="190" width="6" height="22" fill="#58c7fa"/>
+<rect x="894.9355160174554" y="190" width="6" height="22" fill="#58c7fa"/>
+<path d="M842.3934209118268,176 L842.3934209118268,228" stroke="#eaf1fc" stroke-width="2"/>
+<text x="200" y="247" fill="#a7b8d2" font-family="sans-serif" font-size="19">median 0.430 s | 8 of 8 checks passed</text>
+<text x="28" y="301" fill="#eaf1fc" font-family="sans-serif" font-size="23">TX6 M55+</text>
+<rect x="854.842484755229" y="285" width="6" height="22" fill="#c39bf5"/>
+<rect x="875.368374395846" y="285" width="6" height="22" fill="#c39bf5"/>
+<rect x="888.5013922299266" y="285" width="6" height="22" fill="#c39bf5"/>
+<rect x="863.2896606738698" y="285" width="6" height="22" fill="#c39bf5"/>
+<rect x="919.4267927876255" y="285" width="6" height="22" fill="#c39bf5"/>
+<rect x="898.1804483611215" y="285" width="6" height="22" fill="#c39bf5"/>
+<rect x="915.8910108497754" y="285" width="6" height="22" fill="#c39bf5"/>
+<rect x="933.634620141219" y="285" width="6" height="22" fill="#c39bf5"/>
+<path d="M896.340920295524,271 L896.340920295524,323" stroke="#eaf1fc" stroke-width="2"/>
+<text x="200" y="342" fill="#a7b8d2" font-family="sans-serif" font-size="19">median 0.457 s | 8 of 8 checks passed</text>
+<path d="M200,372 L1020,372" stroke="#a7b8d2" stroke-width="2"/>
+<text x="195" y="399" fill="#a7b8d2" font-family="sans-serif" font-size="19">0.11 s</text>
+<text x="935" y="399" fill="#a7b8d2" font-family="sans-serif" font-size="19">0.52 s</text>
+<text x="28" y="446" fill="#a7b8d2" font-family="sans-serif" font-size="18">TX5 idles in WFI (fast-forwarded by QEMU); TX6 idles in a spin loop. Harness cost only.</text>
 </svg>

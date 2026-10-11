@@ -1,7 +1,13 @@
 {
-  "generated_utc": "2026-10-10T23:25:06.399523+00:00",
+  "generated_utc": "2026-10-11T06:34:59.157575+00:00",
   "threadx_tag": "v6.5.2.202603_rel",
   "threadx_sha": "93387b0a60382a29579bbad5045c68328e3751df",
+  "tx5": {
+    "version": "G5.6.5.2",
+    "source": "WICED SDK 3.1.0 prebuilt ThreadX.ARM_CM4.release.a (external, not redistributed)",
+    "wiced_commit": "0886ec932a063e12db768cd09428e8a8ab555bce",
+    "archive_sha256": "71288b46e58b2c398118674b53feb708994e18740cf7e5d68bc8d070f72fac1e"
+  },
   "compiler": "clang version 22.1.3 (https://github.com/msys2/MINGW-packages b2ba9d193810f115e9af26819b666d1fa929a940)",
   "qemu": "QEMU emulator version 11.1.0 (v11.1.0-12130-ge470268ff4)",
   "virtual_time_model": "QEMU icount shift=7,align=off,sleep=off; 128 ns/instruction",
@@ -9,73 +15,96 @@
     "Host wall time includes emulator startup, guest sleep, and semihosting.",
     "Host timings are not CPU cycle, silicon throughput, or WCET measurements.",
     "M85 is compile/link only; there is no M85 runtime or stack measurement.",
-    "All compared images use ThreadX 6.5.2.202603; no TX5 runtime is included.",
-    "Stack high-water values are observed through ThreadX stack checking."
+    "TX5 and TX6 images use different kernel configurations; size deltas are not pure kernel growth.",
+    "Stack high-water is measured by scanning the 0xEFEFEFEF stack fill pattern."
   ],
   "builds": {
-    "m4": {
-      "elf_sha256": "503dc7e8480f0a4e617cc8324ef7865ca27a4dd6bd736fccb4dedcfb4e3a5a6d",
+    "tx5-m4": {
+      "stage": "Stage 1: TX5.6 / Cortex-M4",
+      "threadx_version": "G5.6.5.2",
+      "elf_sha256": "18b6e9a5b480fca52974b668f395b96445f74012cad39642ccff0135d2cef5d9",
       "sections": {
         ".vectors": 512,
-        ".text": 17123,
+        ".text": 12024,
+        ".ARM.exidx": 16,
+        ".data": 8,
+        ".bss": 3568,
+        ".stack": 2048,
+        ".ARM.attributes": 65
+      },
+      "rom_bytes": 12560,
+      "ram_reserved_bytes": 5624,
+      "runtime_status": "PASS"
+    },
+    "m4": {
+      "stage": "Stage 2: TX6.5 / Cortex-M4",
+      "threadx_version": "6.5.2.202603",
+      "elf_sha256": "6c264846ed98117ac8c1de302190480bbd0b1b5fb369b0cc5672e21d69b93e8a",
+      "sections": {
+        ".vectors": 512,
+        ".text": 17441,
         ".ARM.exidx": 16,
         ".data": 128,
-        ".bss": 4784,
+        ".bss": 4788,
         ".stack": 2048,
         ".ARM.attributes": 73
       },
-      "rom_bytes": 17779,
-      "ram_reserved_bytes": 6960,
-      "runtime_status": "PASS"
-    },
-    "m55": {
-      "elf_sha256": "41cd66ca43ba6c14d5207e35c488120e18fd4e581e4ade6f0a28ff22a26deef5",
-      "sections": {
-        ".vectors": 512,
-        ".text": 16696,
-        ".ARM.exidx": 16,
-        ".data": 124,
-        ".bss": 4784,
-        ".stack": 2048,
-        ".ARM.attributes": 76
-      },
-      "rom_bytes": 17348,
-      "ram_reserved_bytes": 6956,
+      "rom_bytes": 18097,
+      "ram_reserved_bytes": 6964,
       "runtime_status": "PASS"
     },
     "m85": {
-      "elf_sha256": "760eafa2501a052ebe388741831d056e8af9f35216cb7219f9a111a9827ae05e",
+      "stage": "Stage 3: TX6.5 / Cortex-M85",
+      "threadx_version": "6.5.2.202603",
+      "elf_sha256": "5b579c6ef2d4ae48bf70b645654de32b236a5b08a7a993633b13e31bba93c3c4",
       "sections": {
         ".vectors": 512,
-        ".text": 17396,
+        ".text": 17634,
         ".ARM.exidx": 16,
         ".data": 124,
-        ".bss": 4784,
+        ".bss": 4788,
         ".stack": 2048,
         ".ARM.attributes": 80
       },
-      "rom_bytes": 18048,
-      "ram_reserved_bytes": 6956,
+      "rom_bytes": 18286,
+      "ram_reserved_bytes": 6960,
       "runtime_status": "NOT_RUN"
+    },
+    "m55": {
+      "stage": "Supplement: TX6.5 / Cortex-M55",
+      "threadx_version": "6.5.2.202603",
+      "elf_sha256": "cb52516899b63e31adf322330538e8b5fe47c16d6c24bf49f37ff441e960f74d",
+      "sections": {
+        ".vectors": 512,
+        ".text": 16930,
+        ".ARM.exidx": 16,
+        ".data": 124,
+        ".bss": 4788,
+        ".stack": 2048,
+        ".ARM.attributes": 76
+      },
+      "rom_bytes": 17582,
+      "ram_reserved_bytes": 6960,
+      "runtime_status": "PASS"
     }
   },
   "runs": {
-    "m4": {
+    "tx5-m4": {
       "repeats": 8,
       "pass_count": 8,
       "host_wall_seconds": [
-        0.4032203000970185,
-        0.4993078999686986,
-        0.3802278999937698,
-        0.425489200046286,
-        0.4754386000568047,
-        0.40143670001998544,
-        0.4220693000825122,
-        0.4231019999133423
+        0.16037980001419783,
+        0.1477384000318125,
+        0.13380619999952614,
+        0.132468199939467,
+        0.12876210000831634,
+        0.12637239997275174,
+        0.12984950002282858,
+        0.14559149998240173
       ],
-      "median_host_wall_seconds": 0.42258564999792725,
-      "min_host_wall_seconds": 0.3802278999937698,
-      "max_host_wall_seconds": 0.4993078999686986,
+      "median_host_wall_seconds": 0.13313719996949658,
+      "min_host_wall_seconds": 0.12637239997275174,
+      "max_host_wall_seconds": 0.16037980001419783,
       "tick_intervals": [
         25,
         25,
@@ -156,25 +185,124 @@
         "led_stack_reserved": 1024,
         "worker_thread_runs": 2,
         "led_thread_runs": 12,
-        "led_stack_high_water_bytes": 212
+        "led_stack_high_water_bytes": 196
+      }
+    },
+    "m4": {
+      "repeats": 8,
+      "pass_count": 8,
+      "host_wall_seconds": [
+        0.4945908000227064,
+        0.4215735000325367,
+        0.4295488999923691,
+        0.42625879996921867,
+        0.4234747999580577,
+        0.43527770007494837,
+        0.43066049995832145,
+        0.45800470001995564
+      ],
+      "median_host_wall_seconds": 0.4301046999753453,
+      "min_host_wall_seconds": 0.4215735000325367,
+      "max_host_wall_seconds": 0.4945908000227064,
+      "tick_intervals": [
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25,
+        25
+      ],
+      "metrics": {
+        "cpuid": 1091551808,
+        "sizeof_TX_THREAD": 180,
+        "led_stack_reserved": 1024,
+        "worker_thread_runs": 2,
+        "led_thread_runs": 12,
+        "led_stack_high_water_bytes": 224
       }
     },
     "m55": {
       "repeats": 8,
       "pass_count": 8,
       "host_wall_seconds": [
-        0.42075589997693896,
-        0.48401730007026345,
-        0.4363249000161886,
-        0.45719550002831966,
-        0.52390149992425,
-        0.4546633999561891,
-        0.46041200007312,
-        0.44540790002793074
+        0.4378651001024991,
+        0.44817570003215224,
+        0.45477269997354597,
+        0.4421082999324426,
+        0.47030719998292625,
+        0.4596346999751404,
+        0.4685310999630019,
+        0.477444100077264
       ],
-      "median_host_wall_seconds": 0.4559294499922544,
-      "min_host_wall_seconds": 0.42075589997693896,
-      "max_host_wall_seconds": 0.52390149992425,
+      "median_host_wall_seconds": 0.4572036999743432,
+      "min_host_wall_seconds": 0.4378651001024991,
+      "max_host_wall_seconds": 0.477444100077264,
       "tick_intervals": [
         25,
         25,
@@ -255,7 +383,7 @@
         "led_stack_reserved": 1024,
         "worker_thread_runs": 2,
         "led_thread_runs": 12,
-        "led_stack_high_water_bytes": 348
+        "led_stack_high_water_bytes": 360
       }
     }
   }
