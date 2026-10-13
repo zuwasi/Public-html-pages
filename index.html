@@ -62,6 +62,12 @@
   <p class="new-sub">המצגות החדשות ביותר — הוסרו לכאן לגישה מהירה</p>
   <div class="new-grid">
     <div class="new-card" dir="ltr">
+      <span class="nc-tag">NEW · BUILD PERFORMANCE / MOLD LINKER</span>
+      <a href="apollo-mold-linker/">Apollo Linker Benchmark: When the mold Linker Helps, and When It Doesn't</a>
+      <span class="nc-dates">Published: 2026-10-13</span>
+      <div class="nc-desc">22 interactive slides from two cold Bazel builds of Apollo's cyber and planning modules (24 cores, GCC 7.5), one with GNU ld.bfd and one with mold 2.0.0, with every link action timed through bazel --profile. Whole-build wall time moved +1.1% (462 s vs 467 s), within run-to-run noise. Per link, the median was 16.8% faster with mold and the best single link was 2.94x faster, but links under 1.5 s often got slower: 119 of 124 losses were in that range. Includes all 310 paired link timings, a comparison with the large single-link workloads in Rui Ueyama's arXiv:2608.23228 paper, the setup problems we hit, and when mold is worth adopting.</div>
+    </div>
+    <div class="new-card" dir="ltr">
       <span class="nc-tag">NEW · STATIC ANALYSIS / PARASOFT VS SONARQUBE</span>
       <a href="threadx-parasoft-sonarqube.html">Parasoft C/C++test vs SonarQube CLI on ThreadX Win32: 50 Planted Defects</a>
       <span class="nc-dates">Published: 2026-10-11 · Updated: 2026-10-11</span>
