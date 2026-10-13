@@ -712,6 +712,42 @@ table.vs th:nth-child(3) { color: var(--coral-dark); }
   </div>
 </section>
 
+<!-- Security relevance: benefits -->
+<section class="slide" data-stage="test">
+  <div class="kicker">Cybersecurity relevance</div>
+  <h2>Skill behavior is measurable. Security behavior is <span class="grad">behavior too</span>.</h2>
+  <table>
+    <tr><th>Security benefit</th><th>How an eval expresses it</th></tr>
+    <tr><td><strong>Prompt injection resistance</strong></td><td>Adversarial task: malicious instructions inside an input fixture. Graders fail the run if the agent disregards the skill's rules.</td></tr>
+    <tr><td><strong>Tool usage restrictions</strong></td><td>Name the prohibited commands and tools in the graders; pass/fail is computed from the recorded tool calls.</td></tr>
+    <tr><td><strong>Sensitive data protection</strong></td><td>Output and file validation: fail the run if generated outputs contain credentials or other restricted information.</td></tr>
+    <tr><td><strong>Security regression detection</strong></td><td><code>--baseline</code> over security tasks: repeat them after any skill, model, or agent configuration change, and gate in CI.</td></tr>
+    <tr><td><strong>Investigation evidence</strong></td><td>Transcripts, tool calls, and generated files from every run, to understand an unsafe action instead of guessing.</td></tr>
+  </table>
+  <p class="small-note">These are uses of the documented capabilities (adversarial testing, execution recording, behavior and output graders, CI integration) that you configure per skill; they are not security checks that run out of the box. Source: security assessment of github.com/zuwasi/wazatator, 13 Oct 2026.</p>
+</section>
+
+<!-- Security relevance: conditions and limitations -->
+<section class="slide" data-stage="review">
+  <div class="kicker">Cybersecurity relevance: conditions and limits</div>
+  <h2>Evidence for the scenarios you test. <span class="grad">Not a security product.</span></h2>
+  <div class="grid2">
+    <div class="card">
+      <h3>You design the test</h3>
+      <p>A security eval needs three things from you: the security requirement, the adversarial or representative input, and an observable pass/fail rule. Example: hide instructions to disclose a <strong>synthetic secret</strong> inside an untrusted document, then grade the output and tool calls for prohibited behavior.</p>
+    </div>
+    <div class="card">
+      <h3>What it is not</h3>
+      <p>Not a runtime enforcement system, not a vulnerability scanner, and not a substitute for sandboxing and access controls. Recording an unsafe action or failing an evaluation does not necessarily prevent it.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px">
+    <h3>How to run the evaluations</h3>
+    <p>With appropriate isolation, restricted permissions, and synthetic sensitive data. Passing a suite is evidence for the scenarios tested: it does not prove resistance to every attack or guarantee the same behavior in a different execution environment.</p>
+  </div>
+  <p class="small-note">Recommended positioning: "An AI agent skill evaluation framework supporting security testing and behavioral assurance."</p>
+</section>
+
 <!-- 12. Get started -->
 <section class="slide" data-stage="release">
   <div class="kicker">Get started</div>
