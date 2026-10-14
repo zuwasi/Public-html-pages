@@ -209,7 +209,7 @@
       <div class="titlecard-meta">
         <span>Wolfram Mathematica · executable oracle</span>
         <span>Lean 4 · kernel-checked proofs</span>
-        <span>Numerical simulator · scattering lab</span>
+        <span>QASM / Classiq · verified circuit on a simulator</span>
         <span>Evidence package · public and reproducible</span>
       </div>
       <p class="footnote" style="max-width:60rem;">
@@ -304,15 +304,15 @@
         <div class="arrow">→</div>
         <div class="stage">
           <span class="chip">05 · ENGINEER</span>
-          <h4>Scattering simulator</h4>
-          <p>An independent numerical lab: evolve the linearized perturbation on a(y), extract reflected and transmitted flux, overlay the closed form. Interactive in the browser.</p>
+          <h4>QASM / Classiq artifact</h4>
+          <p>Compile the domain-wall wave dynamics into a quantum circuit (OpenQASM or a Classiq program), run it on a simulator, and overlay measured transmission on the closed form.</p>
           <span class="badge b-numeric">NUMERICALLY TESTED</span>
         </div>
         <div class="arrow">→</div>
         <div class="stage">
           <span class="chip">06 · OUTPUT</span>
           <h4>Evidence package</h4>
-          <p>Claim-status table, notebook, Lean files, vectors, simulator, reproduction guide. Public, downloadable, extensible by readers.</p>
+          <p>Claim-status table, notebook, Lean files, vectors, QASM / Classiq circuit, simulator, reproduction guide. Public, downloadable, extensible by readers.</p>
           <span class="badge b-symbolic">REPRODUCIBLE</span>
         </div>
       </div>
@@ -433,27 +433,27 @@
   <!-- 8 · SIMULATOR STAGE -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Stage 05 · Simulator · 08</div>
-      <h2>The endpoint for a theory paper: a scattering lab.</h2>
+      <div class="kicker"><span class="rule"></span>Stage 05 · Engineer · 08</div>
+      <h2>The endpoint: a verified circuit on a simulator.</h2>
       <div class="grid2">
         <div class="card">
-          <h3>What it computes</h3>
-          <p>Numerically solve the linearized perturbation equation (the Eq. 8 wave equation) on domain-wall backgrounds, extract reflected and transmitted energy flux from the asymptotics, and compare against the closed-form T<sub>L</sub>.</p>
+          <h3>From warp factor to circuit</h3>
+          <p>The domain-wall scattering problem is a wave equation with a position-dependent speed: exactly the class Hamiltonian simulation and discrete-time quantum walks handle. Discretize the linearized perturbation on a(y) into a unitary circuit.</p>
         </div>
         <div class="card">
-          <h3>Cross-model evidence</h3>
-          <p>Agreement between two independent models (numerical evolution vs the Wolfram oracle) is the evidence class, mirroring Wolfram-vs-Python in REED and browser-vs-Wolfram in QPE. Disagreement is preserved and diagnosed, never repaired away.</p>
+          <h3>QASM and Classiq targets</h3>
+          <p>Emit OpenQASM for stock simulators, or synthesize through Classiq; both are named target outputs of the MantiQ production line. The circuit is the executable artifact, not a diagram of one.</p>
         </div>
         <div class="card">
-          <h3>What it makes tangible</h3>
-          <p>Choose d, family (thin brane, Janus, multi-brane), and parameters; watch the transmission curve move, watch the bounds tighten as C<sup>T</sup><sub>L</sub> / C<sup>T</sup><sub>R</sub> changes, and see the slight d-dependence directly.</p>
+          <h3>Three routes to the same number</h3>
+          <p>Run the circuit on a simulator, read the transmitted energy from measured amplitudes, and compare against two independent routes: the Wolfram oracle and the closed-form T<sub>L</sub>. Disagreement is preserved and diagnosed, never repaired away.</p>
         </div>
         <div class="card">
-          <h3>The honest endpoint</h3>
-          <p>This paper defines no deployable artifact, so there is no FPGA or contract stage. The pipeline ends where the QPE case study ends: a runnable public lab plus an evidence package. That is the correct shape here, not a limitation.</p>
+          <h3>Interactive lab alongside</h3>
+          <p>A browser lab sweeps d, family (thin brane, Janus, multi-brane), and parameters: watch the transmission curve move, watch the bounds tighten as C<sup>T</sup><sub>L</sub> / C<sup>T</sup><sub>R</sub> changes, and see the slight d-dependence directly.</p>
         </div>
       </div>
-      <p class="footnote"><b>Status language:</b> simulator agreement is NUMERICALLY TESTED for the swept grid. It is not exhaustive and it does not upgrade any symbolic or formal claim.</p>
+      <p class="footnote"><b>Status language:</b> simulator agreement is NUMERICALLY TESTED for the swept grid. No quantum speedup is claimed: the circuit is the checked, executable form of the model, not a hardware claim.</p>
     </div>
   </section>
 
@@ -507,7 +507,7 @@
         <div class="card verdict v-strong">
           <div>
             <h3><span class="mark">●</span> Strong fit</h3>
-            <p>Wolfram oracle for the closed forms, limits, and dimension scans. Claim and ambiguity ledgers for a conventions-heavy holography derivation. Independent numerical cross-check through the simulator.</p>
+            <p>Wolfram oracle for the closed forms, limits, and dimension scans. Claim and ambiguity ledgers for a conventions-heavy holography derivation. Independent cross-checks through a QASM / Classiq circuit artifact executed on a simulator.</p>
           </div>
         </div>
         <div class="card verdict v-adapt">
@@ -519,16 +519,17 @@
         <div class="card verdict v-absent">
           <div>
             <h3><span class="mark">●</span> Not applicable</h3>
-            <p>The RTL, FPGA, and Solidity gates do not apply: the paper defines no deployable artifact. The endpoint is a public evidence package, QPE-shaped rather than REED-shaped.</p>
+            <p>RTL, FPGA, and Solidity gates do not apply. The executable layer lands one level up, in the MantiQ production line's quantum targets: a QASM / Classiq circuit on a simulator, plus a public evidence package.</p>
           </div>
         </div>
       </div>
       <div class="chips">
         <span>Pipeline coverage: stages 01 to 06 fully applicable</span>
-        <span>Hardware gate: absent by nature of the paper, not skipped</span>
+        <span>Target outputs: QASM and Classiq, exactly as on the MantiQ production line</span>
+        <span>No RTL / FPGA stage for this paper; the simulator is the product run</span>
         <span>Effort shape: comparable to the QPE case study, plus a deeper Lean stage</span>
       </div>
-      <p class="footnote"><b>Summary:</b> roughly the first two thirds of the MantiQ pipeline (normalize, compute, verify, simulate) apply directly and strongly; the last third (implementation hardware) is replaced by the simulator endpoint and the evidence package.</p>
+      <p class="footnote"><b>Summary:</b> the pipeline applies end to end: normalize, compute, verify, then engineer the model as a QASM / Classiq circuit executed on a simulator, closing with the evidence package.</p>
     </div>
   </section>
 
@@ -544,7 +545,7 @@
         </div>
         <div class="card">
           <h3>A public, extensible artifact</h3>
-          <p>Notebook, Lean files, vectors, and simulator travel together with reproduction instructions, like the QPE evidence folder. Readers and referees can re-run rather than re-derive.</p>
+          <p>Notebook, Lean files, vectors, QASM / Classiq circuit, and simulator travel together with reproduction instructions, like the QPE evidence folder. Readers and referees can re-run rather than re-derive.</p>
         </div>
         <div class="card">
           <h3>A lab for the open questions</h3>
@@ -565,7 +566,7 @@
       <div class="kicker"><span class="rule"></span>Next step · 12</div>
       <h2>Proposed next step: a scoped case study.</h2>
       <p class="lead" style="max-width:58rem; margin-top:.4rem;">
-        Run arXiv:2609.38318 through the QPE-shaped scope: manual transcription with an ambiguity ledger, a Wolfram notebook with a named audit and frozen vectors, scoped Lean theorems for the bounds and the d = 2 identity, an interactive scattering simulator, and a public evidence page.
+        Run arXiv:2609.38318 through the QPE-shaped scope: manual transcription with an ambiguity ledger, a Wolfram notebook with a named audit and frozen vectors, scoped Lean theorems for the bounds and the d = 2 identity, an interactive scattering lab, a QASM / Classiq circuit executed on a simulator, and a public evidence page.
       </p>
       <div class="grid3">
         <div class="card">
@@ -578,7 +579,7 @@
         </div>
         <div class="card">
           <h3>Weeks 5 to 6</h3>
-          <p>Numerical scattering lab and cross-model comparison; assemble the public evidence package and claim-status table.</p>
+          <p>QASM / Classiq circuit artifact and simulator runs, three-way cross-model comparison, and the public evidence package with claim-status table.</p>
         </div>
       </div>
       <p class="authors" style="margin-top:1.2rem;">
