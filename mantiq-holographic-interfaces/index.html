@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>MantiQ Factor × arXiv:2609.38318 · From a holography letter to a checked result</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0b1220;
+    --bg-soft: #0f1830;
+    --card: #111a2e;
+    --border: #2a3a58;
+    --text: #e8ecf4;
+    --muted: #9aa7c0;
+    --accent: #4fc3f7;
+    --amber: #f2b544;
+    --green: #66bb6a;
+    --red: #ef6c75;
+    --violet: #b39ddb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .deck { position: fixed; inset: 0; overflow: hidden; }
+  .track { display: flex; height: 100vh; width: 100vw; transition: transform .45s cubic-bezier(.4,0,.2,1); }
+  .slide {
+    flex: 0 0 100vw; height: 100vh; overflow-y: auto;
+    padding: clamp(3.4rem, 8vh, 5.2rem) clamp(1.1rem, 5vw, 4.5rem) 5rem;
+    background:
+      radial-gradient(1200px 500px at 15% -10%, rgba(79,195,247,.08), transparent 60%),
+      radial-gradient(900px 480px at 95% 110%, rgba(179,157,219,.07), transparent 60%),
+      var(--bg);
+  }
+  .inner { max-width: 1150px; margin: 0 auto; }
+  .kicker {
+    color: var(--accent); font-weight: 800; letter-spacing: .14em;
+    font-size: clamp(.66rem, 1.3vw, .78rem); text-transform: uppercase;
+    display: flex; align-items: center; gap: .6rem; margin-bottom: clamp(.7rem, 1.8vh, 1.1rem);
+  }
+  .kicker .rule { height: 1px; flex: 0 0 2.4rem; background: var(--accent); opacity: .55; }
+  h1 { font-size: clamp(1.7rem, 4.6vw, 3.2rem); line-height: 1.12; font-weight: 800; letter-spacing: -.01em; }
+  h2 { font-size: clamp(1.35rem, 3.1vw, 2.25rem); line-height: 1.15; font-weight: 800; letter-spacing: -.01em; margin-bottom: clamp(.6rem, 1.6vh, 1rem); }
+  .sub { color: var(--muted); font-size: clamp(.9rem, 1.9vw, 1.12rem); line-height: 1.55; }
+  .lead { font-size: clamp(.95rem, 2vw, 1.2rem); line-height: 1.6; color: var(--text); }
+  .muted { color: var(--muted); }
+  .mono { font-family: ui-monospace, 'Cascadia Code', Consolas, monospace; font-size: .92em; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
+    background: rgba(79,195,247,.09); border: 1px solid rgba(79,195,247,.22);
+    padding: .08em .38em; border-radius: 6px; font-size: .9em; white-space: nowrap;
+  }
+  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(.7rem, 1.6vw, 1.1rem); margin-top: clamp(.9rem, 2.4vh, 1.4rem); }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(.7rem, 1.6vw, 1.1rem); margin-top: clamp(.9rem, 2.4vh, 1.4rem); }
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: clamp(.8rem, 1.8vw, 1.15rem);
+  }
+  .card h3 { font-size: clamp(.92rem, 1.8vw, 1.08rem); margin-bottom: .45rem; }
+  .card p, .card li { font-size: clamp(.8rem, 1.55vw, .95rem); line-height: 1.55; color: var(--muted); }
+  .card ul { padding-left: 1.1rem; }
+  .card li { margin: .3rem 0; }
+  .num { color: var(--accent); font-weight: 800; }
+  .badge {
+    display: inline-block; font-size: clamp(.58rem, 1.15vw, .68rem); font-weight: 800;
+    letter-spacing: .08em; padding: .18rem .55rem; border-radius: 999px; margin-top: .55rem;
+  }
+  .b-paper  { background: rgba(154,167,192,.14); color: #aeb9d0; border: 1px solid rgba(154,167,192,.35); }
+  .b-symbolic { background: rgba(79,195,247,.12); color: var(--accent); border: 1px solid rgba(79,195,247,.4); }
+  .b-proof  { background: rgba(102,187,106,.12); color: var(--green); border: 1px solid rgba(102,187,106,.4); }
+  .b-numeric { background: rgba(242,181,68,.12); color: var(--amber); border: 1px solid rgba(242,181,68,.4); }
+  .b-notest { background: rgba(239,108,117,.12); color: var(--red); border: 1px solid rgba(239,108,117,.4); }
+  .footnote {
+    margin-top: clamp(.8rem, 2.2vh, 1.3rem); color: var(--muted);
+    font-size: clamp(.72rem, 1.4vw, .84rem); line-height: 1.5;
+    border-left: 2px solid var(--border); padding-left: .8rem;
+  }
+  .footnote b { color: var(--text); }
+
+  /* Workflow diagram (slide 3) */
+  .flow { display: flex; align-items: stretch; gap: clamp(.3rem, .9vw, .7rem); margin-top: clamp(.9rem, 2.4vh, 1.5rem); }
+  .stage {
+    flex: 1 1 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+    padding: clamp(.6rem, 1.4vw, .95rem); display: flex; flex-direction: column; min-width: 0;
+  }
+  .stage .chip {
+    color: var(--accent); font-weight: 800; font-size: clamp(.6rem, 1.2vw, .7rem); letter-spacing: .1em;
+  }
+  .stage h4 { font-size: clamp(.82rem, 1.6vw, 1rem); margin: .3rem 0 .4rem; }
+  .stage p { font-size: clamp(.68rem, 1.35vw, .82rem); line-height: 1.45; color: var(--muted); flex: 1; }
+  .stage .badge { margin-top: .5rem; align-self: flex-start; }
+  .arrow { align-self: center; color: var(--accent); font-size: clamp(1rem, 2.2vw, 1.5rem); font-weight: 700; flex: 0 0 auto; }
+  .precedent {
+    margin-top: clamp(.8rem, 2vh, 1.2rem); display: flex; flex-wrap: wrap; gap: .5rem;
+  }
+  .precedent span {
+    background: rgba(179,157,219,.1); border: 1px solid rgba(179,157,219,.35); color: #cfc4ea;
+    border-radius: 999px; padding: .25rem .7rem; font-size: clamp(.62rem, 1.25vw, .76rem); font-weight: 600;
+  }
+
+  /* Evidence table (slide 8) */
+  table.ev { width: 100%; border-collapse: collapse; margin-top: clamp(.8rem, 2vh, 1.3rem); }
+  table.ev th {
+    text-align: left; color: var(--accent); font-size: clamp(.64rem, 1.3vw, .78rem);
+    letter-spacing: .08em; text-transform: uppercase; padding: .45rem .6rem;
+    border-bottom: 1px solid var(--border);
+  }
+  table.ev td {
+    padding: clamp(.5rem, 1.2vw, .75rem) .6rem; border-bottom: 1px solid rgba(42,58,88,.6);
+    font-size: clamp(.72rem, 1.45vw, .9rem); line-height: 1.45; vertical-align: top;
+  }
+  table.ev td.claim { color: var(--text); font-weight: 600; }
+  table.ev td.boundary { color: var(--muted); }
+
+  .verdict { display: flex; align-items: flex-start; gap: .6rem; }
+  .verdict .mark { font-size: 1.1rem; line-height: 1.2; }
+  .v-strong h3 { color: var(--green); }
+  .v-adapt h3 { color: var(--amber); }
+  .v-absent h3 { color: var(--red); }
+
+  .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .8rem; }
+  .chips span {
+    background: rgba(79,195,247,.08); border: 1px solid rgba(79,195,247,.3); color: var(--text);
+    border-radius: 999px; padding: .25rem .7rem; font-size: clamp(.62rem, 1.25vw, .76rem);
+  }
+  .titlecard-meta { margin-top: clamp(1rem, 3vh, 1.8rem); display: flex; flex-wrap: wrap; gap: .5rem; }
+  .titlecard-meta span {
+    background: var(--card); border: 1px solid var(--border); color: var(--muted);
+    border-radius: 999px; padding: .3rem .8rem; font-size: clamp(.64rem, 1.3vw, .78rem);
+  }
+  .authors { color: var(--muted); margin-top: .9rem; font-size: clamp(.8rem, 1.7vw, 1rem); line-height: 1.6; }
+
+  /* Chrome */
+  .brand {
+    position: fixed; top: .9rem; right: 1.2rem; z-index: 30; color: var(--muted);
+    font-size: clamp(.62rem, 1.2vw, .74rem); letter-spacing: .06em; font-weight: 600;
+  }
+  .brand b { color: var(--accent); }
+  .nav {
+    position: fixed; top: 50%; transform: translateY(-50%); z-index: 40;
+    width: clamp(2.6rem, 5vw, 3.2rem); height: clamp(2.6rem, 5vw, 3.2rem);
+    border-radius: 50%; border: 1px solid var(--border); background: rgba(17,26,46,.85);
+    color: var(--text); font-size: clamp(1.2rem, 2.6vw, 1.6rem); line-height: 1;
+    cursor: pointer; user-select: none; transition: border-color .2s, color .2s;
+  }
+  .nav:hover { border-color: var(--accent); color: var(--accent); }
+  .nav.prev { left: .9rem; }
+  .nav.next { right: .9rem; }
+  .progress { position: fixed; left: 0; right: 0; bottom: 0; height: 4px; background: rgba(42,58,88,.5); z-index: 40; }
+  .progress div { height: 100%; width: 0; background: linear-gradient(90deg, #4fc3f7, #b39ddb); transition: width .45s ease; }
+  .counter {
+    position: fixed; right: 1.2rem; bottom: .8rem; z-index: 40; color: var(--muted);
+    font-size: clamp(.66rem, 1.3vw, .8rem); font-weight: 600;
+  }
+  .hint {
+    position: fixed; left: 50%; transform: translateX(-50%); bottom: .9rem; z-index: 40;
+    color: var(--muted); font-size: clamp(.68rem, 1.4vw, .82rem); animation: pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
+
+  @media (max-width: 760px) {
+    .grid2, .grid3 { grid-template-columns: 1fr; }
+    .flow { flex-direction: column; }
+    .arrow { transform: rotate(90deg); align-self: center; }
+    .stage { width: 100%; }
+    .brand { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="brand">MantiQ Factor · <b>arXiv:2609.38318</b> · ESL</div>
+
+<div class="deck">
+<div class="track" id="track">
+
+  <!-- 1 · TITLE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Fit assessment · workflow proposal</div>
+      <h1>Your holography letter,<br>checked end to end.</h1>
+      <p class="sub" style="margin-top:1rem; max-width:56rem;">
+        <b style="color:var(--text)">Energy Transmission Across Holographic Conformal Interfaces in General Dimensions</b><br>
+        arXiv:2609.38318 [hep-th] · submitted 29 September 2026 · 9 + 20 pages
+      </p>
+      <p class="authors">
+        Igal Arav, Theodore Bertrand, Shira Chapman, Giuseppe Policastro, Sebastian Waeber<br>
+        <a href="https://arxiv.org/abs/2609.38318">arxiv.org/abs/2609.38318</a> · <a href="https://arxiv.org/pdf/2609.38318">PDF</a>
+      </p>
+      <div class="titlecard-meta">
+        <span>Wolfram Mathematica · executable oracle</span>
+        <span>Lean 4 · kernel-checked proofs</span>
+        <span>Numerical simulator · scattering lab</span>
+        <span>Evidence package · public and reproducible</span>
+      </div>
+      <p class="footnote" style="max-width:60rem;">
+        <b>About this deck.</b> A workflow proposal prepared by Daniel Liezrowice (Engineering Software Lab) for the paper's authors:
+        what the MantiQ Factor process would do with this specific paper. Independent of the authors; no work has been executed yet;
+        paper facts cited from v1. Precedents: <a href="https://zuwasi.github.io/Public-html-pages/mantiq-factor-fhe-hardware/">MantiQ Factor / REED</a>,
+        <a href="https://zuwasi.github.io/Public-html-pages/mantiq-qpe/">MantiQ / QPE</a>,
+        <a href="https://zuwasi.github.io/Public-html-pages/mantiq-solidity/">MantiQ / Solidity</a>.
+      </p>
+    </div>
+  </section>
+
+  <!-- 2 · WHAT THE PAPER ESTABLISHES -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>The paper · 02</div>
+      <h2>Four results that invite independent checking.</h2>
+      <p class="sub">Energy scattering across a conformal interface, studied through AdS<sub>d</sub>-sliced domain walls: a short letter with dense, checkable mathematics.</p>
+      <div class="grid2">
+        <div class="card">
+          <h3><span class="num">1</span> · Closed-form transmission from the warp factor</h3>
+          <p>For metrics <code>ds² = dy² + a²(y) ds²(AdS<sub>d</sub>)</code> asymptotic to empty AdS<sub>d+1</sub>, the transmission coefficient T<sub>L</sub> is a closed-form functional of the warp factor a(y) alone (Eq. 15), independent of the wave details.</p>
+          <span class="badge b-symbolic">CLOSED FORM · CHECKABLE SYMBOLICALLY</span>
+        </div>
+        <div class="card">
+          <h3><span class="num">2</span> · Recovers d = 2, extends to general d</h3>
+          <p>Reproduces the known two-dimensional holographic results (Refs. 11, 12, 16) and extends them to arbitrary dimension. The d = 2 Janus case has a fully explicit form (Eq. 154).</p>
+          <span class="badge b-paper">KNOWN RESULTS = READY-MADE REGRESSION TARGETS</span>
+        </div>
+        <div class="card">
+          <h3><span class="num">3</span> · Universality within the class</h3>
+          <p>Transmission is independent of the incidence angle, of the profile of the incident perturbation, and of the source used to create it. Examples: thin-brane models, Janus geometries (Eqs. 27 to 29).</p>
+          <span class="badge b-numeric">SWEEPABLE IN A SIMULATOR</span>
+        </div>
+        <div class="card">
+          <h3><span class="num">4</span> · Bounds from CFT-like data</h3>
+          <p>Transmission is bounded by central-charge-like quantities: lower and upper bounds controlled by C<sup>T</sup><sub>L</sub> / C<sup>T</sup><sub>R</sub> (Eq. 23), with the bound structure proved in Appendix B. Complete reflection is attainable in multi-brane models.</p>
+          <span class="badge b-proof">INEQUALITY · A NATURAL PROOF TARGET</span>
+        </div>
+      </div>
+      <p class="footnote"><b>Key d = 2 check value (Eq. 154):</b> T<sub>L</sub> = Ω(b) = √(b(2−b)) / (2 arctanh √(b/(2−b))), with T → 1 as b → 0 and T → 0 as b approaches the bound of the allowed range. Boundary: results are for the stated class, linearized perturbations; the Discussion itself asks how far they extend.</p>
+    </div>
+  </section>
+
+  <!-- 3 · THE WORKFLOW DIAGRAM -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>The workflow · 03</div>
+      <h2>The MantiQ pipeline, applied to your letter.</h2>
+      <p class="sub">Six stages. Each produces a different evidence class, and no stage silently strengthens the one before it.</p>
+      <div class="flow">
+        <div class="stage">
+          <span class="chip">01 · INPUT</span>
+          <h4>Freeze the source</h4>
+          <p>PDF + LaTeX source, SHA-256 manifest. The letter's claims are enumerated verbatim into a claim ledger.</p>
+          <span class="badge b-paper">PAPER / DERIVED</span>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage">
+          <span class="chip">02 · NORMALIZE</span>
+          <h4>Make scope explicit</h4>
+          <p>Manual transcription of the metric ansatz, the T<sub>L</sub> definition, conventions (Fefferman-Graham, slicing, branches). Ambiguities become ledger entries, never silent repairs.</p>
+          <span class="badge b-paper">RECORDED ASSUMPTIONS</span>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage">
+          <span class="chip">03 · COMPUTE</span>
+          <h4>Wolfram notebook oracle</h4>
+          <p>Symbolically re-derive Eq. 15 for thin-brane and Janus warp factors, reproduce Eq. 154, verify limits, generate frozen regression vectors plus a named audit.</p>
+          <span class="badge b-symbolic">SYMBOLICALLY VALIDATED</span>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage">
+          <span class="chip">04 · VERIFY</span>
+          <h4>Lean 4, scoped</h4>
+          <p>Kernel-checked theorems: the transmission bounds (Appendix B structure), the d = 2 Janus identity, the complete-reflection limit. The proof boundary is published.</p>
+          <span class="badge b-proof">FORMALLY PROVED (SCOPED)</span>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage">
+          <span class="chip">05 · ENGINEER</span>
+          <h4>Scattering simulator</h4>
+          <p>An independent numerical lab: evolve the linearized perturbation on a(y), extract reflected and transmitted flux, overlay the closed form. Interactive in the browser.</p>
+          <span class="badge b-numeric">NUMERICALLY TESTED</span>
+        </div>
+        <div class="arrow">→</div>
+        <div class="stage">
+          <span class="chip">06 · OUTPUT</span>
+          <h4>Evidence package</h4>
+          <p>Claim-status table, notebook, Lean files, vectors, simulator, reproduction guide. Public, downloadable, extensible by readers.</p>
+          <span class="badge b-symbolic">REPRODUCIBLE</span>
+        </div>
+      </div>
+      <div class="precedent">
+        <span>Precedent · REED (TCHES 2025): paper → FPGA demonstrator, 12 gates</span>
+        <span>Precedent · QPE: paper → simulator, claim-by-claim statuses</span>
+        <span>Precedent · Solidity: contract → proofs + supply-chain SBOM</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4 · WHY THE FRONT FITS -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Fit rationale · 04</div>
+      <h2>Why the front of the pipeline fits this paper.</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3>One central object, one headline functional</h3>
+          <p>The whole letter lives on the warp factor a(y) and the functional T<sub>L</sub>[a]. Closed forms, limits, and bounds around a single object are exactly what an executable oracle is for.</p>
+        </div>
+        <div class="card">
+          <h3>Known results become regression vectors</h3>
+          <p>The d = 2 results (Refs. 11, 12, 16) and Eq. 154 are fixed targets. The REED pattern applies directly: freeze vectors, audit them, and never edit the oracle to fit an implementation.</p>
+        </div>
+        <div class="card">
+          <h3>The bound is a scoped proof target</h3>
+          <p>Appendix B is an inequality over a stated class of warp factors, the kind of statement Lean 4 + Mathlib handles well when the scope is explicit.</p>
+        </div>
+        <div class="card">
+          <h3>Culture match</h3>
+          <p>The paper already separates what is proved, what is checked, and what is expected (Appendix D is labeled a consistency check, not a fix). MantiQ formalizes exactly that separation.</p>
+        </div>
+      </div>
+      <p class="footnote"><b>Boundary:</b> this is the assessment for the workflow's first four stages. Stage-fit for the endpoint is addressed separately (slides 07 and 09).</p>
+    </div>
+  </section>
+
+  <!-- 5 · WOLFRAM STAGE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Stage 03 · Wolfram · 05</div>
+      <h2>The notebook: an independent oracle for T<sub>L</sub>.</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3>Symbolic re-derivations</h3>
+          <ul>
+            <li>Evaluate the warp-factor integral (Eq. 15) for the thin-brane family and the explicit per-dimension forms of Appendix F.</li>
+            <li>Reproduce the d = 2 Janus closed form (Eq. 154) from the warp-factor solution (Eq. 29).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Limit and edge behavior</h3>
+          <ul>
+            <li>b → 0 gives T<sub>L</sub> = 1 (no defect); b approaches its maximum gives T<sub>L</sub> → 0 (complete reflection, logarithmic divergence).</li>
+            <li>Pure-AdS reference: T<sub>L</sub> = 1 by construction.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Dimension scans</h3>
+          <ul>
+            <li>Sweep even and odd d, testing the paper's observation that transmission increases slightly with d under the b / b<sub>max</sub> parameterization.</li>
+            <li>Check the tension bounds of Appendix C against the admissible-parameter region.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Frozen vectors and audit</h3>
+          <ul>
+            <li>Deterministic regression vectors (d, family, parameter, T<sub>L</sub>) with SHA-256 manifest, the REED vector-schema pattern.</li>
+            <li>A named audit of checks, run headless via wolframscript, with exact counts reported.</li>
+          </ul>
+        </div>
+      </div>
+      <p class="footnote"><b>Status language:</b> each item ends as SYMBOLICALLY VALIDATED for the named families and cases only. A notebook checks named cases; it is not a universal theorem.</p>
+    </div>
+  </section>
+
+  <!-- 6 · LEAN STAGE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Stage 04 · Lean 4 · 06</div>
+      <h2>Scoped theorems, published boundary.</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3>Candidate headline theorems</h3>
+          <ul>
+            <li><b>Bounds:</b> for the stated warp-factor class, T<sub>L</sub> lies between the C<sup>T</sup><sub>L</sub> / C<sup>T</sup><sub>R</sub>-controlled lower and upper bounds (the Appendix B inequality structure).</li>
+            <li><b>d = 2 certificate:</b> the Janus integral evaluates to Ω(b) = √(b(2−b)) / (2 arctanh √(b/(2−b))), kernel-checked like the REED BASE-1024 certificate.</li>
+            <li><b>Complete reflection:</b> T<sub>L</sub> → 0 as b approaches the allowed maximum, under stated hypotheses.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>What Lean would not prove</h3>
+          <ul>
+            <li>The linearized Einstein-scalar derivation (Appendix A) and holographic renormalization stay outside.</li>
+            <li>Israel-condition matching (Appendix D) and the angular-coordinate computations stay outside.</li>
+            <li>These remain PAPER / DERIVED, with the derivation chain cited. Declared non-goals, not omissions.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>Trust discipline</h3>
+          <p>No <code>sorry</code>, no <code>admit</code>, no project axioms. Only Mathlib's logical foundation (<code>propext</code>, <code>Classical.choice</code>, <code>Quot.sound</code>), with an axiom audit published alongside the theorems, as in the REED and QPE runs.</p>
+        </div>
+        <div class="card">
+          <h3>Precedent scope</h3>
+          <p>The QPE case study proved exactly one resource identity and said so. The same honesty applies here: a bounded, correct proof set beats an implied but unreachable whole-paper formalization.</p>
+        </div>
+      </div>
+      <p class="footnote"><b>Boundary:</b> Lean proves mathematics under definitions. It asserts nothing about any numerical solver, and the solver asserts nothing about Lean.</p>
+    </div>
+  </section>
+
+  <!-- 7 · SIMULATOR STAGE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Stage 05 · Simulator · 07</div>
+      <h2>The endpoint for a theory paper: a scattering lab.</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3>What it computes</h3>
+          <p>Numerically solve the linearized perturbation equation (the Eq. 8 wave equation) on domain-wall backgrounds, extract reflected and transmitted energy flux from the asymptotics, and compare against the closed-form T<sub>L</sub>.</p>
+        </div>
+        <div class="card">
+          <h3>Cross-model evidence</h3>
+          <p>Agreement between two independent models (numerical evolution vs the Wolfram oracle) is the evidence class, mirroring Wolfram-vs-Python in REED and browser-vs-Wolfram in QPE. Disagreement is preserved and diagnosed, never repaired away.</p>
+        </div>
+        <div class="card">
+          <h3>What it makes tangible</h3>
+          <p>Choose d, family (thin brane, Janus, multi-brane), and parameters; watch the transmission curve move, watch the bounds tighten as C<sup>T</sup><sub>L</sub> / C<sup>T</sup><sub>R</sub> changes, and see the slight d-dependence directly.</p>
+        </div>
+        <div class="card">
+          <h3>The honest endpoint</h3>
+          <p>This paper defines no deployable artifact, so there is no FPGA or contract stage. The pipeline ends where the QPE case study ends: a runnable public lab plus an evidence package. That is the correct shape here, not a limitation.</p>
+        </div>
+      </div>
+      <p class="footnote"><b>Status language:</b> simulator agreement is NUMERICALLY TESTED for the swept grid. It is not exhaustive and it does not upgrade any symbolic or formal claim.</p>
+    </div>
+  </section>
+
+  <!-- 8 · CLAIM TABLE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Evidence · 08</div>
+      <h2>Claim by claim: what a run would establish.</h2>
+      <table class="ev">
+        <thead>
+          <tr><th style="width:34%">Paper claim</th><th style="width:26%">MantiQ evidence status</th><th>Artifact and boundary</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="claim">Closed-form T<sub>L</sub>[a] (Eq. 15)</td>
+            <td><span class="badge b-symbolic">SYMBOLICALLY VALIDATED</span></td>
+            <td class="boundary">Wolfram re-derivation for thin-brane and Janus families; exact values per named case. Not a theorem about all warp factors.</td>
+          </tr>
+          <tr>
+            <td class="claim">d = 2 reproduction (Eq. 154)</td>
+            <td><span class="badge b-proof">FORMALLY PROVED</span> <span class="badge b-numeric">+ TESTED</span></td>
+            <td class="boundary">Lean certificate for the Janus identity plus numeric regression vectors. Scoped to the flat-potential d = 2 case.</td>
+          </tr>
+          <tr>
+            <td class="claim">Central-charge bounds (Eq. 23)</td>
+            <td><span class="badge b-proof">FORMALLY PROVED (SCOPED)</span></td>
+            <td class="boundary">The Appendix B inequality structure, formalized for the stated class. Hypotheses travel with the theorem.</td>
+          </tr>
+          <tr>
+            <td class="claim">Universality: angle and profile independence</td>
+            <td><span class="badge b-numeric">NUMERICALLY TESTED</span></td>
+            <td class="boundary">Simulator sweeps over angles, profiles, and sources within the class. The paper's derivation remains PAPER / DERIVED.</td>
+          </tr>
+          <tr>
+            <td class="claim">Beyond the class: top-down models, beyond linearized order, quantum corrections</td>
+            <td><span class="badge b-notest">NOT ESTABLISHED (TODAY)</span></td>
+            <td class="boundary">Open questions the Discussion itself raises. The simulator becomes the probe for future follow-ups rather than a claimed result.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="footnote"><b>The contract:</b> statuses apply to their stated scope and never combine into a blanket claim. Downstream stages can add evidence; they never silently strengthen an upstream claim.</p>
+    </div>
+  </section>
+
+  <!-- 9 · FIT VERDICT -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Verdict · 09</div>
+      <h2>Is this paper a good fit? Yes, with one scope adjustment.</h2>
+      <div class="grid3">
+        <div class="card verdict v-strong">
+          <div>
+            <h3><span class="mark">●</span> Strong fit</h3>
+            <p>Wolfram oracle for the closed forms, limits, and dimension scans. Claim and ambiguity ledgers for a conventions-heavy holography derivation. Independent numerical cross-check through the simulator.</p>
+          </div>
+        </div>
+        <div class="card verdict v-adapt">
+          <div>
+            <h3><span class="mark">●</span> Adapted fit</h3>
+            <p>Lean 4 verification must be scoped: bounds, certificates, and limits are realistic; formalizing the full linearized-gravity derivation is research-level work and stays a declared non-goal.</p>
+          </div>
+        </div>
+        <div class="card verdict v-absent">
+          <div>
+            <h3><span class="mark">●</span> Not applicable</h3>
+            <p>The RTL, FPGA, and Solidity gates do not apply: the letter defines no deployable artifact. The endpoint is a public evidence package, QPE-shaped rather than REED-shaped.</p>
+          </div>
+        </div>
+      </div>
+      <div class="chips">
+        <span>Pipeline coverage: stages 01 to 06 fully applicable</span>
+        <span>Hardware gate: absent by nature of the paper, not skipped</span>
+        <span>Effort shape: comparable to the QPE case study, plus a deeper Lean stage</span>
+      </div>
+      <p class="footnote"><b>Summary:</b> roughly the first two thirds of the MantiQ pipeline (normalize, compute, verify, simulate) apply directly and strongly; the last third (implementation hardware) is replaced by the simulator endpoint and the evidence package.</p>
+    </div>
+  </section>
+
+  <!-- 10 · WHAT THE AUTHORS GAIN -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Value · 10</div>
+      <h2>What the authors gain from a run.</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3>Independent confirmation of the core formula</h3>
+          <p>T<sub>L</sub>[a], the bounds, and the limit behavior re-derived by a separate symbolic engine, formalized where feasible, and tested numerically. Useful before follow-up work builds on the letter.</p>
+        </div>
+        <div class="card">
+          <h3>A public, extensible artifact</h3>
+          <p>Notebook, Lean files, vectors, and simulator travel together with reproduction instructions, like the QPE evidence folder. Readers and referees can re-run rather than re-derive.</p>
+        </div>
+        <div class="card">
+          <h3>A lab for the open questions</h3>
+          <p>The Discussion asks how far universality extends: more general matter couplings, top-down solutions, beyond linearized order. The simulator is the instrument for those probes.</p>
+        </div>
+        <div class="card">
+          <h3>A precise claimed-versus-proved map</h3>
+          <p>The claim-status table gives referees and readers an exact picture of what is proved, what is computed, and what is assumed, strengthening rather than inflating the paper's claims.</p>
+        </div>
+      </div>
+      <p class="footnote"><b>Note:</b> nothing about the paper's results changes. What changes is how independently a reader can verify them, and how easily follow-up work can start from a checked baseline.</p>
+    </div>
+  </section>
+
+  <!-- 11 · CLOSE -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>Next step · 11</div>
+      <h2>Proposed next step: a scoped case study.</h2>
+      <p class="lead" style="max-width:58rem; margin-top:.4rem;">
+        Run arXiv:2609.38318 through the QPE-shaped scope: manual transcription with an ambiguity ledger, a Wolfram notebook with a named audit and frozen vectors, scoped Lean theorems for the bounds and the d = 2 identity, an interactive scattering simulator, and a public evidence page.
+      </p>
+      <div class="grid3">
+        <div class="card">
+          <h3>Weeks 1 to 2</h3>
+          <p>Normalize the claims and conventions; build the Wolfram oracle for Eqs. 15, 29, and 154; freeze the first vector set and audit.</p>
+        </div>
+        <div class="card">
+          <h3>Weeks 3 to 4</h3>
+          <p>Lean theorems for the bounds and the Janus certificate; publish the axiom audit and the proof boundary.</p>
+        </div>
+        <div class="card">
+          <h3>Weeks 5 to 6</h3>
+          <p>Numerical scattering lab and cross-model comparison; assemble the public evidence package and claim-status table.</p>
+        </div>
+      </div>
+      <p class="authors" style="margin-top:1.2rem;">
+        Daniel Liezrowice · Engineering Software Lab · <a href="mailto:daniel.l@eswlab.com">daniel.l@eswlab.com</a> · <a href="https://eswlab.com">eswlab.com</a>
+      </p>
+      <p class="footnote" style="max-width:62rem;">
+        <b>Boundary:</b> independent of the paper's authors; prepared 14 October 2026 from arXiv:2609.38318 v1. Equation numbers cite v1.
+        This deck proposes a workflow; it reports no executed verification. Case-study precedents:
+        <a href="https://zuwasi.github.io/Public-html-pages/mantiq-factor-fhe-hardware/">REED / FHE hardware</a>,
+        <a href="https://zuwasi.github.io/Public-html-pages/mantiq-qpe/">quantum phase estimation</a>,
+        <a href="https://zuwasi.github.io/Public-html-pages/mantiq-solidity/">Solidity escrow</a>.
+        Third-party names remain the property of their owners; no endorsement implied.
+      </p>
+    </div>
+  </section>
+
+</div>
+</div>
+
+<button class="nav prev" aria-label="Previous slide">‹</button>
+<button class="nav next" aria-label="Next slide">›</button>
+<div class="progress"><div id="bar"></div></div>
+<div class="counter" id="count"></div>
+<div class="hint" id="hint">← Swipe to navigate →</div>
+
+<script>
+  const track = document.getElementById('track');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const bar = document.getElementById('bar');
+  const counter = document.getElementById('count');
+  const hint = document.getElementById('hint');
+  const prevBtn = document.querySelector('.nav.prev');
+  const nextBtn = document.querySelector('.nav.next');
+  let current = 0;
+
+  function go(n, pushHash) {
+    current = Math.max(0, Math.min(slides.length - 1, n));
+    track.style.transform = 'translateX(' + (-current * 100) + 'vw)';
+    bar.style.width = ((current + 1) / slides.length * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + slides.length;
+    prevBtn.style.visibility = current === 0 ? 'hidden' : 'visible';
+    nextBtn.style.visibility = current === slides.length - 1 ? 'hidden' : 'visible';
+    hint.style.display = current === 0 ? '' : 'none';
+    const h = '#slide-' + (current + 1);
+    if (location.hash !== h) {
+      if (pushHash === false) { history.replaceState(null, '', h); }
+      else { history.pushState(null, '', h); }
+    }
+  }
+
+  prevBtn.addEventListener('click', function () { go(current - 1); });
+  nextBtn.addEventListener('click', function () { go(current + 1); });
+
+  window.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); go(current - 1); }
+  });
+
+  window.addEventListener('hashchange', function () {
+    const m = location.hash.match(/^#slide-(\d+)$/);
+    if (m) { go(parseInt(m[1], 10) - 1, false); }
+  });
+
+  let touchX = null;
+  window.addEventListener('touchstart', function (e) { touchX = e.changedTouches[0].clientX; }, { passive: true });
+  window.addEventListener('touchend', function (e) {
+    if (touchX === null) { return; }
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) >= 50) { go(current + (dx < 0 ? 1 : -1)); }
+    touchX = null;
+  }, { passive: true });
+
+  let dragX = null;
+  window.addEventListener('mousedown', function (e) { dragX = e.clientX; });
+  window.addEventListener('mouseup', function (e) {
+    if (dragX === null) { return; }
+    const dx = e.clientX - dragX;
+    if (Math.abs(dx) >= 50) { go(current + (dx < 0 ? 1 : -1)); }
+    dragX = null;
+  });
+
+  const initial = location.hash.match(/^#slide-(\d+)$/);
+  go(initial ? parseInt(initial[1], 10) - 1 : 0, false);
+</script>
+</body>
+</html>
