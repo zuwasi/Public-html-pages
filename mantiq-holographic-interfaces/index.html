@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>MantiQ Factor × arXiv:2609.38318 · From a holography letter to a checked result</title>
+<title>MantiQ Factor × arXiv:2609.38318 · From a research paper to a checked result</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -86,8 +86,17 @@
     border-left: 2px solid var(--border); padding-left: .8rem;
   }
   .footnote b { color: var(--text); }
+  .hero-fig { margin-top: clamp(.7rem, 1.8vh, 1.2rem); }
+  .hero-fig img {
+    display: block; width: auto; max-width: 100%; margin: 0 auto;
+    max-height: min(56vh, calc(100vh - 21rem));
+    border: 1px solid var(--border); border-radius: 12px; background: #060d1a;
+  }
+  .h2-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .h2-row h2 { margin-bottom: 0; }
+  .tool-logo { height: clamp(2.6rem, 5.5vw, 3.4rem); width: auto; flex: 0 0 auto; background: #ffffff; border-radius: 8px; padding: .45rem .75rem; }
 
-  /* Workflow diagram (slide 3) */
+  /* Workflow diagram (slide 4) */
   .flow { display: flex; align-items: stretch; gap: clamp(.3rem, .9vw, .7rem); margin-top: clamp(.9rem, 2.4vh, 1.5rem); }
   .stage {
     flex: 1 1 0; background: var(--card); border: 1px solid var(--border); border-radius: 12px;
@@ -108,7 +117,7 @@
     border-radius: 999px; padding: .25rem .7rem; font-size: clamp(.62rem, 1.25vw, .76rem); font-weight: 600;
   }
 
-  /* Evidence table (slide 8) */
+  /* Evidence table (slide 9) */
   table.ev { width: 100%; border-collapse: collapse; margin-top: clamp(.8rem, 2vh, 1.3rem); }
   table.ev th {
     text-align: left; color: var(--accent); font-size: clamp(.64rem, 1.3vw, .78rem);
@@ -188,7 +197,7 @@
   <section class="slide">
     <div class="inner">
       <div class="kicker"><span class="rule"></span>Fit assessment · workflow proposal</div>
-      <h1>Your holography letter,<br>checked end to end.</h1>
+      <h1>Your holography paper,<br>checked end to end.</h1>
       <p class="sub" style="margin-top:1rem; max-width:56rem;">
         <b style="color:var(--text)">Energy Transmission Across Holographic Conformal Interfaces in General Dimensions</b><br>
         arXiv:2609.38318 [hep-th] · submitted 29 September 2026 · 9 + 20 pages
@@ -213,12 +222,25 @@
     </div>
   </section>
 
-  <!-- 2 · WHAT THE PAPER ESTABLISHES -->
+  <!-- 2 · THE TOOL: MANTIQ OVERVIEW -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>The paper · 02</div>
+      <div class="kicker"><span class="rule"></span>The tool · 02</div>
+      <h2>MantiQ Factor, in one picture.</h2>
+      <p class="sub">The production line the REED case study built: seven stages from a public research paper to formally verified, executable systems. This deck maps that same line onto your paper.</p>
+      <div class="hero-fig">
+        <img src="assets/MantiQ-Factor-overview.png" alt="MantiQ Factor: from research knowledge to formally verified executable systems. Seven production-line stages: input, conversion, understand, compute, verify, engineer, output, over core pillars of intelligent orchestration, knowledge and skills, and trust and traceability.">
+      </div>
+      <p class="footnote"><b>Reading the picture:</b> the seven stages (input, conversion, understand, compute, verify, engineer, output) compress into the six-stage pipeline on slide 04, adapted to a theory paper. Image source: <a href="https://zuwasi.github.io/Public-html-pages/mantiq-factor-fhe-hardware/#slide-1">MantiQ Factor / REED case study, slide 1</a>.</p>
+    </div>
+  </section>
+
+  <!-- 3 · WHAT THE PAPER ESTABLISHES -->
+  <section class="slide">
+    <div class="inner">
+      <div class="kicker"><span class="rule"></span>The paper · 03</div>
       <h2>Four results that invite independent checking.</h2>
-      <p class="sub">Energy scattering across a conformal interface, studied through AdS<sub>d</sub>-sliced domain walls: a short letter with dense, checkable mathematics.</p>
+      <p class="sub">Energy scattering across a conformal interface, studied through AdS<sub>d</sub>-sliced domain walls: a compact research paper with dense, checkable mathematics.</p>
       <div class="grid2">
         <div class="card">
           <h3><span class="num">1</span> · Closed-form transmission from the warp factor</h3>
@@ -245,17 +267,17 @@
     </div>
   </section>
 
-  <!-- 3 · THE WORKFLOW DIAGRAM -->
+  <!-- 4 · THE WORKFLOW DIAGRAM -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>The workflow · 03</div>
-      <h2>The MantiQ pipeline, applied to your letter.</h2>
+      <div class="kicker"><span class="rule"></span>The workflow · 04</div>
+      <h2>The MantiQ pipeline, applied to your paper.</h2>
       <p class="sub">Six stages. Each produces a different evidence class, and no stage silently strengthens the one before it.</p>
       <div class="flow">
         <div class="stage">
           <span class="chip">01 · INPUT</span>
           <h4>Freeze the source</h4>
-          <p>PDF + LaTeX source, SHA-256 manifest. The letter's claims are enumerated verbatim into a claim ledger.</p>
+          <p>PDF + LaTeX source, SHA-256 manifest. The paper's claims are enumerated verbatim into a claim ledger.</p>
           <span class="badge b-paper">PAPER / DERIVED</span>
         </div>
         <div class="arrow">→</div>
@@ -302,15 +324,15 @@
     </div>
   </section>
 
-  <!-- 4 · WHY THE FRONT FITS -->
+  <!-- 5 · WHY THE FRONT FITS -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Fit rationale · 04</div>
+      <div class="kicker"><span class="rule"></span>Fit rationale · 05</div>
       <h2>Why the front of the pipeline fits this paper.</h2>
       <div class="grid2">
         <div class="card">
           <h3>One central object, one headline functional</h3>
-          <p>The whole letter lives on the warp factor a(y) and the functional T<sub>L</sub>[a]. Closed forms, limits, and bounds around a single object are exactly what an executable oracle is for.</p>
+          <p>The whole paper lives on the warp factor a(y) and the functional T<sub>L</sub>[a]. Closed forms, limits, and bounds around a single object are exactly what an executable oracle is for.</p>
         </div>
         <div class="card">
           <h3>Known results become regression vectors</h3>
@@ -325,15 +347,18 @@
           <p>The paper already separates what is proved, what is checked, and what is expected (Appendix D is labeled a consistency check, not a fix). MantiQ formalizes exactly that separation.</p>
         </div>
       </div>
-      <p class="footnote"><b>Boundary:</b> this is the assessment for the workflow's first four stages. Stage-fit for the endpoint is addressed separately (slides 07 and 09).</p>
+      <p class="footnote"><b>Boundary:</b> this is the assessment for the workflow's first four stages. Stage-fit for the endpoint is addressed separately (slides 08 and 10).</p>
     </div>
   </section>
 
-  <!-- 5 · WOLFRAM STAGE -->
+  <!-- 6 · WOLFRAM STAGE -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Stage 03 · Wolfram · 05</div>
-      <h2>The notebook: an independent oracle for T<sub>L</sub>.</h2>
+      <div class="kicker"><span class="rule"></span>Stage 03 · Wolfram · 06</div>
+      <div class="h2-row">
+        <h2>The notebook: an independent oracle for T<sub>L</sub>.</h2>
+        <img class="tool-logo" src="assets/Wolfram-Mathematica-15-logo.png" alt="Wolfram Mathematica 15 logo">
+      </div>
       <div class="grid2">
         <div class="card">
           <h3>Symbolic re-derivations</h3>
@@ -368,10 +393,10 @@
     </div>
   </section>
 
-  <!-- 6 · LEAN STAGE -->
+  <!-- 7 · LEAN STAGE -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Stage 04 · Lean 4 · 06</div>
+      <div class="kicker"><span class="rule"></span>Stage 04 · Lean 4 · 07</div>
       <h2>Scoped theorems, published boundary.</h2>
       <div class="grid2">
         <div class="card">
@@ -405,10 +430,10 @@
     </div>
   </section>
 
-  <!-- 7 · SIMULATOR STAGE -->
+  <!-- 8 · SIMULATOR STAGE -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Stage 05 · Simulator · 07</div>
+      <div class="kicker"><span class="rule"></span>Stage 05 · Simulator · 08</div>
       <h2>The endpoint for a theory paper: a scattering lab.</h2>
       <div class="grid2">
         <div class="card">
@@ -432,10 +457,10 @@
     </div>
   </section>
 
-  <!-- 8 · CLAIM TABLE -->
+  <!-- 9 · CLAIM TABLE -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Evidence · 08</div>
+      <div class="kicker"><span class="rule"></span>Evidence · 09</div>
       <h2>Claim by claim: what a run would establish.</h2>
       <table class="ev">
         <thead>
@@ -473,10 +498,10 @@
     </div>
   </section>
 
-  <!-- 9 · FIT VERDICT -->
+  <!-- 10 · FIT VERDICT -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Verdict · 09</div>
+      <div class="kicker"><span class="rule"></span>Verdict · 10</div>
       <h2>Is this paper a good fit? Yes, with one scope adjustment.</h2>
       <div class="grid3">
         <div class="card verdict v-strong">
@@ -494,7 +519,7 @@
         <div class="card verdict v-absent">
           <div>
             <h3><span class="mark">●</span> Not applicable</h3>
-            <p>The RTL, FPGA, and Solidity gates do not apply: the letter defines no deployable artifact. The endpoint is a public evidence package, QPE-shaped rather than REED-shaped.</p>
+            <p>The RTL, FPGA, and Solidity gates do not apply: the paper defines no deployable artifact. The endpoint is a public evidence package, QPE-shaped rather than REED-shaped.</p>
           </div>
         </div>
       </div>
@@ -507,15 +532,15 @@
     </div>
   </section>
 
-  <!-- 10 · WHAT THE AUTHORS GAIN -->
+  <!-- 11 · WHAT THE AUTHORS GAIN -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Value · 10</div>
+      <div class="kicker"><span class="rule"></span>Value · 11</div>
       <h2>What the authors gain from a run.</h2>
       <div class="grid2">
         <div class="card">
           <h3>Independent confirmation of the core formula</h3>
-          <p>T<sub>L</sub>[a], the bounds, and the limit behavior re-derived by a separate symbolic engine, formalized where feasible, and tested numerically. Useful before follow-up work builds on the letter.</p>
+          <p>T<sub>L</sub>[a], the bounds, and the limit behavior re-derived by a separate symbolic engine, formalized where feasible, and tested numerically. Useful before follow-up work builds on the paper.</p>
         </div>
         <div class="card">
           <h3>A public, extensible artifact</h3>
@@ -534,10 +559,10 @@
     </div>
   </section>
 
-  <!-- 11 · CLOSE -->
+  <!-- 12 · CLOSE -->
   <section class="slide">
     <div class="inner">
-      <div class="kicker"><span class="rule"></span>Next step · 11</div>
+      <div class="kicker"><span class="rule"></span>Next step · 12</div>
       <h2>Proposed next step: a scoped case study.</h2>
       <p class="lead" style="max-width:58rem; margin-top:.4rem;">
         Run arXiv:2609.38318 through the QPE-shaped scope: manual transcription with an ambiguity ledger, a Wolfram notebook with a named audit and frozen vectors, scoped Lean theorems for the bounds and the d = 2 identity, an interactive scattering simulator, and a public evidence page.
