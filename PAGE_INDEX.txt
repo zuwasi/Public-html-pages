@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-13
+Last updated: 2026-10-14
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -328,6 +328,9 @@ Last updated: 2026-10-13
 
 • mantiq-factor-fhe-hardware
   https://zuwasi.github.io/Public-html-pages/mantiq-factor-fhe-hardware
+
+• mantiq-holographic-interfaces
+  https://zuwasi.github.io/Public-html-pages/mantiq-holographic-interfaces
 
 • mantiq-qpe
   https://zuwasi.github.io/Public-html-pages/mantiq-qpe
