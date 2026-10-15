@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-14
+Last updated: 2026-10-15
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -307,6 +307,9 @@ Last updated: 2026-10-14
 
 • hallusquatting-protection
   https://zuwasi.github.io/Public-html-pages/hallusquatting-protection
+
+• harness-is-the-product
+  https://zuwasi.github.io/Public-html-pages/harness-is-the-product
 
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
