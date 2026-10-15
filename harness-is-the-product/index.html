@@ -60,10 +60,8 @@
     font-size:clamp(2.1rem,6.2vw,5.6rem);
   }
   .hl{color:var(--orange);}
-  .tagline{font-size:clamp(1rem,2.3vw,1.9rem);color:var(--ink);opacity:.9;font-weight:600}
   .lsub{font-size:clamp(1rem,2.4vw,1.9rem);color:var(--acc,var(--ink));font-weight:700}
   .credits{font-size:clamp(.62rem,1.1vw,.85rem);color:var(--dim);font-weight:600}
-  .keys{font-size:clamp(.72rem,1.3vw,1rem);color:var(--dim);font-weight:600;letter-spacing:.06em}
   /* ---------- entrance animations ---------- */
   .a{opacity:0}
   .slide.active .a{animation:rise .8s cubic-bezier(.2,.7,.2,1) forwards}
@@ -118,47 +116,24 @@
   body.notfirst #hint{display:none}
   @keyframes hintPulse{0%,100%{opacity:.85}50%{opacity:.35}}
   /* ---------- slide 1 : title ---------- */
-  .s-title .wrap{align-items:flex-start;text-align:left}
-  .hero-fig{
-    position:absolute;right:clamp(64px,7.5vw,150px);top:50%;transform:translateY(-50%);
-    width:min(31vw,500px);
-    background:#fbfaf5;border:2px solid var(--line);border-radius:18px;
-    padding:clamp(8px,1.2vw,14px);
-    box-shadow:0 18px 50px rgba(0,0,0,.45);
+  .s-title .wrap{
+    display:grid;grid-template-columns:1.05fr .95fr;column-gap:clamp(18px,3.4vw,60px);
+    align-items:center;text-align:left;
   }
-  .hero-build{position:relative;width:100%;aspect-ratio:1179/1000;overflow:hidden;border-radius:10px}
-  .hb{
-    position:absolute;left:0;width:100%;height:12.5%;top:calc(var(--i) * 12.5%);
-    overflow:hidden;opacity:0;
+  .t-left{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(8px,1.8vh,18px)}
+  .t-left .cta{align-self:flex-start;font-size:clamp(.85rem,1.8vw,1.35rem)}
+  .t-right{margin:0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.4vh,14px)}
+  .hero-img{
+    display:block;width:100%;height:auto;max-width:min(44vw,780px);max-height:min(74vh,860px);object-fit:contain;
+    background:#fbfaf5;border:3px solid var(--line);border-radius:20px;padding:clamp(10px,1.4vw,18px);
+    box-shadow:0 0 0 2px rgba(246,131,59,.3),0 0 55px rgba(246,131,59,.2),0 26px 70px rgba(0,0,0,.55);
+    animation:heroGlow 3.2s ease-in-out 1.2s infinite;
   }
-  .hb:nth-child(odd){--fx:56px}
-  .hb:nth-child(even){--fx:-56px}
-  .hb img{
-    position:absolute;top:0;left:0;width:100%;height:800%;max-width:none;
-    transform:translateY(calc(var(--i) * -12.5%));
+  @keyframes heroGlow{
+    0%,100%{box-shadow:0 0 0 2px rgba(246,131,59,.3),0 0 45px rgba(246,131,59,.15),0 26px 70px rgba(0,0,0,.55)}
+    50%{box-shadow:0 0 0 3px rgba(246,131,59,.62),0 0 95px rgba(246,131,59,.42),0 26px 70px rgba(0,0,0,.55)}
   }
-  .slide.active .hb{
-    animation:bandIn .5s cubic-bezier(.2,.7,.2,1) forwards;
-    animation-delay:calc(.2s + var(--i) * .32s);
-  }
-  @keyframes bandIn{from{opacity:0;transform:translateX(var(--fx,56px))}to{opacity:1;transform:none}}
-  .hflash{
-    position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen;
-    background:radial-gradient(circle at 50% 45%, rgba(255,246,232,.95), rgba(246,131,59,.5) 62%, transparent 78%);
-  }
-  .slide.active .hflash{animation:hflash 1.4s ease-out forwards;animation-delay:3.02s}
-  @keyframes hflash{0%{opacity:0}14%{opacity:1}34%{opacity:.08}52%{opacity:.62}100%{opacity:0}}
-  .slide.active .hero-build{animation:buildPop 1.4s ease-out 3.02s}
-  @keyframes buildPop{0%{filter:brightness(1)}12%{filter:brightness(1.6) saturate(1.25)}34%{filter:brightness(1)}52%{filter:brightness(1.28)}100%{filter:brightness(1)}}
-  .slide.active .hero-fig{animation:figGlow 1.5s ease-out 3.02s}
-  @keyframes figGlow{
-    0%{box-shadow:0 0 0 rgba(246,131,59,0)}
-    15%{box-shadow:0 0 48px rgba(246,131,59,.7),0 0 0 2px rgba(246,131,59,.85)}
-    36%{box-shadow:0 0 8px rgba(246,131,59,.12)}
-    56%{box-shadow:0 0 34px rgba(246,131,59,.5)}
-    100%{box-shadow:0 0 0 rgba(246,131,59,0)}
-  }
-  .hero-cap{font-weight:700;font-size:clamp(.6rem,1.1vw,.85rem);letter-spacing:.18em;color:#5a615a;text-align:center;margin-top:clamp(6px,1vh,12px)}
+  .hero-cap{font-weight:800;font-size:clamp(.7rem,1.25vw,.95rem);letter-spacing:.18em;color:var(--orange);text-align:center;margin-top:0}
   .speedbox{
     margin-top:clamp(6px,2vh,20px);
     border:2px solid var(--line);border-radius:22px;background:var(--card);
@@ -332,14 +307,16 @@
     background:var(--orange);border-radius:999px;padding:.55em 1.4em;
     font-size:clamp(.95rem,2.2vw,1.7rem);
   }
+  .ctarow{display:flex;align-items:center;justify-content:center;gap:clamp(12px,2.4vw,26px);flex-wrap:wrap}
+  .cta-url{font-weight:900;letter-spacing:.14em;color:var(--dim);font-size:clamp(.85rem,2vw,1.5rem)}
   /* ---------- reduced motion: final states, no motion ---------- */
   @media (prefers-reduced-motion: reduce){
     #deck{transition:none !important}
     .slide.active .a,.slide.active .seg,.slide.active .fbar i,.slide.active .carrow,
-    .slide.active .term-out,.slide.active .drawpath,.slide.active .hb{
+    .slide.active .term-out,.slide.active .drawpath{
       animation-duration:.01s !important;animation-delay:0s !important;
     }
-    .slide.active .hflash,.slide.active .hero-build,.slide.active .hero-fig{animation:none !important}
+    .hero-img{animation:none !important}
     .donut-val{transition-duration:.01s !important;transition-delay:0s !important}
     .node,.spinring,.cursor,.chip,#hint{animation:none !important}
     .node{opacity:1 !important}
@@ -356,9 +333,11 @@
     .seg b{display:none}
     .stackbar{bottom:clamp(40px,7vh,72px)}
     .wrap,.s-layer .wrap{padding-bottom:clamp(110px,16vh,150px)}
-    .s-title .wrap{justify-content:flex-start;padding-top:clamp(60px,10vh,120px)}
-    .keys,.credits{display:none}
-    .hero-fig{display:none}
+    .s-title .wrap{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:clamp(60px,10vh,120px)}
+    .t-right{order:-1;align-self:center}
+    .hero-img{max-height:40vh;max-width:88vw}
+    .hero-cap{display:none}
+    .t-left{align-items:center;text-align:center}
   }
 </style>
 </head>
@@ -371,34 +350,25 @@
   <!-- ============ SLIDE 1 : TITLE + SPEED CONTROL ============ -->
   <section class="slide s-title">
     <div class="wrap">
-      <p class="kicker a d1">ANATOMY OF AN AI CODING AGENT</p>
-      <h1 class="a d2">The Harness<br>Is the <span class="hl">Product</span></h1>
-      <p class="tagline a d3">9 layers around the model. Only 15% of the product is the LLM.</p>
-      <figure class="hero-fig">
-        <div class="hero-build">
-          <div class="hb" style="--i:0"><img src="layers-precentege.png" alt=""></div>
-          <div class="hb" style="--i:1"><img src="layers-precentege.png" alt=""></div>
-          <div class="hb" style="--i:2"><img src="layers-precentege.png" alt=""></div>
-          <div class="hb" style="--i:3"><img src="layers-precentege.png" alt=""></div>
-          <div class="hb" style="--i:4"><img src="layers-precentege.png" alt=""></div>
-          <div class="hb" style="--i:5"><img src="layers-precentege.png" alt=""></div>
-          <div class="hb" style="--i:6"><img src="layers-precentege.png" alt=""></div>
-          <div class="hb" style="--i:7"><img src="layers-precentege.png" alt=""></div>
-          <div class="hflash"></div>
+      <div class="t-left">
+        <p class="kicker a d1">ANATOMY OF AN AI CODING AGENT</p>
+        <h1 class="a d2">The Harness<br>Is the <span class="hl">Product</span></h1>
+        <div class="cta a d3">30-DAY TRIAL &middot; PROFESSIONAL GUIDANCE INCLUDED</div>
+        <div class="speedbox a d4">
+          <span class="speed-label">SLIDE TIME</span>
+          <div class="speed-ctl">
+            <button id="minus" class="step" aria-label="Decrease seconds">&minus;</button>
+            <span class="speed-val"><span id="speedVal">6</span><em>SEC</em></span>
+            <button id="plus" class="step" aria-label="Increase seconds">+</button>
+          </div>
+          <span class="speed-note">4 to 12 seconds, in steps of 1</span>
         </div>
+        <p class="credits a d5">Source: &ldquo;The Harness Is the Product&rdquo;, Towards AI &nbsp;&middot;&nbsp; Theme: ampcode.com</p>
+      </div>
+      <figure class="t-right a d2">
+        <img class="hero-img" src="layers-precentege.png" alt="AI coding agent stack: user interface 5%, orchestrator 15%, context and indexing 15%, tool execution 20%, LLM core 15%, verification and feedback 20%, memory, state and guardrails 10%">
         <figcaption class="hero-cap">WHERE THE ENGINEERING GOES: 85% HARNESS, 15% MODEL</figcaption>
       </figure>
-      <div class="speedbox a d5">
-        <span class="speed-label">SLIDE TIME</span>
-        <div class="speed-ctl">
-          <button id="minus" class="step" aria-label="Decrease seconds">&minus;</button>
-          <span class="speed-val"><span id="speedVal">6</span><em>SEC</em></span>
-          <button id="plus" class="step" aria-label="Increase seconds">+</button>
-        </div>
-        <span class="speed-note">4 to 12 seconds, in steps of 1</span>
-      </div>
-      <p class="keys a d6">SPACE: pause and talk &nbsp;&middot;&nbsp; ARROWS: navigate &nbsp;&middot;&nbsp; F: fullscreen</p>
-      <p class="credits a d7">Thesis: &ldquo;The Harness Is the Product&rdquo;, Towards AI &nbsp;&middot;&nbsp; Stack data: AI Coding Agent layer percentages &nbsp;&middot;&nbsp; Theme: ampcode.com</p>
     </div>
   </section>
 
@@ -673,7 +643,10 @@
       </div>
       <div class="sum a d5">5 + 15 + 15 + 20 + 15 + 20 + 10 = <b>100% HARNESS</b></div>
       <div class="banner final a d6">Build the harness first. <span class="hl">The harness is the product.</span></div>
-      <div class="cta a d7">ampcode.com</div>
+      <div class="ctarow a d7">
+        <span class="cta">30-DAY TRIAL &middot; PROFESSIONAL GUIDANCE INCLUDED</span>
+        <span class="cta-url">ampcode.com</span>
+      </div>
     </div>
     <div class="stackbar" aria-hidden="true">
       <div class="seg a d4" style="--w:5"><b>UI</b><i>5%</i></div>
@@ -841,8 +814,8 @@
       var st = document.createElement('style');
       st.textContent = '#deck{transition:none !important}' +
         '.slide.active .a,.slide.active .seg,.slide.active .fbar i,.slide.active .carrow,' +
-        '.slide.active .term-out,.slide.active .drawpath,.slide.active .hb{animation-duration:.01s !important;animation-delay:0s !important}' +
-        '.slide.active .hflash,.slide.active .hero-build,.slide.active .hero-fig{animation:none !important}' +
+        '.slide.active .term-out,.slide.active .drawpath{animation-duration:.01s !important;animation-delay:0s !important}' +
+        '.hero-img{animation:none !important}' +
         '.donut-val{transition-duration:.01s !important;transition-delay:0s !important}' +
         '.node,.spinring,.cursor,#hint{animation:none !important}.node{opacity:1 !important}' +
         '.slide.active .type{animation:none !important;width:100% !important}';
