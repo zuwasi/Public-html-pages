@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; base-uri 'none'; form-action 'none'" />
+<title>Does Project Memory Make a Coding Agent Better? OKF Agent Memory × Factory Droid</title>
+<meta name="author" content="Daniel Liezrowice, ESL Engineering Software Lab" />
+<meta name="description" content="A/B benchmark: OKF Agent Memory with Factory Droid on a real TypeScript codebase. 48 blind-graded runs, all data public." />
+<meta property="og:title" content="Does project memory make a coding agent better?" />
+<meta property="og:description" content="OKF Agent Memory × Factory Droid: same accuracy, about 5% more cost. 48 blind-graded runs, all data public." />
+<style>
+  html, body { margin: 0; height: 100%; background: #e2e8f0; font-family: Arial, Helvetica, sans-serif; }
+  .stage { position: fixed; inset: 0 0 56px 0; overflow: hidden; }
+  .deck { position: absolute; left: 50%; top: 50%; width: 960px; height: 540px; transform-origin: center center; transform: translate(-50%, -50%); }
+  .deck .slide { position: absolute; inset: 0; width: 960px; height: 540px; box-sizing: border-box; box-shadow: 0 10px 40px rgba(15,23,42,.25); border-radius: 6px; display: none; }
+  .deck .slide.active { display: block; }
+  .nav { position: fixed; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; justify-content: center; gap: 14px; background: #0f172a; color: #e2e8f0; font-size: 15px; }
+  .nav button { background: #2563eb; color: #fff; border: 0; border-radius: 8px; padding: 9px 16px; font-size: 15px; cursor: pointer; }
+  .nav button:disabled { background: #334155; cursor: default; }
+  .nav a { color: #93c5fd; text-decoration: none; margin-left: 10px; }
+  .nav a:hover { text-decoration: underline; }
+  .count { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
+  @media (max-width: 640px) { .nav { gap: 8px; font-size: 12px; } .nav button { padding: 7px 10px; font-size: 13px; } .nav a { margin-left: 2px; } .count { min-width: 44px; } }
+  @media print {
+    .nav { display: none; }
+    .stage { position: static; display: block; }
+    .deck { transform: none !important; position: static; width: auto; height: auto; }
+    .deck .slide { display: block; position: relative; page-break-after: always; box-shadow: none; margin: 0 auto; }
+  }
+  
+  .slide { font-family: Arial, Helvetica, sans-serif; color: #0f172a; background: #ffffff; padding: 0; position: relative; overflow: hidden; }
+  .bar { position: absolute; left: 0; top: 0; width: 12px; height: 100%; background: #2563eb; }
+  .inner { position: absolute; left: 64px; right: 56px; top: 44px; bottom: 36px; }
+  h1 { font-size: 36px; margin: 0 0 18px; line-height: 1.15; }
+  h2 { font-size: 15px; letter-spacing: 2px; text-transform: uppercase; color: #2563eb; margin: 0 0 8px; font-weight: bold; }
+  p, li { font-size: 21px; line-height: 1.45; }
+  ul { margin: 0; padding-left: 26px; }
+  li { margin-bottom: 10px; }
+  .muted { color: #64748b; }
+  .foot { position: absolute; left: 64px; bottom: 16px; font-size: 12px; color: #94a3b8; }
+  .dark { background: #0f172a; color: #f8fafc; }
+  .dark .muted { color: #94a3b8; }
+  .dark h2 { color: #60a5fa; }
+  .cols { display: flex; gap: 28px; }
+  .card { flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 18px 20px; }
+  .card h3 { margin: 0 0 10px; font-size: 21px; }
+  .card p, .card li { font-size: 17px; }
+  .big { display: flex; gap: 22px; margin-top: 14px; }
+  .metric { flex: 1; border-radius: 14px; padding: 20px 18px; background: #f1f5f9; }
+  .metric .v { font-size: 50px; font-weight: bold; line-height: 1; }
+  .metric .l { font-size: 17px; margin-top: 10px; color: #334155; }
+  .metric .s { font-size: 14px; margin-top: 6px; color: #64748b; }
+  .good { color: #16a34a; } .bad { color: #dc2626; } .neutral { color: #2563eb; }
+  .chart { display: block; margin: 0 auto; }
+  table { border-collapse: collapse; width: 100%; font-size: 17px; }
+  th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #e2e8f0; }
+  th { color: #475569; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill { display: inline-block; background: #dbeafe; color: #1d4ed8; border-radius: 999px; padding: 3px 12px; font-size: 14px; font-weight: bold; }
+
+  .logo-box { position: absolute; top: 34px; right: 40px; background: #ffffff; border-radius: 10px; padding: 10px 14px; line-height: 0; }
+  .logo-box img { height: 46px; width: auto; display: block; }
+  .dark a { color: #93c5fd; text-decoration: none; }
+  .credit { position: absolute; left: 64px; bottom: 44px; font-size: 18px; color: #cbd5e1; }
+</style>
+</head>
+<body>
+<main class="stage" aria-live="polite">
+  <div class="deck" id="deck">
+
+
+<section class="slide dark">
+  <div class="bar"></div>
+  <div class="inner" style="top: 120px;">
+    <h2>A/B benchmark · October 2026</h2>
+    <h1 style="font-size: 48px; margin-bottom: 22px;">Does project memory make a<br/>coding agent better?</h1>
+    <p style="font-size: 24px;" class="muted">OKF Agent Memory × Factory Droid, tested on a real TypeScript codebase.<br/>48 runs · blind-graded · all data public</p>
+  </div>
+  <div class="logo-box"><img src="esl-logo.png" alt="ESL Engineering Software Lab" /></div>
+  <div class="credit">By <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener noreferrer">Daniel Liezrowice</a> &middot; ESL Engineering Software Lab &middot; Contact us: <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer">eswlab.com/contact-us</a></div>
+  <div class="foot">github.com/zuwasi/okf-droid-benchmark</div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>The question</h2>
+    <h1>Can a memory layer make Droid faster, cheaper or more accurate?</h1>
+    <div class="cols" style="margin-top: 22px;">
+      <div class="card">
+        <h3>OKF Agent Memory</h3>
+        <ul>
+          <li>Project knowledge as Markdown files, versioned in git</li>
+          <li>Local keyword search (BM25), served to agents over MCP</li>
+          <li>Claims large token savings through "search before reading"</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>What we measured</h3>
+        <ul>
+          <li>Answer accuracy (blind-graded)</li>
+          <li>Cost in Factory credits and tokens</li>
+          <li>Wall-clock time, turns and file reads</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot">github.com/okf-memory/okf-agent-memory · factory.ai</div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Setup</h2>
+    <h1>Two identical clones, one difference: memory</h1>
+    <div class="cols" style="margin-top: 16px;">
+      <div class="card">
+        <h3>Without memory</h3>
+        <ul>
+          <li>Plain clone of <b>zuwasi/TSscrutinizer</b></li>
+          <li>Tools: Read, Grep, Glob, LS</li>
+        </ul>
+      </div>
+      <div class="card" style="border-color: #2563eb;">
+        <h3 style="color: #2563eb;">With OKF memory</h3>
+        <ul>
+          <li>Same clone + 20-concept OKF bundle</li>
+          <li>OKF MCP server + OKF's AGENTS.md protocol</li>
+          <li>Tools: same + okf_search, okf_show</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 22px; font-size: 18px;" class="muted">Droid CLI 0.236 · model gpt-6-sol · headless <code>droid exec</code> · neither setup could edit files</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Method</h2>
+    <h1>Designed to give memory its best shot</h1>
+    <ul style="margin-top: 10px;">
+      <li><b>8 questions × 3 repetitions × 2 setups = 48 runs</b>, run in alternating order</li>
+      <li>Questions cover real internals: finding de-duplication, priority formula, update verification, air-gap guard, and more</li>
+      <li>The memory was <b>written by Droid itself</b> in a separate session that never saw the questions. It contained the exact facts asked for.</li>
+      <li>Answers were shuffled and <b>blind-graded</b> against 5 key points each and checked against the source</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Results</h2>
+    <h1>Same accuracy, slightly higher cost</h1>
+    <div class="big">
+      <div class="metric"><div class="v neutral">4.75</div><div class="l">Accuracy with memory (out of 5)</div><div class="s">vs 4.71 without · 0 factual errors either way</div></div>
+      <div class="metric"><div class="v bad">+5%</div><div class="l">Credits per question</div><div class="s">24.0k vs 22.8k</div></div>
+      <div class="metric"><div class="v bad">+6%</div><div class="l">Time per question</div><div class="s">25.1 s vs 23.6 s</div></div>
+    </div>
+    <div class="big">
+      <div class="metric"><div class="v good">−17%</div><div class="l">Source files read</div><div class="s">4.2 vs 5.1 per question</div></div>
+      <div class="metric"><div class="v bad">+16%</div><div class="l">Input tokens</div><div class="s">57.7k vs 50.0k per question</div></div>
+      <div class="metric"><div class="v neutral">24/24</div><div class="l">Runs that used OKF</div><div class="s">1.8 OKF calls per question</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Results</h2>
+    <h1 style="font-size: 30px;">Fewer file reads, but more tokens overall</h1>
+    <img class="chart" alt="Change with OKF memory vs without, per-question averages" src="headline.png" style="width: 700px;" />
+  </div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Per question</h2>
+    <h1 style="font-size: 30px;">Per-question differences are small and go both ways</h1>
+    <img class="chart" alt="Cost per question with and without memory" src="credits_per_question.png" style="width: 800px;" />
+  </div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Why</h2>
+    <h1>Why memory didn't help here</h1>
+    <div class="cols" style="margin-top: 14px;">
+      <div class="card"><h3>1. Droid still checks the code</h3><p>Memory pointed to the right file sooner. The model then read the source anyway to confirm.</p></div>
+      <div class="card"><h3>2. The protocol has overhead</h3><p>AGENTS.md rules and search results added more tokens than the skipped reads saved.</p></div>
+      <div class="card"><h3>3. The baseline was already fast</h3><p>Without memory, Droid answered correctly in 3–5 turns and about 20 seconds on a 27-file codebase.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Economics</h2>
+    <h1 style="font-size: 30px;">The 316k-credit build cost is never recovered</h1>
+    <img class="chart" alt="Cumulative credits including the memory build cost" src="breakeven.png" style="width: 700px;" />
+  </div>
+</section>
+
+<section class="slide">
+  <div class="bar"></div>
+  <div class="inner">
+    <h2>Limits</h2>
+    <h1>What this test does not show</h1>
+    <p class="muted" style="margin-top: -4px;">One repo, one model, code-fact questions. OKF may still pay off for:</p>
+    <ul>
+      <li><b>Knowledge that isn't in the code:</b> design rationale, past decisions, incidents</li>
+      <li><b>Large codebases</b>, where finding the right files is expensive</li>
+      <li><b>Weaker or cheaper models</b> that benefit from pre-digested context</li>
+      <li><b>Sharing memory</b> across tools (Claude Code, Cursor) and teammates through git</li>
+    </ul>
+  </div>
+</section>
+
+<section class="slide dark">
+  <div class="logo-box"><img src="esl-logo.png" alt="ESL Engineering Software Lab" /></div>
+  <div class="bar"></div>
+  <div class="inner" style="top: 100px;">
+    <h2>Bottom line</h2>
+    <h1 style="font-size: 40px;">For code questions on a small repo,<br/>OKF memory gave Droid no benefit.</h1>
+    <p style="font-size: 22px;" class="muted">Same accuracy · about 5% more cost · about 6% slower · one-time build never recovered.<br/>Test it on design-rationale questions or large repos before deciding.</p>
+    <p style="font-size: 20px; margin-top: 26px;">All transcripts, grades, scripts and the memory bundle:<br/><b>github.com/zuwasi/okf-droid-benchmark</b></p>
+    <p style="font-size: 19px; margin-top: 18px;">Done by <b><a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener noreferrer">Daniel Liezrowice</a></b>, ESL Engineering Software Lab<br/>Contact us: <b><a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer">eswlab.com/contact-us</a></b></p>
+  </div>
+</section>
+
+
+  </div>
+</main>
+<nav class="nav" aria-label="Slide navigation">
+  <button id="prev" type="button" aria-label="Previous slide">&larr; Prev</button>
+  <span class="count" id="count">1 / 1</span>
+  <button id="next" type="button" aria-label="Next slide">Next &rarr;</button>
+  <a href="okf-droid-benchmark.pptx" download>PowerPoint</a>
+  <a href="https://github.com/zuwasi/okf-droid-benchmark" target="_blank" rel="noopener noreferrer">GitHub data</a>
+  <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer">Contact us</a>
+</nav>
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll("#deck .slide"));
+    var deck = document.getElementById("deck");
+    var prev = document.getElementById("prev");
+    var next = document.getElementById("next");
+    var count = document.getElementById("count");
+    var i = Math.min(Math.max(parseInt((location.hash || "#1").slice(1), 10) || 1, 1), slides.length) - 1;
+    function show(n) {
+      i = Math.min(Math.max(n, 0), slides.length - 1);
+      slides.forEach(function (s, k) { s.classList.toggle("active", k === i); });
+      count.textContent = (i + 1) + " / " + slides.length;
+      prev.disabled = i === 0;
+      next.disabled = i === slides.length - 1;
+      history.replaceState(null, "", "#" + (i + 1));
+    }
+    function fit() {
+      var w = window.innerWidth - 32, h = window.innerHeight - 56 - 32;
+      deck.style.transform = "translate(-50%, -50%) scale(" + Math.min(w / 960, h / 540) + ")";
+    }
+    prev.addEventListener("click", function () { show(i - 1); });
+    next.addEventListener("click", function () { show(i + 1); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight" || e.key === "PageDown" || e.key === " ") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft" || e.key === "PageUp") { e.preventDefault(); show(i - 1); }
+      if (e.key === "Home") show(0);
+      if (e.key === "End") show(slides.length - 1);
+    });
+    window.addEventListener("resize", fit);
+    fit();
+    show(i);
+  })();
+</script>
+</body>
+</html>
