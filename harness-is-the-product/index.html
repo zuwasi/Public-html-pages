@@ -123,15 +123,43 @@
   .t-left{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(8px,1.8vh,18px)}
   .t-left .cta{align-self:flex-start;font-size:clamp(.85rem,1.8vw,1.35rem)}
   .t-right{margin:0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.4vh,14px)}
-  .hero-img{
-    display:block;width:100%;height:auto;max-width:min(44vw,780px);max-height:min(74vh,860px);object-fit:contain;
-    background:#fbfaf5;border:3px solid var(--line);border-radius:20px;padding:clamp(10px,1.4vw,18px);
-    box-shadow:0 0 0 2px rgba(246,131,59,.3),0 0 55px rgba(246,131,59,.2),0 26px 70px rgba(0,0,0,.55);
-    animation:heroGlow 3.2s ease-in-out 1.2s infinite;
+  .hero-card{
+    width:100%;max-width:min(40vw,720px);
+    background:#fbfaf5;border:3px solid var(--line);border-radius:20px;
+    padding:clamp(10px,1.4vw,18px);
+    box-shadow:0 0 0 2px rgba(246,131,59,.3),0 26px 70px rgba(0,0,0,.55);
   }
-  @keyframes heroGlow{
-    0%,100%{box-shadow:0 0 0 2px rgba(246,131,59,.3),0 0 45px rgba(246,131,59,.15),0 26px 70px rgba(0,0,0,.55)}
-    50%{box-shadow:0 0 0 3px rgba(246,131,59,.62),0 0 95px rgba(246,131,59,.42),0 26px 70px rgba(0,0,0,.55)}
+  .hero-crop{position:relative;width:100%;aspect-ratio:1179/1000;overflow:hidden;border-radius:10px}
+  .hb{
+    position:absolute;left:0;width:100%;height:12.5%;top:calc(var(--i) * 12.5%);
+    overflow:hidden;opacity:0;
+  }
+  .hb:nth-child(odd){--fx:56px}
+  .hb:nth-child(even){--fx:-56px}
+  .hb img{
+    position:absolute;top:0;left:0;width:100%;height:800%;max-width:none;
+    transform:translateY(calc(var(--i) * -12.5%));
+  }
+  .slide.active .hb{
+    animation:bandIn .4s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay:calc(.3s + var(--i) * .26s);
+  }
+  @keyframes bandIn{from{opacity:0;transform:translateX(var(--fx,56px))}to{opacity:1;transform:none}}
+  .hflash{
+    position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen;
+    background:radial-gradient(circle at 50% 45%, rgba(255,246,232,.95), rgba(246,131,59,.5) 62%, transparent 78%);
+  }
+  .slide.active .hflash{animation:hflash 1.3s ease-out forwards;animation-delay:2.6s}
+  @keyframes hflash{0%{opacity:0}14%{opacity:1}34%{opacity:.08}52%{opacity:.62}100%{opacity:0}}
+  .slide.active .hero-crop{animation:buildPop 1.3s ease-out 2.6s}
+  @keyframes buildPop{0%{filter:brightness(1)}12%{filter:brightness(1.6) saturate(1.25)}34%{filter:brightness(1)}52%{filter:brightness(1.28)}100%{filter:brightness(1)}}
+  .slide.active .hero-card{animation:cardFlash 1.4s ease-out 2.6s}
+  @keyframes cardFlash{
+    0%{box-shadow:0 0 0 2px rgba(246,131,59,.3),0 26px 70px rgba(0,0,0,.55)}
+    15%{box-shadow:0 0 0 3px rgba(246,131,59,.85),0 0 95px rgba(246,131,59,.55),0 26px 70px rgba(0,0,0,.55)}
+    36%{box-shadow:0 0 0 2px rgba(246,131,59,.35),0 0 20px rgba(246,131,59,.1),0 26px 70px rgba(0,0,0,.55)}
+    56%{box-shadow:0 0 0 3px rgba(246,131,59,.6),0 0 60px rgba(246,131,59,.35),0 26px 70px rgba(0,0,0,.55)}
+    100%{box-shadow:0 0 0 2px rgba(246,131,59,.3),0 26px 70px rgba(0,0,0,.55)}
   }
   .hero-cap{font-weight:800;font-size:clamp(.7rem,1.25vw,.95rem);letter-spacing:.18em;color:var(--orange);text-align:center;margin-top:0}
   .speedbox{
@@ -313,10 +341,11 @@
   @media (prefers-reduced-motion: reduce){
     #deck{transition:none !important}
     .slide.active .a,.slide.active .seg,.slide.active .fbar i,.slide.active .carrow,
-    .slide.active .term-out,.slide.active .drawpath{
+    .slide.active .term-out,.slide.active .drawpath,.slide.active .hb{
       animation-duration:.01s !important;animation-delay:0s !important;
     }
-    .hero-img{animation:none !important}
+    .hflash{animation:none !important;opacity:0 !important}
+    .slide.active .hero-crop,.slide.active .hero-card{animation:none !important}
     .donut-val{transition-duration:.01s !important;transition-delay:0s !important}
     .node,.spinring,.cursor,.chip,#hint{animation:none !important}
     .node{opacity:1 !important}
@@ -335,7 +364,7 @@
     .wrap,.s-layer .wrap{padding-bottom:clamp(110px,16vh,150px)}
     .s-title .wrap{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;padding-top:clamp(60px,10vh,120px)}
     .t-right{order:-1;align-self:center}
-    .hero-img{max-height:40vh;max-width:88vw}
+    .hero-card{width:min(88vw,560px)}
     .hero-cap{display:none}
     .t-left{align-items:center;text-align:center}
   }
@@ -366,7 +395,19 @@
         <p class="credits a d5">Source: &ldquo;The Harness Is the Product&rdquo;, Towards AI &nbsp;&middot;&nbsp; Theme: ampcode.com</p>
       </div>
       <figure class="t-right a d2">
-        <img class="hero-img" src="layers-precentege.png" alt="AI coding agent stack: user interface 5%, orchestrator 15%, context and indexing 15%, tool execution 20%, LLM core 15%, verification and feedback 20%, memory, state and guardrails 10%">
+        <div class="hero-card">
+          <div class="hero-crop">
+            <div class="hb" style="--i:0"><img src="layers-precentege.png" alt=""></div>
+            <div class="hb" style="--i:1"><img src="layers-precentege.png" alt=""></div>
+            <div class="hb" style="--i:2"><img src="layers-precentege.png" alt=""></div>
+            <div class="hb" style="--i:3"><img src="layers-precentege.png" alt=""></div>
+            <div class="hb" style="--i:4"><img src="layers-precentege.png" alt=""></div>
+            <div class="hb" style="--i:5"><img src="layers-precentege.png" alt=""></div>
+            <div class="hb" style="--i:6"><img src="layers-precentege.png" alt=""></div>
+            <div class="hb" style="--i:7"><img src="layers-precentege.png" alt=""></div>
+            <div class="hflash"></div>
+          </div>
+        </div>
         <figcaption class="hero-cap">WHERE THE ENGINEERING GOES: 85% HARNESS, 15% MODEL</figcaption>
       </figure>
     </div>
@@ -814,8 +855,9 @@
       var st = document.createElement('style');
       st.textContent = '#deck{transition:none !important}' +
         '.slide.active .a,.slide.active .seg,.slide.active .fbar i,.slide.active .carrow,' +
-        '.slide.active .term-out,.slide.active .drawpath{animation-duration:.01s !important;animation-delay:0s !important}' +
-        '.hero-img{animation:none !important}' +
+        '.slide.active .term-out,.slide.active .drawpath,.slide.active .hb{animation-duration:.01s !important;animation-delay:0s !important}' +
+        '.hflash{animation:none !important;opacity:0 !important}' +
+        '.slide.active .hero-crop,.slide.active .hero-card{animation:none !important}' +
         '.donut-val{transition-duration:.01s !important;transition-delay:0s !important}' +
         '.node,.spinring,.cursor,#hint{animation:none !important}.node{opacity:1 !important}' +
         '.slide.active .type{animation:none !important;width:100% !important}';
