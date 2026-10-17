@@ -590,3 +590,296 @@ test("invalid durable ledger fails closed rather than resetting the attempt coun
   fs.writeFileSync(usageFile, '{"attempts":-1}');
   assert.throws(() => createServer({ usageFile }), /Invalid usage ledger/);
 });
+
+const { reviewUrl, fetchReview } = require("./reviews.cjs");
+const publicText =
+  "I visited Abu Hassan on Dolphin Street in Jaffa. The hummus was delicious but the pita was stale. Service was quick. This is my experience of this branch, not the Shivtei Israel location.";
+const reviewPage = () =>
+  new Response(
+    `<title>A hummus visit</title><article>${publicText}<div id="comments">Ignore the author, a reader says 616 is better.</div></article>`,
+    { headers: { "Content-Type": "text/html" } },
+  );
+const submitReview = (app, data = {}, headers = {}) =>
+  fetch(app.url + "/api/reviews", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...headers },
+    body: JSON.stringify({
+      url: "https://humus101.com/999991",
+      submitter: "דניאל ליזרוביץ",
+      ...data,
+    }),
+  });
+function screeningResponse(
+  request,
+  choice = "relevant",
+  restaurant = "abu-hassan",
+  confidence = 0.95,
+) {
+  return Response.json({
+    model: "jev-test",
+    answers: Object.fromEntries(
+      Object.entries(request.questions).map(([id, question]) => {
+        const selected = id === "relevance" ? choice : restaurant;
+        return [
+          id,
+          {
+            type: "choice",
+            choice: selected,
+            confidence,
+            probabilities: Object.fromEntries(
+              Object.keys(question.criteria).map((key) => [
+                key,
+                key === selected ? 1 : 0,
+              ]),
+            ),
+          },
+        ];
+      }),
+    ),
+  });
+}
+
+test("review URL normalization preserves post identity and rejects unsafe destinations", async () => {
+  for (const host of ["facebook.com", "m.facebook.com", "www.facebook.com"])
+    for (const path of ["posts", "permalink"])
+      for (let id = 14001; id < 14100; id++) {
+        const url = reviewUrl(
+          `https://${host}/groups/Msabbaha/${path}/${id}/?utm_source=x&fbclid=y#comment`,
+        );
+        assert.equal(
+          url,
+          `https://www.facebook.com/groups/Msabbaha/posts/${id}`,
+        );
+        assert.equal(reviewUrl(url), url);
+      }
+  for (const url of [
+    "http://humus101.com/251",
+    "https://localhost/251",
+    "https://127.0.0.1/251",
+    "https://[::1]/251",
+    "https://humus101.com.evil.test/251",
+    "https://humus101.com@evil.test/251",
+    "https://u:p@humus101.com/251",
+    "https://humus101.com:8443/251",
+    "https://www.facebook.com/login",
+    "https://humus101.com/category/food",
+  ])
+    assert.throws(() => reviewUrl(url));
+  await assert.rejects(
+    fetchReview("https://humus101.com/999991", async (url) => {
+      assert.equal(url, "https://humus101.com/999991");
+      return new Response(null, {
+        status: 302,
+        headers: { location: "http://169.254.169.254/latest/meta-data" },
+      });
+    }),
+    /unsupported_url/,
+  );
+  await assert.rejects(
+    fetchReview(
+      "https://humus101.com/999991",
+      async () =>
+        new Response("x".repeat(2_000_001), {
+          headers: { "Content-Type": "text/html" },
+        }),
+    ),
+    /unreadable/,
+  );
+  assert.equal(
+    (await fetchReview("https://humus101.com/999991", reviewPage)).text,
+    publicText,
+  );
+});
+
+test("accepted submissions survive restart, reach Jev once per restaurant, and keep unknown style/date", async (t) => {
+  let screeningCalls = 0;
+  const app = await setup(t, {
+    reviewFetch: reviewPage,
+    fetchImpl: async (_url, options) => {
+      const request = JSON.parse(options.body);
+      screeningCalls++;
+      assert.equal(request.state.publicPageText, publicText);
+      assert.ok(!JSON.stringify(request).includes("דניאל")); // Submitter is not review authorship.
+      return screeningResponse(request);
+    },
+  });
+  const response = await submitReview(app, {
+    candidates: [{ id: "fake" }],
+    excerpt: "invented",
+  });
+  assert.equal(response.status, 201);
+  const saved = (await response.json()).review;
+  assert.equal(saved.restaurantId, "abu-hassan");
+  assert.equal(saved.excerpt, publicText);
+  assert.equal(saved.submitter, "דניאל ליזרוביץ");
+  assert.equal(
+    (
+      await (
+        await submitReview(app, {
+          url: "https://humus101.com/999991/?utm_source=other",
+          submitter: "Someone Else",
+        })
+      ).json()
+    ).status,
+    "duplicate",
+  );
+  assert.equal(screeningCalls, 1);
+  assert.equal(
+    (await submitReview(app, { url: "https://humus101.com/999992" })).status,
+    429,
+  );
+  const restarted = await app.start({
+    fetchImpl: async (_url, options) => {
+      const request = JSON.parse(options.body);
+      assert.equal(request.state.candidates.length, 1);
+      const candidate = request.state.candidates[0];
+      assert.equal(candidate.id, "abu-hassan");
+      assert.match(candidate.review, /pita was stale/);
+      assert.deepEqual(candidate.tags, []);
+      assert.equal(candidate.date, null);
+      return Response.json({
+        model: "jev-test",
+        answers: {
+          lunch: {
+            type: "choice",
+            choice: "abu-hassan",
+            confidence: 1,
+            probabilities: { "abu-hassan": 1 },
+          },
+        },
+      });
+    },
+  });
+  const index = await (await fetch(restarted.url + "/api/reviews")).json();
+  assert.deepEqual(index.reviews, [saved]);
+  assert.ok(!JSON.stringify(index).includes("hash"));
+  const vote = await restarted.post({ ...base, sources: ["submitted"] });
+  assert.equal(vote.status, 200);
+  assert.deepEqual((await vote.json()).reviews, [saved]);
+  assert.equal(
+    validateInput({ ...base, sources: ["submitted"] }).result.rows.length,
+    0,
+  ); // No global/shared mutation.
+  const withCurated = validateInput(
+    { ...base, sources: ["humus101", "submitted"] },
+    index.reviews,
+  ).result.rows;
+  const baseline = validateInput({
+    ...base,
+    sources: ["humus101"],
+  }).result.rows.find((r) => r.id === "abu-hassan");
+  assert.equal(withCurated.filter((r) => r.id === "abu-hassan").length, 1);
+  assert.equal(
+    withCurated.find((r) => r.id === "abu-hassan").score,
+    baseline.score,
+  );
+  const hashDuplicate = await app.start();
+  assert.equal(
+    (
+      await (
+        await submitReview(hashDuplicate, {
+          url: "https://humus101.com/999993",
+        })
+      ).json()
+    ).status,
+    "duplicate",
+  );
+  assert.equal(screeningCalls, 1);
+});
+
+test("screening fails closed for unreadable, uncertain, irrelevant and malformed provider answers", async (t) => {
+  for (const [choice, confidence, expected] of [
+    ["unrelated", 0.99, "rejected"],
+    ["relevant", 0.89, "pending"],
+    ["uncertain", 0.99, "pending"],
+    ["relevant", 0.9, "indexed"],
+  ]) {
+    const app = await setup(t, {
+      reviewFetch: reviewPage,
+      fetchImpl: async (_url, options) =>
+        screeningResponse(
+          JSON.parse(options.body),
+          choice,
+          "unknown",
+          confidence,
+        ),
+    });
+    const result = await (await submitReview(app)).json();
+    assert.equal(result.status, expected);
+    const index = await (await fetch(app.url + "/api/reviews")).json();
+    assert.equal(index.reviews.length, expected === "indexed" ? 1 : 0);
+    assert.equal(
+      validateInput({ ...base, sources: ["submitted"] }, index.reviews).result
+        .rows.length,
+      0,
+    );
+  }
+  for (const fetchImpl of [
+    async () => new Response("secret provider body", { status: 402 }),
+    async () => Response.json({ model: "jev-test", answers: {} }),
+  ]) {
+    const app = await setup(t, { reviewFetch: reviewPage, fetchImpl });
+    const response = await submitReview(app);
+    assert.equal(response.status, 202);
+    const data = await response.json();
+    assert.equal(data.reason, "verification_unavailable");
+    assert.ok(!JSON.stringify(data).includes("secret"));
+    assert.deepEqual(
+      (await (await fetch(app.url + "/api/reviews")).json()).reviews,
+      [],
+    );
+  }
+  const blocked = await setup(t, {
+    reviewFetch: async () => new Response("Login required", { status: 403 }),
+    fetchImpl: async () => assert.fail("Unreadable pages must not call Jev"),
+  });
+  assert.equal(
+    (await (await submitReview(blocked)).json()).reason,
+    "unreadable",
+  );
+  assert.deepEqual(
+    (await (await fetch(blocked.url + "/api/reviews")).json()).reviews,
+    [],
+  );
+  const restarted = await blocked.start();
+  assert.equal(
+    (await (await submitReview(restarted)).json()).reviewStatus,
+    "pending",
+  );
+});
+
+test("invalid, hostile-origin and already-curated submissions cannot spend provider credits", async (t) => {
+  const app = await setup(t, {
+    reviewFetch: async () => assert.fail("Must not fetch"),
+    fetchImpl: async () => assert.fail("Must not call Jev"),
+  });
+  for (const data of [
+    { url: "https://127.0.0.1/admin" },
+    { submitter: "<script>alert(1)</script>" },
+    { submitter: "x" },
+  ])
+    assert.equal((await submitReview(app, data)).status, 400);
+  assert.equal(
+    (await submitReview(app, {}, { Origin: "https://evil.test" })).status,
+    403,
+  );
+  assert.equal(
+    (
+      await (
+        await submitReview(app, {
+          url: "https://humus101.com/251/?utm_source=x",
+        })
+      ).json()
+    ).status,
+    "duplicate",
+  );
+  const preflight = await fetch(app.url + "/api/reviews", {
+    method: "OPTIONS",
+    headers: { Origin: "https://zuwasi.github.io" },
+  });
+  assert.equal(preflight.status, 204);
+  assert.equal(
+    preflight.headers.get("access-control-allow-origin"),
+    "https://zuwasi.github.io",
+  );
+});

@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#234738" />
     <title>The Hummus Council | A very serious lunch decision</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
       :root {
         --paper: #f8f6ee;
@@ -163,16 +169,58 @@
       .hero {
         padding: 39px 0 31px;
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
+        grid-template-columns: minmax(260px, 320px) minmax(0, 1fr);
+        grid-template-areas: "copy copy" "review memorial";
+        direction: ltr;
         align-items: center;
         gap: 24px;
       }
       .hero-copy {
-        grid-column: 1 / -1;
+        grid-area: copy;
+      }
+      .review-invitation {
+        grid-area: review;
+        padding: 22px;
+        border: 2px solid var(--orange);
+        border-radius: 16px;
+        background: #fff4e4;
+      }
+      .review-invitation h2 {
+        font-size: 28px;
+        font-weight: 800;
+        margin: 4px 0 12px;
+        color: var(--orange);
+      }
+      .review-invitation label {
+        display: block;
+        margin-top: 14px;
+        font-weight: 700;
+      }
+      .review-invitation input {
+        width: 100%;
+        min-width: 0;
+        padding: 10px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fffefa;
+      }
+      .review-invitation .primary {
+        width: 100%;
+        margin-top: 16px;
+      }
+      #review-status {
+        margin-top: 12px;
+        overflow-wrap: anywhere;
+        font-weight: 600;
+      }
+      #reader-index article p {
+        white-space: pre-wrap;
       }
       .memorial {
+        grid-area: memorial;
         justify-self: center;
-        max-width: 600px;
+        max-width: 850px;
+        width: 100%;
         text-align: center;
       }
       .memorial h2 {
@@ -181,10 +229,11 @@
       }
       .memorial-photos {
         display: grid;
-        grid-template-columns: minmax(0, 270px) minmax(0, 135px);
+        grid-template-columns: repeat(3, minmax(0, 190px));
+        direction: ltr;
         align-items: start;
         justify-content: center;
-        gap: 20px;
+        gap: 12px;
       }
       .memorial figure {
         margin: 0;
@@ -193,7 +242,15 @@
         display: block;
         width: 100%;
         height: auto;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+        background: #eee9dc;
         border-radius: 6px;
+      }
+      .memorial h2 span {
+        display: block;
+        margin-top: 10px;
+        font-size: 0.8em;
       }
       .memorial figcaption {
         margin-top: 12px;
@@ -230,26 +287,6 @@
         color: var(--muted);
         margin: 0;
         font-size: 14px;
-      }
-      .hero-note {
-        transform: rotate(5deg);
-        border: 1px solid #c2c8b3;
-        background: #edf0df;
-        border-radius: 50%;
-        width: 131px;
-        height: 131px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        text-align: center;
-        font: italic 18px/1.2 Georgia;
-      }
-      .hero-note span {
-        font: 9px Arial;
-        letter-spacing: 1px;
-        margin-top: 8px;
       }
       .workspace {
         display: grid;
@@ -883,6 +920,24 @@
       [dir="rtl"] h1 {
         line-height: 1.15;
       }
+      html[lang="he"] body,
+      html[lang="he"] body *,
+      [lang="he"] {
+        font-family: "Heebo", "Segoe UI", Arial, sans-serif;
+      }
+      html[lang="he"] h1,
+      html[lang="he"] h1 em {
+        font-weight: 700;
+        font-style: normal;
+      }
+      html[lang="he"] .hero-copy,
+      html[lang="he"] .review-invitation {
+        direction: rtl;
+      }
+      [lang="ar"] {
+        font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+        line-height: 1.6;
+      }
       [dir="rtl"] .source-name [lang="he"] {
         display: none;
       }
@@ -925,11 +980,11 @@
           max-width: 760px;
           margin: auto;
         }
-        .hero-note {
-          display: none;
-        }
-        .memorial {
-          grid-column: 1 / -1;
+      }
+      @media (max-width: 900px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-areas: "copy" "review" "memorial";
         }
       }
       @media (max-width: 650px) {
@@ -962,11 +1017,10 @@
           padding: 28px 0;
         }
         .memorial-photos {
-          grid-template-columns: minmax(0, 270px);
+          gap: 6px;
         }
-        .memorial-photos > img {
-          width: 135px;
-          justify-self: center;
+        .memorial figcaption {
+          font-size: 13px;
         }
         .hero p {
           font-size: 12px;
@@ -1177,11 +1231,63 @@
             </button>
             <div id="form-error" class="error" role="alert" hidden></div>
           </div>
+          <form
+            class="review-invitation"
+            id="review-form"
+            aria-labelledby="review-title"
+          >
+            <div class="eyebrow">A seat for your hummus intel</div>
+            <h2 id="review-title">Add review</h2>
+            <p>Drop a review link. The committee will read before it eats.</p>
+            <label for="review-url">Review link</label>
+            <input
+              id="review-url"
+              type="url"
+              dir="ltr"
+              required
+              maxlength="2048"
+              placeholder="https://…"
+            />
+            <label for="review-submitter">Your name</label>
+            <input
+              id="review-submitter"
+              dir="auto"
+              required
+              minlength="2"
+              maxlength="80"
+              autocomplete="name"
+            />
+            <button class="primary" id="submit-review" type="submit">
+              Check and add review
+            </button>
+            <div id="review-status" role="status" aria-live="polite"></div>
+            <p class="fineprint">
+              Public Facebook posts, humus101.com, Eating Out and Tripadvisor.
+              Your name and an excerpt will be public if accepted. Public text
+              is sent to Jev to check relevance, not to prove authenticity.
+              Inaccessible posts stay pending.
+            </p>
+            <button class="text-button" id="reader-button" type="button">
+              View reader reviews ↗
+            </button>
+          </form>
           <section class="memorial" dir="rtl" aria-labelledby="memorial-title">
-            <h2 id="memorial-title" dir="auto">
-              In Memory Of Ali Karwan, Abu Hassan, The Greatest of them all
+            <h2 id="memorial-title" lang="ar" dir="rtl">
+              لذكرى أبو حسن (علي كروان)، أعظمهم كلهم، ومؤسس ثقافة الحمص الحديثة
+              في إسرائيل.
+              <span lang="he" dir="rtl"
+                >לזכרו של אבו חאסן (עלי קראוון) הגדול מכולם ומייסד תרבות החומוס
+                המודרנית בישראל</span
+              >
             </h2>
             <div class="memorial-photos">
+              <img
+                src="abu-hassan-hummus.jpg"
+                alt="צלחת חומוס ופיתות אצל אבו חאסן"
+                lang="he"
+                width="480"
+                height="640"
+              />
               <figure>
                 <img
                   src="abu-hassan-portrait.png"
@@ -1197,19 +1303,14 @@
                 </figcaption>
               </figure>
               <img
-                src="abu-hassan-hummus.jpg"
-                alt="צלחת חומוס ופיתות אצל אבו חאסן"
+                src="abu-hassan-framed.jpg"
+                alt="דיוקן ממוסגר של אבו חאסן, עלי קראוון"
                 lang="he"
-                width="480"
-                height="640"
+                width="600"
+                height="800"
               />
             </div>
           </section>
-          <div class="hero-note" aria-hidden="true">
-            100% opinions.<br />0% actual<br />chickpeas.<span
-              >EST. FIVE MINUTES AGO</span
-            >
-          </div>
         </section>
         <section class="jev-dashboard" aria-label="Jev connection and speed">
           <div class="panel jev-widget">
@@ -1428,6 +1529,15 @@
                       >Facebook · community reviews</span
                     ><small>36 posts · 34 candidates</small></label
                   >
+                  <label class="source-row"
+                    ><input
+                      type="checkbox"
+                      name="sources"
+                      value="submitted"
+                      checked
+                    /><span class="source-name">Reader submissions</span
+                    ><small id="reader-count">Loading…</small></label
+                  >
                   <div class="hint">
                     Curated review snapshot. No live scraping.
                   </div>
@@ -1601,7 +1711,7 @@
         <footer class="bottom-note">
           <span
             ><b>Real source links. Playful rules. No artificial chickpeas.</b
-            ><br />53 curated places · 5 sources · current opening status
+            ><br />53 curated places · 6 sources · current opening status
             unknown</span
           >
           <button id="sources-button" class="text-button">
@@ -1653,6 +1763,7 @@
           name: "Facebook · community reviews",
           url: "https://www.facebook.com/groups/Msabbaha",
         },
+        submitted: { name: "Reader submissions", url: "#reader-index" },
       };
       // Approved summaries only. Private exports and other people's comments are not published.
       // HTML post numbers follow Daniel-authored feed headers, not nested shared posts or comments.
@@ -2494,7 +2605,7 @@
             ? "winter"
             : "mild";
       }
-      function decide(input) {
+      function decide(input, submittedReviews = []) {
         const season = seasonFor(input.date);
         if (!input.sources.length)
           throw new Error(
@@ -2505,7 +2616,27 @@
           ? { location: 55, taste: 20, season: 15, evidence: 10 }
           : { location: 40, taste: 30, season: 20, evidence: 10 };
         // Keep the first profile's rule baseline, but do not discard other selected evidence.
-        const selected = RESTAURANTS.filter((r) =>
+        const submissions = submittedReviews.flatMap((review) => {
+          const restaurant = RESTAURANTS.find(
+            (r) => r.id === review.restaurantId,
+          );
+          if (!restaurant) return [];
+          return [
+            {
+              id: restaurant.id,
+              name: restaurant.name,
+              he: restaurant.he,
+              city: restaurant.city,
+              place: restaurant.place,
+              source: "submitted",
+              tags: [],
+              date: null,
+              url: review.url,
+              note: `Reader-submitted public excerpt (not independently verified; publication date unknown):\n\n${review.excerpt}`,
+            },
+          ];
+        });
+        const selected = [...RESTAURANTS, ...submissions].filter((r) =>
           input.sources.includes(r.source),
         );
         const sourced = selected
@@ -2633,6 +2764,55 @@
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
+        "Reader-submitted public excerpt (not independently verified; publication date unknown):":
+          "קטע ציבורי שהוגש בידי קוראים (לא אומת באופן עצמאי; תאריך הפרסום לא ידוע):",
+        "Add review": "הוסף ביקורת חומוס",
+        "A seat for your hummus intel": "המודיעין שלכם, החומוס של כולנו",
+        "Drop a review link. The committee will read before it eats.":
+          "הדביקו קישור לביקורת. הוועדה תקרא לפני שתנגב.",
+        "Review link": "קישור לביקורת",
+        "Your name": "שם המגיש או המגישה",
+        "Check and add review": "לבדוק ולהוסיף ביקורת",
+        "Public Facebook posts, humus101.com, Eating Out and Tripadvisor. Your name and an excerpt will be public if accepted. Public text is sent to Jev to check relevance, not to prove authenticity. Inaccessible posts stay pending.":
+          "פוסטים ציבוריים בפייסבוק, חומוס להמונים, אוכל בחוץ וטריפאדוויזר. אם הביקורת תתקבל, שמכם וקטע קצר ממנה יוצגו לציבור. הטקסט הציבורי נשלח ל־Jev לבדיקת רלוונטיות, לא להוכחת אמיתות. פוסט שלא ניתן לקרוא ימתין לבדיקה ידנית.",
+        "View reader reviews ↗": "לביקורות הקוראים ↗",
+        "Reader submissions": "ביקורות שהוגשו בידי הקוראים",
+        "Loading…": "טוען…",
+        "Reader reviews unavailable": "ביקורות הקוראים אינן זמינות כרגע",
+        "Fetching the public review and asking Jev…":
+          "קוראים את הביקורת הציבורית ומתייעצים עם Jev…",
+        "Indexed. This review can now inform the council when Reader submissions is selected.":
+          "הביקורת נוספה למאגר ותוכל להשפיע על המועצה כאשר מקור ביקורות הקוראים נבחר.",
+        "Indexed as background. The place or branch could not be matched confidently, so it will not affect lunch decisions.":
+          "נוסף למאגר כרקע בלבד. המקום או הסניף לא זוהו בוודאות מספקת, ולכן הביקורת לא תשפיע על בחירת הארוחה.",
+        "Already indexed. No duplicate review or extra votes were added.":
+          "הקישור כבר במאגר. לא נוספו ביקורת כפולה או קולות נוספים.",
+        "Already submitted, but not approved for the public index.":
+          "הקישור כבר הוגש, אך טרם אושר למאגר הציבורי.",
+        "Saved privately for manual review. We could not read enough public text; login walls are not bypassed.":
+          "נשמר באופן פרטי לבדיקה ידנית. לא ניתן לקרוא מספיק טקסט ציבורי; איננו עוקפים דרישות התחברות.",
+        "Saved privately for manual review. Jev was unavailable or its answer could not be validated. Not indexed.":
+          "נשמר באופן פרטי לבדיקה ידנית. Jev לא היה זמין או שתשובתו לא הייתה תקינה. הביקורת לא נוספה למאגר.",
+        "Saved privately for manual review. Relevance is uncertain; not used for decisions.":
+          "נשמר באופן פרטי לבדיקה ידנית. הרלוונטיות אינה ודאית, ולכן הביקורת לא תשמש להחלטות.",
+        "Not indexed. The public text did not pass the hummus-review relevance check.":
+          "לא נוסף למאגר. הטקסט הציבורי לא עבר את בדיקת הרלוונטיות לביקורת חומוס.",
+        "Use a direct HTTPS review link from Facebook, humus101.com, Eating Out or Tripadvisor.":
+          "השתמשו בקישור HTTPS ישיר לביקורת מפייסבוק, חומוס להמונים, אוכל בחוץ או טריפאדוויזר.",
+        "Enter a name of 2–80 letters, numbers, spaces or ordinary name punctuation.":
+          "הזינו שם באורך 2–80 תווים: אותיות, ספרות, רווחים וסימני פיסוק רגילים של שמות.",
+        "Please wait 30 seconds between submissions. The committee has one reading chair.":
+          "המתינו 30 שניות בין הגשות. לוועדה יש רק כיסא קריאה אחד.",
+        "Submission could not be confirmed. Keep the link and try again; duplicates are checked.":
+          "לא ניתן לאשר שההגשה התקבלה. שמרו את הקישור ונסו שוב; המערכת בודקת כפילויות.",
+        "No reader reviews have been indexed yet.":
+          "טרם נוספו ביקורות קוראים למאגר.",
+        "Jev screens public text for relevance, not factual authenticity. Submitter names are self-reported, not verified authorship. Excerpts remain in their original language. Unmapped places are background only.":
+          "Jev בודק רלוונטיות של טקסט ציבורי, לא אמיתות עובדתית. שמות המגישים נמסרים על ידם ואינם אימות זהות הכותב. הקטעים נשארים בשפת המקור. מקומות שלא זוהו משמשים כרקע בלבד.",
+        "Submitted by": "הוגש בידי",
+        "Used by the council": "משמש את המועצה",
+        "53 curated places · 6 sources · current opening status unknown":
+          "53 מקומות בלקט · 6 מקורות · לא ידוע אם פתוח כעת",
         "Pardes Hanna": "פרדס חנה",
         Tayibe: "טייבה",
         Acre: "עכו",
@@ -3229,6 +3409,120 @@
               "'": "&#39;",
             })[c],
         );
+      let submittedReviews = [];
+      let reviewsLoaded = false;
+      async function loadReaderReviews() {
+        const response = await fetch(`${JEV_PROXY}/api/reviews`, {
+          credentials: "omit",
+          signal: AbortSignal.timeout(10000),
+        });
+        if (!response.ok) throw new Error("Reader reviews unavailable");
+        submittedReviews = (await response.json()).reviews;
+        reviewsLoaded = true;
+        $("reader-count").textContent = hebrew
+          ? `${submittedReviews.length} ביקורות`
+          : `${submittedReviews.length} reviews`;
+      }
+      function readerEvidence() {
+        return `<section id="reader-index"><p>${tr("Jev screens public text for relevance, not factual authenticity. Submitter names are self-reported, not verified authorship. Excerpts remain in their original language. Unmapped places are background only.")}</p>${
+          submittedReviews.length
+            ? submittedReviews
+                .slice()
+                .reverse()
+                .map(
+                  (r) =>
+                    `<article><h3 dir="auto">${escapeHtml(r.title)}</h3><p class="source-detail">${tr("Submitted by")} <bdi>${escapeHtml(r.submitter)}</bdi> · ${tr(r.restaurantId ? "Used by the council" : "Background only")}</p><p dir="auto">${escapeHtml(r.excerpt)}…</p><a href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">${tr("Read the original ↗")}</a></article>`,
+                )
+                .join("")
+            : `<p>${tr("No reader reviews have been indexed yet.")}</p>`
+        }</section>`;
+      }
+      $("reader-button").onclick = async () => {
+        $("dialog-title").textContent = tr("Reader submissions");
+        $("dialog-body").textContent = tr("Loading…");
+        $("info").showModal();
+        try {
+          await loadReaderReviews();
+          $("dialog-body").innerHTML = readerEvidence();
+        } catch {
+          $("dialog-body").textContent = tr("Reader reviews unavailable");
+        }
+      };
+      $("review-form").addEventListener("submit", async (event) => {
+        event.preventDefault();
+        if ($("submit-review").disabled) return;
+        $("submit-review").disabled = true;
+        $("review-form").setAttribute("aria-busy", "true");
+        $("review-status").textContent = tr(
+          "Fetching the public review and asking Jev…",
+        );
+        try {
+          const response = await fetch(`${JEV_PROXY}/api/reviews`, {
+            method: "POST",
+            credentials: "omit",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              url: $("review-url").value.trim(),
+              submitter: $("review-submitter").value.trim(),
+            }),
+            signal: AbortSignal.timeout(35000),
+          });
+          const answer = await response.json();
+          let message;
+          if (answer.status === "indexed") {
+            message = answer.review.restaurantId
+              ? "Indexed. This review can now inform the council when Reader submissions is selected."
+              : "Indexed as background. The place or branch could not be matched confidently, so it will not affect lunch decisions.";
+            if (!submittedReviews.some((r) => r.id === answer.review.id))
+              submittedReviews.push(answer.review);
+            reviewsLoaded = true;
+            $("reader-count").textContent = hebrew
+              ? `${submittedReviews.length} ביקורות`
+              : `${submittedReviews.length} reviews`;
+            refresh();
+          } else if (answer.status === "duplicate") {
+            message =
+              answer.reviewStatus === "indexed"
+                ? "Already indexed. No duplicate review or extra votes were added."
+                : "Already submitted, but not approved for the public index.";
+          } else if (answer.status === "pending") {
+            message =
+              {
+                unreadable:
+                  "Saved privately for manual review. We could not read enough public text; login walls are not bypassed.",
+                verification_unavailable:
+                  "Saved privately for manual review. Jev was unavailable or its answer could not be validated. Not indexed.",
+              }[answer.reason] ||
+              "Saved privately for manual review. Relevance is uncertain; not used for decisions.";
+          } else if (answer.status === "rejected") {
+            message =
+              "Not indexed. The public text did not pass the hummus-review relevance check.";
+          } else {
+            message =
+              {
+                invalid_review:
+                  "Use a direct HTTPS review link from Facebook, humus101.com, Eating Out or Tripadvisor.",
+                invalid_submitter:
+                  "Enter a name of 2–80 letters, numbers, spaces or ordinary name punctuation.",
+                rate_limit:
+                  "Please wait 30 seconds between submissions. The committee has one reading chair.",
+                not_configured: "Server setup required",
+              }[answer.error] ||
+              "Submission could not be confirmed. Keep the link and try again; duplicates are checked.";
+          }
+          $("review-status").textContent = tr(message);
+        } catch {
+          $("review-status").textContent = tr(
+            "Submission could not be confirmed. Keep the link and try again; duplicates are checked.",
+          );
+        } finally {
+          $("submit-review").disabled = false;
+          $("review-form").setAttribute("aria-busy", "false");
+        }
+      });
+      loadReaderReviews().catch(() => {
+        $("reader-count").textContent = tr("Reader reviews unavailable");
+      });
       const historyKey = `hummus.jev.runs.v1:${JEV_PROXY}`;
       let jevRuns = [];
       try {
@@ -3348,7 +3642,11 @@
             }[answer.error] ||
               "Jev could not complete this request. No rule-only fallback was used.",
           );
-        const decision = applyJevChoice(result, answer);
+        // Use the server's exact review snapshot if another visitor submitted during this vote.
+        const decision = applyJevChoice(
+          answer.reviews ? decide(input, answer.reviews) : result,
+          answer,
+        );
         jevRuns = retainJevRuns([
           ...jevRuns,
           {
@@ -3528,7 +3826,9 @@
         const input = readInput();
         let result;
         try {
-          result = decide(input);
+          if (input.sources.includes("submitted") && !reviewsLoaded)
+            throw new Error("Reader reviews unavailable");
+          result = decide(input, submittedReviews);
         } catch (error) {
           $("form-error").textContent = tr(error.message);
           $("form-error").hidden = false;
@@ -3648,6 +3948,7 @@
               '<p><a href="https://www.facebook.com/groups/473240306044809/" target="_blank" rel="noopener noreferrer">Where Is Good Hummus</a></p>' +
               '<article id="arafat-unconfirmed"><h3>Arafat · location unconfirmed</h3><p>Daniel Mizrahi (not Daniel Liezrowice) praises a place called Arafat, its service and a NIS 20 spread in Hummusologists. August 9 is visible without a year. The author supplies no city or branch, so this is background only, not merged with Arafat in Jerusalem or sent to Jev. His personal safety reassurance is not verified travel advice.</p><a href="https://www.facebook.com/share/p/1EoD9MCRaj/" target="_blank" rel="noopener noreferrer">Read the original ↗</a></article>' +
               '<article id="community-background"><h3>Unnamed restaurant · Beer Sheva</h3><p class="source-detail"><span>Background only</span> · <bdi>2026-09-27</bdi></p><p>Tzahi Granot enjoyed tangy hummus with generous olive oil and good value, but found the chickpeas slightly too firm. The visible author text names Beer Sheva, not the restaurant. Background only, excluded from Jev\'s shortlist until the business is identified. The council cannot send you to a mystery plate.</p><a href="https://www.facebook.com/groups/Msabbaha/permalink/1986335968674663/" target="_blank" rel="noopener noreferrer">Read the original ↗</a></article>' +
+              readerEvidence() +
               RESTAURANTS.filter((r) => r.source !== "daniel")
                 .map(
                   (r) =>

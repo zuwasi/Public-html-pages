@@ -15,6 +15,13 @@ const fs = require("node:fs");
 const path = require("node:path");
 const os = require("node:os");
 const vm = require("node:vm");
+const {
+  reviewUrl,
+  fetchReview,
+  reviewRequest,
+  createReviewStore,
+  publicReview,
+} = require("./reviews.cjs");
 
 // Share the curated data and hard filters with the standalone page, not client-supplied reviews.
 const html = fs.readFileSync(path.join(__dirname, "index.html"), "utf8");
@@ -24,7 +31,7 @@ const { decide, RESTAURANTS, SOURCES } = vm.runInNewContext(
 );
 const ENDPOINT = "https://api.typesafe.ai/v1/systemone";
 
-function validateInput(input) {
+function validateInput(input, reviews = []) {
   if (
     !input ||
     !RESTAURANTS.some((r) => r.city === input.city) ||
@@ -45,7 +52,7 @@ function validateInput(input) {
   // Drop all unrecognized fields before sending anything upstream.
   const { city, travel, taste, hunger, seasonal, date, sources } = input;
   const clean = { city, travel, taste, hunger, seasonal, date, sources };
-  return { input: clean, result: decide(clean) };
+  return { input: clean, result: decide(clean, reviews) };
 }
 
 function buildRequest(input, result) {
@@ -78,8 +85,8 @@ function buildRequest(input, result) {
   };
 }
 
-function validateAnswer(body, ids) {
-  const answer = body?.answers?.lunch;
+function validateAnswer(body, ids, question = "lunch") {
+  const answer = body?.answers?.[question];
   const probability = (n) =>
     typeof n === "number" && Number.isFinite(n) && n >= 0 && n <= 1;
   if (
@@ -118,8 +125,24 @@ function createServer({
   usageFile = process.env.JEV_USAGE_FILE ||
     path.join(os.homedir(), ".hummus-council", "usage.json"),
   fetchImpl = fetch,
+  reviewFetch = fetch,
 } = {}) {
   const configured = Boolean(apiKey);
+  // The same mounted directory as the usage ledger survives Railway redeploys.
+  const reviews = createReviewStore(
+    path.join(path.dirname(usageFile), "reviews.json"),
+  );
+  const knownUrls = new Set(
+    RESTAURANTS.flatMap((r) => [r.url, ...(r.additionalUrls || [])]).flatMap(
+      (url) => {
+        try {
+          return [reviewUrl(url)];
+        } catch {
+          return [];
+        }
+      },
+    ),
+  );
   let used = 0;
   if (fs.existsSync(usageFile)) {
     used = JSON.parse(fs.readFileSync(usageFile, "utf8")).attempts;
@@ -128,6 +151,37 @@ function createServer({
   }
   let busy = false;
   let lastAttempt = -Infinity;
+  let lastSubmission = -Infinity;
+  async function callJev(request) {
+    fs.mkdirSync(path.dirname(usageFile), { recursive: true });
+    fs.writeFileSync(
+      usageFile + ".tmp",
+      JSON.stringify({ attempts: used + 1 }),
+      { mode: 0o600 },
+    );
+    fs.renameSync(usageFile + ".tmp", usageFile);
+    used++;
+    lastAttempt = performance.now();
+    const response = await fetchImpl(ENDPOINT, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(request),
+      signal: AbortSignal.timeout(15000),
+      redirect: "error",
+    });
+    if (!response.ok)
+      throw new Error(
+        [401, 403].includes(response.status)
+          ? "provider_auth"
+          : response.status === 402
+            ? "provider_credit"
+            : "provider_unavailable",
+      );
+    return response.json();
+  }
   return http.createServer(async (req, res) => {
     const origin = req.headers.origin;
     const sameOrigin =
@@ -153,13 +207,18 @@ function createServer({
     } catch {
       return send(400, { error: "invalid_url" });
     }
-    if (req.method === "OPTIONS" && url.pathname.startsWith("/api/jev/")) {
+    if (
+      req.method === "OPTIONS" &&
+      (url.pathname.startsWith("/api/jev/") || url.pathname === "/api/reviews")
+    ) {
       res.writeHead(204, {
         "Access-Control-Allow-Methods": "GET, POST",
         "Access-Control-Allow-Headers": "Content-Type",
       });
       return res.end();
     }
+    if (req.method === "GET" && url.pathname === "/api/reviews")
+      return send(200, { reviews: reviews.indexed().map(publicReview) });
     if (req.method === "GET" && url.pathname === "/api/jev/status")
       return send(200, {
         configured,
@@ -171,6 +230,7 @@ function createServer({
       "/jev-logo.png": "image/png",
       "/abu-hassan-portrait.png": "image/png",
       "/abu-hassan-hummus.jpg": "image/jpeg",
+      "/abu-hassan-framed.jpg": "image/jpeg",
       "/esl-logo.png": "image/png",
     };
     if (
@@ -190,68 +250,166 @@ function createServer({
           : html,
       );
     }
-    if (req.method !== "POST" || url.pathname !== "/api/jev/decide")
+    if (
+      req.method !== "POST" ||
+      !["/api/jev/decide", "/api/reviews"].includes(url.pathname)
+    )
       return send(404, { error: "not_found" });
-    if (!configured) return send(503, { error: "not_configured" });
     if (!req.headers["content-type"]?.startsWith("application/json"))
       return send(415, { error: "json_required" });
-    let input, result;
+    const submission = url.pathname === "/api/reviews";
+    let payload, input, result;
     try {
-      let text = "";
+      const chunks = [];
+      let size = 0;
       for await (const chunk of req) {
-        text += chunk.toString("utf8");
-        if (Buffer.byteLength(text) > 4096)
-          return send(413, { error: "too_large" });
+        size += chunk.length;
+        if (size > 4096) return send(413, { error: "too_large" });
+        chunks.push(chunk);
       }
-      ({ input, result } = validateInput(JSON.parse(text)));
+      payload = JSON.parse(Buffer.concat(chunks).toString("utf8"));
+      if (submission) {
+        const submitter = payload?.submitter;
+        if (
+          typeof submitter !== "string" ||
+          !/^[\p{L}\p{M}\p{N} .,'’\-]{2,80}$/u.test(submitter.trim())
+        )
+          return send(400, { error: "invalid_submitter" });
+        payload = { url: reviewUrl(payload.url), submitter: submitter.trim() };
+      } else ({ input, result } = validateInput(payload, reviews.indexed()));
     } catch {
-      return send(400, { error: "invalid_brief" });
+      return send(400, {
+        error: submission ? "invalid_review" : "invalid_brief",
+      });
     }
-    if (!result.rows.length) return send(422, { error: "no_candidates" });
-    if (busy || performance.now() - lastAttempt < 3000)
+    if (submission) {
+      const existing = reviews.find(payload.url);
+      if (existing || knownUrls.has(payload.url))
+        return send(200, {
+          status: "duplicate",
+          reviewStatus: existing?.status || "indexed",
+        });
+    } else if (!result.rows.length)
+      return send(422, { error: "no_candidates" });
+    if (!configured) return send(503, { error: "not_configured" });
+    if (
+      busy ||
+      performance.now() - lastAttempt < 3000 ||
+      (submission && performance.now() - lastSubmission < 30000)
+    )
       return send(429, { error: "rate_limit" });
     busy = true;
     try {
-      // Count every attempted call BEFORE sending. No automatic retries or paid health probes.
-      fs.mkdirSync(path.dirname(usageFile), { recursive: true });
-      fs.writeFileSync(
-        usageFile + ".tmp",
-        JSON.stringify({ attempts: used + 1 }),
-        { mode: 0o600 },
-      );
-      fs.renameSync(usageFile + ".tmp", usageFile);
-      used++;
-      lastAttempt = performance.now();
-      const started = performance.now();
-      const response = await fetchImpl(ENDPOINT, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(buildRequest(input, result)),
-        signal: AbortSignal.timeout(15000),
-        redirect: "error",
-      });
-      if (!response.ok) {
-        return send(502, {
-          error: [401, 403].includes(response.status)
-            ? "provider_auth"
-            : response.status === 402
-              ? "provider_credit"
-              : "provider_unavailable",
+      if (submission) {
+        lastSubmission = performance.now();
+        let page;
+        try {
+          page = await fetchReview(payload.url, reviewFetch);
+        } catch {
+          const record = reviews.save({
+            ...payload,
+            status: "pending",
+            reason: "unreadable",
+          });
+          return send(202, {
+            status: "pending",
+            reason: "unreadable",
+            id: record.id,
+          });
+        }
+        if (knownUrls.has(page.url) || reviews.find(page.url, page.hash))
+          return send(200, {
+            status: "duplicate",
+            reviewStatus:
+              reviews.find(page.url, page.hash)?.status || "indexed",
+          });
+        const request = reviewRequest(page, RESTAURANTS);
+        let relevance, restaurant;
+        try {
+          const body = await callJev(request);
+          relevance = validateAnswer(
+            body,
+            Object.keys(request.questions.relevance.criteria),
+            "relevance",
+          );
+          restaurant = validateAnswer(
+            body,
+            Object.keys(request.questions.restaurant.criteria),
+            "restaurant",
+          );
+        } catch {
+          const record = reviews.save({
+            ...payload,
+            status: "pending",
+            reason: "verification_unavailable",
+          });
+          return send(202, {
+            status: "pending",
+            reason: "verification_unavailable",
+            id: record.id,
+          });
+        }
+        const confident = (answer) =>
+          answer.confidence >= 0.9 &&
+          answer.probabilities[answer.choice] >= 0.9;
+        const status =
+          confident(relevance) && relevance.choice === "relevant"
+            ? "indexed"
+            : confident(relevance) && relevance.choice === "unrelated"
+              ? "rejected"
+              : "pending";
+        const record = reviews.save({
+          ...payload,
+          originalUrl: payload.url,
+          url: page.url,
+          hash: page.hash,
+          status,
+          ...(status === "indexed"
+            ? {
+                title: page.title,
+                excerpt: page.text.slice(0, 420),
+                restaurantId:
+                  confident(restaurant) && restaurant.choice !== "unknown"
+                    ? restaurant.choice
+                    : null,
+              }
+            : { reason: status === "rejected" ? "not_relevant" : "uncertain" }),
         });
+        return send(
+          status === "indexed" ? 201 : status === "pending" ? 202 : 422,
+          {
+            status,
+            reason: record.reason,
+            ...(status === "indexed" ? { review: publicReview(record) } : {}),
+          },
+        );
       }
-      const body = await response.json();
+      const started = performance.now();
+      const body = await callJev(buildRequest(input, result));
       const upstreamMs = Math.round(performance.now() - started);
       const answer = validateAnswer(
         body,
         result.rows.map((r) => r.id),
       );
-      return send(200, { ...answer, upstreamMs });
-    } catch {
+      return send(200, {
+        ...answer,
+        upstreamMs,
+        reviews: input.sources.includes("submitted")
+          ? reviews.indexed().map(publicReview)
+          : [],
+      });
+    } catch (error) {
       // Never return upstream error bodies, credentials or request headers.
-      return send(502, { error: "request_failed" });
+      return send(502, {
+        error: [
+          "provider_auth",
+          "provider_credit",
+          "provider_unavailable",
+          "review_capacity",
+        ].includes(error.message)
+          ? error.message
+          : "request_failed",
+      });
     } finally {
       busy = false;
     }

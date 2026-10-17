@@ -1,0 +1,11 @@
+{
+  "name": "hummus-council",
+  "private": true,
+  "scripts": {
+    "start": "node server.cjs",
+    "test": "node --test *.test.cjs"
+  },
+  "dependencies": {
+    "cheerio": "1.1.2"
+  }
+}

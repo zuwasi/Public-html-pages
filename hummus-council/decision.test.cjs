@@ -496,7 +496,7 @@ test("Salim uses Naor's community review without inventing a date or Daniel attr
   assert.equal(decide({ ...input, sources: ["humus101"] }).rows.length, 0);
 });
 test("retired Hummusai source and its four unsupported profiles are absent", () => {
-  assert.equal(Object.keys(SOURCES).length, 5);
+  assert.equal(Object.keys(SOURCES).length, 6);
   assert.equal(Object.hasOwn(SOURCES, "hummusai"), false);
   assert.doesNotMatch(html, /hummusai|The Hummusai/i);
   const rows = decide({
