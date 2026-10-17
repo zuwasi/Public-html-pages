@@ -801,13 +801,28 @@
       }
       #sabbath-warning {
         font-size: 13px;
-        border-color: #bc692d;
         margin: 0 0 18px;
       }
       #sabbath-warning ul {
         max-height: 18rem;
         overflow-y: auto;
         padding-inline-start: 20px;
+      }
+      #sabbath-warning details {
+        margin: 12px 0;
+      }
+      .caution[data-saturday="closed"] {
+        border-color: #bc692d;
+      }
+      .caution[data-saturday="open"] {
+        color: #294a31;
+        background: #eef5e8;
+        border-color: #8fa77e;
+      }
+      .caution[data-saturday="unknown"] {
+        color: #454b51;
+        background: #f1f3f4;
+        border-color: #adb5bc;
       }
       .alternatives {
         margin-top: 20px;
@@ -2951,11 +2966,15 @@
           "שבת בצהריים: הפיתה מוכנה. אבל הדלת פתוחה?",
         "Kosher-certified restaurants are closed during Shabbat, from Friday sunset until Saturday nightfall; some reopen afterwards. This council plans lunch, not Saturday-night dinner. Non-kosher does not mean open.":
           "מסעדות בעלות תעודת כשרות סגורות בשבת, משקיעת החמה ביום שישי ועד צאת השבת; חלקן נפתחות לאחר מכן. המועצה מתכננת ארוחת צהריים, לא ארוחת מוצאי שבת. לא כשר אינו בהכרח פתוח.",
-        "Excluded from this Saturday's vote:":
-          "לא ישתתפו בהצבעת השבת כי הן רשומות כסגורות:",
-        "No known closures in this selection. This does not confirm that every place is open.":
-          "אין סגירות ידועות בבחירה הזאת. אין בכך אישור שכל המקומות פתוחים.",
-        "Saturday status and sources": "מצב פתיחה בשבת ומקורות",
+        "Listed closed on Saturday · excluded":
+          "רשומים כסגורים בשבת · אינם מועמדים",
+        "Listed open on Saturday · eligible":
+          "רשומים כפתוחים בשבת · נשארים מועמדים",
+        "Saturday hours unknown · NOT marked closed":
+          "שעות שבת לא ידועות · לא מסומנים כסגורים",
+        "Unknown does not mean closed. These places remain eligible; call to confirm hours.":
+          "לא ידוע אינו סגור. המקומות האלה נשארים מועמדים; התקשרו לוודא שעות פעילות.",
+        "About Shabbat and kosher restaurants": "על שבת ומסעדות כשרות",
         "Closed for Saturday lunch": "סגור לארוחת צהריים בשבת",
         "Listed open on Saturday": "רשום כפתוח בשבת",
         "Saturday hours unconfirmed: call before travelling":
@@ -3903,11 +3922,30 @@
       function renderSaturdayWarning(result) {
         $("sabbath-warning").hidden = !result.saturday;
         if (!result.saturday) return;
+        const open = result.rows.filter((r) => r.saturdayStatus === "open");
+        const unknown = result.rows.filter(
+          (r) => r.saturdayStatus === "unknown",
+        );
+        $("sabbath-warning").dataset.saturday = result.closed.length
+          ? "closed"
+          : unknown.length
+            ? "unknown"
+            : "open";
+        const groups = [
+          ["closed", "Listed closed on Saturday · excluded", result.closed],
+          ["open", "Listed open on Saturday · eligible", open],
+          ["unknown", "Saturday hours unknown · NOT marked closed", unknown],
+        ]
+          .filter(([, , rows]) => rows.length)
+          .map(
+            ([status, label, rows]) =>
+              `<details data-saturday-group="${status}"><summary><strong>${tr(label)} (${rows.length})</strong></summary>${status === "unknown" ? `<p>${tr("Unknown does not mean closed. These places remain eligible; call to confirm hours.")}</p>` : ""}<ul>${rows.map((r) => `<li><strong>${escapeHtml(restaurantName(r))}</strong> · ${escapeHtml(tr(r.place))}: ${saturdayEvidence(r)}</li>`).join("")}</ul></details>`,
+          )
+          .join("");
         $("sabbath-warning").innerHTML =
-          `<strong>⚠ ${tr("Saturday lunch: the pita is ready. Is the door open?")}</strong>
-          <p>${tr("Kosher-certified restaurants are closed during Shabbat, from Friday sunset until Saturday nightfall; some reopen afterwards. This council plans lunch, not Saturday-night dinner. Non-kosher does not mean open.")}</p>
-          <p>${result.closed.length ? `<strong>${tr("Excluded from this Saturday's vote:")}</strong> ${result.closed.map((r) => escapeHtml(restaurantName(r))).join(", ")}.` : tr("No known closures in this selection. This does not confirm that every place is open.")}</p>
-          <details><summary>${tr("Saturday status and sources")}</summary><ul>${[...result.closed, ...result.rows].map((r) => `<li><strong>${escapeHtml(restaurantName(r))}</strong> · ${escapeHtml(tr(r.place))}: ${saturdayEvidence(r)}</li>`).join("")}</ul></details>
+          `<strong>${tr("Saturday lunch: the pita is ready. Is the door open?")}</strong>
+          ${groups}
+          <details><summary>${tr("About Shabbat and kosher restaurants")}</summary><p>${tr("Kosher-certified restaurants are closed during Shabbat, from Friday sunset until Saturday nightfall; some reopen afterwards. This council plans lunch, not Saturday-night dinner. Non-kosher does not mean open.")}</p></details>
           <p>${tr("Sources checked:")} <bdi>${HOURS_CHECKED}</bdi>. ${tr("Published weekly schedules, not live confirmation for your date. Unknown hours remain eligible with a warning. Confirm the exact branch and hours directly; holidays and changes are not covered.")}</p>`;
       }
       function refresh() {
@@ -4027,7 +4065,8 @@
         if (result.saturday) {
           const notice = document.createElement("p");
           notice.className = "caution";
-          notice.innerHTML = `⚠ ${saturdayEvidence(winner)}. ${tr("Sources checked:")} <bdi>${HOURS_CHECKED}</bdi>. ${tr("Published weekly schedules, not live confirmation for your date. Unknown hours remain eligible with a warning. Confirm the exact branch and hours directly; holidays and changes are not covered.")}`;
+          notice.dataset.saturday = winner.saturdayStatus;
+          notice.innerHTML = `${saturdayEvidence(winner)}. ${tr("Sources checked:")} <bdi>${HOURS_CHECKED}</bdi>. ${tr("Published weekly schedules, not live confirmation for your date. Unknown hours remain eligible with a warning. Confirm the exact branch and hours directly; holidays and changes are not covered.")}`;
           $("result").querySelector(".winner-city").after(notice);
         }
         $("result").querySelector(".score-label").firstChild.textContent =
