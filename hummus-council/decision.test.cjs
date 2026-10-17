@@ -80,6 +80,73 @@ test("season boundaries and invalid dates are not timezone-dependent", () => {
   for (const date of ["", "garbage", "2026-02-29", "2026-06-31", "2026-13-01"])
     assert.throws(() => seasonFor(date));
 });
+test("Saturday lunch excludes closed branches across sources without calling unknown hours open", () => {
+  const input = {
+    ...base,
+    sources: Object.keys(SOURCES),
+    date: "2026-10-17",
+    seasonal: false,
+  };
+  const saturday = decide(input);
+  assert.equal(saturday.saturday, true);
+  for (const id of [
+    "ashkara",
+    "616",
+    "abu-hassan",
+    "shlomo-doron",
+    "fawzi-hashamen",
+  ]) {
+    assert.ok(
+      saturday.closed.some((r) => r.id === id),
+      id,
+    );
+    assert.ok(!saturday.rows.some((r) => r.id === id), id);
+  }
+  assert.equal(
+    saturday.rows.find((r) => r.id === "asli-jaffa").saturdayStatus,
+    "open",
+  );
+  assert.equal(
+    saturday.rows.find((r) => r.id === "gargiros").saturdayStatus,
+    "unknown",
+  );
+  // The west-side branch has no reliable hours; never copy the Dolphin branch's closure.
+  assert.equal(
+    saturday.rows.find((r) => r.id === "abu-hassan-shivtei-israel-west")
+      .saturdayStatus,
+    "unknown",
+  );
+  assert.equal(
+    new Set(saturday.closed.map((r) => r.id)).size,
+    saturday.closed.length,
+  );
+  for (const date of ["2026-10-16", "2026-10-18"]) {
+    const weekday = decide({ ...input, date });
+    assert.equal(weekday.saturday, false);
+    assert.equal(weekday.closed.length, 0);
+    assert.ok(weekday.rows.some((r) => r.id === "ashkara"));
+    for (const row of saturday.rows)
+      assert.equal(row.score, weekday.rows.find((r) => r.id === row.id).score);
+  }
+  for (const date of ["2028-12-30", "2028-01-01", "2020-02-29"])
+    assert.equal(decide({ ...input, date }).saturday, true);
+  const readerOnly = decide({ ...input, sources: ["submitted"] }, [
+    {
+      restaurantId: "ashkara",
+      url: "https://humus101.com/test-review",
+      excerpt: "A new review cannot override opening hours.",
+    },
+  ]);
+  assert.equal(readerOnly.rows.length, 0);
+  assert.deepEqual(
+    Array.from(readerOnly.closed, (r) => r.id),
+    ["ashkara"],
+  );
+  assert.equal(
+    decide({ ...input, city: "haifa", sources: ["daniel"] }).closed.length,
+    0,
+  );
+});
 test("unknown style receives half credit, not a fabricated match", () => {
   const unknown = decide({ ...base, city: "fureidis" }).rows[0];
   assert.equal(unknown.id, "abu-qassem");

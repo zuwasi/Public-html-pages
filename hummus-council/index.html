@@ -799,6 +799,16 @@
         padding: 12px;
         margin-top: 18px;
       }
+      #sabbath-warning {
+        font-size: 13px;
+        border-color: #bc692d;
+        margin: 0 0 18px;
+      }
+      #sabbath-warning ul {
+        max-height: 18rem;
+        overflow-y: auto;
+        padding-inline-start: 20px;
+      }
       .alternatives {
         margin-top: 20px;
         border-top: 1px solid #d2dbc3;
@@ -1427,6 +1437,12 @@
                     <div id="season-label" class="season-tag"></div>
                   </div>
                 </div>
+                <div
+                  id="sabbath-warning"
+                  class="caution"
+                  role="status"
+                  hidden
+                ></div>
                 <div class="field">
                   <label for="travel">How far will you go for hummus?</label
                   ><select name="travel" id="travel">
@@ -2587,6 +2603,157 @@
             note: review.note,
           })),
       ];
+      // Branch-specific published schedules read on this date, not live opening checks.
+      // Missing/conflicting hours stay unknown. A closed Saturday does not imply kosher.
+      const HOURS_CHECKED = "2026-10-17";
+      const SATURDAY_HOURS = {
+        "abu-hassan": {
+          status: "closed",
+          url: "https://easy.co.il/page/8822534",
+        },
+        616: { status: "closed", url: "https://easy.co.il/page/10141247" },
+        ashkara: {
+          status: "closed",
+          kosherListed: true,
+          url: "https://hummus-ashkara.co.il/",
+        },
+        "shlomo-doron": {
+          status: "closed",
+          kosherListed: true,
+          url: "https://easy.co.il/page/8822978",
+        },
+        "fawzi-hashamen": {
+          status: "closed",
+          kosherListed: true,
+          url: "https://easy.co.il/page/27455858",
+        },
+        "roni-ful-bat-yam": {
+          status: "closed",
+          kosherListed: true,
+          url: "https://easy.co.il/page/26366615",
+        },
+        "falafel-ramla-shilat": {
+          status: "closed",
+          url: "https://easy.co.il/page/26599237",
+        },
+        "sharon-ful": {
+          status: "closed",
+          kosherListed: true,
+          url: "https://easy.co.il/page/8825587",
+        },
+        "hakerem-harakevet": {
+          status: "closed",
+          url: "https://easy.co.il/page/26478837",
+        },
+        "haben-shel-hasuri-bat-yam": {
+          status: "closed",
+          kosherListed: true,
+          url: "https://easy.co.il/page/26003807",
+        },
+        "akram-shenkin": {
+          status: "closed",
+          url: "https://easy.co.il/page/5773784",
+        },
+        "uzi-netanya": {
+          status: "closed",
+          kosherListed: true,
+          url: "https://easy.co.il/page/27088994",
+        },
+        "neri-hod-hasharon": {
+          status: "closed",
+          kosherListed: true,
+          url: "https://easy.co.il/page/27170992",
+        },
+        "said-acre": {
+          status: "closed",
+          url: "https://www.oldakko.co.il/category/סעיד",
+        },
+        lina: {
+          status: "open",
+          hours: "08:30–16:00",
+          url: "https://www.tripadvisor.com/Restaurant_Review-g293983-d1541436-Reviews-Hummus_Lina-Jerusalem_Jerusalem_District.html",
+        },
+        "hamudi-yehuda-halevi": {
+          status: "open",
+          hours: "09:00–18:00",
+          url: "https://www.instagram.com/reel/DafFr5hMVF_/",
+        },
+        "george-shikun-dan": {
+          status: "open",
+          hours: "08:00–18:00",
+          url: "https://www.rol.co.il/restaurant/hummus-george",
+        },
+        "asli-jaffa": {
+          status: "open",
+          hours: "06:30–21:00",
+          url: "https://easy.co.il/page/8829379",
+        },
+        "nader-hagadol-tel-aviv": {
+          status: "open",
+          hours: "08:30–17:00",
+          url: "https://easy.co.il/page/10023512",
+        },
+        "abu-adam-qalansuwa": {
+          status: "open",
+          hours: "11:00–21:00",
+          url: "https://asif.org/he/restaurants/שווארמה-אבו-אדם/",
+        },
+        "zina-zarzir": {
+          status: "open",
+          hours: "08:30–16:00",
+          url: "https://easy.co.il/page/27020841",
+        },
+        "abu-adham-kafr-yasif": {
+          status: "open",
+          hours: "09:00–17:00",
+          url: "https://easy.co.il/page/8818882",
+        },
+        "al-amir-tarshiha": {
+          status: "open",
+          hours: "08:00–18:30",
+          url: "https://www.ozrothagalil.org.il/poi/מסעדת-אלאמיר/",
+        },
+        "al-sheikh-nazareth": {
+          status: "open",
+          hours: "07:00–23:00",
+          url: "https://easy.co.il/page/9221232",
+        },
+        "abu-ali-jerusalem": {
+          status: "open",
+          hours: "08:00–15:00",
+          url: "https://easy.co.il/page/9070168",
+        },
+        "al-hawam-shefa-amr": {
+          status: "open",
+          hours: "07:00–15:00",
+          url: "https://easy.co.il/page/3480465",
+        },
+        "abu-rami": {
+          status: "open",
+          hours: "08:00–16:30",
+          url: "https://www.instagram.com/abu_rami.restaurant/",
+        },
+        "abu-qassem": {
+          status: "open",
+          hours: "09:00–18:00",
+          url: "https://easy.co.il/page/20169866",
+        },
+        "el-sham": {
+          status: "open",
+          hours: "08:00–16:00",
+          url: "https://easy.co.il/page/26521243",
+        },
+        hamza: {
+          status: "open",
+          hours: "06:30–16:30",
+          url: "https://easy.co.il/page/10037165",
+        },
+        "abu-al-abed": {
+          status: "open",
+          hours: "08:00–15:30",
+          url: "https://easy.co.il/page/10106223",
+        },
+      };
       function seasonFor(date) {
         if (!/^\d{4}-\d{2}-\d{2}$/.test(date))
           throw new Error(
@@ -2607,6 +2774,7 @@
       }
       function decide(input, submittedReviews = []) {
         const season = seasonFor(input.date);
+        const saturday = new Date(input.date + "T12:00:00Z").getUTCDay() === 6;
         if (!input.sources.length)
           throw new Error(
             "Choose at least one source. Even a committee needs evidence.",
@@ -2647,6 +2815,9 @@
             const reviews = selected.filter((other) => other.id === r.id);
             return {
               ...r,
+              saturdayStatus: SATURDAY_HOURS[r.id]?.kosherListed
+                ? "closed"
+                : SATURDAY_HOURS[r.id]?.status || "unknown",
               note: reviews.map((review) => review.note).join("\n\n"),
               additionalUrls: [
                 ...new Set(
@@ -2661,7 +2832,11 @@
         const eligible = sourced.filter(
           (r) => input.travel === "any" || r.city === input.city,
         );
+        const closed = saturday
+          ? eligible.filter((r) => r.saturdayStatus === "closed")
+          : [];
         const rows = eligible
+          .filter((r) => !saturday || r.saturdayStatus !== "closed")
           .map((r) => {
             const local = r.city === input.city;
             const preference =
@@ -2699,7 +2874,15 @@
           .sort(
             (a, b) => b.score - a.score || a.name.localeCompare(b.name, "en"),
           );
-        return { season, weights, rows, sourced: sourced.length, urgent };
+        return {
+          season,
+          weights,
+          rows,
+          sourced: sourced.length,
+          urgent,
+          saturday,
+          closed,
+        };
       }
     </script>
     <script id="jev-client">
@@ -2764,6 +2947,28 @@
     <script id="localization">
       const hebrew = new URLSearchParams(location.search).get("lang") === "he";
       const HE = {
+        "Saturday lunch: the pita is ready. Is the door open?":
+          "שבת בצהריים: הפיתה מוכנה. אבל הדלת פתוחה?",
+        "Kosher-certified restaurants are closed during Shabbat, from Friday sunset until Saturday nightfall; some reopen afterwards. This council plans lunch, not Saturday-night dinner. Non-kosher does not mean open.":
+          "מסעדות בעלות תעודת כשרות סגורות בשבת, משקיעת החמה ביום שישי ועד צאת השבת; חלקן נפתחות לאחר מכן. המועצה מתכננת ארוחת צהריים, לא ארוחת מוצאי שבת. לא כשר אינו בהכרח פתוח.",
+        "Excluded from this Saturday's vote:":
+          "לא ישתתפו בהצבעת השבת כי הן רשומות כסגורות:",
+        "No known closures in this selection. This does not confirm that every place is open.":
+          "אין סגירות ידועות בבחירה הזאת. אין בכך אישור שכל המקומות פתוחים.",
+        "Saturday status and sources": "מצב פתיחה בשבת ומקורות",
+        "Closed for Saturday lunch": "סגור לארוחת צהריים בשבת",
+        "Listed open on Saturday": "רשום כפתוח בשבת",
+        "Saturday hours unconfirmed: call before travelling":
+          "שעות שבת לא מאומתות: יש להתקשר לפני הנסיעה",
+        "Listed kosher": "רשום ככשר",
+        "Hours source ↗": "מקור שעות הפעילות ↗",
+        "Sources checked:": "המקורות נבדקו:",
+        "Published weekly schedules, not live confirmation for your date. Unknown hours remain eligible with a warning. Confirm the exact branch and hours directly; holidays and changes are not covered.":
+          "שעות שבועיות שפורסמו, לא אישור פתיחה חי לתאריך שבחרתם. מקומות ששעותיהם אינן ידועות נשארים מועמדים עם אזהרה. יש לוודא ישירות את הסניף והשעות; חגים ושינויים אינם נבדקים.",
+        "All matching places are listed closed for Saturday lunch. Choose another date, source or city. The committee cannot negotiate with a locked door.":
+          "כל המקומות המתאימים רשומים כסגורים לארוחת צהריים בשבת. בחרו תאריך, מקור או עיר אחרים. הוועדה לא מנהלת משא ומתן עם דלת נעולה.",
+        "Saturday lunch excludes places listed closed or kosher in our dated hours snapshot; unknown hours remain eligible with a warning. This is not a live opening check.":
+          "לארוחת שבת בצהריים מוצאים מהרשימה מקומות הרשומים כסגורים או ככשרים בלקט שעות הפעילות המתוארך שלנו; מקומות ששעותיהם לא ידועות נשארים עם אזהרה. זו אינה בדיקת פתיחה בזמן אמת.",
         "Reader-submitted public excerpt (not independently verified; publication date unknown):":
           "קטע ציבורי שהוגש בידי קוראים (לא אומת באופן עצמאי; תאריך הפרסום לא ידוע):",
         "Add review": "הוסף ביקורת חומוס",
@@ -3308,8 +3513,8 @@
         "Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.":
           "ראיות: ביקורות משנת 2020 ואילך מקבלות 10 נקודות; ישנות יותר מקבלות 5. זה סף קבוע לצורכי הדגמה, לא הבטחה לעדכניות.",
         "What the demo does not know:": "מה ההדגמה לא יודעת:",
-        "current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.":
-          "אם המקום פעיל כיום, שעות בחגים, תורים, מחירים, מזג אוויר, אלרגיות, תעודת כשרות או זמינות מנות. התאריך קובע העדפה עונתית ולא בודק זמינות בעבר או בעתיד. ״קליל״ מתאר העדפת מרקם וגודל מנה, לא קלוריות או בטיחות מזון.",
+        "live operation, holiday hours, queues, costs, weather, allergies, validity of kosher certificates or menu availability. The date sets season and Saturday-lunch filtering from published schedules, not guaranteed availability. “Lighter” describes texture and portion preference, not calories or food safety.":
+          "פתיחה בזמן אמת, שעות בחגים, תורים, מחירים, מזג אוויר, אלרגיות, תוקף תעודות כשרות או זמינות מנות. התאריך קובע עונה וסינון לארוחת שבת לפי שעות שפורסמו, לא זמינות מובטחת. ״קליל״ מתאר העדפת מרקם וגודל מנה, לא קלוריות או בטיחות מזון.",
         "Curated review snapshot": "לקט הביקורות",
         "Updated 4 October 2026. Summaries paraphrase the authors, not their readers. Style tags and all scoring are our demo interpretation, not the authors' ratings. Unknown styles stay unknown. Profiles with multiple reviews show the latest publication date; the summary identifies each author.":
           "עודכן ב־4 באוקטובר 2026. התקצירים מבוססים על דברי הכותבים, לא על תגובות הקוראים. תגיות הסגנון וכל הניקוד הם פרשנות לצורך ההדגמה, לא ציוני הכותבים. סגנון לא ידוע נשאר לא ידוע. ברשומות עם כמה ביקורות מוצג תאריך הפרסום האחרון; התקציר מזהה כל כותב.",
@@ -3686,6 +3891,25 @@
           ),
         };
       }
+      function saturdayEvidence(restaurant) {
+        const hours = SATURDAY_HOURS[restaurant.id];
+        const label = {
+          closed: "Closed for Saturday lunch",
+          open: "Listed open on Saturday",
+          unknown: "Saturday hours unconfirmed: call before travelling",
+        }[restaurant.saturdayStatus];
+        return `${tr(label)}${hours?.hours ? ` · <bdi>${hours.hours}</bdi>` : ""}${hours?.kosherListed ? ` · ${tr("Listed kosher")}` : ""}${hours ? ` · <a href="${escapeHtml(hours.url)}" target="_blank" rel="noopener noreferrer">${tr("Hours source ↗")}</a>` : ""}`;
+      }
+      function renderSaturdayWarning(result) {
+        $("sabbath-warning").hidden = !result.saturday;
+        if (!result.saturday) return;
+        $("sabbath-warning").innerHTML =
+          `<strong>⚠ ${tr("Saturday lunch: the pita is ready. Is the door open?")}</strong>
+          <p>${tr("Kosher-certified restaurants are closed during Shabbat, from Friday sunset until Saturday nightfall; some reopen afterwards. This council plans lunch, not Saturday-night dinner. Non-kosher does not mean open.")}</p>
+          <p>${result.closed.length ? `<strong>${tr("Excluded from this Saturday's vote:")}</strong> ${result.closed.map((r) => escapeHtml(restaurantName(r))).join(", ")}.` : tr("No known closures in this selection. This does not confirm that every place is open.")}</p>
+          <details><summary>${tr("Saturday status and sources")}</summary><ul>${[...result.closed, ...result.rows].map((r) => `<li><strong>${escapeHtml(restaurantName(r))}</strong> · ${escapeHtml(tr(r.place))}: ${saturdayEvidence(r)}</li>`).join("")}</ul></details>
+          <p>${tr("Sources checked:")} <bdi>${HOURS_CHECKED}</bdi>. ${tr("Published weekly schedules, not live confirmation for your date. Unknown hours remain eligible with a warning. Confirm the exact branch and hours directly; holidays and changes are not covered.")}</p>`;
+      }
       function refresh() {
         if (running) return;
         const labels = [
@@ -3714,6 +3938,11 @@
         } catch {
           $("season-label").textContent = tr("Choose your lunch date");
         }
+        try {
+          renderSaturdayWarning(decide(readInput(), submittedReviews));
+        } catch {
+          $("sabbath-warning").hidden = true;
+        }
         $("state").textContent = tr("Ready for a vote");
         $("progress").style.width = "0%";
         $("result").innerHTML = initialResult;
@@ -3738,6 +3967,7 @@
         $("verdict").setAttribute("aria-busy", String(busy));
       }
       function renderResult(result, input) {
+        renderSaturdayWarning(result);
         const winner = result.rows[0];
         if (!winner) {
           $("result").innerHTML =
@@ -3746,6 +3976,13 @@
           $("minutes").textContent = tr(
             "No match in this small snapshot. Your city may have excellent hummus; our cupboard is simply understocked.",
           );
+          if (result.closed.length) {
+            const message = tr(
+              "All matching places are listed closed for Saturday lunch. Choose another date, source or city. The committee cannot negotiate with a locked door.",
+            );
+            $("result").querySelector(".empty-copy").textContent = message;
+            $("minutes").textContent = message;
+          }
           return;
         }
         const names = {
@@ -3787,6 +4024,12 @@
         $("result").innerHTML =
           `<span class="tag">✓ MOTION DELICIOUSLY CARRIED</span><h3 class="winner-name">${escapeHtml(restaurantName(winner))}</h3><div class="winner-city">${hebrew ? "" : `<span lang="he">${escapeHtml(winner.he)}</span> · `}${escapeHtml(tr(winner.place))}</div><div class="score-block"><div class="score-ring">${winner.score}</div><div class="score-label">Council fit / 100<small>A demo score, not a restaurant rating.</small></div></div><p class="reason">${tr(winner.local ? "In your chosen city." : "An out-of-city option; check the journey yourself.")} ${tr(matchText)}</p><div class="breakdown">${bars}</div><p class="reason"><strong>The recommended maneuver</strong><br>${order}</p><div class="source-detail">${tr("Historical review summary:")} ${escapeHtml(tr(winner.note))}<br><br>${escapeHtml(tr(SOURCES[winner.source].name))} · ${winner.date ? tr("published") : ""} <bdi>${winner.date || tr("Date unknown")}</bdi></div><div class="result-links"><a href="${escapeHtml(winner.url)}" target="_blank" rel="noopener noreferrer">Read the original ↗</a><a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(winner.he + " " + winner.place)}" target="_blank" rel="noopener noreferrer">Check on Maps ↗</a></div><div class="caution"><strong>Before you grab the car keys:</strong> this is a curated, dated review snapshot, not a live recommendation service. Verify the branch, opening hours, menu and dietary requirements directly. Season rules describe preferences, not health benefits.</div><div class="alternatives"><div class="eyebrow" style="font-size:9px">${alternatives ? "The loyal opposition" : "No other matching candidates"}</div>${alternatives || '<p class="hint">Only one entry matches. This is not a comparison with every restaurant in the city.</p>'}</div>`;
         localize($("result"));
+        if (result.saturday) {
+          const notice = document.createElement("p");
+          notice.className = "caution";
+          notice.innerHTML = `⚠ ${saturdayEvidence(winner)}. ${tr("Sources checked:")} <bdi>${HOURS_CHECKED}</bdi>. ${tr("Published weekly schedules, not live confirmation for your date. Unknown hours remain eligible with a warning. Confirm the exact branch and hours directly; holidays and changes are not covered.")}`;
+          $("result").querySelector(".winner-city").after(notice);
+        }
         $("result").querySelector(".score-label").firstChild.textContent =
           tr("Rule fit / 100");
         for (const url of winner.additionalUrls || []) {
@@ -3919,7 +4162,7 @@
       }
       $("summer").onclick = () => preset(7);
       $("winter").onclick = () => preset(1);
-      const method = `<p>The server rebuilds the shortlist from approved reviews, then calls TypeSafe's Jev Choice API. Jev selects the winner; its option probabilities order the alternatives. The 0–100 rule score is shown separately, not as model confidence.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected sources determine eligibility. “My city only” is a hard filter.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li></ul><p><strong>What the demo does not know:</strong> current operation, holiday hours, queues, costs, weather, allergies, kosher certification or menu availability. The date sets a seasonal preference, not a historical or future availability check. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
+      const method = `<p>The server rebuilds the shortlist from approved reviews, then calls TypeSafe's Jev Choice API. Jev selects the winner; its option probabilities order the alternatives. The 0–100 rule score is shown separately, not as model confidence.</p><p><strong>The rules are simple and visible:</strong></p><ul><li>Selected sources determine eligibility. “My city only” is a hard filter.</li><li>Saturday lunch excludes places listed closed or kosher in our dated hours snapshot; unknown hours remain eligible with a warning. This is not a live opening check.</li><li>Normal weights: location 40, taste 30, season 20, evidence 10. Hunger 4 or 5 shifts them to 55, 20, 15, 10.</li><li>Location: full points in your city, zero elsewhere. No road-distance estimates.</li><li>Taste: full points for a matching tag or no preference; half for unknown style; zero for a mismatch.</li><li>Summer (June–September) rewards light tags. Winter (December–February) rewards rich tags. Other months, disabled season voting and unknown styles receive half points, rounded up where needed.</li><li>Evidence: reviews dated 2020 onward get 10 points; older reviews get 5. This fixed demo cutoff is not a freshness guarantee.</li></ul><p><strong>What the demo does not know:</strong> live operation, holiday hours, queues, costs, weather, allergies, validity of kosher certificates or menu availability. The date sets season and Saturday-lunch filtering from published schedules, not guaranteed availability. “Lighter” describes texture and portion preference, not calories or food safety.</p>`;
       function danielEvidence() {
         return `<section id="daniel-evidence"><p>${$("daniel-credit").innerHTML}</p><p class="caution">${tr("11 HTML posts + 6 PDF posts, with 3 overlaps, plus 2 public posts: 16 distinct posts and 8 lunch candidates. The rest are background, not scoring evidence. Only visible Daniel-authored text is summarized; hidden text, private exports and other people's comments are not published. Unknown dates and styles stay unknown. Historical prices are not current offers. This is not a live group feed.")}</p><p>${tr(sourcePolicy)}</p>${Object.values(
           DANIEL_REVIEWS,

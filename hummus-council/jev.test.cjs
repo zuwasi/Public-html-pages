@@ -134,6 +134,36 @@ test("proxy reconstructs approved candidates and discards client-supplied eviden
     assert.throws(() => validateInput({ ...base, ...override }));
 });
 
+test("Saturday filtering is enforced by the proxy and an all-closed vote spends no credits", async (t) => {
+  const { input, result } = validateInput({
+    ...base,
+    date: "2026-10-17",
+    saturday: false,
+    candidates: [{ id: "616", saturdayStatus: "open" }],
+  });
+  const request = buildRequest(input, result);
+  assert.equal(request.state.saturdayLunch, true);
+  assert.ok(!Object.hasOwn(request.questions.lunch.criteria, "616"));
+  assert.equal(
+    request.state.candidates.find((r) => r.id === "asli-jaffa").saturdayStatus,
+    "open",
+  );
+  assert.equal(
+    request.state.candidates.find((r) => r.id === "gargiros").saturdayStatus,
+    "unknown",
+  );
+  const { post, url } = await setup(t);
+  const response = await post({
+    ...base,
+    date: "2026-10-17",
+    sources: ["tripadvisor"],
+  });
+  assert.equal(response.status, 422);
+  assert.deepEqual(await response.json(), { error: "no_candidates" });
+  const status = await fetch(url + "/api/jev/status").then((r) => r.json());
+  assert.equal(status.attempts, 0);
+});
+
 test("Jev receives the added city and sources with approved review evidence", () => {
   for (const [city, source, ids] of [
     ["tel-aviv", "tripadvisor", ["ashkara"]],
