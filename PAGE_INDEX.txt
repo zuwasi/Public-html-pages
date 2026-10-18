@@ -248,6 +248,9 @@ Last updated: 2026-10-18
 • ampcode-classiq-research-orchestrator
   https://zuwasi.github.io/Public-html-pages/ampcode-classiq-research-orchestrator
 
+• anthropic-swe-skills
+  https://zuwasi.github.io/Public-html-pages/anthropic-swe-skills
+
 • apollo-misra-demo
   https://zuwasi.github.io/Public-html-pages/apollo-misra-demo
 
