@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-18
+Last updated: 2026-10-19
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -148,55 +148,58 @@ Last updated: 2026-10-18
 46. endorlabs-amp-integration-presentation.html
    https://zuwasi.github.io/Public-html-pages/endorlabs-amp-integration-presentation.html
 
-47. final-scores.html
+47. factory-airgap-presentation.html
+   https://zuwasi.github.io/Public-html-pages/factory-airgap-presentation.html
+
+48. final-scores.html
    https://zuwasi.github.io/Public-html-pages/final-scores.html
 
-48. harness-beats-model.html
+49. harness-beats-model.html
    https://zuwasi.github.io/Public-html-pages/harness-beats-model.html
 
-49. harness-story-backup.html
+50. harness-story-backup.html
    https://zuwasi.github.io/Public-html-pages/harness-story-backup.html
 
-50. harness-story.html
+51. harness-story.html
    https://zuwasi.github.io/Public-html-pages/harness-story.html
 
-51. hiring-agent-presentation.html
+52. hiring-agent-presentation.html
    https://zuwasi.github.io/Public-html-pages/hiring-agent-presentation.html
 
-52. nesher2gm-pentest-operator-guide.html
+53. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-53. nono-ampcode-presentation.html
+54. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-54. optical-ai-network-comparison-presentation.html
+55. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-55. proof-lean-cbmc.html
+56. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-56. python-json-throughput.html
+57. python-json-throughput.html
    https://zuwasi.github.io/Public-html-pages/python-json-throughput.html
 
-57. rna-transcript-svd-lean4-presentation.html
+58. rna-transcript-svd-lean4-presentation.html
    https://zuwasi.github.io/Public-html-pages/rna-transcript-svd-lean4-presentation.html
 
-58. skillspector-droid-locate-and-judge.html
+59. skillspector-droid-locate-and-judge.html
    https://zuwasi.github.io/Public-html-pages/skillspector-droid-locate-and-judge.html
 
-59. static-code-analysis-2026.html
+60. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-60. threadx-parasoft-sonarqube.html
+61. threadx-parasoft-sonarqube.html
    https://zuwasi.github.io/Public-html-pages/threadx-parasoft-sonarqube.html
 
-61. why-amp-doesnt-need-node9-proxy.html
+62. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-62. wolfram-engine-gpu-demo-presentation.html
+63. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
-63. xdp-verification-workflow-presentation.html
+64. xdp-verification-workflow-presentation.html
    https://zuwasi.github.io/Public-html-pages/xdp-verification-workflow-presentation.html
 
 ──────────────────────────────────────────────────────────────
