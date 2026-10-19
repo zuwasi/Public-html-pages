@@ -189,15 +189,15 @@
   /* ======================================================================
      TYPOGRAPHY
      ====================================================================== */
-  h1.cover {
+  h1.cover-title {
     font-family: var(--serif-display);
-    font-size: 92px;
+    font-size: 86px;
     font-weight: 500;
     line-height: 1.02;
     letter-spacing: -2.5px;
     color: var(--ink);
   }
-  h1.cover em { font-style: italic; color: var(--accent); font-weight: 500; }
+  h1.cover-title em { font-style: italic; color: var(--accent); font-weight: 500; }
 
   h2.headline {
     font-family: var(--serif-display);
@@ -927,6 +927,45 @@
   .nav button:hover { background: var(--accent); color: var(--paper); border-color: var(--accent); }
 
   /* ======================================================================
+     ESL TYPOGRAPHIC MARK
+     ====================================================================== */
+  .esl-mark {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+    user-select: none;
+  }
+  .esl-mark .wm {
+    font-family: var(--serif-display);
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 6px;
+    padding-right: 0;
+    padding-left: 6px;
+  }
+  .esl-mark .wm-line {
+    width: 100%;
+    height: 1px;
+    background: var(--accent);
+    margin: 4px 0 4px 0;
+  }
+  .esl-mark .wm-sub {
+    font-family: var(--sans);
+    font-size: 8.5px;
+    letter-spacing: 2.8px;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .esl-mark.large .wm { font-size: 56px; letter-spacing: 10px; padding-left: 10px; }
+  .esl-mark.large .wm-sub { font-size: 10px; letter-spacing: 3.2px; }
+  .esl-mark.small .wm { font-size: 22px; letter-spacing: 4px; padding-left: 4px; }
+  .esl-mark.small .wm-sub { font-size: 7px; letter-spacing: 2px; }
+
+  /* ======================================================================
      HOME LINK
      ====================================================================== */
   .home {
@@ -980,9 +1019,17 @@
 <section class="slide active">
   <div class="cover">
     <div class="cover-head">
-      <div class="pub">
-        Engineering Software Lab
-        <span class="sub">Technical Briefing Series</span>
+      <div class="pub" style="display: flex; align-items: center; gap: 22px;">
+        <span class="esl-mark large">
+          <span class="wm">ESL</span>
+          <span class="wm-line"></span>
+          <span class="wm-sub">Engineering · Software · Lab</span>
+        </span>
+        <span style="display: inline-block; width: 1px; height: 44px; background: var(--rule-strong);"></span>
+        <span>
+          Technical Briefing Series
+          <span class="sub">eswlab.com</span>
+        </span>
       </div>
       <div class="stamps">
         <span class="seal">Restricted</span>
@@ -992,7 +1039,7 @@
 
     <div class="cover-middle">
       <div class="cover-eyebrow">Government Deployment · Air-Gapped</div>
-      <h1 class="cover">Factory Droid —<br>autonomous coding,<br><em>fully inside</em> the perimeter.</h1>
+      <h1 class="cover-title">Factory Droid —<br>autonomous coding,<br><em>fully inside</em> the perimeter.</h1>
       <p class="cover-abstract">A production path for sovereign software engineering: coding agents that run on hardware you own, against models you host, with every byte of source, every prompt, and every tool call confined to your network. Prepared for government leadership considering a pilot deployment.</p>
     </div>
 
@@ -1790,7 +1837,7 @@
       </div>
 
       <div>
-        <svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+        <svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto; max-height: 480px; display: block;">
           <!-- central LLM -->
           <circle cx="210" cy="210" r="60" fill="#8b2635" stroke="#5c1620" stroke-width="2"/>
           <text x="210" y="206" font-family="Helvetica Neue, Arial, sans-serif" font-size="9" font-weight="700" letter-spacing="2" fill="#f3ebd6" text-anchor="middle">MODEL</text>
@@ -2202,16 +2249,28 @@
         </blockquote>
       </div>
 
-      <div style="padding: 32px 36px; background: var(--paper-alt); border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);">
-        <h4 class="kicker" style="color: var(--accent);">Point of contact</h4>
-        <h3 style="font-family: var(--serif-display); font-size: 36px; font-weight: 500; color: var(--ink); margin-top: 6px; line-height: 1.1;">Daniel Liezrowice</h3>
-        <p class="small" style="margin-top: 4px;">Lead Engineer · Engineering Software Lab</p>
+      <div style="padding: 28px 32px; background: var(--paper-alt); border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;">
+          <div>
+            <h4 class="kicker" style="color: var(--accent);">Point of contact</h4>
+            <h3 style="font-family: var(--serif-display); font-size: 32px; font-weight: 500; color: var(--ink); margin-top: 6px; line-height: 1.1;">Daniel Liezrowice</h3>
+            <p class="small" style="margin-top: 4px;">Lead Engineer · Engineering Software Lab</p>
+          </div>
+          <span class="esl-mark" style="margin-top: 4px;">
+            <span class="wm">ESL</span>
+            <span class="wm-line"></span>
+            <span class="wm-sub">Engineering · Software · Lab</span>
+          </span>
+        </div>
 
-        <div style="height: 1px; background: var(--rule-strong); margin: 22px 0;"></div>
+        <div style="height: 1px; background: var(--rule-strong); margin: 18px 0;"></div>
 
-        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 10px 20px; font-size: 15px;">
+        <div style="display: grid; grid-template-columns: 90px 1fr; gap: 10px 18px; font-size: 14px;">
           <span class="tiny" style="padding-top: 2px;">Email</span>
           <span class="mono" style="color: var(--accent); font-weight: 700;">daniel.l@eswlab.com</span>
+
+          <span class="tiny" style="padding-top: 2px;">Web</span>
+          <span class="mono" style="color: var(--accent); font-weight: 700;">www.eswlab.com</span>
 
           <span class="tiny" style="padding-top: 2px;">Role</span>
           <span>Factory Private programme lead</span>
@@ -2223,7 +2282,7 @@
           <span style="color: var(--accent); font-weight: 700;">Fully air-gapped · customer-controlled</span>
         </div>
 
-        <div style="height: 1px; background: var(--rule); margin: 22px 0;"></div>
+        <div style="height: 1px; background: var(--rule); margin: 18px 0;"></div>
 
         <p class="small">Request a technical kickoff: send a one-paragraph description of the engineering backlog you would like the pilot to target. A response and a rack specification follow within one business day.</p>
       </div>
