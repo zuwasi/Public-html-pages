@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-19
+Last updated: 2026-10-20
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -259,6 +259,9 @@ Last updated: 2026-10-19
 
 • apollo-mold-linker
   https://zuwasi.github.io/Public-html-pages/apollo-mold-linker
+
+• ardupilot-sbom-overview
+  https://zuwasi.github.io/Public-html-pages/ardupilot-sbom-overview
 
 • assets
   https://zuwasi.github.io/Public-html-pages/assets
