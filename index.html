@@ -62,28 +62,16 @@
   <p class="new-sub">המצגות החדשות ביותר — הוסרו לכאן לגישה מהירה</p>
   <div class="new-grid">
     <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AI CAREERS / SKILLS MARKET</span>
-      <a href="anthropic-swe-skills/">The Skills Anthropic Hires For: 148 Software Engineering Roles, Scored</a>
-      <span class="nc-dates">Published: 2026-10-18</span>
-      <div class="nc-desc">By ESL (Engineering Software Lab), a member of Anthropic's Claude Partner Network and AI SDLC consultants. All 656 open postings on Anthropic's careers board were collected, filtered to the 148 hands-on software and research engineering roles, and matched against 62 skills. Each skill is scored 0 to 10, with required qualifications weighted above nice-to-haves, and shown with the share of roles that ask for it. Python leads the languages (73%), followed by Rust (33%) and Go (26%); production experience, large-scale systems, system design and LLM know-how follow close behind. Includes the original prompts, the method, an interactive chart and links to every posting. Independent analysis, not endorsed by Anthropic.</div>
+      <span class="nc-tag">NEW · AGENT BENCHMARK</span>
+      <a href="mini-swe-sweep/index.html">mini-swe_sweep: Amp vs Claude Code on Real SWE-sweep Bugs</a>
+      <span class="nc-dates">Published: 2026-10-20</span>
+      <div class="nc-desc">12 repositories across 6 languages, 60 real reference bugs, same model (claude-opus-5-5) on both agent arms with equal 1-hour caps and hidden-test Docker verifiers. Same-model results so far: Amp 4/60 versus Claude Code 1/30 on the six valid repos; Claude batch-3 rerun in progress after quota truncation. Includes method, per-repo tables, cost-tier run 1, and provenance.</div>
     </div>
     <div class="new-card" dir="ltr">
       <span class="nc-tag">NEW · PYTHON / JSON PERFORMANCE</span>
       <a href="python-json-throughput.html">16 GB/s of JSON on a Laptop: Free-Threaded Python and Field Projection</a>
       <span class="nc-dates">Published: 2026-10-18</span>
-      <div class="nc-desc">15 ESL-branded slides reproducing Daniel Lemire's GH Archive workload on a 24-core Core Ultra 9 laptop in isolated WSL. Field projection reached 16.07 GB/s median versus 12.87 GB/s for lazy views at 24 threads: 24.8% higher throughput and 19.9% less time. All 70 measured runs matched independent counters across 2,247,806 events. Includes setup, code, thread scaling, individual samples, CPU-contention lessons, explicit limitations and a public reproduction repository.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AI CODING AGENTS / TOKEN OPTIMIZATION</span>
-      <a href="https://zuwasi.github.io/rtk-token-benchmark/" target="_blank" rel="noopener noreferrer">rtk Output Compression: Five LLM Tokenizers, Three Coding Agents</a>
-      <span class="nc-dates">Published: 2026-10-17</span>
-      <div class="nc-desc">Measured benchmark of rtk, a CLI proxy that compresses shell command output before it reaches the model. Across 12 real developer commands, rtk cut tokens by about 88% under all five tokenizers tested (GPT-4o, Claude, Gemini/Gemma, Llama, Qwen3). Then the same 3+3 A/B question runs inside Claude Code, Factory Droid and Amp: answers got more accurate in all three, Amp and Droid used less context, and Claude Code + rtk scored best but used more context and cost. Includes the scoreboard, the failure cases (such as truncated git log lines) and what the numbers do not show.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AI AGENT MEMORY / BENCHMARK</span>
-      <a href="okf-droid-benchmark/">Does Project Memory Make a Coding Agent Better? OKF Agent Memory × Factory Droid</a>
-      <span class="nc-dates">Published: 2026-10-15</span>
-      <div class="nc-desc">A/B benchmark of OKF Agent Memory (git-native project memory over MCP) with the Factory Droid coding agent on the TSscrutinizer TypeScript codebase. 8 code questions × 3 runs × 2 setups = 48 headless runs, blind-graded against an answer key. Result: same accuracy (4.75 vs 4.71 out of 5, zero factual errors), about 5% more credits and 6% more time with memory, and a one-time 316k-credit memory build that never pays back. Covers why (Droid still verifies against source) and what the test does not show. <a href="okf-droid-benchmark/okf-droid-benchmark.pptx">Download the PowerPoint</a> or browse all transcripts, grades and scripts on <a href="https://github.com/zuwasi/okf-droid-benchmark" target="_blank" rel="noopener noreferrer">GitHub</a>.</div>
+      <div class="nc-desc">15 ESL-branded slides reproducing Daniel Lemire's GH Archive workload on a 24-core Core Ultra 9 laptop in isolated WSL. Field projection reached 16.07 GB/s median versus 12.87 GB/s for lazy views at 24 threads: 24.8% higher throughput and 19.9% less time.</div>
     </div>
     <div class="new-card" dir="ltr">
       <span class="nc-tag">NEW · AMP / AI CODING AGENTS</span>
@@ -203,7 +191,7 @@
       <span class="nc-tag">NEW · MANTIQ / SOLIDITY</span>
       <a href="mantiq-solidity/">MantiQ / Solidity: The Buyer Signed. Should the Contract Pay?</a>
       <span class="nc-dates">Published: 2026-09-20</span>
-      <div class="nc-desc">Follow a 10 test ETH escrow through the wrong authorization check, the corrected outcome, and the evidence. Daniel Liezrowice presents an ESL case-file walkthrough with real screenshots, Wolfram checks, Lean 4 model proofs, and ESL SBOMator. Open the <a href="mantiq-solidity/reports/sbomator-report.html">license-enriched SBOMator report</a> (368 components, zero missing licenses) or <a href="mantiq-solidity/dashboard.html?autoplay=1">automated recorded-evidence tour</a>. Olympix access remains blocked; vulnerability findings remain visible. Educational evidence, not a production security guarantee.</div>
+      <div class="nc-desc">Solidity static analysis, finding triage, EVM tests, and Wolfram/Lean 4 model evidence, presented by Daniel Liezrowice of ESL through a 10 test ETH escrow case. Static analysis is core to the proposed workflow; the provider will be an ESL tool or Olympix, subject to readiness and commercial terms. The current Olympix scan remains blocked, with no completed detection claimed. Explore the <a href="mantiq-solidity/dashboard.html?autoplay=1">recorded-evidence tour</a>, <a href="mantiq-solidity/assets/mantiq-solidity-workflow.png">workflow image</a>, and supporting <a href="mantiq-solidity/reports/sbomator-report.html">SBOMator report</a> (368 components, zero missing licenses, vulnerability findings retained). Not an audit or a production security guarantee.</div>
     </div>
     <div class="new-card" dir="ltr">
       <span class="nc-tag">NEW · AI AGENT MEMORY</span>
@@ -323,7 +311,6 @@
   <li><a href="ai-cost-estimation-presentation/">AI Coding Agent Cost Estimation Dashboards</a><span class="dates">פורסם: 2026-05-09</span><span class="desc">דשבורדים להערכת עלויות</span></li>
   <li><a href="Dive-into-Claude-Code-Presentation.html">Dive into Claude Code</a><span class="dates">פורסם: 2026-06-16 · עודכן: 2026-07-27</span><span class="desc">סקירת עומק של Claude Code</span></li>
   <li><a href="Claude-Code-Qwen-Local-Guide.html">Connect Claude Code to Local Qwen3-Coder / Qwen 2.5 Coder</a><span class="dates">פורסם: 2026-04-06 · עודכן: 2026-07-27</span><span class="desc">מדריך חיבור למודל מקומי — שוכתב ל-Anthropic /v1/messages</span></li>
-  <li><a href="https://zuwasi.github.io/rtk-token-benchmark/" target="_blank" rel="noopener noreferrer">rtk Output Compression — Five LLM Tokenizers, Three Coding Agents</a><span class="dates">פורסם: 2026-10-17</span><span class="desc">בנצ'מרק חיסכון בטוקנים עם rtk: כ-88% פחות טוקנים, ומבחני A/B ב-Claude Code, Droid ו-Amp</span></li>
 </ol>
 
 <h2>אבטחה, CISO ו-AI</h2>

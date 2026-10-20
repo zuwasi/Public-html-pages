@@ -429,3 +429,6 @@ Last updated: 2026-10-20
   https://zuwasi.github.io/Public-html-pages/yocto-bsp-studio-design-partner
 
 ══════════════════════════════════════════════════════════════
+
+60. mini-swe-sweep/index.html
+   https://zuwasi.github.io/Public-html-pages/mini-swe-sweep/index.html
