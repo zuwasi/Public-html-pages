@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ArduPilot Repository Overview for SBOM Analysis and FDA Submission Preparation</title>
+<style>
+  :root {
+    --ink: #1a2332;
+    --muted: #5b6b7f;
+    --accent: #0b5fa5;
+    --accent-soft: #e8f1f9;
+    --line: #dbe4ec;
+    --bg: #f7f9fb;
+    --card: #ffffff;
+    --warn-bg: #fff8e8;
+    --warn-line: #e6c860;
+    --good-bg: #eef8f0;
+    --good-line: #4c9e63;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px 64px; }
+  header.hero {
+    background: linear-gradient(135deg, #0b2d52 0%, #0b5fa5 100%);
+    color: #fff;
+    padding: 48px 24px 40px;
+    margin-bottom: 32px;
+  }
+  header.hero .inner { max-width: 1080px; margin: 0 auto; }
+  .kicker {
+    font-size: 12px; letter-spacing: 2.5px; text-transform: uppercase;
+    color: #9fd0f5; font-weight: 700; margin-bottom: 10px;
+  }
+  header.hero h1 { font-size: clamp(24px, 4vw, 38px); font-weight: 800; line-height: 1.2; margin-bottom: 14px; }
+  header.hero p.sub { color: #cfe3f5; max-width: 820px; font-size: 16px; }
+  .meta-strip {
+    display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px;
+  }
+  .meta-chip {
+    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 8px; padding: 8px 14px; font-size: 13px;
+  }
+  .meta-chip b { color: #fff; }
+  h2 {
+    font-size: 22px; font-weight: 800; margin: 40px 0 6px;
+    padding-top: 12px; color: var(--ink);
+  }
+  h2 .num { color: var(--accent); margin-right: 8px; }
+  h3 { font-size: 16.5px; font-weight: 700; margin: 20px 0 8px; color: #22344d; }
+  p.lead { color: var(--muted); margin-bottom: 14px; max-width: 900px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 20px 22px; margin: 14px 0;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; background: var(--card); font-size: 14.5px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: var(--accent-soft); color: #14456f; font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+  tr:last-child td { border-bottom: none; }
+  code, .mono { font-family: 'Cascadia Code', Consolas, monospace; font-size: 13px; background: #eef2f6; padding: 1px 6px; border-radius: 5px; color: #0b3a63; }
+  pre {
+    background: #12253c; color: #d7e6f5; padding: 16px 18px; border-radius: 10px;
+    overflow-x: auto; font-family: Consolas, monospace; font-size: 13px; line-height: 1.55; margin: 12px 0;
+  }
+  ul.plain { list-style: none; }
+  ul.plain li { padding: 5px 0 5px 26px; position: relative; }
+  ul.plain li::before { content: '▸'; position: absolute; left: 6px; color: var(--accent); font-weight: 700; }
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 14px 0; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px;
+  }
+  .stat .v { font-size: 30px; font-weight: 800; color: var(--accent); }
+  .stat .l { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .callout {
+    border-left: 4px solid var(--warn-line); background: var(--warn-bg);
+    padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 14px 0; font-size: 14.5px;
+  }
+  .callout.good { border-left-color: var(--good-line); background: var(--good-bg); }
+  .callout b.tag { display: inline-block; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #8a6d1d; margin-bottom: 4px; }
+  .callout.good b.tag { color: #2f6e40; }
+  .checklist { counter-reset: chk; }
+  .checklist li {
+    list-style: none; padding: 10px 0 10px 44px; position: relative; border-bottom: 1px dashed var(--line);
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li::before {
+    counter-increment: chk; content: counter(chk);
+    position: absolute; left: 0; top: 12px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 14px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pill {
+    display: inline-block; font-size: 11.5px; font-weight: 700; padding: 2px 10px;
+    border-radius: 999px; margin: 1px 3px 1px 0; background: var(--accent-soft); color: #14456f; border: 1px solid #c4dcee;
+  }
+  .pill.red { background: #fdeaea; color: #8f2020; border-color: #f0c4c4; }
+  .pill.amber { background: #fdf3dd; color: #7a5a10; border-color: #ecd9a0; }
+  .pill.green { background: #e6f4ea; color: #256a3a; border-color: #bfe3ca; }
+  footer { text-align: center; color: var(--muted); font-size: 13px; padding: 32px 24px; }
+  a { color: var(--accent); }
+  @media (max-width: 640px) {
+    body { font-size: 15px; }
+    .card, .stat { padding: 14px 16px; }
+    table { font-size: 13px; }
+    th, td { padding: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <div class="kicker">SBOM Provider Briefing · Medical Device / FDA Cyber Device Context</div>
+    <h1>ArduPilot Repository Overview<br>for SBOM Scan Configuration</h1>
+    <p class="sub">An inventory-oriented analysis of <b>github.com/ardupilot/ardupilot</b> prepared so the SBOM tooling provider can configure the correct scan modules, dependency sources, and report structure before generating the production Software Bill of Materials for an FDA submission.</p>
+    <div class="meta-strip">
+      <div class="meta-chip">Repository: <b>ardupilot/ardupilot</b></div>
+      <div class="meta-chip">License: <b>GPLv3 (with per-component licenses)</b></div>
+      <div class="meta-chip">Languages: <b>C++ · C · Python · Lua</b></div>
+      <div class="meta-chip">Build system: <b>Waf (customized)</b></div>
+      <div class="meta-chip">Report date: <b>2026-10-20</b></div>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- 1. Purpose -->
+  <h2><span class="num">1</span>Purpose and Intended Use of This Report</h2>
+  <p class="lead">This document is not the SBOM itself. It is a pre-scan briefing: a map of what lives in the ArduPilot repository and what the SBOM tools provider needs to enable so the resulting SBOM is complete enough for an FDA premarket cyber device submission under Section 524B of the FD&amp;C Act.</p>
+  <div class="callout">
+    <b class="tag">Key instruction to the provider</b><br>
+    ArduPilot is a source-only project with no package manager manifest for its embedded dependencies. A package-manager-only scan will miss most of the third-party inventory. Scanning must combine recursive Git submodule resolution with vendored-source fingerprinting, and the final SBOM must describe the <b>configured production binary</b> (board, vehicle, feature set), not just the whole repository.
+  </div>
+  <div class="callout good">
+    <b class="tag">Before generating the production SBOM</b><br>
+    Pin the exact release tag of ardupilot that the device firmware is built from, run <code>git submodule update --init --recursive</code>, and record the commit SHA of every submodule. All figures in this report describe the current <code>master</code> branch and must be regenerated for the exact submission revision.
+  </div>
+
+  <!-- 2. At a glance -->
+  <h2><span class="num">2</span>Repository at a Glance</h2>
+  <div class="grid2">
+    <div class="stat"><div class="v">~700k</div><div class="l">lines of code, core tree (developer documentation figure; regenerate with <code>cloc</code> for the pinned revision)</div></div>
+    <div class="stat"><div class="v">150+</div><div class="l">shared library directories under <code>libraries/</code> (the first-party platform)</div></div>
+    <div class="stat"><div class="v">15</div><div class="l">declared Git submodules in <code>.gitmodules</code>, plus additional vendored source</div></div>
+    <div class="stat"><div class="v">6</div><div class="l">hardware abstraction layers (ChibiOS, Linux, SITL, ESP32, QURT, Empty)</div></div>
+    <div class="stat"><div class="v">7+</div><div class="l">vehicle firmware families (Copter, Heli, Plane, Rover, Sub, AntennaTracker, Blimp)</div></div>
+    <div class="stat"><div class="v">100s</div><div class="l">of board configurations and driver backends discovered from <code>hwdef.dat</code> files</div></div>
+  </div>
+
+  <!-- 3. Structure -->
+  <h2><span class="num">3</span>Top-Level Directory Map</h2>
+  <table>
+    <tr><th style="width:220px">Path</th><th>Contents and SBOM relevance</th></tr>
+    <tr><td><code>ArduCopter/</code></td><td>Multirotor and traditional-helicopter vehicle application: flight modes, failsafes, control loops, vehicle configuration.</td></tr>
+    <tr><td><code>ArduPlane/</code></td><td>Fixed-wing, glider, VTOL/QuadPlane and tailsitter application.</td></tr>
+    <tr><td><code>Rover/</code></td><td>Ground rover, boat, sailboat and balance-bot application.</td></tr>
+    <tr><td><code>ArduSub/</code></td><td>Underwater ROV application.</td></tr>
+    <tr><td><code>AntennaTracker/</code></td><td>Telemetry-driven antenna tracking firmware.</td></tr>
+    <tr><td><code>Blimp/</code></td><td>Lighter-than-air vehicle firmware.</td></tr>
+    <tr><td><code>libraries/</code></td><td><b>Primary first-party scan scope.</b> The shared platform: HALs, estimators (EKF), controllers, hundreds of sensor and actuator drivers, MAVLink, CAN, networking, logging, filesystems, Lua scripting, and safety functions.</td></tr>
+    <tr><td><code>modules/</code></td><td><b>Primary third-party inventory location.</b> Git submodules and externally sourced libraries. Must be resolved recursively with exact commit SHAs.</td></tr>
+    <tr><td><code>Tools/</code></td><td>Build extensions (ArduPilot waf), bootloaders, AP_Periph peripheral firmware, I/O co-processor firmware, SITL/autotest, ROS 2 support, MAVProxy add-ons, deployment scripts.</td></tr>
+    <tr><td><code>tests/</code>, <code>benchmarks/</code></td><td>Python tests and GoogleTest / Google Benchmark based unit and benchmark suites (test-framework dependencies enter the toolchain SBOM).</td></tr>
+    <tr><td><code>waf</code>, <code>wscript</code></td><td>Build entry point and central build graph. All vehicle targets and feature switches are registered here.</td></tr>
+    <tr><td><code>.gitmodules</code></td><td>Authoritative submodule URL inventory; the starting point for third-party dependency resolution.</td></tr>
+  </table>
+
+  <!-- 4. Firmware families -->
+  <h2><span class="num">4</span>Firmware Families and Build Targets</h2>
+  <p class="lead">Each family is a separately built application registered in the root <code>wscript</code>. The submitted SBOM should name the family and vehicle configuration actually shipped on the device.</p>
+  <table>
+    <tr><th>Family</th><th>Waf command</th><th>Produced application</th></tr>
+    <tr><td>Copter (multirotor)</td><td><code>./waf copter</code></td><td><code>arducopter</code></td></tr>
+    <tr><td>Traditional helicopter</td><td><code>./waf heli</code></td><td><code>arducopter-heli</code></td></tr>
+    <tr><td>Plane / VTOL</td><td><code>./waf plane</code></td><td><code>arduplane</code></td></tr>
+    <tr><td>Rover / boat</td><td><code>./waf rover</code></td><td><code>ardurover</code></td></tr>
+    <tr><td>Sub (underwater)</td><td><code>./waf sub</code></td><td><code>ardusub</code></td></tr>
+    <tr><td>Antenna tracker</td><td><code>./waf antennatracker</code></td><td><code>antennatracker</code></td></tr>
+    <tr><td>Blimp</td><td><code>./waf blimp</code></td><td><code>blimp</code></td></tr>
+    <tr><td>CAN peripheral firmware</td><td><code>./waf AP_Periph</code></td><td>AP_Periph (DroneCAN / UART peripherals)</td></tr>
+    <tr><td>Supporting targets</td><td><code>bootloader</code>, <code>iofirmware</code>, <code>replay</code></td><td>Bootloader, I/O co-processor, replay tools</td></tr>
+  </table>
+
+  <!-- 5. Platforms -->
+  <h2><span class="num">5</span>Hardware Platforms, HAL and RTOS Mapping</h2>
+  <p class="lead">The build target determines which RTOS, toolchain, and driver set enters the binary. The provider needs to know which platform family the medical device uses so reachability analysis can be scoped to that configuration.</p>
+  <table>
+    <tr><th>Platform / HAL</th><th>Runtime and toolchain</th><th>Notes</th></tr>
+    <tr><td><b>ChibiOS</b></td><td>ChibiOS/RT on STM32 (Cortex-M4/M7, F4/F7/H7), <code>arm-none-eabi-gcc</code></td><td>Main embedded flight-controller target. Board definitions in <code>libraries/AP_HAL_ChibiOS/hwdef/</code>. Includes Cube/Pixhawk-class boards.</td></tr>
+    <tr><td><b>SITL</b></td><td>Native host process (Linux / macOS / WSL)</td><td>Software-in-the-loop simulation; typically part of the verification environment, not the shipped device.</td></tr>
+    <tr><td><b>Linux</b></td><td>POSIX Linux SBC targets (BeagleBone, Navio, Navigator class)</td><td>Full Linux userland stack applies.</td></tr>
+    <tr><td><b>ESP32</b></td><td>ESP-IDF / FreeRTOS on ESP32 and ESP32-S3</td><td>Second RTOS family to configure if used.</td></tr>
+    <tr><td><b>QURT</b></td><td>Qualcomm Hexagon / QURT</td><td>Niche target; confirm applicability.</td></tr>
+    <tr><td><b>Empty</b></td><td>Stub HAL</td><td>Used for porting and compile testing; not a product target.</td></tr>
+  </table>
+  <p class="lead">The AP_HAL layer (<code>libraries/AP_HAL</code>) defines scheduler, threading, UART/SPI/I2C/CAN, GPIO, RC, storage, and timing interfaces. Board-specific feature selection matters: constrained boards compile out features, so two binaries from the same source tree can have different component inventories.</p>
+
+  <!-- 6. Third party -->
+  <h2><span class="num">6</span>Third-Party and Vendored Dependency Inventory</h2>
+  <h3>6.1 Declared Git submodules (from .gitmodules)</h3>
+  <table>
+    <tr><th style="width:280px">Component</th><th>Purpose</th></tr>
+    <tr><td><code>modules/waf</code></td><td>Build framework (Waf)</td></tr>
+    <tr><td><code>modules/ChibiOS</code></td><td>Embedded RTOS and MCU platform support</td></tr>
+    <tr><td><code>modules/mavlink</code></td><td>MAVLink protocol definitions and generator</td></tr>
+    <tr><td><code>modules/DroneCAN/DSDL</code></td><td>DroneCAN data type definitions</td></tr>
+    <tr><td><code>modules/DroneCAN/pydronecan</code></td><td>Python DroneCAN tooling (host side)</td></tr>
+    <tr><td><code>modules/DroneCAN/dronecan_dsdlc</code></td><td>DSDL compiler</td></tr>
+    <tr><td><code>modules/DroneCAN/libcanard</code></td><td>Embedded DroneCAN transport implementation</td></tr>
+    <tr><td><code>modules/Micro-XRCE-DDS-Client</code></td><td>Embedded DDS / XRCE client</td></tr>
+    <tr><td><code>modules/Micro-CDR</code></td><td>CDR serialization</td></tr>
+    <tr><td><code>modules/lwip</code></td><td>Embedded TCP/IP stack</td></tr>
+    <tr><td><code>modules/littlefs</code></td><td>Embedded filesystem</td></tr>
+    <tr><td><code>modules/gtest</code></td><td>Unit test framework</td></tr>
+    <tr><td><code>modules/gbenchmark</code></td><td>Benchmark framework</td></tr>
+    <tr><td><code>modules/gsoap</code></td><td>SOAP / ONVIF camera support</td></tr>
+  </table>
+  <h3>6.2 Vendored and copied source inside libraries/ (no manifest, needs fingerprinting)</h3>
+  <ul class="plain">
+    <li><b>Lua 5.3.6</b> (customized) under <code>libraries/AP_Scripting/lua</code>, MIT upstream.</li>
+    <li><b>ARM CMSIS</b> material under <code>AP_GyroFFT</code>.</li>
+    <li><b>Sagetech SDK</b> fragments under <code>AP_ADSB</code>.</li>
+    <li><b>Piccolo CAN</b> protocol material under <code>AP_PiccoloCAN</code>.</li>
+    <li>Protocol parsers, numerical code, and device SDK fragments spread across individual driver libraries.</li>
+  </ul>
+  <div class="callout">
+    <b class="tag">Provider configuration note</b><br>
+    Enable both (a) recursive Git/submodule analysis recording URL and exact commit for every submodule, and (b) embedded/vendored library fingerprinting for copied source under <code>libraries/</code>. Submodule-only scanning undercounts; fingerprint-only scanning misattributes. Both are required for a defensible inventory.
+  </div>
+
+  <!-- 7. Middleware -->
+  <h2><span class="num">7</span>Scripting and Middleware Components</h2>
+  <table>
+    <tr><th style="width:200px">Component</th><th>Role and SBOM treatment</th></tr>
+    <tr><td><b>Lua scripting</b></td><td><code>libraries/AP_Scripting</code> embeds a customized Lua 5.3.6 interpreter with generated C++ bindings. User scripts load from SD card (<code>APM/scripts</code>) or are embedded into ROMFS at build time. <b>Deployed Lua scripts must be inventoried and hashed separately from the firmware binary</b>, because scripts can change runtime behavior without changing the binary.</td></tr>
+    <tr><td><b>MAVLink</b></td><td>Message definitions from the <code>modules/mavlink</code> submodule; headers generated at build time into <code>libraries/GCS_MAVLink/include/mavlink/v2.0</code>. This is the primary external command, telemetry, and ground-control interface. MAVLink 2 supports message signing; command authorization is a system-level control to assess separately.</td></tr>
+    <tr><td><b>DroneCAN / libcanard</b></td><td>CAN peripheral ecosystem: DSDL type definitions, <code>libcanard</code> embedded transport, AP_Periph node firmware.</td></tr>
+    <tr><td><b>DDS / ROS 2</b></td><td>Micro XRCE-DDS client and Micro-CDR serialization; ROS 2 integration tooling under <code>Tools/ros2</code>.</td></tr>
+    <tr><td><b>lwIP</b></td><td>Embedded TCP/IP networking stack (submodule).</td></tr>
+    <tr><td><b>gSOAP / ONVIF</b></td><td>Camera discovery and control interface (submodule).</td></tr>
+    <tr><td><b>MAVProxy</b></td><td><b>Not part of this repository's runtime.</b> MAVProxy is a separate Python ground-control/router project. ArduPilot only carries SITL launch tooling and plug-ins under <code>Tools/mavproxy_modules</code>. If MAVProxy (or any GCS) ships with or verifies the medical device, generate a separate SBOM from its own repository and Python environment.</td></tr>
+  </table>
+
+  <!-- 8. Licensing -->
+  <h2><span class="num">8</span>Licensing Overview</h2>
+  <p class="lead">The main work is <b>GNU GPL version 3</b> (see <code>COPYING.txt</code>). Third-party components retain their own licenses; there is no repository-wide exception that converts all embedded third-party code to GPLv3.</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>License scan configuration</h3>
+      <ul class="plain">
+        <li>File-level and nested-directory license discovery, not just a root <code>LICENSE</code> read.</li>
+        <li>Preserve per-file notices and scan nested <code>LICENSE</code> / <code>COPYING</code> files and the actual submodule repositories.</li>
+        <li>Expect a mix: GPLv3 first-party code; MIT (Lua), and mixed permissive/ LGPL-type terms in ChibiOS, lwIP, littlefs, CMSIS, gtest, gSOAP, and protocol libraries. Each needs an individual conclusion.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Why this matters for a medical device</h3>
+      <ul class="plain">
+        <li>GPLv3 distribution of modified firmware triggers corresponding-source obligations; "User Product" provisions can trigger installation-information obligations.</li>
+        <li>GPLv3 warranty and fitness disclaimers do not satisfy medical-device assurance obligations.</li>
+        <li>Whether higher-level proprietary software can remain separate from the firmware is a derivative-work and linkage question requiring legal review, not a scan result.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- 9. Scan modules -->
+  <h2><span class="num">9</span>Scan Module Configuration Checklist for the Provider</h2>
+  <p class="lead">Enable the following modules and data sources when configuring the toolchain for this repository:</p>
+  <div class="card">
+    <ul class="checklist">
+      <li><b>Recursive Git / submodule analysis</b>, recording URL and exact commit SHA for each of the 15 submodules (plus nested submodules inside them).</li>
+      <li><b>C/C++ source composition analysis</b> including conditional compilation (<code>#if</code> feature switches) and static linking into firmware images.</li>
+      <li><b>Python analysis</b> for the Waf build system, code generators, autotest, and any shipped host-side tools.</li>
+      <li><b>Lua analysis</b>, covering both the vendored interpreter (<code>AP_Scripting/lua</code>) and every deployed SD-card or ROMFS script.</li>
+      <li><b>RTOS / OS module scanning</b> for ChibiOS, and FreeRTOS / ESP-IDF, Linux, or QURT as applicable to the device build.</li>
+      <li><b>Embedded library fingerprinting</b> for vendored source copied under <code>libraries/</code>, where no package manifest exists.</li>
+      <li><b>License discovery at file and nested-directory level</b>, with per-component license conclusions.</li>
+      <li><b>Firmware / binary scanning</b> of the exact generated <code>.elf</code>, <code>.bin</code>, or <code>.apj</code>, including compiler and linker provenance (toolchain identity belongs in the SBOM).</li>
+      <li><b>Hardware-specific reachability analysis</b> using the production board, vehicle family, and feature configuration so unused drivers are marked accordingly.</li>
+      <li><b>Separate host-tool SBOMs</b> for the compiler/toolchain, Waf/Python environment, MAVProxy or other ground stations, ROS 2 tooling, and CI containers where these participate in production or verification.</li>
+    </ul>
+  </div>
+
+  <!-- 10. Safety critical -->
+  <h2><span class="num">10</span>Potentially Safety-Critical Components to Flag</h2>
+  <p class="lead">The following areas should be treated as safety-relevant in the SBOM report's criticality column and in SOUP evaluation:</p>
+  <div>
+    <span class="pill red">Scheduler / watchdog / bootloader</span>
+    <span class="pill red">Firmware update and signing path</span>
+    <span class="pill red">AHRS / EKF and navigation</span>
+    <span class="pill red">Attitude and position control</span>
+    <span class="pill red">Motor / servo output drivers</span>
+    <span class="pill red">Arming and failsafe logic</span>
+    <span class="pill amber">Sensor drivers (IMU, GPS, baro, battery, rangefinder)</span>
+    <span class="pill amber">Actuator and ESC drivers</span>
+    <span class="pill amber">Parameter and persistent storage</span>
+    <span class="pill amber">MAVLink / CAN / network command paths</span>
+    <span class="pill amber">Lua scripts and runtime-selectable modules</span>
+    <span class="pill green">Logging and diagnostic integrity</span>
+  </div>
+  <p class="lead" style="margin-top:12px">Pill colors: red = flight-critical core, amber = input/output and command surface, green = evidence and diagnostics.</p>
+
+  <!-- 11. FDA notes -->
+  <h2><span class="num">11</span>FDA Submission Considerations</h2>
+  <div class="callout">
+    <b class="tag">Scope of this analysis</b><br>
+    ArduPilot is mature, widely deployed autopilot software, but it is <b>not automatically medical-device qualified</b>. Reusing it in a device makes it software of unknown provenance (SOUP) that the manufacturer must evaluate under its own quality system.
+  </div>
+  <ul class="plain">
+    <li><b>Section 524B (cyber devices):</b> the submission SBOM must cover the shipped firmware image, its build/toolchain provenance, and every third-party component in it, with plans and evidence for postmarket vulnerability monitoring against this inventory.</li>
+    <li><b>Intended-use and traceability:</b> the manufacturer remains responsible for intended-use analysis, requirements traceability, hazard controls, cybersecurity risk analysis, V&amp;V, configuration control, and postmarket monitoring. An SBOM supports but does not replace these.</li>
+    <li><b>Pin and freeze:</b> record the ArduPilot release tag, submodule SHAs, toolchain version, board hwdef, and vehicle configuration that define the shipped binary. Regenerate all metrics from that exact revision.</li>
+    <li><b>Companion software:</b> ground stations, companion computers, and build/verification containers get their own SBOMs; do not infer them from this repository.</li>
+    <li><b>Reproducible metrics commands</b> for the pinned revision:</li>
+  </ul>
+  <pre>git submodule update --init --recursive
+./waf list_boards | tr ' ' '\n' | sort -u | wc -l
+find libraries/AP_HAL_ChibiOS/hwdef -name hwdef.dat | wc -l
+cloc --exclude-dir=.git,build .</pre>
+  <p class="lead">Report both "repository including submodules" and "first-party tree excluding submodules" component counts in the SBOM summary.</p>
+
+  <footer>
+    Prepared 2026-10-20 from the ardupilot/ardupilot <code>master</code> branch · Pre-scan briefing document, not the production SBOM · All quantitative figures must be regenerated for the pinned submission revision
+  </footer>
+
+</div>
+</body>
+</html>
