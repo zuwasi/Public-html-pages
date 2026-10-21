@@ -718,7 +718,9 @@ cat .../verifier/reward.json   <span class="cm"># n_resolved, n_regressions, vis
     document.getElementById("counter").textContent=(i+1)+" / "+n;
     document.getElementById("progress").style.width=((i+1)/n*100)+"%";
     document.getElementById("prev").disabled=(i===0);document.getElementById("next").disabled=(i===n-1);
-    if(i>0&&hint)hint.style.display="none";}
+    if(i>0&&hint)hint.style.display="none";
+    try{history.replaceState(null,"","#"+(i+1))}catch(e){}}
+  var start=parseInt(location.hash.slice(1),10);
   document.getElementById("prev").onclick=function(){go(i-1)};
   document.getElementById("next").onclick=function(){go(i+1)};
   document.addEventListener("keydown",function(e){
@@ -731,7 +733,7 @@ cat .../verifier/reward.json   <span class="cm"># n_resolved, n_regressions, vis
   document.addEventListener("mousedown",function(e){x0=e.clientX});
   document.addEventListener("mouseup",function(e){if(x0===null)return;dx=e.clientX-x0;
     if(Math.abs(dx)>50){go(i+(dx<0?1:-1))}x0=null});
-  go(0);
+  go(isNaN(start)?0:start-1);
 })();
 </script>
 </body>
