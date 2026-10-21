@@ -8,85 +8,72 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1117; color:#e6edf3; line-height:1.6; padding:clamp(16px,4vw,48px); }
-  .wrap { max-width:1100px; margin:0 auto; }
-  h1 { font-size:clamp(1.5rem,4vw,2.4rem); font-weight:800; margin-bottom:.2em; }
-  h2 { font-size:clamp(1.1rem,2.8vw,1.5rem); color:#4fc3f7; margin:1.8em 0 .6em; border-bottom:1px solid #263048; padding-bottom:.3em; }
-  .sub { color:#7d8aa5; margin-bottom:1.5em; font-size:clamp(.8rem,1.6vw,.95rem); }
-  table { border-collapse:collapse; width:100%; margin:1em 0; font-size:clamp(.72rem,1.6vw,.92rem); }
-  td, th { border:1px solid #30363d; padding:7px 12px; text-align:left; }
+  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1117; color:#e6edf3; line-height:1.55; padding:clamp(14px,3vw,44px); }
+  .wrap { max-width:1200px; margin:0 auto; }
+  h1 { font-size:clamp(1.4rem,3.6vw,2.2rem); font-weight:800; margin-bottom:.2em; }
+  h2 { font-size:clamp(1.05rem,2.6vw,1.4rem); color:#4fc3f7; margin:1.8em 0 .6em; border-bottom:1px solid #263048; padding-bottom:.3em; }
+  .sub { color:#7d8aa5; margin-bottom:1.2em; font-size:clamp(.78rem,1.6vw,.92rem); }
+  table { border-collapse:collapse; width:100%; margin:1em 0; font-size:clamp(.68rem,1.5vw,.86rem); }
+  td, th { border:1px solid #30363d; padding:6px 10px; text-align:left; vertical-align:top; }
   th { background:#161b22; color:#4fc3f7; }
   tr:nth-child(even) { background:#10161f; }
-  .num { text-align:center; font-variant-numeric:tabular-nums; }
-  .good { background:#173a22; color:#66bb6a; font-weight:700; padding:2px 10px; border-radius:10px; display:inline-block; }
-  .zero { background:#3d1212; color:#f28b82; font-weight:700; padding:2px 10px; border-radius:10px; display:inline-block; }
-  .trunc { background:#3a2e12; color:#ffd54f; font-weight:700; padding:2px 10px; border-radius:10px; display:inline-block; }
-  .warn { background:#2a2410; border:1px solid #665015; border-radius:12px; padding:14px 18px; margin:1.2em 0; font-size:clamp(.78rem,1.7vw,.92rem); color:#ffd54f; }
-  .note { color:#9aa7c0; font-size:clamp(.75rem,1.6vw,.88rem); margin:.6em 0; }
+  small { color:#8b98ad; font-size:.86em; }
+  .good { background:#173a22; color:#66bb6a; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
+  .zero { background:#3d1212; color:#f28b82; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
+  .trunc { background:#3a2e12; color:#ffd54f; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
+  .warn { background:#2a2410; border:1px solid #665015; border-radius:12px; padding:12px 16px; margin:1.2em 0; font-size:clamp(.75rem,1.6vw,.9rem); color:#ffd54f; }
+  .note { color:#9aa7c0; font-size:clamp(.73rem,1.5vw,.86rem); margin:.6em 0; }
   a { color:#4fc3f7; }
-  code { background:#161b22; padding:1px 6px; border-radius:5px; font-size:.9em; color:#79c0ff; }
-  .kpi { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:1.4em 0; }
-  .kpi .card { background:#111a2e; border:1px solid #2a3a58; border-radius:12px; padding:14px 16px; }
-  .kpi .big { font-size:clamp(1.4rem,3.5vw,2rem); font-weight:800; color:#4fc3f7; }
-  .kpi .lbl { color:#9aa7c0; font-size:clamp(.7rem,1.5vw,.82rem); }
+  code { background:#161b22; padding:1px 6px; border-radius:5px; color:#79c0ff; }
+  ul { margin:.4em 0 0 1.2em; color:#c9d4e5; font-size:clamp(.76rem,1.6vw,.9rem); }
+  li { margin-bottom:.45em; }
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>mini-swe_sweep: Amp vs Claude Code</h1>
-<p class="sub">Repository-level bug-fixing benchmark on real SWE-sweep bugs &middot; same model on both arms &middot; last updated 2026-10-20 20:00 IDT &middot; page auto-refreshes every 5 minutes</p>
+<p class="sub">Repository-level bug-fixing benchmark on real SWE-sweep bugs &middot; hidden-test Docker verifier per bug &middot; last updated: generated from run data after the final batch &middot; page auto-refreshes every 5 min</p>
 
-<div class="warn"><b>Status note:</b> the Claude batch-3 arm (hdf5, proj, black, rxjava, fsharp, syn) was truncated by a Claude monthly spend limit after 6&ndash;25 minutes in each repo, so its scores are <b>quota-limited, not comparable</b> (marked yellow). A full rerun with the same 60-minute cap as Amp is scheduled tonight at 21:41 IDT after the quota reset. This page will be refreshed with final numbers afterward.</div>
+<div class="warn"><b>Data status:</b> in the batch-3 Claude arm (hdf5, proj, black, rxjava, fsharp, syn) every session was killed by the Claude monthly spend limit after 6&ndash;26 minutes (marked <span class="trunc">trunc*</span>). Those scores are quota-limited, not comparable, and are excluded from totals. A same-cap rerun after the quota reset is in progress; this page will be regenerated when it lands.</div>
 
-<h2>Method</h2>
-<p>Both agents received the identical SWE-sweep instruction: find and fix 5 reference bugs in a repository checked out at a frozen upstream release, in 1 hour, fully autonomous (no human input). Each agent's diff is then scored by the SWE-sweep Docker verifier against hidden regression tests for each of the 5 bugs, plus visible-test regression checks. A bug counts only when the hidden test passes; introduced regressions are reported. Both arms ran the <b>same underlying model, claude-opus-5-5</b>, so the only variable is the agent harness: Amp (default mode, sandboxed orchestrator) versus Claude Code (headless <code>-p</code> mode).</p>
-<div class="kpi">
-  <div class="card"><div class="big">12</div><div class="lbl">repositories across 6 languages</div></div>
-  <div class="card"><div class="big">60</div><div class="lbl">real reference bugs (5 per repo)</div></div>
-  <div class="card"><div class="big">1h</div><div class="lbl">equal time cap per agent-repo</div></div>
-  <div class="card"><div class="big">24</div><div class="lbl">scored agent runs (12 per arm)</div></div>
-</div>
-
-<h2>Run 2 &mdash; same model (claude-opus-5-5 on both arms), bugs resolved out of 5</h2>
+<h2>Run 2 &mdash; same model on both arms: claude-opus-5-5 (both arms)</h2>
+<p class="note">Identical prompt, identical repos at frozen upstream releases, identical 60-minute cap per agent-repo. Score = hidden reference-bug tests passed via the SWE-sweep verifier; a visible-test regression zeroes a repo's reward.</p>
 <table>
-<tr><th>Repo</th><th>Language</th><th>Amp (default mode)</th><th>Claude Code</th><th>Verdict</th></tr>
-<tr><td>libexpat</td><td>C</td><td class="num"><span class="zero">0/5</span></td><td class="num"><span class="zero">0/5</span></td><td>tie</td></tr>
-<tr><td>click</td><td>Python</td><td class="num"><span class="good">1/5</span></td><td class="num"><span class="zero">0/5</span></td><td>Amp</td></tr>
-<tr><td>gson</td><td>Java</td><td class="num"><span class="good">1/5</span></td><td class="num"><span class="zero">0/5</span></td><td>Amp</td></tr>
-<tr><td>roslyn</td><td>C#</td><td class="num"><span class="zero">0/5</span> (1 regression)</td><td class="num"><span class="zero">0/5</span></td><td>Claude (cleaner diff)</td></tr>
-<tr><td>z3</td><td>C++</td><td class="num"><span class="zero">0/5</span></td><td class="num"><span class="zero">0/5</span></td><td>tie</td></tr>
-<tr><td>tokio</td><td>Rust</td><td class="num"><span class="zero">0/5</span></td><td class="num"><span class="good">1/5</span></td><td>Claude</td></tr>
-<tr><td>hdf5</td><td>C</td><td class="num"><span class="zero">0/5</span></td><td class="num"><span class="trunc">1/5*</span></td><td>*truncated run</td></tr>
-<tr><td>proj (PROJ)</td><td>C++</td><td class="num"><span class="good">1/5</span></td><td class="num"><span class="trunc">0/5*</span></td><td>*truncated run</td></tr>
-<tr><td>black</td><td>Python</td><td class="num"><span class="zero">0/5</span></td><td class="num"><span class="trunc">n/a*</span></td><td>*no diff produced</td></tr>
-<tr><td>rxjava</td><td>Java</td><td class="num"><span class="good">1/5</span></td><td class="num"><span class="trunc">0/5*</span></td><td>*truncated run</td></tr>
-<tr><td>fsharp</td><td>C#</td><td class="num"><span class="zero">0/5</span></td><td class="num"><span class="trunc">0/5*</span></td><td>*truncated run</td></tr>
-<tr><td>syn</td><td>Rust</td><td class="num"><span class="zero">0/5</span></td><td class="num"><span class="trunc">0/5*</span></td><td>*truncated run</td></tr>
-<tr><th colspan="2">Totals</th><th class="num"><span class="good">4/60</span> (valid: all 12)</th><th class="num">2/60 valid-side: 1/30</th><th></th></tr>
+<tr><th>Repo</th><th>Language</th><th>Amp (default mode, claude-opus-5-5)<br><small>score / wall time / patch size / est. cost</small></th><th>Claude Code (headless)<br><small>score / wall time / patch size / est. cost</small></th><th>Data status</th></tr>
+<tr><td>libexpat</td><td>C</td><td><span class='zero'>0/5</span><br><small>21m11s, 37 diff lines, est $1-$2</small></td><td><span class='zero'>0/5</span><br><small>5m01s, 15 diff lines, est $0-$1</small></td><td>valid</td></tr><tr><td>click</td><td>Python</td><td><span class='good'>1/5</span><br><small>16m07s, 80 diff lines, est $1-$2</small></td><td><span class='zero'>0/5</span><br><small>3m09s, 30 diff lines, est $0-$0</small></td><td>valid</td></tr><tr><td>gson</td><td>Java</td><td><span class='good'>1/5</span><br><small>19m49s, 291 diff lines, est $1-$2</small></td><td><span class='zero'>0/5</span><br><small>8m10s, 53 diff lines, est $1-$1</small></td><td>valid</td></tr><tr><td>roslyn</td><td>C#</td><td><span class='zero'>0/5</span><br><small>6m26s, 256 diff lines, est $0-$1</small></td><td><span class='zero'>0/5</span><br><small>24m44s, 256 diff lines, est $2-$3</small></td><td> +1 reg</td></tr><tr><td>z3</td><td>C++</td><td><span class='zero'>0/5</span><br><small>58m34s, 399 diff lines, est $4-$7</small></td><td><span class='zero'>0/5</span><br><small>32m43s, 1006 diff lines, est $2-$4</small></td><td>valid</td></tr><tr><td>tokio</td><td>Rust</td><td><span class='zero'>0/5</span><br><small>15m19s, 58 diff lines, est $1-$2</small></td><td><span class='good'>1/5</span><br><small>23m58s, 553 diff lines, est $2-$3</small></td><td>valid</td></tr><tr><td>hdf5</td><td>C</td><td><span class='zero'>0/5</span><br><small>19m37s, 61 diff lines, est $1-$2</small></td><td><span class='trunc'>trunc*</span><br><small>9m57s, 2411 diff lines, est $1-$1</small></td><td>quota-killed</td></tr><tr><td>proj</td><td>C++</td><td><span class='good'>1/5</span><br><small>57m52s, 329 diff lines, est $4-$7</small></td><td><span class='trunc'>trunc*</span><br><small>31m31s, 111 diff lines, est $2-$4</small></td><td>quota-killed</td></tr><tr><td>black</td><td>Python</td><td><span class='zero'>0/5</span><br><small>57m52s, 34 diff lines, est $4-$7</small></td><td><span class='trunc'>trunc*</span><br><small>35m25s, 0 diff lines, est $2-$4</small></td><td>quota-killed</td></tr><tr><td>rxjava</td><td>Java</td><td><span class='good'>1/5</span><br><small>57m52s, 152 diff lines, est $4-$7</small></td><td><span class='trunc'>trunc*</span><br><small>8m04s, 25 diff lines, est $1-$1</small></td><td>quota-killed</td></tr><tr><td>fsharp</td><td>C#</td><td><span class='zero'>0/5</span><br><small>56m56s, 747 diff lines, est $4-$7</small></td><td><span class='trunc'>trunc*</span><br><small>7m58s, 114 diff lines, est $1-$1</small></td><td>quota-killed</td></tr><tr><td>syn</td><td>Rust</td><td><span class='zero'>0/5</span><br><small>26m42s, 118 diff lines, est $2-$3</small></td><td><span class='trunc'>trunc*</span><br><small>9m01s, 35 diff lines, est $1-$1</small></td><td>quota-killed</td></tr>
+<tr><th colspan="2">Totals (valid rows only)</th>
+<th>4/60, wall 6.9h, est $28-$48</th>
+<th>1/30, wall 3.3h, est $13-$23 <small>(batch-3 rows excluded)</small></th><th></th></tr>
 </table>
-<p class="note">Yellow cells (*) are quota-truncated Claude sessions (6&ndash;25 min of the 60-minute cap) and are excluded from conclusions. On the six valid repos for both arms (libexpat, click, gson, roslyn, z3, tokio): Amp 2/20 vs Claude Code 1/20. Note rxjava flipped between truncated runs (1/5 yesterday, 0/5 today), confirming truncated scores are noise.</p>
+<p class="note">On the six repos where both arms completed validly (libexpat, click, gson, roslyn, z3, tokio): <b>Amp 2/20 vs Claude Code 1/20</b>. The truncated rxjava score flipped between two truncated runs (1/5 then 0/5), demonstrating that quota-truncated scores are noise, not signal.</p>
 
 <h2>Run 1 &mdash; cost-tier comparison (not model-equal)</h2>
+<p class="note">Amp in low mode (budget model tier) vs Claude Code on Opus defaults. Shows the cost/quality frontier; cannot isolate the agent harness.</p>
 <table>
-<tr><th>Repo</th><th>Language</th><th>Amp (low mode)</th><th>Claude Code (Opus defaults)</th></tr>
-<tr><td>libexpat</td><td>C/C++</td><td class="num">2/5</td><td class="num">1/5</td></tr>
-<tr><td>click</td><td>Python</td><td class="num">0/5</td><td class="num">2/5</td></tr>
-<tr><td>gson</td><td>Java</td><td class="num">0/5</td><td class="num">0/5</td></tr>
-<tr><td>roslyn</td><td>C#</td><td class="num">0/5</td><td class="num">0/5 (22 regressions)</td></tr>
-<tr><th colspan="2">Totals</th><th class="num">2/20 (10%)</th><th class="num">3/20 (15%)</th></tr>
+<tr><th>Repo</th><th>Language</th><th>Amp low mode<br><small>score / wall time / est. cost</small></th><th>Claude Code (Opus defaults)<br><small>score / wall time / est. cost</small></th></tr>
+<tr><td>libexpat</td><td>C/C++</td><td><span class='good'>2/5</span><br><small>11m02s, est $0-$0</small></td><td><span class='good'>1/5</span><br><small>25m17s, est $2-$3</small></td></tr><tr><td>click</td><td>Python</td><td><span class='zero'>0/5</span><br><small>12m32s, est $0-$0</small></td><td><span class='good'>2/5</span><br><small>3m58s, est $0-$0</small></td></tr><tr><td>gson</td><td>Java</td><td><span class='zero'>0/5</span><br><small>12m59s, est $0-$0</small></td><td><span class='zero'>0/5</span><br><small>10m46s, est $1-$1</small></td></tr><tr><td>roslyn</td><td>C#</td><td><span class='zero'>0/5</span><br><small>58m18s, est $0-$1</small></td><td><span class='zero'>0/5</span> +22 reg<br><small>58m13s, est $4-$7</small></td></tr>
+<tr><th colspan="2">Totals</th><th>0/20, wall 1.6h, est $1-$2</th><th>0/20, wall 1.6h, est $7-$11</th></tr>
 </table>
-<p class="note">Run 1 compared a budget Amp configuration against a premium Claude Code configuration; it shows the cost/quality frontier but cannot isolate the agent harness. Run 2 exists for that.</p>
 
-<h2>Early observations (pending final Claude batch-3 numbers)</h2>
-<ul style="margin:0.5em 0 0 1.2em; color:#c9d4e5; font-size:clamp(.78rem,1.7vw,.95rem);">
-  <li>Both agents find these behavioral bugs hard: the best full-run score on any repo is 1/5 (10-20%), consistent with SWE-sweep's overall difficulty.</li>
-  <li>Same model, six valid repos: Amp's harness resolved 2 bugs where Claude Code's resolved 1, and Amp produced fewer graded regressions.</li>
-  <li>The verifier's regression gate matters: run 1's Claude roslyn diff passed visible tests but introduced 22 regressions, zeroing its reward.</li>
-  <li>Quota interruptions are a real operational cost of agent benchmarking: three of five Claude batch attempts were invalidated by a monthly spend limit. Budget the quota, not just the tokens.</li>
+<h2>Cost estimates: how they were computed</h2>
+<ul>
+  <li><b>Per-session wall time</b> is exact (measured by the harness, shown per row). Token counts are not exposed by either CLI, so cost is estimated from wall time.</li>
+  <li><b>Opus-class sessions</b> (both arms of run 2, and Claude Code in run 1): estimated at <b>4-7 dollars per hour</b> of wall time. Assumes ~3M input tokens/hour (mostly cache reads billed near 10%), ~40k output tokens/hour, at roughly $5 per M input and $25 per M output. Treat as order-of-magnitude.</li>
+  <li><b>Amp low mode</b> (run 1 only): estimated at <b>0.5-1.5 dollars per hour</b> (budget-tier model, cheaper per token).</li>
+  <li><b>Run 2 estimate total:</b> Amp arm $28-$48 + Claude arm $13-$23 (Claude figure would roughly double once the 6 truncated repos are rerun with full caps). <b>Run 1 estimate total:</b> Amp low $1-$2 + Claude $7-$11.</li>
+  <li>Amp subscription plans bill separately from metered API; if sessions run inside a subscription the marginal cost can be zero, but the metered-equivalent estimate above is what the work would cost on pay-per-token.</li>
+</ul>
+
+<h2>Observations</h2>
+<ul>
+  <li>These behavioral bugs are hard for both agents: the best full-run score on any repo is 1/5 (20%), consistent with SWE-sweep difficulty.</li>
+  <li>Same model, six valid repos: Amp's harness resolved 2 bugs vs Claude Code's 1, with fewer graded regressions (run 1's Claude roslyn diff introduced 22 regressions and was zeroed by the gate).</li>
+  <li>Amp sessions typically used the time budget fully; Claude Code sessions in this benchmark either finished early with small diffs or died to quota. Session durations per row above.</li>
+  <li>Operational lesson: quota interruptions invalidated 3 of 5 Claude batch attempts. For agent benchmarks, budget the plan limit, not just the tokens.</li>
 </ul>
 
 <h2>Artifacts and provenance</h2>
-<p class="note">Harness, patches, logs, and per-run verifier outputs: <a href="https://github.com/zuwasi/mini-swe-sweep">github.com/zuwasi/mini-swe-sweep</a>. Companion study: <a href="https://github.com/zuwasi/swe-sweep-parasoft-cpptest">Parasoft C++test vs SWE-sweep reference bugs</a> (static analysis detected 0&ndash;0.3% of the same reference bugs at line level; agents are complementary). Verifier: <a href="https://github.com/swe-bench/swe-sweep">SWE-sweep</a> task definitions with hidden-bug scoring.</p>
+<p class="note">Harness, patches, session logs, and per-run verifier outputs: <a href="https://github.com/zuwasi/mini-swe-sweep">github.com/zuwasi/mini-swe-sweep</a>. Companion study: <a href="https://github.com/zuwasi/swe-sweep-parasoft-cpptest">Parasoft C++test vs SWE-sweep reference bugs</a> (0&ndash;0.3% line-level detection of the same bugs; agents are complementary). Verifier: SWE-sweep task definitions with hidden-bug scoring.</p>
 </div>
 </body>
 </html>
