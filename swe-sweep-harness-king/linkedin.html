@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Ready-to-post LinkedIn text for the ESL SWE-sweep agent benchmark: Amp vs Claude Code, same model, the harness is the king.">
+<title>LinkedIn post | The Harness Is the King | ESL</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1114;--sheet:#161a1f;--ink:#e8ebee;--muted:#9aa4af;--line:#2b3138;--blue:#4f9efb;--blue-text:#7db9ff;--amber:#ffb30b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,Arial,sans-serif;line-height:1.55;padding:24px 5vw}
+header{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+header img{height:34px}
+header a{color:var(--ink);font-size:14px;font-weight:600}
+h1{font-size:clamp(22px,3vw,34px);margin:10px 0 6px}
+p.sub{color:var(--blue-text);margin-bottom:24px}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:22px;margin:0 auto 22px;max-width:860px}
+.card h2{font-size:15px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.post{white-space:pre-wrap;font-size:15px;color:#d8dee5}
+.copybtn{display:inline-block;margin-top:14px;padding:10px 18px;background:var(--blue);color:#fff;border:0;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer}
+.copybtn:hover{background:#3b8ce8}
+.note{color:var(--muted);font-size:13px;margin-top:10px}
+.links{max-width:860px;margin:0 auto;font-size:14px}
+.links a{color:var(--blue-text)}
+</style>
+</head>
+<body>
+<header>
+  <img src="assets/esl-logo.png" alt="ESL">
+  <a href="https://eswlab.com/">ESL - Engineering Software Lab</a>
+</header>
+<h1>LinkedIn post: The Harness Is the King</h1>
+<p class="sub">Copy, paste, post. Links open in new tabs when clicked from the post.</p>
+
+<div class="card">
+  <h2>Full post</h2>
+  <div class="post" id="post1">We ran two coding agents on Meta Superintelligence Labs' SWE-sweep benchmark. Same model in both. Only the harness differed.
+
+The model: Claude Opus 5.5, identical on both arms.
+The harnesses: Amp (default mode) vs Claude Code (headless).
+The task: 12 real open-source repos, 5 hidden reference bugs each, 60 scored tasks, one hour per session. C, C++, C#, F#, Java, Python, Rust.
+
+Result, scored by the official SWE-sweep Docker verifiers:
+
+Amp: 4/60 bugs resolved (6.7%)
+Claude Code: 2/60 (3.3%)
+
+For scale: the best official SWE-sweep leaderboard entry, GPT-5.6 Sol on mini-SWE-agent, resolves 4.7% of 4,100 bugs for $7,230 per run. Our Amp result lands above that on our subsample, for an estimated $28-48.
+
+What the agents actually fixed: a binary-mode config write in click, an overflow in tokio's size_hint (Claude), a null re-entry bug in RxJava's FlowableCreate. What they failed: a 399-line plausible-looking patch on z3 that scored exactly 0, and a roslyn fix that the regression gate zeroed because it broke one existing test. SWE-sweep scores the patch, not the intention.
+
+We also ran a control: Parasoft C++test, five configurations including MISRA C 2025 and MISRA C++ 2023, on six C/C++ repos. Half a million findings. Line-level overlap with the real bugs: 0-0.3%. These behavioral bugs need an agent that reads code, forms hypotheses and runs tests. Static analysis answers a different, equally important question: the rule book.
+
+SWE-sweep's own authors ran a harness ablation: Claude Code and Codex do not significantly outperform mini-swe-agent. Our data adds a production-harness data point: on identical weights, Amp resolved 2x the bugs, finished every session inside the cap, and won our earlier quantum-compiler kernel study too (4/4 vs 3/4 at 39x lower cost).
+
+The models are converging. The scaffolding is diverging. The model is the engine; the harness is the car.
+
+Full per-run data, patches and verifier outputs:
+https://zuwasi.github.io/Public-html-pages/mini-swe-sweep/
+Benchmark: https://swesweep.com/
+Our harness: https://github.com/zuwasi/mini-swe-sweep
+Parasoft study: https://github.com/zuwasi/swe-sweep-parasoft-cpptest
+Slide deck: https://zuwasi.github.io/Public-html-pages/swe-sweep-harness-king/
+
+#SoftwareEngineering #AI #CodingAgents #LLM #Benchmark #StaticAnalysis #Parasoft #DevTools #QualityAssurance</div>
+  <button class="copybtn" onclick="navigator.clipboard.writeText(document.getElementById('post1').textContent).then(()=>this.textContent='Copied')">Copy post</button>
+  <p class="note">Tip: attach a screenshot of the results page or the deck title slide. First three lines are the hook visible before "see more".</p>
+</div>
+
+<div class="card">
+  <h2>Short variant</h2>
+  <div class="post" id="post2">Same model. Different harness. Different result.
+
+We ran Amp and Claude Code on Meta's SWE-sweep bug benchmark: 12 repos, 60 hidden-test-scored bugs, identical Claude Opus 5.5 on both arms.
+
+Amp resolved 4/60 (6.7%). Claude Code resolved 2/60 (3.3%). Best official leaderboard entry: 4.7%, at $7,230 per run.
+
+The model is the engine. The harness is the car.
+
+Data, diffs and verifier outputs: https://zuwasi.github.io/Public-html-pages/mini-swe-sweep/</div>
+  <button class="copybtn" onclick="navigator.clipboard.writeText(document.getElementById('post2').textContent).then(()=>this.textContent='Copied')">Copy post</button>
+</div>
+
+<div class="links">
+  <p><a href="index.html">Back to the slide deck</a> · <a href="article.html">Website article version</a> · <a href="https://zuwasi.github.io/Public-html-pages/mini-swe-sweep/">Results page</a></p>
+</div>
+</body>
+</html>

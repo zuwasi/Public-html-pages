@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="ESL ran Amp and Claude Code on Meta's SWE-sweep benchmark with the same model on both arms: 4/60 vs 2/60 reference bugs resolved. Includes the Parasoft C++test control study and why the harness beats the model.">
+<title>The Harness Is the King: Amp vs Claude Code on SWE-sweep | ESL</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1114;--sheet:#161a1f;--ink:#e8ebee;--muted:#9aa4af;--line:#2b3138;--blue:#4f9efb;--blue-text:#7db9ff;--amber:#ffb30b;--amber-text:#ffca5c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,Arial,sans-serif;line-height:1.6}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 4vw;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0e1114f5;backdrop-filter:blur(6px);z-index:5}
+header img{height:32px;display:block}
+header nav a{color:var(--ink);font-size:14px;margin-left:20px;text-decoration:none}
+header nav a:hover{border-bottom:2px solid var(--amber)}
+main{max-width:900px;margin:0 auto;padding:40px 5vw 80px}
+.eyebrow{color:var(--muted);font-size:12px;letter-spacing:.18em;font-weight:700}
+h1{font-size:clamp(26px,4vw,44px);line-height:1.15;letter-spacing:-.02em;margin:12px 0 10px}
+p.sub{font-size:clamp(15px,1.8vw,20px);color:var(--blue-text);margin-bottom:26px}
+h2{font-size:clamp(20px,2.4vw,28px);color:var(--amber-text);margin:38px 0 12px}
+h3{font-size:17px;color:var(--blue-text);margin:22px 0 8px}
+p{margin:12px 0;font-size:clamp(14px,1.4vw,17px)}
+li{margin:9px 0;padding-left:4px;font-size:clamp(14px,1.4vw,17px)}
+ul,ol{padding-left:24px}
+li::marker{color:var(--amber)}
+a{color:var(--blue-text)}
+.note{padding:13px 17px;border-left:4px solid var(--amber);background:#241e0e;color:#ffd98a;font-size:14.5px;margin:18px 0;border-radius:0 6px 6px 0}
+.quote{border-left:4px solid var(--blue);padding:14px 18px;background:var(--sheet);border-radius:0 8px 8px 0;margin:18px 0;font-style:italic;font-size:16px}
+.quote .who{display:block;font-style:normal;font-size:13px;color:var(--muted);margin-top:10px}
+.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#20252c;font-weight:650}
+tbody tr:nth-child(even){background:#1a1f25}
+tr.hl td{background:#1d2a1d;color:#b8ecba;font-weight:650}
+tr.hl2 td{background:#2a2413;color:#ffe1a1;font-weight:650}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+pre{font-family:"Cascadia Mono",Consolas,monospace;font-size:13px;line-height:1.6;background:#0b0d10;border:1px solid #23272c;border-radius:8px;padding:14px 16px;overflow-x:auto;color:#eef1f4;margin:14px 0;tab-size:4}
+pre .cm{color:#7a848e} pre .add{color:#9cc8fd} pre .rem{color:#ffc65c}
+code.inl{background:#1b2026;padding:1px 6px;border-radius:5px;color:#9cc8fd;font-size:.92em}
+.byline{display:flex;gap:16px;align-items:center;margin:26px 0;padding:16px;background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:8px}
+.byline img{width:84px;height:84px;object-fit:cover;border-radius:6px}
+footer{border-top:1px solid var(--line);padding:22px 4vw;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+</style>
+</head>
+<body>
+<header>
+  <a href="https://eswlab.com/"><img src="assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+  <nav><a href="https://eswlab.com/contact-us/">Contact</a><a href="https://www.linkedin.com/in/liezrowice/">LinkedIn</a><a href="index.html">Slide deck</a></nav>
+</header>
+<main>
+  <div class="eyebrow">ESL AGENT BENCHMARK &middot; SWE-SWEEP &middot; OCTOBER 2026</div>
+  <h1>The Harness Is the King</h1>
+  <p class="sub">We ran Amp and Claude Code on Meta Superintelligence Labs' SWE-sweep benchmark with the identical model on both arms. The harness decided the outcome: 4/60 reference bugs resolved versus 2/60. A Parasoft C++test control shows why no classical tool was going to find these bugs.</p>
+
+  <div class="byline">
+    <img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
+    <div>
+      <strong>Daniel Liezrowice</strong> &middot; CTO, ESL - Engineering Software Lab<br>
+      <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a> &middot; <a href="https://eswlab.com/">eswlab.com</a><br>
+      <span style="color:var(--muted);font-size:13px">All runs executed and verified between October 18 and 21, 2026. Every number links to logged runs, real patches and Docker verifier outputs.</span>
+    </div>
+  </div>
+
+  <h2>What SWE-sweep is</h2>
+  <p><a href="https://swesweep.com/">SWE-sweep</a> is a benchmark from Meta Superintelligence Labs (Lieret et al., ICLR 2026 preprint, <a href="https://github.com/facebookresearch/swe-sweep">facebookresearch/swe-sweep</a>). It asks a harder question than SWE-bench: not "fix this reported issue" but "an agent is given a real repository containing an unknown number of confirmed bugs and no hints. How many can it find and fix?"</p>
+  <ul>
+    <li><strong>100 repositories, 4,100 bugs.</strong> Each repo snapshot is a commit where the maximum number of upstream-confirmed bugs coexist.</li>
+    <li><strong>No hints.</strong> No issue text, no filenames, no line ranges. The agent must explore, hypothesize and repair on its own.</li>
+    <li><strong>Unforgiving scoring.</strong> Each candidate fix runs against hidden fail-to-pass tests from the upstream pull request, plus the repository's entire existing test suite. A single regression zeroes the whole repo reward.</li>
+  </ul>
+  <p>The official leaderboard is sobering: the best entry in the world, GPT-5.6 Sol on the minimal mini-SWE-agent scaffold, resolves <strong>4.7%</strong> of the bugs for <strong>$7,230</strong> per full run. Most entries sit between 0.1% and 2.5%.</p>
+
+  <h2>What the benchmark's authors say about harnesses</h2>
+  <p>SWE-sweep's FAQ directly addresses whether the agent scaffold matters:</p>
+  <div class="quote">&ldquo;Our paper has an ablation with Claude Code and Codex. Neither seems to significantly outperform mini-swe-agent (to the contrary, mini-swe-agent is even quite a bit better than Codex).&rdquo;<span class="who">SWE-sweep FAQ, <a href="https://swesweep.com/">swesweep.com</a>, accessed October 21, 2026</span></div>
+  <p>The academic context agrees that the loop around the model carries much of the outcome: the SWE-agent ACI ablation moved resolution from 3.8% to 12.5% with no new weights (NeurIPS 2024); a 2026 survey, <em>Code as Agent Harness</em> (arXiv:2605.18747), names "harness-level evaluation" the field's open problem #1; and Kaggle's 2026 SDLC analysis attributes roughly 90% of an agent's engineering to the harness, 10% to the model.</p>
+
+  <h2>Our experiment: hold the model, vary the harness</h2>
+  <p>We built a small harness (<a href="https://github.com/zuwasi/mini-swe-sweep">github.com/zuwasi/mini-swe-sweep</a>) that gives both agents identical treatment:</p>
+  <ul>
+    <li><strong>Two arms, one model:</strong> Amp (default mode) and Claude Code (headless defaults), both running <code class="inl">claude-opus-5-5</code>. The harness is the only variable.</li>
+    <li><strong>12 repositories</strong> spanning C, C++, C#, F#, Java, Python and Rust: libexpat, click, gson, roslyn, z3, tokio, hdf5, proj, black, rxjava, fsharp, syn.</li>
+    <li><strong>5 frozen reference bugs per repo</strong>, 60 scored tasks, a 60-minute cap per session, and the official SWE-sweep Docker verifiers as the only referee. The agents never see the tests.</li>
+  </ul>
+  <pre><span class="cm"># run_agent.sh (core): identical loop for both CLIs</span>
+cd "$REPO" &amp;&amp; timeout 3600 "$AGENT_CLI" &lt; prompt.md &gt; session.log
+git diff &gt; "patches/${AGENT}__${REPO}.diff"
+
+<span class="cm"># eval.sh: replay into the official SWE-sweep task image</span>
+run_verifier "$TASK_DIR" --patch "patches/${AGENT}__${REPO}.diff"</pre>
+
+  <h2>The result</h2>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Entry</th><th>Model</th><th>Agent</th><th class="num">Score</th><th class="num">Cost</th></tr></thead>
+    <tbody>
+      <tr class="hl"><td>ESL benchmark</td><td>claude-opus-5-5</td><td>Amp (default)</td><td class="num">4/60 = 6.7%</td><td class="num">est $28-48</td></tr>
+      <tr><td>Official rank 1</td><td>GPT-5.6 Sol (xhigh)</td><td>mini-SWE-agent</td><td class="num">4.7%</td><td class="num">$7,230</td></tr>
+      <tr class="hl2"><td>ESL benchmark</td><td>claude-opus-5-5</td><td>Claude Code (headless)</td><td class="num">2/60 = 3.3%</td><td class="num">est $13-24</td></tr>
+      <tr><td>Official rank 5</td><td>Opus 5 (xhigh)</td><td>mini-SWE-agent</td><td class="num">1.3%</td><td class="num">$5,363</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Amp resolved bugs in 4 of 12 repos (click, gson, proj, rxjava); Claude Code in 2 (tokio, rxjava). Amp finished all 12 sessions inside the one-hour cap. Three Claude Code sessions ended when the tool hit its own plan spend limit; the patches those sessions produced were still graded by the real verifier. The full per-run table with durations, patch sizes and verifier JSONs is on the <a href="https://zuwasi.github.io/Public-html-pages/mini-swe-sweep/">public results page</a>.</p>
+  <div class="note">Honesty clause: one resolved bug is worth 1.67 points on our 60-bug subsample, so 4-vs-2 is directional evidence, not a statistical proof. It aligns, however, with our earlier quantum-kernel study, where the same pattern appeared at much larger effect size.</div>
+
+  <h2>The bugs, up close</h2>
+  <h3>What the agents fixed</h3>
+  <p>Claude Code's tokio fix combines a missing macro-argument name with an overflow guard, both minimal and correct:</p>
+  <pre>--- a/tokio-macros/src/entry.rs
+@@ -303,7 +303,7 @@ fn build_config(
+-   "flavor" | "worker_threads" | "start_paused" =&gt; {
++   "flavor" | "worker_threads" | "start_paused" | "crate" =&gt; {
+        format!("The `{}` attribute requires an argument.", name)
+
+--- a/tokio-stream/src/stream_map.rs
+@@ -578,15 +578,15 @@ where
+-   ret.0 += hint.0;
++   ret.0 = ret.0.saturating_add(hint.0);</pre>
+  <p>Claude Code's rxjava fix stops a recursive re-entry: the operator called <code class="inl">onError</code> with a freshly built NullPointerException, re-entering the same null branch forever:</p>
+  <pre>--- a/src/main/java/io/reactivex/internal/operators/flowable/FlowableCreate.java
+@@ -619,7 +619,7 @@ public final class FlowableCreate&lt;T&gt; extends Flowable&lt;T&gt; {
+       if (e == null) {
+-         onError(new NullPointerException(
++         e = new NullPointerException(
+             "onError called with null. Null values are generally not allowed in 2.x operators and sources."));
++      }
+       error = e;</pre>
+  <p>Amp's click fix is surgical Python 3 API repair in the bundled examples: writing a configparser in binary mode, and using the removed private <code class="inl">get_binary_stdin</code> helper:</p>
+  <pre>--- a/examples/aliases/aliases.py
+@@ -27,7 +27,7 @@ class Config:
+-   with open(filename, "wb") as file:
++   with open(filename, "w") as file:
+        parser.write(file)
+
+--- a/examples/imagepipe/imagepipe.py
+@@ -89,7 +89,7 @@ def open_cmd(images):
+-       img = Image.open(click.get_binary_stdin())
++       img = Image.open(click.get_binary_stream("stdin"))</pre>
+
+  <h3>What they failed, and why it matters</h3>
+  <p>On z3, Amp spent the full hour and produced a 399-line patch of plausible API-mapping fixes. Every hidden test still failed; the reward was 0.0. Claude Code wrote 1,006 diff lines on the same repo and also scored 0. On behavioral solver bugs, plausible is not passing, and more output is not more resolution.</p>
+  <p>On roslyn, the regression gate earned its keep. Amp's patch resolved a bug but swapped the synthesized hash-function names for Span and ReadOnlySpan pattern matches, breaking an existing test:</p>
+  <pre><span class="cm"># verifier/reward.json for amp/roslyn</span>
+{ "reward": 0.0, "n_resolved": 0.0, "visible_ok": 0.0, "n_regressions": 1.0 }</pre>
+  <p>SWE-sweep scores the patch, not the intention. This is exactly the fence production agent use needs, and it is a harness property, not a model one.</p>
+
+  <h2>The Parasoft C++test control: 0 to 0.3%</h2>
+  <p>Before crediting agents, we asked whether classic static analysis finds these bugs at all. On six C/C++ repos (libexpat, jerryscript, hdf5, proj, z3, tarantool) we ran Parasoft C++test Professional 2025.2.0 in five configurations: Recommended Rules, Flow Analysis Standard, Flow Analysis Aggressive, MISRA C 2025 and MISRA C++ 2023. That produced roughly <strong>500,000 findings</strong>. We then checked each finding against the SWE-sweep oracle patches: a finding "hits" a bug only if its line falls on a line the upstream fix changed.</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Repo</th><th class="num">Fixed lines</th><th class="num">Recommended</th><th class="num">FA Std</th><th class="num">FA Aggr</th><th class="num">MISRA C 2025</th><th class="num">MISRA C++ 2023</th></tr></thead>
+    <tbody>
+      <tr><td>z3</td><td class="num">248</td><td class="num">3 (0.1%)</td><td class="num">2 (0.1%)</td><td class="num">2 (0.1%)</td><td class="num">20 (0.05%)</td><td class="num">18 (0.03%)</td></tr>
+      <tr><td>tarantool</td><td class="num">1,339</td><td class="num">2 (0.2%)</td><td class="num">6 (0.3%)</td><td class="num">6 (0.2%)</td><td class="num">213 (0.27%)</td><td class="num">193 (0.32%)</td></tr>
+      <tr><td>libexpat</td><td class="num">279 (3 CVEs)</td><td class="num">0</td><td class="num">0</td><td class="num">3 (1.1%)</td><td class="num">~2.5% (baseline ~4%)</td><td class="num">~2.5%</td></tr>
+      <tr><td>jerryscript</td><td class="num">density 18.7%</td><td class="num">-</td><td class="num">14.2%</td><td class="num">16.7%</td><td class="num">11.4%</td><td class="num">-</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Wherever a fair baseline exists, the hit rate sits at or below the random density of changed lines. The apparent jerryscript overlap is a line-density artifact, not detection. This is expected once you look at what the bugs are: a null re-entry in an RxJava operator, an overflow in a Rust <code class="inl">size_hint</code>, a swapped hash-function name in a C# compiler backend. These are semantic, behavioral defects judged by hidden tests, not pattern violations a rule can name.</p>
+  <p>The conclusion is <strong>complementary, not competitive</strong>. For MISRA/CERT/AUTOSAR compliance work, static analysis is the right instrument and ESL deploys it daily. For unreported behavioral bugs, the agent loop wins, and the published direct-LLM baseline in the same study (no agent loop) resolves only 0 to 20% per repo. Our pipeline recommendation: static analysis for the rule book, agents for behavior, hidden tests as the referee.</p>
+
+  <h2>Why the harness is the king</h2>
+  <p>This is our second controlled harness study. The first, on four from-scratch quantum-compiler C++ kernels (qubit routing, magic-state scheduling, GRAPE pulse control, tensor contraction), put Amp's fast tier against Claude Code running the era's strongest model at maximum reasoning effort:</p>
+  <div class="tablewrap">
+  <table>
+    <thead><tr><th>Task</th><th class="num">Amp (rush)</th><th class="num">Claude Code + Fable 5 (max)</th><th class="num">Cost ratio</th></tr></thead>
+    <tbody>
+      <tr><td>Qubit routing (NP-complete)</td><td class="num">1.000</td><td class="num">0.889</td><td class="num">62×</td></tr>
+      <tr><td>All 4 tasks</td><td class="num">1.000, $1.93</td><td class="num">0.972, $75.40</td><td class="num">39×</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>Two independent benchmarks, different task domains, different model classes, one direction: <strong>the same weights produce very different software depending on the loop you wrap around them.</strong> The deciding harness behaviors in the SWE-sweep runs were repo-wide context management, knowing when to stop exploring and edit, patch-size discipline, and running the visible test suite before declaring victory. None of those live in the model.</p>
+  <p>That is why we say the harness is the king, and why <strong>the winner of this benchmark is Amp</strong>: twice the resolved bugs of Claude Code on identical weights, every session completed inside the cap, minimal targeted diffs, a score above the best official full-run entry, and a prior study showing the same pattern at 39× lower cost. Claude Code's harness earns real credit too; it found tokio, which Amp missed. But on the evidence we collected, Amp built the better loop.</p>
+
+  <h2>Reproduce it</h2>
+  <ul>
+    <li>Per-run results table, session logs, cost model: <a href="https://zuwasi.github.io/Public-html-pages/mini-swe-sweep/">zuwasi.github.io/Public-html-pages/mini-swe-sweep</a></li>
+    <li>Harness, all patches, verifier outputs: <a href="https://github.com/zuwasi/mini-swe-sweep">github.com/zuwasi/mini-swe-sweep</a></li>
+    <li>Parasoft C++test control study: <a href="https://github.com/zuwasi/swe-sweep-parasoft-cpptest">github.com/zuwasi/swe-sweep-parasoft-cpptest</a></li>
+    <li>SWE-sweep benchmark, paper and leaderboard: <a href="https://swesweep.com/">swesweep.com</a></li>
+    <li>Prior study: <a href="https://zuwasi.github.io/Public-html-pages/harness-beats-model.html">The Harness Beats the Model</a> and <a href="https://zuwasi.github.io/Public-html-pages/harness-is-the-product/">The Harness Is the Product</a></li>
+  </ul>
+
+  <div class="note">ESL - Engineering Software Lab: embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years. We bring the same evidence discipline to AI-augmented development that we bring to safety-critical code. <a href="https://eswlab.com/contact-us/">Talk to us.</a></div>
+</main>
+<footer>
+  <span>ESL - Engineering Software Lab &middot; <a href="https://eswlab.com/">eswlab.com</a></span>
+  <span>Slide deck: <a href="index.html">The Harness Is the King</a> &middot; October 2026</span>
+</footer>
+</body>
+</html>

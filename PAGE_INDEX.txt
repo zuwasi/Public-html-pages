@@ -407,6 +407,9 @@ Last updated: 2026-10-21
 • services
   https://zuwasi.github.io/Public-html-pages/services
 
+• swe-sweep-harness-king
+  https://zuwasi.github.io/Public-html-pages/swe-sweep-harness-king
+
 • terratest-ampcode-esl-presentation
   https://zuwasi.github.io/Public-html-pages/terratest-ampcode-esl-presentation
 
