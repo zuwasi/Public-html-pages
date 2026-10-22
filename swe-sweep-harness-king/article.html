@@ -45,6 +45,13 @@ pre span.lr{display:inline-block;width:100%;background:rgba(248,81,73,.13)}
 pre span.lh{display:inline-block;width:100%;color:#79b8ff;background:rgba(64,120,192,.14)}
 pre span.lm{display:inline-block;width:100%;color:#8b949e}
 code.inl{background:#1b2026;padding:1px 6px;border-radius:5px;color:#9cc8fd;font-size:.92em}
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.toc a{display:flex;gap:12px;align-items:flex-start;padding:10px 13px;background:var(--sheet);border:1px solid var(--line);border-radius:8px;text-decoration:none;color:var(--ink)}
+.toc a:hover{border-color:var(--blue);background:#eef3f9}
+.toc .n{color:var(--amber-text);font-weight:800;font-size:14px;min-width:26px;font-variant-numeric:tabular-nums}
+.toc b{color:var(--blue-text);font-size:14.5px}
+.toc small{display:block;color:var(--muted);font-size:13px;line-height:1.45;margin-top:2px}
+@media(max-width:640px){.toc{grid-template-columns:1fr}}
 .byline{display:flex;gap:16px;align-items:center;margin:26px 0;padding:16px;background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:8px}
 .byline img{width:84px;height:84px;object-fit:cover;border-radius:6px}
 footer{border-top:1px solid var(--line);padding:22px 4vw;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
@@ -70,6 +77,35 @@ footer{border-top:1px solid var(--line);padding:22px 4vw;font-size:13px;color:va
       <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a> &middot; <a href="https://eswlab.com/">eswlab.com</a><br>
       <span style="color:var(--muted);font-size:13px">All runs executed and verified between October 18 and 21, 2026. Every number links to logged runs, real patches and Docker verifier outputs.</span>
     </div>
+  </div>
+
+  <h2 id="toc">What is in every slide</h2>
+  <p>The companion <a href="index.html">slide deck</a> has 24 slides. Each card below opens that slide directly.</p>
+  <div class="toc">
+    <a href="index.html#1"><span class="n">01</span><span><b>The Harness Is the King</b><small>Title and the headline result: same model on both arms, 4/60 versus 2/60 reference bugs resolved.</small></span></a>
+    <a href="index.html#2"><span class="n">02</span><span><b>What is SWE-sweep?</b><small>Meta Superintelligence Labs' benchmark: 100 repositories, 4,100 confirmed bugs, no hints of any kind.</small></span></a>
+    <a href="index.html#3"><span class="n">03</span><span><b>How a bug is scored</b><small>Hidden fail-to-pass tests from the upstream pull request, plus the full existing test suite as a regression gate.</small></span></a>
+    <a href="index.html#4"><span class="n">04</span><span><b>The official leaderboard</b><small>Print screen of swesweep.com: the best entry in the world resolves 4.7% for $7,230 per run.</small></span></a>
+    <a href="index.html#5"><span class="n">05</span><span><b>What the authors say about harnesses</b><small>The SWE-sweep FAQ quote: Claude Code and Codex do not outperform the minimal mini-SWE-agent scaffold.</small></span></a>
+    <a href="index.html#6"><span class="n">06</span><span><b>Academic context: the harness debate</b><small>SWE-agent's ACI ablation (3.8% to 12.5%, no new weights), Code as Agent Harness, and Kaggle's 90/10 rule.</small></span></a>
+    <a href="index.html#7"><span class="n">07</span><span><b>The question: same model, different harness</b><small>The experiment design: hold claude-opus-5-5 fixed and vary only the agent around it.</small></span></a>
+    <a href="index.html#8"><span class="n">08</span><span><b>The harness we built around both agents</b><small>mini-swe-sweep: identical prompt, identical one-hour cap, identical Docker verifier loop for both CLIs.</small></span></a>
+    <a href="index.html#9"><span class="n">09</span><span><b>Final scoreboard: Amp 4/60, Claude Code 2/60</b><small>The result table with scores, estimated costs, and which repos each agent solved.</small></span></a>
+    <a href="index.html#10"><span class="n">10</span><span><b>Where this lands on the leaderboard</b><small>Our two arms placed against the official top 10, cost per bug included.</small></span></a>
+    <a href="index.html#11"><span class="n">11</span><span><b>What the agents got right: click (Python)</b><small>Amp's minimal, correct fix to a real click bug, with the actual diff.</small></span></a>
+    <a href="index.html#12"><span class="n">12</span><span><b>Claude Code's wins: tokio (Rust)</b><small>Two latent bugs in one patch: a missing macro argument and an overflow guard in size_hint.</small></span></a>
+    <a href="index.html#13"><span class="n">13</span><span><b>Claude Code's wins: rxjava (Java)</b><small>The shared win: both agents found and fixed the same rxjava bug.</small></span></a>
+    <a href="index.html#14"><span class="n">14</span><span><b>What the agents failed: z3 (C++)</b><small>A 399-line attempt that scored 0: activity, patch size, and why big diffs fail.</small></span></a>
+    <a href="index.html#15"><span class="n">15</span><span><b>The regression gate: roslyn (C#)</b><small>A plausible fix zeroed by a single broken existing test: the gate does the judging.</small></span></a>
+    <a href="index.html#16"><span class="n">16</span><span><b>Before this: the quantum-compiler kernels</b><small>Our prior ESL study said the same thing: Amp 4/4 for $1.93 versus Claude at max effort 3/4 for $75.40.</small></span></a>
+    <a href="index.html#17"><span class="n">17</span><span><b>The Parasoft C++test control</b><small>Six C/C++ repos, five configurations including MISRA C 2025 and MISRA C++ 2023 with aggressive flow analysis.</small></span></a>
+    <a href="index.html#18"><span class="n">18</span><span><b>Parasoft result: 0 to 0.3% overlap</b><small>About 500,000 findings across six repos, almost none on the reference-bug fix lines.</small></span></a>
+    <a href="index.html#19"><span class="n">19</span><span><b>Why static analysis is not relevant to SWE-sweep</b><small>Different bug classes: SWE-sweep scores behavioral bugs proven by tests, not rule violations. The tools are complementary.</small></span></a>
+    <a href="index.html#20"><span class="n">20</span><span><b>Why the harness is the king</b><small>The analysis: exploration budget, verifier-first loops, and diff discipline decide outcomes.</small></span></a>
+    <a href="index.html#21"><span class="n">21</span><span><b>The winner: Amp</b><small>Two for two studies, 39 times cheaper in the prior study, and the same direction here.</small></span></a>
+    <a href="index.html#22"><span class="n">22</span><span><b>Honest limitations</b><small>60 bugs is a subsample, one model, and three Claude sessions ended at plan spend caps. Directional, not statistical.</small></span></a>
+    <a href="index.html#23"><span class="n">23</span><span><b>What to do Monday</b><small>Practical takeaways for teams choosing an agent harness and running their own sweeps.</small></span></a>
+    <a href="index.html#24"><span class="n">24</span><span><b>ESL - Engineering Software Lab</b><small>Closing slide with contact details and the public results page.</small></span></a>
   </div>
 
   <h2>What SWE-sweep is</h2>
