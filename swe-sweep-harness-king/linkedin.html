@@ -7,17 +7,19 @@
 <title>LinkedIn post | The Harness Is the King | ESL</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0e1114;--sheet:#161a1f;--ink:#e8ebee;--muted:#9aa4af;--line:#2b3138;--blue:#4f9efb;--blue-text:#7db9ff;--amber:#ffb30b}
+:root{--bg:#e2e5ea;--sheet:#f7f8fa;--ink:#24282d;--muted:#5a626c;--line:#cfd4da;--blue:#4f9efb;--blue-text:#1d6bd0;--amber:#ffb30b}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,Arial,sans-serif;line-height:1.55;padding:24px 5vw}
 header{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.homebtn{font-size:22px;line-height:1;text-decoration:none}
+.homebtn:hover{transform:scale(1.15)}
 header img{height:34px}
 header a{color:var(--ink);font-size:14px;font-weight:600}
 h1{font-size:clamp(22px,3vw,34px);margin:10px 0 6px}
 p.sub{color:var(--blue-text);margin-bottom:24px}
-.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:22px;margin:0 auto 22px;max-width:860px}
-.card h2{font-size:15px;color:var(--amber);letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
-.post{white-space:pre-wrap;font-size:15px;color:#d8dee5}
+.card{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:22px;margin:0 auto 22px;max-width:860px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card h2{font-size:15px;color:#7a5200;letter-spacing:.12em;text-transform:uppercase;margin-bottom:12px}
+.post{white-space:pre-wrap;font-size:15px;color:#333a42}
 .copybtn{display:inline-block;margin-top:14px;padding:10px 18px;background:var(--blue);color:#fff;border:0;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer}
 .copybtn:hover{background:#3b8ce8}
 .note{color:var(--muted);font-size:13px;margin-top:10px}
@@ -27,6 +29,7 @@ p.sub{color:var(--blue-text);margin-bottom:24px}
 </head>
 <body>
 <header>
+  <a class="homebtn" href="https://zuwasi.github.io/Public-html-pages/" title="Home">&#127968;</a>
   <img src="assets/esl-logo.png" alt="ESL">
   <a href="https://eswlab.com/">ESL - Engineering Software Lab</a>
 </header>

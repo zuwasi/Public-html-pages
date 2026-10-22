@@ -7,37 +7,43 @@
 <title>The Harness Is the King: Amp vs Claude Code on SWE-sweep | ESL</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0e1114;--sheet:#161a1f;--ink:#e8ebee;--muted:#9aa4af;--line:#2b3138;--blue:#4f9efb;--blue-text:#7db9ff;--amber:#ffb30b;--amber-text:#ffca5c}
+:root{--bg:#e2e5ea;--sheet:#f7f8fa;--ink:#24282d;--muted:#5a626c;--line:#cfd4da;--blue:#4f9efb;--blue-text:#1d6bd0;--amber:#ffb30b;--amber-text:#8a5e00}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,Arial,sans-serif;line-height:1.6}
-header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 4vw;border-bottom:1px solid var(--line);position:sticky;top:0;background:#0e1114f5;backdrop-filter:blur(6px);z-index:5}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 4vw;border-bottom:1px solid var(--line);position:sticky;top:0;background:#f7f8faf5;backdrop-filter:blur(6px);z-index:5}
 header img{height:32px;display:block}
+.homebtn{font-size:22px;line-height:1;text-decoration:none}
+.homebtn:hover{transform:scale(1.15)}
 header nav a{color:var(--ink);font-size:14px;margin-left:20px;text-decoration:none}
 header nav a:hover{border-bottom:2px solid var(--amber)}
 main{max-width:900px;margin:0 auto;padding:40px 5vw 80px}
 .eyebrow{color:var(--muted);font-size:12px;letter-spacing:.18em;font-weight:700}
 h1{font-size:clamp(26px,4vw,44px);line-height:1.15;letter-spacing:-.02em;margin:12px 0 10px}
 p.sub{font-size:clamp(15px,1.8vw,20px);color:var(--blue-text);margin-bottom:26px}
-h2{font-size:clamp(20px,2.4vw,28px);color:var(--amber-text);margin:38px 0 12px}
+h2{font-size:clamp(20px,2.4vw,28px);color:#7a5200;margin:38px 0 12px}
 h3{font-size:17px;color:var(--blue-text);margin:22px 0 8px}
 p{margin:12px 0;font-size:clamp(14px,1.4vw,17px)}
 li{margin:9px 0;padding-left:4px;font-size:clamp(14px,1.4vw,17px)}
 ul,ol{padding-left:24px}
 li::marker{color:var(--amber)}
 a{color:var(--blue-text)}
-.note{padding:13px 17px;border-left:4px solid var(--amber);background:#241e0e;color:#ffd98a;font-size:14.5px;margin:18px 0;border-radius:0 6px 6px 0}
+.note{padding:13px 17px;border-left:4px solid var(--amber);background:#fdf6e3;color:#5c470e;font-size:14.5px;margin:18px 0;border-radius:0 6px 6px 0}
 .quote{border-left:4px solid var(--blue);padding:14px 18px;background:var(--sheet);border-radius:0 8px 8px 0;margin:18px 0;font-style:italic;font-size:16px}
 .quote .who{display:block;font-style:normal;font-size:13px;color:var(--muted);margin-top:10px}
-.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px}
+.tablewrap{overflow-x:auto;margin:18px 0;border:1px solid var(--line);border-radius:8px;background:var(--sheet)}
 table{border-collapse:collapse;width:100%;font-size:14.5px}
 th,td{padding:9px 13px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#20252c;font-weight:650}
-tbody tr:nth-child(even){background:#1a1f25}
-tr.hl td{background:#1d2a1d;color:#b8ecba;font-weight:650}
-tr.hl2 td{background:#2a2413;color:#ffe1a1;font-weight:650}
+th{background:#2a2f36;color:#fff;font-weight:650}
+tbody tr:nth-child(even){background:#f0f2f6}
+tr.hl td{background:#e2f2e4;color:#14532a;font-weight:650}
+tr.hl2 td{background:#fdf3dc;color:#7a5200;font-weight:650}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
-pre{font-family:"Cascadia Mono",Consolas,monospace;font-size:13px;line-height:1.6;background:#0b0d10;border:1px solid #23272c;border-radius:8px;padding:14px 16px;overflow-x:auto;color:#eef1f4;margin:14px 0;tab-size:4}
-pre .cm{color:#7a848e} pre .add{color:#9cc8fd} pre .rem{color:#ffc65c}
+pre{font-family:"Cascadia Mono",Consolas,monospace;font-size:13px;line-height:1.6;background:#16181c;border:1px solid #23272c;border-radius:8px;padding:14px 16px;overflow-x:auto;color:#e6e8eb;margin:14px 0;tab-size:4}
+.tok-c{color:#6a9955} .tok-s{color:#ce9178} .tok-n{color:#b5cea8} .tok-k{color:#c586d9} .tok-t{color:#4ec9b0} .tok-v{color:#9cdcfe} .tok-key{color:#9cdcfe}
+pre span.la{display:inline-block;width:100%;background:rgba(46,160,67,.16)}
+pre span.lr{display:inline-block;width:100%;background:rgba(248,81,73,.13)}
+pre span.lh{display:inline-block;width:100%;color:#79b8ff;background:rgba(64,120,192,.14)}
+pre span.lm{display:inline-block;width:100%;color:#8b949e}
 code.inl{background:#1b2026;padding:1px 6px;border-radius:5px;color:#9cc8fd;font-size:.92em}
 .byline{display:flex;gap:16px;align-items:center;margin:26px 0;padding:16px;background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:8px}
 .byline img{width:84px;height:84px;object-fit:cover;border-radius:6px}
@@ -46,7 +52,10 @@ footer{border-top:1px solid var(--line);padding:22px 4vw;font-size:13px;color:va
 </head>
 <body>
 <header>
-  <a href="https://eswlab.com/"><img src="assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+  <div style="display:flex;align-items:center;gap:16px">
+    <a class="homebtn" href="https://zuwasi.github.io/Public-html-pages/" title="Home">&#127968;</a>
+    <a href="https://eswlab.com/"><img src="assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+  </div>
   <nav><a href="https://eswlab.com/contact-us/">Contact</a><a href="https://www.linkedin.com/in/liezrowice/">LinkedIn</a><a href="index.html">Slide deck</a></nav>
 </header>
 <main>
@@ -84,11 +93,11 @@ footer{border-top:1px solid var(--line);padding:22px 4vw;font-size:13px;color:va
     <li><strong>12 repositories</strong> spanning C, C++, C#, F#, Java, Python and Rust: libexpat, click, gson, roslyn, z3, tokio, hdf5, proj, black, rxjava, fsharp, syn.</li>
     <li><strong>5 frozen reference bugs per repo</strong>, 60 scored tasks, a 60-minute cap per session, and the official SWE-sweep Docker verifiers as the only referee. The agents never see the tests.</li>
   </ul>
-  <pre><span class="cm"># run_agent.sh (core): identical loop for both CLIs</span>
+  <pre data-lang="bash"># run_agent.sh (core): identical loop for both CLIs
 cd "$REPO" &amp;&amp; timeout 3600 "$AGENT_CLI" &lt; prompt.md &gt; session.log
 git diff &gt; "patches/${AGENT}__${REPO}.diff"
 
-<span class="cm"># eval.sh: replay into the official SWE-sweep task image</span>
+# eval.sh: replay into the official SWE-sweep task image
 run_verifier "$TASK_DIR" --patch "patches/${AGENT}__${REPO}.diff"</pre>
 
   <h2>The result</h2>
@@ -109,7 +118,7 @@ run_verifier "$TASK_DIR" --patch "patches/${AGENT}__${REPO}.diff"</pre>
   <h2>The bugs, up close</h2>
   <h3>What the agents fixed</h3>
   <p>Claude Code's tokio fix combines a missing macro-argument name with an overflow guard, both minimal and correct:</p>
-  <pre>--- a/tokio-macros/src/entry.rs
+  <pre data-lang="diff" data-kw="rust">--- a/tokio-macros/src/entry.rs
 @@ -303,7 +303,7 @@ fn build_config(
 -   "flavor" | "worker_threads" | "start_paused" =&gt; {
 +   "flavor" | "worker_threads" | "start_paused" | "crate" =&gt; {
@@ -120,7 +129,7 @@ run_verifier "$TASK_DIR" --patch "patches/${AGENT}__${REPO}.diff"</pre>
 -   ret.0 += hint.0;
 +   ret.0 = ret.0.saturating_add(hint.0);</pre>
   <p>Claude Code's rxjava fix stops a recursive re-entry: the operator called <code class="inl">onError</code> with a freshly built NullPointerException, re-entering the same null branch forever:</p>
-  <pre>--- a/src/main/java/io/reactivex/internal/operators/flowable/FlowableCreate.java
+  <pre data-lang="diff" data-kw="java">--- a/src/main/java/io/reactivex/internal/operators/flowable/FlowableCreate.java
 @@ -619,7 +619,7 @@ public final class FlowableCreate&lt;T&gt; extends Flowable&lt;T&gt; {
        if (e == null) {
 -         onError(new NullPointerException(
@@ -129,7 +138,7 @@ run_verifier "$TASK_DIR" --patch "patches/${AGENT}__${REPO}.diff"</pre>
 +      }
        error = e;</pre>
   <p>Amp's click fix is surgical Python 3 API repair in the bundled examples: writing a configparser in binary mode, and using the removed private <code class="inl">get_binary_stdin</code> helper:</p>
-  <pre>--- a/examples/aliases/aliases.py
+  <pre data-lang="diff" data-kw="python">--- a/examples/aliases/aliases.py
 @@ -27,7 +27,7 @@ class Config:
 -   with open(filename, "wb") as file:
 +   with open(filename, "w") as file:
@@ -143,7 +152,7 @@ run_verifier "$TASK_DIR" --patch "patches/${AGENT}__${REPO}.diff"</pre>
   <h3>What they failed, and why it matters</h3>
   <p>On z3, Amp spent the full hour and produced a 399-line patch of plausible API-mapping fixes. Every hidden test still failed; the reward was 0.0. Claude Code wrote 1,006 diff lines on the same repo and also scored 0. On behavioral solver bugs, plausible is not passing, and more output is not more resolution.</p>
   <p>On roslyn, the regression gate earned its keep. Amp's patch resolved a bug but swapped the synthesized hash-function names for Span and ReadOnlySpan pattern matches, breaking an existing test:</p>
-  <pre><span class="cm"># verifier/reward.json for amp/roslyn</span>
+  <pre data-lang="json"># verifier/reward.json for amp/roslyn
 { "reward": 0.0, "n_resolved": 0.0, "visible_ok": 0.0, "n_regressions": 1.0 }</pre>
   <p>SWE-sweep scores the patch, not the intention. This is exactly the fence production agent use needs, and it is a harness property, not a model one.</p>
 
@@ -192,5 +201,64 @@ run_verifier "$TASK_DIR" --patch "patches/${AGENT}__${REPO}.diff"</pre>
   <span>ESL - Engineering Software Lab &middot; <a href="https://eswlab.com/">eswlab.com</a></span>
   <span>Slide deck: <a href="index.html">The Harness Is the King</a> &middot; October 2026</span>
 </footer>
+<script>
+(function(){
+  var KW={
+    python:"def|class|import|from|return|if|elif|else|for|while|with|as|in|not|and|or|try|except|finally|raise|None|True|False|open",
+    rust:"fn|let|mut|pub|struct|enum|impl|use|match|if|else|for|while|loop|return|self|Self|crate|where|Some|None",
+    java:"public|private|protected|class|final|return|if|else|for|while|new|throw|try|catch|extends|static|void|int|long|boolean|null|true|false|this|import",
+    csharp:"public|private|protected|class|struct|return|if|else|for|while|new|switch|case|namespace|using|static|void|string|int|bool|null|true|false|this|var|get|set|readonly",
+    cpp:"extern|class|struct|return|if|else|for|while|switch|case|const|auto|void|int|bool|true|false|nullptr|namespace|using|static|include",
+    bash:"cd|echo|git|timeout|cat|for|do|done|if|then|fi|export|while|read|wc|run_verifier"
+  };
+  function tok(line,kwName){
+    var kw=kwName?KW[kwName]:null;
+    var re=new RegExp(
+      "(//[^\\n]*|#[^\\n]*)"+
+      "|(\"(?:[^\"\\\\]|\\\\.)*\"|'(?:[^'\\\\]|\\\\.)*'|`(?:[^`\\\\]|\\\\.)*`)"+
+      "|(\\$\\{?[A-Za-z_][A-Za-z0-9_]*\\}?)"+
+      "|(-?\\b\\d[\\d_]*(?:\\.\\d+)?(?:[eE][+-]?\\d+)?\\b)"+
+      (kw?("|\\b("+kw+")\\b"):"")+
+      "|\\b([A-Z][A-Za-z0-9_]{1,})\\b",
+      "g");
+    return line.replace(re,function(m,c,s,v,n,k,t){
+      if(c)return '<span class="tok-c">'+m+'</span>';
+      if(s)return '<span class="tok-s">'+m+'</span>';
+      if(v)return '<span class="tok-v">'+m+'</span>';
+      if(n)return '<span class="tok-n">'+m+'</span>';
+      if(k)return '<span class="tok-k">'+m+'</span>';
+      if(t)return '<span class="tok-t">'+m+'</span>';
+      return m;
+    });
+  }
+  document.querySelectorAll("pre[data-lang]").forEach(function(pre){
+    var lang=pre.getAttribute("data-lang"),kw=pre.getAttribute("data-kw");
+    var lines=pre.innerHTML.split("\n");
+    var out=lines.map(function(line){
+      if(lang==="diff"){
+        var cls="";
+        if(/^(\+\+\+ |--- )/.test(line)){cls="lm"}
+        else if(/^@@/.test(line)){cls="lh"}
+        else if(/^\+/.test(line)){cls="la"}
+        else if(/^-/.test(line)){cls="lr"}
+        if(cls)return '<span class="'+cls+'">'+tok(line,kw)+'</span>';
+        return tok(line,kw);
+      }
+      if(lang==="json"){
+        return line
+          .replace(/("(?:[^"\\]|\\.)*")(\s*:)|("(?:[^"\\]|\\.)*")/g,function(m,key,colon,str){
+            if(key)return '<span class="tok-key">'+key+'</span>'+colon;
+            return '<span class="tok-s">'+m+'</span>';
+          })
+          .replace(/(#[^\n]*)/g,'<span class="tok-c">$1</span>')
+          .replace(/(:\s*)(-?\d[\d.]*)/g,'$1<span class="tok-n">$2</span>');
+      }
+      if(lang==="bash"){return tok(line,"bash")}
+      return tok(line,null);
+    });
+    pre.innerHTML=out.join("\n");
+  });
+})();
+</script>
 </body>
 </html>
