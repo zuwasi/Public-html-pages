@@ -16,6 +16,8 @@
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,Arial,sans-serif;line-height:1.55;overflow:hidden}
 a{color:var(--blue-text);text-decoration:none}
+.subtitle a{text-decoration:underline}
+.who a{text-decoration:underline}
 a:hover{text-decoration:underline}
 .topbar{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 3vw;background:#f7f8faf5;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
 .topbar .brand{display:flex;align-items:center;gap:14px}
@@ -157,7 +159,7 @@ pre span.lm{display:inline-block;width:100%;color:#8b949e}
       <li><b>100 real repositories, 4,100 confirmed bugs.</b> Built from issue–pull request pairs; each repo snapshot is a commit where the maximum number of bugs coexist.</li>
       <li><b>Open-ended task.</b> The agent gets the repository at a fixed base commit and one broad instruction: find and fix as many bugs as you can. No issue text, no filenames, no line ranges, no hints.</li>
       <li><b>Brutal scoring.</b> Every candidate fix runs against hidden fail-to-pass tests from the upstream PR, plus the repository's whole existing test suite. One regression zeroes the repo's reward.</li>
-      <li><b>ICLR 2026 preprint</b> by Lieret, Ma, Wei, Yang, Press and colleagues at Meta Superintelligence Labs, Harvard, UW and Stanford.</li>
+      <li><b><a href="https://github.com/facebookresearch/swe-sweep">ICLR 2026 preprint</a></b> by Lieret, Ma, Wei, Yang, Press and colleagues at Meta Superintelligence Labs, Harvard, UW and Stanford.</li>
     </ul>
     <div class="diagram">issue + PR pairs ──►  find commit where many bugs coexist ──►  repo snapshot at base commit
       │                                                        │
@@ -202,7 +204,7 @@ regression gate: original test suite must still pass ──►  reward = bugs re
   <div class="inner">
     <div class="eyebrow"><span class="mark"></span>THE BENCHMARK · 04</div>
     <h1 style="font-size:clamp(26px,3vw,40px)">The official leaderboard</h1>
-    <p class="subtitle">Ten entries, all running the minimal mini-SWE-agent scaffold (captured from swesweep.com, Oct 21, 2026)</p>
+    <p class="subtitle">Ten entries, all running the minimal <a href="https://github.com/SWE-agent/mini-swe-agent">mini-SWE-agent</a> scaffold (captured from <a href="https://swesweep.com/">swesweep.com</a>, Oct 21, 2026)</p>
     <div class="duo">
       <div class="tablewrap">
       <table>
@@ -235,12 +237,12 @@ regression gate: original test suite must still pass ──►  reward = bugs re
   <div class="inner">
     <div class="eyebrow"><span class="mark"></span>THE BENCHMARK · 05</div>
     <h1>What the authors say about harnesses</h1>
-    <p class="subtitle">From the official SWE-sweep FAQ: does the scaffold matter?</p>
+    <p class="subtitle">From the official <a href="https://swesweep.com/">SWE-sweep FAQ</a>: does the scaffold matter?</p>
     <div class="quote">&ldquo;Why mini-swe-agent? Could other scaffolds/multi-agents achieve higher performance? Our paper has an ablation with Claude Code and Codex. Neither seems to significantly outperform mini-swe-agent (to the contrary, mini-swe-agent is even quite a bit better than Codex).&rdquo;
-      <span class="who">SWE-sweep FAQ, swesweep.com, accessed October 21, 2026</span>
+      <span class="who"><a href="https://swesweep.com/">SWE-sweep FAQ</a>, swesweep.com, accessed October 21, 2026</span>
     </div>
     <ul>
-      <li>The benchmark's own authors found <b>harness choice does not separate the big scaffolds</b> at their resolution: Claude Code, Codex and mini-swe-agent land in the same band.</li>
+      <li>The benchmark's own authors found <b>harness choice does not separate the big scaffolds</b> at their resolution: Claude Code, Codex and <a href="https://github.com/SWE-agent/mini-swe-agent">mini-swe-agent</a> land in the same band.</li>
       <li>That is exactly the question we set out to test at ESL, but <b>head to head, same model, production harnesses</b>, with the SWE-sweep verifier as the referee.</li>
       <li>And note rank 5: Opus 5 (xhigh) in the mini-swe-agent harness scores 1.3%, while the same Opus-class model in Amp's harness scored multiples of that in our runs.</li>
     </ul>
@@ -254,14 +256,14 @@ regression gate: original test suite must still pass ──►  reward = bugs re
     <h1>Academic context: the harness debate</h1>
     <p class="subtitle">This benchmark is one data point in a 2026 research conversation</p>
     <div class="quote">&ldquo;The bottleneck of autonomy is not only the reasoning ability of the base model, but also the reliability of the system that connects model outputs to long-horizon actions and persistent states.&rdquo;
-      <span class="who">Code as Agent Harness: A Survey, arXiv:2605.18747 (UIUC · Meta · Stanford, 2026), Section 1</span>
+      <span class="who">Code as Agent Harness: A Survey, <a href="https://arxiv.org/abs/2605.18747">arXiv:2605.18747</a> (UIUC · Meta · Stanford, 2026), Section 1</span>
     </div>
     <div class="tablewrap">
     <table>
       <thead><tr><th>Result</th><th>Source</th><th class="num">Effect of the harness alone</th></tr></thead>
       <tbody>
         <tr><td>Harness vs model split</td><td>Kaggle, The New SDLC with Vibe Coding, Fig. 7</td><td class="num">90% harness / 10% model</td></tr>
-        <tr><td>Agent-Computer Interface ablation</td><td>SWE-agent, NeurIPS 2024</td><td class="num">3.8% → 12.5%, no new weights</td></tr>
+        <tr><td>Agent-Computer Interface ablation</td><td><a href="https://arxiv.org/abs/2409.12177">SWE-agent</a>, NeurIPS 2024</td><td class="num">3.8% → 12.5%, no new weights</td></tr>
         <tr><td>Harness-only performance gap</td><td>Meta-Harness (Stanford / MIT)</td><td class="num">6×</td></tr>
         <tr><td>Same model, different scaffold cost swing</td><td>Sentient, ICML 2026</td><td class="num">~40×</td></tr>
         <tr><td>Weak model + strong scaffold beats strong model</td><td>Confucius CCA</td><td class="num">52.7 vs 52.0</td></tr>
@@ -332,8 +334,8 @@ cat .../verifier/reward.json   # n_resolved, n_regressions, visible_ok</pre>
   </div>
 </section>
 
-<!-- 9 -->
-<section class="slide">
+<!-- 9 (dense: stat cards + full 12-repo scoreboard) -->
+<section class="slide dense">
   <div class="inner">
     <div class="eyebrow"><span class="mark"></span>RESULTS · 09</div>
     <h1>Final scoreboard: Amp 4/60, Claude Code 2/60</h1>
@@ -381,7 +383,7 @@ cat .../verifier/reward.json   # n_resolved, n_regressions, visible_ok</pre>
     </table>
     </div>
     <ul>
-      <li>Each resolved bug is worth 1.67 points on our 60-bug subsample, so 4-vs-2 is a real gap but <b>not statistical proof</b>. It is directional, and it matches the prior quantum-kernel benchmark (slide 16).</li>
+      <li>Each resolved bug is worth 1.67 points on our 60-bug subsample, so 4-vs-2 is a real gap but <b>not statistical proof</b>. It is directional, and it matches the prior quantum-kernel benchmark (<a href="index.html#16">slide 16</a>).</li>
       <li>Our runs used a 1-hour cap per repo; official entries ran the full 100-repo benchmark. The comparison is a placement, not a record claim.</li>
       <li>Opus-class model + mini-swe-agent officially scores 1.3%. The same model class in Amp's harness scored 5× that here.</li>
     </ul>
@@ -564,7 +566,7 @@ cat .../verifier/reward.json   # n_resolved, n_regressions, visible_ok</pre>
     <h1>The Parasoft C++test control</h1>
     <p class="subtitle">Before crediting agents, we asked: can classic static analysis find these bugs at all?</p>
     <ul>
-      <li><b>Tool:</b> Parasoft C++test Professional 2025.2.0, licensed, run on 6 C/C++ SWE-sweep repos: libexpat, jerryscript, hdf5, proj, z3, tarantool.</li>
+      <li><b>Tool:</b> <a href="https://www.parasoft.com/products/parasoft-cpptest/">Parasoft C++test Professional 2025.2.0</a>, licensed, run on 6 C/C++ SWE-sweep repos: libexpat, jerryscript, hdf5, proj, z3, tarantool.</li>
       <li><b>Five configurations:</b> Recommended Rules, Flow Analysis Standard, Flow Analysis Aggressive, MISRA C 2025, MISRA C++ 2023.</li>
       <li><b>~500,000 findings</b> in total across the configurations.</li>
       <li><b>Ground truth:</b> the SWE-sweep oracle patches. A finding "hits" a bug only if its line falls on a base-side line that the upstream fix actually changed.</li>
@@ -627,7 +629,7 @@ cat .../verifier/reward.json   # n_resolved, n_regressions, visible_ok</pre>
       <div>
         <h2>Complementary, not competing</h2>
         <ul>
-          <li>For safety-critical work (ESL's home turf: MISRA, CERT, AUTOSAR), C++test is exactly the right tool and we deploy it daily.</li>
+          <li>For safety-critical work (ESL's home turf: <a href="https://misra.org.uk/">MISRA</a>, <a href="https://wiki.sei.cmu.edu/confluence/display/c">CERT</a>, <a href="https://www.autosar.org/">AUTOSAR</a>), C++test is exactly the right tool and we deploy it daily.</li>
           <li>For "find the bugs nobody reported yet", the agent loop wins, and the published direct-LLM baseline in the same study (no agent loop) resolves only 0 to 20% per repo.</li>
           <li>The pipeline we recommend to clients: <b>static analysis for the rule book, agents for the behavior, hidden tests as the referee.</b></li>
         </ul>
@@ -662,7 +664,7 @@ cat .../verifier/reward.json   # n_resolved, n_regressions, visible_ok</pre>
       <li>In our SWE-sweep runs the deciding harness behaviors were: repo-wide context management, when to stop exploring and edit, patch-size discipline, and running the visible test suite before declaring victory.</li>
       <li>The models are converging. The scaffolding is diverging. That is where evaluators, buyers and builders should look.</li>
     </ul>
-    <div class="foot">Layer model: <a href="https://zuwasi.github.io/Public-html-pages/harness-is-the-product/">The Harness Is the Product</a> · survey: arXiv:2605.18747</div>
+    <div class="foot">Layer model: <a href="https://zuwasi.github.io/Public-html-pages/harness-is-the-product/">The Harness Is the Product</a> · survey: <a href="https://arxiv.org/abs/2605.18747">arXiv:2605.18747</a></div>
   </div>
 </section>
 
@@ -676,7 +678,7 @@ cat .../verifier/reward.json   # n_resolved, n_regressions, visible_ok</pre>
       <li><b>2× the resolved bugs on identical weights:</b> 4/60 (6.7%) vs Claude Code's 2/60 (3.3%), same model, same prompt, same cap, same verifier.</li>
       <li><b>Above the state of the art:</b> 6.7% on our subsample vs 4.7% for the best official full-run entry, which cost $7,230.</li>
       <li><b>Cleaner cost profile:</b> Amp completed every session inside the cap and produced minimal, targeted diffs; Claude Code needed larger patches for fewer wins and lost three sessions to its own spend limit.</li>
-      <li><b>Consistent with our prior study:</b> on the quantum-compiler kernels, Amp solved 4/4 where max-effort Claude Code stopped at 3/4, at 39× lower cost.</li>
+      <li><b>Consistent with our prior study:</b> on the <a href="https://zuwasi.github.io/Public-html-pages/harness-beats-model.html">quantum-compiler kernels</a>, Amp solved 4/4 where max-effort Claude Code stopped at 3/4, at 39× lower cost.</li>
       <li><b>The compliment that matters:</b> Amp's context handling, tool execution and verification loop turn the same engine into measurably more working software. The harness is the product, and Amp built a better one.</li>
     </ul>
   </div>
@@ -840,6 +842,7 @@ cat .../verifier/reward.json   # n_resolved, n_regressions, visible_ok</pre>
   document.addEventListener("mouseup",function(e){if(x0===null)return;dx=e.clientX-x0;
     if(Math.abs(dx)>50){go(i+(dx<0?1:-1))}x0=null});
   go(isNaN(start)?0:start-1);
+  window.addEventListener("hashchange",function(){var k=parseInt(location.hash.slice(1),10);if(!isNaN(k)&&k-1!==i)go(k-1);});
 })();
 </script>
 </body>
