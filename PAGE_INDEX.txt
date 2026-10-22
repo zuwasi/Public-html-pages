@@ -416,6 +416,9 @@ Last updated: 2026-10-22
 • terratest-diff-esl-presentation
   https://zuwasi.github.io/Public-html-pages/terratest-diff-esl-presentation
 
+• threadx-loongarch64-port
+  https://zuwasi.github.io/Public-html-pages/threadx-loongarch64-port
+
 • tools
   https://zuwasi.github.io/Public-html-pages/tools
 
