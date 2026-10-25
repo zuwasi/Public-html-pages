@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-22
+Last updated: 2026-10-25
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -331,6 +331,9 @@ Last updated: 2026-10-22
 
 • interrupts-vs-polling
   https://zuwasi.github.io/Public-html-pages/interrupts-vs-polling
+
+• iroad-verified-alignment
+  https://zuwasi.github.io/Public-html-pages/iroad-verified-alignment
 
 • jev-cost-of-being-wrong
   https://zuwasi.github.io/Public-html-pages/jev-cost-of-being-wrong
