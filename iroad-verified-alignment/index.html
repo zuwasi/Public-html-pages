@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<meta name="description" content="ESL: מנוע תוואי מאומת ל-Netivei Yisrael (RFI 94/26) – עדכון בעקבות דרישות Iroad: מקרא, אילוצי קרקע חקלאית, איסור חציית שטח בנוי, והטמעת ספר העקרונות PDDM. אדם בלולאה ובקרת גרסאות.">
+<title>מנוע תוואי מאומת · עדכון בעקבות דרישות Iroad | ESL</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Cascadia+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e2e5ea; --sheet:#f7f8fa; --sheet2:#eef0f4; --ink:#24282d; --muted:#5a626c; --line:#cfd4da;
+  --blue:#4f9efb; --blue-text:#1d6bd0; --amber:#ffb30b; --amber-text:#8a5e00;
+  --code-bg:#16181c; --code-cap:#1f2226; --on-dark:#e6e8eb; --good:#1e7d33; --bad:#c03535;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:"Inter",system-ui,Arial,sans-serif;line-height:1.55;overflow:hidden}
+a{color:var(--blue-text);text-decoration:none}
+a:hover{text-decoration:underline}
+.topbar{position:fixed;top:0;right:0;left:0;z-index:20;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 3vw;background:#f7f8faf5;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.topbar .brand{display:flex;align-items:center;gap:14px}
+.homebtn{font-size:22px;line-height:1;text-decoration:none}
+.homebtn:hover{transform:scale(1.15)}
+.topbar img{height:32px;display:block}
+.topbar #brand{font-weight:600;font-size:14px;color:var(--ink);border-right:2px solid var(--line);padding-right:14px}
+.topbar .links{display:flex;gap:18px;flex-wrap:wrap}
+.topbar .links a{font-size:14px;color:var(--ink);border-bottom:2px solid transparent}
+.topbar .links a:hover{border-bottom-color:var(--amber);text-decoration:none}
+#deck{display:flex;height:100vh;transition:transform .32s ease}
+.slide{flex:0 0 100vw;width:100vw;height:100vh;overflow-y:auto;padding:84px 4.5vw 96px;display:flex;flex-direction:column}
+.inner{max-width:1300px;margin:0 auto;width:100%}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:14px;letter-spacing:.18em;font-weight:700}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{right:0;top:0;border-color:var(--blue)}
+.mark::after{right:8px;top:7px;border-color:var(--amber)}
+h1{font-size:clamp(30px,3.9vw,54px);line-height:1.12;letter-spacing:-.02em;margin:14px 0 10px;font-weight:800}
+h2{font-size:clamp(21px,2.2vw,30px);color:var(--amber-text);margin:16px 0 10px;font-weight:700}
+p.subtitle{font-size:clamp(18px,2vw,25px);color:var(--blue-text);margin:0 0 22px}
+p,li{font-size:clamp(17px,1.75vw,22px)}
+li{margin:12px 0;padding-right:4px}
+ul{padding-right:26px}
+li::marker{color:var(--amber)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin:16px 0}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin:16px 0}
+.bignum{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:20px 22px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.bignum.v{border-top-color:var(--amber)}
+.bignum .n{font-size:clamp(30px,3.4vw,48px);font-weight:800;color:var(--ink)}
+.bignum .l{font-size:clamp(14px,1.35vw,17px);color:var(--muted);margin-top:6px;line-height:1.45}
+.tablewrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
+table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.3vw,17px)}
+th,td{padding:11px 15px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#2a2f36;color:#fff;font-weight:650}
+tbody tr:nth-child(even){background:#eef0f5}
+.shot{width:100%;border-radius:12px;border:1px solid var(--line);box-shadow:0 4px 18px rgba(20,30,50,.10);display:block}
+.cap{font-size:clamp(12px,1.1vw,15px);color:var(--muted);margin-top:8px;line-height:1.4}
+.iroad{display:inline-block;background:var(--amber);color:#4a3300;font-weight:700;font-size:clamp(12px,1.05vw,15px);padding:4px 12px;border-radius:999px;margin:2px 0}
+.hit{display:inline-block;background:#e8f0fb;color:var(--blue-text);border:2px solid var(--blue);font-weight:700;font-size:clamp(12px,1.05vw,15px);padding:4px 12px;border-radius:999px;margin:2px 0}
+.foot{font-size:clamp(12px,1.05vw,15px);color:var(--muted);margin-top:auto;padding-top:18px}
+pre{background:var(--code-bg);color:var(--on-dark);border-radius:12px;padding:18px 20px;font-family:"Cascadia Mono",monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.6;overflow-x:auto}
+pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:#f7f8faf0;color:var(--ink);font-size:26px;cursor:pointer;box-shadow:0 2px 10px rgba(20,30,50,.12)}
+#next{left:18px} #prev{right:18px}
+.navbtn:disabled{opacity:.25;cursor:default}
+#progress{position:fixed;bottom:0;right:0;height:6px;background:linear-gradient(270deg,var(--blue),var(--amber));z-index:40;transition:width .3s}
+#counter{position:fixed;bottom:12px;left:16px;z-index:40;font-size:14px;color:var(--muted);background:#f7f8fae0;padding:2px 10px;border-radius:999px;border:1px solid var(--line)}
+#hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:40;color:var(--muted);font-size:15px;animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.35}}
+@media (max-width:760px){.grid2,.grid3{grid-template-columns:1fr}.slide{padding:70px 5vw 90px}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="homebtn" href="#1" title="חזרה לשקף הראשון">&#127968;</a>
+    <a href="https://eswlab.com/"><img src="assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+    <span id="brand">מנוע תוואי מאומת · עדכון בעקבות דרישות Iroad · RFI 94/26</span>
+  </div>
+  <div class="links">
+    <a href="https://eswlab.com/">ESL</a>
+    <a href="https://highways.dot.gov/federal-lands/pddm">PDDM (FHWA)</a>
+    <a href="https://eswlab.com/contact-us/">יצירת קשר</a>
+  </div>
+</header>
+
+<main id="deck">
+
+<!-- 1 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>ESL · NETIVEI YISRAEL RFI 94/26 · 01</div>
+    <h1>מנוע תוואי מאומת: עדכון בעקבות דרישות Iroad</h1>
+    <p class="subtitle">מה הוספנו מאז המצגת הראשונה, איך זה משתלב באלגוריתם, ואיפה האדם בלולאה</p>
+    <div class="grid3">
+      <div class="bignum"><div class="n">4/4</div><div class="l">דרישות Iroad מהפגישה הקודמת יושמו ואומתו</div></div>
+      <div class="bignum v"><div class="n">18</div><div class="l">הוכחות Lean 4: 6 אילוצים × 3 חלופות, כולל חשיפת עצירה (SSD)</div></div>
+      <div class="bignum"><div class="n">100%</div><div class="l">נתונים ציבוריים: Copernicus GLO-30 · OpenStreetMap · GovMap</div></div>
+    </div>
+    <p style="margin-top:22px">דניאל ליזרוביץ׳, CTO · ESL - Engineering Software Lab · הנדסת תוכנה משובצת, עם ראיות לכל טענה</p>
+    <p class="foot">כל צילום המסך במצגת הוא מהרצה אמיתית על קורידור עפולה – כפר תבור בעמק יזרעאל (25.10.2026), לא תרחיש מתוכנת מראש.</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>עדכון מהפגישה הקודמת · 02</div>
+    <h1>מה ביקשו מ-Iroad, ומה נוסף אצלנו</h1>
+    <p class="subtitle">ארבע דרישות, ארבעה שינויים במנוע, כל אחד מאומת</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>דרישת Iroad</th><th>מה נוסף במנוע</th><th>איפה רואים את זה</th></tr></thead>
+      <tbody>
+        <tr><td>מקרא למפה, שכל שכבה תהיה ברורה<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></td><td>מקרא מלא על המפה: חלופות, שמורה, נחל וחיץ, שטח בנוי, קרקע חקלאית</td><td>שקף 4</td></tr>
+        <tr><td>להימנע מקרקע חקלאית<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></td><td>קרקע חקלאית פרטית: אסורה, אפס סטיה מקובל. קרקע חקלאית פתוחה: מותרת בקנס עלות</td><td>שקף 5</td></tr>
+        <tr><td>לא לחתוך דרך רחובות עירוניים<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></td><td>שטח בנוי: אסור לחצייה, נאכף גם על תוואי שמצייר המהנדס ידנית</td><td>שקף 6</td></tr>
+        <tr><td>לתכנן לפי ספר עקרונות מקצועי<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></td><td>קריטריוני התכנון נגזרים אוטומטית ממהירות מתכנן לפי ה-PDDM של FHWA וה-Green Book של AASHTO</td><td>שקפים 7–8</td></tr>
+      </tbody>
+    </table></div>
+    <p class="foot">בנוסף: אדם בלולאה בכל נקודת החלטה (שקף 9) ובקרת גרסאות מלאה (שקף 10) – שתי הדרישות העקיפות שעמדו מאחורי כל השאר.</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>DATA SOURCES · 03</div>
+    <h1>מקורות הנתונים: מאיפה, מתי, ובאיזו רמת אמון</h1>
+    <div class="tablewrap"><table>
+      <thead><tr><th>מקור</th><th>מה הוא נותן</th><th>מתי נשלף</th><th>רישוי</th></tr></thead>
+      <tbody>
+        <tr><td><b>Copernicus GLO-30</b> דמ"ג (AWS Open Data)</td><td>טופוגרפיה, רזולוציית 30 מ׳ – הבסיס לשיפועים, תצליל ועבודות עפר</td><td>נשלף אוטומטית בכל הרצה (25.10.2026), בתוך דקות</td><td>פתוח, ציבורי</td></tr>
+        <tr><td><b>OpenStreetMap</b> (מיצוי Geofabrik של ישראל)</td><td>שטח בנוי, קרקע חקלאית, שמורות טבע, נחלים, כבישים ויישובים</td><td>אותה הרצה, אותו תאריך</td><td>ODbL, קרדיט בכותרת התחתונה</td></tr>
+        <tr><td><b>GovMap</b> (WFS פתוח, חלקות PARCEL_ALL)</td><td>גבולות חלקות קדסטריות – לעקיפת חלקות</td><td>נבדק 25.10.2026: אין שדה בעלות ב-API הפתוח</td><td>שימוש ציבורי</td></tr>
+        <tr><td><b>מפרט התכנון</b> (PDDM / Green Book)</td><td>קריטריונים: רדיוס, שיפוע, חשיפה – נגזרים ממהירות מתכנן</td><td>מוטמע כטבלאות נתונים בקוד (25.10.2026)</td><td>תקן ציבורי FHWA/AASHTO</td></tr>
+      </tbody>
+    </table></div>
+    <ul>
+      <li><b>לולאת הרענון היא חלק מהמוצר:</b> פקודה אחת שולפת מחדש את כל הריבוע 14×14 ק"מ, כולל סימון תאריך השליפה לשקיפות מלאה</li>
+      <li><b>פער מוכר ומטופל:</b> גם OSM וגם GovMap הפתוח אינם מסמנים בעלות על קרקע חקלאית – ראו הסבר בשקף 5</li>
+      <li><b>בפיילוט:</b> אותו מבנה קלט יקבל CAD/GIS וסקרים של הגוף המתכנן, בלי שינוי קוד</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>דרישה 1 · 04</div>
+    <h1>מקרא למפה<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></h1>
+    <p class="subtitle">כל שכבה מזוהה בעין: חלופות בצהוב/תכלת/ירוק, האדום אסור, הכתום אסור, הירוק בהיר מותר בקנס</p>
+    <div class="grid2">
+      <div><img class="shot" src="img/legend_crop.png" alt="מקרא המפה"><p class="cap">המקרא כמו שהוא מופיע בהדגמה, בהגדלה: כל סימון ותווית שלו</p></div>
+      <ul>
+        <li><b>הבקשה הייתה מדויקת:</b> מפה בלי מקרא מחייבת את מי שמציג להסביר כל צבע בעל פה, וכל טעות בהסבר היא טעות בהחלטה</li>
+        <li>המקרא <b>חי עם המפה</b>: הוא נבנה מאותן שכבות שהאלגוריתם קורא, אז הוא לא יכול להתיישן מול הנתונים</li>
+        <li>כל שקף מפה במצגת הזאת חתום באותה שכבת מקרא, כולל קרדיטים מלאים בכותרת התחתונה של ההדגמה</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>דרישה 2 · 05</div>
+    <h1>קרקע חקלאית<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></h1>
+    <div class="grid2">
+      <div><img class="shot" src="img/map_layers_annotated.png" alt="שכבות המפה עם סימון"><p class="cap">שכבות האילוץ על קורידור עפולה – כפר תבור: 1 קרקע חקלאית פתוחה, 2 שטח בנוי, 3 שמורה, 4 תוואי מאומת</p></div>
+      <div>
+        <ul>
+          <li><b>ההתפתחות של הדרישה:</b> תחילה "אסור לגעת בקרקע חקלאית בכלל". בדיקה על הקורידור האמיתי הראתה שזה לא אפשרי: עמק יזרעאל הוא רצף חקלאי, ואין תוואי בכלל בלי לעבור על קרקע חקלאית</li>
+          <li><b>ההגדרה המעודכנת שאושרה:</b> קרקע חקלאית <b>פרטית אסורה</b> (אפס נקודות, בלי יוצא מן הכלל), קרקע חקלאית <b>פתוחה מותרת בקנס עלות</b> שהמנוע עוקף כשיש אלטרנטיבה</li>
+          <li><b>שקיפות מלאה:</b> ב-OSM של הקורידור אף חלקה אינה מסומנת כפרטית (0 מתוך 113), וה-WFS הפתוח של GovMap אינו חושף שדה בעלות. זה כתוב בדוח המנוע עצמו, לא בהערת שוליים</li>
+          <li><b>כשרשימת חלקות פרטיות תגיע מהלקוח,</b> היא נכנסת לאותה הוכחה כשכבה נוספת, בלי שינוי קוד</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>דרישה 3 · 06</div>
+    <h1>אי חציית שטח בנוי<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></h1>
+    <p class="subtitle">"לא חותכים דרך רחובות של עיירה": האיסור נאכף, וגם על המהנדס עצמו</p>
+    <div class="grid2">
+      <div>
+        <img class="shot" src="img/drawn_reject_annotated.png" alt="תוואי מצויר שנדחה">
+        <p class="cap">1 המהנדס צייר בכוונה תוואי שחוצה שטח בנוי · 2 המנוע דחה: 140 נקודות בשטח בנוי, Lean מסרב להוכיח</p>
+      </div>
+      <ul>
+        <li>שטח בנוי הוא <b>שכבת איסור מלאה</b>: קירור האזור העלותיי עם הרחבה, כך שגם עקיפה צמודה נבדקת</li>
+        <li>האיסור נבדק <b>נקודה אחר נקודה</b> לאורך כל התוואי, ונכנס להוכחה הפורמלית, לא לבדיקת דגימה</li>
+        <li>בהדגמה חיה מול הלקוח ציירנו תוואי כזה בכוונה: הדחייה מגיעה בשניות, עם המספר המדויק של נקודות החריגה</li>
+        <li>זה ההבדל בין "מערכת שמציירת יפה" למנוע ש<b>אי אפשר לשכנע בשקר</b></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>דרישה 4 · 07</div>
+    <h1>ספר העקרונות: PDDM<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></h1>
+    <p class="subtitle">הקריטריונים לא מוגדרים ביד: הם נגזרים ממהירות מתכנן אחת, לפי <a href="https://highways.dot.gov/federal-lands/pddm">PDDM של FHWA Federal Lands</a> וה-Green Book של AASHTO</p>
+    <div class="grid2">
+      <div><img class="shot" src="img/spec_crop.png" alt="סליידר מהירות מתכנן והמפרט הנגזר">
+      <p class="cap">1 סליידר מהירות מתכנן אחד · 2 המפרט המלא שנגזר ממנו: שיפוע ≤ 7% · רדיוס ≥ 304 מ׳ · חשיפה ≥ 160 מ׳</p></div>
+      <div>
+        <pre>-- נגזר אוטומטית מ-V = 90 קמ"ש
+R_min = V² / (127 · (e_max + f))
+  e_max = 8%, f = Green Book
+  → R_min = 304 מ׳
+שיפוע מרבי (שטח גלי, כביש בין-עירוני)
+  → 7%
+חשיפת עצירה (SSD), 2.5 שניות תגובה
+  → 160 מ׳
+<span class="y">-- מקור: PDDM ch.9 (FHWA-FLH) / AASHTO Green Book</span></pre>
+        <ul>
+          <li>מהנדס מזיז סליידר אחד ומקבל <b>מפרט עקבי ושלם</b>: הטבלאות מסונכרנות במקום אחד</li>
+          <li>בפיילוט מחליפים את הטבלאות לתקן הישראלי (ת.ח.ד): <b>עדכון נתונים, לא שינוי קוד</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>שינויי האלגוריתם · 08</div>
+    <h1>מה ה-PDDM שינה באלגוריתם עצמו</h1>
+    <div class="grid2">
+      <div>
+        <ul>
+          <li><b>עקומות אנכיות:</b> התצליר היה קו שבור שעוקב אחרי הקרקע. חשיפת עצירה על פסגות חדות הייתה 30 מ׳ בלבד. הוספנו עיגול גיאומטרי באורך גל תכנון של 250 מ׳ שמכפוף את העקמתיות בפסגות בדיוק כמו עקומת פסגה בתקן, והחשיפה קפצה ל-166–172 מ׳</li>
+          <li><b>מדידת חשיפה (SSD):</b> נערכת נקודה אחר נקודה מעל התצליר המתוכנן, עין בגובה 1.08 מ׳ ומטרה בגובה 0.6 מ׳, מה שהתקן דורש</li>
+          <li><b>18 הוכחות Lean 4</b> (6 אילוצים × 3 חלופות) במקום 15: שיפוע, רדיוס, חשיפה, התרחקות מנחל, קרקע חקלאית פרטית, שטח בנוי</li>
+        </ul>
+      </div>
+      <div>
+        <img class="shot" src="img/checks_crop.png" alt="טבלת אימות עם עמודת חשיפה">
+        <p class="cap">טבלת האימות: שיפוע 6.1% מול 7% מותר, חשיפה 166–172 מ׳ מול 160 דרוש, הכל ירוק</p>
+        <div class="bignum v" style="margin-top:14px"><div class="n bad">90 → 100 קמ"ש</div>
+        <div class="l">הרדיוס הדרוש קופץ מ-304 ל-394 מ׳, החלופות מציעות 342–377 מ׳: Lean דוחה את כל החלופות בשניות, בזמן הפגישה</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>HUMAN IN THE LOOP · 09</div>
+    <h1>אדם בלולאה, בכל נקודת החלטה <span class="hit">דרישת Iroad</span></h1>
+    <p class="subtitle">החשש שנשמע בפגישה: בלי אדם בלולאה, טעות נכנסת בשקט ואף אחד לא יודע מתי ולמה. התשובה שלנו בנויה בתוך המנוע</p>
+    <div class="grid2">
+      <div><img class="shot" src="img/human_loop_annotated.png" alt="נקודות אדם בלולאה בהדגמה">
+      <p class="cap">1 קביעת המפרט · 2 בחירת חלופה ובדיקת מדדים · 3 ציור תוואי חלופי · 4 אישור תעודת Lean</p></div>
+      <ul>
+        <li><b>המנוע מציע, המהנדס מחליט:</b> הוא קובע את הקורידור והמפרט, בוחר בין חלופות מדורגות, מצייר תוואי משלו כדי לאתגר את המנוע, ומאשר את תעודת האימות לפני שכל מספר משמש להחלטה</li>
+        <li><b>שום תוצאה לא עוקפת אדם:</b> המנוע לא חותם תוואי, הוא מחזיר חלופות מדורגות עם ראיות. ההכרעה והאחריות המקצועית נשארות אצל המתכנן</li>
+        <li><b>וכשהמהנדס טועה?</b> המנוע לא מאפשר לו לעבור: תוואי מצויר שחוצה שטח בנוי נדחה בשניות (שקף 6), מפרט לא ריאלי מקבל דחייה מנומקת, וכל טענה נבדקת ב-18 הוכחות</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>VERSION CONTROL · 10</div>
+    <h1>"מי שינה מה, מתי, ולמה": בקרת גרסאות מלאה <span class="hit">דרישת Iroad</span></h1>
+    <p class="subtitle">החשש האמיתי מאחורי "אדם בלולאה": שינוי שנכנס בשקט. אצלנו אין שינוי שקט</p>
+    <div class="grid2">
+      <div>
+        <pre><span class="y">-- כל הרצה משאירה עקבות בגרסה</span>
+out/site_real.json     <span class="g">← נתוני האתר + תאריך שליפה</span>
+out/metrics.json       <span class="g">← כל מדידה, מספר אחר מספר</span>
+out/verify.lean        <span class="g">← ההוכחות המלאות</span>
+out/certificate.json   <span class="g">← תעודת האימות</span>
+git log  <span class="y">← מי שינה מה, מתי, באיזו גרסה</span>
+git checkout &lt;גרסה&gt;  <span class="r">← חזרה לכל גרסה, בכל רגע</span></pre>
+      </div>
+      <ul>
+        <li><b>כל נתון, מדידה, הוכחה ותעודה מנוהלים בגרסאות.</b> אפשר להשוות שתי הרצות שורה-בשורה ולראות בדיוק מה השתנה</li>
+        <li><b>חזרה לאחור היא פעולה רגילה:</b> כל גרסה של הנתונים, המפרט והתוצאות זמינה לשחזור מלא, בכל רגע</li>
+        <li><b>התעודה קושרת הכל:</b> תעודת Lean מסוימת נוצרה מנתונים בגרסה מסוימת עם מפרט מסוים. אי אפשר לערבב גרסאות בטעות</li>
+        <li><b>השינויים עצמם מתועדים:</b> כל אחד מארבעת השינויים שהצגנו היום הוא קומיט נפרד, עם הסבר והרצה מאמתת</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>LIVE DEMO · 11</div>
+    <h1>ההדגמה החיה: מה רואים על המסך</h1>
+    <div class="grid2">
+      <div><img class="shot" src="img/map_layers_annotated.png" alt="מסך ההדגמה עם סימון">
+      <p class="cap">1 קרקע חקלאית פתוחה (קנס) · 2 שטח בנוי (אסור) · 3 שמורה (אסור) · 4 תוואי מאומת. בצד ימין: מפרט דינמי ותעודת Lean</p></div>
+      <ul>
+        <li>הדגמה של קצה לקצה על נתונים אמיתיים: משליפת נתונים, חלופות מדורגות, מדידה ב-Wolfram, הוכחה ב-Lean 4, דוח עברית</li>
+        <li><b>רגע ההכחשה:</b> מעלים מהירות מתכנן ל-100 קמ"ש, Lean דוחה את כל החלופות בשניות</li>
+        <li><b>רגע האנוש:</b> מציירים תוואי משלכם על המפה, המנוע מודד ב-Wolfram ומכריע ב-Lean</li>
+        <li><b>רגע השחזור:</b> כל הרצה כזו משאירה נתונים, מדידות ותעודה בגרסה, לביקורת אחורה</li>
+        <li>ההדגמה כרגע רצה מקומית (http://localhost:8777 בהצגה); פריסה ציבורית בדרך, ראו שקף 12</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>NEXT · 12</div>
+    <h1>מה הלאה: פיילוט על קורידור אמיתי, בענן</h1>
+    <div class="grid3">
+      <div class="bignum"><div class="n">פיילוט</div><div class="l">קורידור אחד לבחירת נתיבי ישראל, מפרט ת.ח.ד ישראלי במקום הטבלאות האמריקאיות, רשימת חלקות פרטיות מהלקוח</div></div>
+      <div class="bignum v"><div class="n">ענן</div><div class="l">סקריפטי פריסה לשרת ענן (VPS) מוכנים: התקנה, שירות מתמשך ופרוקסי, כדי שההדגמה תרוץ ציבורית עם כל הפיצ׳רים הדינמיים</div></div>
+      <div class="bignum"><div class="n">שדרוג נתונים</div><div class="l">במקום OSM: CAD/GIS וסקרים של הגוף המתכנן, אותו מבנה קלט, בלי שינוי קוד</div></div>
+    </div>
+    <ul>
+      <li>הפיצ׳רים הדינמיים (סליידר מהירות, ציור תוואי, הוכחות חיות) הם חלק מהשרת: הם יעלו יחד איתו, לא גרסת תמונות</li>
+      <li>לוח זמנים מוצע: שבועיים לפריסה ולתקן ת.ח.ד, ואז פיילוט מתמשך עם המתכננים שלכם בלולאה</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>THANK YOU · 13</div>
+    <h1>ESL - Engineering Software Lab</h1>
+    <p class="subtitle">הנדסת תוכנה משובצת · אופטימיזציה ומיגרציות · SDLC מוגבר ב-AI עם ראיות לכל טענה</p>
+    <div class="grid2">
+      <div>
+        <p><b>דניאל ליזרוביץ׳</b>, CTO</p>
+        <p style="margin-top:10px">מנוע התוואי המאומת: דוגמה לגישה שלנו, כל טענה מהנדסית היא טענה מוכחת, כל שינוי עוקב, והאדם בלולאה מחזיק בהכרעה ובאחריות</p>
+        <p style="margin-top:14px"><a href="https://eswlab.com/">eswlab.com</a> · <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a> · <a href="https://eswlab.com/contact-us/">יצירת קשר</a></p>
+      </div>
+      <div class="bignum v">
+        <div class="n">הפואנטה</div>
+        <div class="l">ארבע דרישות של Iroad הפכו לאילוצים מוכחים בתוך המנוע: מקרא, קרקע חקלאית, שטח בנוי, וספר עקרונות תכנון. המפרט הוא קלט, ההוכחה היא תפוקה, והאדם מחזיק בהגה</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<button class="navbtn" id="prev" title="הקודם">&#8250;</button>
+<button class="navbtn" id="next" title="הבא">&#8249;</button>
+<div id="progress"></div>
+<div id="counter" dir="ltr"></div>
+<div id="hint">&#8592; Swipe to navigate &#8594;</div>
+
+<script>
+(function(){
+  var deck=document.getElementById("deck"),n=deck.children.length,i=0,hint=document.getElementById("hint");
+  function go(k){i=Math.max(0,Math.min(n-1,k));deck.style.transform="translateX("+(i*100)+"vw)";
+    document.getElementById("counter").textContent=(i+1)+" / "+n;
+    document.getElementById("progress").style.width=((i+1)/n*100)+"%";
+    document.getElementById("prev").disabled=(i===0);document.getElementById("next").disabled=(i===n-1);
+    if(i>0&&hint)hint.style.display="none";
+    try{history.replaceState(null,"","#"+(i+1))}catch(e){}}
+  var start=parseInt(location.hash.slice(1),10);
+  document.getElementById("prev").onclick=function(){go(i-1)};
+  document.getElementById("next").onclick=function(){go(i+1)};
+  document.addEventListener("keydown",function(e){
+    if(e.key==="ArrowLeft"||e.key===" "){go(i+1)}else if(e.key==="ArrowRight"){go(i-1)}
+    else if(e.key==="Home"){go(0)}else if(e.key==="End"){go(n-1)}});
+  var x0=null,dx=0;
+  document.addEventListener("touchstart",function(e){x0=e.touches[0].clientX;dx=0},{passive:true});
+  document.addEventListener("touchend",function(e){if(x0===null)return;dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>50){go(i+(dx<0?1:-1))}x0=null},{passive:true});
+  document.addEventListener("mousedown",function(e){x0=e.clientX});
+  document.addEventListener("mouseup",function(e){if(x0===null)return;dx=e.clientX-x0;
+    if(Math.abs(dx)>50){go(i+(dx<0?1:-1))}x0=null});
+  go(isNaN(start)?0:start-1);
+  window.addEventListener("hashchange",function(){var k=parseInt(location.hash.slice(1),10);if(!isNaN(k)&&k-1!==i)go(k-1);});
+})();
+</script>
+</body>
+</html>
