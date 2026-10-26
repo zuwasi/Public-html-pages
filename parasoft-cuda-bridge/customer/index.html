@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#080d18">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'unsafe-inline'">
+<title>Analyze CUDA in Visual Studio 2026 | Parasoft CUDA Bridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080d18;--line:#29415b;--ink:#f1f6ff;--muted:#b1c0d1;--cyan:#53ded2;--gold:#ffc857;--grad:linear-gradient(100deg,#53ded2,#5899ff 55%,#a783ff)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 85% 8%,#163255 0,transparent 42%),radial-gradient(ellipse at 3% 92%,#173442 0,transparent 38%),var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+.viewport{position:fixed;inset:0;overflow:hidden}#track{display:flex;height:100%;transition:transform .52s cubic-bezier(.2,.7,.25,1);will-change:transform}
+.slide{width:100vw;min-width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;align-items:center;padding:clamp(28px,5vw,76px) clamp(24px,7vw,112px) 78px}
+.wrap{width:min(1180px,100%);margin:auto}
+.eyebrow{font-size:clamp(10px,1vw,13px);font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+h1{font-size:clamp(38px,6.4vw,80px);line-height:1.02;letter-spacing:-.045em;font-weight:900;max-width:1000px}
+h2{font-size:clamp(27px,4vw,49px);line-height:1.08;letter-spacing:-.03em;margin-bottom:20px}
+h3{font-size:clamp(17px,1.8vw,22px);line-height:1.2;margin-bottom:9px}
+p,li{font-size:clamp(14px,1.35vw,18px);line-height:1.58;color:var(--muted)}p+p{margin-top:12px}strong{color:var(--ink)}
+.lead{font-size:clamp(17px,2vw,24px);max-width:850px;color:#d5e1ef;margin-top:20px}
+.meta{font-size:13px;color:#8fa2b9;margin-top:22px}
+.logo{display:block;width:min(330px,55vw);height:auto;background:#fff;border-radius:14px;padding:10px 15px;margin-bottom:32px}
+.accent{color:var(--cyan)}a{color:var(--cyan);text-decoration:none}a:hover{text-decoration:underline}
+.grid{display:grid;gap:16px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:linear-gradient(145deg,rgba(21,34,52,.97),rgba(14,24,38,.97));border:1px solid var(--line);border-radius:18px;padding:clamp(16px,2vw,25px);box-shadow:0 16px 42px rgba(0,0,0,.18)}
+.card p{font-size:clamp(13px,1.15vw,16px)}.card .tag{display:inline-block;color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.metric{font-size:clamp(27px,3.8vw,46px);font-weight:900;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}.metric-label{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.step{padding:15px;border:1px solid var(--line);border-radius:15px;background:rgba(18,30,46,.9);min-height:122px}
+.step b{display:grid;place-items:center;width:26px;height:26px;border-radius:9px;background:var(--grad);color:#07111d;font-size:13px;margin-bottom:12px}
+.step strong{display:block;font-size:14px;margin-bottom:5px}.step span{font-size:12px;line-height:1.42;color:var(--muted)}
+.split{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+.screen-card{background:#0c1421;border:1px solid #2d4260;border-radius:16px;padding:10px;box-shadow:0 22px 58px rgba(0,0,0,.35)}
+.screen-card img{display:block;width:100%;height:auto;max-height:57vh;object-fit:contain;border-radius:9px}
+figcaption{font-size:12px;color:#90a2ba;line-height:1.45;padding:9px 3px 1px}
+.list{display:grid;gap:11px;list-style:none}.list li{position:relative;padding-left:24px}.list li:before{content:"";position:absolute;left:1px;top:.65em;width:8px;height:8px;border-radius:3px;background:var(--cyan)}
+.callout{border-left:3px solid var(--gold);background:rgba(255,208,107,.08);padding:13px 17px;border-radius:0 12px 12px 0;color:#f3dfb6;font-size:clamp(13px,1.2vw,16px);line-height:1.5;margin-top:16px}
+.pill{display:inline-flex;border-radius:999px;padding:5px 10px;border:1px solid var(--line);background:#142239;color:#c8dcf3;font-size:11px;font-weight:800;letter-spacing:.04em}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.small{font-size:12px!important;color:#91a3b8!important}
+.nav{position:fixed;z-index:50;top:50%;transform:translateY(-50%);width:50px;height:50px;border:1px solid #4a5d78;border-radius:50%;background:rgba(12,20,33,.82);color:var(--ink);font-size:29px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s,opacity .2s}
+.nav:hover{background:#28507b}.nav.hidden{opacity:0;pointer-events:none;visibility:hidden}#prev{left:18px}#next{right:18px}
+.progress{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.08);z-index:60}#fill{height:100%;width:0;background:var(--grad);box-shadow:0 0 18px rgba(83,222,210,.38);transition:width .35s ease}
+#counter{position:fixed;right:16px;bottom:17px;z-index:61;background:rgba(8,13,24,.82);border:1px solid #30425e;border-radius:999px;padding:5px 11px;color:#adbed3;font-size:12px;font-variant-numeric:tabular-nums}
+#hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:61;color:#aab8cc;font-size:12px;letter-spacing:.04em;animation:pulse 1.7s ease-in-out infinite}#hint.gone{opacity:0;visibility:hidden}
+@keyframes pulse{50%{opacity:.38}}
+@media(max-width:820px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.flow{grid-template-columns:repeat(3,minmax(0,1fr))}.split{grid-template-columns:1fr}.slide{padding:64px 25px 72px;align-items:flex-start}.nav{width:42px;height:42px;font-size:24px}#prev{left:8px}#next{right:8px}.screen-card img{max-height:42vh}}
+@media(max-width:540px){.g2,.g3,.g4,.flow{grid-template-columns:1fr}.slide{padding:58px 20px 74px}.logo{margin-bottom:24px}.step{min-height:0}.screen-card img{max-height:36vh}.nav{top:auto;bottom:14px;transform:none}#counter{right:auto;left:50%;transform:translateX(-50%)}#hint{bottom:64px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="viewport" aria-label="Parasoft CUDA Bridge customer presentation">
+<div id="track">
+<section class="slide"><div class="wrap">
+  <img class="logo" src="../assets/esl-logo.jpeg" width="1024" height="569" alt="Engineering Software Lab">
+  <p class="eyebrow">Customer evaluation · Visual Studio 2026</p>
+  <h1>Review CUDA findings in your <span class="accent">C++test workflow</span></h1>
+  <p class="lead">Prepare a Visual Studio companion solution from a CMake CUDA project, run analysis, and review mapped findings in the IDE.</p>
+  <p class="meta">Parasoft CUDA Bridge · Engineering Software Lab Ltd. · Evaluation material</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">01 · What it does</p><h2>Connect CUDA sources to familiar C++test review surfaces</h2>
+  <div class="grid g3">
+    <article class="card"><span class="tag">Prepare</span><h3>Generate a companion solution</h3><p>For CMake projects, configure with Visual Studio 2026 and create companion projects for CUDA sources.</p></article>
+    <article class="card"><span class="tag">Analyze</span><h3>Use your installed Parasoft tools</h3><p>Run C++test on host-visible CUDA source using the project's build settings and nvcc host flags.</p></article>
+    <article class="card"><span class="tag">Review</span><h3>Stay in Visual Studio</h3><p>Mapped findings appear in the Error List and editor. An HTML report is also generated.</p></article>
+  </div>
+  <div class="callout">The Bridge is an independent ESL product. It is not a Parasoft or NVIDIA product and no endorsement is claimed.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">02 · Before you start</p><h2>Evaluation prerequisites</h2>
+  <div class="grid g2">
+    <article class="card"><h3>Toolchain</h3><ul class="list"><li>Visual Studio 2026 with C++ and CUDA Toolkit MSBuild integration.</li><li>NVIDIA CUDA Toolkit 13.x and a supported project configuration.</li><li>Parasoft C/C++test Professional 2026.1 with an active license.</li><li>CMake for CMake-folder projects.</li></ul></article>
+    <article class="card"><h3>Bridge authorization</h3><ul class="list"><li>A signed, machine-bound ESL activation token.</li><li>Stage 1 provides 30 days from first successful activation.</li><li>Stage 2 adds its own 30-day period when activated; stage 3 is permanent.</li><li>Unit tests and host coverage additionally require C/C++test Standard and GoogleTest.</li></ul></article>
+  </div>
+  <p class="small" style="margin-top:14px">The Bridge does not supply or extend Parasoft entitlements, CUDA Toolkit licensing, or Visual Studio licensing.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">03 · CMake preparation</p><h2>From CMake folder to analyzable solution</h2>
+  <div class="flow">
+    <div class="step"><b>1</b><strong>Configure</strong><span>Generate with the Visual Studio 2026 CMake generator.</span></div>
+    <div class="step"><b>2</b><strong>Read project settings</strong><span>Evaluate the generated MSBuild projects.</span></div>
+    <div class="step"><b>3</b><strong>Mirror CUDA</strong><span>Create host-visible <code>.cu.cpp</code> companions.</span></div>
+    <div class="step"><b>4</b><strong>Open solution</strong><span>Open the generated <code>*-parasoft.sln</code> in Visual Studio.</span></div>
+    <div class="step"><b>5</b><strong>Run C++test</strong><span>Select the desired configuration and review mapped results.</span></div>
+  </div>
+  <div class="callout">CMake is the preparation path. Analysis runs on the generated companion Visual Studio solution, not through a native CMake analyzer engine.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">04 · Genuine Visual Studio capture</p><h2>Generated solution with findings in the Error List</h2>
+  <div class="split">
+    <figure class="screen-card"><img src="../assets/vectoradd-visual-studio.png" width="1024" height="459" decoding="async" alt="Genuine Visual Studio capture showing vectorAdd companion solution, source editor, and five Error List findings"><figcaption>Actual Visual Studio capture supplied for the local vectorAdd evaluation. The File column shows the generated <code>.cu.cpp</code> mirror in this capture.</figcaption></figure>
+    <div><div class="pills"><span class="pill">Visual Studio</span><span class="pill">C++test results</span></div><h3 style="margin-top:16px">A familiar review surface</h3><p>Review each finding with its source location and analyzer severity. A report finding is not automatically a confirmed defect.</p><p class="small">This local Flow Analysis Standard example checked 1 file and 144 source lines and reported 5 findings (3 Very High, 2 High).</p></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">05 · CUDA guideline rules</p><h2>Use the rule pack as a focused review aid</h2>
+  <div class="grid g4">
+    <div class="card"><div class="metric">36</div><div class="metric-label">NVIDIA CUDA guideline rule identifiers</div></div>
+    <div class="card"><div class="metric">35</div><div class="metric-label">Enabled by default</div></div>
+    <div class="card"><div class="metric">1</div><div class="metric-label">Older-GPU synchronization rule is opt-in</div></div>
+    <div class="card"><div class="metric">5</div><div class="metric-label">Process directives remain guidance, not checks</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <article class="card"><h3>Examples</h3><p><code>CUDA-1_3</code> checks selected CUDA API result handling. <code>CUDA-1_4</code> checks whether a direct kernel launch is followed by an error check. Both are heuristic pattern checks.</p></article>
+    <article class="card"><h3>Interpret carefully</h3><p>Checks can miss cases or report false positives. Review source and control flow; a clean run is not proof of compliance.</p></article>
+  </div>
+  <p class="small" style="margin-top:14px">Reference: <a href="https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/cudaguideV3.0.1.pdf" target="_blank" rel="noopener">NVIDIA CUDA C++ Guidelines 3.0.1</a>.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">06 · Separate analysis layers</p><h2>Review findings under the configuration that produced them</h2>
+  <div class="grid g2">
+    <article class="card"><span class="tag">Flow Analysis Standard</span><div class="metric">5</div><p>Findings in the local vectorAdd run: 1 file, 144 lines, 3 Very High and 2 High.</p></article>
+    <article class="card"><span class="tag">CUDA Guidelines 3.0.1</span><div class="metric">8</div><p>Heuristic findings in a separate vectorAdd run, across CUDA-1_3 and CUDA-1_4.</p></article>
+  </div>
+  <div class="callout">These are separate analysis runs and must not be added as a combined defect count. Review each finding against source and build context.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">07 · Report options</p><h2>Keep both the Error List and optional HTML report</h2>
+  <div class="split">
+    <figure class="screen-card"><img src="../assets/analysis-report-prompt.png" width="751" height="607" decoding="async" alt="Genuine completion dialog showing Error List count and asking whether to open the HTML report"><figcaption>Actual Visual Studio completion dialog from a separate sample run, showing 16 entries rather than the vectorAdd count.</figcaption></figure>
+    <div><h3>Current interaction</h3><ul class="list"><li>Findings are published in Visual Studio.</li><li>The Bridge writes an HTML report and findings JSON.</li><li>The optional report prompt is part of the current workflow.</li><li>Run kinds keep their own results; the clear command removes Bridge entries.</li></ul><p class="small">Report counts vary by project, rules, configuration, and tool version.</p></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">08 · Scope and limitations</p><h2>Know what the workflow does and does not cover</h2>
+  <div class="grid g2">
+    <article class="card"><span class="tag">Analysis</span><ul class="list"><li>Host-visible CUDA code is analyzed through companion projects.</li><li>The workflow is not native CMake engine integration.</li><li>CUDA source checks are heuristic, not full semantic proof.</li></ul></article>
+    <article class="card"><span class="tag">Tests and coverage</span><ul class="list"><li>CUDA GoogleTest supports native Visual Studio projects with adjacent tests.</li><li>CMake-folder test discovery is not supported.</li><li>Host coverage does not instrument device-kernel code.</li></ul></article>
+  </div>
+  <div class="callout">CUDA guideline rules are not MISRA rules. Neither a clean scan nor a coverage percentage is certification or proof of safety compliance.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">09 · Local smoke evidence</p><h2>Validated on a specific evaluation bench</h2>
+  <div class="grid g4">
+    <div class="card"><span class="tag">Visual Studio</span><h3>2026 · 18.6.2</h3><p>Professional edition with C++ workload.</p></div>
+    <div class="card"><span class="tag">CUDA</span><h3>13.2</h3><p>RTX 5080 Laptop, compute capability 12.0.</p></div>
+    <div class="card"><span class="tag">CMake</span><h3>4.2.2</h3><p>Visual Studio 2026 generator path.</p></div>
+    <div class="card"><span class="tag">Parasoft</span><h3>2026.1.3</h3><p>Installed licensed tools required.</p></div>
+  </div>
+  <p style="margin-top:18px"><strong>Native CUDA GoogleTest smoke:</strong> 3 tests passed, 26/26 host lines covered. Device code was not instrumented.</p>
+  <p class="small">These results are specific to the tested setup and do not guarantee compatibility with other toolchain versions.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">10 · Evaluation next steps</p><h2>Start with one representative project</h2>
+  <div class="grid g3">
+    <article class="card"><span class="tag">Prepare</span><h3>Confirm prerequisites</h3><p>Verify Visual Studio, CUDA Toolkit, CMake, Parasoft licensing, and ESL activation.</p></article>
+    <article class="card"><span class="tag">Review</span><h3>Compare source and findings</h3><p>Check mappings, severity, false positives, missing cases, and setup output with the owning engineer.</p></article>
+    <article class="card"><span class="tag">Feedback</span><h3>Agree the evaluation scope</h3><p>Record project/build details, supported configurations, test needs, and acceptance criteria.</p></article>
+  </div>
+  <div class="callout">Public distribution of the extension remains subject to Microsoft SDK redistribution terms and ESL legal approval. This presentation is evaluation material, not an installation offer.</div>
+  <p class="meta">Engineering Software Lab Ltd. · <a href="mailto:sales@eswlab.com">sales@eswlab.com</a> · <a href="https://www.eswlab.com" target="_blank" rel="noopener">eswlab.com</a></p>
+</div></section>
+</div></main>
+<button class="nav hidden" id="prev" type="button" aria-label="Previous slide">‹</button>
+<button class="nav" id="next" type="button" aria-label="Next slide">›</button>
+<div id="hint">← Swipe or use arrow keys →</div>
+<div id="counter" aria-live="polite"></div><div class="progress"><div id="fill"></div></div>
+<script>
+const track=document.getElementById("track"),slides=[...document.querySelectorAll(".slide")],viewport=document.querySelector(".viewport"),prev=document.getElementById("prev"),next=document.getElementById("next"),counter=document.getElementById("counter"),fill=document.getElementById("fill"),hint=document.getElementById("hint");
+let index=0,touchX=0,touchY=0,touchOnTable=false,mouseX=0,dragging=false,mouseOnTable=false;
+function show(n){const newIndex=Math.max(0,Math.min(slides.length-1,n));if(newIndex!==index){if(slides[index].contains(document.activeElement))document.activeElement.blur();index=newIndex;slides[index].scrollTop=0;viewport.scrollLeft=0}slides.forEach((slide,i)=>{slide.inert=i!==index;slide.setAttribute("aria-hidden",i===index?"false":"true")});track.style.transform=`translate3d(${-index*100}vw,0,0)`;prev.classList.toggle("hidden",index===0);next.classList.toggle("hidden",index===slides.length-1);counter.textContent=`${index+1} / ${slides.length}`;fill.style.width=`${(index+1)/slides.length*100}%`;if(index>0)hint.classList.add("gone")}
+prev.addEventListener("click",()=>show(index-1));next.addEventListener("click",()=>show(index+1));
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();show(index+1)}else if(e.key==="ArrowLeft"){e.preventDefault();show(index-1)}});
+document.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchX=t.clientX;touchY=t.clientY;touchOnTable=Boolean(e.target.closest(".table-wrap"))},{passive:true});
+document.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-touchX,dy=t.clientY-touchY;if(!touchOnTable&&Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(index+(dx<0?1:-1))},{passive:true});
+document.addEventListener("mousedown",e=>{mouseX=e.clientX;mouseOnTable=Boolean(e.target.closest(".table-wrap"));dragging=true});
+document.addEventListener("mouseup",e=>{if(!dragging)return;dragging=false;const d=e.clientX-mouseX;if(!mouseOnTable&&Math.abs(d)>50)show(index+(d<0?1:-1))});
+show(0);
+</script>
+</body>
+</html>

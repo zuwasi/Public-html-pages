@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#080d18">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'unsafe-inline'">
+<title>Parasoft CUDA Bridge | Technical Evaluation Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080d18;--line:#283a55;--ink:#eef4ff;--muted:#aab8cc;--cyan:#53ded2;--gold:#ffc857;--red:#ff8b83;--grad:linear-gradient(100deg,#53ded2,#5899ff 55%,#a783ff)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 82% 4%,#142a48 0,transparent 42%),radial-gradient(ellipse at 8% 95%,#15293b 0,transparent 38%),var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+.viewport{position:fixed;inset:0;overflow:hidden}
+#track{display:flex;height:100%;transition:transform .52s cubic-bezier(.2,.7,.25,1);will-change:transform}
+.slide{width:100vw;min-width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;align-items:center;padding:clamp(28px,5vw,76px) clamp(24px,7vw,112px) 78px}
+.wrap{width:min(1180px,100%);margin:auto}
+.eyebrow{font-size:clamp(10px,1vw,13px);font-weight:800;letter-spacing:.17em;text-transform:uppercase;color:var(--cyan);margin-bottom:14px}
+h1{font-size:clamp(38px,6.1vw,78px);line-height:1.02;letter-spacing:-.045em;font-weight:900;max-width:1000px}
+h2{font-size:clamp(27px,4vw,49px);line-height:1.08;letter-spacing:-.03em;margin-bottom:20px}
+h3{font-size:clamp(17px,1.8vw,22px);line-height:1.2;margin-bottom:9px}
+p,li{font-size:clamp(14px,1.35vw,18px);line-height:1.58;color:var(--muted)}
+p+p{margin-top:12px}
+strong{color:var(--ink)}
+a{color:var(--cyan);text-decoration:none}
+.accent{color:var(--cyan)}
+.lead{font-size:clamp(17px,2vw,24px);max-width:860px;color:#d2deef;margin-top:20px}
+.meta{font-size:13px;color:#8799b2;margin-top:22px}
+.hero{max-width:1100px}
+.logo{display:block;width:min(340px,55vw);height:auto;background:#fff;border-radius:14px;padding:10px 15px;margin-bottom:34px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{background:linear-gradient(145deg,rgba(23,35,56,.96),rgba(14,23,38,.96));border:1px solid var(--line);border-radius:18px;padding:clamp(16px,2vw,25px);box-shadow:0 16px 42px rgba(0,0,0,.18)}
+.card p{font-size:clamp(13px,1.15vw,16px)}
+.card .tag{display:inline-block;color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.metric{font-size:clamp(28px,4vw,48px);font-weight:900;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.metric-label{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.45}
+.callout{border-left:3px solid var(--gold);background:rgba(255,200,87,.08);padding:13px 17px;border-radius:0 12px 12px 0;color:#f4ddb0;font-size:clamp(13px,1.2vw,16px);line-height:1.5;margin-top:16px}
+.callout.red{border-color:var(--red);background:rgba(255,139,131,.08);color:#ffd3d0}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.step{position:relative;padding:17px 17px 17px 54px;border:1px solid var(--line);border-radius:15px;background:rgba(17,26,42,.9);min-height:100px}
+.step b{position:absolute;left:15px;top:16px;width:26px;height:26px;border-radius:9px;background:var(--grad);color:#07111d;display:grid;place-items:center;font-size:13px}
+.step strong{display:block;font-size:15px;margin-bottom:5px}
+.step span{font-size:12.5px;line-height:1.45;color:var(--muted)}
+.screen-card{background:#0c1421;border:1px solid #2d4260;border-radius:16px;padding:10px;box-shadow:0 22px 58px rgba(0,0,0,.35)}
+.screen-card img{display:block;width:100%;height:auto;max-height:56vh;object-fit:contain;border-radius:9px}
+.evidence-stack{display:grid;gap:10px}.evidence-stack .screen-card{padding:7px}.evidence-stack img{max-height:31vh}.evidence-stack figcaption{font-size:10.5px;padding:5px 3px 1px}
+figcaption{font-size:12px;color:#90a2ba;line-height:1.45;padding:9px 3px 1px}
+.split{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
+.list{display:grid;gap:11px;list-style:none}
+.list li{position:relative;padding-left:24px}
+.list li:before{content:"";position:absolute;left:1px;top:.65em;width:8px;height:8px;border-radius:3px;background:var(--cyan);box-shadow:0 0 12px rgba(83,222,210,.35)}
+.pill{display:inline-flex;align-items:center;border-radius:999px;padding:5px 10px;border:1px solid var(--line);background:#142239;color:#c8dcf3;font-size:11px;font-weight:800;letter-spacing:.04em}
+.pill.gold{color:#ffdf9c;border-color:#6a5531;background:#2d2518}
+.pill.green{color:#8ff0c1;border-color:#286449;background:#132a22}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:rgba(17,26,42,.9)}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);font-size:clamp(12px,1.05vw,14px);line-height:1.4}
+th{color:#94a9c5;text-transform:uppercase;font-size:10px;letter-spacing:.1em;background:#142137}
+td{color:#d0dcee}
+tr:last-child td{border-bottom:0}
+.rule-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.rule{min-height:86px;padding:13px 14px;border-radius:13px;border:1px solid var(--line);background:rgba(17,26,42,.94)}
+.rule code{display:block;color:var(--cyan);font-size:11px;font-weight:800;margin-bottom:6px}
+.rule span{display:block;color:#d2deed;font-size:12px;line-height:1.42}
+.sources,.footnote{font-size:12px!important;color:#8fa3bd!important;line-height:1.6!important}
+.nav{position:fixed;z-index:50;top:50%;transform:translateY(-50%);width:50px;height:50px;border:1px solid #4a5d78;border-radius:50%;background:rgba(12,20,33,.82);color:var(--ink);font-size:29px;display:grid;place-items:center;cursor:pointer;backdrop-filter:blur(8px);transition:background .2s,opacity .2s}
+.nav:hover{background:#28507b}
+.nav.hidden{opacity:0;pointer-events:none;visibility:hidden}
+#prev{left:18px}#next{right:18px}
+.progress{position:fixed;left:0;right:0;bottom:0;height:5px;background:rgba(255,255,255,.08);z-index:60}
+#fill{height:100%;width:0;background:var(--grad);box-shadow:0 0 18px rgba(83,222,210,.38);transition:width .35s ease}
+#counter{position:fixed;right:16px;bottom:17px;z-index:61;background:rgba(8,13,24,.82);border:1px solid #30425e;border-radius:999px;padding:5px 11px;color:#adbed3;font-size:12px;font-variant-numeric:tabular-nums}
+#hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:61;color:#aab8cc;font-size:12px;letter-spacing:.04em;animation:pulse 1.7s ease-in-out infinite}
+#hint.gone{opacity:0;visibility:hidden}
+@keyframes pulse{50%{opacity:.38}}
+@media(max-width:820px){.g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.flow{grid-template-columns:repeat(2,minmax(0,1fr))}.split{grid-template-columns:1fr}.slide{padding:64px 25px 72px;align-items:flex-start}.nav{width:42px;height:42px;font-size:24px}#prev{left:8px}#next{right:8px}.rule-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.screen-card img{max-height:42vh}}
+@media(max-width:540px){.g2,.g3,.g4,.flow,.rule-grid{grid-template-columns:1fr}.slide{padding:58px 20px 74px}.logo{margin-bottom:25px}.step{min-height:0}.rule{min-height:0}.screen-card img{max-height:36vh}.evidence-stack img{max-height:23vh}.nav{top:auto;bottom:14px;transform:none}#counter{right:auto;left:50%;transform:translateX(-50%)}#hint{bottom:64px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<main class="viewport" aria-label="Parasoft CUDA Bridge technical presentation">
+<div id="track">
+<section class="slide"><div class="wrap hero">
+  <img class="logo" src="../assets/esl-logo.jpeg" width="1024" height="569" alt="Engineering Software Lab">
+  <p class="eyebrow">Technical evaluation brief · for the Parasoft C++test product team</p>
+  <h1>Bring CUDA source into a <span class="accent">reviewable C++test workflow</span></h1>
+  <p class="lead">Implementation map, CUDA rule scope, test evidence, known limits, and questions for product feedback.</p>
+  <p class="meta">Engineering Software Lab Ltd. · 26 October 2026 · Evaluation material, not a release announcement</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">01 · The integration gap</p><h2>CUDA source enters the build through a different project item</h2>
+  <div class="grid g2">
+    <article class="card"><span class="tag">C++test boundary</span><h3>Host C/C++ scope</h3><p>C/C++test Professional scopes the familiar <code>ClCompile</code> extensions: <code>.c</code>, <code>.cc</code>, <code>.cpp</code>, and <code>.cxx</code>.</p></article>
+    <article class="card"><span class="tag">CUDA boundary</span><h3><code>.cu</code> uses <code>CudaCompile</code></h3><p>The CUDA build task is not a standard C++ compile item. The Bridge creates C++-recognizable companion inputs so C++test can analyze host-visible CUDA source.</p></article>
+  </div>
+  <div class="callout">This is a compatibility workflow around the existing analyzer, not a claim that C++test has become a native CUDA semantic analyzer.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">02 · Components</p><h2>A small adapter around installed engineering tools</h2>
+  <div class="grid g3">
+    <article class="card"><span class="tag">Native CLI</span><h3>Prepare and run</h3><p><code>pcb.exe</code> is a .NET 10 NativeAOT win-x64 tool. It generates companion solutions, installs local rules, invokes analysis, maps findings, and runs supported tests.</p></article>
+    <article class="card"><span class="tag">Visual Studio extension</span><h3>Bring actions into VS</h3><p>The net472 VSIX adds Parasoft CUDA commands, activation and legal UI, rule selection, configuration management, Error List findings, and editor squiggles.</p></article>
+    <article class="card"><span class="tag">Local rule pack</span><h3>CUDA guidance checks</h3><p>Python rule scripts are generated into Parasoft RuleWizard files at build time. The source checks remain heuristic and are not a complete C++ front end.</p></article>
+  </div>
+  <p class="footnote">The VSIX bundles the native CLI and ESL rule assets. It does not include Parasoft, CUDA Toolkit, the issuer, or a token-signing private key.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">03 · CMake path</p><h2>CMake prepares a Visual Studio analysis solution</h2>
+  <div class="flow">
+    <div class="step"><b>1</b><strong>Configure</strong><span>Use the Visual Studio 2026 CMake generator and the customer's toolchain.</span></div>
+    <div class="step"><b>2</b><strong>Evaluate projects</strong><span>Read evaluated MSBuild metadata, including CUDA and C/C++ items and properties.</span></div>
+    <div class="step"><b>3</b><strong>Capture host flags</strong><span>Use <code>nvcc --dryrun</code> to collect host defines, include paths, and options.</span></div>
+    <div class="step"><b>4</b><strong>Generate companions</strong><span>Create analysis <code>.vcxproj</code> files and <code>.cu.cpp</code> source mirrors.</span></div>
+    <div class="step"><b>5</b><strong>Analyze</strong><span>Run C/C++test on the generated <code>*-parasoft.sln</code>.</span></div>
+    <div class="step"><b>6</b><strong>Map results</strong><span>Write reports and findings JSON, then publish locations against original CUDA files.</span></div>
+  </div>
+  <div class="callout">Important: this is not native CMake-engine integration. Generate the companion solution first, then analyze that solution.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">04 · Source fidelity</p><h2>Keep host-side compiler context close to nvcc</h2>
+  <div class="split">
+    <div>
+      <ul class="list">
+        <li>One companion project is produced for each CUDA project.</li>
+        <li>Each <code>.cu</code> is mirrored as <code>.cu.cpp</code>, usually as a hard link, with a copy fallback across volumes.</li>
+        <li>Definitions, include paths, forced includes, language options, and host flags come from evaluated build metadata and nvcc's dry-run.</li>
+        <li>Source maps bring findings back to the original <code>.cu</code> path and line.</li>
+        <li>The analyzer project is for analysis, not a replacement build target.</li>
+      </ul>
+    </div>
+    <article class="card"><span class="tag">Profile behavior</span><h3>Use the customer's installation</h3><p>The per-user CUDA compiler profile is adapted from the locally installed Parasoft profile. ESL does not ship Parasoft's base compiler profile or engine.</p><div class="pills"><span class="pill">nvcc host flags</span><span class="pill">source mapping</span><span class="pill">local profile</span></div></article>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">05 · CUDA Guidelines 3.0.1</p><h2>36 rule identifiers, with explicit heuristic boundaries</h2>
+  <div class="grid g4">
+    <div class="card"><div class="metric">36</div><div class="metric-label">NVIDIA rule identifiers represented</div></div>
+    <div class="card"><div class="metric">35</div><div class="metric-label">Enabled in the default profile</div></div>
+    <div class="card"><div class="metric">1</div><div class="metric-label"><code>CUDA-2_4</code> is opt-in for compute capability 6.0 and below</div></div>
+    <div class="card"><div class="metric">5</div><div class="metric-label">Process directives are guidance, not automated checks</div></div>
+  </div>
+  <div class="callout">The checks are source-pattern heuristics. They can report false positives or miss cases. A clean report is not proof of CUDA guideline compliance.</div>
+  <p class="sources">Reference: <a href="https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/cudaguideV3.0.1.pdf" target="_blank" rel="noopener">NVIDIA CUDA C++ Guidelines for Robust and Safety Critical Programming, v3.0.1</a>.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">06 · Real Visual Studio evidence</p><h2>One run in the generated companion solution</h2>
+  <div class="split">
+    <div class="evidence-stack">
+      <figure class="screen-card"><img src="../assets/vectoradd-visual-studio.png" width="1024" height="459" decoding="async" alt="User-provided Visual Studio capture showing the generated vectorAdd companion solution and five findings in the Error List"><figcaption>Genuine local Visual Studio capture of the generated vectorAdd companion solution.</figcaption></figure>
+      <figure class="screen-card"><img src="../assets/vectoradd-error-list.png" width="1024" height="227" decoding="async" alt="Close view of the five vectorAdd Flow Analysis findings"><figcaption>Detail view of the same Flow Analysis Standard run.</figcaption></figure>
+    </div>
+    <div>
+      <div class="pills"><span class="pill">Flow Analysis Standard</span><span class="pill gold">Local demo</span></div>
+      <h3 style="margin-top:16px">vectorAdd run</h3>
+      <p><strong>1 of 1 file</strong>, 144 source lines, 5 findings: 3 Very High and 2 High.</p>
+      <p>These are analyzer findings to review, not confirmed defects. The screenshot's File column shows the generated <code>.cu.cpp</code> mirror, so it does not prove original-path presentation.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">07 · CUDA rule findings</p><h2>Heuristic findings in a native Visual Studio capture</h2>
+  <div class="split">
+    <figure class="screen-card"><img src="../assets/native-cuda-parasoft.png" width="1024" height="609" decoding="async" alt="User-provided Visual Studio capture of native CUDA companion projects with CUDA guideline warnings"><figcaption>Genuine native CUDA project capture. It shows 16 CUDA heuristic warning entries and one active E0029 entry in the Build + IntelliSense list.</figcaption></figure>
+    <div><h3>Separate run, separate counts</h3><p>This native-project capture is not the CMake vectorAdd run above. Its 16 warning entries are shown as heuristic CUDA findings.</p><p>The active E0029 entry is a separate IDE diagnostic. This screenshot is not evidence of a clean build.</p><div class="callout">Do not combine the screenshot's warning count with the separate vectorAdd CLI smoke count.</div></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">08 · Rule-pack QA</p><h2>Representative rule validation, not a compliance score</h2>
+  <div class="grid g4">
+    <div class="card"><div class="metric">35</div><div class="metric-label">Selected Windows-enabled rules</div></div>
+    <div class="card"><div class="metric">33</div><div class="metric-label">Windows targets in the sample run</div></div>
+    <div class="card"><div class="metric">34</div><div class="metric-label">CUDA mirror files exercised</div></div>
+    <div class="card"><div class="metric">10,587</div><div class="metric-label">Source lines in that QA sample</div></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <article class="card"><h3>Observed analyzer workload</h3><p>6,008 StdViol records and zero failed targets in the selected sample. Two Linux-only targets were 0/0 and are not included in the Windows target count.</p></article>
+    <article class="card"><h3>Interpretation</h3><p>Violation records are not unique confirmed defects. This sample measures rule execution and output handling, not correctness, completeness, or safety compliance.</p></article>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">09 · Historical stress runs</p><h2>Keep each repository's scope beside its counts</h2>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Project</th><th>StdViol</th><th>FlowViol</th><th>Files</th><th>Lines</th></tr></thead>
+    <tbody>
+      <tr><td>llama.cpp</td><td>40,919</td><td>559</td><td>702 / 702</td><td>376,144</td></tr>
+      <tr><td>nvbench</td><td>3,040</td><td>40</td><td>45 / 45</td><td>18,351</td></tr>
+      <tr><td>MatX</td><td>888</td><td>None recorded</td><td>26 / 28</td><td>6,289 / 6,427</td></tr>
+      <tr><td>CUTLASS</td><td>12,182</td><td>68</td><td>410 / 416</td><td>65,829 / 68,202</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout">Historical runs are incomplete and not directly comparable. MatX missed 2 translation units; CUTLASS missed 6, skipped 13 MSBuild-unevaluable projects, and had CCCL preprocessing failures. Do not sum these results or infer full coverage.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">10 · CUDA GoogleTest</p><h2>Native Visual Studio projects can run CUDA tests with host coverage</h2>
+  <div class="flow">
+    <div class="step"><b>1</b><strong>Discover tests</strong><span>Adjacent <code>tests\*.cu</code> and <code>*.cpp</code> for native <code>.sln</code>/<code>.vcxproj</code> projects.</span></div>
+    <div class="step"><b>2</b><strong>Build host units</strong><span>Split CUDA translation units, instrument host code, then link with nvcc.</span></div>
+    <div class="step"><b>3</b><strong>Run and import</strong><span>Run GoogleTest and import test XML and coverage using C/C++test Standard.</span></div>
+  </div>
+  <div class="grid g3" style="margin-top:17px">
+    <div class="card"><div class="metric">3 / 3</div><div class="metric-label">Native CUDA GoogleTests passed</div></div>
+    <div class="card"><div class="metric">26 / 26</div><div class="metric-label">Host lines covered in the smoke run</div></div>
+    <div class="card"><div class="metric">0</div><div class="metric-label">Device-kernel lines instrumented</div></div>
+  </div>
+  <div class="callout">This test workflow is for native Visual Studio projects. CMake-folder test discovery is not supported. Device kernels are exercised through host calls but are not covered.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">11 · Visual Studio results</p><h2>Keep the current Error List and optional report flow</h2>
+  <div class="split">
+    <figure class="screen-card"><img src="../assets/analysis-report-prompt.png" width="751" height="607" decoding="async" alt="Genuine Visual Studio Parasoft CUDA completion dialog asking whether to open the HTML report"><figcaption>User-provided Visual Studio capture of the completion dialog. This separate sample shows 16 entries, not the vectorAdd run.</figcaption></figure>
+    <div><h3>One run, two useful views</h3><ul class="list"><li>Findings are published to the Visual Studio Error List and editor squiggles.</li><li>The run also writes <code>findings.json</code> and an HTML report.</li><li>The completion prompt lets the user open that report.</li><li>Run kinds keep their own results; the clear command removes Bridge entries.</li></ul></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">12 · Activation and authorization</p><h2>Separate the ESL token from the Parasoft entitlement</h2>
+  <div class="grid g3">
+    <article class="card"><span class="tag">Stage 1</span><div class="metric">30 days</div><p class="metric-label">Starts at first successful activation, not at token issuance.</p></article>
+    <article class="card"><span class="tag">Stage 2</span><div class="metric">+30 days</div><p class="metric-label">Its own period begins when the later stage is activated.</p></article>
+    <article class="card"><span class="tag">Stage 3</span><div class="metric">Permanent</div><p class="metric-label">No time limit. This does not promise perpetual support.</p></article>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <article class="card"><h3>ESL activation controls</h3><p>ECDSA P-256 signed tokens, machine binding, versioned DPAPI-protected local state, stage/replay checks, grace handling, and rollback detection.</p></article>
+    <article class="card"><h3>Parasoft checks are separate</h3><p>Protected operations validate a genuine Parasoft-signed <code>cpptestcli</code> and run a checked-source analysis probe. An ESL token cannot grant Parasoft features.</p></article>
+  </div>
+  <div class="callout red">Local controls provide tamper resistance, not unbreakable protection. A local administrator can bypass or remove local state; no server-backed revocation is claimed.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">13 · Feedback requested</p><h2>Questions for the C++test product team</h2>
+  <div class="grid g2">
+    <article class="card"><span class="tag">Integration</span><h3>What is the supported long-term seam?</h3><p>Is a generated Visual Studio companion solution the right approach, or is there a preferred C++test extension point for CUDA host analysis?</p></article>
+    <article class="card"><span class="tag">Profiles and rules</span><h3>Can Parasoft review the adaptation?</h3><p>We request feedback on the local compiler-profile patch, RuleWizard generation, and compatibility boundaries.</p></article>
+    <article class="card"><span class="tag">Test and coverage</span><h3>How should host-only coverage be presented?</h3><p>What reporting or UI conventions best distinguish host coverage from non-instrumented device kernels?</p></article>
+    <article class="card"><span class="tag">Evaluation</span><h3>Which acceptance criteria matter most?</h3><p>Rule accuracy, setup friction, result navigation, compatibility, and supported configurations are open review topics.</p></article>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">14 · Boundaries and release gate</p><h2>What this evidence does not establish</h2>
+  <ul class="list">
+    <li>It does not prove complete C++ or GPU semantic analysis, full repository coverage, or compliance with CUDA guidance.</li>
+    <li>It does not convert CUDA guideline heuristics into MISRA checks. They are separate analysis layers.</li>
+    <li>It does not show CMake-native analysis or CMake-folder GoogleTest coverage.</li>
+    <li>It does not include device-kernel coverage or guarantee findings are true defects.</li>
+    <li>It does not establish Parasoft approval of the profile patch or rule generation.</li>
+  </ul>
+  <div class="callout red"><strong>Distribution gate:</strong> Microsoft Visual Studio Extensibility SDK redistribution authority is unresolved. ESL legal wording is a review copy, not counsel-approved. Do not treat this deck or a successful build as shipment clearance.</div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">Appendix · CUDA rule catalog · 1 of 4</p><h2>CUDA Guidelines rule titles</h2>
+  <div class="rule-grid">
+    <div class="rule"><code>CUDA-1_1</code><span>Keep device-dependent operations inside program lifetime</span></div>
+    <div class="rule"><code>CUDA-1_2</code><span>Synchronize outstanding device work before termination</span></div>
+    <div class="rule"><code>CUDA-1_3</code><span>Inspect CUDA interface error results</span></div>
+    <div class="rule"><code>CUDA-1_4</code><span>Check launch errors before another CUDA operation</span></div>
+    <div class="rule"><code>CUDA-1_5</code><span>Do not manufacture CUdevice handles from integers</span></div>
+    <div class="rule"><code>CUDA-1_6</code><span>Follow fork with exec before using CUDA</span></div>
+    <div class="rule"><code>CUDA-1_7</code><span>Keep execution specifiers consistent</span></div>
+    <div class="rule"><code>CUDA-1_8</code><span>Pass trivial kernel arguments by value</span></div>
+    <div class="rule"><code>CUDA-1_9</code><span>Use managed storage for host kernel reference arguments</span></div>
+  </div>
+  <p class="footnote">Titles follow the generated catalog. All checks are heuristic; consult the catalog for each boundary. CUDA-2_4 is opt-in for compute capability 6.0 and below.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">Appendix · CUDA rule catalog · 2 of 4</p><h2>CUDA Guidelines rule titles</h2>
+  <div class="rule-grid">
+    <div class="rule"><code>CUDA-1_10</code><span>Do not guard declarations with CUDA architecture macros</span></div>
+    <div class="rule"><code>CUDA-1_11</code><span>Do not redefine CUDA implementation macros</span></div>
+    <div class="rule"><code>CUDA-1_12</code><span>Do not write constant memory from device code</span></div>
+    <div class="rule"><code>CUDA-1_13</code><span>Do not use thread_local in device code</span></div>
+    <div class="rule"><code>CUDA-1_14</code><span>Keep block synchronization uniform</span></div>
+    <div class="rule"><code>CUDA-2_1</code><span>Only include participating lanes in warp collectives</span></div>
+    <div class="rule"><code>CUDA-2_2</code><span>Use valid power-of-two shuffle widths</span></div>
+    <div class="rule"><code>CUDA-2_3</code><span>Include calling and source lanes in warp masks</span></div>
+    <div class="rule"><code>CUDA-2_4</code><span>Converge warp synchronization on older GPUs (opt-in)</span></div>
+  </div>
+  <p class="footnote">Titles follow the generated catalog. All checks are heuristic; consult the catalog for each boundary. CUDA-2_4 is opt-in for compute capability 6.0 and below.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">Appendix · CUDA rule catalog · 3 of 4</p><h2>CUDA Guidelines rule titles</h2>
+  <div class="rule-grid">
+    <div class="rule"><code>CUDA-3_1</code><span>Call functions in their declared execution spaces</span></div>
+    <div class="rule"><code>CUDA-3_2</code><span>Keep function pointers in their originating execution space</span></div>
+    <div class="rule"><code>CUDA-3_3</code><span>Access objects only in accessible execution spaces</span></div>
+    <div class="rule"><code>CUDA-3_4</code><span>Use at most one dynamic shared array per kernel</span></div>
+    <div class="rule"><code>CUDA-3_5</code><span>Do not alias restricted function arguments</span></div>
+    <div class="rule"><code>CUDA-4_1</code><span>Configure every kernel call</span></div>
+    <div class="rule"><code>CUDA-4_2</code><span>Only configure kernel functions</span></div>
+    <div class="rule"><code>CUDA-4_3</code><span>Do not pass polymorphic kernel arguments by value</span></div>
+    <div class="rule"><code>CUDA-4_4</code><span>Keep kernel launch bounds consistent</span></div>
+  </div>
+  <p class="footnote">Titles follow the generated catalog. All checks are heuristic; consult the catalog for each boundary. CUDA-2_4 is opt-in for compute capability 6.0 and below.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">Appendix · CUDA rule catalog · 4 of 4</p><h2>CUDA Guidelines rule titles</h2>
+  <div class="rule-grid">
+    <div class="rule"><code>CUDA-S1_1</code><span>Do not register CUDA callbacks</span></div>
+    <div class="rule"><code>CUDA-S1_2</code><span>Do not use device assembly</span></div>
+    <div class="rule"><code>CUDA-S1_3</code><span>Do not use device RTTI operators</span></div>
+    <div class="rule"><code>CUDA-S1_4</code><span>Do not use long double in device code</span></div>
+    <div class="rule"><code>CUDA-S1_5</code><span>Restrict uses of const host variables in device code</span></div>
+    <div class="rule"><code>CUDA-S1_6</code><span>Restrict uses of constexpr host variables in device code</span></div>
+    <div class="rule"><code>CUDA-S2_1</code><span>Avoid unsafe deduced execution-space member pointers</span></div>
+    <div class="rule"><code>CUDA-S3_1</code><span>Do not launch kernels while evaluating launch configuration</span></div>
+    <div class="rule"><code>CUDA-S3_2</code><span>Do not launch kernels from device code</span></div>
+  </div>
+  <p class="footnote">Titles follow the generated catalog. All checks are heuristic; consult the catalog for each boundary. CUDA-2_4 is opt-in for compute capability 6.0 and below.</p>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">19 · Sources and evidence</p><h2>Traceable claims, bounded conclusions</h2>
+  <div class="grid g2">
+    <article class="card"><h3>Primary reference</h3><p><a href="https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/cudaguideV3.0.1.pdf" target="_blank" rel="noopener">NVIDIA CUDA C++ Guidelines 3.0.1</a><br>36 rules and 5 process directives.</p></article>
+    <article class="card"><h3>Local engineering evidence</h3><p>CMake-prepared vectorAdd companion-solution analysis and native CUDA GoogleTest smoke runs, 26 October 2026. Test logs and reports are local evaluation artifacts.</p></article>
+  </div>
+  <p class="footnote" style="margin-top:16px">Validation environment: Visual Studio 2026 18.6.2, CUDA 13.2, CMake 4.2.2, Parasoft C/C++test 2026.1.3, RTX 5080 Laptop (sm_120). Results are specific to this setup.</p>
+  <p class="meta">Engineering Software Lab Ltd. · <a href="mailto:sales@eswlab.com">sales@eswlab.com</a> · <a href="https://www.eswlab.com" target="_blank" rel="noopener">eswlab.com</a></p>
+</div></section>
+</div></main>
+
+<button class="nav hidden" id="prev" type="button" aria-label="Previous slide">‹</button>
+<button class="nav" id="next" type="button" aria-label="Next slide">›</button>
+<div id="hint">← Swipe or use arrow keys →</div>
+<div id="counter" aria-live="polite"></div><div class="progress"><div id="fill"></div></div>
+<script>
+const track=document.getElementById("track");
+const slides=[...document.querySelectorAll(".slide")],viewport=document.querySelector(".viewport"),prev=document.getElementById("prev"),next=document.getElementById("next"),counter=document.getElementById("counter"),fill=document.getElementById("fill"),hint=document.getElementById("hint");
+let index=0,touchX=0,touchY=0,touchOnTable=false,mouseX=0,dragging=false,mouseOnTable=false;
+function show(n){const newIndex=Math.max(0,Math.min(slides.length-1,n));if(newIndex!==index){if(slides[index].contains(document.activeElement))document.activeElement.blur();index=newIndex;slides[index].scrollTop=0;viewport.scrollLeft=0}slides.forEach((slide,i)=>{slide.inert=i!==index;slide.setAttribute("aria-hidden",i===index?"false":"true")});track.style.transform=`translate3d(${-index*100}vw,0,0)`;prev.classList.toggle("hidden",index===0);next.classList.toggle("hidden",index===slides.length-1);counter.textContent=`${index+1} / ${slides.length}`;fill.style.width=`${(index+1)/slides.length*100}%`;if(index>0)hint.classList.add("gone")}
+prev.addEventListener("click",()=>show(index-1));next.addEventListener("click",()=>show(index+1));
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key===" "){e.preventDefault();show(index+1)}else if(e.key==="ArrowLeft"){e.preventDefault();show(index-1)}});
+document.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchX=t.clientX;touchY=t.clientY;touchOnTable=Boolean(e.target.closest(".table-wrap"))},{passive:true});
+document.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-touchX,dy=t.clientY-touchY;if(!touchOnTable&&Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(index+(dx<0?1:-1))},{passive:true});
+document.addEventListener("mousedown",e=>{mouseX=e.clientX;mouseOnTable=Boolean(e.target.closest(".table-wrap"));dragging=true});
+document.addEventListener("mouseup",e=>{if(!dragging)return;dragging=false;const d=e.clientX-mouseX;if(!mouseOnTable&&Math.abs(d)>50)show(index+(d<0?1:-1))});
+show(0);
+</script>
+</body>
+</html>
