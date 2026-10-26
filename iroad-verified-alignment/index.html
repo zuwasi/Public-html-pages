@@ -58,6 +58,14 @@ tbody tr:nth-child(even){background:#eef0f5}
 .hit{display:inline-block;background:#e8f0fb;color:var(--blue-text);border:2px solid var(--blue);font-weight:700;font-size:clamp(12px,1.05vw,15px);padding:4px 12px;border-radius:999px;margin:2px 0}
 .foot{font-size:clamp(12px,1.05vw,15px);color:var(--muted);margin-top:auto;padding-top:18px}
 pre{background:var(--code-bg);color:var(--on-dark);border-radius:12px;padding:18px 20px;font-family:"Cascadia Mono",monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.6;overflow-x:auto}
+.beforeafter{display:flex;gap:14px;align-items:center;margin-top:12px;background:var(--sheet2);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.beforeafter img{height:104px;border-radius:8px;border:1px solid var(--line);flex:none}
+.beforeafter p{font-size:clamp(11px,1vw,15px);color:var(--muted);line-height:1.45}
+.vctimeline{display:flex;gap:12px;align-items:stretch;margin:10px 0 12px}
+.vcsnap{flex:1;background:var(--sheet2);border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;font-size:clamp(11px,.95vw,14px);line-height:1.4}
+.vcsnap .vcd{font-weight:800;color:var(--blue-text);margin-bottom:2px}
+.vcsnap.now{border-color:var(--amber);background:#fff7e6}
+.vcback{flex:none;align-self:center;color:var(--bad);font-weight:800;font-size:clamp(11px,.95vw,14px);max-width:180px;text-align:center}
 pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
 .navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:#f7f8faf0;color:var(--ink);font-size:26px;cursor:pointer;box-shadow:0 2px 10px rgba(20,30,50,.12)}
 #next{left:18px} #prev{right:18px}
@@ -97,7 +105,7 @@ pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
       <div class="bignum"><div class="n">100%</div><div class="l">נתונים ציבוריים: Copernicus GLO-30 · OpenStreetMap · GovMap</div></div>
     </div>
     <p style="margin-top:22px">דניאל ליזרוביץ׳, CTO · ESL - Engineering Software Lab · הנדסת תוכנה משובצת, עם ראיות לכל טענה</p>
-    <p class="foot">כל צילום המסך במצגת הוא מהרצה אמיתית על קורידור עפולה – כפר תבור בעמק יזרעאל (25.10.2026), לא תרחיש מתוכנת מראש.</p>
+    <p class="foot">כל צילום המסך במצגת הוא מהרצה אמיתית על ציר עפולה – כפר תבור בעמק יזרעאל (25.10.2026), לא תרחיש מתוכנת מראש.</p>
   </div>
 </section>
 
@@ -116,6 +124,10 @@ pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
         <tr><td>לתכנן לפי ספר עקרונות מקצועי<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></td><td>קריטריוני התכנון נגזרים אוטומטית ממהירות מתכנן לפי ה-PDDM של FHWA וה-Green Book של AASHTO</td><td>שקפים 7–8</td></tr>
       </tbody>
     </table></div>
+    <div class="beforeafter">
+      <img src="img/first_presentation_title.png" alt="שקף הפתיחה של המצגת הראשונה">
+      <p><b>איפה זה התחיל:</b> שקף הפתיחה של המצגת הראשונה שהצגנו ל-Iroad. אז היו אלה הצהרות על מסך כהה: "כל אילוץ אסורה בהוכחה פורמלית", "לוגיקה אופטימלית", "ראיות פורמליות מתוכנת". היום כל אחת מההצהרות האלה הפכה לאילוץ מוכח בתוך המנוע (שקפים 4-7), וההדגמה החיה על נתונים אמיתיים בשקף 11 מוכיחה אותן מולכם, בזמן הפגישה</p>
+    </div>
     <p class="foot">בנוסף: אדם בלולאה בכל נקודת החלטה (שקף 9) ובקרת גרסאות מלאה (שקף 10) – שתי הדרישות העקיפות שעמדו מאחורי כל השאר.</p>
   </div>
 </section>
@@ -165,12 +177,12 @@ pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
     <div class="eyebrow"><span class="mark"></span>דרישה 2 · 05</div>
     <h1>קרקע חקלאית<br><span class="iroad">נוסף בעקבות דרישת Iroad</span></h1>
     <div class="grid2">
-      <div><img class="shot" src="img/map_layers_annotated.png" alt="שכבות המפה עם סימון"><p class="cap">שכבות האילוץ על קורידור עפולה – כפר תבור: 1 קרקע חקלאית פתוחה, 2 שטח בנוי, 3 שמורה, 4 תוואי מאומת</p></div>
+      <div><img class="shot" src="img/map_layers_annotated.png" alt="שכבות המפה עם סימון"><p class="cap">שכבות האילוץ על ציר עפולה – כפר תבור: 1 קרקע חקלאית פתוחה, 2 שטח בנוי, 3 שמורה, 4 תוואי מאומת</p></div>
       <div>
         <ul>
-          <li><b>ההתפתחות של הדרישה:</b> תחילה "אסור לגעת בקרקע חקלאית בכלל". בדיקה על הקורידור האמיתי הראתה שזה לא אפשרי: עמק יזרעאל הוא רצף חקלאי, ואין תוואי בכלל בלי לעבור על קרקע חקלאית</li>
+          <li><b>ההתפתחות של הדרישה:</b> תחילה "אסור לגעת בקרקע חקלאית בכלל". בדיקה על הציר האמיתי הראתה שזה לא אפשרי: עמק יזרעאל הוא רצף חקלאי, ואין תוואי בכלל בלי לעבור על קרקע חקלאית</li>
           <li><b>ההגדרה המעודכנת שאושרה:</b> קרקע חקלאית <b>פרטית אסורה</b> (אפס נקודות, בלי יוצא מן הכלל), קרקע חקלאית <b>פתוחה מותרת בקנס עלות</b> שהמנוע עוקף כשיש אלטרנטיבה</li>
-          <li><b>שקיפות מלאה:</b> ב-OSM של הקורידור אף חלקה אינה מסומנת כפרטית (0 מתוך 113), וה-WFS הפתוח של GovMap אינו חושף שדה בעלות. זה כתוב בדוח המנוע עצמו, לא בהערת שוליים</li>
+          <li><b>שקיפות מלאה:</b> ב-OSM של הציר אף חלקה אינה מסומנת כפרטית (0 מתוך 113), וה-WFS הפתוח של GovMap אינו חושף שדה בעלות. זה כתוב בדוח המנוע עצמו, לא בהערת שוליים</li>
           <li><b>כשרשימת חלקות פרטיות תגיע מהלקוח,</b> היא נכנסת לאותה הוכחה כשכבה נוספת, בלי שינוי קוד</li>
         </ul>
       </div>
@@ -187,7 +199,7 @@ pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
     <div class="grid2">
       <div>
         <img class="shot" src="img/drawn_reject_annotated.png" alt="תוואי מצויר שנדחה">
-        <p class="cap">1 המהנדס צייר בכוונה תוואי שחוצה שטח בנוי · 2 המנוע דחה: 140 נקודות בשטח בנוי, Lean מסרב להוכיח</p>
+        <p class="cap">1 המהנדס צייר בכוונה תוואי שחוצה שטח בנוי · 2 המנוע דחה: 121 נקודות בשטח בנוי, Lean מסרב להוכיח</p>
       </div>
       <ul>
         <li>שטח בנוי הוא <b>שכבת איסור מלאה</b>: קירור האזור העלותיי עם הרחבה, כך שגם עקיפה צמודה נבדקת</li>
@@ -235,8 +247,8 @@ R_min = V² / (127 · (e_max + f))
     <div class="grid2">
       <div>
         <ul>
-          <li><b>עקומות אנכיות:</b> התצליר היה קו שבור שעוקב אחרי הקרקע. חשיפת עצירה על פסגות חדות הייתה 30 מ׳ בלבד. הוספנו עיגול גיאומטרי באורך גל תכנון של 250 מ׳ שמכפוף את העקמתיות בפסגות בדיוק כמו עקומת פסגה בתקן, והחשיפה קפצה ל-166–172 מ׳</li>
-          <li><b>מדידת חשיפה (SSD):</b> נערכת נקודה אחר נקודה מעל התצליר המתוכנן, עין בגובה 1.08 מ׳ ומטרה בגובה 0.6 מ׳, מה שהתקן דורש</li>
+          <li><b>עקומות אנכיות:</b> הפרופיל האורכי היה קו שבור שעוקב אחרי הקרקע. חשיפת עצירה על פסגות חדות הייתה 30 מ׳ בלבד. הוספנו עיגול גיאומטרי באורך גל תכנון של 250 מ׳ שמכפוף את העקמתיות בפסגות בדיוק כמו עקומת פסגה בתקן, והחשיפה קפצה ל-166–172 מ׳</li>
+          <li><b>מדידת חשיפה (SSD):</b> נערכת נקודה אחר נקודה מעל הפרופיל האורכי המתוכנן, עין בגובה 1.08 מ׳ ומטרה בגובה 0.6 מ׳, מה שהתקן דורש</li>
           <li><b>18 הוכחות Lean 4</b> (6 אילוצים × 3 חלופות) במקום 15: שיפוע, רדיוס, חשיפה, התרחקות מנחל, קרקע חקלאית פרטית, שטח בנוי</li>
         </ul>
       </div>
@@ -260,7 +272,7 @@ R_min = V² / (127 · (e_max + f))
       <div><img class="shot" src="img/human_loop_annotated.png" alt="נקודות אדם בלולאה בהדגמה">
       <p class="cap">1 קביעת המפרט · 2 בחירת חלופה ובדיקת מדדים · 3 ציור תוואי חלופי · 4 אישור תעודת Lean</p></div>
       <ul>
-        <li><b>המנוע מציע, המהנדס מחליט:</b> הוא קובע את הקורידור והמפרט, בוחר בין חלופות מדורגות, מצייר תוואי משלו כדי לאתגר את המנוע, ומאשר את תעודת האימות לפני שכל מספר משמש להחלטה</li>
+        <li><b>המנוע מציע, המהנדס מחליט:</b> הוא קובע את הציר והמפרט, בוחר בין חלופות מדורגות, מצייר תוואי משלו כדי לאתגר את המנוע, ומאשר את תעודת האימות לפני שכל מספר משמש להחלטה</li>
         <li><b>שום תוצאה לא עוקפת אדם:</b> המנוע לא חותם תוואי, הוא מחזיר חלופות מדורגות עם ראיות. ההכרעה והאחריות המקצועית נשארות אצל המתכנן</li>
         <li><b>וכשהמהנדס טועה?</b> המנוע לא מאפשר לו לעבור: תוואי מצויר שחוצה שטח בנוי נדחה בשניות (שקף 6), מפרט לא ריאלי מקבל דחייה מנומקת, וכל טענה נבדקת ב-18 הוכחות</li>
       </ul>
@@ -274,6 +286,12 @@ R_min = V² / (127 · (e_max + f))
     <div class="eyebrow"><span class="mark"></span>VERSION CONTROL · 10</div>
     <h1>"מי שינה מה, מתי, ולמה": בקרת גרסאות מלאה <span class="hit">דרישת Iroad</span></h1>
     <p class="subtitle">החשש האמיתי מאחורי "אדם בלולאה": שינוי שנכנס בשקט. אצלנו אין שינוי שקט</p>
+    <div class="vctimeline">
+      <div class="vcsnap"><div class="vcd">10.10 · הרצה ראשונה</div>נתוני הציר נשלפו, 3 חלופות דורגו ואומתו</div>
+      <div class="vcsnap"><div class="vcd">20.10 · שינוי מפרט</div>המהנדס העלה מהירות מתכנן: ההרצה נשמרה שלמה</div>
+      <div class="vcsnap now"><div class="vcd">25.10 · הרצת היום</div>תוואי חוצה שטח בנוי נדחה (121 נקודות), תעודה חתומה</div>
+      <div class="vcback">חזרה לכל תמונת מצב, בכל רגע, בלי לאבד כלום ⟲</div>
+    </div>
     <div class="grid2">
       <div>
         <pre><span class="y">-- כל הרצה משאירה עקבות בגרסה</span>
@@ -288,7 +306,7 @@ git checkout &lt;גרסה&gt;  <span class="r">← חזרה לכל גרסה, ב�
         <li><b>כל נתון, מדידה, הוכחה ותעודה מנוהלים בגרסאות.</b> אפשר להשוות שתי הרצות שורה-בשורה ולראות בדיוק מה השתנה</li>
         <li><b>חזרה לאחור היא פעולה רגילה:</b> כל גרסה של הנתונים, המפרט והתוצאות זמינה לשחזור מלא, בכל רגע</li>
         <li><b>התעודה קושרת הכל:</b> תעודת Lean מסוימת נוצרה מנתונים בגרסה מסוימת עם מפרט מסוים. אי אפשר לערבב גרסאות בטעות</li>
-        <li><b>השינויים עצמם מתועדים:</b> כל אחד מארבעת השינויים שהצגנו היום הוא קומיט נפרד, עם הסבר והרצה מאמתת</li>
+        <li><b>השינויים עצמם מתועדים:</b> כל אחד מארבעת השינויים שהצגנו היום רשום כרשומה נפרדת ביומן השינויים, עם הסבר והרצה מאמתת</li>
       </ul>
     </div>
   </div>
@@ -317,9 +335,9 @@ git checkout &lt;גרסה&gt;  <span class="r">← חזרה לכל גרסה, ב�
 <section class="slide">
   <div class="inner">
     <div class="eyebrow"><span class="mark"></span>NEXT · 12</div>
-    <h1>מה הלאה: פיילוט על קורידור אמיתי, בענן</h1>
+    <h1>מה הלאה: פיילוט על ציר אמיתי, בענן</h1>
     <div class="grid3">
-      <div class="bignum"><div class="n">פיילוט</div><div class="l">קורידור אחד לבחירת נתיבי ישראל, מפרט ת.ח.ד ישראלי במקום הטבלאות האמריקאיות, רשימת חלקות פרטיות מהלקוח</div></div>
+      <div class="bignum"><div class="n">פיילוט</div><div class="l">ציר אחד לבחירת נתיבי ישראל, מפרט ת.ח.ד ישראלי במקום הטבלאות האמריקאיות, רשימת חלקות פרטיות מהלקוח</div></div>
       <div class="bignum v"><div class="n">ענן</div><div class="l">סקריפטי פריסה לשרת ענן (VPS) מוכנים: התקנה, שירות מתמשך ופרוקסי, כדי שההדגמה תרוץ ציבורית עם כל הפיצ׳רים הדינמיים</div></div>
       <div class="bignum"><div class="n">שדרוג נתונים</div><div class="l">במקום OSM: CAD/GIS וסקרים של הגוף המתכנן, אותו מבנה קלט, בלי שינוי קוד</div></div>
     </div>
@@ -333,7 +351,45 @@ git checkout &lt;גרסה&gt;  <span class="r">← חזרה לכל גרסה, ב�
 <!-- 13 -->
 <section class="slide">
   <div class="inner">
-    <div class="eyebrow"><span class="mark"></span>THANK YOU · 13</div>
+    <div class="eyebrow"><span class="mark"></span>CIVIL 3D · 13</div>
+    <h1>שילוב עם Civil 3D: המנוע מדבר את השפה של המתכנן</h1>
+    <p class="subtitle">ייצוא LandXML תקני: משטח קרקע ותוואים נכנסים כאובייקטים מקוריים, בלי תוספים</p>
+    <div class="grid2">
+      <div><img class="shot" style="max-height:40vh;object-fit:contain;background:#0d1b2e" src="img/civil3d_1_full_corridor.png" alt="תוואי מלא ב-Civil 3D">
+      <p class="cap">משטח ESL_Terrain + תוואי 16 ק״מ ב-Civil 3D 2027, אחרי Import LandXML</p></div>
+      <ul>
+        <li><b>מה מיוצא:</b> קובץ LandXML 1.2 תקני: משטח טין מה-DEM + שלושת התוואים עם פרופיל אורכי</li>
+        <li><b>איך מייבאים:</b> Insert → Import LandXML (LANDXMLIN), פחות מדקה, בלי תוספים</li>
+        <li><b>מה נכנס:</b> אובייקטים מקוריים: משטח עבודות עפר, תוואים עם תחנות ונקודות PI</li>
+        <li><b>למה חשוב:</b> התחלה חכמה ומאומתת, ישר לסביבת העבודה של המתכננים שלכם</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>CIVIL 3D · 14</div>
+    <h1>סבב אמת מלא: מתכננים ב-Civil 3D, מאומתים ב-Lean 4</h1>
+    <p class="subtitle">העריכה נשארת בידי המהנדס; האימות ממוכן, מתועד, וחוזר בתוך דקה</p>
+    <div class="grid2">
+      <div><img class="shot" style="max-height:40vh;object-fit:contain;background:#0d1b2e" src="img/civil3d_3_prospector_objects.png" alt="Prospector ב-Civil 3D עם אובייקטי המנוע">
+      <p class="cap">ESL_Terrain ו-alt1, alt2, alt3 כאובייקטים מקוריים בסייר האובייקטים</p></div>
+      <ul>
+        <li><b>שלב 1 · מתכננים:</b> המהנדס עורך או מצייר תוואי ב-Civil 3D על הקרקע שלנו</li>
+        <li><b>שלב 2 · מייצאים חזרה:</b> Export LandXML (או CSV של קו המרכז)</li>
+        <li><b>שלב 3 · מאמתים:</b> מדידה ב-Wolfram ותעודת Lean 4: ״עומד בתקן״ או ״נכשל״ עם האילוץ המפר</li>
+        <li><b>אדם בלולאה:</b> ההכרעה אצל המהנדס, שום שינוי לא נכנס בשקט, הכל מתועד בגרסאות</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <div class="inner">
+    <div class="eyebrow"><span class="mark"></span>THANK YOU · 15</div>
     <h1>ESL - Engineering Software Lab</h1>
     <p class="subtitle">הנדסת תוכנה משובצת · אופטימיזציה ומיגרציות · SDLC מוגבר ב-AI עם ראיות לכל טענה</p>
     <div class="grid2">
@@ -343,7 +399,7 @@ git checkout &lt;גרסה&gt;  <span class="r">← חזרה לכל גרסה, ב�
         <p style="margin-top:14px"><a href="https://eswlab.com/">eswlab.com</a> · <a href="https://www.linkedin.com/in/liezrowice/">linkedin.com/in/liezrowice</a> · <a href="https://eswlab.com/contact-us/">יצירת קשר</a></p>
       </div>
       <div class="bignum v">
-        <div class="n">הפואנטה</div>
+        <div class="n">בשורה התחתונה</div>
         <div class="l">ארבע דרישות של Iroad הפכו לאילוצים מוכחים בתוך המנוע: מקרא, קרקע חקלאית, שטח בנוי, וספר עקרונות תכנון. המפרט הוא קלט, ההוכחה היא תפוקה, והאדם מחזיק בהגה</div>
       </div>
     </div>
