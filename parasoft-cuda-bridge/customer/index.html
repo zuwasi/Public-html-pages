@@ -37,6 +37,7 @@ p,li{font-size:clamp(14px,1.35vw,18px);line-height:1.58;color:var(--muted)}p+p{m
 .split{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:center}
 .screen-card{background:#0c1421;border:1px solid #2d4260;border-radius:16px;padding:10px;box-shadow:0 22px 58px rgba(0,0,0,.35)}
 .screen-card img{display:block;width:100%;height:auto;max-height:57vh;object-fit:contain;border-radius:9px}
+.evidence-stack{display:grid;gap:10px}.evidence-stack .screen-card{padding:7px}.evidence-stack img{max-height:31vh}.evidence-stack figcaption{font-size:10.5px;padding:5px 3px 1px}
 figcaption{font-size:12px;color:#90a2ba;line-height:1.45;padding:9px 3px 1px}
 .list{display:grid;gap:11px;list-style:none}.list li{position:relative;padding-left:24px}.list li:before{content:"";position:absolute;left:1px;top:.65em;width:8px;height:8px;border-radius:3px;background:var(--cyan)}
 .callout{border-left:3px solid var(--gold);background:rgba(255,208,107,.08);padding:13px 17px;border-radius:0 12px 12px 0;color:#f3dfb6;font-size:clamp(13px,1.2vw,16px);line-height:1.5;margin-top:16px}
@@ -50,7 +51,7 @@ figcaption{font-size:12px;color:#90a2ba;line-height:1.45;padding:9px 3px 1px}
 #hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:61;color:#aab8cc;font-size:12px;letter-spacing:.04em;animation:pulse 1.7s ease-in-out infinite}#hint.gone{opacity:0;visibility:hidden}
 @keyframes pulse{50%{opacity:.38}}
 @media(max-width:820px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.flow{grid-template-columns:repeat(3,minmax(0,1fr))}.split{grid-template-columns:1fr}.slide{padding:64px 25px 72px;align-items:flex-start}.nav{width:42px;height:42px;font-size:24px}#prev{left:8px}#next{right:8px}.screen-card img{max-height:42vh}}
-@media(max-width:540px){.g2,.g3,.g4,.flow{grid-template-columns:1fr}.slide{padding:58px 20px 74px}.logo{margin-bottom:24px}.step{min-height:0}.screen-card img{max-height:36vh}.nav{top:auto;bottom:14px;transform:none}#counter{right:auto;left:50%;transform:translateX(-50%)}#hint{bottom:64px;font-size:10px}}
+@media(max-width:540px){.g2,.g3,.g4,.flow{grid-template-columns:1fr}.slide{padding:58px 20px 74px}.logo{margin-bottom:24px}.step{min-height:0}.screen-card img{max-height:36vh}.evidence-stack img{max-height:23vh}.nav{top:auto;bottom:14px;transform:none}#counter{right:auto;left:50%;transform:translateX(-50%)}#hint{bottom:64px;font-size:10px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
 </head>
@@ -129,15 +130,30 @@ figcaption{font-size:12px;color:#90a2ba;line-height:1.45;padding:9px 3px 1px}
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">07 · Report options</p><h2>Keep both the Error List and optional HTML report</h2>
+  <p class="eyebrow">07 · Report options</p><h2>Choose where to review the findings</h2>
   <div class="split">
-    <figure class="screen-card"><img src="../assets/analysis-report-prompt.png" width="751" height="607" decoding="async" alt="Genuine completion dialog showing Error List count and asking whether to open the HTML report"><figcaption>Actual Visual Studio completion dialog from a separate sample run, showing 16 entries rather than the vectorAdd count.</figcaption></figure>
-    <div><h3>Current interaction</h3><ul class="list"><li>Findings are published in Visual Studio.</li><li>The Bridge writes an HTML report and findings JSON.</li><li>The optional report prompt is part of the current workflow.</li><li>Run kinds keep their own results; the clear command removes Bridge entries.</li></ul><p class="small">Report counts vary by project, rules, configuration, and tool version.</p></div>
+    <div class="evidence-stack">
+      <figure class="screen-card"><img src="../assets/v080-completion-prompt.png" width="866" height="256" decoding="async" alt="Completion prompt reporting 62 findings with HTML report only, Error List only, Both and None choices"><figcaption>Completion prompt after a MISRA C++ 2023 run on the vectorAdd sample.</figcaption></figure>
+      <figure class="screen-card"><img src="../assets/v080-misra-error-list.png" width="1567" height="935" decoding="async" alt="Visual Studio Error List showing MISRA C++ 2023 findings with severity tags"><figcaption>The same findings in the Visual Studio Error List.</figcaption></figure>
+    </div>
+    <div><h3>Your choice after each run</h3><ul class="list"><li>HTML report only, Error List only, Both, or None.</li><li>Error List entries show the C/C++test severity and open the source line.</li><li>Every run also writes an HTML report and findings JSON.</li><li>The clear command removes Bridge entries from the Error List.</li></ul><p class="small">Tip: set the Error List filter to Build + IntelliSense to see Bridge findings. Counts vary by project, rules, configuration, and tool version.</p></div>
   </div>
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">08 · Scope and limitations</p><h2>Know what the workflow does and does not cover</h2>
+  <p class="eyebrow">08 · Activation</p><h2>See activation status inside Visual Studio</h2>
+  <div class="split">
+    <figure class="screen-card"><img src="../assets/v080-about.png" width="1150" height="1114" decoding="async" alt="About dialog with activation state, days left, masked fingerprint, contact links and legal notice buttons"><figcaption>About / Legal Notices shows the version, activation state, days left, and legal documents.</figcaption></figure>
+    <div class="evidence-stack">
+      <figure class="screen-card"><img src="../assets/v080-activation-status.png" width="693" height="356" decoding="async" alt="Activation and License Status dialog showing the trial stage and a valid Parasoft license"><figcaption>Activation and License Status checks both the ESL activation and your Parasoft license.</figcaption></figure>
+      <figure class="screen-card"><img src="../assets/v080-activate.png" width="1120" height="589" decoding="async" alt="Activate dialog with a field for an activation token"><figcaption>To activate, send the fingerprint to <a href="mailto:sales@eswlab.com">sales@eswlab.com</a> and paste the token you receive.</figcaption></figure>
+      <p class="small">Fingerprint and machine ID are masked in these captures.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">09 · Scope and limitations</p><h2>Know what the workflow does and does not cover</h2>
   <div class="grid g2">
     <article class="card"><span class="tag">Analysis</span><ul class="list"><li>Host-visible CUDA code is analyzed through companion projects.</li><li>The workflow is not native CMake engine integration.</li><li>CUDA source checks are heuristic, not full semantic proof.</li></ul></article>
     <article class="card"><span class="tag">Tests and coverage</span><ul class="list"><li>CUDA GoogleTest supports native Visual Studio projects with adjacent tests.</li><li>CMake-folder test discovery is not supported.</li><li>Host coverage does not instrument device-kernel code.</li></ul></article>
@@ -146,7 +162,7 @@ figcaption{font-size:12px;color:#90a2ba;line-height:1.45;padding:9px 3px 1px}
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">09 · Local smoke evidence</p><h2>Validated on a specific evaluation bench</h2>
+  <p class="eyebrow">10 · Local smoke evidence</p><h2>Validated on a specific evaluation bench</h2>
   <div class="grid g4">
     <div class="card"><span class="tag">Visual Studio</span><h3>2026 · 18.6.2</h3><p>Professional edition with C++ workload.</p></div>
     <div class="card"><span class="tag">CUDA</span><h3>13.2</h3><p>RTX 5080 Laptop, compute capability 12.0.</p></div>
@@ -158,7 +174,7 @@ figcaption{font-size:12px;color:#90a2ba;line-height:1.45;padding:9px 3px 1px}
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">10 · Evaluation next steps</p><h2>Start with one representative project</h2>
+  <p class="eyebrow">11 · Evaluation next steps</p><h2>Start with one representative project</h2>
   <div class="grid g3">
     <article class="card"><span class="tag">Prepare</span><h3>Confirm prerequisites</h3><p>Verify Visual Studio, CUDA Toolkit, CMake, Parasoft licensing, and ESL activation.</p></article>
     <article class="card"><span class="tag">Review</span><h3>Compare source and findings</h3><p>Check mappings, severity, false positives, missing cases, and setup output with the owning engineer.</p></article>

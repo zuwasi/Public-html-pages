@@ -224,10 +224,13 @@ tr:last-child td{border-bottom:0}
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">11 · Visual Studio results</p><h2>Keep the current Error List and optional report flow</h2>
+  <p class="eyebrow">11 · Visual Studio results</p><h2>Choose where each run's findings appear</h2>
   <div class="split">
-    <figure class="screen-card"><img src="../assets/analysis-report-prompt.png" width="751" height="607" decoding="async" alt="Genuine Visual Studio Parasoft CUDA completion dialog asking whether to open the HTML report"><figcaption>User-provided Visual Studio capture of the completion dialog. This separate sample shows 16 entries, not the vectorAdd run.</figcaption></figure>
-    <div><h3>One run, two useful views</h3><ul class="list"><li>Findings are published to the Visual Studio Error List and editor squiggles.</li><li>The run also writes <code>findings.json</code> and an HTML report.</li><li>The completion prompt lets the user open that report.</li><li>Run kinds keep their own results; the clear command removes Bridge entries.</li></ul></div>
+    <div class="evidence-stack">
+      <figure class="screen-card"><img src="../assets/v080-completion-prompt.png" width="866" height="256" decoding="async" alt="Bridge 0.8.0 completion prompt reporting 62 findings with HTML report only, Error List only, Both and None choices"><figcaption>Bridge 0.8.0 completion prompt in Visual Studio 2026 after a MISRA C++ 2023 run on vectorAdd.</figcaption></figure>
+      <figure class="screen-card"><img src="../assets/v080-misra-error-list.png" width="1567" height="935" decoding="async" alt="Visual Studio Error List showing MISRA C++ 2023 findings with C/C++test severity tags on vectorAdd.cu.cpp"><figcaption>The same run in the Error List (Build + IntelliSense filter), with the C/C++test severity on each finding.</figcaption></figure>
+    </div>
+    <div><div class="pills"><span class="pill">MISRA C++ 2023</span><span class="pill gold">Bridge 0.8.0</span></div><h3 style="margin-top:16px">One run, four choices</h3><ul class="list"><li>The prompt offers HTML report only, Error List only, Both, or None.</li><li>Error List entries keep the C/C++test severity, for example <code>[High]</code>, and link to the source line.</li><li>Each run also writes <code>findings.json</code> and an HTML report.</li><li>Run kinds keep their own results; the clear command removes Bridge entries.</li></ul><p class="small">This run: 1 of 1 file, 144 source lines, 62 findings across 18 rules. Findings are analyzer output to review, not confirmed defects.</p></div>
   </div>
 </div></section>
 
@@ -246,7 +249,18 @@ tr:last-child td{border-bottom:0}
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">13 · Feedback requested</p><h2>Questions for the C++test product team</h2>
+  <p class="eyebrow">13 · Activation in Visual Studio</p><h2>Activation state is visible inside the IDE</h2>
+  <div class="split">
+    <figure class="screen-card"><img src="../assets/v080-about.png" width="1150" height="1114" decoding="async" alt="Bridge 0.8.0 About dialog with activation state, days left, masked fingerprint, contact links and legal notice buttons"><figcaption>About / Legal Notices: version, activation state and days left, fingerprint, and legal documents.</figcaption></figure>
+    <div class="evidence-stack">
+      <figure class="screen-card"><img src="../assets/v080-activation-status.png" width="693" height="356" decoding="async" alt="Activation and License Status dialog showing stage 1 trial and a valid Parasoft C/C++test license"><figcaption>Activation and License Status: ESL stage and the separate Parasoft license check.</figcaption></figure>
+      <figure class="screen-card"><img src="../assets/v080-activate.png" width="1120" height="589" decoding="async" alt="Activate dialog with current activation state and a field for a PCB1 activation token"><figcaption>Activate: paste a machine-bound <code>PCB1-</code> token issued by ESL.</figcaption></figure>
+      <p class="footnote">Bridge 0.8.0 in Visual Studio 2026. Fingerprint and machine ID are masked in these captures.</p>
+    </div>
+  </div>
+</div></section>
+<section class="slide"><div class="wrap">
+  <p class="eyebrow">14 · Feedback requested</p><h2>Questions for the C++test product team</h2>
   <div class="grid g2">
     <article class="card"><span class="tag">Integration</span><h3>What is the supported long-term seam?</h3><p>Is a generated Visual Studio companion solution the right approach, or is there a preferred C++test extension point for CUDA host analysis?</p></article>
     <article class="card"><span class="tag">Profiles and rules</span><h3>Can Parasoft review the adaptation?</h3><p>We request feedback on the local compiler-profile patch, RuleWizard generation, and compatibility boundaries.</p></article>
@@ -256,7 +270,7 @@ tr:last-child td{border-bottom:0}
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">14 · Boundaries</p><h2>What this evidence does not establish</h2>
+  <p class="eyebrow">15 · Boundaries</p><h2>What this evidence does not establish</h2>
   <ul class="list">
     <li>It does not prove complete C++ or GPU semantic analysis, full repository coverage, or compliance with CUDA guidance.</li>
     <li>It does not convert CUDA guideline heuristics into MISRA checks. They are separate analysis layers.</li>
@@ -332,7 +346,7 @@ tr:last-child td{border-bottom:0}
 </div></section>
 
 <section class="slide"><div class="wrap">
-  <p class="eyebrow">19 · Sources and evidence</p><h2>Traceable claims, bounded conclusions</h2>
+  <p class="eyebrow">20 · Sources and evidence</p><h2>Traceable claims, bounded conclusions</h2>
   <div class="grid g2">
     <article class="card"><h3>Primary reference</h3><p><a href="https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/cudaguideV3.0.1.pdf" target="_blank" rel="noopener">NVIDIA CUDA C++ Guidelines 3.0.1</a><br>36 rules and 5 process directives.</p></article>
     <article class="card"><h3>Local engineering evidence</h3><p>CMake-prepared vectorAdd companion-solution analysis and native CUDA GoogleTest smoke runs, 26 October 2026. Test logs and reports are local evaluation artifacts.</p></article>
