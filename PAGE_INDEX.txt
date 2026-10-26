@@ -383,6 +383,9 @@ Last updated: 2026-10-26
 • parasoft-cpptest-obfuscation
   https://zuwasi.github.io/Public-html-pages/parasoft-cpptest-obfuscation
 
+• parasoft-cuda-bridge
+  https://zuwasi.github.io/Public-html-pages/parasoft-cuda-bridge
+
 • parasoft-ti-armclang-misra-setup
   https://zuwasi.github.io/Public-html-pages/parasoft-ti-armclang-misra-setup
 
