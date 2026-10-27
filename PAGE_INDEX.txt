@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-26
+Last updated: 2026-10-27
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -319,6 +319,9 @@ Last updated: 2026-10-26
 
 • hallusquatting-protection
   https://zuwasi.github.io/Public-html-pages/hallusquatting-protection
+
+• hardenator-vsix-skills
+  https://zuwasi.github.io/Public-html-pages/hardenator-vsix-skills
 
 • harness-is-the-product
   https://zuwasi.github.io/Public-html-pages/harness-is-the-product
