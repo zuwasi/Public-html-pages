@@ -582,6 +582,11 @@ td b{color:var(--ink)}
   var h = location.hash.match(/^#(\d+)$/);
   if (h) idx = Math.max(0, Math.min(slides - 1, parseInt(h[1], 10) - 1));
   render();
+
+  window.addEventListener('hashchange', function(){
+    var m = location.hash.match(/^#(\d+)$/);
+    if (m) go(parseInt(m[1], 10) - 1);
+  });
 })();
 </script>
 </body>
