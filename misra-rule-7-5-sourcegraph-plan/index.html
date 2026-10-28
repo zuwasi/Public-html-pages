@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Scaling MISRA C:2025 Compliance — Tooling Approval</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --bg:#0d1321; --panel:#161d2f; --panel2:#111a2e; --line:#263048;
+    --cyan:#4fc3f7; --accent:#00d9ff; --amber:#ffd54f; --green:#66bb6a; --red:#ef5350;
+    --txt:#e8ecf4; --dim:#9aa7c0; --faint:#7d8aa5;
+  }
+  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:var(--bg); color:var(--txt); overflow:hidden; height:100vh; }
+  .deck { display:flex; height:100vh; width:100vw; transition:transform .45s cubic-bezier(.4,0,.2,1); }
+  .slide { min-width:100vw; height:100vh; display:flex; flex-direction:column; justify-content:center; padding:clamp(20px,5vw,70px) clamp(24px,7vw,110px) clamp(70px,9vh,110px); overflow-y:auto; }
+  .kicker { color:var(--accent); font-weight:700; letter-spacing:2.5px; text-transform:uppercase; font-size:clamp(.65rem,1.4vw,.85rem); margin-bottom:clamp(8px,1.5vh,16px); }
+  h1 { font-size:clamp(1.7rem,4.6vw,3.3rem); font-weight:800; line-height:1.15; margin-bottom:clamp(10px,2vh,20px); }
+  h2 { font-size:clamp(1.4rem,3.6vw,2.4rem); font-weight:800; line-height:1.2; margin-bottom:clamp(12px,2.4vh,24px); }
+  .sub { color:var(--dim); font-size:clamp(.85rem,1.9vw,1.15rem); max-width:900px; }
+  .grid { display:grid; gap:clamp(10px,1.6vw,18px); margin-top:clamp(14px,3vh,28px); }
+  .g2 { grid-template-columns:repeat(2,1fr); }
+  .g3 { grid-template-columns:repeat(3,1fr); }
+  .g4 { grid-template-columns:repeat(4,1fr); }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:clamp(12px,2vw,22px); }
+  .card h3 { color:var(--cyan); font-size:clamp(.85rem,1.8vw,1.1rem); font-weight:700; margin-bottom:6px; }
+  .card p { color:var(--dim); font-size:clamp(.72rem,1.5vw,.92rem); line-height:1.5; }
+  .stat { text-align:center; padding:clamp(14px,2.2vw,26px) clamp(8px,1.4vw,14px); }
+  .stat .num { font-size:clamp(1.6rem,4.2vw,3rem); font-weight:800; color:var(--accent); }
+  .stat .lbl { color:var(--dim); font-size:clamp(.68rem,1.4vw,.9rem); margin-top:4px; }
+  pre { background:#0a0f1c; border:1px solid var(--line); border-radius:12px; padding:clamp(10px,1.8vw,20px); font-family:'Consolas','Menlo',monospace; font-size:clamp(.62rem,1.35vw,.9rem); line-height:1.55; overflow-x:auto; color:#d8e2f2; }
+  .c-key { color:var(--cyan); } .c-bad { color:var(--red); } .c-good { color:var(--green); } .c-cm { color:#5f86c9; font-style:italic; } .c-am { color:var(--amber); }
+  code.inline { background:#0a0f1c; border:1px solid var(--line); border-radius:6px; padding:1px 7px; font-family:'Consolas',monospace; font-size:.9em; color:var(--cyan); }
+  .flow { display:flex; align-items:stretch; gap:0; flex-wrap:wrap; justify-content:center; margin-top:clamp(14px,3vh,30px); }
+  .fstep { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:clamp(10px,1.6vw,18px) clamp(8px,1.2vw,14px); text-align:center; flex:1 1 0; min-width:0; position:relative; }
+  .fstep .fn { font-size:clamp(1.2rem,2.6vw,2rem); margin-bottom:4px; color:var(--accent); font-weight:800; }
+  .fstep .ft { font-weight:700; font-size:clamp(.62rem,1.3vw,.88rem); color:var(--txt); }
+  .fstep .fd { color:var(--dim); font-size:clamp(.56rem,1.1vw,.72rem); margin-top:3px; line-height:1.4; }
+  .farrow { display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:clamp(.9rem,1.8vw,1.3rem); padding:0 clamp(2px,.6vw,8px); font-weight:800; flex:0 0 auto; }
+  .tag { display:inline-block; font-size:clamp(.58rem,1.1vw,.72rem); font-weight:700; padding:3px 10px; border-radius:999px; margin-bottom:8px; }
+  .t-sg { background:#0d2f3d; color:var(--accent); border:1px solid #1e5568; }
+  .t-ps { background:#33230d; color:var(--amber); border:1px solid #5e4516; }
+  .t-ok { background:#173a22; color:var(--green); border:1px solid #2a5e38; }
+  table { width:100%; border-collapse:collapse; margin-top:clamp(10px,2vh,20px); }
+  th,td { padding:clamp(7px,1.3vw,13px) clamp(8px,1.5vw,14px); text-align:left; border-bottom:1px solid var(--line); font-size:clamp(.64rem,1.4vw,.92rem); }
+  th { color:var(--cyan); font-weight:700; }
+  td { color:var(--dim); }
+  td b { color:var(--txt); }
+  .num { font-variant-numeric:tabular-nums; }
+  .ask { background:linear-gradient(135deg,#13243a,#1a3050); border:1px solid #2f4a6e; border-radius:16px; padding:clamp(16px,3vw,32px); margin-top:clamp(12px,2.5vh,24px); }
+  .ask li { color:var(--dim); font-size:clamp(.78rem,1.7vw,1.05rem); margin:10px 0 10px 20px; line-height:1.5; }
+  .ask b { color:var(--txt); }
+  .pill-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:clamp(10px,2vh,18px); }
+  .pill { background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:6px 16px; font-size:clamp(.62rem,1.3vw,.85rem); color:var(--dim); }
+  .pill b { color:var(--accent); }
+
+  /* Navigation arrows */
+  .nav { position:fixed; top:50%; transform:translateY(-50%); width:clamp(40px,5.5vw,56px); height:clamp(40px,5.5vw,56px); border-radius:50%; border:1px solid var(--line); background:rgba(22,29,47,.85); color:var(--txt); font-size:clamp(1.1rem,2.4vw,1.6rem); cursor:pointer; z-index:10; display:flex; align-items:center; justify-content:center; transition:border-color .2s,color .2s; user-select:none; }
+  .nav:hover { border-color:var(--accent); color:var(--accent); }
+  .nav.prev { left:clamp(10px,2vw,24px); } .nav.next { right:clamp(10px,2vw,24px); }
+  .nav.hidden { opacity:0; pointer-events:none; }
+
+  /* Progress bar */
+  .progress-wrap { position:fixed; bottom:0; left:0; width:100%; height:5px; background:#1a2236; z-index:10; }
+  .progress { height:100%; width:0; background:linear-gradient(90deg,#4fc3f7,#00d9ff,#ffd54f); transition:width .4s ease; }
+
+  /* Slide counter */
+  .counter { position:fixed; bottom:clamp(12px,2.4vh,22px); right:clamp(14px,2.4vw,26px); color:var(--faint); font-size:clamp(.7rem,1.4vw,.9rem); font-weight:600; z-index:10; direction:ltr; }
+
+  /* Swipe hint */
+  .swipe-hint { position:fixed; bottom:clamp(34px,6vh,56px); left:50%; transform:translateX(-50%); color:var(--dim); font-size:clamp(.7rem,1.5vw,.95rem); animation:pulse 1.6s ease-in-out infinite; z-index:10; }
+  @keyframes pulse { 0%,100%{opacity:.45;} 50%{opacity:1;} }
+  .swipe-hint.hidden { display:none; }
+
+  .hl { color:var(--amber); font-weight:700; }
+  .goodline { color:var(--green); }
+  .badline { color:var(--red); }
+  @media (max-width:640px){ .g3,.g4{grid-template-columns:repeat(2,1fr);} .g2{grid-template-columns:1fr;} .fstep{flex:1 1 38%;} .farrow{flex:0 0 100%; justify-content:flex-start; padding-left:8%;} }
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+  <!-- 1 · TITLE -->
+  <section class="slide">
+    <div class="kicker">Tooling approval request · Engineering</div>
+    <h1>Scaling MISRA C:2025 Compliance<br><span style="color:var(--accent)">From Thousands of Violations to Zero</span></h1>
+    <p class="sub">A plan to find, fix, and prove elimination of MISRA C:2025 Rule 7.5 violations across the full codebase, using Sourcegraph Enterprise for automated search and repair, and Parasoft C/C++test as the authoritative compliance scanner.</p>
+    <div class="grid g4">
+      <div class="card stat"><div class="num">4</div><div class="lbl">Repositories</div></div>
+      <div class="card stat"><div class="num">400</div><div class="lbl">Branches</div></div>
+      <div class="card stat"><div class="num">5</div><div class="lbl">Languages</div></div>
+      <div class="card stat"><div class="num">20%</div><div class="lbl">C code, must be MISRA compliant</div></div>
+    </div>
+  </section>
+
+  <!-- 2 · THE RULE -->
+  <section class="slide">
+    <div class="kicker">The problem, concretely</div>
+    <h2>MISRA C:2025 Rule 7.5 <span style="color:var(--red)">(Mandatory)</span></h2>
+    <p class="sub">"The argument of an integer constant macro shall have an appropriate form." One coding habit, repeated everywhere, produces easily identifiable violations: negative values or suffixes placed <i>inside</i> the macro.</p>
+    <div class="grid g2">
+      <div class="card">
+        <span class="tag t-ps">NONCOMPLIANT</span>
+<pre><span class="c-cm">/* Negative or suffixed argument */</span>
+<span class="c-key">#define</span> TEMP_OFFSET   <span class="c-bad">INT32_C(-40)</span>
+<span class="c-key">#define</span> MIN_PRESSURE  <span class="c-bad">INT32_C(-100)</span>
+<span class="c-key">#define</span> MASK          <span class="c-bad">UINT32_C(0xFFUL)</span></pre>
+      </div>
+      <div class="card">
+        <span class="tag t-ok">COMPLIANT</span>
+<pre><span class="c-cm">/* Minus outside, no suffix */</span>
+<span class="c-key">#define</span> TEMP_OFFSET   <span class="c-good">(-INT32_C(40))</span>
+<span class="c-key">#define</span> MIN_PRESSURE  <span class="c-good">(-INT32_C(100))</span>
+<span class="c-key">#define</span> MASK          <span class="c-good">UINT32_C(0xFF)</span></pre>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px">Because the same pattern repeats at every <code class="inline">#define</code> and every call site, it is mechanically findable and mechanically fixable. That is exactly what tooling is for.</p>
+  </section>
+
+  <!-- 3 · WHY MANUAL DOES NOT SCALE -->
+  <section class="slide">
+    <div class="kicker">Why we are here</div>
+    <h2>Manual cleanup does not scale to this codebase</h2>
+    <div class="grid g3">
+      <div class="card"><h3>One module already shows a cluster</h3><p>Dozens of violations in a single module. Extrapolated across 4 repos and 400 branches, the count is in the thousands, and every future branch can reintroduce them.</p></div>
+      <div class="card"><h3>Hand editing is slow and risky</h3><p>Each fix is trivial, but a human applying thousands of them introduces copy-paste errors, misses occurrences in headers and call sites, and cannot keep 400 branches consistent.</p></div>
+      <div class="card"><h3>Compliance is binary</h3><p>Rule 7.5 is Mandatory. A scan with any remaining violation is a failed scan. We need a repeatable way to reach and hold zero, not a one-time cleanup.</p></div>
+    </div>
+    <div class="pill-row">
+      <div class="pill">Manual estimate: <b>weeks</b> of engineer time, high regression risk, no proof</div>
+      <div class="pill">Automated with tooling: <b>days</b>, every fix reviewed as a normal code change, proven by re-scan</div>
+    </div>
+  </section>
+
+  <!-- 4 · THE TOOLCHAIN -->
+  <section class="slide">
+    <div class="kicker">Proposed toolchain</div>
+    <h2>Two tools, two distinct jobs</h2>
+    <div class="grid g2">
+      <div class="card">
+        <span class="tag t-sg">SOURCEGRAPH ENTERPRISE</span>
+        <h3>Find and fix, everywhere</h3>
+        <p>Searches all 4 repos at once across languages. Structural search finds every Rule 7.5 pattern. Batch Changes generates one reviewed pull request per repo with all fixes applied automatically.</p>
+        <ul style="color:var(--dim);font-size:clamp(.68rem,1.4vw,.88rem);margin:10px 0 0 18px;line-height:1.7">
+          <li>Cross-repo, cross-language code search</li>
+          <li>Batch Changes: automated, reviewable pull requests</li>
+          <li>Reusable: every future MISRA rule gets the same workflow</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="tag t-ps">PARASOFT C/C++TEST</span>
+        <h3>Prove compliance, authoritatively</h3>
+        <p>The industry-standard static analysis scanner that enforces MISRA C:2025, including Rule 7.5 as Mandatory. It is the compliance evidence of record, not the repair mechanism.</p>
+        <ul style="color:var(--dim);font-size:clamp(.68rem,1.4vw,.88rem);margin:10px 0 0 18px;line-height:1.7">
+          <li>Authoritative MISRA C:2025 checking, with certified rule mapping</li>
+          <li>Gate: zero Rule 7.5 findings = compliance proven</li>
+          <li>Covers the C portion of all repos in CI or on demand</li>
+        </ul>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px">Neither tool alone is enough: Sourcegraph fixes at scale but cannot certify compliance; Parasoft certifies but does not repair thousands of occurrences.</p>
+  </section>
+
+  <!-- 5 · WORKFLOW OVERVIEW -->
+  <section class="slide">
+    <div class="kicker">The plan at a glance</div>
+    <h2>Seven steps, then a standing gate</h2>
+    <div class="flow">
+      <div class="fstep"><div class="fn">1</div><div class="ft">Search</div><div class="fd">Cross-repo queries for each violation pattern</div></div>
+      <div class="farrow">›</div>
+      <div class="fstep"><div class="fn">2</div><div class="ft">Inventory</div><div class="fd">Full count, per repo, manual-review list</div></div>
+      <div class="farrow">›</div>
+      <div class="fstep"><div class="fn">3</div><div class="ft">Batch Change</div><div class="fd">Auto-fix all mechanical cases</div></div>
+      <div class="farrow">›</div>
+      <div class="fstep"><div class="fn">4</div><div class="ft">Review</div><div class="fd">One PR per repo, normal code review</div></div>
+      <div class="farrow">›</div>
+      <div class="fstep"><div class="fn">5</div><div class="ft">Merge</div><div class="fd">Changesets reach all 400 branches via merge</div></div>
+      <div class="farrow">›</div>
+      <div class="fstep"><div class="fn">6</div><div class="ft">Re-scan</div><div class="fd">Parasoft scan, whole project</div></div>
+      <div class="farrow">›</div>
+      <div class="fstep" style="border-color:var(--green)"><div class="fn" style="color:var(--green)">✓</div><div class="ft">Zero</div><div class="fd">Rule 7.5 findings: zero, and stays zero</div></div>
+    </div>
+    <p class="sub" style="margin-top:24px">Steps 1 and 6 use the same queries: the search that found the violations is the search that proves they are gone. The scanner closes the loop.</p>
+  </section>
+
+  <!-- 6 · STEP DETAIL: SEARCH -->
+  <section class="slide">
+    <div class="kicker">Steps 1 and 2 · Sourcegraph</div>
+    <h2>Inventory every violation class with scoped queries</h2>
+    <pre>repo:^github\.com/our-org/(repoA|repoB|repoC|repoD)$
+  (U?INT(?:8|16|32|64))_C\(\s*-\s*[0-9]+\s*\)
+  patternType:regexp lang:C lang:C++ <span class="c-am">count:5000</span></pre>
+    <div class="grid g3" style="margin-top:16px">
+      <div class="card"><h3>Pattern 1</h3><p>Negative argument, decimal: <code class="inline">INT32_C(-40)</code>. Minus moves outside the macro.</p></div>
+      <div class="card"><h3>Pattern 2</h3><p>Suffix inside macro, decimal or hex: <code class="inline">UINT32_C(0xFFUL)</code>. Suffix stripped.</p></div>
+      <div class="card"><h3>Pattern 3</h3><p>Non-literal argument: <code class="inline">INT32_C(SOME_MACRO)</code>. Flagged for human decision, never auto-fixed.</p></div>
+    </div>
+    <p class="sub" style="margin-top:16px">Queries also match call sites like <code class="inline">set_trim(INT32_C(-25))</code>, not only <code class="inline">#define</code> lines. Release branches are covered with Sourcegraph revision syntax, so nothing hides on the other 399 branches.</p>
+  </section>
+
+  <!-- 7 · STEP DETAIL: FIX -->
+  <section class="slide">
+    <div class="kicker">Steps 3 and 4 · Sourcegraph Batch Changes</div>
+    <h2>Thousands of fixes, one reviewed pull request per repo</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3>What the automation applies</h3>
+        <pre><span class="c-bad">INT32_C(-40)</span>   <span class="c-cm">→</span>  <span class="c-good">(-INT32_C(40))</span>
+<span class="c-bad">INT32_C(-100)</span>  <span class="c-cm">→</span>  <span class="c-good">(-INT32_C(100))</span>
+<span class="c-bad">UINT32_C(100U)</span>  <span class="c-cm">→</span>  <span class="c-good">UINT32_C(100)</span>
+<span class="c-bad">UINT32_C(0xFFUL)</span> <span class="c-cm">→</span>  <span class="c-good">UINT32_C(0xFF)</span>
+<span class="c-bad">INT64_C(-500)</span>  <span class="c-cm">→</span>  <span class="c-good">(-INT64_C(500))</span></pre>
+      </div>
+      <div class="card">
+        <h3>What management sees</h3>
+        <p style="margin-bottom:8px">Not a black box: Batch Changes opens standard pull requests. Every change is a visible diff, reviewed by the team like any other code change, applied with the same CI checks.</p>
+        <p>Dry-run preview first, publish on approval. The changeset flows to all branches through normal merge, keeping the fix set consistent without touching 400 branches by hand.</p>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px">Value-preserving by construction: the numeric value never changes, only its form. The compiler and CI protect against anything the automation gets wrong.</p>
+  </section>
+
+  <!-- 8 · EDGE CASES -->
+  <section class="slide">
+    <div class="kicker">Safety rails</div>
+    <h2>Automation knows what <i>not</i> to touch</h2>
+    <div class="grid g2">
+      <div class="card"><h3>Signed minimum: INT32_MIN</h3><p><code class="inline">INT32_C(-2147483648)</code> cannot become <code class="inline">(-INT32_C(2147483648))</code>, because 2147483648 does not fit in a 32-bit signed type. The compliant form is <code class="inline">((-INT32_C(2147483647))-1)</code>. The automation excludes it; an expert fixes the handful of cases.</p></div>
+      <div class="card"><h3>Range checks after suffix removal</h3><p>The argument must fit the macro's type. Values that were already out of range are surfaced by the scanner as compile-time findings, which is the correct, early signal.</p></div>
+    </div>
+    <div class="grid g2" style="margin-top:0">
+      <div class="card"><h3>Human-review list, never auto-fixed</h3><p>Non-literal arguments such as <code class="inline">INT32_C(OTHER_MACRO)</code> or <code class="inline">INT32_C(2+3)</code> are collected in a short manual list. Deliberately small and expert-owned.</p></div>
+      <div class="card"><h3>Full review before merge</h3><p>The Batch Change ships as an unreviewed draft by default. Nothing merges until the team signs off, and CI must pass on every repo.</p></div>
+    </div>
+  </section>
+
+  <!-- 9 · VERIFICATION -->
+  <section class="slide">
+    <div class="kicker">Steps 6 and 7 · Closing the loop</div>
+    <h2>Zero is proven twice, then held</h2>
+    <div class="grid g2">
+      <div class="card">
+        <span class="tag t-sg">PROOF 1 · SOURCEGRAPH</span>
+        <h3>The finder becomes the auditor</h3>
+        <p>Re-running the exact queries from step 1 must return <b>zero results</b> on all repos and indexed branches. Source-level absence of the pattern, confirmed in seconds, any time.</p>
+      </div>
+      <div class="card">
+        <span class="tag t-ps">PROOF 2 · PARASOFT</span>
+        <h3>The scanner certifies it</h3>
+        <p>A full Parasoft C/C++test scan of the whole project reports <b>zero Rule 7.5 findings</b>. This is the compliance evidence of record for auditors and certification.</p>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px">After cleanup, the same search runs in CI as a guard: any new violation of the pattern is caught at the pull request that introduced it, before it spreads to branches. The scanner runs on the merged result. Zero violations become the steady state, not a one-time achievement.</p>
+  </section>
+
+  <!-- 10 · ROLLOUT -->
+  <section class="slide">
+    <div class="kicker">Execution plan</div>
+    <h2>Pilot first, then scale, then hold</h2>
+    <table>
+      <tr><th>Phase</th><th>Scope</th><th>Duration</th><th>Exit criteria</th></tr>
+      <tr><td><b>1 · Pilot</b></td><td>The module with the known violation cluster, on one repo</td><td class="num">3 to 5 days</td><td>Parasoft scan of that module: zero Rule 7.5 findings</td></tr>
+      <tr><td><b>2 · Scale</b></td><td>All 4 repos, default branches, via one Batch Change</td><td class="num">1 to 2 weeks</td><td>Inventory queries return zero; CI green everywhere</td></tr>
+      <tr><td><b>3 · Branches</b></td><td>Active release branches covered with branch-scoped queries</td><td class="num">Concurrent</td><td>Zero on indexed branches; fixes reach others by merge</td></tr>
+      <tr><td><b>4 · Hold</b></td><td>Sourcegraph guard query in CI; Parasoft scan in the pipeline</td><td class="num">Standing</td><td>New violations blocked at the PR that introduces them</td></tr>
+    </table>
+    <p class="sub" style="margin-top:16px">Total elapsed time to a proven zero on Rule 7.5: <span class="hl">under one month</span>, including the pilot. The workflow is then a template: the next MISRA rule gets the same search, fix, and proof loop.</p>
+  </section>
+
+  <!-- 11 · THE ASK -->
+  <section class="slide">
+    <div class="kicker">Decision requested</div>
+    <h2>What we are asking you to approve</h2>
+    <div class="ask">
+      <ul>
+        <li><b>Purchase Sourcegraph Enterprise:</b> cross-repo search and Batch Changes for all 4 repositories. This is the find-and-fix engine, reusable for every future coding-standard rule.</li>
+        <li><b>Purchase Parasoft C/C++test (MISRA C:2025 module):</b> the authoritative scanner that turns "we believe it is clean" into compliance evidence for certification.</li>
+        <li><b>Endorse the 4-phase plan:</b> pilot on the known module, automated cleanup across the codebase, branch coverage, then a permanent zero-violation gate in CI.</li>
+      </ul>
+    </div>
+    <div class="grid g3" style="margin-top:18px">
+      <div class="card stat"><div class="num">&lt;1 mo</div><div class="lbl">To proven zero on Rule 7.5</div></div>
+      <div class="card stat"><div class="num">100%</div><div class="lbl">Fixes reviewed as normal code changes</div></div>
+      <div class="card stat"><div class="num">∞</div><div class="lbl">Future rules reuse the same workflow</div></div>
+    </div>
+    <p class="sub" style="margin-top:16px">The alternative is weeks of manual editing with no proof, repeated every time the standard or the code changes. Tooling makes compliance a property of the process, not of heroics.</p>
+  </section>
+
+</div>
+
+<button class="nav prev hidden" id="prevBtn" aria-label="Previous slide">‹</button>
+<button class="nav next" id="nextBtn" aria-label="Next slide">›</button>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="counter" id="counter">1 / 11</div>
+<div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
+
+<script>
+(function(){
+  var deck = document.getElementById('deck');
+  var total = document.querySelectorAll('.slide').length;
+  var idx = 0;
+  var prevBtn = document.getElementById('prevBtn');
+  var nextBtn = document.getElementById('nextBtn');
+  var progress = document.getElementById('progress');
+  var counter = document.getElementById('counter');
+  var swipeHint = document.getElementById('swipeHint');
+
+  function render(){
+    deck.style.transform = 'translateX(' + (-idx * 100) + 'vw)';
+    progress.style.width = ((idx + 1) / total * 100) + '%';
+    counter.textContent = (idx + 1) + ' / ' + total;
+    prevBtn.classList.toggle('hidden', idx === 0);
+    nextBtn.classList.toggle('hidden', idx === total - 1);
+    if (idx > 0) swipeHint.classList.add('hidden');
+  }
+  function go(n){
+    idx = Math.max(0, Math.min(total - 1, n));
+    if (history.replaceState) history.replaceState(null, '', '#' + (idx + 1));
+    render();
+  }
+
+  prevBtn.addEventListener('click', function(){ go(idx - 1); });
+  nextBtn.addEventListener('click', function(){ go(idx + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(idx + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx - 1); }
+  });
+
+  var startX = null, startY = null;
+  document.addEventListener('touchstart', function(e){
+    startX = e.touches[0].clientX; startY = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (startX === null) return;
+    var dx = e.changedTouches[0].clientX - startX;
+    var dy = e.changedTouches[0].clientY - startY;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) go(idx + (dx < 0 ? 1 : -1));
+    startX = startY = null;
+  }, {passive:true});
+
+  document.addEventListener('mousedown', function(e){
+    if (e.target.closest('button') || e.target.closest('a')) return;
+    startX = e.clientX; startY = e.clientY;
+  });
+  document.addEventListener('mouseup', function(e){
+    if (startX === null) return;
+    var dx = e.clientX - startX;
+    if (Math.abs(dx) > 60) go(idx + (dx < 0 ? 1 : -1));
+    startX = startY = null;
+  });
+
+  var startHash = location.hash.match(/^#(\d+)$/);
+  if (startHash) idx = Math.max(0, Math.min(total - 1, parseInt(startHash[1], 10) - 1));
+  render();
+})();
+</script>
+</body>
+</html>
