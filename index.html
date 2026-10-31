@@ -144,6 +144,36 @@
                border:1px solid rgba(184,50,42,.45); }
   .badge-he { color:var(--warn); background:rgba(154,91,16,.08);
               border:1px solid rgba(154,91,16,.4); }
+  .card-top { width:100%; display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+  .stamp {
+    flex:none; width:68px; height:68px; border-radius:50%;
+    border:2px solid var(--stamp); color:var(--stamp); background:rgba(184,50,42,.05);
+    box-shadow:inset 0 0 0 1px rgba(184,50,42,.3);
+    font-family:'Special Elite',monospace; font-size:.52rem; line-height:1.3;
+    text-transform:uppercase; letter-spacing:.4px; text-align:center;
+    display:grid; place-items:center; padding:4px;
+    transform:rotate(-8deg); cursor:pointer; transition:transform .15s, background .15s;
+  }
+  .stamp:hover { transform:rotate(0deg) scale(1.07); background:rgba(184,50,42,.1); }
+  .ai-backdrop { position:fixed; inset:0; z-index:100; background:rgba(29,26,22,.55);
+    display:flex; align-items:center; justify-content:center; padding:20px; }
+  .ai-backdrop[hidden] { display:none; }
+  .ai-modal { position:relative; background:var(--paper); border:2px solid var(--stamp);
+    border-radius:12px; max-width:540px; width:100%; padding:24px 26px 22px;
+    box-shadow:0 18px 50px rgba(0,0,0,.4); }
+  .ai-close { position:absolute; top:8px; inset-inline-end:12px; background:none; border:0;
+    font-size:1.5rem; line-height:1; color:var(--ink2); cursor:pointer; }
+  .ai-close:hover { color:var(--stamp); }
+  .ai-stamp { width:76px; height:76px; border-radius:50%; border:2px solid var(--stamp);
+    color:var(--stamp); background:rgba(184,50,42,.05);
+    box-shadow:inset 0 0 0 1px rgba(184,50,42,.3);
+    font-family:'Special Elite',monospace; font-size:.55rem; line-height:1.3;
+    text-transform:uppercase; letter-spacing:.4px; text-align:center;
+    display:grid; place-items:center; padding:6px; margin-bottom:14px; transform:rotate(-7deg); }
+  .ai-eyebrow { font-size:.66rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink2); margin:0 0 2px; }
+  .ai-title { font-family:'Special Elite',monospace; font-size:1.02rem; line-height:1.4; margin:0 0 10px; }
+  .ai-text { font-size:.88rem; color:var(--ink2); margin:0; line-height:1.6; }
   .card-title { width:100%; font-weight:700; font-size:.98rem; line-height:1.45;
                 text-decoration:none; text-align:start; color:var(--ink); }
   .card-title:hover { color:var(--blue); text-decoration:underline; }
@@ -253,55 +283,55 @@
   <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">9</span></h2>
   <div class="grid">
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · INFOGRAPHIC · CERN × SOURCEGRAPH CASE STUDY</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · INFOGRAPHIC · CERN × SOURCEGRAPH CASE STUDY</span></div>
       <a class="card-title" href="cern-sourcegraph-infographic/index.html">CERN Tackles Technical Debt: 15M Lines of Mission-Critical Code</a>
       <div class="card-dates">Published: 2026-10-31</div>
       <p class="card-desc">Dynamic one-page scrolling infographic based on the Sourcegraph CERN case study: animated counters (15M lines of Java, ~300 developers, 18 years of growth), an 18-year timeline, run mode vs upgrade mode change clocks (5-year LHC stability periods vs 1-2 year upgrade windows), four ways code search shrinks technical debt, and the Chris Roderick quote. Built for social sharing.</p>
     </article>
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · MISRA C:2025 · SOURCEGRAPH + PARASOFT APPROVAL DECK</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · MISRA C:2025 · SOURCEGRAPH + PARASOFT APPROVAL DECK</span></div>
       <a class="card-title" href="misra-rule-7-5-sourcegraph-plan/index.html">Scaling MISRA C:2025 Compliance: From Thousands of Violations to Zero</a>
       <div class="card-dates">Published: 2026-10-28</div>
       <p class="card-desc">11-slide ESL solution deck for eliminating MISRA C:2025 Rule 7.5 violations across 4 repositories and 400 branches. Opens with the engineering loop as a flowchart: a Parasoft C/C++test baseline scan of one module (~500 findings) extrapolates to ~50,000 project-wide, triggering the decision to automate; Sourcegraph search queries and Batch Change scripts fix every incident; a Parasoft verification scan is the judge, and a non-zero result loops back to script redesign until zero is proven, then scaled to all repos and held by a standing CI gate. Includes Sourcegraph UI recreations, an annotated real Parasoft screenshot, an ESL-style compliance dashboard, and the edge-case safety rails.</p>
     </article>
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · HARDENATOR · VSIX &amp; AI SKILL SECURITY</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · HARDENATOR · VSIX &amp; AI SKILL SECURITY</span><button class="stamp" type="button" data-note="hardenator-vsix-skills/index.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="hardenator-vsix-skills/index.html">Hardenator: Four Options for VSIX and AI Skill Security</a>
       <div class="card-dates">Published: 2026-10-27</div>
       <p class="card-desc">12 mobile-friendly ESL slides comparing a desktop inspection station, central review portal, enforced admission gateway, and controlled internal catalog. Each option includes technical details, an interactive synthetic mockup, and a user workflow. Complements Sonatype IQ; proposed capabilities, not deployed security controls.</p>
     </article>
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · TECHNICAL REVIEW</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · TECHNICAL REVIEW</span></div>
       <a class="card-title" href="parasoft-cuda-bridge/technical/">Parasoft CUDA Bridge: Technical Evaluation Brief</a>
       <div class="card-dates">Published: 2026-10-26</div>
       <p class="card-desc">Technical review for the C++test product team: implementation, CMake companion workflow, heuristic CUDA rules, CUDA GoogleTest host-coverage evidence, limitations, per-project stress results, and feedback questions.</p>
     </article>
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · CUSTOMER EVALUATION</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · CUSTOMER EVALUATION</span></div>
       <a class="card-title" href="parasoft-cuda-bridge/customer/">Analyze CUDA in Visual Studio 2026</a>
       <div class="card-dates">Published: 2026-10-26</div>
       <p class="card-desc">Customer evaluation deck showing CMake preparation, generated Visual Studio companion analysis, genuine Error List screenshots, CUDA guideline rule scope, result handling, prerequisites, and limitations.</p>
     </article>
     <article class="card card-new" dir="rtl">
-      <span class="card-tag badge-new">NEW · תשתיות / AI · מנוע תוואי מאומת</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · תשתיות / AI · מנוע תוואי מאומת</span></div>
       <a class="card-title" href="iroad-verified-alignment/index.html">מנוע תוואי מאומת: עדכון בעקבות דרישות Iroad (Netivei Yisrael RFI 94/26)</a>
       <div class="card-dates">Published: 2026-10-25</div>
       <p class="card-desc">13 שקפים במיתוג ESL: ארבע דרישות של Iroad מהמצגת הראשונה יושמו ואומתו (מקרא למפה, אילוץ קרקע חקלאית, איסור חציית שטח בנוי, והטמעת ספר העקרונות PDDM של FHWA), כל אחת מסומנת "נוסף בעקבות דרישת Iroad". פירוט מקורות הנתונים (Copernicus GLO-30, OpenStreetMap, GovMap) עם תאריכי שליפה, שינויי האלגוריתם לפי התקן (עקומות אנכיות, מדידת חשיפת עצירה, 18 הוכחות Lean 4), סימון נקודות אדם בלולאה על צילומי ההדגמה, והסבר על בקרת גרסאות ושחזור כל גרסה.</p>
     </article>
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · AGENT BENCHMARK · THE HARNESS IS THE KING</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · AGENT BENCHMARK · THE HARNESS IS THE KING</span><button class="stamp" type="button" data-note="swe-sweep-harness-king/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="swe-sweep-harness-king/index.html">The Harness Is the King: Amp vs Claude Code on SWE-sweep</a>
       <div class="card-dates">Published: 2026-10-21</div>
       <p class="card-desc">ESL slide deck on the completed benchmark: same model (claude-opus-5-5) on both arms, 12 repos, 60 hidden-test-scored bugs, official SWE-sweep Docker verifiers. Amp 4/60 (6.7%) vs Claude Code 2/60 (3.3%), above the official SOTA entry of 4.7%. Introduces SWE-sweep and its leaderboard, quotes the authors' harness ablation, walks through the real diffs the agents got right and wrong, presents the Parasoft C++test control (0-0.3% line-level overlap with ~500k findings), and concludes the harness is the king. Companion pages: linkedin.html (ready-to-post text) and article.html (website article).</p>
     </article>
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · AGENT BENCHMARK</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · AGENT BENCHMARK</span><button class="stamp" type="button" data-note="mini-swe-sweep/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="mini-swe-sweep/index.html">mini-swe_sweep: Amp vs Claude Code on Real SWE-sweep Bugs</a>
       <div class="card-dates">Published: 2026-10-20</div>
       <p class="card-desc">12 repositories across 6 languages, 60 real reference bugs, same model (claude-opus-5-5) on both agent arms with equal 1-hour caps and hidden-test Docker verifiers. Final results: Amp 4/60 (6.7%) versus Claude Code 2/60 (3.3%), with cost-tier run 1, per-repo tables, cost model, and provenance.</p>
     </article>
     <article class="card card-new" dir="ltr">
-      <span class="card-tag badge-new">NEW · PYTHON / JSON PERFORMANCE</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW · PYTHON / JSON PERFORMANCE</span></div>
       <a class="card-title" href="python-json-throughput.html">16 GB/s of JSON on a Laptop: Free-Threaded Python and Field Projection</a>
       <div class="card-dates">Published: 2026-10-18</div>
       <p class="card-desc">15 ESL-branded slides reproducing Daniel Lemire's GH Archive workload on a 24-core Core Ultra 9 laptop in isolated WSL. Field projection reached 16.07 GB/s median versus 12.87 GB/s for lazy views at 24 threads: 24.8% higher throughput and 19.9% less time.</p>
@@ -313,31 +343,31 @@
   <h2><span class="sec-dot"></span>Earlier Additions<span class="sec-count">33</span></h2>
   <div class="grid">
     <article class="card " dir="ltr">
-      <span class="card-tag">AMP / AI CODING AGENTS</span>
+      <div class="card-top"><span class="card-tag">AMP / AI CODING AGENTS</span><button class="stamp" type="button" data-note="harness-is-the-product/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="harness-is-the-product/">The Harness Is the Product: Anatomy of an AI Coding Agent in 9 Slides</a>
       <div class="card-dates">Published: 2026-10-15</div>
       <p class="card-desc">Trade-show loop deck in the Amp theme (near-black, cream, orange): the harness is more important than the LLM, then each layer of the AI Coding Agent stack as an animated infographic with its share of the product: User Interface 5%, Agent Orchestrator 15% (planning and control loop), Context &amp; Indexing 15% (repo indexing and code search), Tool Execution 20% (file ops, builds, tests, MCP), LLM Core 15% (just the engine), Verification &amp; Feedback 20%, and Memory &amp; State plus Safety &amp; Guardrails for the remaining 10%. Slides auto-advance in a circle every 6 seconds by default, with a big pause button for talking and an adjustable slide time on the first slide (4 to 12 seconds, steps of 1). Thesis credit: "The Harness Is the Product" (Towards AI).</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">MANTIQ FACTOR / HOLOGRAPHY</span>
+      <div class="card-top"><span class="card-tag">MANTIQ FACTOR / HOLOGRAPHY</span><button class="stamp" type="button" data-note="mantiq-holographic-interfaces/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="mantiq-holographic-interfaces/">MantiQ Factor × arXiv:2609.38318: Your Holography Paper, Checked End to End</a>
       <div class="card-dates">Published: 2026-10-14</div>
       <p class="card-desc">A workflow proposal prepared for the authors of "Energy Transmission Across Holographic Conformal Interfaces in General Dimensions" (Arav, Bertrand, Chapman, Policastro, Waeber): what the MantiQ Factor process would do with their paper. A 12-slide fit assessment opening with the MantiQ Factor production-line overview, then a six-stage pipeline diagram: freeze the source, normalize claims and conventions, a Wolfram notebook oracle re-deriving the warp-factor transmission formula (Eqs. 15, 29, 154), scoped Lean 4 theorems for the central-charge bounds, a QASM / Classiq circuit artifact executed on a quantum simulator (with an interactive scattering lab), and a public evidence package. Includes a claim-by-claim evidence table and an honest verdict: strong fit for the Wolfram, Lean, and simulator stages; no RTL/FPGA stage applies to a theory paper.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">BUILD PERFORMANCE / MOLD LINKER</span>
+      <div class="card-top"><span class="card-tag">BUILD PERFORMANCE / MOLD LINKER</span></div>
       <a class="card-title" href="apollo-mold-linker/">Apollo Linker Benchmark: When the mold Linker Helps, and When It Doesn't</a>
       <div class="card-dates">Published: 2026-10-13</div>
       <p class="card-desc">22 interactive slides from two cold Bazel builds of Apollo's cyber and planning modules (24 cores, GCC 7.5), one with GNU ld.bfd and one with mold 2.0.0, with every link action timed through bazel --profile. Whole-build wall time moved +1.1% (462 s vs 467 s), within run-to-run noise. Per link, the median was 16.8% faster with mold and the best single link was 2.94x faster, but links under 1.5 s often got slower: 119 of 124 losses were in that range. Includes all 310 paired link timings, a comparison with the large single-link workloads in Rui Ueyama's arXiv:2608.23228 paper, the setup problems we hit, and when mold is worth adopting.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">STATIC ANALYSIS / PARASOFT VS SONARQUBE</span>
+      <div class="card-top"><span class="card-tag">STATIC ANALYSIS / PARASOFT VS SONARQUBE</span></div>
       <a class="card-title" href="threadx-parasoft-sonarqube.html">Parasoft C/C++test vs SonarQube CLI on ThreadX Win32: 50 Planted Defects</a>
       <div class="card-dates">Published: 2026-10-11 · Updated: 2026-10-11</div>
       <p class="card-desc">30 widescreen slides introduce both tools and the test method, show representative planted C defects beside Parasoft's actual rule IDs and messages, and list all 50 valid defects in the adjudication appendices. Parasoft's only scored configuration was Flow Analysis Aggressive, run on the clean and bugged states: 15 strict true positives out of 50 valid defects, plus one partial and one indirect signal (not counted as direct detections). It missed all eight concurrency defects and nine of eleven size-arithmetic defects. SonarQube's DEEP code scan was unavailable — Vortex returned 403 and every requested file was skipped — never zero findings; its local secrets scan completed with zero secrets. Links to the MIT repository, defect catalog, scan protocol, comparison report and detection matrix.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">THREADX / CORTEX-M / CLANG</span>
+      <div class="card-top"><span class="card-tag">THREADX / CORTEX-M / CLANG</span></div>
       <a class="card-title" href="tx5-upgrade/">ThreadX 5.6 to 6.5, Cortex-M4 to M85: Migration with Executable Evidence</a>
       <div class="card-dates">Published: 2026-10-11 · Updated: 2026-10-11</div>
       <p class="card-desc">41 ESL-branded slides plus PDF: ESL and CTO Daniel Liezrowice, five project challenges, and one Clang-built application run on the real ThreadX 5.6 Cortex-M4 kernel and on MIT ThreadX 6.5, then built for Cortex-M85. Verified TX5-M4, TX6-M4 and M55 QEMU runs, eleven code-diff discussions, binary-kernel inspection, measured memory charts and histograms. Mobile arrows, Home, a recorded LED/button replay and ESL contact links. M85 execution and real-board performance remain unverified.</p>
@@ -346,86 +376,86 @@
       <a class="card-title" href="Jahalin-reports/">Jahalin-reports</a>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">PARASOFT / APOLLO</span>
+      <div class="card-top"><span class="card-tag">PARASOFT / APOLLO</span><button class="stamp" type="button" data-note="apollo-misra-demo/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="apollo-misra-demo/">Apollo: Parallel MISRA Analysis and Verified Improvement</a>
       <div class="card-dates">Published: 2026-10-04</div>
       <p class="card-desc">Animated customer-demo plan: Apollo's 471,310 C/C++ code lines, six independent PRs, Jenkins, six Parasoft automation servers, optional Incredibuild acceleration, and one DTP. Follow 100 selected findings through Amp-assisted fixes, unit tests, rescanning, and before/after evidence. Proposed targets, not measured results.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">AI AGENTS / SKILL EVALS</span>
+      <div class="card-top"><span class="card-tag">AI AGENTS / SKILL EVALS</span><button class="stamp" type="button" data-note="wazatator/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="wazatator/">Wazatator: Evaluate Agent Skills with Claude Code</a>
       <div class="card-dates">Published: 2026-10-02</div>
       <p class="card-desc">By ESL (Engineering Software Lab), a member of Anthropic's Claude Partner Network. What Wazatator is and how it works: an open-source fork of Microsoft Waza that runs your SKILL.md through real Claude Code sessions and scores the result. Code samples for eval suites, tasks, graders and trigger tests, real findings (skills that ask instead of act, skills never invoked, tool-policy violations, MCP usage, cost), a before/after fix, and a replayed live demo.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">INTERACTIVE HUMMUS DEMO</span>
+      <div class="card-top"><span class="card-tag">INTERACTIVE HUMMUS DEMO</span></div>
       <a class="card-title" href="hummus-council/">The Hummus Council: Big Decisions, Small Chickpeas</a>
       <a class="card-title" href="hummus-council/?lang=he" lang="he" dir="rtl">מועצת גדולי החומוס: הגרסה בעברית</a>
       <div class="card-dates">Published: 2026-10-02</div>
       <p class="card-desc">A humorous lunch-decision app. Choose a city, date, hunger level, hummus style and sources, then watch four fictional experts turn your preferences into a transparent, source-linked verdict. Ten curated places, seasonal scoring and six of Daniel Liezrowice's own posts in the Facebook group “החומוסולוגים”, with a group link and clear evidence limits. Absolutely no actual chickpeas.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">EMBEDDED / INTERRUPTS &amp; POLLING</span>
+      <div class="card-top"><span class="card-tag">EMBEDDED / INTERRUPTS &amp; POLLING</span></div>
       <a class="card-title" href="interrupts-vs-polling/">Interrupt on the Edge, Poll on the Level</a>
       <div class="card-dates">Published: 2026-10-01</div>
       <p class="card-desc">Beyond "interrupts vs polling": seven Cortex-M code samples compiled against real STM32F4 and nRF52 headers. Covers the NAPI-style hybrid, DMA with idle-line detection (and its half-transfer gotcha), zero-CPU PPI event routing, the lost-wakeup race in "check, then WFI" with real disassembly, BASEPRI critical sections, interrupt storm guards, and debouncing by polling.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">C++26 / GCC 16.1 / REFLECTION</span>
+      <div class="card-top"><span class="card-tag">C++26 / GCC 16.1 / REFLECTION</span></div>
       <a class="card-title" href="cpp26-reflection-misra-parasoft/">C++26 Reflection on GCC 16.1: What Actually Compiles Today</a>
       <div class="card-dates">Published: 2026-09-29</div>
       <p class="card-desc">Amadeus Ferro's print_fields() plus a compile-time wire-layout check, built and run on GCC 16.1 through Compiler Explorer. Six compile errors between the P2996 snippet and a running binary with the fix for each, two negative tests, the static-analyzer parse gap, and one MISRA C++:2023 consequence. A reply to a LinkedIn post.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">XSIGHT LABS / PARASOFT AUTOMATION</span>
+      <div class="card-top"><span class="card-tag">XSIGHT LABS / PARASOFT AUTOMATION</span></div>
       <a class="card-title" href="xsightlab-automation/">Three Containers. Nine Scan Results.</a>
       <div class="card-dates">Published: 2026-09-27</div>
       <p class="card-desc">Twelve customer-facing slides: first check available license features with cpptest-license-features, then use the nine-app C++17 test project to verify three scans per container. Includes interactive scheduling and DTP views. Utility compatibility, customer scans and license acceptance remain to be verified in the lab.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">SBOMATOR / MARKET COMPARISON</span>
+      <div class="card-top"><span class="card-tag">SBOMATOR / MARKET COMPARISON</span></div>
       <a class="card-title" href="sbomator-market-comparison/">SBOMator: Not CSPM or CNAPP. A Black Duck Competitor.</a>
       <div class="card-dates">Published: 2026-09-27</div>
       <p class="card-desc">20 mobile-friendly slides: distinguish product supply-chain security from CSPM/CNAPP, then compare SBOMator with Black Duck. Includes site-license pricing, ESL’s 60-day integration offer with payment after success, and contact details. Product master-plan capabilities assumed complete.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">MANTIQ / QUANTUM PHASE ESTIMATION</span>
+      <div class="card-top"><span class="card-tag">MANTIQ / QUANTUM PHASE ESTIMATION</span><button class="stamp" type="button" data-note="mantiq-qpe/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="mantiq-qpe/">From a Quantum Claim to a Checked Result</a>
       <div class="card-dates">Published: 2026-09-24</div>
       <p class="card-desc">Eight slides with a live gate-level QPE simulator: exact and approximate phases, eigenstate superpositions, deliberate circuit faults, independent Wolfram vectors, and a scoped Lean resource-count proof. Download reproducible evidence; no hardware or quantum-speedup claim.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">AI ENGINEERING / CODE OWNERSHIP</span>
+      <div class="card-top"><span class="card-tag">AI ENGINEERING / CODE OWNERSHIP</span><button class="stamp" type="button" data-note="ai-code-ownership.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="ai-code-ownership.html">Code Is Cheap. Understanding Is Earned.</a>
       <div class="card-dates">Published: 2026-09-22</div>
       <p class="card-desc">Five copyable discussion comments with code examples: counterexamples, observability debt, atomicity, learning loops, and durable code ownership. A six-slide companion to Michal Stawarz's post on AI-assisted engineering.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">ESL AI SDLC / PREDICTION &amp; POLICY</span>
+      <div class="card-top"><span class="card-tag">ESL AI SDLC / PREDICTION &amp; POLICY</span><button class="stamp" type="button" data-note="prediction-is-not-permission/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="prediction-is-not-permission/">Same Probability. Different Action.</a>
       <div class="card-dates">Published: 2026-09-22</div>
       <p class="card-desc">Six interactive slides: a $5 misrouted ticket versus a $10,000 wrongful account closure, a live expected-loss calculator, copyable Python policy, Jev confidence caveats, and a downloadable infographic. ESL AI SDLC, Daniel Liezrowice.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">ESL AI SDLC / DECISION ECONOMICS</span>
+      <div class="card-top"><span class="card-tag">ESL AI SDLC / DECISION ECONOMICS</span><button class="stamp" type="button" data-note="jev-cost-of-being-wrong/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="jev-cost-of-being-wrong/">99% Sure. Two Different Decisions: The Cost of Being Wrong</a>
       <div class="card-dates">Published: 2026-09-22</div>
       <p class="card-desc">Seven interactive ESL slides on Jev and cost-aware automation: compare a $20 credit with a $20,000 reimbursement, experiment with expected error loss, copy the Python policy, and download the infographic. Illustrative cases, not measured Jev performance.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">SBOMATOR / VENDOR EVIDENCE</span>
+      <div class="card-top"><span class="card-tag">SBOMATOR / VENDOR EVIDENCE</span></div>
       <a class="card-title" href="sbomator-scrapling-vendor-comparison/">Scrapling + SBOMator: Nine Real Repository Comparisons</a>
       <div class="card-dates">Published: 2026-09-21</div>
       <p class="card-desc">Three NXP, three ST, and three AMD/Xilinx-targeting repositories: 18 source-only scans, experimental vendor lifecycle enrichment, downloadable paired SBOMs, and HTTP retrieval trials. Shows unchanged component inventories, coverage gaps, and an obsolete ST board whose MCU still has a longevity commitment.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">AI SDLC / JEV</span>
+      <div class="card-top"><span class="card-tag">AI SDLC / JEV</span><button class="stamp" type="button" data-note="jev-decision-safeguards/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="jev-decision-safeguards/">A Fast Decision Is Not a Verified Result: Jev Decision Safeguards</a>
       <div class="card-dates">Published: 2026-09-20</div>
       <p class="card-desc">Daniel Liezrowice, ESL: an interactive walkthrough of context filtering, missing-evidence review gates, and confidently wrong routing. Adjust the threshold to compare errors with deferred work. Synthetic illustration, not measured Jev performance.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">MANTIQ / SOLIDITY</span>
+      <div class="card-top"><span class="card-tag">MANTIQ / SOLIDITY</span><button class="stamp" type="button" data-note="mantiq-solidity/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="mantiq-solidity/">MantiQ / Solidity: The Buyer Signed. Should the Contract Pay?</a>
       <a class="card-title" href="mantiq-solidity/dashboard.html?autoplay=1" dir="auto">recorded-evidence tour</a>
       <a class="card-title" href="mantiq-solidity/assets/mantiq-solidity-workflow.png" dir="auto">workflow image</a>
@@ -434,79 +464,80 @@
       <p class="card-desc">Solidity static analysis, finding triage, EVM tests, and Wolfram/Lean 4 model evidence, presented by Daniel Liezrowice of ESL through a 10 test ETH escrow case. Static analysis is core to the proposed workflow; the provider will be an ESL tool or Olympix, subject to readiness and commercial terms. The current Olympix scan remains blocked, with no completed detection claimed. Explore the <a href="mantiq-solidity/dashboard.html?autoplay=1">recorded-evidence tour</a>, <a href="mantiq-solidity/assets/mantiq-solidity-workflow.png">workflow image</a>, and supporting <a href="mantiq-solidity/reports/sbomator-report.html">SBOMator report</a> (368 components, zero missing licenses, vulnerability findings retained). Not an audit or a production security guarantee.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">AI AGENT MEMORY</span>
+      <div class="card-top"><span class="card-tag">AI AGENT MEMORY</span><button class="stamp" type="button" data-note="agent-memory-benchmark/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="agent-memory-benchmark/">Memory, Under Test — Interactive Agent Memory Benchmark</a>
       <div class="card-dates">Published: 2026-09-18</div>
       <p class="card-desc">A critical, evidence-first examination of agent memory claims. Compare stateless, full-context, and governed selective-memory strategies across six interactive scenarios, inspect decision traces, disable safeguards, and download reproducible benchmark results.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">EMBEDDED / CORTEX-M</span>
+      <div class="card-top"><span class="card-tag">EMBEDDED / CORTEX-M</span></div>
       <a class="card-title" href="cortex-m-call-anatomy/">What Really Happens When You Call a Function in C? -O0 vs -O2 on Cortex-M4</a>
       <a class="card-title" href="cortex-m-call-anatomy/animation.html" dir="auto">emulator-driven animation</a>
       <div class="card-dates">Published: 2026-09-11</div>
       <p class="card-desc">The textbook "6 steps of a function call" is a picture of -O0. Real arm-none-eabi-gcc output shows the call vanishing at -O2 (30 instructions become 2), what a forced call looks like (stack alignment padding, -fipa-ra keeping a scratch register live, pop {r3, pc} as the ROP surface), plus an <a href="cortex-m-call-anatomy/animation.html">emulator-driven animation</a> of every instruction, register and stack word.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">C++ DEBUGGING</span>
+      <div class="card-top"><span class="card-tag">C++ DEBUGGING</span></div>
       <a class="card-title" href="cpp-debugging-evidence-demo/">Beyond Breakpoints to Evidence — ESL C++ Debugging Demo</a>
       <div class="card-dates">Published: 2026-08-15</div>
       <p class="card-desc">A hands-on companion to Vivek Bhadra's “Beyond Breakpoints”: one reproducible use-after-free defect investigated with AddressSanitizer and GDB, corrected through explicit ownership, and protected by automated regression tests—with a one-click WSL runner and findings dashboard.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">FHE HARDWARE</span>
+      <div class="card-top"><span class="card-tag">FHE HARDWARE</span><button class="stamp" type="button" data-note="mantiq-factor-fhe-hardware/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="mantiq-factor-fhe-hardware/">MantiQ Factor — From FHE Research to Verified Accelerator Hardware</a>
       <div class="card-dates">Published: 2026-08-15</div>
       <p class="card-desc">A 60-slide evidence-driven journey from the public REED paper through Mathematica, Lean 4, vendor-neutral VHDL simulation, and PYNQ-Z2 implementation—positioned as a reproducible engineering path toward specialized FHE hardware, with physical validation explicitly pending.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">C++ COMPILER BUG</span>
+      <div class="card-top"><span class="card-tag">C++ COMPILER BUG</span></div>
       <a class="card-title" href="msvc-o1-miscompilation-parasoft/">When Correct C++ Produces the Wrong Answer — MSVC /O1 Miscompilation &amp; How Parasoft C/C++test Catches It</a>
       <div class="card-dates">Published: 2026-08-07</div>
       <p class="card-desc">MSVC 19.51 /O1 feeds address offsets instead of array values into adc — a value-versus-address optimizer regression. How layered verification (static analysis, unit tests, coverage, compiler diversity, CI gates) with Parasoft C/C++test catches the bad binary before release. Originally published on LinkedIn Pulse.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">EMBEDDED LINUX</span>
+      <div class="card-top"><span class="card-tag">EMBEDDED LINUX</span></div>
       <a class="card-title" href="yocto-bsp-studio-design-partner/">Yocto BSP Studio — Design Partner Presentation</a>
       <div class="card-dates">Created: 2026-07-29</div>
       <p class="card-desc">A 15-slide product concept for turning scarce Yocto BSP expertise into a guided, auditable workflow covering component selection, BSP generation, isolated builds, simulation, testing, Parasoft C/C++test, ESL SBOMator, CVE triage, SBOMs, VEX, and release evidence.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">WOLFRAM + LEAN 4</span>
+      <div class="card-top"><span class="card-tag">WOLFRAM + LEAN 4</span><button class="stamp" type="button" data-note="floating-point-heat-method-verification/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="floating-point-heat-method-verification/">Beyond Nonzero — Certified Floating-Point Heat-Method Numerics</a>
       <div class="card-dates">Created: 2026-07-29</div>
       <p class="card-desc">Technical ESL presentation showing how Amp orchestrates a corrected Python solver, Wolfram Mathematica 15 cross-validation, and Lean 4 kernel-checked proofs to diagnose precision loss, finite propagation, CFL positivity, and hidden defects in a Heat Method implementation.</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="amp-vs-langgraph/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="amp-vs-langgraph/">Amp vs. Graph-Based Coding Agents — Why Amp Already Implements the State Machine</a>
       <div class="card-dates">Created: 2026-07-29</div>
       <p class="card-desc">16-slide technical breakdown mapping every node in a graph-based coding agent state machine to Amp's built-in tools. Side-by-side code, oracle vs static gates, parallel milestones, and a decision framework for regulated industries.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">28.07.2026</span>
+      <div class="card-top"><span class="card-tag">28.07.2026</span></div>
       <a class="card-title" href="Euclidean_Remainder_Fallacy_Presentation.html">The Euclidean Remainder Fallacy — MSVC /O1–/O2 Miscompilation &amp; How Parasoft C/C++test Catches It</a>
       <div class="card-dates">Published: 2026-07-28</div>
       <p class="card-desc">MSVC v19.51 optimizer confuses C++ truncated modulo with Euclidean modulo, miscompiling 6U &lt; (v % 5) for negative inputs. How CERT-C INT10-C, MISRA-C 10.4, and C++test unit tests catch the compiler's own error.</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">28.07.2026</span>
+      <div class="card-top"><span class="card-tag">28.07.2026</span><button class="stamp" type="button" data-note="adaptive-visual-context/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="adaptive-visual-context/">Adaptive Visual Context — CARES Research to Verified Agent Workflow</a>
       <div class="card-dates">Published: 2026-07-28</div>
       <p class="card-desc">ממחקר CARES לזרימת עבודה מאומתת: Agent Skill, בדיקות מדעיות ב-Wolfram, הוכחות ממוקדות ב-Lean 4 וממשל ESL AI SDLC</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">27.07.2026</span>
+      <div class="card-top"><span class="card-tag">27.07.2026</span><button class="stamp" type="button" data-note="edpb-databom-legal-edition/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="edpb-databom-legal-edition/">EDPB Guidelines 03/2026 — DataBOM Legal Edition (for Privacy &amp; AI Counsel)</a>
       <div class="card-dates">Published: 2026-07-27</div>
       <p class="card-desc">גרסת עורכי הדין: ESL כספקית כלים לתעשיות מפוקחות, לקוחות ולוגואים, SPDF "מי מוודא את המוודא", DataBOM כשכבת הראיות ל-LIA/DPIA — התקנה מקומית air-gapped</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">27.07.2026</span>
+      <div class="card-top"><span class="card-tag">27.07.2026</span></div>
       <a class="card-title" href="embedox-misra-c2023-presentation.html">Embedox Management Command Handlers — MISRA C:2023 Compliance Analysis</a>
       <div class="card-dates">Published: 2026-07-26 · Updated: 2026-07-27</div>
       <p class="card-desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional — V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag">25.07.2026</span>
+      <div class="card-top"><span class="card-tag">25.07.2026</span><button class="stamp" type="button" data-note="github-trends-watch-presentation/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="github-trends-watch-presentation/">GitHub Trends Watch</a>
       <div class="card-dates">Published: 2026-07-25</div>
       <p class="card-desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</p>
@@ -518,13 +549,13 @@
   <h2><span class="sec-dot"></span>SBOMator, DataBOM & Supply Chain<span class="sec-count">15</span></h2>
   <div class="grid">
     <article class="card " dir="ltr">
-      <span class="card-tag badge-new">NEW</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW</span></div>
       <a class="card-title" href="savepathcopier/">SavePathCopier — Tell Amp What You Just Saved</a>
       <div class="card-dates">Published: 2026-10-31</div>
       <p class="card-desc">One-pager for a free Windows tray utility that copies every saved file's full path to the clipboard, so you can paste the path straight into Amp when you cannot paste the screenshot itself</p>
     </article>
     <article class="card " dir="ltr">
-      <span class="card-tag badge-new">NEW</span>
+      <div class="card-top"><span class="card-tag badge-new">NEW</span></div>
       <a class="card-title" href="ardupilot-sbom-overview/">ArduPilot Repository Overview for SBOM Scan Configuration</a>
       <div class="card-dates">Published: 2026-10-20</div>
       <p class="card-desc">Pre-scan briefing for an FDA cyber-device submission: directory map, firmware families, HAL and RTOS mapping, 15 Git submodules plus vendored-source inventory, licensing notes, a 10-point scan-module checklist, and safety-critical component flags for the SBOM tooling provider</p>
@@ -565,16 +596,19 @@
       <p class="card-desc">Complete DevOps guide for running MISRA C 2025 static analysis with Parasoft C++test and the unsupported TI Arm Clang compiler (tiarmclang) using the tiarmgcc_7 compiler family</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="edpb-databom-legal-edition/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="edpb-databom-legal-edition/">EDPB Guidelines 03/2026 — DataBOM Legal Edition (for Privacy &amp; AI Counsel)</a>
       <div class="card-dates">Published: 2026-07-27</div>
       <p class="card-desc">הגרסה לעורכי דין וליועצים משפטיים: רקע על ESL ולקוחותיה, SPDF, ומה DataBOM פותר ומה נשאר אצל היועץ — עם דגש על התקנה מקומית air-gapped</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="edpb-guidelines-databom-risk/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="edpb-guidelines-databom-risk/">EDPB Guidelines 03/2026 — Risks &amp; the DataBOM Answer</a>
       <div class="card-dates">Published: 2026-07-21</div>
       <p class="card-desc">הנחיות ה-EDPB החדשות על web scraping, הסיכונים ל-CTO/CISO/משפט, ומה DataBOM פותר ומה לא</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="sbomator-databom-presentation/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="sbomator-databom-presentation/">SBOMator DataBOM — An SBOM for Your AI Training Data</a>
       <div class="card-dates">Published: 2026-07-21</div>
       <p class="card-desc">מצגת המוצר: סריקת Provenance לדאטהסטים של AI, כולל מסך Mockup והתקנה מקומית air-gapped</p>
@@ -601,87 +635,103 @@
   <h2><span class="sec-dot"></span>Amp vs Claude Code — Comparisons & Benchmarks<span class="sec-count">17</span></h2>
   <div class="grid">
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="ai_agent_eval_presentation.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="ai_agent_eval_presentation.html">AI Coding Agent Evaluation — Ampcode vs Claude Code</a>
       <div class="card-dates">Published: 2026-04-04</div>
       <p class="card-desc">מתודולוגיית הערכה והשוואה מלאה</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="ampcode-vs-claudecode-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="ampcode-vs-claudecode-presentation.html">Ampcode vs Claude Code — Why Ampcode Wins</a>
       <div class="card-dates">Published: 2026-04-15 · Updated: 2026-07-27</div>
       <p class="card-desc">מצגת השוואה תמציתית</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="amp-deep3-vs-claude-opus47-benchmark.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="amp-deep3-vs-claude-opus47-benchmark.html">QuickSWE v2 — Amp Deep³ vs Claude Opus 4.7</a>
       <div class="card-dates">Published: 2026-04-17 · Updated: 2026-07-27</div>
       <p class="card-desc">בנצ'מרק ראש-בראש</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="baboons-benchmark-report.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="baboons-benchmark-report.html">Amp Ultra vs Claude Code — Claude Fable 5 Benchmark</a>
       <div class="card-dates">Published: 2026-07-17 · Updated: 2026-07-18</div>
       <p class="card-desc">דוח בנצ'מרק משחק ה-FPS</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="baboons-face-off.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="baboons-face-off.html">Baboons Over London — Amp vs Claude, Same Model</a>
       <div class="card-dates">Published: 2026-07-17 · Updated: 2026-07-19</div>
       <p class="card-desc">אותו מודל, harness שונה — עימות ישיר</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="final-scores.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="final-scores.html">Final Scores — Amp vs Claude</a>
       <div class="card-dates">Published: 2026-07-17 · Updated: 2026-07-18</div>
       <p class="card-desc">טבלת תוצאות מסכמת</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="harness-beats-model.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="harness-beats-model.html">The Harness Beats the Model — Amp Rush vs Claude Fable 5</a>
       <div class="card-dates">Published: 2026-07-13 · Updated: 2026-07-19</div>
       <p class="card-desc">התזה: ה-harness חשוב מהמודל</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="harness-story.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="harness-story.html">The Harness Beats the Model — Qubits, Baboons &amp; AI Agents</a>
       <div class="card-dates">Published: 2026-07-17 · Updated: 2026-07-19</div>
       <p class="card-desc">גרסת הסיפור המלא</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="NotebookComparison_Presentation.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="NotebookComparison_Presentation.html">Mohammadian 1988 — Claude vs Amp Slide Deck</a>
       <div class="card-dates">Published: 2026-05-13</div>
       <p class="card-desc">השוואה על שחזור מאמר ב-Mathematica</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="claude-code-skills-vs-amp/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="claude-code-skills-vs-amp/">Claude Code Skills vs Amp Built-in Capabilities</a>
       <div class="card-dates">Published: 2026-07-15</div>
       <p class="card-desc">השוואת מנגנוני skills</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="amp-lost-in-the-middle-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="amp-lost-in-the-middle-presentation.html">How Amp Solves "Lost in the Middle"</a>
       <div class="card-dates">Published: 2026-04-26</div>
       <p class="card-desc">איך Amp פותר את בעיית אמצע-הקונטקסט</p>
     </article>
     <article class="card " dir="rtl">
-      <span class="card-tag badge-he">Hebrew</span>
+      <div class="card-top"><span class="card-tag badge-he">Hebrew</span><button class="stamp" type="button" data-note="Claude_HalfLife_Test.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="Claude_HalfLife_Test.html">בדיקת "זמן מחצית חיים" של Claude</a>
       <div class="card-dates">Published: 2026-04-07</div>
       <p class="card-desc">ניסוי דעיכת ביצועים לאורך שיחה</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="agent-halflife-tester.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="agent-halflife-tester.html">Agent Half-Life Tester</a>
       <div class="card-dates">Published: 2026-04-06</div>
       <p class="card-desc">הכלי שמודד דעיכת ביצועי סוכן</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="ai-coding-agent-cost-calculator.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="ai-coding-agent-cost-calculator.html">AI Coding Agent Cost Calculator</a>
       <div class="card-dates">Published: 2026-05-29 · Updated: 2026-07-27</div>
       <p class="card-desc">מחשבון עלויות אינטראקטיבי — קטלוג מודלים רוענן</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="ai-cost-estimation-presentation/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="ai-cost-estimation-presentation/">AI Coding Agent Cost Estimation Dashboards</a>
       <div class="card-dates">Published: 2026-05-09</div>
       <p class="card-desc">דשבורדים להערכת עלויות</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="Dive-into-Claude-Code-Presentation.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="Dive-into-Claude-Code-Presentation.html">Dive into Claude Code</a>
       <div class="card-dates">Published: 2026-06-16 · Updated: 2026-07-27</div>
       <p class="card-desc">סקירת עומק של Claude Code</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="Claude-Code-Qwen-Local-Guide.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="Claude-Code-Qwen-Local-Guide.html">Connect Claude Code to Local Qwen3-Coder / Qwen 2.5 Coder</a>
       <div class="card-dates">Published: 2026-04-06 · Updated: 2026-07-27</div>
       <p class="card-desc">מדריך חיבור למודל מקומי — שוכתב ל-Anthropic /v1/messages</p>
@@ -693,42 +743,49 @@
   <h2><span class="sec-dot"></span>Security, CISO & AI<span class="sec-count">11</span></h2>
   <div class="grid">
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="AI_Coding_Tools_Security_Comparison.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="AI_Coding_Tools_Security_Comparison.html">AI Coding Tools Security Comparison — CISO Assessment</a>
       <div class="card-dates">Published: 2026-03-19 · Updated: 2026-07-27</div>
       <p class="card-desc">הערכת מוכנות ארגונית של כלי קידוד AI — בדיקה מחדש + הערות יכולות חדשות</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="AI_Coding_Tools_Security_Comparison_Report.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="AI_Coding_Tools_Security_Comparison_Report.html">AI Coding Tools — CISO Security Comparison Report</a>
       <div class="card-dates">Published: 2026-03-19 · Updated: 2026-06-22</div>
       <p class="card-desc">גרסת הדוח המלא</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="Ampcode_CISO_Security_Review.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="Ampcode_CISO_Security_Review.html">CISO Security Review — Ampcode (Sourcegraph)</a>
       <div class="card-dates">Published: 2026-03-19</div>
       <p class="card-desc">סקירת אבטחה ל-Ampcode</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="amp-arupilot-security-benchmark.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="amp-arupilot-security-benchmark.html">Amp-Optimized Security Prompt — Benchmark on ArduPilot</a>
       <div class="card-dates">Published: 2026-05-21</div>
       <p class="card-desc">בנצ'מרק פרומפט אבטחה על ArduPilot</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="apweb-security-bakeoff-judge.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="apweb-security-bakeoff-judge.html">APWeb Blind Security Bake-off — Droid as a Judge</a>
       <div class="card-dates">Published: 2026-08-08</div>
       <p class="card-desc">שיפוט עיוור: Amp מול Claude Code על ArduPilot APWeb</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="ampcode-mcp-defense-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="ampcode-mcp-defense-presentation.html">Defending Against MCP Tool Poisoning</a>
       <div class="card-dates">Published: 2026-06-18 · Updated: 2026-06-19</div>
       <p class="card-desc">הגנה מהרעלת כלי MCP</p>
     </article>
     <article class="card " dir="rtl">
-      <span class="card-tag badge-he">Hebrew</span>
+      <div class="card-top"><span class="card-tag badge-he">Hebrew</span><button class="stamp" type="button" data-note="ampcode-prompt-injection-immunity.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="ampcode-prompt-injection-immunity.html">למה הבאג הזה לא יכול לקרות ב-Ampcode</a>
       <div class="card-dates">Published: 2026-04-15</div>
       <p class="card-desc">חסינות ל-prompt injection</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="nono-ampcode-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="nono-ampcode-presentation.html">nono — AI Agent Security for Ampcode</a>
       <div class="card-dates">Published: 2026-04-03</div>
       <p class="card-desc">שכבת אבטחה לסוכני AI</p>
@@ -744,6 +801,7 @@
       <p class="card-desc">ניתוח זרימת נתונים של SQLi</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="endorlabs-amp-integration-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="endorlabs-amp-integration-presentation.html">Endor Labs + Amp Integration</a>
       <div class="card-dates">Published: 2026-06-16</div>
       <p class="card-desc">שילוב סריקות Endor Labs בתוך Amp</p>
@@ -780,6 +838,7 @@
       <p class="card-desc">מודרניזציה של קוד ASN1C</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="asn1c-workbench-amp-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="asn1c-workbench-amp-presentation.html">ASN1C Workbench + Amp</a>
       <div class="card-dates">Published: 2026-05-31</div>
       <p class="card-desc">סביבת עבודה ל-ASN.1 עם Amp</p>
@@ -815,17 +874,19 @@
       <p class="card-desc">מדריך הגירה ל-Axelera Metis</p>
     </article>
     <article class="card " dir="rtl">
-      <span class="card-tag badge-he">Hebrew</span>
+      <div class="card-top"><span class="card-tag badge-he">Hebrew</span><button class="stamp" type="button" data-note="static-code-analysis-2026.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="static-code-analysis-2026.html">ניתוח קוד סטטי ובדיקות דינאמיות 2026</a>
       <div class="card-dates">Published: 2026-04-06</div>
       <p class="card-desc">עידן הבינה המלאכותית בניתוח קוד</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="terratest-ampcode-esl-presentation/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="terratest-ampcode-esl-presentation/">Ampcode × Terratest</a>
       <div class="card-dates">Published: 2026-07-05</div>
       <p class="card-desc">בדיקות תשתית עם Terratest ו-Amp</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="terratest-diff-esl-presentation/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="terratest-diff-esl-presentation/">Terratest × Ampcode — The Diff</a>
       <div class="card-dates">Published: 2026-07-05</div>
       <p class="card-desc">גרסת ה-diff של אותו נושא</p>
@@ -836,16 +897,19 @@
       <p class="card-desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional, כולל V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות, דוח תיקון ודוח סטיות</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="github-trends-watch-presentation/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="github-trends-watch-presentation/">GitHub Trends Watch</a>
       <div class="card-dates">Published: 2026-07-25</div>
       <p class="card-desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="why-amp-doesnt-need-node9-proxy.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="why-amp-doesnt-need-node9-proxy.html">Why Amp Doesn't Need node9-proxy</a>
       <div class="card-dates">Published: 2026-03-28</div>
       <p class="card-desc">ניתוח ארכיטקטורת רשת</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="skillspector-droid-locate-and-judge.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="skillspector-droid-locate-and-judge.html">Droid as Locate-and-Judge — SkillSpector</a>
       <div class="card-dates">Published: 2026-07-20</div>
       <p class="card-desc">שיפוט אוטומטי של skills</p>
@@ -857,11 +921,13 @@
   <h2><span class="sec-dot"></span>Wolfram, Math & Research<span class="sec-count">14</span></h2>
   <div class="grid">
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="floating-point-heat-method-verification/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="floating-point-heat-method-verification/">Beyond Nonzero — Certified Floating-Point Heat-Method Numerics</a>
       <div class="card-dates">Published: 2026-07-29 · Updated: 2026-07-29</div>
       <p class="card-desc">מצגת טכנית של ESL: מימוש Python מתוקן עם 9 בדיקות, אימות צולב מול Wolfram Mathematica 15 והוכחות Lean 4 לחיוביות, תנאי CFL והתפשטות סופית; כולל תיקונים למאמר המקורי, השלכות הנדסיות ושימושים מסחריים</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="adaptive-visual-context/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="adaptive-visual-context/">Adaptive Visual Context — CARES Research to Verified Agent Workflow</a>
       <div class="card-dates">Published: 2026-07-28</div>
       <p class="card-desc">מצגת מדעית בת 39 שקופיות המחברת את מחקר CARES ל-Agent Skill דטרמיניסטי, שחזורי Wolfram, הוכחות Lean 4 ממוקדות וממשל ראיות של ESL AI SDLC</p>
@@ -877,6 +943,7 @@
       <p class="card-desc">מצגת טכנית על גאומטריה דיפרנציאלית, תכנון הפוך ואימות חוצה Wolfram, Lean 4 ו-C++</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="Avraham_Gilo_Lemma1_Presentation.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="Avraham_Gilo_Lemma1_Presentation.html">Avraham &amp; Gilo — Lemma 1 Verification</a>
       <div class="card-dates">Published: 2026-03-31</div>
       <p class="card-desc">אימות למה מתמטית עם Ampcode + Wolfram</p>
@@ -902,6 +969,7 @@
       <p class="card-desc">טלמטריית GPU ב-Wolfram Engine</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="ampcode-classiq-research-orchestrator/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="ampcode-classiq-research-orchestrator/">Ampcode + Mathematica + Lean 4 + Classiq</a>
       <div class="card-dates">Published: 2026-07-22</div>
       <p class="card-desc">אורקסטרציה של מחקר קוונטי</p>
@@ -917,6 +985,7 @@
       <p class="card-desc">ממאמר לקוד מאומת</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="cardioband-tr-wolfram-demo/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="cardioband-tr-wolfram-demo/">AMP + Wolfram Paper-to-Simulation Demo</a>
       <div class="card-dates">Published: 2026-05-23</div>
       <p class="card-desc">ממאמר לסימולציה</p>
@@ -948,11 +1017,13 @@
       <p class="card-desc">גרסת דוח</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="hiring-agent-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="hiring-agent-presentation.html">Hiring Agent — Concept &amp; Process</a>
       <div class="card-dates">Published: 2026-06-04</div>
       <p class="card-desc">סוכן AI לתהליכי גיוס</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="optical-ai-network-comparison-presentation.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="optical-ai-network-comparison-presentation.html">Optical AI Networks: China vs. Nvidia Israel</a>
       <div class="card-dates">Published: 2026-07-15</div>
       <p class="card-desc">השוואת רשתות AI אופטיות</p>
@@ -968,11 +1039,13 @@
       <p class="card-desc">מסע נוסטלגי — DOS ועד AI</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="games/amp-best.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="games/amp-best.html">London Baboon Hunt — FPS (Amp)</a>
       <div class="card-dates">Published: 2026-07-17</div>
       <p class="card-desc">משחק ה-FPS מהבנצ'מרק — גרסת Amp</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="games/claude-best.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="games/claude-best.html">London Baboon Hunter — FPS (Claude)</a>
       <div class="card-dates">Published: 2026-07-17</div>
       <p class="card-desc">גרסת Claude</p>
@@ -983,6 +1056,7 @@
       <p class="card-desc">14-phase pipeline: fault injection, FMEA/FTA/HAZOP, MC/DC, WCET, GSN safety case, secureFlows</p>
     </article>
     <article class="card " dir="ltr">
+      <div class="card-top"><button class="stamp" type="button" data-note="answer-to-tannenbaum-concern.html" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
       <a class="card-title" href="answer-to-tannenbaum-concern.html">An Answer to Tannenbaum's Concern - Securing AI-Generated HTML</a>
       <div class="card-dates">Published: 2026-07-30 · Updated: 2026-08-23</div>
       <p class="card-desc">Open-source 9-check HTML safety gate, local GUI, CVE review, hardened git hooks, and CI</p>
@@ -1024,6 +1098,15 @@
 
 </main>
 
+<div class="ai-backdrop" id="ai-backdrop" hidden>
+  <div class="ai-modal" role="dialog" aria-modal="true" aria-labelledby="ai-title">
+    <button class="ai-close" id="ai-close" type="button" aria-label="Close">&times;</button>
+    <div class="ai-stamp" id="ai-stamp">AGENTIC<br>AI<br>INSIDE</div>
+    <p class="ai-eyebrow">How AI was used inside</p>
+    <h3 class="ai-title" id="ai-title">&nbsp;</h3>
+    <p class="ai-text" id="ai-text"></p>
+  </div>
+</div>
 <script>
 (function () {
   var q = document.getElementById('q');
@@ -1074,6 +1157,31 @@
   }
   q.addEventListener('input', apply);
   apply();
+
+  // AI stamp popup: one modal, populated per card from AI_NOTES.
+  var AI_NOTES = {"swe-sweep-harness-king/index.html": {"stamp": "AGENTIC AI INSIDE", "how": "Two agentic coding agents, Amp and Claude Code on the same claude-opus-5-5 model, attempted 60 real SWE-sweep bugs under identical one-hour caps and hidden-test Docker verifiers. The deck walks through the agents' actual diffs, the harness ablation and a Parasoft control."}, "mini-swe-sweep/index.html": {"stamp": "AGENTIC AI INSIDE", "how": "Amp and Claude Code agents ran head-to-head on 60 real reference bugs across 12 repositories in 6 languages, with equal time caps and hidden-test scoring. Every result shown is agent output."}, "hardenator-vsix-skills/index.html": {"stamp": "AI INSIDE", "how": "Subject: security of AI artifacts. Four intake options review VSIX extensions and SKILL.md agent skill bundles before they enter the internal network. The inspection flow is deterministic; the things being inspected are AI skills."}, "floating-point-heat-method-verification/": {"stamp": "AGENTIC AI INSIDE", "how": "Amp orchestrates the verification loop: a corrected Python solver with 9 checks, Wolfram Mathematica 15 cross-validation and Lean 4 kernel-checked proofs for positivity, CFL and finite propagation."}, "adaptive-visual-context/": {"stamp": "AI INSIDE", "how": "Connects the CARES research model to a deterministic Agent Skill: 39 slides on verified agentic visual-context workflows with Wolfram reproductions and targeted Lean 4 proofs."}, "edpb-databom-legal-edition/": {"stamp": "AI INSIDE", "how": "Subject: governance of AI training data. DataBOM documents dataset provenance as evidence for LIA/DPIA under EDPB Guidelines 03/2026. No LLM runs inside; AI is the governed subject (Hebrew)."}, "github-trends-watch-presentation/": {"stamp": "AGENTIC AI INSIDE", "how": "An automated newsletter pipeline in which AI analysis of GitHub trends produces the recurring report."}, "apollo-misra-demo/": {"stamp": "AGENTIC AI INSIDE", "how": "Amp-assisted remediation: 100 selected MISRA findings flow through AI-assisted fixes, unit tests and rescanning across six Parasoft automation servers, with before/after evidence for each finding."}, "wazatator/": {"stamp": "AGENTIC AI INSIDE", "how": "Wazatator runs your SKILL.md through real Claude Code sessions and scores the result. An open-source fork of Microsoft Waza: eval suites, tasks, graders and trigger tests executed by actual agent runs."}, "mantiq-holographic-interfaces/": {"stamp": "AGENTIC AI INSIDE", "how": "ESL's MantiQ Factor workflow: an Amp-driven agent orchestrates Wolfram notebook re-derivations, scoped Lean 4 proofs and a quantum simulator for the holography paper. The LLM orchestrates and cross-checks; the math tools compute."}, "mantiq-qpe/": {"stamp": "AGENTIC AI INSIDE", "how": "An agentic verification loop over a live gate-level QPE simulator: exact and approximate phases checked against independent Wolfram vectors and a scoped Lean 4 resource-count proof."}, "mantiq-solidity/": {"stamp": "AGENTIC AI INSIDE", "how": "The MantiQ Factor agentic pipeline applied to an ETH escrow contract: static-analysis triage, EVM tests and Wolfram/Lean 4 model evidence, chained and cross-checked by the agent (368-component SBOM included)."}, "mantiq-factor-fhe-hardware/": {"stamp": "AGENTIC AI INSIDE", "how": "The MantiQ Factor agentic pipeline drives the full path from the REED paper through Wolfram re-derivation, Lean 4 proofs, VHDL simulation and PYNQ-Z2 implementation, checking each stage against the paper's claims."}, "ai-code-ownership.html": {"stamp": "AI INSIDE", "how": "Subject: engineering practice when agents write most of the code. Five discussion patterns (counterexamples, observability debt, atomicity, learning loops, durable ownership) for AI-assisted codebases."}, "prediction-is-not-permission/": {"stamp": "AI INSIDE", "how": "ESL AI SDLC governance: how an AI prediction at 99% confidence should route differently for a $5 ticket versus a $10,000 account closure. Live expected-loss calculator and copyable policy code for agent decisions."}, "jev-cost-of-being-wrong/": {"stamp": "AI INSIDE", "how": "Cost-aware AI automation: Jev confidence weighed against the cost of being wrong ($20 credit vs $20,000 reimbursement), with an interactive expected-error-loss calculator and copyable Python policy."}, "jev-decision-safeguards/": {"stamp": "AI INSIDE", "how": "Interactive walkthrough of safeguards for AI decisions: context filtering, missing-evidence review gates and confidently-wrong routing, with an adjustable threshold to compare errors against deferred work."}, "agent-memory-benchmark/": {"stamp": "AGENTIC AI INSIDE", "how": "Benchmarks agent memory itself: stateless, full-context and governed selective-memory strategies compared across six interactive scenarios, with decision traces you can inspect and reproducible downloads."}, "amp-vs-langgraph/": {"stamp": "AI INSIDE", "how": "Design analysis: every node of a graph-based coding agent state machine mapped to Amp's built-in tools. About how agentic harnesses implement orchestration; includes a decision framework for regulated industries."}, "harness-is-the-product/": {"stamp": "AGENTIC AI INSIDE", "how": "An auto-advancing loop deck dissecting the AI coding agent stack: UI, orchestrator, context and indexing, tool execution, LLM core, verification and memory, and what share of the product each layer carries beyond the LLM itself."}, "edpb-guidelines-databom-risk/": {"stamp": "AI INSIDE", "how": "Subject: the risks EDPB Guidelines 03/2026 create around web scraping, and how DataBOM evidence covers AI training data. AI is the governed subject, not a component."}, "sbomator-databom-presentation/": {"stamp": "AI INSIDE", "how": "Product concept: provenance scanning for AI training datasets (a DataBOM). The provenance scans are deterministic; the AI training data is what gets documented and governed (Hebrew)."}, "ai_agent_eval_presentation.html": {"stamp": "AGENTIC AI INSIDE", "how": "A full evaluation methodology comparing the Ampcode and Claude Code agents: task design, scoring and repeatability across both harnesses."}, "ampcode-vs-claudecode-presentation.html": {"stamp": "AGENTIC AI INSIDE", "how": "Head-to-head comparison of the two agentic coding tools; every slide evaluates agent behavior and output, not a human workflow."}, "amp-deep3-vs-claude-opus47-benchmark.html": {"stamp": "AGENTIC AI INSIDE", "how": "Benchmark of Amp Deep\u00b3 against Claude Opus 4.7 on identical tasks: agent-versus-agent measurement with per-task links and scoring."}, "baboons-benchmark-report.html": {"stamp": "AGENTIC AI INSIDE", "how": "Report on the FPS benchmark in which both agents built the same game from the same prompt, measuring agent output quality and cost."}, "baboons-face-off.html": {"stamp": "AGENTIC AI INSIDE", "how": "Same model, different harness: a direct confrontation built from the two agents' own outputs in the London Baboon benchmark."}, "final-scores.html": {"stamp": "AGENTIC AI INSIDE", "how": "Summary score table of the Amp vs Claude agent benchmark runs."}, "harness-beats-model.html": {"stamp": "AGENTIC AI INSIDE", "how": "The thesis deck: the agent harness matters more than the LLM, argued from measured agent runs rather than opinion."}, "harness-story.html": {"stamp": "AGENTIC AI INSIDE", "how": "The full-story version of the harness-beats-model argument, told through qubits, baboons and recorded AI agent runs."}, "NotebookComparison_Presentation.html": {"stamp": "AGENTIC AI INSIDE", "how": "Both agents independently reproduced a 1988 Mathematica paper; the deck compares their autonomous workflows, errors and outputs."}, "claude-code-skills-vs-amp/": {"stamp": "AI INSIDE", "how": "Mechanism comparison of the two agents' skill systems: what each harness offers natively and where the boundary sits."}, "amp-lost-in-the-middle-presentation.html": {"stamp": "AI INSIDE", "how": "How Amp's context management counters lost-in-the-middle degradation in long agent sessions."}, "Claude_HalfLife_Test.html": {"stamp": "AGENTIC AI INSIDE", "how": "An empirical agent-session experiment: measured performance decay of Claude across a long conversation (Hebrew)."}, "agent-halflife-tester.html": {"stamp": "AGENTIC AI INSIDE", "how": "The tool behind the half-life experiment: it drives an agent through long sessions and measures output-quality decay automatically."}, "ai-coding-agent-cost-calculator.html": {"stamp": "AI INSIDE", "how": "Interactive calculator for AI coding agent spend: model catalog, token pricing and session math, refreshed model list."}, "ai-cost-estimation-presentation/": {"stamp": "AI INSIDE", "how": "Dashboards for estimating AI coding agent costs across teams and workloads."}, "Dive-into-Claude-Code-Presentation.html": {"stamp": "AI INSIDE", "how": "Deep dive into Claude Code's architecture, workflows and internals."}, "Claude-Code-Qwen-Local-Guide.html": {"stamp": "AGENTIC AI INSIDE", "how": "Wires the Claude Code agent to local Qwen models: a setup for running an agentic harness on a local LLM (rewritten to the Anthropic /v1/messages API)."}, "AI_Coding_Tools_Security_Comparison.html": {"stamp": "AI INSIDE", "how": "CISO readiness assessment of AI coding tools: security posture, data handling and enterprise controls of each agent, re-checked with notes on new capabilities."}, "AI_Coding_Tools_Security_Comparison_Report.html": {"stamp": "AI INSIDE", "how": "Full report version of the AI coding tools security assessment."}, "Ampcode_CISO_Security_Review.html": {"stamp": "AI INSIDE", "how": "Security review of the Ampcode agent itself: trust portals, subprocessors, SOC 2 evidence and penetration-test status."}, "amp-arupilot-security-benchmark.html": {"stamp": "AGENTIC AI INSIDE", "how": "An AI security-analysis prompt was benchmarked by running the agent over ArduPilot: measures the quality of agent-produced security findings."}, "apweb-security-bakeoff-judge.html": {"stamp": "AGENTIC AI INSIDE", "how": "Blind bake-off: an AI judge (Droid) scores Amp and Claude Code security analyses of ArduPilot APWeb without knowing which agent produced which output."}, "ampcode-mcp-defense-presentation.html": {"stamp": "AI INSIDE", "how": "Defense against MCP tool poisoning: securing the tool layer that AI agents act through."}, "ampcode-prompt-injection-immunity.html": {"stamp": "AI INSIDE", "how": "Why prompt injection cannot reach this Ampcode path: an injection-resistance analysis of the agent's architecture (Hebrew)."}, "nono-ampcode-presentation.html": {"stamp": "AI INSIDE", "how": "nono: a security layer wrapped around AI agents in Ampcode."}, "endorlabs-amp-integration-presentation.html": {"stamp": "AGENTIC AI INSIDE", "how": "Endor Labs scan results surfaced inside the Amp agent loop, so security findings reach the agent while it works."}, "asn1c-workbench-amp-presentation.html": {"stamp": "AGENTIC AI INSIDE", "how": "An ASN.1 workbench with the Amp agent integrated: the agent assists schema exploration and code generation inside the tool."}, "static-code-analysis-2026.html": {"stamp": "AI INSIDE", "how": "2026 survey (Hebrew): static and dynamic analysis in the AI era, covering LLM-era tooling, local models and agent-driven fixing."}, "terratest-ampcode-esl-presentation/": {"stamp": "AGENTIC AI INSIDE", "how": "Infrastructure tests authored and iterated with the Amp agent over Terratest."}, "terratest-diff-esl-presentation/": {"stamp": "AGENTIC AI INSIDE", "how": "The diff view of the same agent-authored Terratest work, change by change."}, "why-amp-doesnt-need-node9-proxy.html": {"stamp": "AI INSIDE", "how": "Architecture analysis of Amp's networking layer: why the agent product does not need an external proxy."}, "skillspector-droid-locate-and-judge.html": {"stamp": "AGENTIC AI INSIDE", "how": "An AI droid locates and judges agent skills automatically: SkillSpector's locate-and-judge evaluation pipeline."}, "Avraham_Gilo_Lemma1_Presentation.html": {"stamp": "AGENTIC AI INSIDE", "how": "Ampcode drove the verification workflow, pairing the agent with Wolfram to check the mathematical lemma step by step."}, "ampcode-classiq-research-orchestrator/": {"stamp": "AGENTIC AI INSIDE", "how": "Ampcode orchestrates the quantum research loop across Mathematica, Lean 4 and Classiq, turning a paper pipeline into agent-run evidence."}, "cardioband-tr-wolfram-demo/": {"stamp": "AGENTIC AI INSIDE", "how": "The AMP agent drove the paper-to-simulation pipeline with Wolfram for the Cardioband TR case: extraction, modeling and verification."}, "hiring-agent-presentation.html": {"stamp": "AI INSIDE", "how": "Concept for an AI agent that executes steps of the hiring process; the deck defines the agent's scope and guardrails."}, "optical-ai-network-comparison-presentation.html": {"stamp": "AI INSIDE", "how": "Subject: AI infrastructure. Compares optical network builds for AI compute (China vs Nvidia Israel)."}, "games/amp-best.html": {"stamp": "AGENTIC AI INSIDE", "how": "This FPS game was built end to end by the Amp agent during the benchmark: the code is agent output, produced from a single prompt."}, "games/claude-best.html": {"stamp": "AGENTIC AI INSIDE", "how": "Same benchmark, Claude Code arm: the game is agent-generated code from the same prompt."}, "answer-to-tannenbaum-concern.html": {"stamp": "AI INSIDE", "how": "Subject: securing AI-generated HTML. An open-source 9-check safety gate with a local GUI and CI, hardened git hooks and CVE review, for code that agents produce."}};
+  var backdrop = document.getElementById('ai-backdrop');
+  var aiStampEl = document.getElementById('ai-stamp');
+  var aiTitle = document.getElementById('ai-title');
+  var aiText = document.getElementById('ai-text');
+  var aiClose = document.getElementById('ai-close');
+  function closeAi() { backdrop.hidden = true; }
+  Array.prototype.slice.call(document.querySelectorAll('.stamp')).forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var note = AI_NOTES[btn.getAttribute('data-note')];
+      if (!note) return;
+      var card = btn.closest('.card');
+      var t = card ? card.querySelector('.card-title') : null;
+      aiTitle.textContent = t ? t.textContent : '';
+      aiStampEl.innerHTML = note.stamp.replace('AGENTIC AI INSIDE', 'AGENTIC<br>AI<br>INSIDE').replace('AI INSIDE', 'AI<br>INSIDE');
+      aiText.textContent = note.how;
+      backdrop.hidden = false;
+      aiClose.focus();
+    });
+  });
+  aiClose.addEventListener('click', closeAi);
+  backdrop.addEventListener('click', function (e) { if (e.target === backdrop) closeAi(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !backdrop.hidden) closeAi(); });
 })();
 </script>
 </body>
