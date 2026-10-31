@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>SavePathCopier — Tell Amp what you just saved</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1321; color:#e8ecf4; line-height:1.65; padding:clamp(16px,4vw,56px); }
+  .wrap { max-width:900px; margin:0 auto; }
+  .badge { display:inline-block; background:#123a52; color:#4fc3f7; font-size:.72rem; font-weight:700; padding:4px 12px; border-radius:999px; letter-spacing:.5px; margin-bottom:14px; }
+  h1 { font-size:clamp(1.7rem,5vw,2.8rem); font-weight:800; line-height:1.2; margin-bottom:.4em; }
+  h1 .hl { color:#4fc3f7; }
+  .sub { color:#9aa7c0; font-size:clamp(.95rem,2.2vw,1.15rem); margin-bottom:2.2em; max-width:46em; }
+  h2 { font-size:clamp(1.15rem,3vw,1.55rem); font-weight:700; color:#4fc3f7; margin:1.8em 0 .7em; }
+  p { margin-bottom:1em; color:#c9d3e3; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px; margin:1.2em 0; }
+  .card { background:#161d2f; border:1px solid #263048; border-radius:14px; padding:18px 20px; }
+  .card h3 { color:#e8ecf4; font-size:1rem; margin-bottom:.45em; }
+  .card p { color:#9aa7c0; font-size:.88rem; margin:0; }
+  .card .num { color:#4fc3f7; font-weight:800; display:block; margin-bottom:6px; font-size:1.05rem; }
+  .flow { display:flex; flex-wrap:wrap; gap:10px; align-items:stretch; margin:1.4em 0; }
+  .step { flex:1 1 150px; background:#111a2e; border:1px solid #2a3a58; border-radius:12px; padding:14px 16px; position:relative; }
+  .step b { color:#4fc3f7; display:block; margin-bottom:4px; font-size:.95rem; }
+  .step span { color:#9aa7c0; font-size:.84rem; }
+  .step .arrow { position:absolute; right:-16px; top:50%; transform:translateY(-50%); color:#4fc3f7; font-size:1.1rem; z-index:1; }
+  code, .path { font-family:Consolas,'Courier New',monospace; background:#0a0f1d; border:1px solid #263048; border-radius:6px; padding:2px 7px; color:#66bb6a; font-size:.85em; direction:ltr; unicode-bidi:embed; }
+  .example { background:#0a0f1d; border:1px solid #263048; border-radius:14px; padding:18px 20px; margin:1.2em 0; }
+  .example .you { color:#8ab4f8; }
+  .example .amp { color:#66bb6a; }
+  .example div { margin-bottom:8px; font-size:clamp(.85rem,1.8vw,.98rem); }
+  .example div:last-child { margin-bottom:0; }
+  ul { margin:0 0 1em 1.3em; color:#c9d3e3; }
+  li { margin-bottom:.45em; }
+  .cta { background:linear-gradient(135deg,#13243a 0%,#1a3050 100%); border:1px solid #2f4a6e; border-radius:16px; padding:clamp(18px,4vw,28px); margin:2em 0 1.5em; text-align:center; }
+  .cta a.btn { display:inline-block; background:#4fc3f7; color:#0d1321; font-weight:800; padding:13px 30px; border-radius:12px; text-decoration:none; font-size:clamp(.95rem,2vw,1.1rem); margin:6px 8px 0; }
+  .cta a.ghost { background:transparent; color:#4fc3f7; border:1.5px solid #4fc3f7; font-weight:700; }
+  .cta a.btn:hover { filter:brightness(1.1); }
+  .cta small { display:block; color:#9aa7c0; margin-top:10px; font-size:.8rem; }
+  footer { color:#5f6f8d; font-size:.8rem; margin-top:2.5em; border-top:1px solid #263048; padding-top:1.2em; }
+  footer a { color:#7d8aa5; }
+  @media (max-width:640px){ .step .arrow{ display:none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="badge">SAVEPATHCOPIER &middot; FREE &middot; MIT LICENSE</div>
+  <h1>You just saved a screenshot. <span class="hl">Amp needs the path, not the pixels.</span></h1>
+  <p class="sub">SavePathCopier is a tiny Windows tray utility: every time you save a file, its full path lands on your clipboard. Save, paste, done — Amp knows exactly which file to open.</p>
+
+  <h2>The problem it solves</h2>
+  <p>An AI coding agent like <strong>Amp</strong> cannot see your screen. It also cannot peek into your folders on its own. What it <em>can</em> do is read any file on your machine — a screenshot, an error dialog capture, a log, a PDF — the moment you tell it where that file is.</p>
+  <p>The problem: in many Amp workflows (terminal sessions, quick questions, inputs without image paste support) you cannot paste a picture at all. The practical bridge between your screen and the agent is the <strong>file path</strong>. And typing <code>C:\Users\danie\OneDrive\Desktop\Screenshot 2026-10-31 125117.png</code> by hand is exactly the kind of chore nobody wants.</p>
+
+  <h2>The workflow, in four steps</h2>
+  <div class="flow">
+    <div class="step"><b>1. Save</b><span>Screenshot, export, document — save it anywhere you normally would (Win+Shift+S, Save As...).</span><span class="arrow">→</span></div>
+    <div class="step"><b>2. Path is copied</b><span>SavePathCopier puts the full path on your clipboard automatically. No click, no typing.</span><span class="arrow">→</span></div>
+    <div class="step"><b>3. Paste into Amp</b><span>Ctrl+V in the Amp prompt. Or Win+V to pick an earlier saved file from clipboard history.</span><span class="arrow">→</span></div>
+    <div class="step"><b>4. Amp reads it</b><span>Amp opens the file at that path — image, log, PDF, code — and answers with full context.</span></div>
+  </div>
+
+  <h2>Why pasting the path beats everything else</h2>
+  <div class="grid">
+    <div class="card"><span class="num">Zero typing</span><p>Long OneDrive paths, timestamps in screenshot names — copied perfectly every time, no "which folder was it again".</p></div>
+    <div class="card"><span class="num">Works everywhere</span><p>A path is plain text: paste it into the Amp CLI, a chat box, a config file, an issue, or a script.</p></div>
+    <div class="card"><span class="num">Any file type</span><p>Screenshots, PDFs, Excel exports, stack-trace logs, design mockups — Amp opens and analyzes all of them.</p></div>
+    <div class="card"><span class="num">Built-in history</span><p>Win+V keeps your recent saved-file paths, so "the dialog from ten minutes ago" is still one paste away.</p></div>
+  </div>
+
+  <h2>What it looks like in practice</h2>
+  <div class="example">
+    <div><span class="you"><strong>You:</strong></span> Why is this dialog showing an empty table? <span class="path">C:\Users\danie\OneDrive\Desktop\Screenshot 2026-10-31 125117.png</span></div>
+    <div><span class="amp"><strong>Amp:</strong></span> Opens the screenshot, sees the grid has zero rows and a red status bar, then reads your service code and finds the query returning nothing — and proposes the fix.</div>
+  </div>
+  <div class="example">
+    <div><span class="you"><strong>You:</strong></span> This build log looks wrong, check the last 50 lines: <span class="path">C:\tmp\build-output.log</span></div>
+    <div><span class="amp"><strong>Amp:</strong></span> Greps the log, finds the linker error, and explains which missing symbol caused it.</div>
+  </div>
+
+  <h2>What it watches</h2>
+  <p>By default: your <strong>Desktop</strong>, <strong>Documents</strong>, <strong>Downloads</strong> and <strong>C:\tmp</strong>, including subfolders. Office lock files and browser temp downloads are ignored, so autosave noise never floods your clipboard. Edit one text file to add any folder.</p>
+
+  <div class="cta">
+    <h2 style="margin:0 0 .3em">Install in under a minute</h2>
+    <p style="margin:0">Runs at logon as a tray app. No admin rights, no dependencies, no typing of paths.</p>
+    <a class="btn" href="https://github.com/zuwasi/SavePathCopier/releases/latest">Download SavePathCopier-Setup.exe</a>
+    <a class="btn ghost" href="https://github.com/zuwasi/SavePathCopier">View source on GitHub</a>
+    <small>Windows 10/11 &middot; MIT License &middot; Uninstaller included</small>
+  </div>
+
+  <footer>SavePathCopier &middot; <a href="https://github.com/zuwasi/SavePathCopier">github.com/zuwasi/SavePathCopier</a> &middot; MIT License</footer>
+</div>
+</body>
+</html>
