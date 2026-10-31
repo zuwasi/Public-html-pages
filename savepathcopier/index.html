@@ -7,7 +7,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1321; color:#e8ecf4; line-height:1.65; padding:clamp(16px,4vw,56px); }
+  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1321; color:#e8ecf4; line-height:1.65; padding:clamp(16px,4vw,56px); overflow-x:hidden; }
+  * { overflow-wrap:break-word; }
   .wrap { max-width:900px; margin:0 auto; }
   .badge { display:inline-block; background:#123a52; color:#4fc3f7; font-size:.72rem; font-weight:700; padding:4px 12px; border-radius:999px; letter-spacing:.5px; margin-bottom:14px; }
   h1 { font-size:clamp(1.7rem,5vw,2.8rem); font-weight:800; line-height:1.2; margin-bottom:.4em; }
@@ -25,7 +26,7 @@
   .step b { color:#4fc3f7; display:block; margin-bottom:4px; font-size:.95rem; }
   .step span { color:#9aa7c0; font-size:.84rem; }
   .step .arrow { position:absolute; right:-16px; top:50%; transform:translateY(-50%); color:#4fc3f7; font-size:1.1rem; z-index:1; }
-  code, .path { font-family:Consolas,'Courier New',monospace; background:#0a0f1d; border:1px solid #263048; border-radius:6px; padding:2px 7px; color:#66bb6a; font-size:.85em; direction:ltr; unicode-bidi:embed; }
+  code, .path { font-family:Consolas,'Courier New',monospace; background:#0a0f1d; border:1px solid #263048; border-radius:6px; padding:2px 7px; color:#66bb6a; font-size:.85em; direction:ltr; unicode-bidi:embed; overflow-wrap:anywhere; }
   .example { background:#0a0f1d; border:1px solid #263048; border-radius:14px; padding:18px 20px; margin:1.2em 0; }
   .example .you { color:#8ab4f8; }
   .example .amp { color:#66bb6a; }
