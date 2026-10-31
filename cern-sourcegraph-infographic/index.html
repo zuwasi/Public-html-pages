@@ -112,10 +112,10 @@
     border:1px solid rgba(243,78,63,.45);border-radius:999px;
     padding:7px 16px;margin-bottom:16px;
   }
-  h1{font-size:clamp(28px,5.4vw,60px);font-weight:900;line-height:1.08;letter-spacing:-.02em}
+  h1{font-size:clamp(30px,6vw,66px);font-weight:900;line-height:1.08;letter-spacing:-.02em}
   h1 .hl{color:var(--red-lt)}
-  h2{font-size:clamp(22px,3.8vw,40px);font-weight:800;letter-spacing:-.01em;line-height:1.15}
-  .lead{color:var(--muted);font-size:clamp(14px,1.8vw,18px);line-height:1.65;max-width:660px}
+  h2{font-size:clamp(24px,4.4vw,48px);font-weight:800;letter-spacing:-.01em;line-height:1.15}
+  .lead{color:var(--muted);font-size:clamp(15px,2.1vw,21px);line-height:1.65;max-width:660px}
   .lead strong{color:var(--txt)}
   .lead .hl{color:var(--red-lt);font-weight:600}
 
@@ -150,6 +150,17 @@
   /* ---------- SLIDE 1: HERO ---------- */
   .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
   .hero-sub{margin-top:20px}
+  .globe-frame{
+    margin:0;position:relative;border-radius:16px;overflow:hidden;
+    border:1px solid rgba(243,78,63,.4);
+    box-shadow:0 24px 60px rgba(243,78,63,.18),0 4px 20px rgba(0,0,0,.5);
+  }
+  .globe-frame img{width:100%;display:block;aspect-ratio:1615/1116;object-fit:cover}
+  .globe-frame figcaption{
+    position:absolute;bottom:0;left:0;right:0;padding:12px 16px;
+    font-size:clamp(11px,1.3vw,13px);color:#fff;text-align:right;
+    background:linear-gradient(transparent,rgba(0,0,0,.82));
+  }
   .scroll-cue{
     margin-top:34px;display:flex;align-items:center;gap:12px;
     font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
@@ -174,7 +185,7 @@
   .stat:nth-child(2).in{transition-delay:.12s}
   .stat:nth-child(3).in{transition-delay:.24s}
   .stat:nth-child(4).in{transition-delay:.36s}
-  .stat .num{font-size:clamp(28px,4.6vw,52px);font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+  .stat .num{font-size:clamp(30px,5vw,56px);font-weight:900;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
   .stat:nth-child(1) .num{color:var(--red-lt)}
   .stat:nth-child(2) .num{color:#fff}
   .stat:nth-child(3) .num{color:var(--red-lt)}
@@ -211,10 +222,10 @@
   .mode.run{border-top:3px solid var(--red-lt)}
   .mode.up{border-top:3px solid var(--red-dk)}
   .mode .mode-body{padding:clamp(16px,2.4vw,26px)}
-  .mode h3{font-size:clamp(17px,2.2vw,22px);font-weight:800;margin-bottom:4px;color:var(--red-lt)}
-  .mode .dur{font-size:clamp(10px,1.2vw,13px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  .mode h3{font-size:clamp(19px,2.4vw,25px);font-weight:800;margin-bottom:4px;color:var(--red-lt)}
+  .mode .dur{font-size:clamp(10px,1.3vw,14px);font-weight:700;letter-spacing:.1em;text-transform:uppercase;
     color:var(--muted);margin-bottom:12px}
-  .mode p{font-size:clamp(13px,1.5vw,15px);color:var(--muted);line-height:1.6}
+  .mode p{font-size:clamp(14px,1.7vw,17px);color:var(--muted);line-height:1.6}
   .mode p b{color:var(--txt)}
   .mode .bar{margin-top:16px;height:8px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
   .mode .bar i{display:block;height:100%;width:0;transition:width 1.4s cubic-bezier(.22,.9,.3,1) .3s}
@@ -240,8 +251,8 @@
     display:flex;align-items:center;justify-content:center;
     background:rgba(243,78,63,.12);border:1px solid rgba(243,78,63,.35);color:var(--red-lt)}
   .use .ic svg{width:24px;height:24px;display:block}
-  .use h4{font-size:clamp(14px,1.7vw,17px);font-weight:700;margin-bottom:4px}
-  .use p{font-size:clamp(12px,1.4vw,14px);color:var(--muted);line-height:1.55}
+  .use h4{font-size:clamp(15px,1.9vw,19px);font-weight:700;margin-bottom:4px}
+  .use p{font-size:clamp(13px,1.6vw,16px);color:var(--muted);line-height:1.55}
 
   /* ---------- SLIDE 7: QUOTE ---------- */
   .quote{
@@ -249,7 +260,7 @@
     border:1px solid var(--line);border-left:5px solid var(--red);
     border-radius:14px;padding:clamp(24px,4vw,48px);max-width:860px;
   }
-  .quote p{font-size:clamp(16px,2.4vw,23px);line-height:1.6;font-weight:600;font-style:italic}
+  .quote p{font-size:clamp(17px,2.6vw,26px);line-height:1.6;font-weight:600;font-style:italic}
   .quote p .hl{color:var(--red-lt)}
   .quote .who{margin-top:22px;font-size:clamp(13px,1.5vw,14px);color:var(--muted)}
   .quote .who b{color:var(--txt)}
@@ -261,7 +272,7 @@
     padding:clamp(26px,4.5vw,52px);text-align:center;
   }
   .take h2{margin-bottom:14px}
-  .take p{color:var(--muted);font-size:clamp(14px,1.8vw,17px);line-height:1.65;max-width:720px;margin:0 auto}
+  .take p{color:var(--muted);font-size:clamp(15px,2vw,19px);line-height:1.65;max-width:720px;margin:0 auto}
   .take .cta{
     display:inline-block;margin-top:24px;padding:13px 26px;border-radius:999px;
     background:var(--red);color:#fff;font-weight:800;font-size:clamp(13px,1.6vw,15px);
@@ -334,20 +345,11 @@
           </p>
           <div class="scroll-cue"><span class="arrow">→</span> Use arrows or swipe</div>
         </div>
-        <div class="sw-window">
-          <div class="sw-titlebar">
-            <span class="sw-dot d1"></span><span class="sw-dot d2"></span><span class="sw-dot d3"></span>
-            <span class="sw-title">sourcegraph &middot; code search &mdash; cern-accelerator/controls</span>
-          </div>
-          <div class="sw-body">
-            <div><span class="cmt">// semantic search across 15M lines</span><br>
-              <span class="kwd">pattern:</span> <span class="str" id="typed"></span><span class="caret"></span></div>
-            <div class="results" id="hero-results">
-              <span class="res">✓ <b>214 matches</b> in 1,842 files</span><br>
-              <span class="res">✓ reuse found: <b>next/requestUtils.go#L24</b></span><br>
-              <span class="res">✓ deprecated API usage flagged: <b>3 call sites</b></span>
-            </div>
-          </div>
+        <div>
+          <figure class="globe-frame">
+            <img src="assets/globe.jpg" alt="The Globe of Science and Innovation at CERN">
+            <figcaption>The Globe of Science and Innovation &middot; CERN</figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -383,20 +385,39 @@
   <!-- SLIDE 3: PROBLEM -->
   <section class="slide">
     <div class="wrap">
-      <span class="sec-tag">The Problem</span>
-      <h2>15M lines. Nearly 300 authors.<br>One wrong change stops the LHC.</h2>
-      <div style="height:26px"></div>
-      <p class="lead">
-        Before Sourcegraph, CERN's tooling couldn't do <span class="hl">precise, semantic searches</span> for
-        how and where a specific method was used. The result? Teams
-        <span class="hl">weren't making necessary changes</span> because they couldn't measure the blast
-        radius of a planned API change across the huge codebase.
-      </p>
-      <div style="height:18px"></div>
-      <p class="lead">
-        Meanwhile, valuable code was being <strong>reinvented</strong>: utility methods, deprecated API usage,
-        and general-purpose logic hidden inside specific projects duplicated over and over.
-      </p>
+      <div class="hero-grid">
+        <div>
+          <span class="sec-tag">The Problem</span>
+          <h2>15M lines. Nearly 300 authors.<br>One wrong change stops the LHC.</h2>
+          <div style="height:22px"></div>
+          <p class="lead">
+            Before Sourcegraph, CERN's tooling couldn't do <span class="hl">precise, semantic searches</span> for
+            how and where a specific method was used. The result? Teams
+            <span class="hl">weren't making necessary changes</span> because they couldn't measure the blast
+            radius of a planned API change across the huge codebase.
+          </p>
+          <div style="height:14px"></div>
+          <p class="lead">
+            Meanwhile, valuable code was being <strong>reinvented</strong>: utility methods, deprecated API usage,
+            and general-purpose logic hidden inside specific projects duplicated over and over.
+          </p>
+        </div>
+        <div class="sw-window">
+          <div class="sw-titlebar">
+            <span class="sw-dot d1"></span><span class="sw-dot d2"></span><span class="sw-dot d3"></span>
+            <span class="sw-title">sourcegraph &middot; code search &mdash; cern-accelerator/controls</span>
+          </div>
+          <div class="sw-body">
+            <div><span class="cmt">// semantic search across 15M lines</span><br>
+              <span class="kwd">pattern:</span> <span class="str" id="typed"></span><span class="caret"></span></div>
+            <div class="results" id="hero-results">
+              <span class="res">✓ <b>214 matches</b> in 1,842 files</span><br>
+              <span class="res">✓ reuse found: <b>next/requestUtils.go#L24</b></span><br>
+              <span class="res">✓ deprecated API usage flagged: <b>3 call sites</b></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -546,6 +567,7 @@
 
   function onSlideEnter(){
     if(idx===1 && !visited.stats){ visited.stats=true; document.querySelectorAll('#statGrid .count').forEach(startCount); document.querySelectorAll('#statGrid .stat').forEach(function(el){ el.classList.add('in'); }); }
+    if(idx===2){ startTyping(); }
     if(idx===3 && !visited.tl){ visited.tl=true; document.getElementById('tl').classList.add('in'); }
     if(idx===4 && !visited.modes){ visited.modes=true; document.getElementById('modeRun').classList.add('in'); document.getElementById('modeUp').classList.add('in'); }
     if(idx===5 && !visited.uses){ visited.uses=true; document.querySelectorAll('#useGrid .use').forEach(function(el){ el.classList.add('in'); }); }
@@ -611,11 +633,16 @@
     requestAnimationFrame(tick);
   }
 
-  /* hero typing (timestamp-based so it catches up on throttled timers) */
+  /* hero typing (timestamp-based so it catches up on throttled timers); starts when slide 3 first shown */
   var Q = 'getPropertyValue" type:path';
   var typedEl = document.getElementById('typed');
   var resultsEl = document.getElementById('hero-results');
-  var t0=null;
+  var t0=null, typingStarted=false;
+  function startTyping(){
+    if(typingStarted) return;
+    typingStarted = true;
+    requestAnimationFrame(typeLoop);
+  }
   function typeLoop(t){
     if(t0===null) t0=t;
     var chars = Math.min(Math.floor((t-t0)/45), Q.length);
@@ -623,7 +650,6 @@
     if(chars < Q.length){ requestAnimationFrame(typeLoop); }
     else { setTimeout(function(){ resultsEl.classList.add('on'); }, 350); }
   }
-  requestAnimationFrame(typeLoop);
 })();
 </script>
 </body>
