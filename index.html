@@ -4,434 +4,1016 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>תוכן עניינים — מצגות ודוחות | ESL Public Pages</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" content="כל המצגות, הדוחות והדפים הציבוריים של ESL באתר zuwasi.github.io/Public-html-pages, מקובצים לפי נושא עם חיפוש וסינון.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --bg: #0a0f1e;
+    --panel: #101828;
+    --card: #111a2e;
+    --line: #223049;
+    --line-soft: #1a2540;
+    --text: #e9eef7;
+    --muted: #97a5c0;
+    --dim: #64748f;
+    --accent: #38bdf8;
+    --amber: #fbbf24;
+    --green: #4ade80;
+  }
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1321; color:#e8ecf4; direction:rtl; text-align:right; line-height:1.6; padding:clamp(16px,4vw,48px); }
-  .wrap { max-width:960px; margin:0 auto; }
-  h1 { font-size:clamp(1.6rem,4.5vw,2.6rem); font-weight:800; margin-bottom:.3em; }
-  .sub { color:#7d8aa5; margin-bottom:2em; font-size:clamp(.85rem,1.6vw,1rem); }
-  h2 { font-size:clamp(1.15rem,2.8vw,1.6rem); font-weight:700; color:#4fc3f7; margin:1.8em 0 .6em; border-bottom:1px solid #263048; padding-bottom:.3em; }
-  ol { list-style:none; counter-reset:item; }
-  li { counter-increment:item; padding:10px 14px; margin-bottom:6px; background:#161d2f; border:1px solid #263048; border-radius:10px; display:flex; gap:12px; align-items:baseline; }
-  li::before { content:counter(item); color:#4fc3f7; font-weight:700; min-width:1.6em; text-align:center; }
-  li a { color:#e8ecf4; font-weight:600; text-decoration:none; }
-  li a:hover { color:#4fc3f7; }
-  li .dates { color:#5f86c9; font-size:clamp(.7rem,1.3vw,.82rem); white-space:nowrap; direction:ltr; unicode-bidi:embed; }
-  li .desc { color:#9aa7c0; font-size:clamp(.8rem,1.5vw,.95rem); }
-  .badge { font-size:.68rem; font-weight:700; padding:2px 8px; border-radius:999px; white-space:nowrap; }
-  .b-new { background:#173a22; color:#66bb6a; }
-  .b-he { background:#123a52; color:#4fc3f7; }
-  /* ---- NEW JUST CAME IN ---- */
-  .new-section { background:linear-gradient(135deg,#13243a 0%,#1a3050 100%); border:1px solid #2f4a6e; border-radius:16px; padding:clamp(16px,4vw,28px); margin-bottom:2.5em; box-shadow:0 0 24px rgba(79,195,247,.12); }
-  .new-header { display:flex; align-items:center; gap:10px; margin-bottom:.8em; flex-wrap:wrap; }
-  .new-title { font-size:clamp(1.3rem,3.5vw,2rem); font-weight:800; color:#ffd54f; letter-spacing:.5px; text-shadow:0 0 12px rgba(255,213,79,.3); }
-  .new-stars { font-size:clamp(1.2rem,3vw,1.7rem); color:#ffd54f; letter-spacing:2px; animation:twinkle 1.8s ease-in-out infinite alternate; }
-  @keyframes twinkle { from{opacity:.55;} to{opacity:1;} }
-  .new-sub { color:#9fb3d1; font-size:clamp(.78rem,1.4vw,.92rem); margin-bottom:1em; }
-  .new-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; }
-  .new-card { background:#111a2e; border:1px solid #2a3a58; border-radius:12px; padding:14px 16px; transition:border-color .2s,transform .2s; }
-  .new-card:hover { border-color:#4fc3f7; transform:translateY(-2px); }
-  .new-card a { color:#e8ecf4; font-weight:700; text-decoration:none; font-size:clamp(.92rem,1.7vw,1.05rem); }
-  .new-card a:hover { color:#4fc3f7; }
-  .new-card .nc-dates { color:#5f86c9; font-size:.78rem; direction:ltr; unicode-bidi:embed; display:block; margin-top:4px; }
-  .new-card .nc-desc { color:#9aa7c0; font-size:.85rem; margin-top:6px; }
-  .new-card .nc-tag { display:inline-block; background:#2a4a2a; color:#66bb6a; font-size:.66rem; font-weight:700; padding:2px 7px; border-radius:999px; margin-bottom:6px; }
-  .services-section { direction:ltr; text-align:left; margin-top:3em; padding:clamp(22px,4vw,34px); border:1px solid #2a4662; border-top:2px solid #ffb21a; border-radius:16px; background:radial-gradient(circle at 90% 15%,rgba(0,217,255,.13),transparent 30%),linear-gradient(135deg,#060b17,#0c1a2c); box-shadow:0 0 32px rgba(255,178,26,.08); }
-  .services-section h2 { margin:0 0 .5em; border:0; color:#ffb21a; }
-  .services-section p { max-width:760px; margin:0 0 1.2em; color:#a8bad0; }
-  .services-section a { display:inline-block; padding:10px 16px; border:1px solid #00d9ff; border-radius:9px; color:#00d9ff; background:rgba(0,217,255,.06); font-weight:800; text-decoration:none; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:'Inter', Arial, -apple-system, sans-serif;
+    background:
+      radial-gradient(900px 480px at 85% -10%, rgba(56,189,248,.14), transparent 60%),
+      radial-gradient(800px 500px at 0% 100%, rgba(129,140,248,.10), transparent 55%),
+      var(--bg);
+    color:var(--text); line-height:1.6;
+    min-height:100vh;
+  }
+  a { color:inherit; }
+
+  /* ---------- sticky header ---------- */
+  .topbar {
+    position:sticky; top:0; z-index:50;
+    background:rgba(10,15,30,.82);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar-inner {
+    max-width:1180px; margin:0 auto; padding:10px clamp(14px,3vw,28px);
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+  }
+  .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:.95rem; white-space:nowrap; }
+  .brand-mark {
+    width:30px; height:30px; border-radius:8px; flex:none;
+    background:linear-gradient(135deg,#38bdf8,#6366f1);
+    display:grid; place-items:center;
+    color:#07101f; font-size:.72rem; font-weight:800; letter-spacing:.5px;
+  }
+  .brand small { color:var(--dim); font-weight:600; }
+  .search-wrap { flex:1; min-width:220px; display:flex; justify-content:flex-end; }
+  .search {
+    width:min(420px,100%);
+    display:flex; align-items:center; gap:8px;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:8px 12px;
+  }
+  .search:focus-within { border-color:var(--accent); box-shadow:0 0 0 3px rgba(56,189,248,.15); }
+  .search svg { flex:none; color:var(--dim); }
+  .search input {
+    flex:1; background:none; border:0; outline:0;
+    color:var(--text); font:inherit; font-size:.9rem; direction:auto;
+  }
+  .search input::placeholder { color:var(--dim); }
+
+  /* ---------- filter chips ---------- */
+  .chipbar {
+    position:sticky; top:53px; z-index:40;
+    background:rgba(10,15,30,.82);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line-soft);
+  }
+  .chips {
+    max-width:1180px; margin:0 auto; padding:9px clamp(14px,3vw,28px);
+    display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;
+  }
+  .chips::-webkit-scrollbar { display:none; }
+  .chip {
+    flex:none; cursor:pointer;
+    font:inherit; font-size:.8rem; font-weight:600;
+    color:var(--muted); background:var(--panel);
+    border:1px solid var(--line); border-radius:999px;
+    padding:5px 12px; display:flex; align-items:center; gap:6px;
+    transition:color .15s, border-color .15s, background .15s;
+  }
+  .chip:hover { color:var(--text); border-color:var(--accent); }
+  .chip.is-active { color:#07101f; background:var(--accent); border-color:var(--accent); }
+  .chip-new.is-active { background:var(--amber); border-color:var(--amber); }
+  .chip .chip-n {
+    font-size:.68rem; font-weight:700; color:var(--dim);
+    background:rgba(255,255,255,.06); border-radius:999px; padding:1px 7px;
+  }
+  .chip.is-active .chip-n { color:#07101f; background:rgba(0,0,0,.18); }
+
+  /* ---------- page ---------- */
+  .wrap { max-width:1180px; margin:0 auto; padding:clamp(20px,4vw,44px) clamp(14px,3vw,28px) 0; }
+  .hero h1 { font-size:clamp(1.7rem,4.5vw,2.7rem); font-weight:800; letter-spacing:-.02em; }
+  .hero h1 em { font-style:normal; color:var(--accent); }
+  .hero .sub { color:var(--muted); font-size:clamp(.85rem,1.6vw,.98rem); margin-top:.5em; max-width:760px; }
+  .stats { display:flex; gap:10px; flex-wrap:wrap; margin-top:1.2em; }
+  .stat {
+    background:var(--panel); border:1px solid var(--line); border-radius:11px;
+    padding:8px 14px; font-size:.8rem; color:var(--muted);
+    display:flex; align-items:center; gap:8px;
+  }
+  .stat b { color:var(--text); font-size:1rem; font-weight:800; }
+  .status-line { color:var(--dim); font-size:.82rem; margin-top:1em; min-height:1.2em; }
+  .status-line b { color:var(--accent); }
+
+  /* ---------- sections ---------- */
+  .catalog-section { margin-top:clamp(2.2em,5vw,3.2em); scroll-margin-top:120px; }
+  .catalog-section h2 {
+    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+    font-size:clamp(1.15rem,2.6vw,1.5rem); font-weight:700; margin-bottom:1em;
+  }
+  .sec-dot { width:11px; height:11px; border-radius:3px; background:var(--sec,var(--accent)); flex:none;
+              box-shadow:0 0 10px var(--sec,var(--accent)); }
+  .sec-count {
+    font-size:.72rem; font-weight:700; color:var(--dim);
+    border:1px solid var(--line); border-radius:999px; padding:1px 9px;
+  }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:12px; }
+  .grid > * { min-width:0; }
+
+  /* ---------- cards ---------- */
+  .card {
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:16px 17px; display:flex; flex-direction:column; gap:7px; align-items:flex-start;
+    transition:border-color .18s, transform .18s, box-shadow .18s;
+  }
+  .card:hover { border-color:var(--sec,var(--accent)); transform:translateY(-3px);
+                box-shadow:0 10px 26px rgba(2,8,20,.55); }
+  .card-tag {
+    font-size:.66rem; font-weight:700; letter-spacing:.4px;
+    color:var(--accent); background:rgba(56,189,248,.09);
+    border:1px solid rgba(56,189,248,.25); border-radius:999px; padding:2px 9px;
+  }
+  .badge-new { color:var(--green); background:rgba(74,222,128,.09); border-color:rgba(74,222,128,.3); }
+  .badge-he { color:var(--amber); background:rgba(251,191,36,.09); border-color:rgba(251,191,36,.3); }
+  .card-title { width:100%; font-weight:700; font-size:.98rem; line-height:1.45; text-decoration:none; text-align:start; }
+  .card-title:hover { color:var(--accent); }
+  .card-dates { width:100%; color:var(--dim); font-size:.73rem; text-align:start; }
+  .card-desc { width:100%; color:var(--muted); font-size:.83rem; text-align:start;
+               display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+
+  .card-new { background:linear-gradient(160deg,#122036 0%,var(--card) 65%);
+              border-color:rgba(251,191,36,.28); }
+  .card-new:hover { border-color:var(--amber); }
+  .card-new .card-tag { color:var(--amber); background:rgba(251,191,36,.08);
+                        border-color:rgba(251,191,36,.3); }
+
+  #sec-new h2 .sec-dot { background:var(--amber); box-shadow:0 0 10px var(--amber); }
+
+  .noresults {
+    display:none; margin-top:2.5em; text-align:center;
+    color:var(--muted); background:var(--panel); border:1px dashed var(--line);
+    border-radius:14px; padding:2.2em 1em; font-size:.95rem;
+  }
+  .noresults b { color:var(--accent); }
+
+  /* ---------- services + footer ---------- */
+  .services-section {
+    direction:ltr; text-align:left; margin-top:3em;
+    padding:clamp(22px,4vw,34px); border:1px solid #2a4662; border-top:2px solid var(--amber);
+    border-radius:16px;
+    background:radial-gradient(circle at 90% 15%, rgba(0,217,255,.13), transparent 30%),
+               linear-gradient(135deg,#060b17,#0c1a2c);
+  }
+  .services-section h2 { margin:0 0 .5em; color:var(--amber); font-size:clamp(1.15rem,2.6vw,1.5rem); }
+  .services-section p { max-width:760px; margin:0 0 1.2em; color:#a8bad0; font-size:.92rem; }
+  .services-section a {
+    display:inline-block; padding:10px 18px; border:1px solid #00d9ff; border-radius:10px;
+    color:#00d9ff; background:rgba(0,217,255,.06); font-weight:800; font-size:.9rem;
+    text-decoration:none; transition:background .15s, color .15s;
+  }
   .services-section a:hover { color:#07111f; background:#00d9ff; }
-  @media (max-width:640px){ .new-grid{ grid-template-columns:1fr; } }
-  footer { margin-top:3em; color:#7d8aa5; font-size:.85rem; border-top:1px solid #263048; padding-top:1em; }
-  footer a { color:#4fc3f7; }
-  @media (max-width:640px){ li { flex-direction:column; gap:2px; } li::before { display:none; } }
+
+  footer {
+    margin-top:2.5em; border-top:1px solid var(--line-soft);
+    padding:1.4em 0 2.2em; color:var(--dim); font-size:.83rem;
+    display:flex; gap:6px; flex-wrap:wrap; align-items:baseline;
+  }
+  footer a { color:var(--accent); text-decoration:none; }
+  footer a:hover { text-decoration:underline; }
+  footer .dates { color:var(--dim); font-size:.75rem; }
+
+  @media (max-width:640px) {
+    .grid { grid-template-columns:1fr; }
+    .chipbar { top:101px; }
+    .chips { scrollbar-width:thin; scrollbar-color:var(--line) transparent; }
+    .chips::-webkit-scrollbar { display:block; height:4px; }
+    .chips::-webkit-scrollbar-thumb { background:var(--line); border-radius:4px; }
+    .card-desc { -webkit-line-clamp:3; }
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
-<h1>תוכן עניינים — מצגות ודוחות</h1>
-<p class="sub">כל הדפים הציבוריים באתר zuwasi.github.io/Public-html-pages, מקובצים לפי נושא, עם תאריך פרסום ראשוני ותאריך עדכון אחרון מתוך היסטוריית git · עודכן 28.07.2026</p>
 
-<div class="new-section">
-  <div class="new-header">
-    <span class="new-stars">★★★</span>
-    <span class="new-title">NEW — JUST CAME IN</span>
-    <span class="new-stars">★★★</span>
-  </div>
-  <p class="new-sub">המצגות החדשות ביותר — הוסרו לכאן לגישה מהירה</p>
-  <div class="new-grid">
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · INFOGRAPHIC · CERN × SOURCEGRAPH CASE STUDY</span>
-      <a href="cern-sourcegraph-infographic/index.html">CERN Tackles Technical Debt: 15M Lines of Mission-Critical Code</a>
-      <span class="nc-dates">Published: 2026-10-31</span>
-      <div class="nc-desc">Dynamic one-page scrolling infographic based on the Sourcegraph CERN case study: animated counters (15M lines of Java, ~300 developers, 18 years of growth), an 18-year timeline, run mode vs upgrade mode change clocks (5-year LHC stability periods vs 1-2 year upgrade windows), four ways code search shrinks technical debt, and the Chris Roderick quote. Built for social sharing.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · MISRA C:2025 · SOURCEGRAPH + PARASOFT APPROVAL DECK</span>
-      <a href="misra-rule-7-5-sourcegraph-plan/index.html">Scaling MISRA C:2025 Compliance: From Thousands of Violations to Zero</a>
-      <span class="nc-dates">Published: 2026-10-28</span>
-      <div class="nc-desc">11-slide ESL solution deck for eliminating MISRA C:2025 Rule 7.5 violations across 4 repositories and 400 branches. Opens with the engineering loop as a flowchart: a Parasoft C/C++test baseline scan of one module (~500 findings) extrapolates to ~50,000 project-wide, triggering the decision to automate; Sourcegraph search queries and Batch Change scripts fix every incident; a Parasoft verification scan is the judge, and a non-zero result loops back to script redesign until zero is proven, then scaled to all repos and held by a standing CI gate. Includes Sourcegraph UI recreations, an annotated real Parasoft screenshot, an ESL-style compliance dashboard, and the edge-case safety rails.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · HARDENATOR · VSIX &amp; AI SKILL SECURITY</span>
-      <a href="hardenator-vsix-skills/index.html">Hardenator: Four Options for VSIX and AI Skill Security</a>
-      <span class="nc-dates">Published: 2026-10-27</span>
-      <div class="nc-desc">12 mobile-friendly ESL slides comparing a desktop inspection station, central review portal, enforced admission gateway, and controlled internal catalog. Each option includes technical details, an interactive synthetic mockup, and a user workflow. Complements Sonatype IQ; proposed capabilities, not deployed security controls.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · PARASOFT CUDA BRIDGE · TECHNICAL REVIEW</span>
-      <a href="parasoft-cuda-bridge/technical/">Parasoft CUDA Bridge: Technical Evaluation Brief</a>
-      <span class="nc-dates">Published: 2026-10-26</span>
-      <div class="nc-desc">Technical review for the C++test product team: implementation, CMake companion workflow, heuristic CUDA rules, CUDA GoogleTest host-coverage evidence, limitations, per-project stress results, and feedback questions.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · PARASOFT CUDA BRIDGE · CUSTOMER EVALUATION</span>
-      <a href="parasoft-cuda-bridge/customer/">Analyze CUDA in Visual Studio 2026</a>
-      <span class="nc-dates">Published: 2026-10-26</span>
-      <div class="nc-desc">Customer evaluation deck showing CMake preparation, generated Visual Studio companion analysis, genuine Error List screenshots, CUDA guideline rule scope, result handling, prerequisites, and limitations.</div>
-    </div>
-    <div class="new-card" dir="rtl">
-      <span class="nc-tag">NEW · תשתיות / AI · מנוע תוואי מאומת</span>
-      <a href="iroad-verified-alignment/index.html">מנוע תוואי מאומת: עדכון בעקבות דרישות Iroad (Netivei Yisrael RFI 94/26)</a>
-      <span class="nc-dates">Published: 2026-10-25</span>
-      <div class="nc-desc">13 שקפים במיתוג ESL: ארבע דרישות של Iroad מהמצגת הראשונה יושמו ואומתו (מקרא למפה, אילוץ קרקע חקלאית, איסור חציית שטח בנוי, והטמעת ספר העקרונות PDDM של FHWA), כל אחת מסומנת "נוסף בעקבות דרישת Iroad". פירוט מקורות הנתונים (Copernicus GLO-30, OpenStreetMap, GovMap) עם תאריכי שליפה, שינויי האלגוריתם לפי התקן (עקומות אנכיות, מדידת חשיפת עצירה, 18 הוכחות Lean 4), סימון נקודות אדם בלולאה על צילומי ההדגמה, והסבר על בקרת גרסאות ושחזור כל גרסה.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AGENT BENCHMARK · THE HARNESS IS THE KING</span>
-      <a href="swe-sweep-harness-king/index.html">The Harness Is the King: Amp vs Claude Code on SWE-sweep</a>
-      <span class="nc-dates">Published: 2026-10-21</span>
-      <div class="nc-desc">ESL slide deck on the completed benchmark: same model (claude-opus-5-5) on both arms, 12 repos, 60 hidden-test-scored bugs, official SWE-sweep Docker verifiers. Amp 4/60 (6.7%) vs Claude Code 2/60 (3.3%), above the official SOTA entry of 4.7%. Introduces SWE-sweep and its leaderboard, quotes the authors' harness ablation, walks through the real diffs the agents got right and wrong, presents the Parasoft C++test control (0-0.3% line-level overlap with ~500k findings), and concludes the harness is the king. Companion pages: linkedin.html (ready-to-post text) and article.html (website article).</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AGENT BENCHMARK</span>
-      <a href="mini-swe-sweep/index.html">mini-swe_sweep: Amp vs Claude Code on Real SWE-sweep Bugs</a>
-      <span class="nc-dates">Published: 2026-10-20</span>
-      <div class="nc-desc">12 repositories across 6 languages, 60 real reference bugs, same model (claude-opus-5-5) on both agent arms with equal 1-hour caps and hidden-test Docker verifiers. Final results: Amp 4/60 (6.7%) versus Claude Code 2/60 (3.3%), with cost-tier run 1, per-repo tables, cost model, and provenance.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · PYTHON / JSON PERFORMANCE</span>
-      <a href="python-json-throughput.html">16 GB/s of JSON on a Laptop: Free-Threaded Python and Field Projection</a>
-      <span class="nc-dates">Published: 2026-10-18</span>
-      <div class="nc-desc">15 ESL-branded slides reproducing Daniel Lemire's GH Archive workload on a 24-core Core Ultra 9 laptop in isolated WSL. Field projection reached 16.07 GB/s median versus 12.87 GB/s for lazy views at 24 threads: 24.8% higher throughput and 19.9% less time.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AMP / AI CODING AGENTS</span>
-      <a href="harness-is-the-product/">The Harness Is the Product: Anatomy of an AI Coding Agent in 9 Slides</a>
-      <span class="nc-dates">Published: 2026-10-15</span>
-      <div class="nc-desc">Trade-show loop deck in the Amp theme (near-black, cream, orange): the harness is more important than the LLM, then each layer of the AI Coding Agent stack as an animated infographic with its share of the product: User Interface 5%, Agent Orchestrator 15% (planning and control loop), Context &amp; Indexing 15% (repo indexing and code search), Tool Execution 20% (file ops, builds, tests, MCP), LLM Core 15% (just the engine), Verification &amp; Feedback 20%, and Memory &amp; State plus Safety &amp; Guardrails for the remaining 10%. Slides auto-advance in a circle every 6 seconds by default, with a big pause button for talking and an adjustable slide time on the first slide (4 to 12 seconds, steps of 1). Thesis credit: "The Harness Is the Product" (Towards AI).</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · MANTIQ FACTOR / HOLOGRAPHY</span>
-      <a href="mantiq-holographic-interfaces/">MantiQ Factor × arXiv:2609.38318: Your Holography Paper, Checked End to End</a>
-      <span class="nc-dates">Published: 2026-10-14</span>
-      <div class="nc-desc">A workflow proposal prepared for the authors of "Energy Transmission Across Holographic Conformal Interfaces in General Dimensions" (Arav, Bertrand, Chapman, Policastro, Waeber): what the MantiQ Factor process would do with their paper. A 12-slide fit assessment opening with the MantiQ Factor production-line overview, then a six-stage pipeline diagram: freeze the source, normalize claims and conventions, a Wolfram notebook oracle re-deriving the warp-factor transmission formula (Eqs. 15, 29, 154), scoped Lean 4 theorems for the central-charge bounds, a QASM / Classiq circuit artifact executed on a quantum simulator (with an interactive scattering lab), and a public evidence package. Includes a claim-by-claim evidence table and an honest verdict: strong fit for the Wolfram, Lean, and simulator stages; no RTL/FPGA stage applies to a theory paper.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · BUILD PERFORMANCE / MOLD LINKER</span>
-      <a href="apollo-mold-linker/">Apollo Linker Benchmark: When the mold Linker Helps, and When It Doesn't</a>
-      <span class="nc-dates">Published: 2026-10-13</span>
-      <div class="nc-desc">22 interactive slides from two cold Bazel builds of Apollo's cyber and planning modules (24 cores, GCC 7.5), one with GNU ld.bfd and one with mold 2.0.0, with every link action timed through bazel --profile. Whole-build wall time moved +1.1% (462 s vs 467 s), within run-to-run noise. Per link, the median was 16.8% faster with mold and the best single link was 2.94x faster, but links under 1.5 s often got slower: 119 of 124 losses were in that range. Includes all 310 paired link timings, a comparison with the large single-link workloads in Rui Ueyama's arXiv:2608.23228 paper, the setup problems we hit, and when mold is worth adopting.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · STATIC ANALYSIS / PARASOFT VS SONARQUBE</span>
-      <a href="threadx-parasoft-sonarqube.html">Parasoft C/C++test vs SonarQube CLI on ThreadX Win32: 50 Planted Defects</a>
-      <span class="nc-dates">Published: 2026-10-11 · Updated: 2026-10-11</span>
-      <div class="nc-desc">30 widescreen slides introduce both tools and the test method, show representative planted C defects beside Parasoft's actual rule IDs and messages, and list all 50 valid defects in the adjudication appendices. Parasoft's only scored configuration was Flow Analysis Aggressive, run on the clean and bugged states: 15 strict true positives out of 50 valid defects, plus one partial and one indirect signal (not counted as direct detections). It missed all eight concurrency defects and nine of eleven size-arithmetic defects. SonarQube's DEEP code scan was unavailable — Vortex returned 403 and every requested file was skipped — never zero findings; its local secrets scan completed with zero secrets. Links to the MIT repository, defect catalog, scan protocol, comparison report and detection matrix.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · THREADX / CORTEX-M / CLANG</span>
-      <a href="tx5-upgrade/">ThreadX 5.6 to 6.5, Cortex-M4 to M85: Migration with Executable Evidence</a>
-      <span class="nc-dates">Published: 2026-10-11 · Updated: 2026-10-11</span>
-      <div class="nc-desc">41 ESL-branded slides plus PDF: ESL and CTO Daniel Liezrowice, five project challenges, and one Clang-built application run on the real ThreadX 5.6 Cortex-M4 kernel and on MIT ThreadX 6.5, then built for Cortex-M85. Verified TX5-M4, TX6-M4 and M55 QEMU runs, eleven code-diff discussions, binary-kernel inspection, measured memory charts and histograms. Mobile arrows, Home, a recorded LED/button replay and ESL contact links. M85 execution and real-board performance remain unverified.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <a href="Jahalin-reports/">Jahalin-reports</a>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · PARASOFT / APOLLO</span>
-      <a href="apollo-misra-demo/">Apollo: Parallel MISRA Analysis and Verified Improvement</a>
-      <span class="nc-dates">Published: 2026-10-04</span>
-      <div class="nc-desc">Animated customer-demo plan: Apollo's 471,310 C/C++ code lines, six independent PRs, Jenkins, six Parasoft automation servers, optional Incredibuild acceleration, and one DTP. Follow 100 selected findings through Amp-assisted fixes, unit tests, rescanning, and before/after evidence. Proposed targets, not measured results.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW 
-·
- AI AGENTS / SKILL EVALS</span>
-      <a href="wazatator/">Wazatator: Evaluate Agent Skills with Claude Code</a>
-      <span class="nc-dates">Published: 2026-10-02</span>
-      <div class="nc-desc">By ESL (Engineering Software Lab), a member of Anthropic's Claude Partner Network. What Wazatator is and how it works: an open-source fork of Microsoft Waza that runs your SKILL.md through real Claude Code sessions and scores the result. Code samples for eval suites, tasks, graders and trigger tests, real findings (skills that ask instead of act, skills never invoked, tool-policy violations, MCP usage, cost), a before/after fix, and a replayed live demo.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · INTERACTIVE HUMMUS DEMO</span>
-      <a href="hummus-council/">The Hummus Council: Big Decisions, Small Chickpeas</a>
-      <a href="hummus-council/?lang=he" lang="he" dir="rtl">מועצת גדולי החומוס: הגרסה בעברית</a>
-      <span class="nc-dates">Published: 2026-10-02</span>
-      <div class="nc-desc">A humorous lunch-decision app. Choose a city, date, hunger level, hummus style and sources, then watch four fictional experts turn your preferences into a transparent, source-linked verdict. Ten curated places, seasonal scoring and six of Daniel Liezrowice's own posts in the Facebook group “החומוסולוגים”, with a group link and clear evidence limits. Absolutely no actual chickpeas.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · EMBEDDED / INTERRUPTS &amp; POLLING</span>
-      <a href="interrupts-vs-polling/">Interrupt on the Edge, Poll on the Level</a>
-      <span class="nc-dates">Published: 2026-10-01</span>
-      <div class="nc-desc">Beyond "interrupts vs polling": seven Cortex-M code samples compiled against real STM32F4 and nRF52 headers. Covers the NAPI-style hybrid, DMA with idle-line detection (and its half-transfer gotcha), zero-CPU PPI event routing, the lost-wakeup race in "check, then WFI" with real disassembly, BASEPRI critical sections, interrupt storm guards, and debouncing by polling.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · C++26 / GCC 16.1 / REFLECTION</span>
-      <a href="cpp26-reflection-misra-parasoft/">C++26 Reflection on GCC 16.1: What Actually Compiles Today</a>
-      <span class="nc-dates">Published: 2026-09-29</span>
-      <div class="nc-desc">Amadeus Ferro's print_fields() plus a compile-time wire-layout check, built and run on GCC 16.1 through Compiler Explorer. Six compile errors between the P2996 snippet and a running binary with the fix for each, two negative tests, the static-analyzer parse gap, and one MISRA C++:2023 consequence. A reply to a LinkedIn post.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · XSIGHT LABS / PARASOFT AUTOMATION</span>
-      <a href="xsightlab-automation/">Three Containers. Nine Scan Results.</a>
-      <span class="nc-dates">Published: 2026-09-27</span>
-      <div class="nc-desc">Twelve customer-facing slides: first check available license features with cpptest-license-features, then use the nine-app C++17 test project to verify three scans per container. Includes interactive scheduling and DTP views. Utility compatibility, customer scans and license acceptance remain to be verified in the lab.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · SBOMATOR / MARKET COMPARISON</span>
-      <a href="sbomator-market-comparison/">SBOMator: Not CSPM or CNAPP. A Black Duck Competitor.</a>
-      <span class="nc-dates">Published: 2026-09-27</span>
-      <div class="nc-desc">20 mobile-friendly slides: distinguish product supply-chain security from CSPM/CNAPP, then compare SBOMator with Black Duck. Includes site-license pricing, ESL’s 60-day integration offer with payment after success, and contact details. Product master-plan capabilities assumed complete.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · MANTIQ / QUANTUM PHASE ESTIMATION</span>
-      <a href="mantiq-qpe/">From a Quantum Claim to a Checked Result</a>
-      <span class="nc-dates">Published: 2026-09-24</span>
-      <div class="nc-desc">Eight slides with a live gate-level QPE simulator: exact and approximate phases, eigenstate superpositions, deliberate circuit faults, independent Wolfram vectors, and a scoped Lean resource-count proof. Download reproducible evidence; no hardware or quantum-speedup claim.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AI ENGINEERING / CODE OWNERSHIP</span>
-      <a href="ai-code-ownership.html">Code Is Cheap. Understanding Is Earned.</a>
-      <span class="nc-dates">Published: 2026-09-22</span>
-      <div class="nc-desc">Five copyable discussion comments with code examples: counterexamples, observability debt, atomicity, learning loops, and durable code ownership. A six-slide companion to Michal Stawarz's post on AI-assisted engineering.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · ESL AI SDLC / PREDICTION &amp; POLICY</span>
-      <a href="prediction-is-not-permission/">Same Probability. Different Action.</a>
-      <span class="nc-dates">Published: 2026-09-22</span>
-      <div class="nc-desc">Six interactive slides: a $5 misrouted ticket versus a $10,000 wrongful account closure, a live expected-loss calculator, copyable Python policy, Jev confidence caveats, and a downloadable infographic. ESL AI SDLC, Daniel Liezrowice.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · ESL AI SDLC / DECISION ECONOMICS</span>
-      <a href="jev-cost-of-being-wrong/">99% Sure. Two Different Decisions: The Cost of Being Wrong</a>
-      <span class="nc-dates">Published: 2026-09-22</span>
-      <div class="nc-desc">Seven interactive ESL slides on Jev and cost-aware automation: compare a $20 credit with a $20,000 reimbursement, experiment with expected error loss, copy the Python policy, and download the infographic. Illustrative cases, not measured Jev performance.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · SBOMATOR / VENDOR EVIDENCE</span>
-      <a href="sbomator-scrapling-vendor-comparison/">Scrapling + SBOMator: Nine Real Repository Comparisons</a>
-      <span class="nc-dates">Published: 2026-09-21</span>
-      <div class="nc-desc">Three NXP, three ST, and three AMD/Xilinx-targeting repositories: 18 source-only scans, experimental vendor lifecycle enrichment, downloadable paired SBOMs, and HTTP retrieval trials. Shows unchanged component inventories, coverage gaps, and an obsolete ST board whose MCU still has a longevity commitment.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AI SDLC / JEV</span>
-      <a href="jev-decision-safeguards/">A Fast Decision Is Not a Verified Result: Jev Decision Safeguards</a>
-      <span class="nc-dates">Published: 2026-09-20</span>
-      <div class="nc-desc">Daniel Liezrowice, ESL: an interactive walkthrough of context filtering, missing-evidence review gates, and confidently wrong routing. Adjust the threshold to compare errors with deferred work. Synthetic illustration, not measured Jev performance.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · MANTIQ / SOLIDITY</span>
-      <a href="mantiq-solidity/">MantiQ / Solidity: The Buyer Signed. Should the Contract Pay?</a>
-      <span class="nc-dates">Published: 2026-09-20</span>
-      <div class="nc-desc">Solidity static analysis, finding triage, EVM tests, and Wolfram/Lean 4 model evidence, presented by Daniel Liezrowice of ESL through a 10 test ETH escrow case. Static analysis is core to the proposed workflow; the provider will be an ESL tool or Olympix, subject to readiness and commercial terms. The current Olympix scan remains blocked, with no completed detection claimed. Explore the <a href="mantiq-solidity/dashboard.html?autoplay=1">recorded-evidence tour</a>, <a href="mantiq-solidity/assets/mantiq-solidity-workflow.png">workflow image</a>, and supporting <a href="mantiq-solidity/reports/sbomator-report.html">SBOMator report</a> (368 components, zero missing licenses, vulnerability findings retained). Not an audit or a production security guarantee.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · AI AGENT MEMORY</span>
-      <a href="agent-memory-benchmark/">Memory, Under Test — Interactive Agent Memory Benchmark</a>
-      <span class="nc-dates">Published: 2026-09-18</span>
-      <div class="nc-desc">A critical, evidence-first examination of agent memory claims. Compare stateless, full-context, and governed selective-memory strategies across six interactive scenarios, inspect decision traces, disable safeguards, and download reproducible benchmark results.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · EMBEDDED / CORTEX-M</span>
-      <a href="cortex-m-call-anatomy/">What Really Happens When You Call a Function in C? -O0 vs -O2 on Cortex-M4</a>
-      <span class="nc-dates">Published: 2026-09-11</span>
-      <div class="nc-desc">The textbook "6 steps of a function call" is a picture of -O0. Real arm-none-eabi-gcc output shows the call vanishing at -O2 (30 instructions become 2), what a forced call looks like (stack alignment padding, -fipa-ra keeping a scratch register live, pop {r3, pc} as the ROP surface), plus an <a href="cortex-m-call-anatomy/animation.html">emulator-driven animation</a> of every instruction, register and stack word.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · C++ DEBUGGING</span>
-      <a href="cpp-debugging-evidence-demo/">Beyond Breakpoints to Evidence — ESL C++ Debugging Demo</a>
-      <span class="nc-dates">Published: 2026-08-15</span>
-      <div class="nc-desc">A hands-on companion to Vivek Bhadra's “Beyond Breakpoints”: one reproducible use-after-free defect investigated with AddressSanitizer and GDB, corrected through explicit ownership, and protected by automated regression tests—with a one-click WSL runner and findings dashboard.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · FHE HARDWARE</span>
-      <a href="mantiq-factor-fhe-hardware/">MantiQ Factor — From FHE Research to Verified Accelerator Hardware</a>
-      <span class="nc-dates">Published: 2026-08-15</span>
-      <div class="nc-desc">A 60-slide evidence-driven journey from the public REED paper through Mathematica, Lean 4, vendor-neutral VHDL simulation, and PYNQ-Z2 implementation—positioned as a reproducible engineering path toward specialized FHE hardware, with physical validation explicitly pending.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · C++ COMPILER BUG</span>
-      <a href="msvc-o1-miscompilation-parasoft/">When Correct C++ Produces the Wrong Answer — MSVC /O1 Miscompilation &amp; How Parasoft C/C++test Catches It</a>
-      <span class="nc-dates">Published: 2026-08-07</span>
-      <div class="nc-desc">MSVC 19.51 /O1 feeds address offsets instead of array values into adc — a value-versus-address optimizer regression. How layered verification (static analysis, unit tests, coverage, compiler diversity, CI gates) with Parasoft C/C++test catches the bad binary before release. Originally published on LinkedIn Pulse.</div>
-    </div>
-    <div class="new-card" dir="ltr">
-      <span class="nc-tag">NEW · EMBEDDED LINUX</span>
-      <a href="yocto-bsp-studio-design-partner/">Yocto BSP Studio — Design Partner Presentation</a>
-      <span class="nc-dates">Created: 2026-07-29</span>
-      <div class="nc-desc">A 15-slide product concept for turning scarce Yocto BSP expertise into a guided, auditable workflow covering component selection, BSP generation, isolated builds, simulation, testing, Parasoft C/C++test, ESL SBOMator, CVE triage, SBOMs, VEX, and release evidence.</div>
-    </div>
-    <div class="new-card">
-      <span class="nc-tag">NEW · WOLFRAM + LEAN 4</span>
-      <a href="floating-point-heat-method-verification/">Beyond Nonzero — Certified Floating-Point Heat-Method Numerics</a>
-      <span class="nc-dates">Created: 2026-07-29</span>
-      <div class="nc-desc">Technical ESL presentation showing how Amp orchestrates a corrected Python solver, Wolfram Mathematica 15 cross-validation, and Lean 4 kernel-checked proofs to diagnose precision loss, finite propagation, CFL positivity, and hidden defects in a Heat Method implementation.</div>
-    </div>
-    <div class="new-card">
-      <a href="amp-vs-langgraph/">Amp vs. Graph-Based Coding Agents — Why Amp Already Implements the State Machine</a>
-      <span class="nc-dates">Created: 2026-07-29</span>
-      <div class="nc-desc">16-slide technical breakdown mapping every node in a graph-based coding agent state machine to Amp's built-in tools. Side-by-side code, oracle vs static gates, parallel milestones, and a decision framework for regulated industries.</div>
-    </div>
-    
-    <div class="new-card">
-      <span class="nc-tag">חדש · 28.07.2026</span>
-      <a href="Euclidean_Remainder_Fallacy_Presentation.html">The Euclidean Remainder Fallacy — MSVC /O1–/O2 Miscompilation &amp; How Parasoft C/C++test Catches It</a>
-      <span class="nc-dates">פורסם: 2026-07-28</span>
-      <div class="nc-desc">MSVC v19.51 optimizer confuses C++ truncated modulo with Euclidean modulo, miscompiling 6U &lt; (v % 5) for negative inputs. How CERT-C INT10-C, MISRA-C 10.4, and C++test unit tests catch the compiler's own error.</div>
-    </div>
-    <div class="new-card">
-      <span class="nc-tag">חדש · 28.07.2026</span>
-      <a href="adaptive-visual-context/">Adaptive Visual Context — CARES Research to Verified Agent Workflow</a>
-      <span class="nc-dates">פורסם: 2026-07-28</span>
-      <div class="nc-desc">ממחקר CARES לזרימת עבודה מאומתת: Agent Skill, בדיקות מדעיות ב-Wolfram, הוכחות ממוקדות ב-Lean 4 וממשל ESL AI SDLC</div>
-    </div>
-    <div class="new-card">
-      <span class="nc-tag">חדש · 27.07.2026</span>
-      <a href="edpb-databom-legal-edition/">EDPB Guidelines 03/2026 — DataBOM Legal Edition (for Privacy &amp; AI Counsel)</a>
-      <span class="nc-dates">פורסם: 2026-07-27</span>
-      <div class="nc-desc">גרסת עורכי הדין: ESL כספקית כלים לתעשיות מפוקחות, לקוחות ולוגואים, SPDF "מי מוודא את המוודא", DataBOM כשכבת הראיות ל-LIA/DPIA — התקנה מקומית air-gapped</div>
-    </div>
-    <div class="new-card">
-      <span class="nc-tag">חדש · 27.07.2026</span>
-      <a href="embedox-misra-c2023-presentation.html">Embedox Management Command Handlers — MISRA C:2023 Compliance Analysis</a>
-      <span class="nc-dates">פורסם: 2026-07-26 · עודכן: 2026-07-27</span>
-      <div class="nc-desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional — V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות</div>
-    </div>
-    <div class="new-card">
-      <span class="nc-tag">חדש · 25.07.2026</span>
-      <a href="github-trends-watch-presentation/">GitHub Trends Watch</a>
-      <span class="nc-dates">פורסם: 2026-07-25</span>
-      <div class="nc-desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</div>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="brand-mark">ESL</span> Public Pages <small>· Engineering Software Lab</small></div>
+    <div class="search-wrap">
+      <label class="search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="חיפוש בקטלוג… (עברית או English)" autocomplete="off">
+      </label>
     </div>
   </div>
-</div>
+</header>
 
-<h2>SBOMator, DataBOM ושרשרת אספקה</h2>
-<ol>
-  <li><span class="badge b-new">NEW</span><a href="savepathcopier/">SavePathCopier — Tell Amp What You Just Saved</a><span class="dates">Published: 2026-10-31</span><span class="desc">One-pager for a free Windows tray utility that copies every saved file's full path to the clipboard, so you can paste the path straight into Amp when you cannot paste the screenshot itself</span></li>
-  <li><span class="badge b-new">NEW</span><a href="ardupilot-sbom-overview/">ArduPilot Repository Overview for SBOM Scan Configuration</a><span class="dates">Published: 2026-10-20</span><span class="desc">Pre-scan briefing for an FDA cyber-device submission: directory map, firmware families, HAL and RTOS mapping, 15 Git submodules plus vendored-source inventory, licensing notes, a 10-point scan-module checklist, and safety-critical component flags for the SBOM tooling provider</span></li>
-  <li><span class="badge b-new">NEW</span><a href="sbomator-cra-reporting-demo/">ESL SBOMator 1.4.7 - From Scan to ENISA CRA Report in Nine Moves</a><span class="dates">Published: 2026-09-14</span><span class="desc">Animated 13-slide demo with real 1.4.7 screenshots and typed terminal replay: risk dashboard, CI/CD reference verification, and the ENISA SRP drill with 24h and 72h clocks, paste sheet, package manifest and audit chain. Includes an MP4 version (sbomator-cra-reporting-demo.mp4)</span></li>
-  <li><span class="badge b-new">NEW</span><a href="esl-fda-software-evidence-services/">ESL FDA Software Evidence Services</a><span class="dates">Published: 2026-08-21</span><span class="desc">Focused 9-page brochure covering complete FDA software-evidence execution: SBOM and CVE remediation, static analysis and bug fixing, unit testing and code coverage, and ALM traceability</span></li>
-  <li><span class="badge b-new">NEW</span><a href="sbomator-fda-edition/">SBOMator FDA Edition — Section 524B Medical Device Cybersecurity</a><span class="dates">Published: 2026-08-21</span><span class="desc">Interactive 10-page web brochure: submission-ready SBOM, VEX, HBOM, DataBOM, vulnerability intelligence and postmarket evidence for FDA cyber-device submissions</span></li>
-  <li><span class="badge b-new">NEW</span><a href="esl-cra-solutions/">ESL Solutions for CRA - Cyber Resilience Act Compliance Brochure</a><span class="dates">Published: 2026-08-17</span><span class="desc">Full ESL product portfolio mapped to EU Cyber Resilience Act requirements</span></li>
-  <li><span class="badge b-new">NEW</span><a href="sbomator-supply-chain-detection/">SBOMator 1.3 — Real-Time Supply-Chain Threat Detection</a><span class="dates">Published: 2026-08-06</span><span class="desc">New in 1.3: OSV.dev malware checks in every scan, real-time endpoint watcher, and the zero-day install-hook heuristic — told through the Aug 2026 keyv/cacheable npm attack</span></li>
-  <li><span class="badge b-new">NEW</span><a href="xdp-verification-workflow-presentation.html">Wolfram + Lean + eBPF/XDP - Closed-Loop Formal Verification Workflow</a><span class="dates">Published: 2026-08-06</span><span class="desc">12-slide walkthrough of a closed verification loop: Wolfram symbolic invariant discovery, Lean 4 machine-checked proofs, and differential testing against a compiled eBPF/XDP rate limiter</span></li>
-  <li><span class="badge b-new">NEW</span><a href="parasoft-ti-armclang-misra-setup/">Parasoft C++test + TI Arm Clang - MISRA C 2025 & Flow Analysis Setup Guide for DevOps</a><span class="dates">Published: 2026-08-05</span><span class="desc">Complete DevOps guide for running MISRA C 2025 static analysis with Parasoft C++test and the unsupported TI Arm Clang compiler (tiarmclang) using the tiarmgcc_7 compiler family</span></li>
-  <li><span class="badge b-new">חדש</span><a href="edpb-databom-legal-edition/">EDPB Guidelines 03/2026 — DataBOM Legal Edition (for Privacy &amp; AI Counsel)</a><span class="dates">פורסם: 2026-07-27</span><span class="desc">הגרסה לעורכי דין וליועצים משפטיים: רקע על ESL ולקוחותיה, SPDF, ומה DataBOM פותר ומה נשאר אצל היועץ — עם דגש על התקנה מקומית air-gapped</span></li>
-  <li><span class="badge b-new">חדש</span><a href="edpb-guidelines-databom-risk/">EDPB Guidelines 03/2026 — Risks &amp; the DataBOM Answer</a><span class="dates">פורסם: 2026-07-21</span><span class="desc">הנחיות ה-EDPB החדשות על web scraping, הסיכונים ל-CTO/CISO/משפט, ומה DataBOM פותר ומה לא</span></li>
-  <li><span class="badge b-new">חדש</span><a href="sbomator-databom-presentation/">SBOMator DataBOM — An SBOM for Your AI Training Data</a><span class="dates">פורסם: 2026-07-21</span><span class="desc">מצגת המוצר: סריקת Provenance לדאטהסטים של AI, כולל מסך Mockup והתקנה מקומית air-gapped</span></li>
-  <li><a href="Trivy-Attack-SBOMator-Defense.html">ESL SBOMator — Immune to the Trivy Supply Chain Attack</a><span class="dates">פורסם: 2026-03-29</span><span class="desc">למה SBOMator חסין למתקפת שרשרת האספקה של Trivy</span></li>
-  <li><a href="SBOMator_vs_FiniteState_Decision.html">SBOMator vs Finite State — Tool Comparison</a><span class="dates">פורסם: 2026-04-16</span><span class="desc">השוואת כלים והחלטת רכש</span></li>
-  <li><a href="1goat_Report.html">ESL SBOMator — Professional SBOM Analysis</a><span class="dates">פורסם: 2026-03-18</span><span class="desc">דוגמת דוח סריקה של SBOMator</span></li>
-</ol>
+<nav class="chipbar">
+  <div class="chips" id="chips">
+        <button class="chip is-active" data-cat="all">הכל <span class="chip-n">131</span></button>
+        <button class="chip chip-new" data-cat="sec-new">חדשים <span class="chip-n">42</span></button>
+        <button class="chip" data-cat="sec-1" style="--sec:#38bdf8">SBOMator, DataBOM ושרשרת אספקה <span class="chip-n">15</span></button>
+        <button class="chip" data-cat="sec-2" style="--sec:#f472b6">Amp מול Claude Code — השוואות ובנצ'מרקים <span class="chip-n">17</span></button>
+        <button class="chip" data-cat="sec-3" style="--sec:#f87171">אבטחה, CISO ו-AI <span class="chip-n">11</span></button>
+        <button class="chip" data-cat="sec-4" style="--sec:#4ade80">Embedded, C++ וכלי פיתוח <span class="chip-n">19</span></button>
+        <button class="chip" data-cat="sec-5" style="--sec:#c084fc">Wolfram, מתמטיקה ומחקר <span class="chip-n">14</span></button>
+        <button class="chip" data-cat="sec-6" style="--sec:#fbbf24">שונות <span class="chip-n">11</span></button>
+        <button class="chip" data-cat="sec-7" style="--sec:#2dd4bf">Reports Examples <span class="chip-n">2</span></button>
+  </div>
+</nav>
 
-<h2>Amp מול Claude Code — השוואות ובנצ'מרקים</h2>
-<ol>
-  <li><a href="ai_agent_eval_presentation.html">AI Coding Agent Evaluation — Ampcode vs Claude Code</a><span class="dates">פורסם: 2026-04-04</span><span class="desc">מתודולוגיית הערכה והשוואה מלאה</span></li>
-  <li><a href="ampcode-vs-claudecode-presentation.html">Ampcode vs Claude Code — Why Ampcode Wins</a><span class="dates">פורסם: 2026-04-15 · עודכן: 2026-07-27</span><span class="desc">מצגת השוואה תמציתית</span></li>
-  <li><a href="amp-deep3-vs-claude-opus47-benchmark.html">QuickSWE v2 — Amp Deep³ vs Claude Opus 4.7</a><span class="dates">פורסם: 2026-04-17 · עודכן: 2026-07-27</span><span class="desc">בנצ'מרק ראש-בראש</span></li>
-  <li><a href="baboons-benchmark-report.html">Amp Ultra vs Claude Code — Claude Fable 5 Benchmark</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</span><span class="desc">דוח בנצ'מרק משחק ה-FPS</span></li>
-  <li><a href="baboons-face-off.html">Baboons Over London — Amp vs Claude, Same Model</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-19</span><span class="desc">אותו מודל, harness שונה — עימות ישיר</span></li>
-  <li><a href="final-scores.html">Final Scores — Amp vs Claude</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</span><span class="desc">טבלת תוצאות מסכמת</span></li>
-  <li><a href="harness-beats-model.html">The Harness Beats the Model — Amp Rush vs Claude Fable 5</a><span class="dates">פורסם: 2026-07-13 · עודכן: 2026-07-19</span><span class="desc">התזה: ה-harness חשוב מהמודל</span></li>
-  <li><a href="harness-story.html">The Harness Beats the Model — Qubits, Baboons &amp; AI Agents</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-19</span><span class="desc">גרסת הסיפור המלא</span></li>
-  <li><a href="NotebookComparison_Presentation.html">Mohammadian 1988 — Claude vs Amp Slide Deck</a><span class="dates">פורסם: 2026-05-13</span><span class="desc">השוואה על שחזור מאמר ב-Mathematica</span></li>
-  <li><a href="claude-code-skills-vs-amp/">Claude Code Skills vs Amp Built-in Capabilities</a><span class="dates">פורסם: 2026-07-15</span><span class="desc">השוואת מנגנוני skills</span></li>
-  <li><a href="amp-lost-in-the-middle-presentation.html">How Amp Solves "Lost in the Middle"</a><span class="dates">פורסם: 2026-04-26</span><span class="desc">איך Amp פותר את בעיית אמצע-הקונטקסט</span></li>
-  <li><span class="badge b-he">עברית</span><a href="Claude_HalfLife_Test.html">בדיקת "זמן מחצית חיים" של Claude</a><span class="dates">פורסם: 2026-04-07</span><span class="desc">ניסוי דעיכת ביצועים לאורך שיחה</span></li>
-  <li><a href="agent-halflife-tester.html">Agent Half-Life Tester</a><span class="dates">פורסם: 2026-04-06</span><span class="desc">הכלי שמודד דעיכת ביצועי סוכן</span></li>
-  <li><a href="ai-coding-agent-cost-calculator.html">AI Coding Agent Cost Calculator</a><span class="dates">פורסם: 2026-05-29 · עודכן: 2026-07-27</span><span class="desc">מחשבון עלויות אינטראקטיבי — קטלוג מודלים רוענן</span></li>
-  <li><a href="ai-cost-estimation-presentation/">AI Coding Agent Cost Estimation Dashboards</a><span class="dates">פורסם: 2026-05-09</span><span class="desc">דשבורדים להערכת עלויות</span></li>
-  <li><a href="Dive-into-Claude-Code-Presentation.html">Dive into Claude Code</a><span class="dates">פורסם: 2026-06-16 · עודכן: 2026-07-27</span><span class="desc">סקירת עומק של Claude Code</span></li>
-  <li><a href="Claude-Code-Qwen-Local-Guide.html">Connect Claude Code to Local Qwen3-Coder / Qwen 2.5 Coder</a><span class="dates">פורסם: 2026-04-06 · עודכן: 2026-07-27</span><span class="desc">מדריך חיבור למודל מקומי — שוכתב ל-Anthropic /v1/messages</span></li>
-</ol>
+<main class="wrap">
 
-<h2>אבטחה, CISO ו-AI</h2>
-<ol>
-  <li><a href="AI_Coding_Tools_Security_Comparison.html">AI Coding Tools Security Comparison — CISO Assessment</a><span class="dates">פורסם: 2026-03-19 · עודכן: 2026-07-27</span><span class="desc">הערכת מוכנות ארגונית של כלי קידוד AI — בדיקה מחדש + הערות יכולות חדשות</span></li>
-  <li><a href="AI_Coding_Tools_Security_Comparison_Report.html">AI Coding Tools — CISO Security Comparison Report</a><span class="dates">פורסם: 2026-03-19 · עודכן: 2026-06-22</span><span class="desc">גרסת הדוח המלא</span></li>
-  <li><a href="Ampcode_CISO_Security_Review.html">CISO Security Review — Ampcode (Sourcegraph)</a><span class="dates">פורסם: 2026-03-19</span><span class="desc">סקירת אבטחה ל-Ampcode</span></li>
-  <li><a href="amp-arupilot-security-benchmark.html">Amp-Optimized Security Prompt — Benchmark on ArduPilot</a><span class="dates">פורסם: 2026-05-21</span><span class="desc">בנצ'מרק פרומפט אבטחה על ArduPilot</span></li>
-  <li><a href="apweb-security-bakeoff-judge.html">APWeb Blind Security Bake-off — Droid as a Judge</a><span class="dates">פורסם: 2026-08-08</span><span class="desc">שיפוט עיוור: Amp מול Claude Code על ArduPilot APWeb</span></li>
-  <li><a href="ampcode-mcp-defense-presentation.html">Defending Against MCP Tool Poisoning</a><span class="dates">פורסם: 2026-06-18 · עודכן: 2026-06-19</span><span class="desc">הגנה מהרעלת כלי MCP</span></li>
-  <li><span class="badge b-he">עברית</span><a href="ampcode-prompt-injection-immunity.html">למה הבאג הזה לא יכול לקרות ב-Ampcode</a><span class="dates">פורסם: 2026-04-15</span><span class="desc">חסינות ל-prompt injection</span></li>
-  <li><a href="nono-ampcode-presentation.html">nono — AI Agent Security for Ampcode</a><span class="dates">פורסם: 2026-04-03</span><span class="desc">שכבת אבטחה לסוכני AI</span></li>
-  <li><a href="nesher2gm-pentest-operator-guide.html">Nesher2GM — Pentest Operator Guide</a><span class="dates">פורסם: 2026-05-01</span><span class="desc">מדריך מפעיל לבדיקות חדירות</span></li>
-  <li><a href="BD-SECURITY-TDSQL-Presentation.html">SQL Injection — Data Flow Analysis</a><span class="dates">פורסם: 2026-04-02</span><span class="desc">ניתוח זרימת נתונים של SQLi</span></li>
-  <li><a href="endorlabs-amp-integration-presentation.html">Endor Labs + Amp Integration</a><span class="dates">פורסם: 2026-06-16</span><span class="desc">שילוב סריקות Endor Labs בתוך Amp</span></li>
-</ol>
+<section class="hero">
+  <h1>תוכן עניינים — <em>מצגות ודוחות</em></h1>
+  <p class="sub">כל הדפים הציבוריים באתר zuwasi.github.io/Public-html-pages, מקובצים לפי נושא, עם תאריך פרסום ראשוני ותאריך עדכון אחרון מתוך היסטוריית git. הקלידו לחיפוש או לחצו על מקטע כדי לסנן.</p>
+  <div class="stats">
+    <span class="stat"><b>131</b> עמודים</span>
+    <span class="stat"><b>7</b> מקטעים</span>
+    <span class="stat">עודכן <b>31.10.2026</b></span>
+  </div>
+  <p class="status-line" id="status"></p>
+</section>
 
-<h2>Embedded, C++ וכלי פיתוח</h2>
-<ol>
-  <li dir="ltr"><span class="badge b-new">NEW</span><a href="cpp26-reflection-misra-parasoft/">C++26 Reflection on GCC 16.1: What Actually Compiles Today</a><span class="dates">Published: 2026-09-29</span><span class="desc">P2996 print_fields and a compile-time layout check run on GCC 16.1; six compile errors and fixes, negative tests, the static-analyzer parse gap, one MISRA C++:2023 slide</span></li>
-  <li><a href="msvc-o1-miscompilation-parasoft/">When Correct C++ Produces the Wrong Answer</a><span class="dates">פורסם: 2026-08-07</span><span class="desc">MSVC /O1 compiler regression and layered verification with Parasoft C/C++test</span></li>
-  <li dir="ltr"><span class="badge b-new">NEW</span><a href="yocto-bsp-studio-design-partner/">Yocto BSP Studio — Design Partner Presentation</a><span class="dates">Published: 2026-07-29</span><span class="desc">Guided Yocto BSP configuration, generation, build, simulation, QA, Parasoft C/C++test, ESL SBOMator, CVE/SBOM/VEX analysis, and evidence-based release gates</span></li>
-  <li><span class="badge b-new">חדש</span><a href="Euclidean_Remainder_Fallacy_Presentation.html">The Euclidean Remainder Fallacy — MSVC /O1–/O2 Miscompilation &amp; How Parasoft C/C++test Catches It</a><span class="dates">פורסם: 2026-07-28</span><span class="desc">MSVC v19.51 optimizer assumes Euclidean modulo range instead of C++ truncated modulo — and how CERT-C INT10-C, MISRA-C 10.4, and C++test unit tests would have caught the compiler's own error</span></li>
-  <li><a href="asn1c-cpp26-modernization.html">ASN1C to Modern C++26</a><span class="dates">פורסם: 2026-05-31</span><span class="desc">מודרניזציה של קוד ASN1C</span></li>
-  <li><a href="asn1c-workbench-amp-presentation.html">ASN1C Workbench + Amp</a><span class="dates">פורסם: 2026-05-31</span><span class="desc">סביבת עבודה ל-ASN.1 עם Amp</span></li>
-  <li><a href="cpp26-embedded-mavlink.html">C++26 for Embedded: MAVLink on RP2040</a><span class="dates">פורסם: 2026-04-22</span><span class="desc">C++26 במערכות משובצות</span></li>
-  <li><span class="badge b-new">NEW</span><a href="ISO-26262-Compliance-Toolkit.html">ISO 26262 Compliance Toolkit — ConnectX-6 Dx</a><span class="dates">Published: 2026-08-19</span><span class="desc">10-slide toolkit presentation: PyQt6 dashboard (10 tabs), 3-phase Scan→Triage→Verify workflow, formal deviation management, GCS/GRP document generation, and unit testing/coverage tracking for ISO 26262 ASIL-B</span></li>
-  <li><span class="badge b-new">NEW</span><a href="BlueField-2-ConnectX-6-Dx-Linux-to-Automotive.html">BlueField-2 / ConnectX-6 Dx — Linux to Automotive</a><span class="dates">Published: 2026-08-19</span><span class="desc">9-slide driver architecture presentation: 5-module Zephyr design, 8-state device state machine, TX/RX/IRQ data paths, 58 unit tests, and 55% completion status</span></li>
-  <li><a href="MLX5-to-Zephyr-MISRA-Journey.html">NVIDIA MLX5 → Zephyr RTOS: The MISRA C Journey</a><span class="dates">פורסם: 2026-04-06</span><span class="desc">מסע הסבה ל-MISRA C</span></li>
-  <li><a href="parasoft-cpptest-obfuscation/">Parasoft C/C++test and Obfuscation</a><span class="dates">פורסם: 2026-07-19</span><span class="desc">ניתוח סטטי וקוד מעורפל</span></li>
-  <li><a href="cuda-to-axelera-migration.html">CUDA → Axelera Migration Guide</a><span class="dates">פורסם: 2026-04-15</span><span class="desc">מדריך הגירה ל-Axelera Metis</span></li>
-  <li><span class="badge b-he">עברית</span><a href="static-code-analysis-2026.html">ניתוח קוד סטטי ובדיקות דינאמיות 2026</a><span class="dates">פורסם: 2026-04-06</span><span class="desc">עידן הבינה המלאכותית בניתוח קוד</span></li>
-  <li><a href="terratest-ampcode-esl-presentation/">Ampcode × Terratest</a><span class="dates">פורסם: 2026-07-05</span><span class="desc">בדיקות תשתית עם Terratest ו-Amp</span></li>
-  <li><a href="terratest-diff-esl-presentation/">Terratest × Ampcode — The Diff</a><span class="dates">פורסם: 2026-07-05</span><span class="desc">גרסת ה-diff של אותו נושא</span></li>
-  <li><span class="badge b-new">חדש</span><a href="embedox-misra-c2023-presentation.html">Embedox Management Command Handlers — MISRA C:2023 Compliance Analysis</a><span class="dates">פורסם: 2026-07-26 · עודכן: 2026-07-27</span><span class="desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional, כולל V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות, דוח תיקון ודוח סטיות</span></li>
-  <li><span class="badge b-new">חדש</span><a href="github-trends-watch-presentation/">GitHub Trends Watch</a><span class="dates">פורסם: 2026-07-25</span><span class="desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</span></li>
-  <li><a href="why-amp-doesnt-need-node9-proxy.html">Why Amp Doesn't Need node9-proxy</a><span class="dates">פורסם: 2026-03-28</span><span class="desc">ניתוח ארכיטקטורת רשת</span></li>
-  <li><a href="skillspector-droid-locate-and-judge.html">Droid as Locate-and-Judge — SkillSpector</a><span class="dates">פורסם: 2026-07-20</span><span class="desc">שיפוט אוטומטי של skills</span></li>
-</ol>
+<section class="catalog-section" data-section="sec-new" id="sec-new">
+  <h2><span class="sec-dot"></span>חדשים באתר<span class="sec-count">42</span></h2>
+  <div class="grid">
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · INFOGRAPHIC · CERN × SOURCEGRAPH CASE STUDY</span>
+      <a class="card-title" href="cern-sourcegraph-infographic/index.html">CERN Tackles Technical Debt: 15M Lines of Mission-Critical Code</a>
+      <div class="card-dates">Published: 2026-10-31</div>
+      <p class="card-desc">Dynamic one-page scrolling infographic based on the Sourcegraph CERN case study: animated counters (15M lines of Java, ~300 developers, 18 years of growth), an 18-year timeline, run mode vs upgrade mode change clocks (5-year LHC stability periods vs 1-2 year upgrade windows), four ways code search shrinks technical debt, and the Chris Roderick quote. Built for social sharing.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · MISRA C:2025 · SOURCEGRAPH + PARASOFT APPROVAL DECK</span>
+      <a class="card-title" href="misra-rule-7-5-sourcegraph-plan/index.html">Scaling MISRA C:2025 Compliance: From Thousands of Violations to Zero</a>
+      <div class="card-dates">Published: 2026-10-28</div>
+      <p class="card-desc">11-slide ESL solution deck for eliminating MISRA C:2025 Rule 7.5 violations across 4 repositories and 400 branches. Opens with the engineering loop as a flowchart: a Parasoft C/C++test baseline scan of one module (~500 findings) extrapolates to ~50,000 project-wide, triggering the decision to automate; Sourcegraph search queries and Batch Change scripts fix every incident; a Parasoft verification scan is the judge, and a non-zero result loops back to script redesign until zero is proven, then scaled to all repos and held by a standing CI gate. Includes Sourcegraph UI recreations, an annotated real Parasoft screenshot, an ESL-style compliance dashboard, and the edge-case safety rails.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · HARDENATOR · VSIX &amp; AI SKILL SECURITY</span>
+      <a class="card-title" href="hardenator-vsix-skills/index.html">Hardenator: Four Options for VSIX and AI Skill Security</a>
+      <div class="card-dates">Published: 2026-10-27</div>
+      <p class="card-desc">12 mobile-friendly ESL slides comparing a desktop inspection station, central review portal, enforced admission gateway, and controlled internal catalog. Each option includes technical details, an interactive synthetic mockup, and a user workflow. Complements Sonatype IQ; proposed capabilities, not deployed security controls.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · TECHNICAL REVIEW</span>
+      <a class="card-title" href="parasoft-cuda-bridge/technical/">Parasoft CUDA Bridge: Technical Evaluation Brief</a>
+      <div class="card-dates">Published: 2026-10-26</div>
+      <p class="card-desc">Technical review for the C++test product team: implementation, CMake companion workflow, heuristic CUDA rules, CUDA GoogleTest host-coverage evidence, limitations, per-project stress results, and feedback questions.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · CUSTOMER EVALUATION</span>
+      <a class="card-title" href="parasoft-cuda-bridge/customer/">Analyze CUDA in Visual Studio 2026</a>
+      <div class="card-dates">Published: 2026-10-26</div>
+      <p class="card-desc">Customer evaluation deck showing CMake preparation, generated Visual Studio companion analysis, genuine Error List screenshots, CUDA guideline rule scope, result handling, prerequisites, and limitations.</p>
+    </article>
+    <article class="card card-new" dir="rtl">
+      <span class="card-tag badge-new">NEW · תשתיות / AI · מנוע תוואי מאומת</span>
+      <a class="card-title" href="iroad-verified-alignment/index.html">מנוע תוואי מאומת: עדכון בעקבות דרישות Iroad (Netivei Yisrael RFI 94/26)</a>
+      <div class="card-dates">Published: 2026-10-25</div>
+      <p class="card-desc">13 שקפים במיתוג ESL: ארבע דרישות של Iroad מהמצגת הראשונה יושמו ואומתו (מקרא למפה, אילוץ קרקע חקלאית, איסור חציית שטח בנוי, והטמעת ספר העקרונות PDDM של FHWA), כל אחת מסומנת "נוסף בעקבות דרישת Iroad". פירוט מקורות הנתונים (Copernicus GLO-30, OpenStreetMap, GovMap) עם תאריכי שליפה, שינויי האלגוריתם לפי התקן (עקומות אנכיות, מדידת חשיפת עצירה, 18 הוכחות Lean 4), סימון נקודות אדם בלולאה על צילומי ההדגמה, והסבר על בקרת גרסאות ושחזור כל גרסה.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · AGENT BENCHMARK · THE HARNESS IS THE KING</span>
+      <a class="card-title" href="swe-sweep-harness-king/index.html">The Harness Is the King: Amp vs Claude Code on SWE-sweep</a>
+      <div class="card-dates">Published: 2026-10-21</div>
+      <p class="card-desc">ESL slide deck on the completed benchmark: same model (claude-opus-5-5) on both arms, 12 repos, 60 hidden-test-scored bugs, official SWE-sweep Docker verifiers. Amp 4/60 (6.7%) vs Claude Code 2/60 (3.3%), above the official SOTA entry of 4.7%. Introduces SWE-sweep and its leaderboard, quotes the authors' harness ablation, walks through the real diffs the agents got right and wrong, presents the Parasoft C++test control (0-0.3% line-level overlap with ~500k findings), and concludes the harness is the king. Companion pages: linkedin.html (ready-to-post text) and article.html (website article).</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · AGENT BENCHMARK</span>
+      <a class="card-title" href="mini-swe-sweep/index.html">mini-swe_sweep: Amp vs Claude Code on Real SWE-sweep Bugs</a>
+      <div class="card-dates">Published: 2026-10-20</div>
+      <p class="card-desc">12 repositories across 6 languages, 60 real reference bugs, same model (claude-opus-5-5) on both agent arms with equal 1-hour caps and hidden-test Docker verifiers. Final results: Amp 4/60 (6.7%) versus Claude Code 2/60 (3.3%), with cost-tier run 1, per-repo tables, cost model, and provenance.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · PYTHON / JSON PERFORMANCE</span>
+      <a class="card-title" href="python-json-throughput.html">16 GB/s of JSON on a Laptop: Free-Threaded Python and Field Projection</a>
+      <div class="card-dates">Published: 2026-10-18</div>
+      <p class="card-desc">15 ESL-branded slides reproducing Daniel Lemire's GH Archive workload on a 24-core Core Ultra 9 laptop in isolated WSL. Field projection reached 16.07 GB/s median versus 12.87 GB/s for lazy views at 24 threads: 24.8% higher throughput and 19.9% less time.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · AMP / AI CODING AGENTS</span>
+      <a class="card-title" href="harness-is-the-product/">The Harness Is the Product: Anatomy of an AI Coding Agent in 9 Slides</a>
+      <div class="card-dates">Published: 2026-10-15</div>
+      <p class="card-desc">Trade-show loop deck in the Amp theme (near-black, cream, orange): the harness is more important than the LLM, then each layer of the AI Coding Agent stack as an animated infographic with its share of the product: User Interface 5%, Agent Orchestrator 15% (planning and control loop), Context &amp; Indexing 15% (repo indexing and code search), Tool Execution 20% (file ops, builds, tests, MCP), LLM Core 15% (just the engine), Verification &amp; Feedback 20%, and Memory &amp; State plus Safety &amp; Guardrails for the remaining 10%. Slides auto-advance in a circle every 6 seconds by default, with a big pause button for talking and an adjustable slide time on the first slide (4 to 12 seconds, steps of 1). Thesis credit: "The Harness Is the Product" (Towards AI).</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · MANTIQ FACTOR / HOLOGRAPHY</span>
+      <a class="card-title" href="mantiq-holographic-interfaces/">MantiQ Factor × arXiv:2609.38318: Your Holography Paper, Checked End to End</a>
+      <div class="card-dates">Published: 2026-10-14</div>
+      <p class="card-desc">A workflow proposal prepared for the authors of "Energy Transmission Across Holographic Conformal Interfaces in General Dimensions" (Arav, Bertrand, Chapman, Policastro, Waeber): what the MantiQ Factor process would do with their paper. A 12-slide fit assessment opening with the MantiQ Factor production-line overview, then a six-stage pipeline diagram: freeze the source, normalize claims and conventions, a Wolfram notebook oracle re-deriving the warp-factor transmission formula (Eqs. 15, 29, 154), scoped Lean 4 theorems for the central-charge bounds, a QASM / Classiq circuit artifact executed on a quantum simulator (with an interactive scattering lab), and a public evidence package. Includes a claim-by-claim evidence table and an honest verdict: strong fit for the Wolfram, Lean, and simulator stages; no RTL/FPGA stage applies to a theory paper.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · BUILD PERFORMANCE / MOLD LINKER</span>
+      <a class="card-title" href="apollo-mold-linker/">Apollo Linker Benchmark: When the mold Linker Helps, and When It Doesn't</a>
+      <div class="card-dates">Published: 2026-10-13</div>
+      <p class="card-desc">22 interactive slides from two cold Bazel builds of Apollo's cyber and planning modules (24 cores, GCC 7.5), one with GNU ld.bfd and one with mold 2.0.0, with every link action timed through bazel --profile. Whole-build wall time moved +1.1% (462 s vs 467 s), within run-to-run noise. Per link, the median was 16.8% faster with mold and the best single link was 2.94x faster, but links under 1.5 s often got slower: 119 of 124 losses were in that range. Includes all 310 paired link timings, a comparison with the large single-link workloads in Rui Ueyama's arXiv:2608.23228 paper, the setup problems we hit, and when mold is worth adopting.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · STATIC ANALYSIS / PARASOFT VS SONARQUBE</span>
+      <a class="card-title" href="threadx-parasoft-sonarqube.html">Parasoft C/C++test vs SonarQube CLI on ThreadX Win32: 50 Planted Defects</a>
+      <div class="card-dates">Published: 2026-10-11 · Updated: 2026-10-11</div>
+      <p class="card-desc">30 widescreen slides introduce both tools and the test method, show representative planted C defects beside Parasoft's actual rule IDs and messages, and list all 50 valid defects in the adjudication appendices. Parasoft's only scored configuration was Flow Analysis Aggressive, run on the clean and bugged states: 15 strict true positives out of 50 valid defects, plus one partial and one indirect signal (not counted as direct detections). It missed all eight concurrency defects and nine of eleven size-arithmetic defects. SonarQube's DEEP code scan was unavailable — Vortex returned 403 and every requested file was skipped — never zero findings; its local secrets scan completed with zero secrets. Links to the MIT repository, defect catalog, scan protocol, comparison report and detection matrix.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · THREADX / CORTEX-M / CLANG</span>
+      <a class="card-title" href="tx5-upgrade/">ThreadX 5.6 to 6.5, Cortex-M4 to M85: Migration with Executable Evidence</a>
+      <div class="card-dates">Published: 2026-10-11 · Updated: 2026-10-11</div>
+      <p class="card-desc">41 ESL-branded slides plus PDF: ESL and CTO Daniel Liezrowice, five project challenges, and one Clang-built application run on the real ThreadX 5.6 Cortex-M4 kernel and on MIT ThreadX 6.5, then built for Cortex-M85. Verified TX5-M4, TX6-M4 and M55 QEMU runs, eleven code-diff discussions, binary-kernel inspection, measured memory charts and histograms. Mobile arrows, Home, a recorded LED/button replay and ESL contact links. M85 execution and real-board performance remain unverified.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <a class="card-title" href="Jahalin-reports/">Jahalin-reports</a>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · PARASOFT / APOLLO</span>
+      <a class="card-title" href="apollo-misra-demo/">Apollo: Parallel MISRA Analysis and Verified Improvement</a>
+      <div class="card-dates">Published: 2026-10-04</div>
+      <p class="card-desc">Animated customer-demo plan: Apollo's 471,310 C/C++ code lines, six independent PRs, Jenkins, six Parasoft automation servers, optional Incredibuild acceleration, and one DTP. Follow 100 selected findings through Amp-assisted fixes, unit tests, rescanning, and before/after evidence. Proposed targets, not measured results.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · AI AGENTS / SKILL EVALS</span>
+      <a class="card-title" href="wazatator/">Wazatator: Evaluate Agent Skills with Claude Code</a>
+      <div class="card-dates">Published: 2026-10-02</div>
+      <p class="card-desc">By ESL (Engineering Software Lab), a member of Anthropic's Claude Partner Network. What Wazatator is and how it works: an open-source fork of Microsoft Waza that runs your SKILL.md through real Claude Code sessions and scores the result. Code samples for eval suites, tasks, graders and trigger tests, real findings (skills that ask instead of act, skills never invoked, tool-policy violations, MCP usage, cost), a before/after fix, and a replayed live demo.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · INTERACTIVE HUMMUS DEMO</span>
+      <a class="card-title" href="hummus-council/">The Hummus Council: Big Decisions, Small Chickpeas</a>
+      <a class="card-title" href="hummus-council/?lang=he" lang="he" dir="rtl">מועצת גדולי החומוס: הגרסה בעברית</a>
+      <div class="card-dates">Published: 2026-10-02</div>
+      <p class="card-desc">A humorous lunch-decision app. Choose a city, date, hunger level, hummus style and sources, then watch four fictional experts turn your preferences into a transparent, source-linked verdict. Ten curated places, seasonal scoring and six of Daniel Liezrowice's own posts in the Facebook group “החומוסולוגים”, with a group link and clear evidence limits. Absolutely no actual chickpeas.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · EMBEDDED / INTERRUPTS &amp; POLLING</span>
+      <a class="card-title" href="interrupts-vs-polling/">Interrupt on the Edge, Poll on the Level</a>
+      <div class="card-dates">Published: 2026-10-01</div>
+      <p class="card-desc">Beyond "interrupts vs polling": seven Cortex-M code samples compiled against real STM32F4 and nRF52 headers. Covers the NAPI-style hybrid, DMA with idle-line detection (and its half-transfer gotcha), zero-CPU PPI event routing, the lost-wakeup race in "check, then WFI" with real disassembly, BASEPRI critical sections, interrupt storm guards, and debouncing by polling.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · C++26 / GCC 16.1 / REFLECTION</span>
+      <a class="card-title" href="cpp26-reflection-misra-parasoft/">C++26 Reflection on GCC 16.1: What Actually Compiles Today</a>
+      <div class="card-dates">Published: 2026-09-29</div>
+      <p class="card-desc">Amadeus Ferro's print_fields() plus a compile-time wire-layout check, built and run on GCC 16.1 through Compiler Explorer. Six compile errors between the P2996 snippet and a running binary with the fix for each, two negative tests, the static-analyzer parse gap, and one MISRA C++:2023 consequence. A reply to a LinkedIn post.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · XSIGHT LABS / PARASOFT AUTOMATION</span>
+      <a class="card-title" href="xsightlab-automation/">Three Containers. Nine Scan Results.</a>
+      <div class="card-dates">Published: 2026-09-27</div>
+      <p class="card-desc">Twelve customer-facing slides: first check available license features with cpptest-license-features, then use the nine-app C++17 test project to verify three scans per container. Includes interactive scheduling and DTP views. Utility compatibility, customer scans and license acceptance remain to be verified in the lab.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · SBOMATOR / MARKET COMPARISON</span>
+      <a class="card-title" href="sbomator-market-comparison/">SBOMator: Not CSPM or CNAPP. A Black Duck Competitor.</a>
+      <div class="card-dates">Published: 2026-09-27</div>
+      <p class="card-desc">20 mobile-friendly slides: distinguish product supply-chain security from CSPM/CNAPP, then compare SBOMator with Black Duck. Includes site-license pricing, ESL’s 60-day integration offer with payment after success, and contact details. Product master-plan capabilities assumed complete.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · MANTIQ / QUANTUM PHASE ESTIMATION</span>
+      <a class="card-title" href="mantiq-qpe/">From a Quantum Claim to a Checked Result</a>
+      <div class="card-dates">Published: 2026-09-24</div>
+      <p class="card-desc">Eight slides with a live gate-level QPE simulator: exact and approximate phases, eigenstate superpositions, deliberate circuit faults, independent Wolfram vectors, and a scoped Lean resource-count proof. Download reproducible evidence; no hardware or quantum-speedup claim.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · AI ENGINEERING / CODE OWNERSHIP</span>
+      <a class="card-title" href="ai-code-ownership.html">Code Is Cheap. Understanding Is Earned.</a>
+      <div class="card-dates">Published: 2026-09-22</div>
+      <p class="card-desc">Five copyable discussion comments with code examples: counterexamples, observability debt, atomicity, learning loops, and durable code ownership. A six-slide companion to Michal Stawarz's post on AI-assisted engineering.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · ESL AI SDLC / PREDICTION &amp; POLICY</span>
+      <a class="card-title" href="prediction-is-not-permission/">Same Probability. Different Action.</a>
+      <div class="card-dates">Published: 2026-09-22</div>
+      <p class="card-desc">Six interactive slides: a $5 misrouted ticket versus a $10,000 wrongful account closure, a live expected-loss calculator, copyable Python policy, Jev confidence caveats, and a downloadable infographic. ESL AI SDLC, Daniel Liezrowice.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · ESL AI SDLC / DECISION ECONOMICS</span>
+      <a class="card-title" href="jev-cost-of-being-wrong/">99% Sure. Two Different Decisions: The Cost of Being Wrong</a>
+      <div class="card-dates">Published: 2026-09-22</div>
+      <p class="card-desc">Seven interactive ESL slides on Jev and cost-aware automation: compare a $20 credit with a $20,000 reimbursement, experiment with expected error loss, copy the Python policy, and download the infographic. Illustrative cases, not measured Jev performance.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · SBOMATOR / VENDOR EVIDENCE</span>
+      <a class="card-title" href="sbomator-scrapling-vendor-comparison/">Scrapling + SBOMator: Nine Real Repository Comparisons</a>
+      <div class="card-dates">Published: 2026-09-21</div>
+      <p class="card-desc">Three NXP, three ST, and three AMD/Xilinx-targeting repositories: 18 source-only scans, experimental vendor lifecycle enrichment, downloadable paired SBOMs, and HTTP retrieval trials. Shows unchanged component inventories, coverage gaps, and an obsolete ST board whose MCU still has a longevity commitment.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · AI SDLC / JEV</span>
+      <a class="card-title" href="jev-decision-safeguards/">A Fast Decision Is Not a Verified Result: Jev Decision Safeguards</a>
+      <div class="card-dates">Published: 2026-09-20</div>
+      <p class="card-desc">Daniel Liezrowice, ESL: an interactive walkthrough of context filtering, missing-evidence review gates, and confidently wrong routing. Adjust the threshold to compare errors with deferred work. Synthetic illustration, not measured Jev performance.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · MANTIQ / SOLIDITY</span>
+      <a class="card-title" href="mantiq-solidity/">MantiQ / Solidity: The Buyer Signed. Should the Contract Pay?</a>
+      <a class="card-title" href="mantiq-solidity/dashboard.html?autoplay=1" dir="auto">recorded-evidence tour</a>
+      <a class="card-title" href="mantiq-solidity/assets/mantiq-solidity-workflow.png" dir="auto">workflow image</a>
+      <a class="card-title" href="mantiq-solidity/reports/sbomator-report.html" dir="auto">SBOMator report</a>
+      <div class="card-dates">Published: 2026-09-20</div>
+      <p class="card-desc">Solidity static analysis, finding triage, EVM tests, and Wolfram/Lean 4 model evidence, presented by Daniel Liezrowice of ESL through a 10 test ETH escrow case. Static analysis is core to the proposed workflow; the provider will be an ESL tool or Olympix, subject to readiness and commercial terms. The current Olympix scan remains blocked, with no completed detection claimed. Explore the <a href="mantiq-solidity/dashboard.html?autoplay=1">recorded-evidence tour</a>, <a href="mantiq-solidity/assets/mantiq-solidity-workflow.png">workflow image</a>, and supporting <a href="mantiq-solidity/reports/sbomator-report.html">SBOMator report</a> (368 components, zero missing licenses, vulnerability findings retained). Not an audit or a production security guarantee.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · AI AGENT MEMORY</span>
+      <a class="card-title" href="agent-memory-benchmark/">Memory, Under Test — Interactive Agent Memory Benchmark</a>
+      <div class="card-dates">Published: 2026-09-18</div>
+      <p class="card-desc">A critical, evidence-first examination of agent memory claims. Compare stateless, full-context, and governed selective-memory strategies across six interactive scenarios, inspect decision traces, disable safeguards, and download reproducible benchmark results.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · EMBEDDED / CORTEX-M</span>
+      <a class="card-title" href="cortex-m-call-anatomy/">What Really Happens When You Call a Function in C? -O0 vs -O2 on Cortex-M4</a>
+      <a class="card-title" href="cortex-m-call-anatomy/animation.html" dir="auto">emulator-driven animation</a>
+      <div class="card-dates">Published: 2026-09-11</div>
+      <p class="card-desc">The textbook "6 steps of a function call" is a picture of -O0. Real arm-none-eabi-gcc output shows the call vanishing at -O2 (30 instructions become 2), what a forced call looks like (stack alignment padding, -fipa-ra keeping a scratch register live, pop {r3, pc} as the ROP surface), plus an <a href="cortex-m-call-anatomy/animation.html">emulator-driven animation</a> of every instruction, register and stack word.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · C++ DEBUGGING</span>
+      <a class="card-title" href="cpp-debugging-evidence-demo/">Beyond Breakpoints to Evidence — ESL C++ Debugging Demo</a>
+      <div class="card-dates">Published: 2026-08-15</div>
+      <p class="card-desc">A hands-on companion to Vivek Bhadra's “Beyond Breakpoints”: one reproducible use-after-free defect investigated with AddressSanitizer and GDB, corrected through explicit ownership, and protected by automated regression tests—with a one-click WSL runner and findings dashboard.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · FHE HARDWARE</span>
+      <a class="card-title" href="mantiq-factor-fhe-hardware/">MantiQ Factor — From FHE Research to Verified Accelerator Hardware</a>
+      <div class="card-dates">Published: 2026-08-15</div>
+      <p class="card-desc">A 60-slide evidence-driven journey from the public REED paper through Mathematica, Lean 4, vendor-neutral VHDL simulation, and PYNQ-Z2 implementation—positioned as a reproducible engineering path toward specialized FHE hardware, with physical validation explicitly pending.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · C++ COMPILER BUG</span>
+      <a class="card-title" href="msvc-o1-miscompilation-parasoft/">When Correct C++ Produces the Wrong Answer — MSVC /O1 Miscompilation &amp; How Parasoft C/C++test Catches It</a>
+      <div class="card-dates">Published: 2026-08-07</div>
+      <p class="card-desc">MSVC 19.51 /O1 feeds address offsets instead of array values into adc — a value-versus-address optimizer regression. How layered verification (static analysis, unit tests, coverage, compiler diversity, CI gates) with Parasoft C/C++test catches the bad binary before release. Originally published on LinkedIn Pulse.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · EMBEDDED LINUX</span>
+      <a class="card-title" href="yocto-bsp-studio-design-partner/">Yocto BSP Studio — Design Partner Presentation</a>
+      <div class="card-dates">Created: 2026-07-29</div>
+      <p class="card-desc">A 15-slide product concept for turning scarce Yocto BSP expertise into a guided, auditable workflow covering component selection, BSP generation, isolated builds, simulation, testing, Parasoft C/C++test, ESL SBOMator, CVE triage, SBOMs, VEX, and release evidence.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">NEW · WOLFRAM + LEAN 4</span>
+      <a class="card-title" href="floating-point-heat-method-verification/">Beyond Nonzero — Certified Floating-Point Heat-Method Numerics</a>
+      <div class="card-dates">Created: 2026-07-29</div>
+      <p class="card-desc">Technical ESL presentation showing how Amp orchestrates a corrected Python solver, Wolfram Mathematica 15 cross-validation, and Lean 4 kernel-checked proofs to diagnose precision loss, finite propagation, CFL positivity, and hidden defects in a Heat Method implementation.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <a class="card-title" href="amp-vs-langgraph/">Amp vs. Graph-Based Coding Agents — Why Amp Already Implements the State Machine</a>
+      <div class="card-dates">Created: 2026-07-29</div>
+      <p class="card-desc">16-slide technical breakdown mapping every node in a graph-based coding agent state machine to Amp's built-in tools. Side-by-side code, oracle vs static gates, parallel milestones, and a decision framework for regulated industries.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">חדש · 28.07.2026</span>
+      <a class="card-title" href="Euclidean_Remainder_Fallacy_Presentation.html">The Euclidean Remainder Fallacy — MSVC /O1–/O2 Miscompilation &amp; How Parasoft C/C++test Catches It</a>
+      <div class="card-dates">פורסם: 2026-07-28</div>
+      <p class="card-desc">MSVC v19.51 optimizer confuses C++ truncated modulo with Euclidean modulo, miscompiling 6U &lt; (v % 5) for negative inputs. How CERT-C INT10-C, MISRA-C 10.4, and C++test unit tests catch the compiler's own error.</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">חדש · 28.07.2026</span>
+      <a class="card-title" href="adaptive-visual-context/">Adaptive Visual Context — CARES Research to Verified Agent Workflow</a>
+      <div class="card-dates">פורסם: 2026-07-28</div>
+      <p class="card-desc">ממחקר CARES לזרימת עבודה מאומתת: Agent Skill, בדיקות מדעיות ב-Wolfram, הוכחות ממוקדות ב-Lean 4 וממשל ESL AI SDLC</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">חדש · 27.07.2026</span>
+      <a class="card-title" href="edpb-databom-legal-edition/">EDPB Guidelines 03/2026 — DataBOM Legal Edition (for Privacy &amp; AI Counsel)</a>
+      <div class="card-dates">פורסם: 2026-07-27</div>
+      <p class="card-desc">גרסת עורכי הדין: ESL כספקית כלים לתעשיות מפוקחות, לקוחות ולוגואים, SPDF "מי מוודא את המוודא", DataBOM כשכבת הראיות ל-LIA/DPIA — התקנה מקומית air-gapped</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">חדש · 27.07.2026</span>
+      <a class="card-title" href="embedox-misra-c2023-presentation.html">Embedox Management Command Handlers — MISRA C:2023 Compliance Analysis</a>
+      <div class="card-dates">פורסם: 2026-07-26 · עודכן: 2026-07-27</div>
+      <p class="card-desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional — V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות</p>
+    </article>
+    <article class="card card-new" dir="ltr">
+      <span class="card-tag badge-new">חדש · 25.07.2026</span>
+      <a class="card-title" href="github-trends-watch-presentation/">GitHub Trends Watch</a>
+      <div class="card-dates">פורסם: 2026-07-25</div>
+      <p class="card-desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</p>
+    </article>
+  </div>
+</section>
 
-<h2>Wolfram, מתמטיקה ומחקר</h2>
-<ol>
-  <li><span class="badge b-new">חדש</span><a href="floating-point-heat-method-verification/">Beyond Nonzero — Certified Floating-Point Heat-Method Numerics</a><span class="dates">פורסם: 2026-07-29 · עודכן: 2026-07-29</span><span class="desc">מצגת טכנית של ESL: מימוש Python מתוקן עם 9 בדיקות, אימות צולב מול Wolfram Mathematica 15 והוכחות Lean 4 לחיוביות, תנאי CFL והתפשטות סופית; כולל תיקונים למאמר המקורי, השלכות הנדסיות ושימושים מסחריים</span></li>
-  <li><span class="badge b-new">חדש</span><a href="adaptive-visual-context/">Adaptive Visual Context — CARES Research to Verified Agent Workflow</a><span class="dates">פורסם: 2026-07-28</span><span class="desc">מצגת מדעית בת 39 שקופיות המחברת את מחקר CARES ל-Agent Skill דטרמיניסטי, שחזורי Wolfram, הוכחות Lean 4 ממוקדות וממשל ראיות של ESL AI SDLC</span></li>
-  <li><span class="badge b-new">חדש</span><a href="rna-transcript-svd-lean4-presentation.html">Transcript-Length SVD — Wolfram + Lean 4</a><span class="dates">פורסם: 2026-07-24 · עודכן: 2026-08-09</span><span class="desc">מודרניזציה של מחברות Mathematica לניתוח התפלגות אורכי transcript עם SVD, המעודכנת כעת עם הנתונים הנמדדים שסיפקה ד״ר אורלי אלתר. המצגת משווה בין שלב הסימולציה הקודם לבין הניתוח הנמדד, מציגה את שינוי אורכי ה-transcript ב-GBM, ומבחינה בין תצפיות אמפיריות, אימות נומרי ב-Wolfram והוכחות פורמליות ב-Lean 4.</span></li>
-  <li><a href="origami-continuum-inverse-design/">Continuum Origami Inverse Design — Reproduction &amp; Verification</a><span class="dates">פורסם: 2026-08-04</span><span class="desc">מצגת טכנית על גאומטריה דיפרנציאלית, תכנון הפוך ואימות חוצה Wolfram, Lean 4 ו-C++</span></li>
-  <li><a href="Avraham_Gilo_Lemma1_Presentation.html">Avraham &amp; Gilo — Lemma 1 Verification</a><span class="dates">פורסם: 2026-03-31</span><span class="desc">אימות למה מתמטית עם Ampcode + Wolfram</span></li>
-  <li><a href="proof-lean-cbmc.html">Can You Prove It? — Lean 4 + CBMC</a><span class="dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</span><span class="desc">הוכחות פורמליות לבנצ'מרק הקוונטי</span></li>
-  <li><a href="Quantum_MathBridge.html">Quantum MathBridge</a><span class="dates">פורסם: 2026-04-08</span><span class="desc">גשר בין סימולציה קוונטית למתמטיקה</span></li>
-  <li><a href="VeriMath_Pitch_Abel_Nazareth.html">VeriMath — Business Proposal for Wolfram Research</a><span class="dates">פורסם: 2026-04-13</span><span class="desc">הצעה עסקית ל-Wolfram</span></li>
-  <li><a href="wolfram-engine-gpu-demo-presentation.html">Wolfram Engine GPU Telemetry Demo</a><span class="dates">פורסם: 2026-05-14 · עודכן: 2026-05-19</span><span class="desc">טלמטריית GPU ב-Wolfram Engine</span></li>
-  <li><a href="ampcode-classiq-research-orchestrator/">Ampcode + Mathematica + Lean 4 + Classiq</a><span class="dates">פורסם: 2026-07-22</span><span class="desc">אורקסטרציה של מחקר קוונטי</span></li>
-  <li><a href="biosense-heartgcn-demo/paper-suitability-presentation.html">Paper Suitability — Biomedical Conduction Velocity</a><span class="dates">פורסם: 2026-07-19</span><span class="desc">התאמת מאמר לדמו ביו-רפואי</span></li>
-  <li><a href="biosense-heartgcn-demo/paper-to-cpp-verification-presentation.html">HeartGCN — Paper to Mathematica to C++</a><span class="dates">פורסם: 2026-07-19</span><span class="desc">ממאמר לקוד מאומת</span></li>
-  <li><a href="cardioband-tr-wolfram-demo/">AMP + Wolfram Paper-to-Simulation Demo</a><span class="dates">פורסם: 2026-05-23</span><span class="desc">ממאמר לסימולציה</span></li>
-  <li><a href="cardiotwin-tr-product-demo/">CardioTwin TR — Product Concept</a><span class="dates">פורסם: 2026-05-24</span><span class="desc">קונספט מוצר תאום דיגיטלי לבבי</span></li>
-</ol>
+<section class="catalog-section" data-section="sec-1" id="sec-1" style="--sec:#38bdf8">
+  <h2><span class="sec-dot"></span>SBOMator, DataBOM ושרשרת אספקה<span class="sec-count">15</span></h2>
+  <div class="grid">
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="savepathcopier/">SavePathCopier — Tell Amp What You Just Saved</a>
+      <div class="card-dates">Published: 2026-10-31</div>
+      <p class="card-desc">One-pager for a free Windows tray utility that copies every saved file's full path to the clipboard, so you can paste the path straight into Amp when you cannot paste the screenshot itself</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="ardupilot-sbom-overview/">ArduPilot Repository Overview for SBOM Scan Configuration</a>
+      <div class="card-dates">Published: 2026-10-20</div>
+      <p class="card-desc">Pre-scan briefing for an FDA cyber-device submission: directory map, firmware families, HAL and RTOS mapping, 15 Git submodules plus vendored-source inventory, licensing notes, a 10-point scan-module checklist, and safety-critical component flags for the SBOM tooling provider</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="sbomator-cra-reporting-demo/">ESL SBOMator 1.4.7 - From Scan to ENISA CRA Report in Nine Moves</a>
+      <div class="card-dates">Published: 2026-09-14</div>
+      <p class="card-desc">Animated 13-slide demo with real 1.4.7 screenshots and typed terminal replay: risk dashboard, CI/CD reference verification, and the ENISA SRP drill with 24h and 72h clocks, paste sheet, package manifest and audit chain. Includes an MP4 version (sbomator-cra-reporting-demo.mp4)</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="esl-fda-software-evidence-services/">ESL FDA Software Evidence Services</a>
+      <div class="card-dates">Published: 2026-08-21</div>
+      <p class="card-desc">Focused 9-page brochure covering complete FDA software-evidence execution: SBOM and CVE remediation, static analysis and bug fixing, unit testing and code coverage, and ALM traceability</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="sbomator-fda-edition/">SBOMator FDA Edition — Section 524B Medical Device Cybersecurity</a>
+      <div class="card-dates">Published: 2026-08-21</div>
+      <p class="card-desc">Interactive 10-page web brochure: submission-ready SBOM, VEX, HBOM, DataBOM, vulnerability intelligence and postmarket evidence for FDA cyber-device submissions</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="esl-cra-solutions/">ESL Solutions for CRA - Cyber Resilience Act Compliance Brochure</a>
+      <div class="card-dates">Published: 2026-08-17</div>
+      <p class="card-desc">Full ESL product portfolio mapped to EU Cyber Resilience Act requirements</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="sbomator-supply-chain-detection/">SBOMator 1.3 — Real-Time Supply-Chain Threat Detection</a>
+      <div class="card-dates">Published: 2026-08-06</div>
+      <p class="card-desc">New in 1.3: OSV.dev malware checks in every scan, real-time endpoint watcher, and the zero-day install-hook heuristic — told through the Aug 2026 keyv/cacheable npm attack</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="xdp-verification-workflow-presentation.html">Wolfram + Lean + eBPF/XDP - Closed-Loop Formal Verification Workflow</a>
+      <div class="card-dates">Published: 2026-08-06</div>
+      <p class="card-desc">12-slide walkthrough of a closed verification loop: Wolfram symbolic invariant discovery, Lean 4 machine-checked proofs, and differential testing against a compiled eBPF/XDP rate limiter</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="parasoft-ti-armclang-misra-setup/">Parasoft C++test + TI Arm Clang - MISRA C 2025 & Flow Analysis Setup Guide for DevOps</a>
+      <div class="card-dates">Published: 2026-08-05</div>
+      <p class="card-desc">Complete DevOps guide for running MISRA C 2025 static analysis with Parasoft C++test and the unsupported TI Arm Clang compiler (tiarmclang) using the tiarmgcc_7 compiler family</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="edpb-databom-legal-edition/">EDPB Guidelines 03/2026 — DataBOM Legal Edition (for Privacy &amp; AI Counsel)</a>
+      <div class="card-dates">פורסם: 2026-07-27</div>
+      <p class="card-desc">הגרסה לעורכי דין וליועצים משפטיים: רקע על ESL ולקוחותיה, SPDF, ומה DataBOM פותר ומה נשאר אצל היועץ — עם דגש על התקנה מקומית air-gapped</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="edpb-guidelines-databom-risk/">EDPB Guidelines 03/2026 — Risks &amp; the DataBOM Answer</a>
+      <div class="card-dates">פורסם: 2026-07-21</div>
+      <p class="card-desc">הנחיות ה-EDPB החדשות על web scraping, הסיכונים ל-CTO/CISO/משפט, ומה DataBOM פותר ומה לא</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="sbomator-databom-presentation/">SBOMator DataBOM — An SBOM for Your AI Training Data</a>
+      <div class="card-dates">פורסם: 2026-07-21</div>
+      <p class="card-desc">מצגת המוצר: סריקת Provenance לדאטהסטים של AI, כולל מסך Mockup והתקנה מקומית air-gapped</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="Trivy-Attack-SBOMator-Defense.html">ESL SBOMator — Immune to the Trivy Supply Chain Attack</a>
+      <div class="card-dates">פורסם: 2026-03-29</div>
+      <p class="card-desc">למה SBOMator חסין למתקפת שרשרת האספקה של Trivy</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="SBOMator_vs_FiniteState_Decision.html">SBOMator vs Finite State — Tool Comparison</a>
+      <div class="card-dates">פורסם: 2026-04-16</div>
+      <p class="card-desc">השוואת כלים והחלטת רכש</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="1goat_Report.html">ESL SBOMator — Professional SBOM Analysis</a>
+      <div class="card-dates">פורסם: 2026-03-18</div>
+      <p class="card-desc">דוגמת דוח סריקה של SBOMator</p>
+    </article>
+  </div>
+</section>
 
-<h2>שונות</h2>
-<ol>
-  <li><a href="comparison-presentation-executive.html">Smart Speech Executive Comparison</a><span class="dates">פורסם: 2026-04-23</span><span class="desc">השוואת מנהלים — Smart Speech</span></li>
-  <li><a href="comparison-presentation-detailed.html">Smart Speech Comparison Presentation</a><span class="dates">פורסם: 2026-04-23</span><span class="desc">הגרסה המפורטת</span></li>
-  <li><a href="comparison-report.html">Smart Speech Executive Comparison (Report)</a><span class="dates">פורסם: 2026-04-23</span><span class="desc">גרסת דוח</span></li>
-  <li><a href="hiring-agent-presentation.html">Hiring Agent — Concept &amp; Process</a><span class="dates">פורסם: 2026-06-04</span><span class="desc">סוכן AI לתהליכי גיוס</span></li>
-  <li><a href="optical-ai-network-comparison-presentation.html">Optical AI Networks: China vs. Nvidia Israel</a><span class="dates">פורסם: 2026-07-15</span><span class="desc">השוואת רשתות AI אופטיות</span></li>
-  <li><a href="Unified_Intelligence_Platform_Proposal.html">Unified Enterprise Intelligence Platform</a><span class="dates">פורסם: 2026-03-30</span><span class="desc">הצעה טכנית ל-Sourcegraph</span></li>
-  <li><a href="early-dos-html/">Early DOS Development, IBM PC, AI Tools and Me</a><span class="dates">פורסם: 2026-05-06 · עודכן: 2026-05-07</span><span class="desc">מסע נוסטלגי — DOS ועד AI</span></li>
-  <li><a href="games/amp-best.html">London Baboon Hunt — FPS (Amp)</a><span class="dates">פורסם: 2026-07-17</span><span class="desc">משחק ה-FPS מהבנצ'מרק — גרסת Amp</span></li>
-  <li><a href="games/claude-best.html">London Baboon Hunter — FPS (Claude)</a><span class="dates">פורסם: 2026-07-17</span><span class="desc">גרסת Claude</span></li>
-  <li><a href="level5-safety-pipeline/">Level 5 - Safety-Critical Compliance Pipeline (DO-178C x ISO 26262 ASIL D)</a><span class="dates">2026-07-29</span><span class="desc">14-phase pipeline: fault injection, FMEA/FTA/HAZOP, MC/DC, WCET, GSN safety case, secureFlows</span></li>
-  <li><a href="answer-to-tannenbaum-concern.html">An Answer to Tannenbaum's Concern - Securing AI-Generated HTML</a><span class="dates">Published: 2026-07-30 · Updated: 2026-08-23</span><span class="desc">Open-source 9-check HTML safety gate, local GUI, CVE review, hardened git hooks, and CI</span></li>
-</ol>
+<section class="catalog-section" data-section="sec-2" id="sec-2" style="--sec:#f472b6">
+  <h2><span class="sec-dot"></span>Amp מול Claude Code — השוואות ובנצ'מרקים<span class="sec-count">17</span></h2>
+  <div class="grid">
+    <article class="card " dir="ltr">
+      <a class="card-title" href="ai_agent_eval_presentation.html">AI Coding Agent Evaluation — Ampcode vs Claude Code</a>
+      <div class="card-dates">פורסם: 2026-04-04</div>
+      <p class="card-desc">מתודולוגיית הערכה והשוואה מלאה</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="ampcode-vs-claudecode-presentation.html">Ampcode vs Claude Code — Why Ampcode Wins</a>
+      <div class="card-dates">פורסם: 2026-04-15 · עודכן: 2026-07-27</div>
+      <p class="card-desc">מצגת השוואה תמציתית</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="amp-deep3-vs-claude-opus47-benchmark.html">QuickSWE v2 — Amp Deep³ vs Claude Opus 4.7</a>
+      <div class="card-dates">פורסם: 2026-04-17 · עודכן: 2026-07-27</div>
+      <p class="card-desc">בנצ'מרק ראש-בראש</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="baboons-benchmark-report.html">Amp Ultra vs Claude Code — Claude Fable 5 Benchmark</a>
+      <div class="card-dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</div>
+      <p class="card-desc">דוח בנצ'מרק משחק ה-FPS</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="baboons-face-off.html">Baboons Over London — Amp vs Claude, Same Model</a>
+      <div class="card-dates">פורסם: 2026-07-17 · עודכן: 2026-07-19</div>
+      <p class="card-desc">אותו מודל, harness שונה — עימות ישיר</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="final-scores.html">Final Scores — Amp vs Claude</a>
+      <div class="card-dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</div>
+      <p class="card-desc">טבלת תוצאות מסכמת</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="harness-beats-model.html">The Harness Beats the Model — Amp Rush vs Claude Fable 5</a>
+      <div class="card-dates">פורסם: 2026-07-13 · עודכן: 2026-07-19</div>
+      <p class="card-desc">התזה: ה-harness חשוב מהמודל</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="harness-story.html">The Harness Beats the Model — Qubits, Baboons &amp; AI Agents</a>
+      <div class="card-dates">פורסם: 2026-07-17 · עודכן: 2026-07-19</div>
+      <p class="card-desc">גרסת הסיפור המלא</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="NotebookComparison_Presentation.html">Mohammadian 1988 — Claude vs Amp Slide Deck</a>
+      <div class="card-dates">פורסם: 2026-05-13</div>
+      <p class="card-desc">השוואה על שחזור מאמר ב-Mathematica</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="claude-code-skills-vs-amp/">Claude Code Skills vs Amp Built-in Capabilities</a>
+      <div class="card-dates">פורסם: 2026-07-15</div>
+      <p class="card-desc">השוואת מנגנוני skills</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="amp-lost-in-the-middle-presentation.html">How Amp Solves "Lost in the Middle"</a>
+      <div class="card-dates">פורסם: 2026-04-26</div>
+      <p class="card-desc">איך Amp פותר את בעיית אמצע-הקונטקסט</p>
+    </article>
+    <article class="card " dir="rtl">
+      <span class="card-tag badge-he">עברית</span>
+      <a class="card-title" href="Claude_HalfLife_Test.html">בדיקת "זמן מחצית חיים" של Claude</a>
+      <div class="card-dates">פורסם: 2026-04-07</div>
+      <p class="card-desc">ניסוי דעיכת ביצועים לאורך שיחה</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="agent-halflife-tester.html">Agent Half-Life Tester</a>
+      <div class="card-dates">פורסם: 2026-04-06</div>
+      <p class="card-desc">הכלי שמודד דעיכת ביצועי סוכן</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="ai-coding-agent-cost-calculator.html">AI Coding Agent Cost Calculator</a>
+      <div class="card-dates">פורסם: 2026-05-29 · עודכן: 2026-07-27</div>
+      <p class="card-desc">מחשבון עלויות אינטראקטיבי — קטלוג מודלים רוענן</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="ai-cost-estimation-presentation/">AI Coding Agent Cost Estimation Dashboards</a>
+      <div class="card-dates">פורסם: 2026-05-09</div>
+      <p class="card-desc">דשבורדים להערכת עלויות</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="Dive-into-Claude-Code-Presentation.html">Dive into Claude Code</a>
+      <div class="card-dates">פורסם: 2026-06-16 · עודכן: 2026-07-27</div>
+      <p class="card-desc">סקירת עומק של Claude Code</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="Claude-Code-Qwen-Local-Guide.html">Connect Claude Code to Local Qwen3-Coder / Qwen 2.5 Coder</a>
+      <div class="card-dates">פורסם: 2026-04-06 · עודכן: 2026-07-27</div>
+      <p class="card-desc">מדריך חיבור למודל מקומי — שוכתב ל-Anthropic /v1/messages</p>
+    </article>
+  </div>
+</section>
 
-<h2>Reports Examples</h2>
-<ol>
-  <li><span class="badge b-new">NEW</span><a href="esl-sbomator-report-examples/">ESL SBOMator — Professional SBOM Analysis (WebGoat 2025.3)</a><span class="dates">Published: 2026-08-24</span><span class="desc">Full SBOMator scan report on WebGoat: 203 components, dependency graph, CVE matches with EPSS/KEV, lifecycle status, and remediation recommendations — interactive HTML with collapsible sections</span></li>
-  <li><a href="1goat_Report.html">ESL SBOMator — Professional SBOM Analysis (1GOAT)</a><span class="dates">פורסם: 2026-03-18</span><span class="desc">דוגמת דוח סריקה של SBOMator</span></li>
-</ol>
+<section class="catalog-section" data-section="sec-3" id="sec-3" style="--sec:#f87171">
+  <h2><span class="sec-dot"></span>אבטחה, CISO ו-AI<span class="sec-count">11</span></h2>
+  <div class="grid">
+    <article class="card " dir="ltr">
+      <a class="card-title" href="AI_Coding_Tools_Security_Comparison.html">AI Coding Tools Security Comparison — CISO Assessment</a>
+      <div class="card-dates">פורסם: 2026-03-19 · עודכן: 2026-07-27</div>
+      <p class="card-desc">הערכת מוכנות ארגונית של כלי קידוד AI — בדיקה מחדש + הערות יכולות חדשות</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="AI_Coding_Tools_Security_Comparison_Report.html">AI Coding Tools — CISO Security Comparison Report</a>
+      <div class="card-dates">פורסם: 2026-03-19 · עודכן: 2026-06-22</div>
+      <p class="card-desc">גרסת הדוח המלא</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="Ampcode_CISO_Security_Review.html">CISO Security Review — Ampcode (Sourcegraph)</a>
+      <div class="card-dates">פורסם: 2026-03-19</div>
+      <p class="card-desc">סקירת אבטחה ל-Ampcode</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="amp-arupilot-security-benchmark.html">Amp-Optimized Security Prompt — Benchmark on ArduPilot</a>
+      <div class="card-dates">פורסם: 2026-05-21</div>
+      <p class="card-desc">בנצ'מרק פרומפט אבטחה על ArduPilot</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="apweb-security-bakeoff-judge.html">APWeb Blind Security Bake-off — Droid as a Judge</a>
+      <div class="card-dates">פורסם: 2026-08-08</div>
+      <p class="card-desc">שיפוט עיוור: Amp מול Claude Code על ArduPilot APWeb</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="ampcode-mcp-defense-presentation.html">Defending Against MCP Tool Poisoning</a>
+      <div class="card-dates">פורסם: 2026-06-18 · עודכן: 2026-06-19</div>
+      <p class="card-desc">הגנה מהרעלת כלי MCP</p>
+    </article>
+    <article class="card " dir="rtl">
+      <span class="card-tag badge-he">עברית</span>
+      <a class="card-title" href="ampcode-prompt-injection-immunity.html">למה הבאג הזה לא יכול לקרות ב-Ampcode</a>
+      <div class="card-dates">פורסם: 2026-04-15</div>
+      <p class="card-desc">חסינות ל-prompt injection</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="nono-ampcode-presentation.html">nono — AI Agent Security for Ampcode</a>
+      <div class="card-dates">פורסם: 2026-04-03</div>
+      <p class="card-desc">שכבת אבטחה לסוכני AI</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="nesher2gm-pentest-operator-guide.html">Nesher2GM — Pentest Operator Guide</a>
+      <div class="card-dates">פורסם: 2026-05-01</div>
+      <p class="card-desc">מדריך מפעיל לבדיקות חדירות</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="BD-SECURITY-TDSQL-Presentation.html">SQL Injection — Data Flow Analysis</a>
+      <div class="card-dates">פורסם: 2026-04-02</div>
+      <p class="card-desc">ניתוח זרימת נתונים של SQLi</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="endorlabs-amp-integration-presentation.html">Endor Labs + Amp Integration</a>
+      <div class="card-dates">פורסם: 2026-06-16</div>
+      <p class="card-desc">שילוב סריקות Endor Labs בתוך Amp</p>
+    </article>
+  </div>
+</section>
+
+<section class="catalog-section" data-section="sec-4" id="sec-4" style="--sec:#4ade80">
+  <h2><span class="sec-dot"></span>Embedded, C++ וכלי פיתוח<span class="sec-count">19</span></h2>
+  <div class="grid">
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="cpp26-reflection-misra-parasoft/">C++26 Reflection on GCC 16.1: What Actually Compiles Today</a>
+      <div class="card-dates">Published: 2026-09-29</div>
+      <p class="card-desc">P2996 print_fields and a compile-time layout check run on GCC 16.1; six compile errors and fixes, negative tests, the static-analyzer parse gap, one MISRA C++:2023 slide</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="msvc-o1-miscompilation-parasoft/">When Correct C++ Produces the Wrong Answer</a>
+      <div class="card-dates">פורסם: 2026-08-07</div>
+      <p class="card-desc">MSVC /O1 compiler regression and layered verification with Parasoft C/C++test</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="yocto-bsp-studio-design-partner/">Yocto BSP Studio — Design Partner Presentation</a>
+      <div class="card-dates">Published: 2026-07-29</div>
+      <p class="card-desc">Guided Yocto BSP configuration, generation, build, simulation, QA, Parasoft C/C++test, ESL SBOMator, CVE/SBOM/VEX analysis, and evidence-based release gates</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="Euclidean_Remainder_Fallacy_Presentation.html">The Euclidean Remainder Fallacy — MSVC /O1–/O2 Miscompilation &amp; How Parasoft C/C++test Catches It</a>
+      <div class="card-dates">פורסם: 2026-07-28</div>
+      <p class="card-desc">MSVC v19.51 optimizer assumes Euclidean modulo range instead of C++ truncated modulo — and how CERT-C INT10-C, MISRA-C 10.4, and C++test unit tests would have caught the compiler's own error</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="asn1c-cpp26-modernization.html">ASN1C to Modern C++26</a>
+      <div class="card-dates">פורסם: 2026-05-31</div>
+      <p class="card-desc">מודרניזציה של קוד ASN1C</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="asn1c-workbench-amp-presentation.html">ASN1C Workbench + Amp</a>
+      <div class="card-dates">פורסם: 2026-05-31</div>
+      <p class="card-desc">סביבת עבודה ל-ASN.1 עם Amp</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="cpp26-embedded-mavlink.html">C++26 for Embedded: MAVLink on RP2040</a>
+      <div class="card-dates">פורסם: 2026-04-22</div>
+      <p class="card-desc">C++26 במערכות משובצות</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="ISO-26262-Compliance-Toolkit.html">ISO 26262 Compliance Toolkit — ConnectX-6 Dx</a>
+      <div class="card-dates">Published: 2026-08-19</div>
+      <p class="card-desc">10-slide toolkit presentation: PyQt6 dashboard (10 tabs), 3-phase Scan→Triage→Verify workflow, formal deviation management, GCS/GRP document generation, and unit testing/coverage tracking for ISO 26262 ASIL-B</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="BlueField-2-ConnectX-6-Dx-Linux-to-Automotive.html">BlueField-2 / ConnectX-6 Dx — Linux to Automotive</a>
+      <div class="card-dates">Published: 2026-08-19</div>
+      <p class="card-desc">9-slide driver architecture presentation: 5-module Zephyr design, 8-state device state machine, TX/RX/IRQ data paths, 58 unit tests, and 55% completion status</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="MLX5-to-Zephyr-MISRA-Journey.html">NVIDIA MLX5 → Zephyr RTOS: The MISRA C Journey</a>
+      <div class="card-dates">פורסם: 2026-04-06</div>
+      <p class="card-desc">מסע הסבה ל-MISRA C</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="parasoft-cpptest-obfuscation/">Parasoft C/C++test and Obfuscation</a>
+      <div class="card-dates">פורסם: 2026-07-19</div>
+      <p class="card-desc">ניתוח סטטי וקוד מעורפל</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="cuda-to-axelera-migration.html">CUDA → Axelera Migration Guide</a>
+      <div class="card-dates">פורסם: 2026-04-15</div>
+      <p class="card-desc">מדריך הגירה ל-Axelera Metis</p>
+    </article>
+    <article class="card " dir="rtl">
+      <span class="card-tag badge-he">עברית</span>
+      <a class="card-title" href="static-code-analysis-2026.html">ניתוח קוד סטטי ובדיקות דינאמיות 2026</a>
+      <div class="card-dates">פורסם: 2026-04-06</div>
+      <p class="card-desc">עידן הבינה המלאכותית בניתוח קוד</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="terratest-ampcode-esl-presentation/">Ampcode × Terratest</a>
+      <div class="card-dates">פורסם: 2026-07-05</div>
+      <p class="card-desc">בדיקות תשתית עם Terratest ו-Amp</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="terratest-diff-esl-presentation/">Terratest × Ampcode — The Diff</a>
+      <div class="card-dates">פורסם: 2026-07-05</div>
+      <p class="card-desc">גרסת ה-diff של אותו נושא</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="embedox-misra-c2023-presentation.html">Embedox Management Command Handlers — MISRA C:2023 Compliance Analysis</a>
+      <div class="card-dates">פורסם: 2026-07-26 · עודכן: 2026-07-27</div>
+      <p class="card-desc">ניתוח מלא של MISRA C:2023 עם Parasoft C/C++test Professional, כולל V2-fixed: 135 מ-174 הפרות תוקנו, 39 סטיות פורמליות, 48/48 בדיקות יחידה עוברות, דוח תיקון ודוח סטיות</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="github-trends-watch-presentation/">GitHub Trends Watch</a>
+      <div class="card-dates">פורסם: 2026-07-25</div>
+      <p class="card-desc">ניוזלטר אוטומטי לטרנדים ב-GitHub עם ניתוח AI</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="why-amp-doesnt-need-node9-proxy.html">Why Amp Doesn't Need node9-proxy</a>
+      <div class="card-dates">פורסם: 2026-03-28</div>
+      <p class="card-desc">ניתוח ארכיטקטורת רשת</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="skillspector-droid-locate-and-judge.html">Droid as Locate-and-Judge — SkillSpector</a>
+      <div class="card-dates">פורסם: 2026-07-20</div>
+      <p class="card-desc">שיפוט אוטומטי של skills</p>
+    </article>
+  </div>
+</section>
+
+<section class="catalog-section" data-section="sec-5" id="sec-5" style="--sec:#c084fc">
+  <h2><span class="sec-dot"></span>Wolfram, מתמטיקה ומחקר<span class="sec-count">14</span></h2>
+  <div class="grid">
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="floating-point-heat-method-verification/">Beyond Nonzero — Certified Floating-Point Heat-Method Numerics</a>
+      <div class="card-dates">פורסם: 2026-07-29 · עודכן: 2026-07-29</div>
+      <p class="card-desc">מצגת טכנית של ESL: מימוש Python מתוקן עם 9 בדיקות, אימות צולב מול Wolfram Mathematica 15 והוכחות Lean 4 לחיוביות, תנאי CFL והתפשטות סופית; כולל תיקונים למאמר המקורי, השלכות הנדסיות ושימושים מסחריים</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="adaptive-visual-context/">Adaptive Visual Context — CARES Research to Verified Agent Workflow</a>
+      <div class="card-dates">פורסם: 2026-07-28</div>
+      <p class="card-desc">מצגת מדעית בת 39 שקופיות המחברת את מחקר CARES ל-Agent Skill דטרמיניסטי, שחזורי Wolfram, הוכחות Lean 4 ממוקדות וממשל ראיות של ESL AI SDLC</p>
+    </article>
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">חדש</span>
+      <a class="card-title" href="rna-transcript-svd-lean4-presentation.html">Transcript-Length SVD — Wolfram + Lean 4</a>
+      <div class="card-dates">פורסם: 2026-07-24 · עודכן: 2026-08-09</div>
+      <p class="card-desc">מודרניזציה של מחברות Mathematica לניתוח התפלגות אורכי transcript עם SVD, המעודכנת כעת עם הנתונים הנמדדים שסיפקה ד״ר אורלי אלתר. המצגת משווה בין שלב הסימולציה הקודם לבין הניתוח הנמדד, מציגה את שינוי אורכי ה-transcript ב-GBM, ומבחינה בין תצפיות אמפיריות, אימות נומרי ב-Wolfram והוכחות פורמליות ב-Lean 4.</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="origami-continuum-inverse-design/">Continuum Origami Inverse Design — Reproduction &amp; Verification</a>
+      <div class="card-dates">פורסם: 2026-08-04</div>
+      <p class="card-desc">מצגת טכנית על גאומטריה דיפרנציאלית, תכנון הפוך ואימות חוצה Wolfram, Lean 4 ו-C++</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="Avraham_Gilo_Lemma1_Presentation.html">Avraham &amp; Gilo — Lemma 1 Verification</a>
+      <div class="card-dates">פורסם: 2026-03-31</div>
+      <p class="card-desc">אימות למה מתמטית עם Ampcode + Wolfram</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="proof-lean-cbmc.html">Can You Prove It? — Lean 4 + CBMC</a>
+      <div class="card-dates">פורסם: 2026-07-17 · עודכן: 2026-07-18</div>
+      <p class="card-desc">הוכחות פורמליות לבנצ'מרק הקוונטי</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="Quantum_MathBridge.html">Quantum MathBridge</a>
+      <div class="card-dates">פורסם: 2026-04-08</div>
+      <p class="card-desc">גשר בין סימולציה קוונטית למתמטיקה</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="VeriMath_Pitch_Abel_Nazareth.html">VeriMath — Business Proposal for Wolfram Research</a>
+      <div class="card-dates">פורסם: 2026-04-13</div>
+      <p class="card-desc">הצעה עסקית ל-Wolfram</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="wolfram-engine-gpu-demo-presentation.html">Wolfram Engine GPU Telemetry Demo</a>
+      <div class="card-dates">פורסם: 2026-05-14 · עודכן: 2026-05-19</div>
+      <p class="card-desc">טלמטריית GPU ב-Wolfram Engine</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="ampcode-classiq-research-orchestrator/">Ampcode + Mathematica + Lean 4 + Classiq</a>
+      <div class="card-dates">פורסם: 2026-07-22</div>
+      <p class="card-desc">אורקסטרציה של מחקר קוונטי</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="biosense-heartgcn-demo/paper-suitability-presentation.html">Paper Suitability — Biomedical Conduction Velocity</a>
+      <div class="card-dates">פורסם: 2026-07-19</div>
+      <p class="card-desc">התאמת מאמר לדמו ביו-רפואי</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="biosense-heartgcn-demo/paper-to-cpp-verification-presentation.html">HeartGCN — Paper to Mathematica to C++</a>
+      <div class="card-dates">פורסם: 2026-07-19</div>
+      <p class="card-desc">ממאמר לקוד מאומת</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="cardioband-tr-wolfram-demo/">AMP + Wolfram Paper-to-Simulation Demo</a>
+      <div class="card-dates">פורסם: 2026-05-23</div>
+      <p class="card-desc">ממאמר לסימולציה</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="cardiotwin-tr-product-demo/">CardioTwin TR — Product Concept</a>
+      <div class="card-dates">פורסם: 2026-05-24</div>
+      <p class="card-desc">קונספט מוצר תאום דיגיטלי לבבי</p>
+    </article>
+  </div>
+</section>
+
+<section class="catalog-section" data-section="sec-6" id="sec-6" style="--sec:#fbbf24">
+  <h2><span class="sec-dot"></span>שונות<span class="sec-count">11</span></h2>
+  <div class="grid">
+    <article class="card " dir="ltr">
+      <a class="card-title" href="comparison-presentation-executive.html">Smart Speech Executive Comparison</a>
+      <div class="card-dates">פורסם: 2026-04-23</div>
+      <p class="card-desc">השוואת מנהלים — Smart Speech</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="comparison-presentation-detailed.html">Smart Speech Comparison Presentation</a>
+      <div class="card-dates">פורסם: 2026-04-23</div>
+      <p class="card-desc">הגרסה המפורטת</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="comparison-report.html">Smart Speech Executive Comparison (Report)</a>
+      <div class="card-dates">פורסם: 2026-04-23</div>
+      <p class="card-desc">גרסת דוח</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="hiring-agent-presentation.html">Hiring Agent — Concept &amp; Process</a>
+      <div class="card-dates">פורסם: 2026-06-04</div>
+      <p class="card-desc">סוכן AI לתהליכי גיוס</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="optical-ai-network-comparison-presentation.html">Optical AI Networks: China vs. Nvidia Israel</a>
+      <div class="card-dates">פורסם: 2026-07-15</div>
+      <p class="card-desc">השוואת רשתות AI אופטיות</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="Unified_Intelligence_Platform_Proposal.html">Unified Enterprise Intelligence Platform</a>
+      <div class="card-dates">פורסם: 2026-03-30</div>
+      <p class="card-desc">הצעה טכנית ל-Sourcegraph</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="early-dos-html/">Early DOS Development, IBM PC, AI Tools and Me</a>
+      <div class="card-dates">פורסם: 2026-05-06 · עודכן: 2026-05-07</div>
+      <p class="card-desc">מסע נוסטלגי — DOS ועד AI</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="games/amp-best.html">London Baboon Hunt — FPS (Amp)</a>
+      <div class="card-dates">פורסם: 2026-07-17</div>
+      <p class="card-desc">משחק ה-FPS מהבנצ'מרק — גרסת Amp</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="games/claude-best.html">London Baboon Hunter — FPS (Claude)</a>
+      <div class="card-dates">פורסם: 2026-07-17</div>
+      <p class="card-desc">גרסת Claude</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="level5-safety-pipeline/">Level 5 - Safety-Critical Compliance Pipeline (DO-178C x ISO 26262 ASIL D)</a>
+      <div class="card-dates">2026-07-29</div>
+      <p class="card-desc">14-phase pipeline: fault injection, FMEA/FTA/HAZOP, MC/DC, WCET, GSN safety case, secureFlows</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="answer-to-tannenbaum-concern.html">An Answer to Tannenbaum's Concern - Securing AI-Generated HTML</a>
+      <div class="card-dates">Published: 2026-07-30 · Updated: 2026-08-23</div>
+      <p class="card-desc">Open-source 9-check HTML safety gate, local GUI, CVE review, hardened git hooks, and CI</p>
+    </article>
+  </div>
+</section>
+
+<section class="catalog-section" data-section="sec-7" id="sec-7" style="--sec:#2dd4bf">
+  <h2><span class="sec-dot"></span>Reports Examples<span class="sec-count">2</span></h2>
+  <div class="grid">
+    <article class="card " dir="ltr">
+      <span class="card-tag badge-new">NEW</span>
+      <a class="card-title" href="esl-sbomator-report-examples/">ESL SBOMator — Professional SBOM Analysis (WebGoat 2025.3)</a>
+      <div class="card-dates">Published: 2026-08-24</div>
+      <p class="card-desc">Full SBOMator scan report on WebGoat: 203 components, dependency graph, CVE matches with EPSS/KEV, lifecycle status, and remediation recommendations — interactive HTML with collapsible sections</p>
+    </article>
+    <article class="card " dir="ltr">
+      <a class="card-title" href="1goat_Report.html">ESL SBOMator — Professional SBOM Analysis (1GOAT)</a>
+      <div class="card-dates">פורסם: 2026-03-18</div>
+      <p class="card-desc">דוגמת דוח סריקה של SBOMator</p>
+    </article>
+  </div>
+</section>
+
+<div class="noresults" id="noresults">לא נמצאו עמודים. נסו מונח אחר או <b>נקו את החיפוש</b>.</div>
 
 <section class="services-section">
   <h2>Engineering Services</h2>
@@ -440,8 +1022,65 @@
 </section>
 
 <footer>
-  ESL — Engineering Software Lab · <a href="https://eswlab.com/contact-us/">צור קשר</a> · רשימה גולמית אוטומטית: <a href="PAGE_INDEX.txt">PAGE_INDEX.txt</a><span class="dates">פורסם: 2026-03-28 · עודכן: 2026-07-22</span>
+  <span>ESL — Engineering Software Lab</span> ·
+  <a href="https://eswlab.com/contact-us/">צור קשר</a> ·
+  <span>רשימה גולמית אוטומטית: <a href="PAGE_INDEX.txt">PAGE_INDEX.txt</a></span>
+  <span class="dates">פורסם: 2026-03-28 · עודכן: 2026-07-22</span>
 </footer>
-</div>
+
+</main>
+
+<script>
+(function () {
+  var q = document.getElementById('q');
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+  var status = document.getElementById('status');
+  var noresults = document.getElementById('noresults');
+  var activeCat = 'all';
+
+  function apply() {
+    var term = q.value.trim().toLowerCase();
+    var shown = 0;
+    var secs = document.querySelectorAll('[data-section]');
+    for (var i = 0; i < secs.length; i++) {
+      var sec = secs[i];
+      var secShown = 0;
+      var cards = sec.querySelectorAll('.card');
+      for (var j = 0; j < cards.length; j++) {
+        var c = cards[j];
+        var okCat = activeCat === 'all' || sec.getAttribute('data-section') === activeCat;
+        var okTerm = !term || c.textContent.toLowerCase().indexOf(term) !== -1;
+        var show = okCat && okTerm;
+        c.style.display = show ? '' : 'none';
+        if (show) secShown++;
+      }
+      var secMatch = activeCat === 'all' || sec.getAttribute('data-section') === activeCat;
+      sec.style.display = (secShown && secMatch) ? '' : 'none';
+      shown += secShown;
+    }
+    noresults.style.display = shown ? 'none' : 'block';
+    status.innerHTML = term || activeCat !== 'all'
+      ? '<b>' + shown + '</b> עמודים מוצגים'
+      : '';
+    for (var k = 0; k < chips.length; k++) {
+      chips[k].classList.toggle('is-active', chips[k].getAttribute('data-cat') === activeCat);
+    }
+  }
+
+  for (var k = 0; k < chips.length; k++) {
+    chips[k].addEventListener('click', function () {
+      var cat = this.getAttribute('data-cat');
+      activeCat = (activeCat === cat) ? 'all' : cat;
+      apply();
+      if (activeCat !== 'all') {
+        var sec = document.querySelector('[data-section="' + activeCat + '"]');
+        if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  }
+  q.addEventListener('input', apply);
+  apply();
+})();
+</script>
 </body>
 </html>
