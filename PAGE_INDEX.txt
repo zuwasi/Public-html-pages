@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-10-28
+Last updated: 2026-10-31
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -277,6 +277,9 @@ Last updated: 2026-10-28
 
 • cardiotwin-tr-product-demo
   https://zuwasi.github.io/Public-html-pages/cardiotwin-tr-product-demo
+
+• cern-sourcegraph-infographic
+  https://zuwasi.github.io/Public-html-pages/cern-sourcegraph-infographic
 
 • claude-code-skills-vs-amp
   https://zuwasi.github.io/Public-html-pages/claude-code-skills-vs-amp
