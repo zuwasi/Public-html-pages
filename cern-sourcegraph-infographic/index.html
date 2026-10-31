@@ -3,22 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CERN Tackles Technical Debt: 15M Lines of Mission-Critical Code</title>
+<title>Case Study: CERN Reduces Technical Debt with Sourcegraph — 15M Lines of Mission-Critical Code</title>
+<meta property="og:title" content="Case Study: CERN Reduces Technical Debt with Sourcegraph">
+<meta property="og:description" content="~15M lines of Java, ~300 developers, 18 years. How universal code search keeps the LHC running.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0a0e1a;
-    --bg2:#0f1526;
-    --card:#141c30;
-    --card2:#1a2340;
-    --line:#263252;
-    --txt:#e8edf7;
-    --muted:#8b98b8;
-    --cyan:#33d6ff;
-    --orange:#ff9d2e;
-    --blue:#4d7cff;
-    --green:#2ee6a8;
+    --bg:#0a0a0b;
+    --bg2:#111113;
+    --card:#161618;
+    --card2:#1c1c1f;
+    --line:#2a2a2e;
+    --txt:#fafafa;
+    --muted:#9a9aa3;
+    --red:#f34e3f;
+    --red-lt:#ff7a6b;
+    --red-md:#c23a2d;
+    --red-dk:#8c2b22;
+    --red-deep:#3a1512;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -29,55 +32,92 @@
     overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
   }
+  .mono{font-family:'JetBrains Mono',monospace}
   .wrap{max-width:1100px;margin:0 auto;padding:0 24px}
 
   /* particles */
-  #particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.6}
+  #particles{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.5}
 
   section{position:relative;z-index:1}
 
   /* ---------- HERO ---------- */
-  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:64px 0 48px}
-  .kicker{
-    display:inline-flex;align-items:center;gap:10px;
-    font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--cyan);margin-bottom:28px;
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:56px 0 48px}
+  .logo-row{display:flex;align-items:center;gap:22px;margin-bottom:30px;flex-wrap:wrap}
+  .logo-row img.sg-logo{height:26px;width:auto}
+  .cern-chip{
+    display:flex;align-items:center;gap:10px;
+    background:#fff;border-radius:8px;padding:7px 14px 7px 7px;
   }
-  .kicker::before{content:"";width:36px;height:2px;background:var(--cyan)}
+  .cern-chip img{height:30px;width:30px;display:block}
+  .cern-chip span{font-size:13px;font-weight:800;color:#0033a0;letter-spacing:.02em}
+  .logo-x{color:var(--muted);font-size:15px;font-weight:600}
+  .case-tag{
+    display:inline-flex;align-items:center;gap:10px;width:fit-content;
+    font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    color:#fff;background:var(--red);border-radius:999px;padding:8px 18px;margin-bottom:26px;
+  }
   h1{
-    font-size:clamp(34px,6vw,72px);
-    font-weight:900;line-height:1.05;letter-spacing:-.02em;
+    font-size:clamp(34px,6vw,68px);
+    font-weight:900;line-height:1.06;letter-spacing:-.02em;
     max-width:900px;
   }
-  h1 .hl{color:var(--cyan)}
-  h1 .hl-o{color:var(--orange)}
+  h1 .hl{color:var(--red-lt)}
   .hero-sub{
-    margin-top:26px;font-size:clamp(16px,2vw,20px);
-    color:var(--muted);max-width:680px;line-height:1.6;
+    margin-top:24px;font-size:clamp(16px,2vw,19px);
+    color:var(--muted);max-width:660px;line-height:1.65;
   }
   .hero-sub strong{color:var(--txt)}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
   .scroll-cue{
-    margin-top:56px;display:flex;align-items:center;gap:12px;
+    margin-top:40px;display:flex;align-items:center;gap:12px;
     font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
   }
-  .scroll-cue .arrow{animation:bob 1.6s ease-in-out infinite;font-size:18px}
+  .scroll-cue .arrow{animation:bob 1.6s ease-in-out infinite;font-size:18px;color:var(--red-lt)}
   @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
 
+  /* ---------- SOFTWARE WINDOWS ---------- */
+  .sw-window{
+    background:#131315;border:1px solid var(--line);border-radius:12px;
+    overflow:hidden;box-shadow:0 24px 60px rgba(243,78,63,.12),0 4px 20px rgba(0,0,0,.5);
+  }
+  .sw-titlebar{
+    display:flex;align-items:center;gap:8px;
+    background:#1d1d20;padding:11px 16px;border-bottom:1px solid var(--line);
+  }
+  .sw-dot{width:11px;height:11px;border-radius:50%}
+  .sw-dot.d1{background:#ff5f57}
+  .sw-dot.d2{background:#febc2e}
+  .sw-dot.d3{background:#28c840}
+  .sw-title{
+    flex:1;text-align:center;font-family:'JetBrains Mono',monospace;
+    font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .sw-body{padding:20px 20px 22px;font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.9}
+  .sw-body .cmt{color:#6e6e76}
+  .sw-body .kwd{color:var(--red-lt)}
+  .sw-body .str{color:#ffb4ab}
+  .sw-body .res{color:#e6e6ea}
+  .sw-body .res b{color:var(--red-lt);font-weight:600}
+  .caret{display:inline-block;width:8px;height:15px;background:var(--red);vertical-align:-2px;animation:blink 1s step-end infinite}
+  @keyframes blink{50%{opacity:0}}
+  .typed-line{min-height:1.9em}
+  .results{opacity:0;transition:opacity .6s ease}
+  .results.on{opacity:1}
+
   /* ---------- STAT ROW ---------- */
-  .stats{padding:40px 0 20px}
+  .stats{padding:36px 0 20px}
   .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
   .stat{
     background:linear-gradient(160deg,var(--card),var(--card2));
-    border:1px solid var(--line);border-radius:16px;
+    border:1px solid var(--line);border-radius:14px;
     padding:28px 22px;position:relative;overflow:hidden;
     opacity:0;transform:translateY(24px);
     transition:opacity .7s ease,transform .7s ease;
   }
-  .stat::after{content:"";position:absolute;top:0;left:0;width:100%;height:3px}
-  .stat:nth-child(1)::after{background:var(--cyan)}
-  .stat:nth-child(2)::after{background:var(--orange)}
-  .stat:nth-child(3)::after{background:var(--blue)}
-  .stat:nth-child(4)::after{background:var(--green)}
+  .stat::after{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--red)}
+  .stat:nth-child(2)::after{background:var(--red-lt)}
+  .stat:nth-child(3)::after{background:var(--red-md)}
+  .stat:nth-child(4)::after{background:var(--red-dk)}
   .stat.in{opacity:1;transform:translateY(0)}
   .stat:nth-child(2).in{transition-delay:.12s}
   .stat:nth-child(3).in{transition-delay:.24s}
@@ -86,29 +126,31 @@
     font-size:clamp(30px,4.2vw,48px);font-weight:900;letter-spacing:-.02em;
     font-variant-numeric:tabular-nums;
   }
-  .stat:nth-child(1) .num{color:var(--cyan)}
-  .stat:nth-child(2) .num{color:var(--orange)}
-  .stat:nth-child(3) .num{color:var(--blue)}
-  .stat:nth-child(4) .num{color:var(--green)}
+  .stat:nth-child(1) .num{color:var(--red-lt)}
+  .stat:nth-child(2) .num{color:#fff}
+  .stat:nth-child(3) .num{color:var(--red-lt)}
+  .stat:nth-child(4) .num{color:#fff}
   .stat .lbl{margin-top:8px;font-size:14px;color:var(--muted);line-height:1.4}
 
-  /* ---------- CONTEXT ---------- */
-  .context{padding:80px 0}
+  /* ---------- SECTION HEADS ---------- */
   .sec-head{margin-bottom:44px}
   .sec-tag{
-    display:inline-block;font-size:12px;font-weight:700;letter-spacing:.16em;
-    text-transform:uppercase;color:var(--orange);
-    border:1px solid rgba(255,157,46,.35);border-radius:999px;
+    display:inline-block;font-size:12px;font-weight:800;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--red-lt);
+    border:1px solid rgba(243,78,63,.45);border-radius:999px;
     padding:7px 16px;margin-bottom:18px;
   }
-  h2{font-size:clamp(26px,4vw,44px);font-weight:800;letter-spacing:-.01em;line-height:1.15}
+  h2{font-size:clamp(26px,4vw,42px);font-weight:800;letter-spacing:-.01em;line-height:1.15}
+
+  /* ---------- CONTEXT ---------- */
+  .context{padding:80px 0 30px}
   .context p{color:var(--muted);font-size:17px;line-height:1.7;max-width:760px;margin-top:18px}
   .context p strong{color:var(--txt)}
-  .context p .hl{color:var(--cyan);font-weight:600}
-  .context p .hl-o{color:var(--orange);font-weight:600}
+  .context p .hl{color:var(--red-lt);font-weight:600}
+  .context p .hl-o{color:var(--red-lt);font-weight:600}
 
   /* ---------- TIMELINE ---------- */
-  .timeline-sec{padding:40px 0 80px}
+  .timeline-sec{padding:40px 0 70px}
   .timeline{position:relative;margin-top:56px;height:190px}
   .timeline .rail{
     position:absolute;top:50%;left:0;width:100%;height:6px;border-radius:3px;
@@ -118,61 +160,55 @@
   .timeline.in .rail{transform:translateY(-50%) scaleX(1)}
   .timeline .rail-fill{
     position:absolute;inset:0;border-radius:3px;
-    background:linear-gradient(90deg,var(--blue),var(--cyan),var(--orange));
+    background:linear-gradient(90deg,var(--red-dk),var(--red),var(--red-lt));
   }
   .tl-node{position:absolute;top:50%;transform:translate(-50%,-50%);text-align:center}
   .tl-node .dot{
     width:18px;height:18px;border-radius:50%;margin:0 auto;
-    background:var(--bg);border:4px solid var(--cyan);
+    background:var(--bg);border:4px solid var(--red);
     transition:transform .4s ease,box-shadow .4s ease;
   }
-  .tl-node:hover .dot{transform:scale(1.35);box-shadow:0 0 24px rgba(51,214,255,.6)}
+  .tl-node:hover .dot{transform:scale(1.35);box-shadow:0 0 24px rgba(243,78,63,.6)}
   .tl-node .yr{position:absolute;bottom:34px;left:50%;transform:translateX(-50%);
     font-weight:800;font-size:15px;color:var(--txt);white-space:nowrap}
   .tl-node .cap{position:absolute;top:34px;left:50%;transform:translateX(-50%);
     font-size:12px;color:var(--muted);white-space:nowrap;line-height:1.35}
   .tl-node.pulse .dot{animation:pulse 2.4s ease-in-out infinite}
-  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(51,214,255,.5)}50%{box-shadow:0 0 0 12px rgba(51,214,255,0)}}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(243,78,63,.5)}50%{box-shadow:0 0 0 12px rgba(243,78,63,0)}}
 
   /* ---------- TWO MODES ---------- */
-  .modes{padding:80px 0}
+  .modes{padding:70px 0}
   .mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:48px}
   .mode{
-    border-radius:20px;padding:36px 32px;position:relative;overflow:hidden;
+    border-radius:14px;padding:0;position:relative;overflow:hidden;
+    background:#131315;border:1px solid var(--line);
     opacity:0;transform:translateY(30px);
     transition:opacity .8s ease,transform .8s ease;
   }
   .mode.in{opacity:1;transform:translateY(0)}
-  .mode.run{background:linear-gradient(160deg,#0e2030,#0c1a2b);border:1px solid rgba(51,214,255,.3)}
-  .mode.up{background:linear-gradient(160deg,#2a1c0d,#1e150a);border:1px solid rgba(255,157,46,.3)}
-  .mode .icon{margin-bottom:16px;color:inherit}
-  .mode.run .icon{color:var(--cyan)}
-  .mode.up .icon{color:var(--orange)}
-  .mode .icon svg,.use .ic svg{width:32px;height:32px;display:block}
-  .use .ic{flex-shrink:0;width:52px;height:52px;border-radius:12px;
-    display:flex;align-items:center;justify-content:center;
-    background:rgba(51,214,255,.1);border:1px solid rgba(51,214,255,.25);color:var(--cyan)}
-  .use .ic svg{width:26px;height:26px}
+  .mode .mode-body{padding:28px 28px 30px}
+  .mode.run{border-top:3px solid var(--red-lt)}
+  .mode.up{border-top:3px solid var(--red-dk)}
   .mode h3{font-size:22px;font-weight:800;margin-bottom:6px}
-  .mode.run h3{color:var(--cyan)}
-  .mode.up h3{color:var(--orange)}
-  .mode .dur{font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  .mode.run h3{color:var(--red-lt)}
+  .mode.up h3{color:var(--red-lt)}
+  .mode .dur{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
     color:var(--muted);margin-bottom:18px}
   .mode p{font-size:15px;color:var(--muted);line-height:1.65}
   .mode p b{color:var(--txt)}
   .mode .bar{margin-top:24px;height:8px;border-radius:4px;background:rgba(255,255,255,.08);overflow:hidden}
   .mode .bar i{display:block;height:100%;width:0;transition:width 1.4s cubic-bezier(.22,.9,.3,1) .3s}
-  .mode.run .bar i{background:var(--cyan)}
-  .mode.up .bar i{background:var(--orange)}
+  .mode.run .bar i{background:var(--red-lt)}
+  .mode.up .bar i{background:var(--red-dk)}
   .mode.in .run-bar{width:100%}
   .mode.in .up-bar{width:30%}
   .mode .bar-cap{margin-top:8px;font-size:12px;color:var(--muted)}
 
-  /* ---------- WHAT THEY DO ---------- */
-  .uses{padding:80px 0}
+  /* ---------- USES ---------- */
+  .uses{padding:70px 0}
   .use-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin-top:48px}
   .use{
-    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
     padding:28px;display:flex;gap:18px;align-items:flex-start;
     opacity:0;transform:translateY(24px);
     transition:opacity .7s ease,transform .7s ease;
@@ -181,28 +217,32 @@
   .use:nth-child(2).in{transition-delay:.1s}
   .use:nth-child(3).in{transition-delay:.2s}
   .use:nth-child(4).in{transition-delay:.3s}
+  .use .ic{flex-shrink:0;width:52px;height:52px;border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(243,78,63,.12);border:1px solid rgba(243,78,63,.35);color:var(--red-lt)}
+  .use .ic svg{width:26px;height:26px;display:block}
   .use h4{font-size:17px;font-weight:700;margin-bottom:6px}
   .use p{font-size:14px;color:var(--muted);line-height:1.6}
 
   /* ---------- QUOTE ---------- */
-  .quote-sec{padding:80px 0}
+  .quote-sec{padding:70px 0}
   .quote{
-    background:linear-gradient(140deg,#101a36,#0d1428);
-    border:1px solid var(--line);border-left:5px solid var(--cyan);
-    border-radius:18px;padding:44px 40px;max-width:860px;margin:0 auto;
+    background:linear-gradient(140deg,#191012,#0f0f11);
+    border:1px solid var(--line);border-left:5px solid var(--red);
+    border-radius:14px;padding:44px 40px;max-width:860px;margin:0 auto;
     opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;
   }
   .quote.in{opacity:1;transform:translateY(0)}
   .quote p{font-size:clamp(17px,2.4vw,22px);line-height:1.6;font-weight:600;font-style:italic}
-  .quote p .hl{color:var(--cyan)}
+  .quote p .hl{color:var(--red-lt)}
   .quote .who{margin-top:22px;font-size:14px;color:var(--muted)}
   .quote .who b{color:var(--txt)}
 
   /* ---------- TAKEAWAY ---------- */
-  .takeaway{padding:40px 0 90px}
+  .takeaway{padding:30px 0 80px}
   .take{
-    background:linear-gradient(120deg,rgba(51,214,255,.12),rgba(255,157,46,.12));
-    border:1px solid rgba(51,214,255,.3);border-radius:20px;
+    background:linear-gradient(120deg,rgba(243,78,63,.16),rgba(140,43,34,.14));
+    border:1px solid rgba(243,78,63,.4);border-radius:16px;
     padding:44px 40px;text-align:center;
     opacity:0;transform:translateY(24px);transition:opacity .8s ease,transform .8s ease;
   }
@@ -211,16 +251,19 @@
   .take p{color:var(--muted);font-size:17px;line-height:1.65;max-width:720px;margin:0 auto}
   .take .cta{
     display:inline-block;margin-top:26px;padding:13px 26px;border-radius:999px;
-    background:var(--cyan);color:#04121c;font-weight:800;font-size:15px;
+    background:var(--red);color:#fff;font-weight:800;font-size:15px;
     text-decoration:none;transition:transform .2s ease,box-shadow .2s ease;
   }
-  .take .cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(51,214,255,.4)}
+  .take .cta:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(243,78,63,.45)}
 
   footer{padding:26px 0 40px;border-top:1px solid var(--line)}
   footer p{font-size:13px;color:var(--muted);text-align:center;line-height:1.7}
-  footer a{color:var(--cyan);text-decoration:none}
+  footer a{color:var(--red-lt);text-decoration:none}
   footer a:hover{text-decoration:underline}
 
+  @media(max-width:960px){
+    .hero-grid{grid-template-columns:1fr}
+  }
   @media(max-width:860px){
     .stat-grid{grid-template-columns:repeat(2,1fr)}
     .mode-grid{grid-template-columns:1fr}
@@ -231,6 +274,7 @@
     .stat-grid{grid-template-columns:1fr 1fr;gap:12px}
     .stat{padding:20px 16px}
     .tl-node .cap{font-size:10px}
+    .quote{padding:32px 24px}
   }
   @media(prefers-reduced-motion:reduce){
     *{animation:none!important;transition-duration:.01s!important}
@@ -243,14 +287,42 @@
 <!-- HERO -->
 <section class="hero">
   <div class="wrap">
-    <span class="kicker">CERN &times; Sourcegraph &middot; Case Study Infographic</span>
-    <h1>A bug here doesn't crash an app.<br>It stops a <span class="hl">particle accelerator</span>.</h1>
-    <p class="hero-sub">
-      CERN's accelerator-control software is <strong>~15 million lines of Java</strong>, built over
-      <strong>18 years</strong> by <strong>nearly 300 developers</strong>. Here's how universal code search
-      keeps technical debt in check where <strong>every change is mission-critical</strong>.
-    </p>
-    <div class="scroll-cue"><span class="arrow">↓</span> Scroll to explore</div>
+    <div class="hero-grid">
+      <div>
+        <div class="logo-row">
+          <img class="sg-logo" src="assets/sourcegraph-logo.svg" alt="Sourcegraph">
+          <span class="logo-x">&times;</span>
+          <div class="cern-chip">
+            <img src="assets/cern-logo-badge.svg" alt="CERN">
+            <span>CERN</span>
+          </div>
+        </div>
+        <span class="case-tag">Case Study &middot; Customer Story</span>
+        <h1>A bug here doesn't crash an app.<br>It stops a <span class="hl">particle accelerator</span>.</h1>
+        <p class="hero-sub">
+          CERN's accelerator-control software is <strong>~15 million lines of Java</strong>, built over
+          <strong>18 years</strong> by <strong>nearly 300 developers</strong>. This is how CERN uses
+          Sourcegraph universal code search to keep technical debt in check where
+          <strong>every change is mission-critical</strong>.
+        </p>
+        <div class="scroll-cue"><span class="arrow">↓</span> Scroll to explore</div>
+      </div>
+      <div class="sw-window reveal-win">
+        <div class="sw-titlebar">
+          <span class="sw-dot d1"></span><span class="sw-dot d2"></span><span class="sw-dot d3"></span>
+          <span class="sw-title">sourcegraph &middot; code search &mdash; cern-accelerator/controls</span>
+        </div>
+        <div class="sw-body">
+          <div class="typed-line"><span class="cmt">// semantic search across 15M lines</span><br>
+            <span class="kwd">pattern:</span> <span class="str" id="typed"></span><span class="caret"></span></div>
+          <div class="results" id="hero-results">
+            <span class="res">✓ <b>214 matches</b> in 1,842 files</span><br>
+            <span class="res">✓ reuse found: <b>next/requestUtils.go#L24</b></span><br>
+            <span class="res">✓ deprecated API usage flagged: <b>3 call sites</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -324,24 +396,34 @@
     </div>
     <div class="mode-grid">
       <div class="mode run reveal">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/><ellipse cx="12" cy="12" rx="10" ry="4.2"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(120 12 12)"/></svg></div>
-        <h3>Run Mode</h3>
-        <div class="dur">5-year operational periods</div>
-        <p>The LHC runs for <b>five years straight</b>. Software must stay stable, so CERN makes
-        <b>small, backward-compatible changes</b> — and Sourcegraph ensures one team's change never breaks
-        dependent code written by someone else.</p>
-        <div class="bar"><i class="run-bar"></i></div>
-        <div class="bar-cap">Priority: absolute stability &middot; backward compatibility</div>
+        <div class="sw-titlebar">
+          <span class="sw-dot d1"></span><span class="sw-dot d2"></span><span class="sw-dot d3"></span>
+          <span class="sw-title">run-mode.md</span>
+        </div>
+        <div class="mode-body">
+          <h3>Run Mode</h3>
+          <div class="dur">5-year operational periods</div>
+          <p>The LHC runs for <b>five years straight</b>. Software must stay stable, so CERN makes
+          <b>small, backward-compatible changes</b> &mdash; and Sourcegraph ensures one team's change never breaks
+          dependent code written by someone else.</p>
+          <div class="bar"><i class="run-bar"></i></div>
+          <div class="bar-cap">Priority: absolute stability &middot; backward compatibility</div>
+        </div>
       </div>
       <div class="mode up reveal">
-        <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
-        <h3>Upgrade Mode</h3>
-        <div class="dur">1&ndash;2 year shutdown windows</div>
-        <p>During upgrades, developers make <b>more radical changes</b>. Sourcegraph reveals redundant code
-        (like duplicate utility methods) and lets teams assess the <b>cost/benefit of breaking API changes</b>
-        before committing to them.</p>
-        <div class="bar"><i class="up-bar"></i></div>
-        <div class="bar-cap">Priority: refactor the debt &middot; measure the blast radius first</div>
+        <div class="sw-titlebar">
+          <span class="sw-dot d1"></span><span class="sw-dot d2"></span><span class="sw-dot d3"></span>
+          <span class="sw-title">upgrade-window.md</span>
+        </div>
+        <div class="mode-body">
+          <h3>Upgrade Mode</h3>
+          <div class="dur">1&ndash;2 year shutdown windows</div>
+          <p>During upgrades, developers make <b>more radical changes</b>. Sourcegraph reveals redundant code
+          (like duplicate utility methods) and lets teams assess the <b>cost/benefit of breaking API changes</b>
+          before committing to them.</p>
+          <div class="bar"><i class="up-bar"></i></div>
+          <div class="bar-cap">Priority: refactor the debt &middot; measure the blast radius first</div>
+        </div>
       </div>
     </div>
   </div>
@@ -407,14 +489,14 @@
       <p>When ~300 people share 15M lines of mission-critical code, the difference between
       "I think it's safe to change" and "I know exactly what it touches" is the difference between
       physics research and downtime.</p>
-      <a class="cta" href="https://sourcegraph.com/case-studies/cern-reduces-technical-debt" target="_blank" rel="noopener">Read the full case study →</a>
+      <a class="cta" href="https://sourcegraph.com/case-studies/cern-reduces-technical-debt" target="_blank" rel="noopener">Read the full case study on sourcegraph.com →</a>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <p>Based on the Sourcegraph case study: <a href="https://sourcegraph.com/case-studies/cern-reduces-technical-debt" target="_blank" rel="noopener">How CERN reduces technical debt in mission-critical accelerator software</a></p>
+    <p>Based on the Sourcegraph customer story: <a href="https://sourcegraph.com/case-studies/cern-reduces-technical-debt" target="_blank" rel="noopener">How CERN reduces technical debt in mission-critical accelerator software</a></p>
   </div>
 </footer>
 
@@ -452,7 +534,24 @@
     requestAnimationFrame(tick);
   }
 
-  /* ---------- particle background (protons) ---------- */
+  /* ---------- hero typing (timestamp-based so it catches up on throttled timers) ---------- */
+  var Q = 'getPropertyValue" type:path';
+  var typedEl = document.getElementById('typed');
+  var resultsEl = document.getElementById('hero-results');
+  var t0 = null;
+  function typeLoop(t){
+    if(t0 === null) t0 = t;
+    var chars = Math.min(Math.floor((t - t0)/45), Q.length);
+    typedEl.textContent = Q.slice(0, chars);
+    if(chars < Q.length){
+      requestAnimationFrame(typeLoop);
+    } else {
+      setTimeout(function(){ resultsEl.classList.add('on'); }, 350);
+    }
+  }
+  requestAnimationFrame(typeLoop);
+
+  /* ---------- particle background ---------- */
   var c = document.getElementById('particles'), ctx = c.getContext('2d');
   var W,H,parts=[];
   function resize(){
@@ -467,7 +566,8 @@
       x:Math.random()*W, y:Math.random()*H,
       vx:(Math.random()-.5)*.35, vy:(Math.random()-.5)*.35,
       r:Math.random()*1.8+.6,
-      hue:Math.random()<.5?195:35
+      hue:Math.random()<.7?4:0,
+      light:Math.random()<.5?60:45
     });
   }
   function draw(){
@@ -479,7 +579,7 @@
       if(p.y<0||p.y>H) p.vy*=-1;
       ctx.beginPath();
       ctx.arc(p.x,p.y,p.r,0,6.283);
-      ctx.fillStyle='hsla('+p.hue+',95%,65%,.5)';
+      ctx.fillStyle='hsla('+p.hue+',85%,'+p.light+'%,.5)';
       ctx.fill();
     }
     for(var a=0;a<parts.length;a++){
@@ -490,7 +590,7 @@
           ctx.beginPath();
           ctx.moveTo(parts[a].x,parts[a].y);
           ctx.lineTo(parts[b].x,parts[b].y);
-          ctx.strokeStyle='hsla(210,80%,60%,'+(.12*(1-d/12000))+')';
+          ctx.strokeStyle='hsla(4,85%,55%,'+(.12*(1-d/12000))+')';
           ctx.lineWidth=1;
           ctx.stroke();
         }
