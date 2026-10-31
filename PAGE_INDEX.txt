@@ -401,6 +401,9 @@ Last updated: 2026-10-31
 • prediction-is-not-permission
   https://zuwasi.github.io/Public-html-pages/prediction-is-not-permission
 
+• savepathcopier
+  https://zuwasi.github.io/Public-html-pages/savepathcopier
+
 • sbomator-cra-reporting-demo
   https://zuwasi.github.io/Public-html-pages/sbomator-cra-reporting-demo
 
