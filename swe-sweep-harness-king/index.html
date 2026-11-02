@@ -8,9 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Cascadia+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#e2e5ea; --sheet:#f7f8fa; --sheet2:#eef0f4; --ink:#24282d; --muted:#5a626c; --line:#cfd4da;
-  --blue:#4f9efb; --blue-text:#1d6bd0; --amber:#ffb30b; --amber-text:#8a5e00;
-  --code-bg:#16181c; --code-cap:#1f2226; --on-dark:#e6e8eb;
+  --bg:#f4eedc; --sheet:#fbf8ee; --sheet2:#ece4cc; --ink:#1d1a16; --muted:#6b6353; --line:#b9ae90;
+  --blue:#12457a; --blue-text:#12457a; --amber:#9a5b10; --amber-text:#8a5e00;
+  --code-bg:#f6efdc; --code-cap:#d9d0b8; --on-dark:#1d1a16;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -53,7 +53,7 @@ li::marker{color:var(--amber)}
 .tablewrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
 table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.3vw,17px)}
 th,td{padding:11px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#2a2f36;color:#fff;font-weight:650}
+th{background:#fbf8ee;color:#1d1a16;font-weight:650}
 tbody tr:nth-child(even){background:#f0f2f6}
 tr:last-child td{border-bottom:0}
 tr.hl td{background:#e2f2e4;color:#14532a;font-weight:650}
@@ -61,16 +61,16 @@ tr.hl2 td{background:#fdf3dc;color:#7a5200;font-weight:650}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .note{padding:16px 20px;border-left:5px solid var(--amber);background:#fdf6e3;color:#5c470e;font-size:clamp(15px,1.5vw,19px);margin:16px 0;border-radius:0 8px 8px 0}
 figure.code{background:var(--code-bg);border-radius:10px;overflow:hidden;margin:18px 0;box-shadow:0 2px 10px rgba(15,20,30,.25)}
-figure.code figcaption{padding:10px 18px;background:var(--code-cap);color:#b7bfc7;font-size:14px;border-top:3px solid var(--amber);border-bottom:1px solid #2a2e34}
+figure.code figcaption{padding:10px 18px;background:var(--code-cap);color:#6b6353;font-size:14px;border-top:3px solid var(--amber);border-bottom:1px solid #2a2e34}
 pre{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(13.5px,1.4vw,17.5px);line-height:1.68;padding:18px 20px;overflow-x:auto;color:var(--on-dark);tab-size:4}
 /* IDE token colors (VS Code Dark+) */
-.tok-c{color:#6a9955} .tok-s{color:#ce9178} .tok-n{color:#b5cea8}
-.tok-k{color:#c586d9} .tok-t{color:#4ec9b0} .tok-v{color:#9cdcfe} .tok-key{color:#9cdcfe}
+.tok-c{color:#2f6b3a} .tok-s{color:#b8322a} .tok-n{color:#6b6353}
+.tok-k{color:#6b3a6b} .tok-t{color:#2f6b3a} .tok-v{color:#1d1a16} .tok-key{color:#1d1a16}
 /* diff line backgrounds */
 pre span.la{display:inline-block;width:100%;background:rgba(46,160,67,.16)}
 pre span.lr{display:inline-block;width:100%;background:rgba(248,81,73,.13)}
-pre span.lh{display:inline-block;width:100%;color:#79b8ff;background:rgba(64,120,192,.14)}
-pre span.lm{display:inline-block;width:100%;color:#8b949e}
+pre span.lh{display:inline-block;width:100%;color:#f4eedc;background:rgba(64,120,192,.14)}
+pre span.lm{display:inline-block;width:100%;color:#6b6353}
 .quote{border-left:5px solid var(--blue);padding:18px 22px;background:var(--sheet);border-radius:0 10px 10px 0;margin:16px 0;font-size:clamp(17px,1.7vw,23px);font-style:italic;box-shadow:0 1px 4px rgba(20,30,50,.06)}
 .quote .who{display:block;font-style:normal;font-size:clamp(13px,1.2vw,16px);color:var(--muted);margin-top:12px}
 .person-card{display:flex;gap:22px;padding:22px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);max-width:640px}
@@ -78,7 +78,7 @@ pre span.lm{display:inline-block;width:100%;color:#8b949e}
 .person-card strong{font-size:clamp(18px,1.8vw,23px);display:block}
 .person-card span{color:var(--blue-text);font-weight:600;font-size:clamp(14px,1.4vw,17px)}
 .diagram{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(11px,1.25vw,16px);line-height:1.5;background:var(--code-bg);color:var(--on-dark);border-radius:10px;padding:20px;overflow-x:auto;white-space:pre;box-shadow:0 2px 10px rgba(15,20,30,.25)}
-.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:none;background:var(--blue);color:#fff;font-size:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,107,208,.45);transition:background .15s,transform .15s}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:none;background:var(--blue);color:#f4eedc;font-size:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,107,208,.45);transition:background .15s,transform .15s}
 .navbtn:hover{background:#1d6bd0;transform:translateY(-50%) scale(1.08)}
 #prev{left:16px} #next{right:16px}
 .navbtn[disabled]{opacity:.22;cursor:default;box-shadow:none;background:#9aa2ac}
@@ -105,6 +105,18 @@ pre span.lm{display:inline-block;width:100%;color:#8b949e}
   .person-card{flex-direction:column}
   .navbtn{width:48px;height:48px;font-size:26px}
 }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>

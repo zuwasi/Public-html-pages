@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#080b16; --bg2:#0f1630; --bg3:#141d3d;
-    --panel:rgba(255,255,255,.045); --panel2:rgba(255,255,255,.07); --brd:rgba(255,255,255,.11);
-    --ink:#eaeefb; --muted:#9fabcc; --faint:#6b7794;
-    --green:#1BA860; --blue:#4F7DF0; --purple:#8B5CF6; --red:#e8443a; --yellow:#f6c945; --cyan:#3fc9c0;
+    --bg:#f4eedc; --bg2:#ece4cc; --bg3:#fbf8ee;
+    --panel:#fbf8ee; --panel2:#f4eedc; --brd:rgba(255,255,255,.11);
+    --ink:#1d1a16; --muted:#6b6353; --faint:#6b6353;
+    --green:#2f6b3a; --blue:#12457a; --purple:#6b3a6b; --red:#b8322a; --yellow:#9a5b10; --cyan:#12457a;
     --grad:linear-gradient(135deg,#1BA860 0%,#4F7DF0 52%,#8B5CF6 100%);
     --grad-soft:linear-gradient(135deg,rgba(27,168,96,.18),rgba(79,125,240,.18),rgba(139,92,246,.18));
   }
@@ -22,8 +22,8 @@
     font-family:'Inter',system-ui,-apple-system,sans-serif;
     background:radial-gradient(1200px 800px at 78% -8%,rgba(139,92,246,.16),transparent 60%),
                radial-gradient(1100px 760px at 12% 108%,rgba(27,168,96,.14),transparent 60%),
-               linear-gradient(160deg,var(--bg),var(--bg2) 60%,#0a1024);
-    color:var(--ink);-webkit-font-smoothing:antialiased;
+               linear-gradient(160deg,var(--bg),var(--bg2) 60%,#e3dabf);
+    color:#f4eedc;-webkit-font-smoothing:antialiased;
   }
   a{color:var(--blue);text-decoration:none}
   a:hover{text-decoration:underline}
@@ -45,7 +45,7 @@
   .brand-chip img{height:22px;display:block}
   .brand-chip span{color:#1b2233;font-weight:800;font-size:12.5px;letter-spacing:.4px}
   .nav{position:fixed;top:50%;transform:translateY(-50%);z-index:40;width:52px;height:52px;border-radius:50%;
-    border:1px solid var(--brd);background:rgba(16,22,48,.72);backdrop-filter:blur(8px);color:var(--ink);
+    border:1px solid var(--brd);background:rgba(251,248,238,.72);backdrop-filter:blur(8px);color:var(--ink);
     font-size:26px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;
     transition:transform .2s,background .2s,opacity .25s}
   .nav:hover{background:var(--blue);transform:translateY(-50%) scale(1.08)}
@@ -54,7 +54,7 @@
   .progress{position:fixed;left:0;bottom:0;height:5px;width:100%;background:rgba(255,255,255,.06);z-index:40}
   #progFill{height:100%;width:0;background:var(--grad);transition:width .45s ease;box-shadow:0 0 14px rgba(79,125,240,.6)}
   #counter{position:fixed;right:16px;bottom:15px;z-index:40;font-size:12.5px;color:var(--muted);
-    font-variant-numeric:tabular-nums;background:rgba(10,14,30,.6);padding:4px 10px;border-radius:20px;border:1px solid var(--brd)}
+    font-variant-numeric:tabular-nums;background:rgba(251,248,238,.6);padding:4px 10px;border-radius:20px;border:1px solid var(--brd)}
   #hint{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:40;color:var(--muted);font-size:13px;
     letter-spacing:.5px;animation:pulse 1.9s ease-in-out infinite;transition:opacity .4s}
   #hint.gone{opacity:0;pointer-events:none}
@@ -84,10 +84,10 @@
   .chip{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--brd);
     border-radius:999px;padding:7px 14px;font-size:13px;color:var(--ink);font-weight:600}
   .pill{display:inline-block;padding:3px 10px;border-radius:999px;font-size:11.5px;font-weight:700;letter-spacing:.03em}
-  .pill.crit{background:rgba(232,68,58,.18);color:#ff8b82;border:1px solid rgba(232,68,58,.4)}
-  .pill.high{background:rgba(246,201,69,.16);color:#ffd873;border:1px solid rgba(246,201,69,.35)}
-  .pill.ok{background:rgba(27,168,96,.18);color:#5fe0a0;border:1px solid rgba(27,168,96,.4)}
-  .pill.info{background:rgba(79,125,240,.16);color:#9ab7ff;border:1px solid rgba(79,125,240,.35)}
+  .pill.crit{background:rgba(232,68,58,.18);color:#f4eedc;border:1px solid rgba(232,68,58,.4)}
+  .pill.high{background:rgba(246,201,69,.16);color:#1d1a16;border:1px solid rgba(246,201,69,.35)}
+  .pill.ok{background:rgba(27,168,96,.18);color:#2f6b3a;border:1px solid rgba(27,168,96,.4)}
+  .pill.info{background:rgba(79,125,240,.16);color:#12457a;border:1px solid rgba(79,125,240,.35)}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
   ul.clean{list-style:none;display:flex;flex-direction:column;gap:10px}
   ul.clean li{position:relative;padding-left:26px}
@@ -103,12 +103,12 @@
   .brow .rl small{display:block;color:var(--faint);font-weight:500;font-size:11.5px}
   .track2{background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden;position:relative;height:26px;display:flex;align-items:center}
   .fill{height:100%;border-radius:8px;background:var(--grad);display:flex;align-items:center;justify-content:flex-end;
-    padding-right:9px;font-size:12px;font-weight:800;color:#fff;min-width:2px}
+    padding-right:9px;font-size:12px;font-weight:800;color:#1d1a16;min-width:2px}
   .fill.g{background:linear-gradient(90deg,#1BA860,#2fd07f)}
-  .fill.b{background:linear-gradient(90deg,#3a63d6,#5f8bff)}
-  .fill.p{background:linear-gradient(90deg,#7a45e0,#a06bff)}
-  .fill.grey{background:linear-gradient(90deg,#3a4260,#59637f)}
-  .fill.red{background:linear-gradient(90deg,#c93b32,#ff6a5f)}
+  .fill.b{background:#f4eedc}
+  .fill.p{background:#f4eedc}
+  .fill.grey{background:#f4eedc}
+  .fill.red{background:#f4eedc}
   .fill.yellow{background:linear-gradient(90deg,#d9ad2e,#ffd257);color:#3a2f00}
   .valout{font-size:12.5px;font-weight:800;color:var(--ink);white-space:nowrap}
   .pair{display:grid;grid-template-columns:200px 1fr;gap:14px;align-items:center}
@@ -122,7 +122,7 @@
   .flow{display:flex;align-items:stretch;gap:8px;flex-wrap:wrap;justify-content:center}
   .fbox{flex:1 1 130px;min-width:120px;max-width:190px;background:var(--panel);border:1px solid var(--brd);
     border-radius:14px;padding:14px 12px;text-align:center;position:relative}
-  .fbox .n{width:26px;height:26px;border-radius:8px;background:var(--grad);color:#fff;font-weight:800;font-size:13px;
+  .fbox .n{width:26px;height:26px;border-radius:8px;background:var(--grad);color:#1d1a16;font-weight:800;font-size:13px;
     display:flex;align-items:center;justify-content:center;margin:0 auto 9px}
   .fbox h4{font-size:14px;font-weight:700;margin-bottom:3px}
   .fbox p{font-size:11.5px;line-height:1.4}
@@ -133,7 +133,7 @@
   .rc .step{background:var(--panel);border:1px solid var(--brd);border-radius:12px;padding:11px 15px;font-size:13.5px;font-weight:600}
   .rc .step.bad{border-color:rgba(232,68,58,.45);background:rgba(232,68,58,.08)}
   .rc .step.good{border-color:rgba(27,168,96,.5);background:rgba(27,168,96,.1)}
-  .rc .ar{color:var(--faint);font-size:17px}
+  .rc .ar{color:#f4eedc;font-size:17px}
 
   /* ---------- table ---------- */
   table{width:100%;border-collapse:collapse;font-size:clamp(12px,1.15vw,14.5px)}
@@ -178,13 +178,25 @@
   /* ---------- table of contents ---------- */
   .toc-hd{display:flex;align-items:center;gap:10px;margin:2px 0 11px}
   .toc-hd h3{font-size:clamp(14.5px,1.45vw,18px)}
-  .trng{flex:0 0 auto;font:800 11.5px/1 ui-monospace,'Cascadia Code',Consolas,monospace;color:#fff;
+  .trng{flex:0 0 auto;font:800 11.5px/1 ui-monospace,'Cascadia Code',Consolas,monospace;color:#1d1a16;
     background:var(--grad);padding:5px 9px;border-radius:8px;letter-spacing:.02em}
   .toclist{list-style:none;display:flex;flex-direction:column;gap:6px}
   .toclist a{display:flex;align-items:baseline;gap:9px;color:var(--muted);font-size:13.5px;line-height:1.35}
   .toclist a:hover{color:var(--ink);text-decoration:none}
   .toclist .tn{flex:0 0 auto;color:var(--blue);font-weight:700;font-size:12px;
     font-family:ui-monospace,'Cascadia Code',Consolas,monospace}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -748,7 +760,7 @@
         </div>
       </div>
       <div class="grid g3" style="margin-top:14px">
-        <div class="stat"><div class="num" style="color:#8894b3">6.0</div><div class="lbl">Overall before</div></div>
+        <div class="stat"><div class="num" style="color:#6b6353">6.0</div><div class="lbl">Overall before</div></div>
         <div class="stat"><div class="num grad-text">→</div><div class="lbl">hardened &amp; optimized</div></div>
         <div class="stat"><div class="num grad-text">8.8</div><div class="lbl">Overall after</div></div>
       </div>
@@ -932,7 +944,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

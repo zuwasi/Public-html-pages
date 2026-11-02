@@ -12,7 +12,7 @@
   html, body {
     width: 100%; height: 100%; overflow: hidden;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #0a0a0f; color: #e8e8f0;
+    background:#fbf8ee; color:#1d1a16;
     -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
   }
   .deck {
@@ -32,9 +32,7 @@
   }
   .slide::before {
     content: ""; position: absolute; inset: 0;
-    background:
-      radial-gradient(circle at 15% 25%, rgba(99, 102, 241, 0.08), transparent 45%),
-      radial-gradient(circle at 85% 75%, rgba(236, 72, 153, 0.07), transparent 45%);
+    background:#f4eedc;
     pointer-events: none; z-index: 0;
   }
   .slide > * { position: relative; z-index: 1; }
@@ -43,7 +41,7 @@
     font-size: clamp(32px, 5.5vw, 76px);
     font-weight: 800; line-height: 1.05;
     letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #f0abfc 100%);
+    background:linear-gradient(135deg, #fff 0%, #a5b4fc 50%, #f0abfc 100%);
     -webkit-background-clip: text; background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: clamp(12px, 1.5vw, 24px);
@@ -52,33 +50,33 @@
     font-size: clamp(24px, 3.2vw, 46px);
     font-weight: 700; line-height: 1.15;
     letter-spacing: -0.02em;
-    color: #fff;
+    color:#1d1a16;
     margin-bottom: clamp(16px, 2vw, 32px);
   }
-  h2 .accent { color: #a5b4fc; }
+  h2 .accent { color:#6b6353; }
   h3 {
     font-size: clamp(18px, 1.8vw, 24px);
-    font-weight: 600; color: #c7d2fe;
+    font-weight: 600; color:#1d1a16;
     margin-bottom: 8px; letter-spacing: -0.01em;
   }
   p, li {
     font-size: clamp(14px, 1.25vw, 19px);
-    line-height: 1.55; color: #cbd5e1;
+    line-height: 1.55; color:#1d1a16;
   }
   .lead {
     font-size: clamp(16px, 1.5vw, 22px);
-    color: #94a3b8; max-width: 1100px;
+    color:#6b6353; max-width: 1100px;
     margin-bottom: clamp(20px, 2vw, 36px);
   }
   .tag {
     display: inline-block;
     padding: 6px 14px;
-    background: rgba(99, 102, 241, 0.15);
+    background:rgba(99, 102, 241, 0.15);
     border: 1px solid rgba(99, 102, 241, 0.35);
     border-radius: 999px;
     font-size: clamp(11px, 0.9vw, 13px);
     font-weight: 600;
-    color: #c7d2fe;
+    color:#f4eedc;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-bottom: 18px;
@@ -93,15 +91,15 @@
   }
 
   .card {
-    background: linear-gradient(160deg, rgba(30, 30, 50, 0.7), rgba(20, 20, 35, 0.7));
+    background:linear-gradient(160deg, rgba(227,218,191,0.7), rgba(227,218,191,0.7));
     border: 1px solid rgba(148, 163, 184, 0.12);
     border-radius: 14px;
     padding: clamp(16px, 1.6vw, 24px);
     backdrop-filter: blur(8px);
   }
-  .card.accent { border-color: rgba(99, 102, 241, 0.4); background: linear-gradient(160deg, rgba(49, 46, 129, 0.35), rgba(20, 20, 35, 0.7)); }
-  .card.warn   { border-color: rgba(244, 63, 94, 0.4);  background: linear-gradient(160deg, rgba(76, 5, 25, 0.35), rgba(20, 20, 35, 0.7)); }
-  .card.good   { border-color: rgba(16, 185, 129, 0.4); background: linear-gradient(160deg, rgba(6, 78, 59, 0.35), rgba(20, 20, 35, 0.7)); }
+  .card.accent { border-color:rgba(99, 102, 241, 0.4); background:linear-gradient(160deg, rgba(227,218,191,0.35), rgba(227,218,191,0.7)); }
+  .card.warn   { border-color:rgba(244, 63, 94, 0.4);  background:linear-gradient(160deg, rgba(227,218,191,0.35), rgba(227,218,191,0.7)); }
+  .card.good   { border-color:rgba(47,107,58,0.4); background:linear-gradient(160deg, rgba(227,218,191,0.35), rgba(227,218,191,0.7)); }
 
   ul.clean { list-style: none; padding: 0; }
   ul.clean li {
@@ -110,19 +108,19 @@
   }
   ul.clean li::before {
     content: "▸"; position: absolute; left: 0;
-    color: #a5b4fc; font-weight: 700;
+    color:#6b6353; font-weight: 700;
   }
 
   code, .mono {
     font-family: 'JetBrains Mono', 'Consolas', monospace;
     font-size: 0.9em;
-    background: rgba(0,0,0,0.35);
+    background:rgba(251,248,238,0.35);
     padding: 2px 7px; border-radius: 4px;
-    color: #fbbf24;
+    color:#9a5b10;
     border: 1px solid rgba(251, 191, 36, 0.15);
   }
   pre {
-    background: rgba(0,0,0,0.45);
+    background:rgba(251,248,238,0.45);
     border: 1px solid rgba(148, 163, 184, 0.15);
     border-radius: 10px;
     padding: clamp(14px, 1.4vw, 20px);
@@ -130,13 +128,13 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: clamp(11px, 0.95vw, 14px);
     line-height: 1.6;
-    color: #e2e8f0;
+    color:#1d1a16;
   }
-  pre .kw  { color: #c084fc; }
-  pre .str { color: #86efac; }
-  pre .com { color: #64748b; font-style: italic; }
-  pre .num { color: #fbbf24; }
-  pre .fn  { color: #60a5fa; }
+  pre .kw  { color:#6b3a6b; }
+  pre .str { color:#1d1a16; }
+  pre .com { color:#64748b; font-style: italic; }
+  pre .num { color:#9a5b10; }
+  pre .fn  { color:#12457a; }
 
   table {
     width: 100%; border-collapse: collapse;
@@ -149,23 +147,23 @@
     vertical-align: top;
   }
   th {
-    color: #a5b4fc; font-weight: 600;
+    color:#6b6353; font-weight: 600;
     text-transform: uppercase; font-size: 0.85em;
     letter-spacing: 0.06em;
   }
-  td.bad  { color: #fca5a5; }
-  td.good { color: #6ee7b7; }
+  td.bad  { color:#6b6353; }
+  td.good { color:#2f6b3a; }
 
   .stat {
     font-size: clamp(36px, 5vw, 72px);
     font-weight: 800;
-    background: linear-gradient(135deg, #a5b4fc, #f0abfc);
+    background:linear-gradient(135deg, #a5b4fc, #f0abfc);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
     line-height: 1;
   }
   .stat-label {
     font-size: clamp(12px, 1vw, 14px);
-    color: #94a3b8;
+    color:#6b6353;
     text-transform: uppercase;
     letter-spacing: 0.08em;
     margin-top: 8px;
@@ -180,14 +178,14 @@
   }
   .arch-box {
     padding: 14px 18px;
-    background: linear-gradient(160deg, rgba(30,30,50,0.8), rgba(20,20,35,0.8));
+    background:linear-gradient(160deg, rgba(227,218,191,0.8), rgba(227,218,191,0.8));
     border: 1px solid rgba(148, 163, 184, 0.2);
     border-radius: 10px;
     text-align: center;
   }
-  .arch-box.main { border-color: rgba(99, 102, 241, 0.5); background: linear-gradient(160deg, rgba(49,46,129,0.5), rgba(30,30,50,0.7)); }
-  .arch-box.sub  { border-color: rgba(16, 185, 129, 0.4); background: linear-gradient(160deg, rgba(6,78,59,0.3), rgba(30,30,50,0.7)); }
-  .arch-arrow { color: #a5b4fc; font-size: 1.5em; text-align: center; }
+  .arch-box.main { border-color:rgba(99, 102, 241, 0.5); background:linear-gradient(160deg, rgba(227,218,191,0.5), rgba(227,218,191,0.7)); }
+  .arch-box.sub  { border-color:rgba(47,107,58,0.4); background:linear-gradient(160deg, rgba(227,218,191,0.3), rgba(227,218,191,0.7)); }
+  .arch-arrow { color:#6b6353; font-size: 1.5em; text-align: center; }
 
   /* Token bar visualization */
   .bar {
@@ -199,7 +197,7 @@
   }
   .bar .seg {
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600; color: #fff;
+    font-size: 11px; font-weight: 600; color:#1d1a16;
     white-space: nowrap;
   }
 
@@ -208,9 +206,9 @@
     position: fixed; top: 50%; transform: translateY(-50%);
     width: 48px; height: 48px;
     border-radius: 50%;
-    background: rgba(99, 102, 241, 0.15);
+    background:rgba(99, 102, 241, 0.15);
     border: 1px solid rgba(99, 102, 241, 0.3);
-    color: #c7d2fe;
+    color:#f4eedc;
     font-size: 22px;
     cursor: pointer;
     display: flex; align-items: center; justify-content: center;
@@ -218,7 +216,7 @@
     transition: all 0.2s;
     backdrop-filter: blur(6px);
   }
-  .nav:hover { background: rgba(99, 102, 241, 0.35); transform: translateY(-50%) scale(1.05); }
+  .nav:hover { background:rgba(99, 102, 241, 0.35); transform: translateY(-50%) scale(1.05); }
   .nav.left  { left: 18px; }
   .nav.right { right: 18px; }
   .nav.hidden { opacity: 0; pointer-events: none; }
@@ -226,20 +224,20 @@
   .progress {
     position: fixed; bottom: 0; left: 0; right: 0;
     height: 3px;
-    background: rgba(255,255,255,0.05);
+    background:rgba(255,255,255,0.05);
     z-index: 100;
   }
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #6366f1, #ec4899);
+    background:#f4eedc;
     transition: width 0.4s cubic-bezier(0.77, 0, 0.175, 1);
   }
   .counter {
     position: fixed; bottom: 14px; right: 18px;
-    font-size: 13px; color: #94a3b8;
+    font-size: 13px; color:#6b6353;
     font-variant-numeric: tabular-nums;
     z-index: 100;
-    background: rgba(0,0,0,0.4);
+    background:rgba(251,248,238,0.4);
     padding: 4px 10px;
     border-radius: 999px;
     backdrop-filter: blur(6px);
@@ -248,7 +246,7 @@
   .swipe-hint {
     position: absolute; bottom: 50px;
     left: 50%; transform: translateX(-50%);
-    font-size: 13px; color: #64748b;
+    font-size: 13px; color:#64748b;
     animation: pulse 2s ease-in-out infinite;
   }
   @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
@@ -258,19 +256,31 @@
     position: absolute;
     bottom: clamp(20px, 2.5vw, 36px);
     left: clamp(20px, 4vw, 70px);
-    color: #64748b;
+    color:#64748b;
     font-size: clamp(11px, 0.9vw, 13px);
   }
 
   .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
   .pill {
-    background: rgba(99, 102, 241, 0.1);
+    background:rgba(99, 102, 241, 0.1);
     border: 1px solid rgba(99, 102, 241, 0.25);
-    color: #c7d2fe;
+    color:#f4eedc;
     padding: 4px 10px; border-radius: 999px;
     font-size: clamp(11px, 0.9vw, 13px);
     font-family: 'JetBrains Mono', monospace;
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -289,7 +299,7 @@
     <h1>How Amp Solves<br/>"Lost in the Middle"</h1>
     <p class="lead" style="max-width:900px">
       Not as a bolt-on Gateway. Not as a separate Semantic Filter service.
-      As an <strong style="color:#fff">organic, built-in architectural property</strong>
+      As an <strong style="color:#1d1a16">organic, built-in architectural property</strong>
       of the agent itself — through context isolation, subagent orchestration,
       and on-demand resource loading.
     </p>
@@ -298,10 +308,10 @@
       <div><div class="stat">0</div><div class="stat-label">External infra required</div></div>
       <div><div class="stat">N×</div><div class="stat-label">Parallel context windows</div></div>
     </div>
-    <p style="margin-top:clamp(20px,2.5vw,36px); font-size:clamp(13px,1.15vw,17px); color:#a5b4fc">
+    <p style="margin-top:clamp(20px,2.5vw,36px); font-size:clamp(13px,1.15vw,17px); color:#6b6353">
       Ampcode, brought to you by
       <a href="https://eswlab.com/products/amp/amp/" target="_blank"
-         style="color:#f0abfc; font-weight:600; text-decoration:none; border-bottom:1px solid rgba(240,171,252,0.4)">
+         style="color:#6b6353; font-weight:600; text-decoration:none; border-bottom:1px solid rgba(240,171,252,0.4)">
         Engineering Software Lab (ESL)
       </a>
     </p>
@@ -332,8 +342,8 @@
     </div>
     <div class="card" style="margin-top:24px">
       <h3>Two compounding sources of bloat</h3>
-      <p><strong style="color:#fff">(1) Static tool-definition tax:</strong> Public GitHub MCP reports have shown dozens of tools and roughly tens of thousands of tokens depending on version and configuration. Add Slack, Jira, Sonar, and the starting context can get crowded fast.</p>
-      <p style="margin-top:8px"><strong style="color:#fff">(2) Dynamic execution noise:</strong> Every grep output, stack trace, and large file read accumulates. Long debugging sessions can end up dominated by history that is no longer useful.</p>
+      <p><strong style="color:#1d1a16">(1) Static tool-definition tax:</strong> Public GitHub MCP reports have shown dozens of tools and roughly tens of thousands of tokens depending on version and configuration. Add Slack, Jira, Sonar, and the starting context can get crowded fast.</p>
+      <p style="margin-top:8px"><strong style="color:#1d1a16">(2) Dynamic execution noise:</strong> Every grep output, stack trace, and large file read accumulates. Long debugging sessions can end up dominated by history that is no longer useful.</p>
     </div>
   </section>
 
@@ -367,7 +377,7 @@
     </div>
 
     <div class="card accent" style="margin-top:22px">
-      <p style="font-size:clamp(15px, 1.4vw, 20px); color:#fff">
+      <p style="font-size:clamp(15px, 1.4vw, 20px); color:#1d1a16">
         <strong>Insight:</strong> Filtering inputs is reactive. The real fix is <em>preventing context from accumulating in the first place</em> — through architectural isolation. That is the design Amp ships organically.
       </p>
     </div>
@@ -377,7 +387,7 @@
   <section class="slide">
     <span class="tag">Design Philosophy</span>
     <h2>Amp's organic answer: <span class="accent">Context Isolation as a primitive</span></h2>
-    <p class="lead">Instead of one giant context window stuffed with everything, Amp orchestrates <strong style="color:#fff">N disposable child contexts</strong> that return only their summary to the parent. The main thread stays lean by construction.</p>
+    <p class="lead">Instead of one giant context window stuffed with everything, Amp orchestrates <strong style="color:#1d1a16">N disposable child contexts</strong> that return only their summary to the parent. The main thread stays lean by construction.</p>
 
     <div class="grid-2" style="margin-top:24px">
       <div class="card warn">
@@ -474,7 +484,7 @@ librarian(...)
       <div class="card good">
         <h3>Why it helps</h3>
         <p>It keeps deep analysis off the main interaction path, so the parent thread gets the recommendation rather than the whole reasoning journey.</p>
-        <p style="margin-top:10px"><strong style="color:#fff">Tradeoff:</strong> Oracle is intentionally slower and more expensive than Amp's everyday coding path, so it is best used where the extra reasoning matters.</p>
+        <p style="margin-top:10px"><strong style="color:#1d1a16">Tradeoff:</strong> Oracle is intentionally slower and more expensive than Amp's everyday coding path, so it is best used where the extra reasoning matters.</p>
       </div>
     </div>
 
@@ -555,7 +565,7 @@ librarian(...)
   <section class="slide">
     <span class="tag">Mechanism 5 of 11</span>
     <h2><span class="accent">Agent Skills</span> — instructions loaded on demand</h2>
-    <p class="lead">Skills are <span class="mono">SKILL.md</span> files registered with the agent. Only the <strong style="color:#fff">name + description</strong> stay visible by default. The full body - workflows, scripts, references - loads <em>only when invoked</em>.</p>
+    <p class="lead">Skills are <span class="mono">SKILL.md</span> files registered with the agent. Only the <strong style="color:#1d1a16">name + description</strong> stay visible by default. The full body - workflows, scripts, references - loads <em>only when invoked</em>.</p>
 
     <div class="grid-2" style="margin-top:20px">
       <div class="card">
@@ -571,7 +581,7 @@ librarian(...)
       </div>
       <div class="card accent">
         <h3>The killer feature: MCP-in-skills</h3>
-        <p>An MCP server bundled inside a skill (<span class="mono">mcp.json</span>) <strong style="color:#fff">starts at launch but its tools stay hidden</strong> until the skill is loaded. This is Amp's organic answer to Gal's "Semantic Filter" — without a Gateway service.</p>
+        <p>An MCP server bundled inside a skill (<span class="mono">mcp.json</span>) <strong style="color:#1d1a16">starts at launch but its tools stay hidden</strong> until the skill is loaded. This is Amp's organic answer to Gal's "Semantic Filter" — without a Gateway service.</p>
         <ul class="clean" style="margin-top:10px">
           <li>Hide MCP tools until they are actually needed</li>
           <li>Expose only the tools bundled with the invoked skill</li>
@@ -580,7 +590,7 @@ librarian(...)
       </div>
     </div>
 
-    <p style="margin-top:18px; color:#94a3b8; font-style:italic">
+    <p style="margin-top:18px; color:#6b6353; font-style:italic">
       This lines up with the broader idea of pre-filtering tool exposure before the model sees a large catalog.
     </p>
   </section>
@@ -589,7 +599,7 @@ librarian(...)
   <section class="slide">
     <span class="tag">Mechanism 6 of 11</span>
     <h2><span class="accent">AGENTS.md</span> with granular globs — scoped guidance</h2>
-    <p class="lead">Project context lives in nested <span class="mono">AGENTS.md</span> files. The key feature is <strong style="color:#fff">glob-scoped @-mentions</strong>: a referenced file only enters context if Amp has read a matching file.</p>
+    <p class="lead">Project context lives in nested <span class="mono">AGENTS.md</span> files. The key feature is <strong style="color:#1d1a16">glob-scoped @-mentions</strong>: a referenced file only enters context if Amp has read a matching file.</p>
 
     <pre style="margin-top:18px"><span class="com"># AGENTS.md (project root)</span>
 
@@ -612,7 +622,7 @@ librarian(...)
       </div>
       <div class="card good">
         <h3>Amp: glob-gated</h3>
-        <p>Working on a Python script? TypeScript rules don't load. Editing tests? API conventions stay dormant. <strong style="color:#fff">Context size scales with relevance, not with documentation volume.</strong></p>
+        <p>Working on a Python script? TypeScript rules don't load. Editing tests? API conventions stay dormant. <strong style="color:#1d1a16">Context size scales with relevance, not with documentation volume.</strong></p>
       </div>
     </div>
   </section>
@@ -621,7 +631,7 @@ librarian(...)
   <section class="slide">
     <span class="tag">Mechanism 7 of 11</span>
     <h2><span class="accent">Code Review Checks</span> — per-module review subagents</h2>
-    <p class="lead">Review prompts live in <span class="mono">.agents/checks/*.md</span> at the module level. Each check runs as <strong style="color:#fff">its own subagent in parallel</strong> with its own context. Findings are aggregated.</p>
+    <p class="lead">Review prompts live in <span class="mono">.agents/checks/*.md</span> at the module level. Each check runs as <strong style="color:#1d1a16">its own subagent in parallel</strong> with its own context. Findings are aggregated.</p>
 
     <div class="grid-2" style="margin-top:20px">
       <div class="card">
@@ -661,12 +671,12 @@ librarian(...)
     <div class="arch">
       <div class="arch-box">
         <h3 style="margin:0">Old Thread</h3>
-        <p style="margin-top:6px">Long thread<br/><span style="color:#fca5a5">dead ends + stale history</span></p>
+        <p style="margin-top:6px">Long thread<br/><span style="color:#6b6353">dead ends + stale history</span></p>
       </div>
       <div class="arch-arrow">⟶ handoff ⟶</div>
       <div class="arch-box main">
         <h3 style="margin:0">New Thread</h3>
-        <p style="margin-top:6px">Fresh thread<br/><span style="color:#6ee7b7">drafted prompt + relevant files</span></p>
+        <p style="margin-top:6px">Fresh thread<br/><span style="color:#2f6b3a">drafted prompt + relevant files</span></p>
       </div>
     </div>
 
@@ -683,7 +693,7 @@ librarian(...)
       <div class="card good">
         <h3>Why it's organic</h3>
         <p>Handoff replaces summary-stacking with a user-reviewable fresh start. Amp drafts the next-thread prompt, shows it to you, and lets you edit it before sending.</p>
-        <p style="margin-top:10px"><strong style="color:#fff">Why it helps:</strong> you leave behind irrelevant history instead of carrying it forever in the same conversation.</p>
+        <p style="margin-top:10px"><strong style="color:#1d1a16">Why it helps:</strong> you leave behind irrelevant history instead of carrying it forever in the same conversation.</p>
       </div>
     </div>
   </section>
@@ -696,7 +706,7 @@ librarian(...)
       <div class="card">
         <h3>9. Toolboxes</h3>
         <p>Replace MCP servers with simple executables in <span class="mono">$AMP_TOOLBOX</span>. Each script self-describes via stdout key-value pairs.</p>
-        <p style="margin-top:10px"><strong style="color:#fff">Why it helps:</strong> No JSON-RPC overhead, no boilerplate tool schemas. A 5-line bash script = a tool. Drastically smaller tool definitions.</p>
+        <p style="margin-top:10px"><strong style="color:#1d1a16">Why it helps:</strong> No JSON-RPC overhead, no boilerplate tool schemas. A 5-line bash script = a tool. Drastically smaller tool definitions.</p>
       </div>
       <div class="card">
         <h3>10. Built-in tools first</h3>
@@ -706,13 +716,13 @@ librarian(...)
       <div class="card">
         <h3>11. Permissions / RBAC</h3>
         <p>Tool-level allow/deny lists per workspace. Untrusted MCPs and skills can be sandboxed. <span class="mono">amp permissions list</span>.</p>
-        <p style="margin-top:10px"><strong style="color:#fff">Governance at the tool boundary</strong> is built into Amp instead of requiring a separate gateway layer.</p>
+        <p style="margin-top:10px"><strong style="color:#1d1a16">Governance at the tool boundary</strong> is built into Amp instead of requiring a separate gateway layer.</p>
       </div>
     </div>
 
     <div class="card accent" style="margin-top:24px">
       <h3>Plus: read_thread, find_thread, ampdo skill, painter, mermaid…</h3>
-      <p>Every Amp tool follows the same design rule: <strong style="color:#fff">if a task can produce big output, give it its own context</strong>. The agent's job is to orchestrate small summaries, not swim in raw data.</p>
+      <p>Every Amp tool follows the same design rule: <strong style="color:#1d1a16">if a task can produce big output, give it its own context</strong>. The agent's job is to orchestrate small summaries, not swim in raw data.</p>
     </div>
   </section>
 
@@ -732,7 +742,7 @@ librarian(...)
           <div class="seg" style="background:#0891b2; flex:12">Thread history</div>
         </div>
         <p style="margin-top:8px"><strong>Everything piles into one window.</strong></p>
-        <p style="color:#fca5a5">The danger is not one specific number. It is that search trails, raw reads, and intermediate reasoning all compete with the actual task.</p>
+        <p style="color:#6b6353">The danger is not one specific number. It is that search trails, raw reads, and intermediate reasoning all compete with the actual task.</p>
       </div>
 
       <div class="card good">
@@ -741,10 +751,10 @@ librarian(...)
           <div class="seg" style="background:#10b981; flex:22">Built-ins</div>
           <div class="seg" style="background:#059669; flex:14">Scoped guidance</div>
           <div class="seg" style="background:#047857; flex:20">Goal + summaries</div>
-          <div class="seg" style="background:#1f2937; flex:44">Heavy work offloaded</div>
+          <div class="seg" style="background:#fbf8ee; flex:44">Heavy work offloaded</div>
         </div>
         <p style="margin-top:8px"><strong>Main thread stays closer to the actual goal.</strong></p>
-        <p style="color:#6ee7b7">Search, deep analysis, and remote-repo research can happen in dedicated tools/subagents, so the parent sees the result instead of every intermediate step.</p>
+        <p style="color:#2f6b3a">Search, deep analysis, and remote-repo research can happen in dedicated tools/subagents, so the parent sees the result instead of every intermediate step.</p>
       </div>
     </div>
 
@@ -880,7 +890,7 @@ where summaries(t) = Σ subagent_i.summary
     </div>
     <p class="lead" style="margin-top:24px">
       The principles directly imply the design. Context isolation isn't a feature Amp added —
-      it's <strong style="color:#fff">the consequence of taking these principles seriously</strong>.
+      it's <strong style="color:#1d1a16">the consequence of taking these principles seriously</strong>.
     </p>
   </section>
 
@@ -912,13 +922,13 @@ where summaries(t) = Σ subagent_i.summary
     </div>
 
     <div class="card accent" style="margin-top:24px">
-      <h3 style="font-size:clamp(18px,2vw,28px); color:#fff">The bottom line</h3>
-      <p style="font-size:clamp(15px, 1.4vw, 20px); color:#e8e8f0; line-height:1.6">
+      <h3 style="font-size:clamp(18px,2vw,28px); color:#1d1a16">The bottom line</h3>
+      <p style="font-size:clamp(15px, 1.4vw, 20px); color:#1d1a16; line-height:1.6">
         A Gateway treats Lost-in-the-Middle as an <em>input filtering</em> problem.<br/>
         Amp treats it as an <em>execution architecture</em> problem.<br/>
         The second framing addresses a broader part of the problem and ships inside the agent itself.
       </p>
-      <p style="margin-top:14px; font-size:clamp(13px,1.1vw,16px); color:#a5b4fc">
+      <p style="margin-top:14px; font-size:clamp(13px,1.1vw,16px); color:#6b6353">
         <strong>Your agent isn't dumb. It's just lost in the middle.</strong><br/>
         Amp's solution: never let it get there in the first place.
       </p>
@@ -930,10 +940,10 @@ where summaries(t) = Σ subagent_i.summary
       <img src="ESL-AI-LOGOS.png" alt="Engineering Software Lab"
            style="height:clamp(50px,6vw,90px); border-radius:8px; border:1px solid rgba(236,72,153,0.3)" />
     </div>
-    <p style="text-align:center; margin-top:14px; font-size:clamp(13px,1.15vw,17px); color:#a5b4fc">
+    <p style="text-align:center; margin-top:14px; font-size:clamp(13px,1.15vw,17px); color:#6b6353">
       Ampcode, brought to you by
       <a href="https://eswlab.com/products/amp/amp/" target="_blank"
-         style="color:#f0abfc; font-weight:600; text-decoration:none; border-bottom:1px solid rgba(240,171,252,0.4)">
+         style="color:#6b6353; font-weight:600; text-decoration:none; border-bottom:1px solid rgba(240,171,252,0.4)">
         Engineering Software Lab (ESL)
       </a>
     </p>
@@ -1005,7 +1015,7 @@ where summaries(t) = Σ subagent_i.summary
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

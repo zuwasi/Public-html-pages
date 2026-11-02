@@ -9,19 +9,19 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f1e8;
-    --ink: #15171d;
-    --muted: #575d67;
-    --panel: rgba(255, 252, 247, 0.9);
-    --panel-strong: rgba(255, 249, 242, 0.97);
-    --line: rgba(21, 23, 29, 0.11);
-    --amp: #d96b2f;
-    --amp-soft: rgba(217, 107, 47, 0.18);
-    --claude: #0f6e62;
-    --claude-soft: rgba(15, 110, 98, 0.18);
-    --alert: #a83329;
-    --warn: #b77620;
-    --ok: #287247;
+    --bg:#f4eedc;
+    --ink:#1d1a16;
+    --muted:#6b6353;
+    --panel:#fbf8ee;
+    --panel-strong:#fbf8ee;
+    --line:#b9ae90;
+    --amp:#12457a;
+    --amp-soft:rgba(18,69,122,.12);
+    --claude:#b8322a;
+    --claude-soft:rgba(184,50,42,.12);
+    --alert:#b8322a;
+    --warn:#9a5b10;
+    --ok:#2f6b3a;
     --shadow: 0 24px 60px rgba(67, 47, 25, 0.18);
     --radius-xl: 28px;
     --radius-lg: 20px;
@@ -36,9 +36,8 @@
     min-height: 100%;
     overflow: hidden;
     font-family: 'Inter', system-ui, sans-serif;
-    color: var(--ink);
-    background:
-      radial-gradient(circle at 8% 18%, rgba(217, 107, 47, 0.20), transparent 24%),
+    color:#f4eedc;
+    background:radial-gradient(circle at 8% 18%, rgba(217, 107, 47, 0.20), transparent 24%),
       radial-gradient(circle at 88% 12%, rgba(15, 110, 98, 0.18), transparent 22%),
       linear-gradient(145deg, #fffaf3 0%, #f7f1e8 45%, #ecdac6 100%);
   }
@@ -58,7 +57,7 @@
     height: 36vw;
     left: -8vw;
     bottom: -10vh;
-    background: rgba(217, 107, 47, 0.16);
+    background:rgba(217, 107, 47, 0.16);
   }
 
   body::after {
@@ -66,7 +65,7 @@
     height: 28vw;
     right: -6vw;
     top: -8vh;
-    background: rgba(15, 110, 98, 0.16);
+    background:rgba(15, 110, 98, 0.16);
   }
 
   .slides {
@@ -87,7 +86,7 @@
   .frame {
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+    background:linear-gradient(180deg, var(--panel-strong), var(--panel));
     border: 1px solid var(--line);
     border-radius: 34px;
     box-shadow: var(--shadow);
@@ -104,7 +103,7 @@
     gap: 8px;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(21, 23, 29, 0.05);
+    background:rgba(251,248,238,0.05);
     width: fit-content;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -163,7 +162,7 @@
 
   .panel {
     min-height: 0;
-    background: rgba(255, 255, 255, 0.68);
+    background:rgba(255, 255, 255, 0.68);
     border: 1px solid rgba(21, 23, 29, 0.08);
     border-radius: var(--radius-lg);
     padding: 18px;
@@ -193,7 +192,7 @@
     min-width: 0;
     padding: 16px 18px;
     border-radius: var(--radius-lg);
-    background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.68));
+    background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.68));
     border: 1px solid rgba(21, 23, 29, 0.08);
   }
 
@@ -225,21 +224,20 @@
     font-weight: 800;
   }
 
-  .pill { background: rgba(21, 23, 29, 0.06); }
+  .pill { background:rgba(251,248,238,0.06); }
   .tag.amp { background: var(--amp-soft); color: var(--amp); }
   .tag.claude { background: var(--claude-soft); color: var(--claude); }
-  .tag.draw { background: rgba(21, 23, 29, 0.07); color: var(--ink); }
-  .tag.ok { background: rgba(40, 114, 71, 0.12); color: var(--ok); }
-  .tag.warn { background: rgba(183, 118, 32, 0.12); color: var(--warn); }
-  .tag.alert { background: rgba(168, 51, 41, 0.12); color: var(--alert); }
+  .tag.draw { background:rgba(251,248,238,0.07); color: var(--ink); }
+  .tag.ok { background:rgba(40, 114, 71, 0.12); color:#f4eedc; }
+  .tag.warn { background:rgba(183, 118, 32, 0.12); color: var(--warn); }
+  .tag.alert { background:rgba(168, 51, 41, 0.12); color:#f4eedc; }
 
   .summary-card {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     gap: 18px;
-    background:
-      linear-gradient(145deg, rgba(217, 107, 47, 0.11), rgba(255,255,255,0.86)),
+    background:linear-gradient(145deg, rgba(217, 107, 47, 0.11), rgba(255,255,255,0.86)),
       linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.70));
     border: 1px solid rgba(217, 107, 47, 0.18);
     border-radius: 30px;
@@ -267,7 +265,7 @@
   .metric-card {
     padding: 14px;
     border-radius: var(--radius-md);
-    background: rgba(255,255,255,0.75);
+    background:rgba(255,255,255,0.75);
     border: 1px solid rgba(21, 23, 29, 0.08);
   }
 
@@ -278,7 +276,7 @@
   }
 
   .table-wrap {
-    background: rgba(255,255,255,0.7);
+    background:rgba(255,255,255,0.7);
     border: 1px solid rgba(21, 23, 29, 0.08);
     border-radius: var(--radius-lg);
     overflow: auto;
@@ -298,7 +296,7 @@
   }
 
   th {
-    background: rgba(21, 23, 29, 0.05);
+    background:rgba(251,248,238,0.05);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 0.8rem;
@@ -321,7 +319,7 @@
     width: 100%;
     height: 12px;
     border-radius: 999px;
-    background: rgba(21, 23, 29, 0.08);
+    background:rgba(251,248,238,0.08);
     overflow: hidden;
   }
 
@@ -331,8 +329,8 @@
     border-radius: inherit;
   }
 
-  .bar-fill.amp { background: linear-gradient(90deg, rgba(217,107,47,0.92), rgba(217,107,47,0.56)); }
-  .bar-fill.claude { background: linear-gradient(90deg, rgba(15,110,98,0.94), rgba(15,110,98,0.52)); }
+  .bar-fill.amp { background:linear-gradient(90deg, rgba(217,107,47,0.92), rgba(217,107,47,0.56)); }
+  .bar-fill.claude { background:#f4eedc; }
 
   .duel-grid {
     display: grid;
@@ -361,12 +359,12 @@
     padding: 14px 16px;
     border-radius: var(--radius-md);
     border: 1px solid rgba(21, 23, 29, 0.08);
-    background: rgba(255,255,255,0.74);
+    background:rgba(255,255,255,0.74);
   }
 
-  .issue.good { background: rgba(40,114,71,0.08); border-color: rgba(40,114,71,0.20); }
-  .issue.warn { background: rgba(183,118,32,0.08); border-color: rgba(183,118,32,0.20); }
-  .issue.alert { background: rgba(168,51,41,0.08); border-color: rgba(168,51,41,0.20); }
+  .issue.good { background:rgba(40,114,71,0.08); border-color:rgba(40,114,71,0.20); }
+  .issue.warn { background:rgba(183,118,32,0.08); border-color:rgba(184,50,42,0.20); }
+  .issue.alert { background:rgba(168,51,41,0.08); border-color:rgba(168,51,41,0.20); }
 
   .issue-title,
   .timeline-title { font-weight: 800; margin-bottom: 6px; }
@@ -403,7 +401,7 @@
     display: inline-flex;
     padding: 8px 12px;
     border-radius: 999px;
-    background: rgba(21, 23, 29, 0.06);
+    background:rgba(251,248,238,0.06);
     color: inherit;
     text-decoration: none;
     font-weight: 700;
@@ -422,7 +420,7 @@
     height: 58px;
     border: none;
     border-radius: 999px;
-    background: rgba(255, 252, 247, 0.92);
+    background:rgba(255, 252, 247, 0.92);
     color: var(--ink);
     box-shadow: 0 12px 34px rgba(21, 23, 29, 0.18);
     cursor: pointer;
@@ -440,14 +438,14 @@
     right: 0;
     bottom: 0;
     height: 8px;
-    background: rgba(21, 23, 29, 0.08);
+    background:rgba(251,248,238,0.08);
     z-index: 30;
   }
 
   .progress-fill {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, var(--claude), var(--amp));
+    background:#f4eedc;
     transition: width 0.35s ease;
   }
 
@@ -458,7 +456,7 @@
     z-index: 31;
     padding: 10px 14px;
     border-radius: 999px;
-    background: rgba(255,252,247,0.94);
+    background:rgba(255,252,247,0.94);
     border: 1px solid rgba(21, 23, 29, 0.08);
     box-shadow: 0 10px 26px rgba(21, 23, 29, 0.12);
     font-weight: 800;
@@ -497,6 +495,18 @@
     .slide { padding-bottom: 120px; }
     .nav-btn { width: 52px; height: 52px; }
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -1218,7 +1228,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

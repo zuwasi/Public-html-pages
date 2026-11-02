@@ -6,40 +6,40 @@
   <title>Yocto BSP Studio — Design Partner Presentation</title>
   <style>
     :root {
-      --navy:#101b3f; --blue:#2563eb; --cyan:#06b6d4; --orange:#f97316;
-      --green:#16a34a; --violet:#7c3aed; --ink:#172033; --muted:#64748b;
-      --paper:#f7f9fc; --line:#dbe4f0; --white:#fff;
+      --navy:#12457a; --blue:#12457a; --cyan:#12457a; --orange:#9a5b10;
+      --green:#2f6b3a; --violet:#6b3a6b; --ink:#1d1a16; --muted:#6b6353;
+      --paper:#f4eedc; --line:#b9ae90; --white:#fbf8ee;
     }
     * { box-sizing:border-box; }
     html,body { margin:0; width:100%; height:100%; overflow:hidden; background:var(--navy); font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; }
     .deck { width:100%; height:100%; overflow:hidden; }
     .track { height:100%; display:flex; transform:translateX(0); transition:transform .52s cubic-bezier(.22,.75,.18,1); }
     .slide { flex:0 0 100vw; width:100vw; height:100vh; padding:clamp(26px,4.5vw,76px); padding-bottom:clamp(62px,8vh,90px); position:relative; overflow:hidden; background:var(--paper); color:var(--ink); }
-    .slide.dark { color:#fff; background:radial-gradient(circle at 80% 10%,#2447a3 0,transparent 34%),linear-gradient(135deg,#0b122d,#172554 58%,#0f3f57); }
-    .slide.blue { color:#fff; background:linear-gradient(135deg,#172554,#1d4ed8); }
-    .slide.green { color:#fff; background:linear-gradient(135deg,#052e2b,#0f766e 60%,#155e75); }
+    .slide.dark { color:#1d1a16; background:radial-gradient(circle at 80% 10%,#e3dabf 0,transparent 34%),linear-gradient(135deg,#e3dabf,#e3dabf 58%,#e3dabf); }
+    .slide.blue { color:#1d1a16; background:#f4eedc; }
+    .slide.green { color:#1d1a16; background:#f4eedc; }
     .slide::after { content:""; position:absolute; width:220px; height:220px; border:1px solid currentColor; opacity:.05; border-radius:50%; right:-80px; bottom:-100px; pointer-events:none; }
     .brand { position:absolute; top:clamp(18px,3vw,34px); right:clamp(22px,4vw,58px); width:clamp(150px,16vw,270px); border-radius:8px; box-shadow:0 10px 28px #0003; }
     .eyebrow { display:inline-flex; align-items:center; gap:9px; font-size:clamp(11px,1.1vw,15px); text-transform:uppercase; letter-spacing:.16em; font-weight:800; color:var(--blue); margin-bottom:14px; }
-    .dark .eyebrow,.blue .eyebrow,.green .eyebrow { color:#93c5fd; }
+    .dark .eyebrow,.blue .eyebrow,.green .eyebrow { color:#12457a; }
     h1 { margin:0; max-width:1100px; font-size:clamp(42px,6.4vw,92px); line-height:.98; letter-spacing:-.045em; }
     h2 { margin:0 0 18px; max-width:1200px; font-size:clamp(32px,4.5vw,66px); line-height:1.02; letter-spacing:-.035em; }
     h3 { margin:0 0 8px; font-size:clamp(18px,2vw,28px); }
     p { font-size:clamp(16px,1.55vw,23px); line-height:1.45; }
     .lead { max-width:980px; font-size:clamp(19px,2.1vw,30px); color:var(--muted); }
-    .dark .lead,.blue .lead,.green .lead { color:#dbeafe; }
+    .dark .lead,.blue .lead,.green .lead { color:#1d1a16; }
     .hero-copy { max-width:1000px; margin-top:clamp(65px,11vh,125px); }
-    .accent { color:#60a5fa; }
-    .orange { color:#fb923c; }
-    .green-text { color:#4ade80; }
+    .accent { color:#12457a; }
+    .orange { color:#b8322a; }
+    .green-text { color:#2f6b3a; }
     .grid { display:grid; gap:clamp(14px,2vw,28px); margin-top:clamp(22px,4vh,42px); }
     .grid.two { grid-template-columns:repeat(2,minmax(0,1fr)); }
     .grid.three { grid-template-columns:repeat(3,minmax(0,1fr)); }
     .grid.four { grid-template-columns:repeat(4,minmax(0,1fr)); }
     .card { border:1px solid var(--line); border-radius:18px; padding:clamp(17px,2.1vw,28px); background:#fff; box-shadow:0 12px 32px #1720330b; }
-    .dark .card,.blue .card,.green .card { background:#ffffff0e; border-color:#ffffff25; box-shadow:none; backdrop-filter:blur(6px); }
+    .dark .card,.blue .card,.green .card { background:#ffffff0e; border-color:rgba(29,26,22,0.40); box-shadow:none; backdrop-filter:blur(6px); }
     .card p { margin:7px 0 0; font-size:clamp(14px,1.25vw,18px); color:var(--muted); }
-    .dark .card p,.blue .card p,.green .card p { color:#dbeafe; }
+    .dark .card p,.blue .card p,.green .card p { color:#1d1a16; }
     .icon { width:42px; height:42px; display:grid; place-items:center; border-radius:12px; background:#dbeafe; color:#1d4ed8; font-weight:900; margin-bottom:16px; }
     .orange-card .icon { background:#ffedd5; color:#c2410c; }
     .green-card .icon { background:#dcfce7; color:#15803d; }
@@ -48,15 +48,15 @@
     li { margin:.32em 0; }
     .stack { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
     .pill { padding:8px 12px; border:1px solid #cbd5e1; border-radius:999px; background:#fff; font-size:clamp(12px,1vw,15px); font-weight:750; }
-    .dark .pill,.blue .pill,.green .pill { background:#ffffff10; border-color:#ffffff32; }
+    .dark .pill,.blue .pill,.green .pill { background:#ffffff10; border-color:rgba(29,26,22,0.45); }
     .status { display:inline-block; padding:5px 9px; border-radius:999px; font-size:11px; font-weight:900; letter-spacing:.08em; margin-bottom:10px; }
     .now { color:#166534; background:#dcfce7; }
     .mvp { color:#1e40af; background:#dbeafe; }
     .roadmap { color:#7c2d12; background:#ffedd5; }
     .metric { font-size:clamp(38px,5vw,76px); line-height:1; font-weight:900; letter-spacing:-.04em; color:var(--blue); }
-    .dark .metric,.blue .metric,.green .metric { color:#7dd3fc; }
+    .dark .metric,.blue .metric,.green .metric { color:#12457a; }
     .small { font-size:clamp(12px,1vw,15px); color:var(--muted); }
-    .dark .small,.blue .small,.green .small { color:#bfdbfe; }
+    .dark .small,.blue .small,.green .small { color:#1d1a16; }
     .workflow { display:block; width:min(100%,1420px); max-height:66vh; margin:18px auto 0; object-fit:contain; background:#fff; border-radius:16px; box-shadow:0 18px 50px #17203320; }
     .pipeline { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px; margin-top:34px; }
     .step { min-width:150px; padding:16px 18px; border:1px solid var(--line); border-radius:14px; background:#fff; color:var(--ink); font-weight:800; text-align:center; }
@@ -71,13 +71,13 @@
     .slide:last-child .quote { margin-top:3vh; font-size:clamp(24px,3.2vw,48px); }
     .slide:last-child .stack { margin-top:12px; }
     .footer-note { position:absolute; left:clamp(26px,4.5vw,76px); bottom:30px; font-size:12px; color:var(--muted); }
-    .nav { position:fixed; z-index:20; top:50%; transform:translateY(-50%); width:50px; height:50px; border:0; border-radius:50%; color:#fff; background:#101b3fdd; font-size:34px; line-height:1; cursor:pointer; box-shadow:0 8px 30px #0003; }
+    .nav { position:fixed; z-index:20; top:50%; transform:translateY(-50%); width:50px; height:50px; border:0; border-radius:50%; color:#1d1a16; background:#fbf8eedd; font-size:34px; line-height:1; cursor:pointer; box-shadow:0 8px 30px #0003; }
     .nav:hover { background:var(--blue); }
     #prev { left:14px; } #next { right:14px; }
     .progress { position:fixed; z-index:21; left:0; right:0; bottom:0; height:6px; background:#ffffff25; }
     .progress > div { height:100%; width:0; background:linear-gradient(90deg,var(--blue),var(--cyan),var(--orange)); transition:width .4s ease; }
-    .counter { position:fixed; z-index:22; right:20px; bottom:15px; color:#fff; background:#101b3fcc; padding:7px 11px; border-radius:999px; font-size:12px; font-weight:800; }
-    .swipe-hint { position:absolute; left:50%; bottom:8vh; transform:translateX(-50%); color:#bfdbfe; font-size:14px; animation:pulse 1.8s infinite; }
+    .counter { position:fixed; z-index:22; right:20px; bottom:15px; color:#1d1a16; background:#fbf8eecc; padding:7px 11px; border-radius:999px; font-size:12px; font-weight:800; }
+    .swipe-hint { position:absolute; left:50%; bottom:8vh; transform:translateX(-50%); color:#1d1a16; font-size:14px; animation:pulse 1.8s infinite; }
     @keyframes pulse { 50% { opacity:.4; transform:translateX(-50%) translateY(4px); } }
     @media(max-width:760px) {
       .slide { padding-top:72px; overflow-x:hidden; overflow-y:auto; }
@@ -96,6 +96,18 @@
       .nav,.progress,.counter,.swipe-hint { display:none!important; }
     }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
 <div class="deck" id="deck">

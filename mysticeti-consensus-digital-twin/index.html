@@ -22,13 +22,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #030914;
-      --panel: #07111f;
-      --cyan: #24d5ff;
-      --violet: #8b5cf6;
-      --green: #2dd4a7;
-      --muted: #9eb1c7;
-      --white: #f8fbff;
+      --bg:#f4eedc;
+      --panel:#fbf8ee;
+      --cyan:#12457a;
+      --violet:#6b3a6b;
+      --green:#2f6b3a;
+      --muted:#6b6353;
+      --white:#fbf8ee;
       --slide: 0;
       color-scheme: dark;
     }
@@ -40,8 +40,7 @@
       height: 100%;
       margin: 0;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(36, 213, 255, .09), transparent 30%),
+      background:radial-gradient(circle at 20% 10%, rgba(36, 213, 255, .09), transparent 30%),
         radial-gradient(circle at 85% 85%, rgba(139, 92, 246, .09), transparent 32%),
         var(--bg);
       color: var(--white);
@@ -85,7 +84,7 @@
       position: absolute;
       inset: 7% 5%;
       border-radius: 24px;
-      background: linear-gradient(145deg, rgba(36, 213, 255, .035), rgba(139, 92, 246, .025));
+      background:#f4eedc;
       filter: blur(30px);
       pointer-events: none;
     }
@@ -123,7 +122,7 @@
       padding: 0 16px;
       border: 1px solid rgba(36, 213, 255, .55);
       border-radius: 999px;
-      background: rgba(7, 17, 31, .94);
+      background:rgba(251,248,238,.94);
       color: var(--white);
       box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
       text-decoration: none;
@@ -156,7 +155,7 @@
       min-height: 36px;
       border: 1px solid rgba(158, 177, 199, .22);
       border-radius: 999px;
-      background: rgba(7, 17, 31, .82);
+      background:rgba(251,248,238,.82);
       color: var(--white);
       box-shadow: 0 10px 35px rgba(0, 0, 0, .25);
       backdrop-filter: blur(14px);
@@ -169,7 +168,7 @@
     .chip { padding: 0 14px; }
     .chip strong { color: var(--cyan); margin-right: 6px; }
     .icon-button { width: 38px; padding: 0; cursor: pointer; }
-    .chip:hover, .icon-button:hover { border-color: rgba(36, 213, 255, .55); background: rgba(12, 28, 48, .94); }
+    .chip:hover, .icon-button:hover { border-color:rgba(36, 213, 255, .55); background:rgba(251,248,238,.94); }
 
     .nav {
       position: fixed;
@@ -179,7 +178,7 @@
       height: clamp(42px, 4vw, 56px);
       border: 1px solid rgba(158, 177, 199, .24);
       border-radius: 50%;
-      background: rgba(7, 17, 31, .82);
+      background:rgba(251,248,238,.82);
       color: var(--white);
       font: 500 clamp(30px, 3vw, 42px)/1 Inter, sans-serif;
       box-shadow: 0 12px 40px rgba(0, 0, 0, .35);
@@ -202,13 +201,13 @@
       bottom: 0;
       z-index: 40;
       height: 5px;
-      background: rgba(158, 177, 199, .11);
+      background:rgba(158, 177, 199, .11);
     }
 
     .progress {
       width: 4.5454545%;
       height: 100%;
-      background: linear-gradient(90deg, var(--cyan), var(--violet), var(--green));
+      background:#f4eedc;
       box-shadow: 0 0 16px rgba(36, 213, 255, .45);
       transition: width 420ms cubic-bezier(.22, .8, .22, 1);
     }
@@ -222,7 +221,7 @@
       padding: 8px 12px;
       border: 1px solid rgba(158, 177, 199, .2);
       border-radius: 999px;
-      background: rgba(7, 17, 31, .78);
+      background:rgba(251,248,238,.78);
       color: var(--muted);
       font-size: 12px;
       font-weight: 700;
@@ -239,7 +238,7 @@
       transform: translateX(-50%);
       padding: 9px 16px;
       border-radius: 999px;
-      background: rgba(7, 17, 31, .76);
+      background:rgba(251,248,238,.76);
       color: var(--muted);
       font-size: clamp(11px, 1vw, 13px);
       font-weight: 600;
@@ -286,14 +285,26 @@
     }
 
     @media print {
-      html, body { overflow: visible; background: #fff; }
+      html, body { overflow: visible; background:#fff; }
       .viewport { position: static; overflow: visible; }
       .deck { display: block; width: auto; transform: none !important; }
-      .slide { width: 100%; height: auto; min-height: 100vh; page-break-after: always; padding: 0; background: #07111f; }
+      .slide { width: 100%; height: auto; min-height: 100vh; page-break-after: always; padding: 0; background:#fbf8ee; }
       .slide img { width: 100%; max-width: none; max-height: none; border-radius: 0; box-shadow: none; }
       .topbar, .nav, .progress-track, .counter, .swipe-hint { display: none !important; }
     }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
   <div class="topbar" aria-label="Presentation links and controls">

@@ -6,7 +6,7 @@
 <title>🔧 BlueField-2 / ConnectX-6 Dx — Linux to Automotive</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;touch-action:pan-y}
+html,body{height:100%;overflow:hidden;background:#fbf8ee;color:#1d1a16;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;touch-action:pan-y}
 
 /* --- Slide Container --- */
 .slides-wrapper{display:flex;height:100vh;transition:transform .45s cubic-bezier(.4,0,.2,1);will-change:transform}
@@ -14,7 +14,7 @@ html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-fami
 .slide-inner{max-width:960px;width:100%;margin:0 auto;padding:16px 0 80px}
 
 /* --- Nav Arrows --- */
-.nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:200;width:56px;height:56px;border-radius:50%;background:rgba(0,221,200,.15);border:2px solid #0dc;color:#0dc;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;user-select:none}
+.nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:200;width:56px;height:56px;border-radius:50%;background:rgba(0,221,200,.15);border:2px solid #0dc;color:#12457a;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;user-select:none}
 .nav-arrow:hover{background:rgba(0,221,200,.35);transform:translateY(-50%) scale(1.1)}
 .nav-arrow:active{transform:translateY(-50%) scale(.95)}
 .nav-arrow.left{left:12px}
@@ -23,21 +23,21 @@ html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-fami
 @media(max-width:600px){.nav-arrow{width:44px;height:44px;font-size:22px}.nav-arrow.left{left:6px}.nav-arrow.right{right:6px}}
 
 /* --- Progress Dots --- */
-.progress{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;padding:8px 16px;background:rgba(15,15,26,.85);border-radius:20px;backdrop-filter:blur(8px);border:1px solid #222}
-.dot{width:10px;height:10px;border-radius:50%;background:#333;cursor:pointer;transition:all .25s}
+.progress{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;padding:8px 16px;background:rgba(251,248,238,.85);border-radius:20px;backdrop-filter:blur(8px);border:1px solid #222}
+.dot{width:10px;height:10px;border-radius:50%;background:#fbf8ee;cursor:pointer;transition:all .25s}
 .dot.active{background:#0dc;transform:scale(1.3)}
 @media(max-width:600px){.dot{width:8px;height:8px}.progress{gap:6px;padding:6px 12px}}
 
 /* --- Slide Counter --- */
-.slide-counter{position:fixed;top:16px;right:16px;z-index:200;color:#555;font-size:14px;background:rgba(15,15,26,.8);padding:4px 12px;border-radius:12px;border:1px solid #222}
+.slide-counter{position:fixed;top:16px;right:16px;z-index:200;color:#555;font-size:14px;background:rgba(251,248,238,.8);padding:4px 12px;border-radius:12px;border:1px solid #222}
 
 /* --- Typography --- */
-h1{font-size:clamp(28px,6vw,52px);color:#0dc;margin-bottom:12px;letter-spacing:-1px}
-h2{font-size:clamp(22px,4.5vw,36px);color:#0dc;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #1a3a3a}
-h3{font-size:clamp(16px,3vw,22px);color:#a78bfa;margin:20px 0 10px}
+h1{font-size:clamp(28px,6vw,52px);color:#12457a;margin-bottom:12px;letter-spacing:-1px}
+h2{font-size:clamp(22px,4.5vw,36px);color:#12457a;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #1a3a3a}
+h3{font-size:clamp(16px,3vw,22px);color:#12457a;margin:20px 0 10px}
 p,.subtitle{font-size:clamp(14px,2.5vw,18px)}
-.subtitle{color:#999;margin-bottom:8px}
-.tag{display:inline-block;background:#1a2a2a;color:#0dc;border:1px solid #0dc;border-radius:4px;padding:3px 10px;font-size:clamp(11px,2vw,13px);margin:3px}
+.subtitle{color:#6b6353;margin-bottom:8px}
+.tag{display:inline-block;background:#fbf8ee;color:#12457a;border:1px solid #0dc;border-radius:4px;padding:3px 10px;font-size:clamp(11px,2vw,13px);margin:3px}
 
 /* --- Hero Slide --- */
 .hero-content{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1}
@@ -47,47 +47,59 @@ p,.subtitle{font-size:clamp(14px,2.5vw,18px)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0}
 @media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
-.card{background:#151528;border:1px solid #2a2a40;border-radius:10px;padding:20px;transition:border-color .3s}
-.card:hover{border-color:#0dc}
-.card h3{margin-top:0;color:#0dc;font-size:clamp(15px,2.8vw,20px)}
-.card.green{border-color:#51cf6633}.card.green h3{color:#51cf66}
-.card.red{border-color:#ff6b6b33}.card.red h3{color:#ff6b6b}
+.card{background:#fbf8ee;border:1px solid #2a2a40;border-radius:10px;padding:20px;transition:border-color .3s}
+.card:hover{border-color:#b9ae90}
+.card h3{margin-top:0;color:#12457a;font-size:clamp(15px,2.8vw,20px)}
+.card.green{border-color:#2f6b3a33}.card.green h3{color:#2f6b3a}
+.card.red{border-color:#b8322a33}.card.red h3{color:#b8322a}
 
 /* --- Flow Diagram --- */
 .flow{display:flex;align-items:center;justify-content:center;gap:0;margin:24px 0;flex-wrap:wrap}
-.flow .box{background:#151528;border:2px solid #0dc;border-radius:8px;padding:12px 16px;text-align:center;min-width:100px;margin:4px 0}
-.flow .box h4{color:#0dc;font-size:clamp(13px,2.5vw,16px);margin-bottom:2px}
-.flow .box p{color:#888;font-size:clamp(10px,1.8vw,12px)}
-.flow .arrow{color:#0dc;font-size:clamp(18px,3vw,28px);padding:0 6px}
+.flow .box{background:#fbf8ee;border:2px solid #0dc;border-radius:8px;padding:12px 16px;text-align:center;min-width:100px;margin:4px 0}
+.flow .box h4{color:#12457a;font-size:clamp(13px,2.5vw,16px);margin-bottom:2px}
+.flow .box p{color:#6b6353;font-size:clamp(10px,1.8vw,12px)}
+.flow .arrow{color:#12457a;font-size:clamp(18px,3vw,28px);padding:0 6px}
 @media(max-width:600px){.flow{flex-direction:column}.flow .arrow{transform:rotate(90deg)}}
 
 /* --- Code --- */
-pre{background:#0a0a18;border:1px solid #2a2a3a;border-radius:8px;padding:16px;overflow-x:auto;font-size:clamp(11px,2vw,14px);margin:12px 0;font-family:'Cascadia Code','Fira Code',monospace}
+pre{background:#fbf8ee;border:1px solid #2a2a3a;border-radius:8px;padding:16px;overflow-x:auto;font-size:clamp(11px,2vw,14px);margin:12px 0;font-family:'Cascadia Code','Fira Code',monospace}
 code{font-family:'Cascadia Code','Fira Code',monospace}
 
 /* --- Table --- */
 table{width:100%;border-collapse:collapse;margin:16px 0;font-size:clamp(12px,2vw,15px)}
-th{background:#1a1a2e;color:#0dc;text-align:left;padding:10px 12px;border-bottom:2px solid #333}
+th{background:#fbf8ee;color:#12457a;text-align:left;padding:10px 12px;border-bottom:2px solid #333}
 td{padding:8px 12px;border-bottom:1px solid #222}
 
 /* --- Stats --- */
 .stat{text-align:center;padding:20px}
-.stat .num{font-size:clamp(32px,6vw,48px);font-weight:800;color:#0dc}
-.stat .lbl{font-size:clamp(11px,2vw,14px);color:#888;margin-top:4px}
+.stat .num{font-size:clamp(32px,6vw,48px);font-weight:800;color:#12457a}
+.stat .lbl{font-size:clamp(11px,2vw,14px);color:#6b6353;margin-top:4px}
 
 /* --- State Machine --- */
 .state-machine{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:16px 0}
-.state-machine .s{background:#1a1a2e;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:clamp(10px,1.8vw,13px);color:#ccc;font-family:monospace}
-.state-machine .s.active{border-color:#0dc;color:#0dc}
+.state-machine .s{background:#fbf8ee;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:clamp(10px,1.8vw,13px);color:#6b6353;font-family:monospace}
+.state-machine .s.active{border-color:#b9ae90;color:#12457a}
 .state-machine .sa{color:#555;font-size:clamp(14px,2vw,18px)}
 
 /* --- Progress Bar --- */
-.progress-outer{background:#1a1a2e;border-radius:8px;height:28px;margin:12px 0;overflow:hidden;border:1px solid #333}
+.progress-outer{background:#fbf8ee;border-radius:8px;height:28px;margin:12px 0;overflow:hidden;border:1px solid #333}
 .progress-inner{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:clamp(12px,2vw,14px)}
-.done{color:#51cf66}.notdone{color:#ff6b6b}
+.done{color:#2f6b3a}.notdone{color:#b8322a}
 
 ul{padding-left:20px}
 li{margin:4px 0}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -126,8 +138,8 @@ li{margin:4px 0}
 <h3>🔌 ConnectX-6 Dx NIC</h3>
 <p>NVIDIA's high-performance network controller (mlx5 family). In Linux, it's driven by the <code>mlx5_core</code> loadable kernel module — a ~200,000-line GPL driver.</p>
 </div>
-<div class="card" style="border-color:#a78bfa33">
-<h3 style="color:#a78bfa">🧠 Embedded ARM Compute</h3>
+<div class="card" style="border-color:#b9ae9033">
+<h3 style="color:#12457a">🧠 Embedded ARM Compute</h3>
 <p>BlueField-2 pairs the ConnectX-6 Dx with 8× ARM Cortex-A72 cores. This mirrors automotive: <strong>high-performance NIC + safety-certified RTOS</strong>.</p>
 </div>
 </div>
@@ -135,9 +147,9 @@ li{margin:4px 0}
 <div class="flow">
 <div class="box"><h4>Linux mlx5</h4><p>~200K lines, GPL</p><p>Data center</p></div>
 <span class="arrow">→</span>
-<div class="box" style="border-color:#a78bfa"><h4>Clean-Room</h4><p>~5,800 lines</p><p>Apache-2.0</p></div>
+<div class="box" style="border-color:#b9ae90"><h4>Clean-Room</h4><p>~5,800 lines</p><p>Apache-2.0</p></div>
 <span class="arrow">→</span>
-<div class="box" style="border-color:#51cf66"><h4>Zephyr RTOS</h4><p>Automotive-grade</p><p>ISO 26262</p></div>
+<div class="box" style="border-color:#2f6b3a"><h4>Zephyr RTOS</h4><p>Automotive-grade</p><p>ISO 26262</p></div>
 </div>
 </div></div>
 
@@ -148,7 +160,7 @@ li{margin:4px 0}
 <div class="grid2">
 <div class="card red">
 <h3>❌ Porting from Linux</h3>
-<ul style="color:#ff6b6b">
+<ul style="color:#b8322a">
 <li>GPL license contamination</li>
 <li>Inherits non-MISRA patterns</li>
 <li>Dynamic allocation everywhere</li>
@@ -158,7 +170,7 @@ li{margin:4px 0}
 </div>
 <div class="card green">
 <h3>✅ Clean-Room Rewrite</h3>
-<ul style="color:#51cf66">
+<ul style="color:#2f6b3a">
 <li>Apache-2.0 — automotive-friendly</li>
 <li>MISRA C:2023 from line 1</li>
 <li>100% static allocation, DMA-safe</li>
@@ -259,20 +271,20 @@ out:
 <h2>File Manifest</h2>
 <table>
 <tbody><tr><th>Category</th><th>File</th><th>Purpose</th></tr>
-<tr><td style="color:#a78bfa">Build</td><td><code>CMakeLists.txt</code></td><td>Zephyr app build</td></tr>
-<tr><td style="color:#a78bfa">Build</td><td><code>Kconfig</code></td><td>Top-level Kconfig</td></tr>
-<tr><td style="color:#a78bfa">Build</td><td><code>prj.conf</code></td><td>Base configuration</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_regs.h</code></td><td>Register offsets &amp; bitmasks</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_cmd_if.h</code></td><td>Command opcodes &amp; BE helpers</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_desc.h</code></td><td>WQE/CQE/EQE formats</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_priv.h</code></td><td>Device struct &amp; state machine</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_pcie.c/h</code></td><td>PCIe discovery, BAR, MSI-X</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_device.c/h</code></td><td>FW commands, HCA lifecycle</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_queue.c/h</code></td><td>DMA rings, WQE construction</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_interrupt.c/h</code></td><td>ISR + k_work bottom-half</td></tr>
-<tr><td style="color:#0dc">Driver</td><td><code>cx6_eth.c/h</code></td><td>Zephyr Ethernet API</td></tr>
-<tr><td style="color:#51cf66">Test</td><td><code>tests/unit/cx6/</code></td><td>58 tests + stubs</td></tr>
-<tr><td style="color:#888">Docs</td><td><code>docs/architecture.md</code></td><td>Full architecture doc</td></tr>
+<tr><td style="color:#12457a">Build</td><td><code>CMakeLists.txt</code></td><td>Zephyr app build</td></tr>
+<tr><td style="color:#12457a">Build</td><td><code>Kconfig</code></td><td>Top-level Kconfig</td></tr>
+<tr><td style="color:#12457a">Build</td><td><code>prj.conf</code></td><td>Base configuration</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_regs.h</code></td><td>Register offsets &amp; bitmasks</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_cmd_if.h</code></td><td>Command opcodes &amp; BE helpers</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_desc.h</code></td><td>WQE/CQE/EQE formats</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_priv.h</code></td><td>Device struct &amp; state machine</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_pcie.c/h</code></td><td>PCIe discovery, BAR, MSI-X</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_device.c/h</code></td><td>FW commands, HCA lifecycle</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_queue.c/h</code></td><td>DMA rings, WQE construction</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_interrupt.c/h</code></td><td>ISR + k_work bottom-half</td></tr>
+<tr><td style="color:#12457a">Driver</td><td><code>cx6_eth.c/h</code></td><td>Zephyr Ethernet API</td></tr>
+<tr><td style="color:#2f6b3a">Test</td><td><code>tests/unit/cx6/</code></td><td>58 tests + stubs</td></tr>
+<tr><td style="color:#6b6353">Docs</td><td><code>docs/architecture.md</code></td><td>Full architecture doc</td></tr>
 </tbody></table>
 </div></div>
 
@@ -368,7 +380,7 @@ make coverage</pre>
 </div>
 <div class="card">
 <h3>License</h3>
-<p style="font-size:clamp(18px,4vw,24px);color:#51cf66;font-weight:bold;margin:12px 0">Apache-2.0</p>
+<p style="font-size:clamp(18px,4vw,24px);color:#2f6b3a;font-weight:bold;margin:12px 0">Apache-2.0</p>
 <p>No GPL contamination — clean-room implementation using only public hardware knowledge.</p>
 </div>
 </div>

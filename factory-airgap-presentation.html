@@ -13,31 +13,31 @@
      ====================================================================== */
   :root {
     /* paper */
-    --paper:        #f3ebd6;
-    --paper-alt:    #ece1c3;
-    --paper-deep:   #ddcea8;
-    --paper-shadow: #c9b98f;
+    --paper:#f4eedc;
+    --paper-alt:#1d1a16;
+    --paper-deep:#1d1a16;
+    --paper-shadow:#9a5b10;
 
     /* ink */
-    --ink:          #1a1510;
+    --ink:#1d1a16;
     --ink-soft:     #3a2d20;
-    --muted:        #6b5a48;
-    --faint:        #a08c74;
+    --muted:#6b6353;
+    --faint:#6b6353;
 
     /* rules */
-    --rule:         #b5a688;
-    --rule-strong:  #8c7a5a;
+    --rule:#b9ae90;
+    --rule-strong:#b8322a;
     --rule-deep:    #5c4e38;
 
     /* accent — burgundy / oxblood */
-    --accent:       #8b2635;
+    --accent:#b8322a;
     --accent-deep:  #5c1620;
     --accent-soft:  #b94856;
-    --accent-wash:  #efe0dd;
+    --accent-wash:#1d1a16;
 
     /* status */
-    --good:         #4a6b3a;
-    --warn:         #a06024;
+    --good:#2f6b3a;
+    --warn:#9a5b10;
 
     /* type */
     --serif-display: "Playfair Display", "Didot", "Bodoni 72", "Hoefler Text", "Baskerville", Georgia, serif;
@@ -48,7 +48,7 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body {
     height: 100%;
-    background: #1c1812;
+    background:#fbf8ee;
     overflow: hidden;
     font-family: var(--serif-body);
     color: var(--ink);
@@ -70,8 +70,7 @@
       0 0 0 1px var(--paper-shadow);
     overflow: hidden;
     /* subtle paper texture */
-    background-image:
-      radial-gradient(circle at 20% 30%, rgba(140,122,90,.04) 0%, transparent 40%),
+    background-image:radial-gradient(circle at 20% 30%, rgba(140,122,90,.04) 0%, transparent 40%),
       radial-gradient(circle at 80% 70%, rgba(140,122,90,.04) 0%, transparent 40%),
       linear-gradient(180deg, var(--paper) 0%, var(--paper-alt) 100%);
   }
@@ -387,7 +386,7 @@
     font-style: italic;
     font-weight: 400;
     line-height: 1.35;
-    color: var(--ink);
+    color:#f4eedc;
     padding: 22px 32px 22px 32px;
     border-left: 3px solid var(--accent);
     background: var(--accent-wash);
@@ -398,7 +397,7 @@
     position: absolute;
     left: 10px; top: -14px;
     font-size: 72px;
-    color: var(--accent);
+    color:#f4eedc;
     font-family: var(--serif-display);
     line-height: 1;
   }
@@ -410,7 +409,7 @@
     font-weight: 700;
     letter-spacing: 2.2px;
     text-transform: uppercase;
-    color: var(--muted);
+    color:#f4eedc;
     font-style: normal;
   }
 
@@ -590,12 +589,12 @@
     font-weight: 700;
     letter-spacing: 2.4px;
     text-transform: uppercase;
-    color: var(--accent);
+    color:#f4eedc;
     margin-bottom: 18px;
     padding-bottom: 10px;
     border-bottom: 1px solid var(--rule-strong);
   }
-  .boundary .side.out h4 { color: var(--muted); }
+  .boundary .side.out h4 { color:#f4eedc; }
   .boundary .divider {
     width: 60px;
     position: relative;
@@ -634,10 +633,10 @@
     font-size: 15px;
     padding: 9px 0;
     border-top: 1px solid var(--rule);
-    color: var(--ink-soft);
+    color:#f4eedc;
   }
   .boundary li:first-child { border-top: none; padding-top: 0; }
-  .boundary .side.out li { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--accent); text-decoration-thickness: 1px; }
+  .boundary .side.out li { color:#f4eedc; text-decoration: line-through; text-decoration-color:#f4eedc; text-decoration-thickness: 1px; }
 
   /* ======================================================================
      CODE BLOCK — document style
@@ -650,15 +649,15 @@
     font-family: var(--mono);
     font-size: 12.5px;
     line-height: 1.65;
-    color: var(--ink);
+    color:#f4eedc;
     overflow: hidden;
     white-space: pre;
     position: relative;
   }
-  pre.code .k { color: var(--accent); font-weight: 700; }
-  pre.code .s { color: var(--ink-soft); }
-  pre.code .c { color: var(--muted); font-style: italic; }
-  pre.code .n { color: var(--accent-deep); font-weight: 700; }
+  pre.code .k { color:#f4eedc; font-weight: 700; }
+  pre.code .s { color:#f4eedc; }
+  pre.code .c { color:#f4eedc; font-style: italic; }
+  pre.code .n { color:#f4eedc; font-weight: 700; }
 
   /* ======================================================================
      COVER SLIDE
@@ -793,7 +792,7 @@
     font-family: var(--serif-display);
     font-size: 320px;
     line-height: .85;
-    color: var(--accent);
+    color:#f4eedc;
     font-weight: 400;
     letter-spacing: -14px;
     position: absolute;
@@ -807,7 +806,7 @@
     font-size: 13px;
     letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--accent);
+    color:#f4eedc;
     font-weight: 700;
     margin-bottom: 24px;
     position: relative;
@@ -827,17 +826,17 @@
     font-weight: 500;
     line-height: 1.02;
     letter-spacing: -2px;
-    color: var(--ink);
+    color:#f4eedc;
     max-width: 1200px;
     position: relative;
     z-index: 1;
   }
-  .divider-slide h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .divider-slide h1 em { font-style: italic; color:#f4eedc; font-weight: 500; }
   .divider-slide .divider-sub {
     font-family: var(--serif-body);
     font-size: 20px;
     line-height: 1.5;
-    color: var(--muted);
+    color:#f4eedc;
     margin-top: 36px;
     max-width: 1000px;
     font-style: italic;
@@ -878,21 +877,21 @@
     font-family: var(--sans);
     font-size: 10px;
     letter-spacing: 2px;
-    color: var(--muted);
+    color:#f4eedc;
     font-weight: 700;
   }
   .gpu-unit .model {
     font-family: var(--serif-display);
     font-size: 26px;
     font-weight: 500;
-    color: var(--ink);
+    color:#f4eedc;
     letter-spacing: -.5px;
     margin: 2px 0;
   }
   .gpu-unit .vram {
     font-family: var(--mono);
     font-size: 11px;
-    color: var(--accent);
+    color:#f4eedc;
     font-weight: 700;
     letter-spacing: .5px;
   }
@@ -924,7 +923,7 @@
     letter-spacing: 1.6px;
     text-transform: uppercase;
   }
-  .nav button:hover { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  .nav button:hover { background: var(--accent); color: var(--paper); border-color:rgba(29,26,22,0.55); }
 
   /* ======================================================================
      ESL TYPOGRAPHIC MARK
@@ -955,7 +954,7 @@
     font-family: var(--sans);
     font-size: 8.5px;
     letter-spacing: 2.8px;
-    color: var(--muted);
+    color:#f4eedc;
     text-transform: uppercase;
     font-weight: 600;
     white-space: nowrap;
@@ -978,7 +977,7 @@
     letter-spacing: 2.4px;
     text-transform: uppercase;
     color: var(--paper);
-    background: rgba(26, 21, 16, .78);
+    background:rgba(251,248,238,.78);
     border: 1px solid var(--rule-strong);
     padding: 7px 14px 7px 28px;
     text-decoration: none;
@@ -989,7 +988,7 @@
   .home:hover {
     opacity: 1;
     background: var(--accent);
-    border-color: var(--accent);
+    border-color:rgba(29,26,22,0.55);
     color: var(--paper);
   }
   .home::before {
@@ -1005,6 +1004,18 @@
     transform-origin: center;
   }
 
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>

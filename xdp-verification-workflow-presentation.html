@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; overflow: hidden; font-family: 'Inter', -apple-system, sans-serif; background: #0d1117; color: #e6edf3; }
+  html, body { height: 100%; overflow: hidden; font-family: 'Inter', -apple-system, sans-serif; background:#fbf8ee; color:#1d1a16; }
   .deck { display: flex; height: 100vh; transition: transform 0.45s cubic-bezier(.4,0,.2,1); }
   .slide { min-width: 100vw; height: 100vh; padding: clamp(20px, 4vw, 60px); display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
   h1 { font-size: clamp(1.8rem, 5vw, 3.4rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.5em; }
@@ -16,45 +16,57 @@
   p, li { font-size: clamp(0.9rem, 1.8vw, 1.15rem); line-height: 1.55; }
   ul { padding-left: 1.3em; margin: 0.4em 0; }
   li { margin-bottom: 0.35em; }
-  .accent { color: #58a6ff; }
-  .orange { color: #ffa657; }
-  .green { color: #7ee787; }
-  .purple { color: #d2a8ff; }
-  .red { color: #ff7b72; }
-  .yellow { color: #e3b341; }
-  .subtitle { font-size: clamp(1rem, 2.5vw, 1.5rem); color: #8b949e; font-weight: 400; }
-  .kicker { text-transform: uppercase; letter-spacing: 0.15em; font-size: clamp(0.7rem, 1.4vw, 0.85rem); color: #58a6ff; font-weight: 700; margin-bottom: 1em; }
+  .accent { color:#12457a; }
+  .orange { color:#b8322a; }
+  .green { color:#2f6b3a; }
+  .purple { color:#6b6353; }
+  .red { color:#b8322a; }
+  .yellow { color:#9a5b10; }
+  .subtitle { font-size: clamp(1rem, 2.5vw, 1.5rem); color:#6b6353; font-weight: 400; }
+  .kicker { text-transform: uppercase; letter-spacing: 0.15em; font-size: clamp(0.7rem, 1.4vw, 0.85rem); color:#12457a; font-weight: 700; margin-bottom: 1em; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(14px, 2.5vw, 30px); margin-top: 1em; }
-  .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: clamp(14px, 2vw, 24px); }
+  .card { background:#fbf8ee; border: 1px solid #30363d; border-radius: 12px; padding: clamp(14px, 2vw, 24px); }
   .card h3 { margin-top: 0; }
   .flow { display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 1em 0; }
   .fbox { border-radius: 10px; padding: 10px 18px; font-size: clamp(0.75rem, 1.5vw, 1rem); font-weight: 600; text-align: center; min-width: min(420px, 80vw); }
   .frow { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; }
   .frow .fbox { min-width: min(260px, 40vw); }
-  .arrow { color: #8b949e; font-size: 1.1rem; line-height: 1; }
-  .b-gray   { background: #21262d; border: 1.5px solid #8b949e; }
-  .b-blue   { background: #0d2440; border: 1.5px solid #58a6ff; }
-  .b-green  { background: #0f2a1a; border: 1.5px solid #7ee787; }
-  .b-orange { background: #331f0b; border: 1.5px solid #ffa657; }
-  .b-yellow { background: #332b0b; border: 1.5px solid #e3b341; }
-  .b-red    { background: #33110d; border: 1.5px solid #ff7b72; }
-  .b-purple { background: #241333; border: 1.5px solid #d2a8ff; }
+  .arrow { color:#6b6353; font-size: 1.1rem; line-height: 1; }
+  .b-gray   { background:#fbf8ee; border: 1.5px solid #8b949e; }
+  .b-blue   { background:#fbf8ee; border: 1.5px solid #58a6ff; }
+  .b-green  { background:#fbf8ee; border: 1.5px solid #7ee787; }
+  .b-orange { background:#fbf8ee; border: 1.5px solid #ffa657; }
+  .b-yellow { background:#fbf8ee; border: 1.5px solid #e3b341; }
+  .b-red    { background:#fbf8ee; border: 1.5px solid #ff7b72; }
+  .b-purple { background:#fbf8ee; border: 1.5px solid #d2a8ff; }
   table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: clamp(0.78rem, 1.6vw, 1.05rem); }
   th, td { border: 1px solid #30363d; padding: 8px 12px; text-align: left; }
-  th { background: #161b22; color: #58a6ff; }
-  code { background: #161b22; border: 1px solid #30363d; border-radius: 5px; padding: 1px 7px; font-size: 0.9em; color: #ffa657; }
+  th { background:#fbf8ee; color:#12457a; }
+  code { background:#fbf8ee; border: 1px solid #30363d; border-radius: 5px; padding: 1px 7px; font-size: 0.9em; color:#b8322a; }
   .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 1em; }
-  .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: clamp(0.75rem, 1.5vw, 0.95rem); color: #8b949e; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: clamp(0.75rem, 1.5vw, 0.95rem); color:#6b6353; }
   .dot { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
-  .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; background: rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.4); color: #58a6ff; font-size: 26px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: background 0.2s; user-select: none; }
-  .nav-btn:hover { background: rgba(88,166,255,0.28); }
+  .nav-btn { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px; border-radius: 50%; background:rgba(88,166,255,0.12); border: 1px solid rgba(88,166,255,0.4); color:#12457a; font-size: 26px; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: background 0.2s; user-select: none; }
+  .nav-btn:hover { background:rgba(88,166,255,0.28); }
   #prevBtn { left: 14px; } #nextBtn { right: 14px; }
   .nav-btn.hidden { display: none; }
-  .progress { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #58a6ff, #7ee787); transition: width 0.3s; z-index: 10; }
-  .counter { position: fixed; bottom: 14px; right: 18px; font-size: 0.85rem; color: #8b949e; z-index: 10; }
-  .hint { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); color: #58a6ff; font-size: 0.95rem; animation: pulse 1.6s infinite; z-index: 10; }
+  .progress { position: fixed; bottom: 0; left: 0; height: 5px; background:linear-gradient(90deg, #58a6ff, #7ee787); transition: width 0.3s; z-index: 10; }
+  .counter { position: fixed; bottom: 14px; right: 18px; font-size: 0.85rem; color:#6b6353; z-index: 10; }
+  .hint { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); color:#12457a; font-size: 0.95rem; animation: pulse 1.6s infinite; z-index: 10; }
   @keyframes pulse { 0%,100% { opacity: 0.45; } 50% { opacity: 1; } }
   @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } .frow { flex-direction: column; align-items: center; } }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -65,7 +77,7 @@
     <div class="kicker">Demo Plan Walkthrough</div>
     <h1>Wolfram + Lean + eBPF/XDP</h1>
     <p class="subtitle">A closed-loop formal-verification workflow for stateful packet processing</p>
-    <p style="margin-top:2em; color:#8b949e;">Symbolic discovery → machine-checked proof → executable validation</p>
+    <p style="margin-top:2em; color:#6b6353;">Symbolic discovery → machine-checked proof → executable validation</p>
     <div class="legend" style="justify-content:center; margin-top:2.5em;">
       <span><span class="dot" style="background:#ffa657;"></span>Wolfram</span>
       <span><span class="dot" style="background:#7ee787;"></span>Lean 4</span>
@@ -114,7 +126,7 @@
       <div class="card"><p><b>Memory safety</b> — every packet read within <code>[0, packet_length]</code><br><b>Parser monotonicity</b> — offset never moves backward<br><b>Parser boundedness</b> — offset ≤ packet length<br><b>Counter monotonicity</b> — counters never silently decrease</p></div>
       <div class="card"><p><b>No silent overflow</b> — saturating counters, proved<br><b>Rate-limit correctness</b> — C ≤ T ⇒ PASS, C &gt; T ⇒ DROP<br><b>Packet preservation, determinism, malformed-packet safety</b><br><b>Refinement</b> — model ≡ real XDP program on all vectors</p></div>
     </div>
-    <p style="margin-top:0.8em; color:#8b949e;">Relevant to DPU / SmartNIC-class systems; described conservatively, not as a vendor implementation.</p>
+    <p style="margin-top:0.8em; color:#6b6353;">Relevant to DPU / SmartNIC-class systems; described conservatively, not as a vendor implementation.</p>
   </section>
 
   <!-- 4: Graph overview -->
@@ -186,7 +198,7 @@
     <div class="kicker">Phases 3 – 4 (parallel)</div>
     <h2>Two independent views of the same parser</h2>
     <div class="grid2">
-      <div class="card" style="border-color:#7ee787;">
+      <div class="card" style="border-color:#2f6b3a;">
         <h3 class="green">Phase 3 · Lean 4 formalization</h3>
         <ul>
           <li><code>Packet.lean</code>, <code>State.lean</code>, <code>Parser.lean</code> — defined independently, <b>not</b> imported from Wolfram output</li>
@@ -194,7 +206,7 @@
           <li>Gate: <code>lake build</code> green, zero <code>sorry</code></li>
         </ul>
       </div>
-      <div class="card" style="border-color:#ffa657;">
+      <div class="card" style="border-color:#b8322a;">
         <h3 class="orange">Phase 4 · Wolfram boundary search</h3>
         <ul>
           <li><code>PacketModel.wl</code>, <code>StateTransition.wl</code> — symbolic packets with byte constraints</li>
@@ -214,7 +226,7 @@
       parser safety proved in Lean · Wolfram vectors agree with Python · concept map documented
     </div>
     <p style="max-width:700px;">The spec forbids building the rate limiter until parser safety is settled. This gate is where the plan is reviewed: representations compared, naming table (<code>packetLength</code> ↔ <code>Packet.length</code> ↔ <code>data_end − data</code>) locked in, assumptions re-checked.</p>
-    <p style="margin-top:1em; color:#8b949e;">Everything after this gate builds on a proven-safe parser.</p>
+    <p style="margin-top:1em; color:#6b6353;">Everything after this gate builds on a proven-safe parser.</p>
   </section>
 
   <!-- 9: Phase 5 loop -->
@@ -303,7 +315,7 @@
       </div>
     </div>
     <p style="margin-top:1em;">Plus conservative relevance docs: this verifies <b>the software class that runs on DPU / SmartNIC platforms</b> — it does not claim anything about proprietary silicon.</p>
-    <p style="margin-top:1.5em; text-align:center; color:#8b949e;">Plan: <code>C:\Amp_demos\Xsightlab\DEMO_PLAN.md</code> · Graph: <code>DEMO_PLAN_Workflow.drawio</code></p>
+    <p style="margin-top:1.5em; text-align:center; color:#6b6353;">Plan: <code>C:\Amp_demos\Xsightlab\DEMO_PLAN.md</code> · Graph: <code>DEMO_PLAN_Workflow.drawio</code></p>
   </section>
 
 </div>

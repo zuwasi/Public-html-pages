@@ -10,61 +10,73 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { height: 100%; overflow: hidden; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0d1117; color: #e6edf3; }
+  html, body { height: 100%; overflow: hidden; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background:#fbf8ee; color:#1d1a16; }
   .deck { display: flex; height: 100vh; width: 100vw; transition: transform 0.45s cubic-bezier(.4,0,.2,1); }
   .slide { min-width: 100vw; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: clamp(20px, 5vw, 70px); overflow-y: auto; }
   .slide-inner { max-width: 1100px; width: 100%; }
   h1 { font-size: clamp(1.7rem, 4.5vw, 3.2rem); font-weight: 800; line-height: 1.15; margin-bottom: 0.5em; }
-  h2 { font-size: clamp(1.3rem, 3.2vw, 2.2rem); font-weight: 700; margin-bottom: 0.8em; color: #58a6ff; }
+  h2 { font-size: clamp(1.3rem, 3.2vw, 2.2rem); font-weight: 700; margin-bottom: 0.8em; color:#12457a; }
   h3 { font-size: clamp(1rem, 2.2vw, 1.3rem); font-weight: 600; margin: 0.8em 0 0.4em; }
   p, li { font-size: clamp(0.85rem, 1.7vw, 1.08rem); line-height: 1.55; }
   ul, ol { margin: 0.6em 0 0.6em 1.3em; }
   li { margin-bottom: 0.45em; }
-  .accent { color: #f85149; }
-  .green { color: #3fb950; }
-  .orange { color: #d29922; }
-  .blue { color: #58a6ff; }
-  .subtitle { font-size: clamp(1rem, 2.2vw, 1.4rem); color: #8b949e; font-weight: 400; }
-  .badge { display: inline-block; background: #f85149; color: #fff; padding: 4px 14px; border-radius: 20px; font-size: clamp(0.7rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 1.2em; letter-spacing: 0.05em; }
-  .badge.g { background: #238636; }
-  .card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: clamp(12px, 2.2vw, 22px); margin: 0.6em 0; }
+  .accent { color:#b8322a; }
+  .green { color:#2f6b3a; }
+  .orange { color:#9a5b10; }
+  .blue { color:#12457a; }
+  .subtitle { font-size: clamp(1rem, 2.2vw, 1.4rem); color:#6b6353; font-weight: 400; }
+  .badge { display: inline-block; background:#f85149; color:#1d1a16; padding: 4px 14px; border-radius: 20px; font-size: clamp(0.7rem, 1.4vw, 0.85rem); font-weight: 700; margin-bottom: 1.2em; letter-spacing: 0.05em; }
+  .badge.g { background:#238636; }
+  .card { background:#fbf8ee; border: 1px solid #30363d; border-radius: 10px; padding: clamp(12px, 2.2vw, 22px); margin: 0.6em 0; }
   .card.red { border-left: 4px solid #f85149; }
   .card.green { border-left: 4px solid #3fb950; }
   .card.orange { border-left: 4px solid #d29922; }
   .card.blue { border-left: 4px solid #58a6ff; }
   table { width: 100%; border-collapse: collapse; margin: 0.8em 0; font-size: clamp(0.72rem, 1.5vw, 0.98rem); }
   th, td { padding: clamp(5px, 1vw, 10px) clamp(6px, 1.2vw, 12px); text-align: left; border-bottom: 1px solid #30363d; }
-  th { color: #58a6ff; font-weight: 700; background: #161b22; }
-  code, .mono { font-family: 'Consolas', 'Courier New', monospace; background: #161b22; padding: 1px 6px; border-radius: 4px; font-size: 0.92em; color: #79c0ff; }
-  pre { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: clamp(10px, 2vw, 18px); overflow-x: auto; margin: 0.6em 0; font-size: clamp(0.68rem, 1.4vw, 0.92rem); line-height: 1.5; font-family: 'Consolas', monospace; color: #c9d1d9; }
+  th { color:#12457a; font-weight: 700; background:#fbf8ee; }
+  code, .mono { font-family: 'Consolas', 'Courier New', monospace; background:#fbf8ee; padding: 1px 6px; border-radius: 4px; font-size: 0.92em; color:#12457a; }
+  pre { background:#fbf8ee; border: 1px solid #30363d; border-radius: 8px; padding: clamp(10px, 2vw, 18px); overflow-x: auto; margin: 0.6em 0; font-size: clamp(0.68rem, 1.4vw, 0.92rem); line-height: 1.5; font-family: 'Consolas', monospace; color:#1d1a16; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(10px, 2vw, 24px); }
   .big-logo { width: clamp(140px, 22vw, 260px); height: auto; border-radius: 12px; margin-bottom: 0.8em; transition: transform 0.2s; }
   .big-logo:hover { transform: scale(1.05); }
   @media (max-width: 700px) { .grid2 { grid-template-columns: 1fr; } }
-  .nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: clamp(40px, 6vw, 56px); height: clamp(40px, 6vw, 56px); border-radius: 50%; background: rgba(88,166,255,0.15); border: 1px solid #58a6ff; color: #58a6ff; font-size: clamp(1.3rem, 3vw, 1.8rem); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; user-select: none; transition: background 0.2s, opacity 0.3s; }
-  .nav-arrow:hover { background: rgba(88,166,255,0.35); }
+  .nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: clamp(40px, 6vw, 56px); height: clamp(40px, 6vw, 56px); border-radius: 50%; background:rgba(88,166,255,0.15); border: 1px solid #58a6ff; color:#12457a; font-size: clamp(1.3rem, 3vw, 1.8rem); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10; user-select: none; transition: background 0.2s, opacity 0.3s; }
+  .nav-arrow:hover { background:rgba(88,166,255,0.35); }
   .nav-arrow.hidden { opacity: 0; pointer-events: none; }
   #prevBtn { left: clamp(8px, 2vw, 24px); }
   #nextBtn { right: clamp(8px, 2vw, 24px); }
-  .progress { position: fixed; bottom: 0; left: 0; height: 5px; background: linear-gradient(90deg, #58a6ff, #3fb950); transition: width 0.4s; z-index: 10; }
-  .counter { position: fixed; bottom: 12px; right: 16px; font-size: clamp(0.7rem, 1.4vw, 0.85rem); color: #8b949e; z-index: 10; }
-  .swipe-hint { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); color: #8b949e; font-size: clamp(0.75rem, 1.6vw, 0.95rem); animation: pulse 1.8s infinite; z-index: 10; }
+  .progress { position: fixed; bottom: 0; left: 0; height: 5px; background:linear-gradient(90deg, #58a6ff, #3fb950); transition: width 0.4s; z-index: 10; }
+  .counter { position: fixed; bottom: 12px; right: 16px; font-size: clamp(0.7rem, 1.4vw, 0.85rem); color:#6b6353; z-index: 10; }
+  .swipe-hint { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%); color:#6b6353; font-size: clamp(0.75rem, 1.6vw, 0.95rem); animation: pulse 1.8s infinite; z-index: 10; }
   @keyframes pulse { 0%,100% { opacity: 0.35; } 50% { opacity: 1; } }
   .brandbar { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: clamp(6px, 1.2vw, 10px) clamp(10px, 2vw, 20px); z-index: 20; pointer-events: none; }
   .brandbar a { pointer-events: auto; }
   .brand-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
   .brand-logo img { height: clamp(30px, 5vw, 44px); width: auto; border-radius: 6px; display: block; }
-  .brand-name { color: #8b949e; font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); letter-spacing: 0.08em; }
-  .home-btn { display: flex; align-items: center; justify-content: center; width: clamp(34px, 5vw, 42px); height: clamp(34px, 5vw, 42px); border-radius: 50%; background: rgba(88,166,255,0.15); border: 1px solid #58a6ff; color: #58a6ff; font-size: clamp(1rem, 2.2vw, 1.25rem); text-decoration: none; transition: background 0.2s; }
-  .home-btn:hover { background: rgba(88,166,255,0.35); }
+  .brand-name { color:#6b6353; font-weight: 700; font-size: clamp(0.7rem, 1.5vw, 0.9rem); letter-spacing: 0.08em; }
+  .home-btn { display: flex; align-items: center; justify-content: center; width: clamp(34px, 5vw, 42px); height: clamp(34px, 5vw, 42px); border-radius: 50%; background:rgba(88,166,255,0.15); border: 1px solid #58a6ff; color:#12457a; font-size: clamp(1rem, 2.2vw, 1.25rem); text-decoration: none; transition: background 0.2s; }
+  .home-btn:hover { background:rgba(88,166,255,0.35); }
   .slide { padding-top: clamp(56px, 9vw, 80px); }
   .timeline { border-left: 3px solid #30363d; margin-left: clamp(8px, 2vw, 20px); padding-left: clamp(14px, 2.5vw, 26px); }
   .t-item { position: relative; margin-bottom: clamp(8px, 1.6vw, 16px); }
-  .t-item::before { content: ''; position: absolute; left: calc(-1 * clamp(14px, 2.5vw, 26px) - 8px); top: 6px; width: 11px; height: 11px; border-radius: 50%; background: #58a6ff; }
-  .t-item.bad::before { background: #f85149; }
-  .t-item.good::before { background: #3fb950; }
-  .t-time { font-weight: 700; color: #79c0ff; font-family: 'Consolas', monospace; font-size: clamp(0.78rem, 1.6vw, 1rem); }
-  .logo-line { color: #8b949e; font-size: clamp(0.8rem, 1.6vw, 1rem); margin-top: 2.5em; }
+  .t-item::before { content: ''; position: absolute; left: calc(-1 * clamp(14px, 2.5vw, 26px) - 8px); top: 6px; width: 11px; height: 11px; border-radius: 50%; background:#58a6ff; }
+  .t-item.bad::before { background:#f85149; }
+  .t-item.good::before { background:#3fb950; }
+  .t-time { font-weight: 700; color:#12457a; font-family: 'Consolas', monospace; font-size: clamp(0.78rem, 1.6vw, 1rem); }
+  .logo-line { color:#6b6353; font-size: clamp(0.8rem, 1.6vw, 1rem); margin-top: 2.5em; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -89,7 +101,7 @@
       <h1>Real-Time Supply-Chain<br>Threat Detection</h1>
       <p class="subtitle">Catching the next <span class="mono">keyv</span>-style npm attack — at scan time, at install time,<br>and before any vendor publishes an advisory</p>
       <p class="logo-line">ESL — Engineering Software Lab &nbsp;|&nbsp; SBOMator 1.4.x &nbsp;|&nbsp; August 2026<br>
-      <a href="https://www.eswlab.com" style="color:#58a6ff;text-decoration:none;">www.eswlab.com</a> &nbsp;|&nbsp; <a href="mailto:sales@eswlab.com" style="color:#58a6ff;text-decoration:none;">sales@eswlab.com</a></p>
+      <a href="https://www.eswlab.com" style="color:#12457a;text-decoration:none;">www.eswlab.com</a> &nbsp;|&nbsp; <a href="mailto:sales@eswlab.com" style="color:#12457a;text-decoration:none;">sales@eswlab.com</a></p>
       <div class="swipe-hint" id="swipeHint">&larr; Swipe to navigate &rarr;</div>
     </div>
   </section>
@@ -117,7 +129,7 @@
           <p>Endpoint monitoring inventories installed software, packages, runtimes and even AI-agent extensions — with rescans, integrity drift and new-CVE alerts.</p>
         </div>
       </div>
-      <p style="margin-top:0.8em;" class="subtitle">Core philosophy: <strong style="color:#e6edf3;">know what is in your product, know what changed, prove what you did.</strong></p>
+      <p style="margin-top:0.8em;" class="subtitle">Core philosophy: <strong style="color:#1d1a16;">know what is in your product, know what changed, prove what you did.</strong></p>
     </div>
   </section>
 
@@ -235,7 +247,7 @@
       <h2>The detection race — who knew when</h2>
       <table>
         <tr><th>Time (UTC)</th><th>Who</th><th>What</th></tr>
-        <tr><td class="mono" style="color:#3fb950;font-weight:700;">09:08</td><td><strong class="green">SBOMator</strong></td><td>Repo-watch detection of the new install hook - before npm publish</td></tr>
+        <tr><td class="mono" style="color:#2f6b3a;font-weight:700;">09:08</td><td><strong class="green">SBOMator</strong></td><td>Repo-watch detection of the new install hook - before npm publish</td></tr>
         <tr><td class="mono">09:35</td><td>npm registry</td><td>keyv@6.0.0 publish event (raw signal)</td></tr>
         <tr><td class="mono">~09:41</td><td>Socket (automated)</td><td>Scanner flags the preinstall hook — ~6 minutes after publish</td></tr>
         <tr><td class="mono">morning</td><td>SafeDep, Aikido feeds</td><td>Real-time publish-event capture, subscriber feeds</td></tr>
@@ -274,10 +286,10 @@
       <p>What changed between clean <span class="mono">keyv@5.6.0</span> and malicious <span class="mono">keyv@6.0.0</span>:</p>
       <pre>  "scripts": {
     "build": "tsdown",
-<span style="color:#3fb950;">+   "preinstall": "node setup.mjs"     &larr; the entire attack</span>
+<span style="color:#f4eedc;">+   "preinstall": "node setup.mjs"     &larr; the entire attack</span>
   },
   "files": [ "dist", "LICENSE",
-<span style="color:#3fb950;">+   "setup.mjs", "Math_Symbol.js"</span>  ]</pre>
+<span style="color:#2f6b3a;">+   "setup.mjs", "Math_Symbol.js"</span>  ]</pre>
       <ul>
         <li>SBOMator fetches the npm registry's lightweight metadata and compares the <span class="mono">hasInstallScript</span> flag against the previous stable release</li>
         <li>New hook where none existed &rarr; <strong class="orange">SUSPICIOUS alert with the exact script line as evidence</strong></li>
@@ -292,7 +304,7 @@
     <div class="slide-inner">
       <h2>Verified against the real attack</h2>
       <p>Live run of SBOMator 1.4 against the actual incident packages:</p>
-      <pre>OSV keyv@6.0.0:  OSV malicious-package advisory (<span style="color:#f85149;">MAL-2026-11524</span>)
+      <pre>OSV keyv@6.0.0:  OSV malicious-package advisory (<span style="color:#b8322a;">MAL-2026-11524</span>)
 OSV keyv@5.6.0:  clean
 SBOM scan: keyv 6.0.0  &lt;- Built-in IOC Database
 SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
@@ -340,7 +352,7 @@ SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
       </ol>
       <table>
         <tr><th>Alert</th><th>Meaning</th><th>Action</th></tr>
-        <tr><td><strong style="color:#fff;background:#d32f2f;padding:2px 8px;border-radius:4px;">MALICIOUS</strong></td><td>Known-bad version (IOC feeds or live OSV)</td><td>Remove immediately + rotate credentials</td></tr>
+        <tr><td><strong style="color:#1d1a16;background:#d32f2f;padding:2px 8px;border-radius:4px;">MALICIOUS</strong></td><td>Known-bad version (IOC feeds or live OSV)</td><td>Remove immediately + rotate credentials</td></tr>
         <tr><td><strong style="color:#8a4b00;background:#fff3cd;padding:2px 8px;border-radius:4px;">SUSPICIOUS</strong></td><td>New install hook vs previous release</td><td>Review before trusting</td></tr>
       </table>
       <div class="card orange">
@@ -397,10 +409,10 @@ SBOM scan: keyv 6.0.0  &lt;- OSV.dev / OpenSSF malicious-packages</pre>
           <img src="sbomator-logo.png" alt="SBOMator by ESL" class="big-logo">
         </a>
       </p>
-      <p style="text-align:center; margin-top:0.6em;" class="subtitle">ESL — Engineering Software Lab<br><strong style="color:#e6edf3;">SBOMator: the supply-chain detection layer your EDR can't see.</strong></p>
+      <p style="text-align:center; margin-top:0.6em;" class="subtitle">ESL — Engineering Software Lab<br><strong style="color:#1d1a16;">SBOMator: the supply-chain detection layer your EDR can't see.</strong></p>
       <p style="text-align:center; margin-top:1em;">
-        <a href="https://www.eswlab.com" style="color:#58a6ff;text-decoration:none;">www.eswlab.com</a> &nbsp;|&nbsp;
-        <a href="mailto:sales@eswlab.com" style="color:#58a6ff;text-decoration:none;">sales@eswlab.com</a>
+        <a href="https://www.eswlab.com" style="color:#12457a;text-decoration:none;">www.eswlab.com</a> &nbsp;|&nbsp;
+        <a href="mailto:sales@eswlab.com" style="color:#12457a;text-decoration:none;">sales@eswlab.com</a>
       </p>
     </div>
   </section>

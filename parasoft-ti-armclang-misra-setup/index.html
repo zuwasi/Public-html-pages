@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
-    :root { --bg:#0d1321; --panel:#111a2e; --panel2:#1a2332; --accent:#4fc3f7; --green:#66bb6a; --text:#e8ecf4; --muted:#aab5c8; }
+    :root { --bg:#f4eedc; --panel:#fbf8ee; --panel2:#f4eedc; --accent:#b8322a; --green:#2f6b3a; --text:#1d1a16; --muted:#6b6353; }
     * { box-sizing:border-box; }
     html, body { margin:0; width:100%; height:100%; overflow:hidden; background:var(--bg); color:var(--text); font-family:Inter,system-ui,sans-serif; }
     .deck { display:flex; width:1700vw; height:100vh; transition:transform .4s ease; }
@@ -21,11 +21,11 @@
     .accent { color:var(--accent); } .muted { color:var(--muted); }
     .subtitle { color:var(--accent); font-size:clamp(1.05rem,2.4vw,1.65rem); margin:.3rem 0 1.6rem; }
     .eyebrow { color:var(--accent); text-transform:uppercase; letter-spacing:.16em; font-size:.76rem; font-weight:700; margin-bottom:1rem; }
-    pre { margin:.7rem 0; padding:clamp(12px,2vw,20px); overflow:auto; background:#111a2e; border:1px solid rgba(79,195,247,.22); border-radius:12px; color:#dce9f4; font:clamp(.65rem,1.5vw,.85rem)/1.55 Consolas,"Courier New",monospace; white-space:pre-wrap; }
+    pre { margin:.7rem 0; padding:clamp(12px,2vw,20px); overflow:auto; background:#fbf8ee; border:1px solid rgba(79,195,247,.22); border-radius:12px; color:#1d1a16; font:clamp(.65rem,1.5vw,.85rem)/1.55 Consolas,"Courier New",monospace; white-space:pre-wrap; }
     code { font-family:Consolas,"Courier New",monospace; }
     table { width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border-radius:12px; border:1px solid #26354b; font-size:clamp(.7rem,1.5vw,.9rem); }
     th, td { text-align:left; padding:clamp(8px,1.35vw,14px); border-bottom:1px solid #26354b; vertical-align:top; }
-    th { background:#1a2332; color:var(--accent); font-weight:700; } tbody tr:nth-child(odd) { background:#111a2e; } tbody tr:nth-child(even) { background:#151f31; } tr:last-child td { border-bottom:0; }
+    th { background:#fbf8ee; color:var(--accent); font-weight:700; } tbody tr:nth-child(odd) { background:#fbf8ee; } tbody tr:nth-child(even) { background:#fbf8ee; } tr:last-child td { border-bottom:0; }
     .callout { margin-top:1rem; padding:1rem 1.2rem; border-left:4px solid var(--accent); border-radius:8px; background:rgba(79,195,247,.1); font-weight:700; }
     .note { color:var(--muted); margin-top:.8rem; font-size:clamp(.75rem,1.4vw,.95rem); }
     .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(12px,2vw,24px); }
@@ -41,16 +41,28 @@
     .takeaways { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1rem; }
     .takeaway { padding:1.1rem; background:linear-gradient(135deg,rgba(79,195,247,.12),rgba(102,187,106,.06)); border:1px solid rgba(79,195,247,.35); border-radius:14px; font-size:clamp(.85rem,1.6vw,1.05rem); line-height:1.5; }
     .takeaway b { color:var(--accent); font-size:1.25em; margin-right:.4rem; }
-    .nav { position:fixed; z-index:10; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:50%; border:1px solid rgba(79,195,247,.45); background:rgba(17,26,46,.9); color:var(--accent); font-size:2rem; cursor:pointer; display:grid; place-items:center; transition:opacity .2s,background .2s; }
-    .nav:hover { background:#1a3045; } .nav.left { left:14px; } .nav.right { right:14px; } .nav[hidden] { display:none; }
-    .progress-track { position:fixed; z-index:11; left:0; bottom:0; width:100%; height:5px; background:#202a3b; }
+    .nav { position:fixed; z-index:10; top:50%; transform:translateY(-50%); width:48px; height:48px; border-radius:50%; border:1px solid rgba(79,195,247,.45); background:rgba(251,248,238,.9); color:var(--accent); font-size:2rem; cursor:pointer; display:grid; place-items:center; transition:opacity .2s,background .2s; }
+    .nav:hover { background:#fbf8ee; } .nav.left { left:14px; } .nav.right { right:14px; } .nav[hidden] { display:none; }
+    .progress-track { position:fixed; z-index:11; left:0; bottom:0; width:100%; height:5px; background:#fbf8ee; }
     .progress { height:100%; width:0; background:linear-gradient(90deg,#4fc3f7,#66bb6a); transition:width .4s ease; }
-    .counter { position:fixed; z-index:12; right:18px; bottom:15px; padding:.35rem .7rem; border-radius:20px; background:rgba(13,19,33,.82); color:var(--muted); font-size:.8rem; }
+    .counter { position:fixed; z-index:12; right:18px; bottom:15px; padding:.35rem .7rem; border-radius:20px; background:rgba(251,248,238,.82); color:var(--muted); font-size:.8rem; }
     .swipe-hint { margin-top:3rem; color:var(--muted); animation:pulse 1.6s ease-in-out infinite; font-size:clamp(.8rem,1.5vw,1rem); }
     @keyframes pulse { 50% { opacity:.35; transform:translateX(5px); } }
     @media (max-width:760px) { .grid,.grid.three,.checklist,.takeaways { grid-template-columns:1fr; } .slide { justify-content:flex-start; } .slide-inner { margin:auto 0; } .nav { width:40px;height:40px;font-size:1.6rem;opacity:.75; } .nav.left{left:6px}.nav.right{right:6px} }
     @media (max-height:700px) { h2{font-size:clamp(1.4rem,3.2vw,2.4rem)} p,li{line-height:1.35} th,td{padding:7px 10px} }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
   <main class="deck" id="deck">
@@ -167,7 +179,7 @@ cpptestscan.exe tiarmclang.exe -c -I. -std=c11 file3.c</code></pre>
           <tr><td><code>unreachableCode.c</code></td><td>Unreachable code</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-CC, BD-PB-SWITCH</td></tr>
           <tr><td><code>useBeforeInit.c</code></td><td>Use before init</td><td style="color:var(--green);font-weight:700">✅ Yes</td><td>BD-PB-NOTINIT</td></tr>
           <tr><td><code>nullPointerDerefBenchmark.c</code></td><td>Benchmark (TP + FP)</td><td style="color:var(--green);font-weight:700">✅ 3 TP, 0 FP</td><td>BD-PB-NP</td></tr>
-          <tr><td><code>fileLeaks.c</code></td><td>File/resource leak</td><td style="color:#ffa726;font-weight:700">⚠️ Partial</td><td>Other issues found, leak missed</td></tr>
+          <tr><td><code>fileLeaks.c</code></td><td>File/resource leak</td><td style="color:#b8322a;font-weight:700">⚠️ Partial</td><td>Other issues found, leak missed</td></tr>
         </tbody>
       </table>
       <p class="note">41 total violations across 13 files. The file leak in fileLeaks.c (fclose commented out) was not flagged with BD-RES-LEAKS, likely because the file handle flows through an interprocedural helper.</p>

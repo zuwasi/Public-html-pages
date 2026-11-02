@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0b1220; --bg2:#101a30; --card:#141f38; --card2:#182544;
-  --accent:#38bdf8; --accent2:#818cf8; --good:#34d399; --warn:#fbbf24; --bad:#f87171;
-  --text:#e6edf7; --muted:#93a4bf; --line:#25355c;
+  --bg:#f4eedc; --bg2:#ece4cc; --card:#fbf8ee; --card2:#f4eedc;
+  --accent:#b8322a; --accent2:#9a5b10; --good:#2f6b3a; --warn:#9a5b10; --bad:#b8322a;
+  --text:#1d1a16; --muted:#6b6353; --line:#b9ae90;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
@@ -27,7 +27,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);
 h1{font-size:clamp(1.7rem,4.6vw,3.6rem);font-weight:900;line-height:1.12;text-align:center;max-width:1000px}
 h2{font-size:clamp(1.3rem,3.2vw,2.4rem);font-weight:800;line-height:1.15;margin-bottom:clamp(14px,3vh,28px);text-align:center;max-width:1000px}
 .sub{font-size:clamp(.95rem,1.8vw,1.25rem);color:var(--muted);max-width:820px;text-align:center;line-height:1.55;margin-top:clamp(10px,2vh,20px)}
-.grad{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grad{background:#f4eedc;-webkit-background-clip:text;background-clip:text;color:transparent}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(10px,1.6vw,20px);max-width:1120px;width:100%}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:clamp(14px,2vw,24px)}
 .card h3{font-size:clamp(.95rem,1.6vw,1.15rem);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
@@ -46,7 +46,7 @@ td{color:var(--text)} td .dim{color:var(--muted)}
 .stat{text-align:center;min-width:150px}
 .stat .lbl{font-size:clamp(.72rem,1.2vw,.9rem);color:var(--muted);margin-top:6px;line-height:1.4}
 .cta-btn{display:inline-block;margin-top:clamp(18px,3.5vh,34px);padding:clamp(12px,2vh,18px) clamp(28px,4vw,52px);
-  background:linear-gradient(90deg,var(--accent),var(--accent2));color:#08101f;font-weight:800;
+  background:#f4eedc;color:#08101f;font-weight:800;
   font-size:clamp(.95rem,1.8vw,1.2rem);border-radius:12px;text-decoration:none;letter-spacing:.03em;
   box-shadow:0 8px 30px rgba(56,189,248,.35);transition:transform .15s}
 .cta-btn:hover{transform:translateY(-2px)}
@@ -56,7 +56,7 @@ td{color:var(--text)} td .dim{color:var(--muted)}
   line-height:1.6;font-weight:500;margin-top:clamp(14px,2.5vh,26px)}
 .quote .src{display:block;margin-top:10px;font-size:clamp(.7rem,1.2vw,.85rem);color:var(--muted);font-weight:400}
 .nav{position:fixed;top:50%;transform:translateY(-50%);width:clamp(38px,4.5vw,54px);height:clamp(38px,4.5vw,54px);
-  border-radius:50%;background:rgba(20,31,56,.85);border:1px solid var(--line);color:var(--text);
+  border-radius:50%;background:rgba(251,248,238,.85);border:1px solid var(--line);color:var(--text);
   font-size:clamp(1.2rem,2.2vw,1.7rem);display:flex;align-items:center;justify-content:center;cursor:pointer;
   z-index:50;user-select:none;transition:opacity .25s,background .15s}
 .nav:hover{background:var(--card2)}
@@ -77,10 +77,10 @@ td{color:var(--text)} td .dim{color:var(--muted)}
 .mockup{width:100%;max-width:980px;border-radius:10px;overflow:hidden;
   box-shadow:0 20px 60px rgba(0,0,0,.55);border:1px solid #3a4a6b;
   font-family:'Segoe UI',Tahoma,sans-serif;text-align:left}
-.mk-titlebar{background:#1f2b3e;color:#fff;display:flex;justify-content:space-between;align-items:center;
+.mk-titlebar{background:#fbf8ee;color:#1d1a16;display:flex;justify-content:space-between;align-items:center;
   padding:7px 12px;font-size:clamp(.7rem,1.2vw,.85rem);font-weight:600}
-.mk-winbtns i{font-style:normal;margin-left:14px;color:#b8c4d6;font-size:.9em}
-.mk-winbtns .mk-x{color:#f87171}
+.mk-winbtns i{font-style:normal;margin-left:14px;color:#6b6353;font-size:.9em}
+.mk-winbtns .mk-x{color:#b8322a}
 .mk-tabs{background:#e0e0e0;display:flex;flex-wrap:wrap;border-bottom:1px solid #bdbdbd}
 .mk-tabs span{padding:6px 12px;font-size:clamp(.58rem,1vw,.78rem);color:#333;border-right:1px solid #cfcfcf;background:#e0e0e0;white-space:nowrap}
 .mk-tabs .mk-tab-active{background:#f0f0f0;font-weight:700;color:#000;border-top:3px solid #4a90d9;padding-top:3px}
@@ -91,7 +91,7 @@ td{color:var(--text)} td .dim{color:var(--muted)}
 .mk-row label{font-size:clamp(.62rem,1.05vw,.8rem);font-weight:600}
 .mk-entry{background:#fff;border:1px solid #9a9a9a;padding:4px 8px;font-size:clamp(.6rem,1vw,.78rem);min-width:180px;color:#222}
 .mk-btn{background:#e8e8e8;border:1px solid #9a9a9a;border-radius:3px;padding:4px 10px;font-size:clamp(.6rem,1vw,.78rem);color:#222;white-space:nowrap}
-.mk-btn-primary{background:#4a90d9;color:#fff;border-color:#3a7bc0;font-weight:600}
+.mk-btn-primary{background:#4a90d9;color:#1d1a16;border-color:#3a7bc0;font-weight:600}
 .mk-status{margin-left:auto;color:#2e7d32;font-size:clamp(.6rem,1vw,.78rem);font-weight:600}
 .mk-result{font-size:clamp(.6rem,1.05vw,.8rem);padding:3px 0;color:#222;line-height:1.45}
 .mk-ok{color:#2e7d32;font-weight:700;margin-right:6px}
@@ -99,7 +99,7 @@ td{color:var(--text)} td .dim{color:var(--muted)}
 .mk-bad{color:#c62828;font-weight:700;margin-right:6px}
 .mk-score{margin-top:8px;font-size:clamp(.62rem,1.1vw,.82rem);font-weight:600;color:#1f2b3e;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .mk-bar{display:inline-block;width:clamp(120px,22vw,260px);height:10px;background:#d0d0d0;border:1px solid #9a9a9a;border-radius:5px;overflow:hidden}
-.mk-bar-fill{display:block;height:100%;background:linear-gradient(90deg,#4a90d9,#2e7d32)}
+.mk-bar-fill{display:block;height:100%;background:#f4eedc}
 .mk-outputs{margin-top:8px;font-size:clamp(.58rem,1vw,.76rem);color:#333;border-top:1px dashed #bdbdbd;padding-top:6px}
 .mk-local{color:#2e7d32;font-weight:700}
 @media (max-width:640px){
@@ -108,6 +108,18 @@ td{color:var(--text)} td .dim{color:var(--muted)}
   .stat-row{gap:14px}
   .mk-tabs span{font-size:.5rem;padding:4px 6px}
 }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -454,7 +466,7 @@ td{color:var(--text)} td .dim{color:var(--muted)}
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

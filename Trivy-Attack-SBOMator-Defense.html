@@ -10,9 +10,9 @@
 *{margin:0;padding:0;box-sizing:border-box}
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
 :root{
-  --bg:#0a0e1a;--card:#111827;--accent:#00e5ff;--accent2:#7c4dff;--red:#ff1744;
-  --orange:#ff9100;--green:#00e676;--yellow:#ffd600;--pink:#f50057;
-  --text:#e8eaf6;--muted:#90a4ae;--glass:rgba(255,255,255,0.06);
+  --bg:#f4eedc;--card:#fbf8ee;--accent:#b8322a;--accent2:#9a5b10;--red:#b8322a;
+  --orange:#9a5b10;--green:#2f6b3a;--yellow:#9a5b10;--pink:#a83a5e;
+  --text:#1d1a16;--muted:#6b6353;--glass:rgba(255,255,255,0.06);
 }
 html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;-webkit-tap-highlight-color:transparent}
 
@@ -57,7 +57,7 @@ h2{font-size:clamp(22px,4vw,42px);font-weight:800;line-height:1.15;text-align:ce
 /* Comparison table */
 .cmp-table{width:100%;max-width:950px;border-collapse:separate;border-spacing:0;margin-top:16px;font-size:clamp(11px,1.3vw,14px)}
 .cmp-table th,.cmp-table td{padding:clamp(8px,1.2vw,14px) clamp(6px,1vw,12px);text-align:left}
-.cmp-table thead th{background:var(--accent2);color:#fff;font-weight:700}
+.cmp-table thead th{background:var(--accent2);color:#f4eedc;font-weight:700}
 .cmp-table thead th:first-child{border-radius:12px 0 0 0}
 .cmp-table thead th:last-child{border-radius:0 12px 0 0}
 .cmp-table tbody tr{background:var(--glass)}
@@ -66,11 +66,11 @@ h2{font-size:clamp(22px,4vw,42px);font-weight:800;line-height:1.15;text-align:ce
 .cmp-table tbody tr:last-child td:first-child{border-radius:0 0 0 12px}
 .cmp-table tbody tr:last-child td:last-child{border-radius:0 0 12px 0}
 .badge{display:inline-block;padding:3px 10px;border-radius:999px;font-weight:700;font-size:11px}
-.badge.red{background:rgba(255,23,68,.15);color:var(--red)}
+.badge.red{background:rgba(255,23,68,.15);color:#f4eedc}
 .badge.green{background:rgba(0,230,118,.15);color:var(--green)}
 
 /* Detail box */
-.detail-box{background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:clamp(16px,2.5vw,28px);margin-top:20px;width:100%;max-width:950px}
+.detail-box{background:rgba(251,248,238,.35);border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:clamp(16px,2.5vw,28px);margin-top:20px;width:100%;max-width:950px}
 .detail-box h4{font-size:clamp(13px,1.5vw,16px);font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .detail-box p,.detail-box li{font-size:clamp(11px,1.3vw,13px);color:var(--muted);line-height:1.6}
 .detail-box ul{padding-left:20px;margin-top:6px}
@@ -86,7 +86,7 @@ h2{font-size:clamp(22px,4vw,42px);font-weight:800;line-height:1.15;text-align:ce
 
 /* Navigation */
 .nav-arrows{position:fixed;top:50%;z-index:100;transform:translateY(-50%)}
-.nav-arrows button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#fff;width:clamp(36px,5vw,52px);height:clamp(36px,5vw,52px);border-radius:50%;font-size:clamp(16px,2.2vw,22px);cursor:pointer;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:background .2s}
+.nav-arrows button{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:#1d1a16;width:clamp(36px,5vw,52px);height:clamp(36px,5vw,52px);border-radius:50%;font-size:clamp(16px,2.2vw,22px);cursor:pointer;backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;transition:background .2s}
 .nav-arrows button:hover{background:var(--accent2)}
 .nav-arrows button:disabled{opacity:.2;pointer-events:none}
 #prevBtn{position:fixed;left:clamp(6px,1.5vw,16px)}
@@ -101,26 +101,26 @@ h2{font-size:clamp(22px,4vw,42px);font-weight:800;line-height:1.15;text-align:ce
 .counter{position:fixed;top:clamp(10px,2vw,18px);right:clamp(10px,2vw,18px);font-size:12px;color:var(--muted);z-index:100;font-family:'JetBrains Mono',monospace}
 
 /* Top brand bar */
-.top-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:8px clamp(12px,3vw,28px);background:rgba(10,14,26,.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)}
+.top-bar{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:8px clamp(12px,3vw,28px);background:rgba(251,248,238,.85);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.06)}
 .top-bar .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .top-bar .brand img{height:32px}
 .top-bar .brand span{font-size:14px;font-weight:700;color:var(--accent);letter-spacing:1px}
 .top-bar .top-links{display:flex;align-items:center;gap:14px}
 .top-bar .top-links a{font-size:clamp(10px,1.3vw,13px);color:var(--muted);text-decoration:none;font-weight:600;padding:5px 12px;border-radius:8px;border:1px solid rgba(255,255,255,.1);transition:all .2s}
-.top-bar .top-links a:hover{color:#fff;border-color:var(--accent);background:rgba(0,229,255,.1)}
-.top-bar .top-links a.cta{background:var(--accent);color:#0a0e1a;border-color:var(--accent);font-weight:700}
+.top-bar .top-links a:hover{color:#1d1a16;border-color:var(--accent);background:rgba(0,229,255,.1)}
+.top-bar .top-links a.cta{background:var(--accent);color:#f4eedc;border-color:rgba(29,26,22,0.55);font-weight:700}
 .top-bar .top-links a.cta:hover{background:#00b8d4}
 
 /* Contact footer */
 .contact-bar{background:linear-gradient(135deg,rgba(124,77,255,.15),rgba(0,229,255,.1));border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:clamp(16px,2.5vw,28px);margin-top:20px;width:100%;max-width:950px;display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
 .contact-bar .contact-info{display:flex;flex-direction:column;gap:6px}
-.contact-bar .contact-info .co-name{font-size:clamp(15px,1.8vw,20px);font-weight:800;color:var(--accent)}
-.contact-bar .contact-info p{font-size:clamp(11px,1.3vw,14px);color:var(--muted);display:flex;align-items:center;gap:8px}
-.contact-bar .contact-info a{color:var(--accent);text-decoration:none}
+.contact-bar .contact-info .co-name{font-size:clamp(15px,1.8vw,20px);font-weight:800;color:#f4eedc}
+.contact-bar .contact-info p{font-size:clamp(11px,1.3vw,14px);color:#f4eedc;display:flex;align-items:center;gap:8px}
+.contact-bar .contact-info a{color:#f4eedc;text-decoration:none}
 .contact-bar .contact-info a:hover{text-decoration:underline}
 .contact-btns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .contact-btns a{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:10px;font-size:clamp(12px,1.4vw,14px);font-weight:700;text-decoration:none;transition:all .2s}
-.contact-btns .btn-primary{background:var(--accent);color:#0a0e1a}
+.contact-btns .btn-primary{background:var(--accent);color:#f4eedc}
 .contact-btns .btn-primary:hover{background:#00b8d4}
 .contact-btns .btn-outline{background:transparent;color:var(--accent);border:2px solid var(--accent)}
 .contact-btns .btn-outline:hover{background:rgba(0,229,255,.12)}
@@ -144,6 +144,18 @@ h2{font-size:clamp(22px,4vw,42px);font-weight:800;line-height:1.15;text-align:ce
   .contact-bar .contact-info{align-items:center}
   .contact-btns{justify-content:center}
 }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -215,7 +227,7 @@ h2{font-size:clamp(22px,4vw,42px);font-weight:800;line-height:1.15;text-align:ce
         <h3 class="c-red">Trivy (Vulnerable)</h3>
         <p>Runs as a <strong>GitHub Action</strong> inside CI/CD pipelines. References mutable version tags (<code>@v0.28.0</code>). Attackers force-pushed 75 tags to run malicious code — <strong>no workflow file changes needed</strong>.</p>
       </div>
-      <div class="card" style="border-color:rgba(0,230,118,.3)">
+      <div class="card" style="border-color:rgba(47,107,58,.3)">
         <div class="card-icon">🛡️</div>
         <h3 class="c-green">SBOMator (Immune)</h3>
         <p>Runs as a <strong>standalone commercial application</strong> on your machine. No GitHub Action, no mutable tags, no automated pipeline execution. <strong>The entire attack vector doesn't exist.</strong></p>
@@ -241,14 +253,14 @@ h2{font-size:clamp(22px,4vw,42px);font-weight:800;line-height:1.15;text-align:ce
         <p>Read <code>/proc/&lt;pid&gt;/mem</code> on CI runners to harvest:<br>
         <span class="c-orange">AWS keys</span> · <span class="c-yellow">GCP/Azure creds</span> · <span class="c-pink">SSH keys</span> · <span class="c-red">K8s tokens</span> · <span class="c-purple">Docker creds</span> · <span class="c-accent">TLS private keys</span> · <span class="c-orange">DB passwords</span> · <span class="c-yellow">Crypto wallets</span></p>
       </div>
-      <div class="card" style="border-color:rgba(0,230,118,.3)">
+      <div class="card" style="border-color:rgba(47,107,58,.3)">
         <div class="card-icon">🔒</div>
         <h3 class="c-green">SBOMator's Position</h3>
         <p>Runs on <strong>your own workstation</strong> or a dedicated analysis machine. Never executes inside a CI/CD runner. <strong>Has zero access to pipeline secrets, runner memory, or cloud credentials.</strong> Architecturally impossible.</p>
       </div>
     </div>
     <div class="card-row">
-      <div class="card" style="border-color:rgba(0,229,255,.2);flex:1 1 100%;max-width:700px">
+      <div class="card" style="border-color:rgba(18,69,122,.2);flex:1 1 100%;max-width:700px">
         <div class="card-icon">🏗️</div>
         <h3>Architecture Comparison</h3>
         <p style="font-family:'JetBrains Mono',monospace;font-size:clamp(10px,1.2vw,13px);white-space:pre;line-height:1.7;color:var(--text)">Trivy:    CI Runner → <span class="c-red">Trivy Action</span> → reads /proc/mem → <span class="c-red">SECRETS STOLEN</span>
@@ -274,12 +286,12 @@ SBOMator: Your PC  → <span class="c-green">SBOMator App</span> → scans sourc
         <h3 class="c-red">Trivy's Problem</h3>
         <p>Open-source with automated release pipelines. Compromised service account → backdoored binaries auto-distributed to <strong>GitHub Releases, Docker Hub, GHCR, and Amazon ECR</strong>. No human review.</p>
       </div>
-      <div class="card" style="border-color:rgba(0,230,118,.3)">
+      <div class="card" style="border-color:rgba(47,107,58,.3)">
         <div class="card-icon">✅</div>
         <h3 class="c-green">SBOMator's Model</h3>
         <p><strong>Commercial product</strong> distributed through controlled channels. No public service account to hijack, no automated release pipeline, no container registries for attackers to tamper with.</p>
       </div>
-      <div class="card" style="border-color:rgba(0,229,255,.2)">
+      <div class="card" style="border-color:rgba(18,69,122,.2)">
         <div class="card-icon">🔐</div>
         <h3 class="c-accent">Built-In Supply Chain Hardening</h3>
         <p>SBOMator secures <em>its own</em> supply chain: exact <strong>version pinning</strong>, <strong>lock files</strong>, <strong>SHA-256 hash verification</strong>, <strong>self-SBOM</strong>, Dependabot with <strong>manual PR review</strong> — no auto-merge.</p>
@@ -295,7 +307,7 @@ SBOMator: Your PC  → <span class="c-green">SBOMator App</span> → scans sourc
 <!-- ================= SLIDE 5 — WHY: No Persistent Backdoor ================= -->
 <section class="slide s5">
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;width:100%">
-    <span class="tag" style="background:rgba(245,0,87,.15);color:var(--pink)">Defense #4</span>
+    <span class="tag" style="background:rgba(251,248,238,.15);color:var(--pink)">Defense #4</span>
     <h2><span class="c-accent">On-Demand Tool</span> = No Persistent Backdoor</h2>
     <p class="subtitle">SBOMator runs, reports, and exits — no background services</p>
     <div class="card-row">
@@ -304,7 +316,7 @@ SBOMator: Your PC  → <span class="c-green">SBOMator App</span> → scans sourc
         <h3 class="c-red">Trivy's Backdoor</h3>
         <p>Installed <code>sysmon.py</code> as a <strong>systemd service</strong> on developer machines. Polled a blockchain canister (ICP) every <strong>50 minutes</strong> for C2 instructions. Takedown-resistant.</p>
       </div>
-      <div class="card" style="border-color:rgba(0,230,118,.3)">
+      <div class="card" style="border-color:rgba(47,107,58,.3)">
         <div class="card-icon">🧹</div>
         <h3 class="c-green">SBOMator's Design</h3>
         <p>A <strong>GUI/CLI application</strong> that runs on demand. Generates SBOM → produces report → <strong>exits</strong>. No system services installed. No background processes. No elevated privileges required.</p>
@@ -329,17 +341,17 @@ SBOMator: Your PC  → <span class="c-green">SBOMator App</span> → scans sourc
     <h2>SBOMator <span class="c-green">Detects</span> the Attack That <span class="c-red">Hit Trivy</span></h2>
     <p class="subtitle">Our Supply Chain Threat Intelligence module catches the aftermath</p>
     <div class="card-row">
-      <div class="card" style="border-color:rgba(0,229,255,.2)">
+      <div class="card" style="border-color:rgba(18,69,122,.2)">
         <div class="card-icon">🔎</div>
         <h3>IOC Auto-Checking</h3>
         <p>Auto-downloads IOC lists from <strong>Wiz Security Research</strong>. Compares every package name + version against known malicious releases. Flags matches as <span class="c-red">CRITICAL</span>.</p>
       </div>
-      <div class="card" style="border-color:rgba(0,229,255,.2)">
+      <div class="card" style="border-color:rgba(18,69,122,.2)">
         <div class="card-icon">📦</div>
         <h3>Malicious Package Detection</h3>
         <p>The CanisterWorm (Phase 5) compromised 47+ npm packages. SBOMator's <strong>triple scanner</strong> (Syft + CDXgen + OSV) identifies every one in your dependency tree.</p>
       </div>
-      <div class="card" style="border-color:rgba(0,229,255,.2)">
+      <div class="card" style="border-color:rgba(18,69,122,.2)">
         <div class="card-icon">📊</div>
         <h3>SBOM Diff Over Time</h3>
         <p>Compare SBOMs before and after to catch <strong>suspicious version bumps</strong> — exactly how Shai-Hulud and CanisterWorm propagated through version manipulation.</p>
@@ -443,7 +455,7 @@ document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')go(
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

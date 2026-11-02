@@ -7,61 +7,61 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Inter',sans-serif;background:#0a0e17;color:#c9d1d9;overflow-x:hidden}
+body{font-family:'Inter',sans-serif;background:#fbf8ee;color:#1d1a16;overflow-x:hidden}
 .slides{display:flex;transition:transform 0.5s cubic-bezier(.4,0,.2,1);width:700vw}
 .slide{width:100vw;min-height:100vh;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:clamp(20px,4vw,60px)}
 .card{max-width:900px;width:100%}
 
-h1{font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:700;color:#58a6ff;margin-bottom:0.4em;line-height:1.2}
-h2{font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:600;color:#79c0ff;margin-bottom:0.6em}
-h3{font-size:clamp(1rem,2vw,1.3rem);font-weight:600;color:#d2a8ff;margin-bottom:0.5em}
+h1{font-size:clamp(1.6rem,3.5vw,2.6rem);font-weight:700;color:#12457a;margin-bottom:0.4em;line-height:1.2}
+h2{font-size:clamp(1.2rem,2.5vw,1.8rem);font-weight:600;color:#12457a;margin-bottom:0.6em}
+h3{font-size:clamp(1rem,2vw,1.3rem);font-weight:600;color:#6b6353;margin-bottom:0.5em}
 p,li{font-size:clamp(0.85rem,1.6vw,1.05rem);line-height:1.7;margin-bottom:0.5em}
 ul{padding-left:1.4em;margin-bottom:1em}
 li{margin-bottom:0.3em}
 
 .tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:0.75rem;font-weight:600;margin-right:6px;margin-bottom:4px}
-.tag-green{background:#0d4429;color:#3fb950;border:1px solid #238636}
-.tag-blue{background:#0c2d6b;color:#58a6ff;border:1px solid #1f6feb}
-.tag-purple{background:#2d1653;color:#d2a8ff;border:1px solid #8957e5}
-.tag-yellow{background:#3d2e00;color:#e3b341;border:1px solid #9e6a03}
-.tag-red{background:#3d1418;color:#f85149;border:1px solid #da3633}
+.tag-green{background:#fbf8ee;color:#2f6b3a;border:1px solid #238636}
+.tag-blue{background:#fbf8ee;color:#12457a;border:1px solid #1f6feb}
+.tag-purple{background:#fbf8ee;color:#6b6353;border:1px solid #8957e5}
+.tag-yellow{background:#fbf8ee;color:#9a5b10;border:1px solid #9e6a03}
+.tag-red{background:#fbf8ee;color:#b8322a;border:1px solid #da3633}
 
-.subtitle{color:#8b949e;font-size:clamp(0.9rem,1.8vw,1.15rem);margin-bottom:1.5em}
+.subtitle{color:#6b6353;font-size:clamp(0.9rem,1.8vw,1.15rem);margin-bottom:1.5em}
 
 /* Syntax-highlighted code blocks */
-pre{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:clamp(12px,2vw,20px);overflow-x:auto;margin:1em 0;font-size:clamp(0.72rem,1.3vw,0.88rem);line-height:1.65}
+pre{background:#fbf8ee;border:1px solid #30363d;border-radius:8px;padding:clamp(12px,2vw,20px);overflow-x:auto;margin:1em 0;font-size:clamp(0.72rem,1.3vw,0.88rem);line-height:1.65}
 code{font-family:'JetBrains Mono',monospace}
-.kw{color:#ff7b72}
-.tp{color:#79c0ff}
-.fn{color:#d2a8ff}
-.cm{color:#8b949e;font-style:italic}
-.st{color:#a5d6ff}
-.num{color:#79c0ff}
-.pp{color:#ffa657}
-.op{color:#c9d1d9}
-.ct{color:#3fb950}
+.kw{color:#b8322a}
+.tp{color:#12457a}
+.fn{color:#6b6353}
+.cm{color:#6b6353;font-style:italic}
+.st{color:#1d1a16}
+.num{color:#12457a}
+.pp{color:#b8322a}
+.op{color:#1d1a16}
+.ct{color:#2f6b3a}
 
 .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:1em 0}
-.feature-box{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px}
+.feature-box{background:#fbf8ee;border:1px solid #30363d;border-radius:8px;padding:16px}
 .feature-box h3{margin-bottom:0.3em;font-size:1rem}
-.feature-box p{font-size:0.88rem;color:#8b949e;margin:0}
+.feature-box p{font-size:0.88rem;color:#6b6353;margin:0}
 
 .compiler-table{width:100%;border-collapse:collapse;margin:1em 0;font-size:clamp(0.78rem,1.4vw,0.92rem)}
-.compiler-table th{background:#161b22;color:#58a6ff;padding:10px 12px;text-align:left;border-bottom:2px solid #30363d}
+.compiler-table th{background:#fbf8ee;color:#12457a;padding:10px 12px;text-align:left;border-bottom:2px solid #30363d}
 .compiler-table td{padding:8px 12px;border-bottom:1px solid #21262d}
-.compiler-table tr:hover{background:#161b22}
-.yes{color:#3fb950;font-weight:600}
-.no{color:#f85149}
-.partial{color:#e3b341}
+.compiler-table tr:hover{background:#fbf8ee}
+.yes{color:#2f6b3a;font-weight:600}
+.no{color:#b8322a}
+.partial{color:#9a5b10}
 
-.divider{height:1px;background:linear-gradient(90deg,transparent,#30363d,transparent);margin:1.5em 0}
+.divider{height:1px;background:linear-gradient(90deg,transparent,#e3dabf,transparent);margin:1.5em 0}
 
 /* Nav */
-.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(22,27,34,0.85);border:1px solid #30363d;color:#58a6ff;font-size:1.4rem;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background 0.2s}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;background:rgba(251,248,238,0.85);border:1px solid #30363d;color:#12457a;font-size:1.4rem;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background 0.2s}
 .nav-btn:hover{background:rgba(31,111,235,0.3)}
 #prevBtn{left:16px}
 #nextBtn{right:16px}
-.progress{position:fixed;bottom:0;left:0;height:3px;background:linear-gradient(90deg,#1f6feb,#8957e5,#da3633);transition:width 0.4s;z-index:100}
+.progress{position:fixed;bottom:0;left:0;height:3px;background:#f4eedc;transition:width 0.4s;z-index:100}
 .counter{position:fixed;bottom:10px;right:16px;font-size:0.78rem;color:#484f58;z-index:100;font-family:'JetBrains Mono',monospace}
 .swipe-hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);color:#484f58;font-size:0.85rem;animation:sway 2s ease-in-out infinite;z-index:100;transition:opacity 0.3s}
 @keyframes sway{0%,100%{transform:translateX(-50%) translateX(-8px)}50%{transform:translateX(-50%) translateX(8px)}}
@@ -73,6 +73,18 @@ code{font-family:'JetBrains Mono',monospace}
   .nav-btn{width:38px;height:38px;font-size:1.1rem}
   #prevBtn{left:8px}#nextBtn{right:8px}
 }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -91,7 +103,7 @@ code{font-family:'JetBrains Mono',monospace}
 <h1 style="margin-top:0.5em">C++26 for Embedded Systems</h1>
 <p class="subtitle">From C spaghetti to zero-cost abstractions on MAVLink + RP2040</p>
 <div class="divider"></div>
-<p style="color:#8b949e">A practical look at what C++26 brings to firmware development,<br>and what you can ship today with GCC 15 and <code style="color:#79c0ff">-std=c++20</code></p>
+<p style="color:#6b6353">A practical look at what C++26 brings to firmware development,<br>and what you can ship today with GCC 15 and <code style="color:#12457a">-std=c++20</code></p>
 </div>
 </div>
 
@@ -100,7 +112,7 @@ code{font-family:'JetBrains Mono',monospace}
 <div class="card">
 <h2>The Vision</h2>
 <p>C++26 and GCC 16 are just a few days (maybe weeks) away. Let's play the game: <em>"what if C++26 and GCC 16 are already here?"</em> -- because it takes embedded C++ much further.</p>
-<p>Contracts, <code style="color:#79c0ff">inplace_vector</code>, and reflection are game changers:</p>
+<p>Contracts, <code style="color:#12457a">inplace_vector</code>, and reflection are game changers:</p>
 <div class="feature-grid">
   <div class="feature-box">
     <h3>Contracts</h3>
@@ -181,20 +193,20 @@ std::<span class="tp">inplace_vector</span>&lt;<span class="tp">uint8_t</span>, 
 <h2>Why C++26 Matters for Embedded</h2>
 <div class="feature-grid">
   <div class="feature-box" style="border-left:3px solid #3fb950">
-    <h3 style="color:#3fb950">Contracts</h3>
-    <p><code style="color:#3fb950">pre</code> / <code style="color:#3fb950">post</code> replace hand-written <code>assert()</code> with standard, toolchain-aware checks. Strip them in release = zero overhead. The compiler and static analyzers can reason about them.</p>
+    <h3 style="color:#2f6b3a">Contracts</h3>
+    <p><code style="color:#2f6b3a">pre</code> / <code style="color:#2f6b3a">post</code> replace hand-written <code>assert()</code> with standard, toolchain-aware checks. Strip them in release = zero overhead. The compiler and static analyzers can reason about them.</p>
   </div>
   <div class="feature-box" style="border-left:3px solid #58a6ff">
-    <h3 style="color:#58a6ff">inplace_vector</h3>
+    <h3 style="color:#12457a">inplace_vector</h3>
     <p>A standard resizable container with fixed capacity and <strong>no heap allocation</strong>. Drop-in replacement for hand-rolled ring buffers. Perfect for MAVLink packet buffers on microcontrollers.</p>
   </div>
   <div class="feature-box" style="border-left:3px solid #d2a8ff">
-    <h3 style="color:#d2a8ff">Reflection</h3>
+    <h3 style="color:#6b6353">Reflection</h3>
     <p>Auto-generate serialization, debug logs, enum-to-string -- all at compile time with zero runtime cost. No more macro hacks or code generators.</p>
   </div>
 </div>
 <div class="divider"></div>
-<p style="color:#8b949e">No globals, no vtables, no heap, no RTTI. Just the way embedded should be.</p>
+<p style="color:#6b6353">No globals, no vtables, no heap, no RTTI. Just the way embedded should be.</p>
 </div>
 </div>
 
@@ -216,7 +228,7 @@ std::<span class="tp">inplace_vector</span>&lt;<span class="tp">uint8_t</span>, 
 <tr><td>Reflection (meta)</td><td>C++26</td><td class="no">No</td><td class="no">No</td></tr>
 </tbody>
 </table>
-<p style="color:#8b949e;margin-top:1em">Since no compiler fully supports C++26 today, the next slide shows what you can ship <strong>right now</strong>.</p>
+<p style="color:#6b6353;margin-top:1em">Since no compiler fully supports C++26 today, the next slide shows what you can ship <strong>right now</strong>.</p>
 </div>
 </div>
 
@@ -285,7 +297,7 @@ std::<span class="tp">inplace_vector</span>&lt;<span class="tp">uint8_t</span>, 
 <div class="divider"></div>
 <div class="feature-grid" style="text-align:left">
   <div class="feature-box" style="border-left:3px solid #3fb950">
-    <h3 style="color:#3fb950">Today (GCC 15 / C++20)</h3>
+    <h3 style="color:#2f6b3a">Today (GCC 15 / C++20)</h3>
     <ul>
       <li>Concepts for zero-cost interface checks</li>
       <li>FixedVec as heap-free buffer</li>
@@ -294,7 +306,7 @@ std::<span class="tp">inplace_vector</span>&lt;<span class="tp">uint8_t</span>, 
     </ul>
   </div>
   <div class="feature-box" style="border-left:3px solid #58a6ff">
-    <h3 style="color:#58a6ff">Tomorrow (GCC 16 / C++26)</h3>
+    <h3 style="color:#12457a">Tomorrow (GCC 16 / C++26)</h3>
     <ul>
       <li>Swap FixedVec for std::inplace_vector</li>
       <li>Add contracts (pre/post) -- zero code rewrite</li>
@@ -356,7 +368,7 @@ document.addEventListener('mouseup',e=>{const dx=e.screenX-mx;if(Math.abs(dx)>50
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

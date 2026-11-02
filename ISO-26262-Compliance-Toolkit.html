@@ -6,7 +6,7 @@
 <title>🛡️ ISO 26262 Compliance Toolkit</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;touch-action:pan-y}
+html,body{height:100%;overflow:hidden;background:#fbf8ee;color:#1d1a16;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;touch-action:pan-y}
 
 /* --- Slide Container --- */
 .slides-wrapper{display:flex;height:100vh;transition:transform .45s cubic-bezier(.4,0,.2,1);will-change:transform}
@@ -14,7 +14,7 @@ html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-fami
 .slide-inner{max-width:960px;width:100%;margin:0 auto;padding:16px 0 80px}
 
 /* --- Nav Arrows --- */
-.nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:200;width:56px;height:56px;border-radius:50%;background:rgba(0,221,200,.15);border:2px solid #0dc;color:#0dc;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;user-select:none}
+.nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:200;width:56px;height:56px;border-radius:50%;background:rgba(0,221,200,.15);border:2px solid #0dc;color:#12457a;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;user-select:none}
 .nav-arrow:hover{background:rgba(0,221,200,.35);transform:translateY(-50%) scale(1.1)}
 .nav-arrow:active{transform:translateY(-50%) scale(.95)}
 .nav-arrow.left{left:12px}
@@ -23,21 +23,21 @@ html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-fami
 @media(max-width:600px){.nav-arrow{width:44px;height:44px;font-size:22px}.nav-arrow.left{left:6px}.nav-arrow.right{right:6px}}
 
 /* --- Progress Dots --- */
-.progress-bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;padding:8px 16px;background:rgba(15,15,26,.85);border-radius:20px;backdrop-filter:blur(8px);border:1px solid #222}
-.dot{width:10px;height:10px;border-radius:50%;background:#333;cursor:pointer;transition:all .25s}
+.progress-bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;padding:8px 16px;background:rgba(251,248,238,.85);border-radius:20px;backdrop-filter:blur(8px);border:1px solid #222}
+.dot{width:10px;height:10px;border-radius:50%;background:#fbf8ee;cursor:pointer;transition:all .25s}
 .dot.active{background:#0dc;transform:scale(1.3)}
 @media(max-width:600px){.dot{width:8px;height:8px}.progress-bar{gap:6px;padding:6px 12px}}
 
 /* --- Counter --- */
-.slide-counter{position:fixed;top:16px;right:16px;z-index:200;color:#555;font-size:14px;background:rgba(15,15,26,.8);padding:4px 12px;border-radius:12px;border:1px solid #222}
+.slide-counter{position:fixed;top:16px;right:16px;z-index:200;color:#555;font-size:14px;background:rgba(251,248,238,.8);padding:4px 12px;border-radius:12px;border:1px solid #222}
 
 /* --- Typography --- */
-h1{font-size:clamp(28px,6vw,52px);color:#0dc;margin-bottom:12px;letter-spacing:-1px}
-h2{font-size:clamp(22px,4.5vw,36px);color:#0dc;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #1a3a3a}
-h3{font-size:clamp(16px,3vw,22px);color:#a78bfa;margin:20px 0 10px}
+h1{font-size:clamp(28px,6vw,52px);color:#12457a;margin-bottom:12px;letter-spacing:-1px}
+h2{font-size:clamp(22px,4.5vw,36px);color:#12457a;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #1a3a3a}
+h3{font-size:clamp(16px,3vw,22px);color:#12457a;margin:20px 0 10px}
 p,.subtitle{font-size:clamp(14px,2.5vw,18px)}
-.subtitle{color:#999;margin-bottom:8px}
-.tag{display:inline-block;background:#1a2a2a;color:#0dc;border:1px solid #0dc;border-radius:4px;padding:3px 10px;font-size:clamp(11px,2vw,13px);margin:3px}
+.subtitle{color:#6b6353;margin-bottom:8px}
+.tag{display:inline-block;background:#fbf8ee;color:#12457a;border:1px solid #0dc;border-radius:4px;padding:3px 10px;font-size:clamp(11px,2vw,13px);margin:3px}
 
 /* --- Hero --- */
 .hero-content{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1}
@@ -47,52 +47,64 @@ p,.subtitle{font-size:clamp(14px,2.5vw,18px)}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:16px 0}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0}
 @media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
-.card{background:#151528;border:1px solid #2a2a40;border-radius:10px;padding:20px;transition:border-color .3s}
-.card:hover{border-color:#0dc}
-.card h3{margin-top:0;color:#0dc;font-size:clamp(15px,2.8vw,20px)}
-.card.green{border-color:#51cf6633}.card.green h3{color:#51cf66}
-.card.red{border-color:#ff6b6b33}.card.red h3{color:#ff6b6b}
-.card.amber{border-color:#ffd43b33}.card.amber h3{color:#ffd43b}
+.card{background:#fbf8ee;border:1px solid #2a2a40;border-radius:10px;padding:20px;transition:border-color .3s}
+.card:hover{border-color:#b9ae90}
+.card h3{margin-top:0;color:#12457a;font-size:clamp(15px,2.8vw,20px)}
+.card.green{border-color:#2f6b3a33}.card.green h3{color:#2f6b3a}
+.card.red{border-color:#b8322a33}.card.red h3{color:#b8322a}
+.card.amber{border-color:#b9ae9033}.card.amber h3{color:#1d1a16}
 
 /* --- Phase Boxes --- */
 .flow-h{display:flex;align-items:center;justify-content:center;gap:0;margin:32px 0;flex-wrap:wrap}
 .flow-h .box{border-radius:10px;padding:20px 24px;text-align:center;min-width:180px;margin:4px 0}
 .flow-h .box h4{font-size:clamp(14px,3vw,18px);margin-bottom:4px}
-.flow-h .box p{font-size:clamp(11px,2vw,13px);color:#aaa}
+.flow-h .box p{font-size:clamp(11px,2vw,13px);color:#6b6353}
 .flow-h .arrow{font-size:clamp(20px,4vw,32px);padding:0 8px;color:#555}
 @media(max-width:600px){.flow-h{flex-direction:column}.flow-h .arrow{transform:rotate(90deg)}}
-.phase-scan{background:#1a1a3a;border:2px solid #a78bfa}.phase-scan h4{color:#a78bfa}
-.phase-triage{background:#1a2a2a;border:2px solid #0dc}.phase-triage h4{color:#0dc}
-.phase-verify{background:#1a2a1a;border:2px solid #51cf66}.phase-verify h4{color:#51cf66}
+.phase-scan{background:#fbf8ee;border:2px solid #a78bfa}.phase-scan h4{color:#12457a}
+.phase-triage{background:#fbf8ee;border:2px solid #0dc}.phase-triage h4{color:#12457a}
+.phase-verify{background:#fbf8ee;border:2px solid #51cf66}.phase-verify h4{color:#2f6b3a}
 
 /* --- Tabs Grid --- */
 .tab-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:16px 0}
 @media(max-width:700px){.tab-grid{grid-template-columns:repeat(2,1fr)}}
-.tab-card{background:#1a1a2e;border:1px solid #333;border-radius:8px;padding:12px 8px;text-align:center;transition:all .3s}
-.tab-card:hover{border-color:#0dc}
+.tab-card{background:#fbf8ee;border:1px solid #333;border-radius:8px;padding:12px 8px;text-align:center;transition:all .3s}
+.tab-card:hover{border-color:#b9ae90}
 .tab-card .icon{font-size:24px;margin-bottom:4px}
-.tab-card .name{font-size:clamp(11px,2vw,13px);font-weight:bold;color:#0dc}
-.tab-card .desc{font-size:clamp(9px,1.6vw,11px);color:#888;margin-top:2px}
+.tab-card .name{font-size:clamp(11px,2vw,13px);font-weight:bold;color:#12457a}
+.tab-card .desc{font-size:clamp(9px,1.6vw,11px);color:#6b6353;margin-top:2px}
 
 /* --- Code --- */
-pre{background:#0a0a18;border:1px solid #2a2a3a;border-radius:8px;padding:16px;overflow-x:auto;font-size:clamp(11px,2vw,14px);margin:12px 0;font-family:'Cascadia Code','Fira Code',monospace}
+pre{background:#fbf8ee;border:1px solid #2a2a3a;border-radius:8px;padding:16px;overflow-x:auto;font-size:clamp(11px,2vw,14px);margin:12px 0;font-family:'Cascadia Code','Fira Code',monospace}
 code{font-family:'Cascadia Code','Fira Code',monospace}
 
 /* --- Table --- */
 table{width:100%;border-collapse:collapse;margin:16px 0;font-size:clamp(12px,2vw,15px)}
-th{background:#1a1a2e;color:#0dc;text-align:left;padding:10px 12px;border-bottom:2px solid #333}
+th{background:#fbf8ee;color:#12457a;text-align:left;padding:10px 12px;border-bottom:2px solid #333}
 td{padding:8px 12px;border-bottom:1px solid #222}
 
 /* --- Burndown --- */
 .burndown{display:flex;align-items:flex-end;gap:clamp(8px,2vw,16px);height:180px;margin:24px auto;max-width:500px;border-bottom:2px solid #333}
 .burn-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-.burn-bar{border-radius:4px 4px 0 0;width:100%;max-width:50px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:clamp(11px,2vw,13px);color:#fff}
-.burn-lbl{font-size:clamp(9px,1.5vw,11px);color:#888}
+.burn-bar{border-radius:4px 4px 0 0;width:100%;max-width:50px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:clamp(11px,2vw,13px);color:#1d1a16}
+.burn-lbl{font-size:clamp(9px,1.5vw,11px);color:#6b6353}
 
 .stat{text-align:center;padding:20px}
-.stat .num{font-size:clamp(28px,5vw,44px);font-weight:800;color:#0dc}
-.stat .lbl{font-size:clamp(11px,2vw,14px);color:#888;margin-top:4px}
+.stat .num{font-size:clamp(28px,5vw,44px);font-weight:800;color:#12457a}
+.stat .lbl{font-size:clamp(11px,2vw,14px);color:#6b6353;margin-top:4px}
 ul{padding-left:20px}li{margin:4px 0}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -109,7 +121,7 @@ ul{padding-left:20px}li{margin:4px 0}
 <div class="hero-content">
 <p class="subtitle">ConnectX-6 Dx Zephyr Ethernet Driver</p>
 <h1>ISO 26262 Compliance Toolkit</h1>
-<p style="font-size:clamp(18px,4vw,26px);color:#ccc;margin-top:8px">Achieving Zero MISRA C:2023 Violations</p>
+<p style="font-size:clamp(18px,4vw,26px);color:#6b6353;margin-top:8px">Achieving Zero MISRA C:2023 Violations</p>
 <p class="subtitle" style="margin-top:16px">From Scan → to Certification</p>
 <div style="margin-top:24px">
 <span class="tag">Parasoft C/C++test</span>
@@ -141,9 +153,9 @@ ul{padding-left:20px}li{margin:4px 0}
 <p>Re-scan confirms zero violations<br>Generate GCS + GRP docs<br>MC/DC coverage ≥ 80%</p>
 </div>
 </div>
-<div style="text-align:center;margin-top:20px;padding:16px;background:#1a1a2e;border:1px solid #333;border-radius:8px">
-<span style="color:#ffd43b;font-size:18px">♻️</span>
-<span style="color:#888;margin-left:8px">Iterate until: <strong style="color:#51cf66">0 Driver Violations</strong> + All Deviations Documented + Coverage Met</span>
+<div style="text-align:center;margin-top:20px;padding:16px;background:#fbf8ee;border:1px solid #333;border-radius:8px">
+<span style="color:#1d1a16;font-size:18px">♻️</span>
+<span style="color:#6b6353;margin-left:8px">Iterate until: <strong style="color:#2f6b3a">0 Driver Violations</strong> + All Deviations Documented + Coverage Met</span>
 </div>
 </div></div>
 
@@ -171,21 +183,21 @@ ul{padding-left:20px}li{margin:4px 0}
 <div class="card red" style="margin-top:16px">
 <h3>⚠️ Critical: ccache Interference</h3>
 <p>Zephyr's <code>ccache.cmake</code> wraps compiler calls, corrupting the BDF. Fix: always pass <code>-DUSE_CCACHE=0</code>.</p>
-<pre style="color:#ff6b6b">BAD: ccache /usr/bin/gcc -DCONFIG... → "invalid option"</pre>
-<pre style="color:#51cf66">FIX: west build ... -- -DUSE_CCACHE=0</pre>
+<pre style="color:#b8322a">BAD: ccache /usr/bin/gcc -DCONFIG... → "invalid option"</pre>
+<pre style="color:#2f6b3a">FIX: west build ... -- -DUSE_CCACHE=0</pre>
 </div>
 <h3>Source Classification</h3>
 <div class="grid3">
-<div class="card" style="border-color:#0dc"><h3 style="color:#0dc">🟢 Driver</h3><p style="color:#0dc;font-weight:bold">HIGH</p><p>Must reach zero violations</p></div>
-<div class="card" style="border-color:#a78bfa"><h3 style="color:#a78bfa">🟣 RTOS</h3><p style="color:#a78bfa;font-weight:bold">LOW</p><p>Zephyr framework — not our scope</p></div>
-<div class="card" style="border-color:#666"><h3 style="color:#888">⚪ Build</h3><p style="color:#888;font-weight:bold">Info</p><p>Excluded from metrics</p></div>
+<div class="card" style="border-color:#b9ae90"><h3 style="color:#12457a">🟢 Driver</h3><p style="color:#12457a;font-weight:bold">HIGH</p><p>Must reach zero violations</p></div>
+<div class="card" style="border-color:#b9ae90"><h3 style="color:#12457a">🟣 RTOS</h3><p style="color:#12457a;font-weight:bold">LOW</p><p>Zephyr framework — not our scope</p></div>
+<div class="card" style="border-color:#666"><h3 style="color:#6b6353">⚪ Build</h3><p style="color:#6b6353;font-weight:bold">Info</p><p>Excluded from metrics</p></div>
 </div>
 </div></div>
 
 <!-- SLIDE 4: Dashboard -->
 <div class="slide"><div class="slide-inner">
 <h2>Phase 2 — The Dashboard</h2>
-<p style="color:#888;margin-bottom:16px">10-tab PyQt6 application (5,591 lines) for complete MISRA compliance management:</p>
+<p style="color:#6b6353;margin-bottom:16px">10-tab PyQt6 application (5,591 lines) for complete MISRA compliance management:</p>
 <div class="tab-grid">
 <div class="tab-card"><div class="icon">📊</div><div class="name">Overview</div><div class="desc">Violation trends</div></div>
 <div class="tab-card"><div class="icon">🔍</div><div class="name">Violations</div><div class="desc">Filterable table</div></div>
@@ -202,7 +214,7 @@ ul{padding-left:20px}li{margin:4px 0}
 <div class="grid2">
 <div class="card">
 <h3>Stacked Bar Charts</h3>
-<p><span style="color:#0dc">■ Driver</span> bright segments, <span style="color:#a78bfa">▤ RTOS</span> dimmed with purple stripes. Delta indicators show scan-to-scan improvement.</p>
+<p><span style="color:#12457a">■ Driver</span> bright segments, <span style="color:#12457a">▤ RTOS</span> dimmed with purple stripes. Delta indicators show scan-to-scan improvement.</p>
 </div>
 <div class="card">
 <h3>Source-Aware Filtering</h3>
@@ -214,8 +226,8 @@ ul{padding-left:20px}li{margin:4px 0}
 <!-- SLIDE 5: Amp AI Fixing -->
 <div class="slide"><div class="slide-inner">
 <h2>Fixing with Amp AI</h2>
-<div class="card" style="border-color:#a78bfa;margin-bottom:20px">
-<h3 style="color:#a78bfa">🤖 How It Works</h3>
+<div class="card" style="border-color:#b9ae90;margin-bottom:20px">
+<h3 style="color:#12457a">🤖 How It Works</h3>
 <ol style="margin-top:12px">
 <li><strong>Research</strong> the MISRA rule via CandleKeep skill (looks up rule text in the standard)</li>
 <li><strong>Read</strong> the violating file and understand context</li>
@@ -239,7 +251,7 @@ out:
 </div>
 <div class="card red">
 <h3>❌ Prohibited</h3>
-<pre style="color:#ff6b6b">/* Multiple returns */
+<pre style="color:#b8322a">/* Multiple returns */
 if (x) return -1;
 
 /* Dynamic allocation */
@@ -251,7 +263,7 @@ unsigned len;</pre>
 </div>
 </div>
 <h3>Example Prompt</h3>
-<pre style="border-color:#a78bfa;font-size:clamp(10px,1.8vw,13px)">Use candlekeep to research MISRA C:2023 Rule 10.3.
+<pre style="border-color:#b9ae90;font-size:clamp(10px,1.8vw,13px)">Use candlekeep to research MISRA C:2023 Rule 10.3.
 Fix violation in cx6_device.c line 148: "Value assigned to narrower essential type"
 Constraints: goto-cleanup, fixed-width types, no malloc, verify with west build.</pre>
 </div></div>
@@ -259,26 +271,26 @@ Constraints: goto-cleanup, fixed-width types, no malloc, verify with west build.
 <!-- SLIDE 6: Deviations -->
 <div class="slide"><div class="slide-inner">
 <h2>Formal Deviations</h2>
-<p style="color:#888;margin-bottom:12px">ISO 26262 allows deviations with documented safety rationale for unavoidable patterns.</p>
+<p style="color:#6b6353;margin-bottom:12px">ISO 26262 allows deviations with documented safety rationale for unavoidable patterns.</p>
 <h3>7 Zephyr-Specific Categories</h3>
 <table>
 <tbody><tr><th>Code</th><th>Category</th><th>Used For</th></tr>
-<tr><td style="color:#0dc;font-weight:bold">HWI</td><td>Hardware Interface</td><td>MMIO pointer-integer casts</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">ZAP</td><td>Zephyr API Pattern</td><td>CONTAINER_OF, K_WORK_INIT</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">PER</td><td>Performance</td><td>Data-path function-like macros</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">CEX</td><td>Compiler Extension</td><td>GCC __attribute__ (aligned, section)</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">ESM</td><td>Equiv. Safety Measure</td><td>Alternative safety mechanisms</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">DRV</td><td>Driver Architecture</td><td>Static single-device instance</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">DBG</td><td>Debug Only</td><td>LOG_* stdio-like formatting</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">HWI</td><td>Hardware Interface</td><td>MMIO pointer-integer casts</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ZAP</td><td>Zephyr API Pattern</td><td>CONTAINER_OF, K_WORK_INIT</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">PER</td><td>Performance</td><td>Data-path function-like macros</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">CEX</td><td>Compiler Extension</td><td>GCC __attribute__ (aligned, section)</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ESM</td><td>Equiv. Safety Measure</td><td>Alternative safety mechanisms</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">DRV</td><td>Driver Architecture</td><td>Static single-device instance</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">DBG</td><td>Debug Only</td><td>LOG_* stdio-like formatting</td></tr>
 </tbody></table>
 <h3>Pre-Populated Deviations</h3>
 <table>
 <tbody><tr><th>Rule</th><th>Cat</th><th>Justification</th></tr>
-<tr><td style="color:#ff6b6b">11.4</td><td>HWI</td><td>MMIO register access requires pointer-integer casts</td></tr>
-<tr><td style="color:#ff6b6b">11.3</td><td>ZAP</td><td>Zephyr CONTAINER_OF() uses pointer-to-struct casts</td></tr>
-<tr><td style="color:#ff6b6b">20.7</td><td>ZAP</td><td>Zephyr macros don't parenthesise all parameters</td></tr>
-<tr><td style="color:#ffd43b">Dir 4.9</td><td>PER</td><td>Data-path helpers use function-like macros</td></tr>
-<tr><td style="color:#ffd43b">21.6</td><td>DBG</td><td>Zephyr LOG_* uses stdio internally</td></tr>
+<tr><td style="color:#b8322a">11.4</td><td>HWI</td><td>MMIO register access requires pointer-integer casts</td></tr>
+<tr><td style="color:#b8322a">11.3</td><td>ZAP</td><td>Zephyr CONTAINER_OF() uses pointer-to-struct casts</td></tr>
+<tr><td style="color:#b8322a">20.7</td><td>ZAP</td><td>Zephyr macros don't parenthesise all parameters</td></tr>
+<tr><td style="color:#1d1a16">Dir 4.9</td><td>PER</td><td>Data-path helpers use function-like macros</td></tr>
+<tr><td style="color:#1d1a16">21.6</td><td>DBG</td><td>Zephyr LOG_* uses stdio internally</td></tr>
 </tbody></table>
 </div></div>
 
@@ -290,9 +302,9 @@ Constraints: goto-cleanup, fixed-width types, no malloc, verify with west build.
 <h3>📋 GCS</h3>
 <p>Guidelines Compliance Summary — per-rule status:</p>
 <ul>
-<li><strong style="color:#51cf66">Compliant</strong> — no violations</li>
-<li><strong style="color:#ffd43b">Deviated</strong> — formal permit filed</li>
-<li><strong style="color:#888">N/A</strong> — rule doesn't apply</li>
+<li><strong style="color:#2f6b3a">Compliant</strong> — no violations</li>
+<li><strong style="color:#1d1a16">Deviated</strong> — formal permit filed</li>
+<li><strong style="color:#6b6353">N/A</strong> — rule doesn't apply</li>
 </ul>
 </div>
 <div class="card green">
@@ -307,10 +319,10 @@ Constraints: goto-cleanup, fixed-width types, no malloc, verify with west build.
 <h3>Coverage Requirements (ISO 26262 Table 12)</h3>
 <table>
 <tbody><tr><th>ASIL</th><th>Method</th><th>Target</th></tr>
-<tr><td style="color:#0dc;font-weight:bold">ASIL A</td><td>Statement Coverage</td><td style="color:#51cf66">≥ 80%</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">ASIL B</td><td>Branch / Decision Coverage</td><td style="color:#51cf66">≥ 80%</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">ASIL C</td><td>MC/DC</td><td style="color:#ffd43b">≥ 80%</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">ASIL D</td><td>MC/DC</td><td style="color:#ff6b6b">≥ 80%</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ASIL A</td><td>Statement Coverage</td><td style="color:#2f6b3a">≥ 80%</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ASIL B</td><td>Branch / Decision Coverage</td><td style="color:#2f6b3a">≥ 80%</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ASIL C</td><td>MC/DC</td><td style="color:#1d1a16">≥ 80%</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ASIL D</td><td>MC/DC</td><td style="color:#b8322a">≥ 80%</td></tr>
 </tbody></table>
 <div class="card" style="margin-top:16px">
 <h3>58 Unit Tests × 5 Modules</h3>
@@ -322,19 +334,19 @@ Constraints: goto-cleanup, fixed-width types, no malloc, verify with west build.
 <div class="slide"><div class="slide-inner">
 <h2>Path to Zero Violations</h2>
 <div class="grid3" style="margin-bottom:24px">
-<div class="card" style="border-color:#51cf66;text-align:center">
-<h3 style="color:#51cf66;font-size:28px">🔧</h3>
-<h3 style="color:#51cf66">Fix</h3>
+<div class="card" style="border-color:#2f6b3a;text-align:center">
+<h3 style="color:#2f6b3a;font-size:28px">🔧</h3>
+<h3 style="color:#2f6b3a">Fix</h3>
 <p>Code change resolves the violation</p>
 </div>
-<div class="card" style="border-color:#ffd43b;text-align:center">
-<h3 style="color:#ffd43b;font-size:28px">📋</h3>
-<h3 style="color:#ffd43b">Deviate</h3>
+<div class="card" style="border-color:#b9ae90;text-align:center">
+<h3 style="color:#1d1a16;font-size:28px">📋</h3>
+<h3 style="color:#1d1a16">Deviate</h3>
 <p>Formal permit with safety rationale</p>
 </div>
-<div class="card" style="border-color:#888;text-align:center">
-<h3 style="color:#888;font-size:28px">🚫</h3>
-<h3 style="color:#888">Suppress</h3>
+<div class="card" style="border-color:#6b6353;text-align:center">
+<h3 style="color:#6b6353;font-size:28px">🚫</h3>
+<h3 style="color:#6b6353">Suppress</h3>
 <p>False positive — tool limitation</p>
 </div>
 </div>
@@ -347,9 +359,9 @@ Constraints: goto-cleanup, fixed-width types, no malloc, verify with west build.
 <div class="burn-col"><div class="burn-bar" style="height:14px;background:#51cf66;min-height:14px">5</div><div class="burn-lbl">Scan 5</div></div>
 <div class="burn-col"><div class="burn-bar" style="height:4px;background:#51cf66;min-height:4px">0</div><div class="burn-lbl">Final ✅</div></div>
 </div>
-<div style="text-align:center;margin-top:24px;padding:20px;background:#0a2a0a;border:2px solid #51cf66;border-radius:10px">
-<p style="font-size:clamp(18px,4vw,28px);color:#51cf66;font-weight:bold">🎯 Target: Zero Driver Violations</p>
-<p style="color:#888;margin-top:6px">All flags documented · Coverage targets met · GCS/GRP generated</p>
+<div style="text-align:center;margin-top:24px;padding:20px;background:#fbf8ee;border:2px solid #51cf66;border-radius:10px">
+<p style="font-size:clamp(18px,4vw,28px);color:#2f6b3a;font-weight:bold">🎯 Target: Zero Driver Violations</p>
+<p style="color:#6b6353;margin-top:6px">All flags documented · Coverage targets met · GCS/GRP generated</p>
 </div>
 </div></div>
 
@@ -407,7 +419,7 @@ python cx6_misra_dashboard.py
 </div>
 <div class="card green" style="margin-top:24px;text-align:center">
 <h3 style="font-size:clamp(18px,4vw,24px)">Scan → Triage → Fix → Verify → Repeat</h3>
-<p style="margin-top:12px;font-size:clamp(14px,2.5vw,18px)">A complete, auditable workflow for achieving<br><strong style="color:#51cf66;font-size:clamp(20px,5vw,32px)">Zero MISRA C:2023 Violations</strong><br>on the ConnectX-6 Dx Zephyr Ethernet driver.</p>
+<p style="margin-top:12px;font-size:clamp(14px,2.5vw,18px)">A complete, auditable workflow for achieving<br><strong style="color:#2f6b3a;font-size:clamp(20px,5vw,32px)">Zero MISRA C:2023 Violations</strong><br>on the ConnectX-6 Dx Zephyr Ethernet driver.</p>
 </div>
 <p style="text-align:center;color:#555;margin-top:32px;font-size:13px">ISO 26262 Compliance Toolkit — March 2026<br>Designed for automotive safety engineers and ISO 26262 auditors.</p>
 </div></div>

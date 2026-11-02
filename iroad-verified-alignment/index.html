@@ -8,9 +8,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&family=Inter:wght@400;600;700;800&family=Cascadia+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#e2e5ea; --sheet:#f7f8fa; --sheet2:#eef0f4; --ink:#24282d; --muted:#5a626c; --line:#cfd4da;
-  --blue:#4f9efb; --blue-text:#1d6bd0; --amber:#ffb30b; --amber-text:#8a5e00;
-  --code-bg:#16181c; --code-cap:#1f2226; --on-dark:#e6e8eb; --good:#1e7d33; --bad:#c03535;
+  --bg:#f4eedc; --sheet:#fbf8ee; --sheet2:#ece4cc; --ink:#1d1a16; --muted:#6b6353; --line:#b9ae90;
+  --blue:#12457a; --blue-text:#12457a; --amber:#9a5b10; --amber-text:#8a5e00;
+  --code-bg:#f6efdc; --code-cap:#d9d0b8; --on-dark:#1d1a16; --good:#2f6b3a; --bad:#b8322a;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -50,11 +50,11 @@ li::marker{color:var(--amber)}
 .tablewrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
 table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.3vw,17px)}
 th,td{padding:11px 15px;text-align:right;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#2a2f36;color:#fff;font-weight:650}
+th{background:#fbf8ee;color:#1d1a16;font-weight:650}
 tbody tr:nth-child(even){background:#eef0f5}
 .shot{width:100%;border-radius:12px;border:1px solid var(--line);box-shadow:0 4px 18px rgba(20,30,50,.10);display:block}
 .cap{font-size:clamp(12px,1.1vw,15px);color:var(--muted);margin-top:8px;line-height:1.4}
-.iroad{display:inline-block;background:var(--amber);color:#4a3300;font-weight:700;font-size:clamp(12px,1.05vw,15px);padding:4px 12px;border-radius:999px;margin:2px 0}
+.iroad{display:inline-block;background:var(--amber);color:#f4eedc;font-weight:700;font-size:clamp(12px,1.05vw,15px);padding:4px 12px;border-radius:999px;margin:2px 0}
 .hit{display:inline-block;background:#e8f0fb;color:var(--blue-text);border:2px solid var(--blue);font-weight:700;font-size:clamp(12px,1.05vw,15px);padding:4px 12px;border-radius:999px;margin:2px 0}
 .foot{font-size:clamp(12px,1.05vw,15px);color:var(--muted);margin-top:auto;padding-top:18px}
 pre{background:var(--code-bg);color:var(--on-dark);border-radius:12px;padding:18px 20px;font-family:"Cascadia Mono",monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.6;overflow-x:auto}
@@ -66,7 +66,7 @@ pre{background:var(--code-bg);color:var(--on-dark);border-radius:12px;padding:18
 .vcsnap .vcd{font-weight:800;color:var(--blue-text);margin-bottom:2px}
 .vcsnap.now{border-color:var(--amber);background:#fff7e6}
 .vcback{flex:none;align-self:center;color:var(--bad);font-weight:800;font-size:clamp(11px,.95vw,14px);max-width:180px;text-align:center}
-pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
+pre .g{color:#2f6b3a} pre .y{color:#1d1a16} pre .r{color:#b8322a}
 .navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:56px;height:56px;border-radius:50%;border:1px solid var(--line);background:#f7f8faf0;color:var(--ink);font-size:26px;cursor:pointer;box-shadow:0 2px 10px rgba(20,30,50,.12)}
 #next{left:18px} #prev{right:18px}
 .navbtn:disabled{opacity:.25;cursor:default}
@@ -75,6 +75,18 @@ pre .g{color:#7ee29a} pre .y{color:#ffcf6b} pre .r{color:#ff8f8f}
 #hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:40;color:var(--muted);font-size:15px;animation:blink 1.6s infinite}
 @keyframes blink{50%{opacity:.35}}
 @media (max-width:760px){.grid2,.grid3{grid-template-columns:1fr}.slide{padding:70px 5vw 90px}}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -355,7 +367,7 @@ git checkout &lt;גרסה&gt;  <span class="r">← חזרה לכל גרסה, ב�
     <h1>שילוב עם Civil 3D: המנוע מדבר את השפה של המתכנן</h1>
     <p class="subtitle">ייצוא LandXML תקני: משטח קרקע ותוואים נכנסים כאובייקטים מקוריים, בלי תוספים</p>
     <div class="grid2">
-      <div><img class="shot" style="max-height:40vh;object-fit:contain;background:#0d1b2e" src="img/civil3d_1_full_corridor.png" alt="תוואי מלא ב-Civil 3D">
+      <div><img class="shot" style="max-height:40vh;object-fit:contain;background:#fbf8ee" src="img/civil3d_1_full_corridor.png" alt="תוואי מלא ב-Civil 3D">
       <p class="cap">משטח ESL_Terrain + תוואי 16 ק״מ ב-Civil 3D 2027, אחרי Import LandXML</p></div>
       <ul>
         <li><b>מה מיוצא:</b> קובץ LandXML 1.2 תקני: משטח טין מה-DEM + שלושת התוואים עם פרופיל אורכי</li>
@@ -374,7 +386,7 @@ git checkout &lt;גרסה&gt;  <span class="r">← חזרה לכל גרסה, ב�
     <h1>סבב אמת מלא: מתכננים ב-Civil 3D, מאומתים ב-Lean 4</h1>
     <p class="subtitle">העריכה נשארת בידי המהנדס; האימות ממוכן, מתועד, וחוזר בתוך דקה</p>
     <div class="grid2">
-      <div><img class="shot" style="max-height:40vh;object-fit:contain;background:#0d1b2e" src="img/civil3d_3_prospector_objects.png" alt="Prospector ב-Civil 3D עם אובייקטי המנוע">
+      <div><img class="shot" style="max-height:40vh;object-fit:contain;background:#fbf8ee" src="img/civil3d_3_prospector_objects.png" alt="Prospector ב-Civil 3D עם אובייקטי המנוע">
       <p class="cap">ESL_Terrain ו-alt1, alt2, alt3 כאובייקטים מקוריים בסייר האובייקטים</p></div>
       <ul>
         <li><b>שלב 1 · מתכננים:</b> המהנדס עורך או מצייר תוואי ב-Civil 3D על הקרקע שלנו</li>

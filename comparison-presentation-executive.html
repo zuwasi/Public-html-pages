@@ -9,18 +9,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #16181e;
-    --muted: #5a6069;
-    --panel: rgba(255, 252, 247, 0.92);
-    --panel-strong: rgba(255, 248, 240, 0.98);
-    --line: rgba(22, 24, 30, 0.10);
-    --amp: #d96c31;
-    --amp-soft: rgba(217, 108, 49, 0.16);
-    --claude: #0f6f63;
-    --claude-soft: rgba(15, 111, 99, 0.16);
-    --warn: #b67722;
-    --alert: #ab342b;
-    --ok: #2a7648;
+    --ink:#1d1a16;
+    --muted:#6b6353;
+    --panel:#fbf8ee;
+    --panel-strong:#fbf8ee;
+    --line:#b9ae90;
+    --amp:#12457a;
+    --amp-soft:rgba(18,69,122,.12);
+    --claude:#b8322a;
+    --claude-soft:rgba(184,50,42,.12);
+    --warn:#9a5b10;
+    --alert:#b8322a;
+    --ok:#2f6b3a;
     --shadow: 0 24px 64px rgba(79, 50, 26, 0.18);
     --radius-xl: 28px;
     --radius-lg: 20px;
@@ -35,9 +35,8 @@
     min-height: 100%;
     overflow: hidden;
     font-family: 'Inter', system-ui, sans-serif;
-    color: var(--ink);
-    background:
-      radial-gradient(circle at 6% 14%, rgba(217, 108, 49, 0.20), transparent 24%),
+    color:#f4eedc;
+    background:radial-gradient(circle at 6% 14%, rgba(217, 108, 49, 0.20), transparent 24%),
       radial-gradient(circle at 90% 10%, rgba(15, 111, 99, 0.18), transparent 22%),
       linear-gradient(145deg, #fffaf3 0%, #f8f1e8 44%, #ecd8c2 100%);
   }
@@ -57,7 +56,7 @@
     height: 34vw;
     left: -8vw;
     bottom: -10vh;
-    background: rgba(217, 108, 49, 0.16);
+    background:rgba(217, 108, 49, 0.16);
   }
 
   body::after {
@@ -65,7 +64,7 @@
     height: 26vw;
     right: -5vw;
     top: -8vh;
-    background: rgba(15, 111, 99, 0.16);
+    background:rgba(15, 111, 99, 0.16);
   }
 
   .slides {
@@ -88,7 +87,7 @@
     height: 100%;
     padding: clamp(22px, 3vw, 38px);
     border-radius: 34px;
-    background: linear-gradient(180deg, var(--panel-strong), var(--panel));
+    background:linear-gradient(180deg, var(--panel-strong), var(--panel));
     border: 1px solid var(--line);
     box-shadow: var(--shadow);
     display: flex;
@@ -102,7 +101,7 @@
     width: fit-content;
     padding: 8px 14px;
     border-radius: 999px;
-    background: rgba(22, 24, 30, 0.05);
+    background:rgba(251,248,238,0.05);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 0.82rem;
@@ -158,7 +157,7 @@
 
   .panel {
     min-height: 0;
-    background: rgba(255, 255, 255, 0.70);
+    background:rgba(255, 255, 255, 0.70);
     border: 1px solid rgba(22, 24, 30, 0.08);
     border-radius: var(--radius-lg);
     padding: 18px;
@@ -188,7 +187,7 @@
     min-width: 0;
     padding: 16px 18px;
     border-radius: var(--radius-lg);
-    background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.68));
+    background:linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.68));
     border: 1px solid rgba(22, 24, 30, 0.08);
   }
 
@@ -215,8 +214,7 @@
     gap: 18px;
     border-radius: 30px;
     padding: 22px;
-    background:
-      linear-gradient(145deg, rgba(217,108,49,0.12), rgba(255,255,255,0.88)),
+    background:linear-gradient(145deg, rgba(217,108,49,0.12), rgba(255,255,255,0.88)),
       linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.72));
     border: 1px solid rgba(217,108,49,0.18);
   }
@@ -233,13 +231,13 @@
     font-weight: 800;
   }
 
-  .pill { background: rgba(22, 24, 30, 0.06); }
+  .pill { background:rgba(251,248,238,0.06); }
   .tag.amp { background: var(--amp-soft); color: var(--amp); }
   .tag.claude { background: var(--claude-soft); color: var(--claude); }
-  .tag.draw { background: rgba(22,24,30,0.08); }
-  .tag.warn { background: rgba(182,119,34,0.12); color: var(--warn); }
-  .tag.alert { background: rgba(171,52,43,0.12); color: var(--alert); }
-  .tag.ok { background: rgba(42,118,72,0.12); color: var(--ok); }
+  .tag.draw { background:rgba(251,248,238,0.08); }
+  .tag.warn { background:rgba(182,119,34,0.12); color: var(--warn); }
+  .tag.alert { background:rgba(171,52,43,0.12); color:#f4eedc; }
+  .tag.ok { background:rgba(42,118,72,0.12); color:#f4eedc; }
 
   .winner-stack { display: grid; gap: 12px; }
 
@@ -262,7 +260,7 @@
     padding: 14px 16px;
     border-radius: var(--radius-md);
     border: 1px solid rgba(22, 24, 30, 0.08);
-    background: rgba(255,255,255,0.74);
+    background:rgba(255,255,255,0.74);
   }
 
   .metric-card strong,
@@ -278,12 +276,12 @@
     gap: 12px;
   }
 
-  .issue.good { background: rgba(42,118,72,0.08); border-color: rgba(42,118,72,0.18); }
-  .issue.warn { background: rgba(182,119,34,0.08); border-color: rgba(182,119,34,0.18); }
-  .issue.alert { background: rgba(171,52,43,0.08); border-color: rgba(171,52,43,0.18); }
+  .issue.good { background:rgba(42,118,72,0.08); border-color:rgba(42,118,72,0.18); }
+  .issue.warn { background:rgba(182,119,34,0.08); border-color:rgba(184,50,42,0.18); }
+  .issue.alert { background:rgba(171,52,43,0.08); border-color:rgba(171,52,43,0.18); }
 
   .table-wrap {
-    background: rgba(255,255,255,0.72);
+    background:rgba(255,255,255,0.72);
     border: 1px solid rgba(22, 24, 30, 0.08);
     border-radius: var(--radius-lg);
     overflow: auto;
@@ -303,7 +301,7 @@
   }
 
   th {
-    background: rgba(22,24,30,0.05);
+    background:rgba(251,248,238,0.05);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 0.8rem;
@@ -326,7 +324,7 @@
     width: 100%;
     height: 12px;
     border-radius: 999px;
-    background: rgba(22, 24, 30, 0.08);
+    background:rgba(251,248,238,0.08);
     overflow: hidden;
   }
 
@@ -336,8 +334,8 @@
     border-radius: inherit;
   }
 
-  .bar-fill.amp { background: linear-gradient(90deg, rgba(217,108,49,0.94), rgba(217,108,49,0.56)); }
-  .bar-fill.claude { background: linear-gradient(90deg, rgba(15,111,99,0.94), rgba(15,111,99,0.56)); }
+  .bar-fill.amp { background:linear-gradient(90deg, rgba(217,108,49,0.94), rgba(217,108,49,0.56)); }
+  .bar-fill.claude { background:#f4eedc; }
 
   .duel-grid { display: grid; gap: 10px; }
 
@@ -382,7 +380,7 @@
     display: inline-flex;
     padding: 8px 12px;
     border-radius: 999px;
-    background: rgba(22, 24, 30, 0.06);
+    background:rgba(251,248,238,0.06);
     color: inherit;
     text-decoration: none;
     font-weight: 700;
@@ -398,7 +396,7 @@
     height: 58px;
     border: none;
     border-radius: 999px;
-    background: rgba(255, 252, 247, 0.94);
+    background:rgba(255, 252, 247, 0.94);
     color: var(--ink);
     box-shadow: 0 12px 34px rgba(22,24,30,0.18);
     cursor: pointer;
@@ -416,14 +414,14 @@
     right: 0;
     bottom: 0;
     height: 8px;
-    background: rgba(22,24,30,0.08);
+    background:rgba(251,248,238,0.08);
     z-index: 30;
   }
 
   .progress-fill {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, var(--claude), var(--amp));
+    background:#f4eedc;
     transition: width 0.35s ease;
   }
 
@@ -434,7 +432,7 @@
     z-index: 31;
     padding: 10px 14px;
     border-radius: 999px;
-    background: rgba(255,252,247,0.94);
+    background:rgba(255,252,247,0.94);
     border: 1px solid rgba(22,24,30,0.08);
     box-shadow: 0 10px 26px rgba(22,24,30,0.12);
     font-weight: 800;
@@ -472,6 +470,18 @@
     .slide { padding-bottom: 120px; }
     .nav-btn { width: 52px; height: 52px; }
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -941,7 +951,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

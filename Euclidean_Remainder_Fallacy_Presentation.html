@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0a0a1a;--card:#111128;--code:#0d1117;--cyan:#00d9ff;--purple:#7b6cf6;--red:#ff6b6b;--green:#51cf66;--text:#e0e0f0;--dim:#8888aa;--bright:#fff;--border:#222244}
+    :root{--bg:#f4eedc;--card:#fbf8ee;--code:#0d1117;--cyan:#12457a;--purple:#6b3a6b;--red:#b8322a;--green:#2f6b3a;--text:#1d1a16;--dim:#6b6353;--bright:#1d1a16;--border:#b9ae90}
     *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
     .deck{display:flex;width:1300vw;height:100vh;transition:transform .55s cubic-bezier(.22,.8,.3,1);will-change:transform}
     .slide{position:relative;width:100vw;height:100vh;flex:0 0 100vw;display:flex;justify-content:center;align-items:center;padding:clamp(3.8rem,7vh,6rem) clamp(1.2rem,5vw,5.5rem) clamp(3rem,6vh,5rem);overflow:hidden}
@@ -18,28 +18,40 @@
     .slide-tag{left:clamp(1.2rem,4vw,4rem);padding:clamp(.35rem,.6vw,.48rem) clamp(.65rem,1vw,.95rem);border:1px solid rgba(0,217,255,.35);border-radius:999px;color:var(--cyan);background:rgba(0,217,255,.06)}
     .slide-number{right:clamp(1.2rem,4vw,4rem);color:var(--dim)}
     h1,h2,h3,p{margin:0}h1,h2{font-size:clamp(2rem,4.3vw,4.7rem);line-height:1.03;letter-spacing:-.045em;color:var(--bright)}
-    h1,.gradient{background:linear-gradient(100deg,#fff 20%,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
+    h1,.gradient{background:#f4eedc;-webkit-background-clip:text;background-clip:text;color:transparent}
     h3{font-size:clamp(.92rem,1.45vw,1.35rem);color:var(--bright)}
     p,li,td,th{font-size:clamp(.68rem,1.12vw,1.05rem);line-height:1.45}.subtitle{font-size:clamp(.85rem,1.55vw,1.35rem);color:var(--dim);max-width:1100px}.intro{color:var(--dim)}
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(.65rem,1.3vw,1.2rem)}.grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .card{background:rgba(17,17,40,.94);border:1px solid var(--border);border-left:clamp(3px,.35vw,5px) solid var(--cyan);border-radius:clamp(.55rem,.9vw,.9rem);padding:clamp(.7rem,1.4vw,1.3rem);display:flex;flex-direction:column;gap:clamp(.35rem,.7vh,.65rem)}
+    .card{background:rgba(251,248,238,.94);border:1px solid var(--border);border-left:clamp(3px,.35vw,5px) solid var(--cyan);border-radius:clamp(.55rem,.9vw,.9rem);padding:clamp(.7rem,1.4vw,1.3rem);display:flex;flex-direction:column;gap:clamp(.35rem,.7vh,.65rem)}
     .card.red{border-left-color:var(--red)}.card.green{border-left-color:var(--green)}.card.purple{border-left-color:var(--purple)}.card.cyan{border-left-color:var(--cyan)}
     .badge{align-self:flex-start;border-radius:999px;padding:clamp(.2rem,.35vw,.3rem) clamp(.45rem,.7vw,.7rem);font-size:clamp(.55rem,.72vw,.7rem);font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(0,217,255,.12);color:var(--cyan)}
-    .badge.bug{background:rgba(255,107,107,.14);color:var(--red)}.badge.fix{background:rgba(81,207,102,.14);color:var(--green)}.badge.rule{background:rgba(123,108,246,.16);color:#a99eff}
+    .badge.bug{background:rgba(255,107,107,.14);color:var(--red)}.badge.fix{background:rgba(81,207,102,.14);color:var(--green)}.badge.rule{background:rgba(123,108,246,.16);color:#12457a}
     .big{font-size:clamp(1.45rem,3vw,2.8rem);font-weight:800;color:var(--bright)}.redtext{color:var(--red)}.greentext{color:var(--green)}.cyantext{color:var(--cyan)}
-    pre{margin:0;background:var(--code);border:1px solid #20283a;border-radius:clamp(.45rem,.7vw,.7rem);padding:clamp(.65rem,1.25vw,1.15rem);overflow:auto;font:clamp(.58rem,1vw,.95rem)/1.45 "JetBrains Mono",monospace;color:#f8f8f2;white-space:pre-wrap}code,.inline{font-family:"JetBrains Mono",monospace}.kw{color:#ff79c6}.fn{color:#50fa7b}.num{color:#bd93f9}.str{color:#f1fa8c}.cm{color:#6272a4}.type{color:#8be9fd}.inline{padding:.08em .3em;background:var(--code);border-radius:.25em;font-style:normal}
-    table{width:100%;border-collapse:collapse;background:rgba(17,17,40,.9);border:1px solid var(--border);border-radius:.7rem;overflow:hidden}th,td{padding:clamp(.4rem,.85vw,.8rem);text-align:left;border-bottom:1px solid var(--border);vertical-align:top}th{color:var(--cyan);background:rgba(0,217,255,.06)}tr:last-child td{border-bottom:0}.wrong{color:var(--red)}.right{color:var(--green)}
+    pre{margin:0;background:var(--code);border:1px solid #20283a;border-radius:clamp(.45rem,.7vw,.7rem);padding:clamp(.65rem,1.25vw,1.15rem);overflow:auto;font:clamp(.58rem,1vw,.95rem)/1.45 "JetBrains Mono",monospace;color:#f4eedc;white-space:pre-wrap}code,.inline{font-family:"JetBrains Mono",monospace}.kw{color:#6b3a6b}.fn{color:#1d1a16}.num{color:#6b3a6b}.str{color:#1d1a16}.cm{color:#6272a4}.type{color:#1d1a16}.inline{padding:.08em .3em;background:var(--code);border-radius:.25em;font-style:normal}
+    table{width:100%;border-collapse:collapse;background:rgba(251,248,238,.9);border:1px solid var(--border);border-radius:.7rem;overflow:hidden}th,td{padding:clamp(.4rem,.85vw,.8rem);text-align:left;border-bottom:1px solid var(--border);vertical-align:top}th{color:var(--cyan);background:rgba(0,217,255,.06)}tr:last-child td{border-bottom:0}.wrong{color:var(--red)}.right{color:var(--green)}
     .highlight{padding:clamp(.75rem,1.5vw,1.35rem);border:1px solid rgba(0,217,255,.4);border-radius:.8rem;background:linear-gradient(110deg,rgba(0,217,255,.08),rgba(123,108,246,.09));text-align:center;font-size:clamp(.85rem,1.5vw,1.35rem);font-weight:700}
-    blockquote{margin:0;border-left:clamp(4px,.5vw,7px) solid var(--purple);padding:clamp(1rem,2.4vw,2.2rem);background:rgba(17,17,40,.72);font-size:clamp(1.1rem,2.3vw,2.25rem);line-height:1.55;font-style:italic;color:#f2f2ff;border-radius:0 1rem 1rem 0}
+    blockquote{margin:0;border-left:clamp(4px,.5vw,7px) solid var(--purple);padding:clamp(1rem,2.4vw,2.2rem);background:rgba(251,248,238,.72);font-size:clamp(1.1rem,2.3vw,2.25rem);line-height:1.55;font-style:italic;color:#1d1a16;border-radius:0 1rem 1rem 0}
     ul{margin:0;padding-left:clamp(1rem,1.7vw,1.5rem)}li{margin:clamp(.12rem,.3vh,.3rem) 0}li::marker{color:var(--cyan)}
-    .flow{display:flex;align-items:stretch;gap:clamp(.35rem,.8vw,.8rem)}.step{flex:1;position:relative}.circle{width:clamp(1.7rem,2.5vw,2.5rem);height:clamp(1.7rem,2.5vw,2.5rem);display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));color:#080814;font-weight:800}.arrow{align-self:center;color:var(--purple);font-size:clamp(1rem,2vw,2rem)}
-    .nav{position:fixed;z-index:10;top:50%;transform:translateY(-50%);width:clamp(2.5rem,4vw,3.7rem);height:clamp(2.5rem,4vw,3.7rem);border:1px solid var(--border);border-radius:50%;background:rgba(17,17,40,.88);color:white;font-size:clamp(1.7rem,2.8vw,2.7rem);cursor:pointer;display:grid;place-items:center;line-height:1;transition:.2s}.nav:hover{border-color:var(--cyan);color:var(--cyan)}#prev{left:clamp(.5rem,1.4vw,1.3rem)}#next{right:clamp(.5rem,1.4vw,1.3rem)}.nav.hidden{opacity:0;pointer-events:none}
-    .progress{position:fixed;z-index:12;bottom:0;left:0;height:clamp(3px,.45vh,5px);background:linear-gradient(90deg,var(--cyan),var(--purple),var(--red));transition:width .4s}.counter{position:fixed;z-index:11;right:clamp(1rem,2vw,2rem);bottom:clamp(.75rem,1.5vh,1.2rem);font-size:clamp(.65rem,.85vw,.8rem);color:var(--dim)}
+    .flow{display:flex;align-items:stretch;gap:clamp(.35rem,.8vw,.8rem)}.step{flex:1;position:relative}.circle{width:clamp(1.7rem,2.5vw,2.5rem);height:clamp(1.7rem,2.5vw,2.5rem);display:grid;place-items:center;border-radius:50%;background:#f4eedc;color:#080814;font-weight:800}.arrow{align-self:center;color:var(--purple);font-size:clamp(1rem,2vw,2rem)}
+    .nav{position:fixed;z-index:10;top:50%;transform:translateY(-50%);width:clamp(2.5rem,4vw,3.7rem);height:clamp(2.5rem,4vw,3.7rem);border:1px solid var(--border);border-radius:50%;background:rgba(251,248,238,.88);color:#1d1a16;font-size:clamp(1.7rem,2.8vw,2.7rem);cursor:pointer;display:grid;place-items:center;line-height:1;transition:.2s}.nav:hover{border-color:var(--cyan);color:var(--cyan)}#prev{left:clamp(.5rem,1.4vw,1.3rem)}#next{right:clamp(.5rem,1.4vw,1.3rem)}.nav.hidden{opacity:0;pointer-events:none}
+    .progress{position:fixed;z-index:12;bottom:0;left:0;height:clamp(3px,.45vh,5px);background:#f4eedc;transition:width .4s}.counter{position:fixed;z-index:11;right:clamp(1rem,2vw,2rem);bottom:clamp(.75rem,1.5vh,1.2rem);font-size:clamp(.65rem,.85vw,.8rem);color:var(--dim)}
     .swipe{position:fixed;z-index:11;bottom:clamp(1.5rem,3vh,2.3rem);left:50%;transform:translateX(-50%);color:var(--dim);font-size:clamp(.68rem,1vw,.9rem);animation:pulse 1.8s infinite}.swipe.hidden{display:none}@keyframes pulse{50%{opacity:.35;transform:translateX(-50%) translateY(-4px)}}
     .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(.5rem,1vw,1rem)}.meta strong{color:var(--cyan)}
     @media(max-width:760px){.slide{overflow-y:auto;align-items:flex-start}.content{margin:auto 0}.grid,.grid.four{grid-template-columns:1fr}.flow{flex-direction:column}.arrow{transform:rotate(90deg)}.meta{grid-template-columns:1fr}.nav{top:auto;bottom:1.2rem}.four .card{padding:.55rem}table{display:block;overflow-x:auto}blockquote{font-size:clamp(.9rem,3.3vw,1.25rem)}}
     @media(max-height:700px){.slide{padding-top:3.4rem;padding-bottom:2.5rem}.content{gap:.5rem}.card{padding:.6rem}p,li,td,th{line-height:1.3}h1,h2{font-size:clamp(1.7rem,3.5vw,3rem)}}
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
 <main class="deck" id="deck">
@@ -98,20 +110,20 @@
         <img src="assets/parasoft-logo-white.svg" alt="Parasoft" style="width:clamp(180px,30vw,360px);height:auto;filter:drop-shadow(0 0 12px rgba(0,99,166,0.4));">
       </a>
       <p style="margin-top:clamp(.6rem,1.5vw,1rem);font-size:clamp(.72rem,1.1vw,1rem);color:var(--dim);">Automated Software Testing — Static Analysis, Unit Testing &amp; Compliance</p>
-      <a href="https://www.linkedin.com/company/parasoft" target="_blank" rel="noopener" style="display:inline-block;margin-top:clamp(.4rem,1vw,.7rem);padding:clamp(.3rem,.6vw,.45rem) clamp(.8rem,1.5vw,1.2rem);border-radius:999px;background:rgba(0,99,166,0.15);border:1px solid rgba(0,99,166,0.3);color:#4fc3f7;font-size:clamp(.68rem,1vw,.85rem);font-weight:600;text-decoration:none;">in/Parasoft ↗</a>
+      <a href="https://www.linkedin.com/company/parasoft" target="_blank" rel="noopener" style="display:inline-block;margin-top:clamp(.4rem,1vw,.7rem);padding:clamp(.3rem,.6vw,.45rem) clamp(.8rem,1.5vw,1.2rem);border-radius:999px;background:rgba(0,99,166,0.15);border:1px solid rgba(0,99,166,0.3);color:#12457a;font-size:clamp(.68rem,1vw,.85rem);font-weight:600;text-decoration:none;">in/Parasoft ↗</a>
     </div>
     <div style="text-align:center;">
       <a href="https://www.eswlab.com" target="_blank" rel="noopener" style="display:inline-block;">
         <img src="assets/esl-logo.png" alt="ESL — Engineering Software Lab" style="width:clamp(180px,30vw,360px);height:auto;border-radius:clamp(.5rem,1vw,.8rem);">
       </a>
       <p style="margin-top:clamp(.6rem,1.5vw,1rem);font-size:clamp(.72rem,1.1vw,1rem);color:var(--dim);">The Israeli Center for Static Code Analysis — Parasoft Distribution &amp; Integration</p>
-      <a href="https://www.linkedin.com/company/engineering-software-lab-esl-" target="_blank" rel="noopener" style="display:inline-block;margin-top:clamp(.4rem,1vw,.7rem);padding:clamp(.3rem,.6vw,.45rem) clamp(.8rem,1.5vw,1.2rem);border-radius:999px;background:rgba(79,195,247,0.12);border:1px solid rgba(79,195,247,0.25);color:#4fc3f7;font-size:clamp(.68rem,1vw,.85rem);font-weight:600;text-decoration:none;">in/Engineering-Software-Lab-ESL ↗</a>
+      <a href="https://www.linkedin.com/company/engineering-software-lab-esl-" target="_blank" rel="noopener" style="display:inline-block;margin-top:clamp(.4rem,1vw,.7rem);padding:clamp(.3rem,.6vw,.45rem) clamp(.8rem,1.5vw,1.2rem);border-radius:999px;background:rgba(79,195,247,0.12);border:1px solid rgba(79,195,247,0.25);color:#12457a;font-size:clamp(.68rem,1vw,.85rem);font-weight:600;text-decoration:none;">in/Engineering-Software-Lab-ESL ↗</a>
     </div>
   </div><div style="margin-top:clamp(1.5rem,3vw,2.5rem);text-align:center;padding-top:clamp(1rem,2vw,1.5rem);border-top:1px solid var(--border);">
     <p style="font-size:clamp(.78rem,1.3vw,1.1rem);color:var(--dim);margin-bottom:clamp(.5rem,1vw,.8rem);">Analysis &amp; Presentation by</p>
     <a href="https://www.linkedin.com/in/liezrowice" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:clamp(.5rem,1vw,.8rem);text-decoration:none;">
       <span style="font-size:clamp(1rem,2vw,1.6rem);font-weight:800;color:var(--bright);">Daniel (Dani) Liezrowice</span>
-      <span style="display:inline-block;padding:clamp(.2rem,.5vw,.35rem) clamp(.5rem,1vw,.7rem);border-radius:999px;background:rgba(0,119,181,0.2);border:1px solid rgba(0,119,181,0.3);color:#4fc3f7;font-size:clamp(.65rem,.9vw,.8rem);font-weight:700;">in/liezrowice ↗</span>
+      <span style="display:inline-block;padding:clamp(.2rem,.5vw,.35rem) clamp(.5rem,1vw,.7rem);border-radius:999px;background:rgba(0,119,181,0.2);border:1px solid rgba(0,119,181,0.3);color:#12457a;font-size:clamp(.65rem,.9vw,.8rem);font-weight:700;">in/liezrowice ↗</span>
     </a>
     <p style="font-size:clamp(.72rem,1.1vw,.9rem);color:var(--dim);margin-top:clamp(.4rem,.8vw,.6rem);">CEO &amp; Co-Founder, ESL — Engineering Software Lab</p>
   </div><div style="margin-top:clamp(1rem,2vw,1.5rem);text-align:center;">

@@ -6,7 +6,7 @@
 <title>Unified Enterprise Intelligence Platform — Sourcegraph Technical Proposal</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #0a0a0f; color: #e4e4e7; }
+html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background:#fbf8ee; color:#1d1a16; }
 
 .deck {
   display: flex; height: 100vh; width: max-content;
@@ -19,51 +19,51 @@ html, body { height: 100%; overflow: hidden; font-family: 'Segoe UI', system-ui,
   -webkit-overflow-scrolling: touch;
 }
 .slide::-webkit-scrollbar { width: 4px; }
-.slide::-webkit-scrollbar-thumb { background: #a112ff55; border-radius: 4px; }
+.slide::-webkit-scrollbar-thumb { background:#fbf8ee55; border-radius: 4px; }
 
 /* Nav */
-.nav { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; gap: 10px; align-items: center; background: #18181bdd; backdrop-filter: blur(12px); border: 1px solid #333; border-radius: 30px; padding: 8px 18px; }
-.nav button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #555; background: #27272a; color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
-.nav button:hover { background: #a112ff; border-color: #a112ff; }
-.nav button:disabled { opacity: .25; cursor: default; background: #27272a; border-color: #555; }
-.nav .counter { font-size: 12px; color: #888; min-width: 50px; text-align: center; }
+.nav { position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; gap: 10px; align-items: center; background:#fbf8eedd; backdrop-filter: blur(12px); border: 1px solid #333; border-radius: 30px; padding: 8px 18px; }
+.nav button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #555; background:#fbf8ee; color:#1d1a16; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .2s; }
+.nav button:hover { background:#fbf8ee; border-color:#b9ae90; }
+.nav button:disabled { opacity: .25; cursor: default; background:#fbf8ee; border-color:#555; }
+.nav .counter { font-size: 12px; color:#6b6353; min-width: 50px; text-align: center; }
 
 .dots { display: flex; gap: 5px; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: #444; transition: all .3s; cursor: pointer; }
-.dot.active { background: #a112ff; width: 20px; border-radius: 4px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background:#fbf8ee; transition: all .3s; cursor: pointer; }
+.dot.active { background:#fbf8ee; width: 20px; border-radius: 4px; }
 
 /* Sourcegraph Logo SVG */
 .sg-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
 .sg-logo svg { width: 32px; height: 32px; }
-.sg-logo-text { font-size: 15px; font-weight: 700; color: #e4e4e7; letter-spacing: -0.3px; }
+.sg-logo-text { font-size: 15px; font-weight: 700; color:#1d1a16; letter-spacing: -0.3px; }
 .sg-logo-large svg { width: 64px; height: 64px; }
 .sg-logo-large .sg-logo-text { font-size: 28px; }
 
 /* Header bar with logo */
 .slide-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .slide-header .sg-logo svg { width: 24px; height: 24px; }
-.slide-header .sg-logo-text { font-size: 12px; color: #71717a; }
+.slide-header .sg-logo-text { font-size: 12px; color:#71717a; }
 
 /* Typography */
-h1 { font-size: clamp(22px, 5vw, 36px); font-weight: 800; margin-bottom: 6px; background: linear-gradient(135deg, #a112ff, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
-h2 { font-size: clamp(16px, 3.5vw, 24px); font-weight: 700; color: #a78bfa; margin: 16px 0 8px; }
-h3 { font-size: clamp(13px, 2.8vw, 18px); font-weight: 600; color: #818cf8; margin: 12px 0 6px; }
-p, li { font-size: clamp(11px, 2.4vw, 14px); line-height: 1.6; color: #a1a1aa; }
+h1 { font-size: clamp(22px, 5vw, 36px); font-weight: 800; margin-bottom: 6px; background:linear-gradient(135deg, #e3dabf, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.2; }
+h2 { font-size: clamp(16px, 3.5vw, 24px); font-weight: 700; color:#12457a; margin: 16px 0 8px; }
+h3 { font-size: clamp(13px, 2.8vw, 18px); font-weight: 600; color:#12457a; margin: 12px 0 6px; }
+p, li { font-size: clamp(11px, 2.4vw, 14px); line-height: 1.6; color:#6b6353; }
 ul { padding-left: 18px; }
 li { margin-bottom: 4px; }
-strong { color: #e4e4e7; }
+strong { color:#1d1a16; }
 
-.subtitle { font-size: clamp(12px, 2.5vw, 16px); color: #71717a; margin-bottom: 18px; }
+.subtitle { font-size: clamp(12px, 2.5vw, 16px); color:#71717a; margin-bottom: 18px; }
 .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; margin-right: 5px; }
-.badge-purple { background: #a112ff22; color: #a78bfa; border: 1px solid #a112ff44; }
-.badge-blue { background: #3b82f622; color: #60a5fa; border: 1px solid #3b82f644; }
-.badge-green { background: #22c55e22; color: #4ade80; border: 1px solid #22c55e44; }
-.badge-orange { background: #f9731622; color: #fb923c; border: 1px solid #f9731644; }
-.badge-pink { background: #ec489922; color: #f472b6; border: 1px solid #ec489944; }
-.badge-teal { background: #14b8a622; color: #2dd4bf; border: 1px solid #14b8a644; }
-.badge-red { background: #ef444422; color: #f87171; border: 1px solid #ef444444; }
+.badge-purple { background:#fbf8ee22; color:#12457a; border: 1px solid #a112ff44; }
+.badge-blue { background:#3b82f622; color:#12457a; border: 1px solid #3b82f644; }
+.badge-green { background:#22c55e22; color:#2f6b3a; border: 1px solid #22c55e44; }
+.badge-orange { background:#f9731622; color:#b8322a; border: 1px solid #f9731644; }
+.badge-pink { background:#ec489922; color:#f4eedc; border: 1px solid #ec489944; }
+.badge-teal { background:#14b8a622; color:#12457a; border: 1px solid #14b8a644; }
+.badge-red { background:#ef444422; color:#f4eedc; border: 1px solid #ef444444; }
 
-.card { background: #18181b; border: 1px solid #27272a; border-radius: 12px; padding: 16px; margin: 8px 0; }
+.card { background:#fbf8ee; border: 1px solid #27272a; border-radius: 12px; padding: 16px; margin: 8px 0; }
 .card-accent { border-left: 3px solid #a112ff; }
 .card-blue { border-left: 3px solid #3b82f6; }
 .card-green { border-left: 3px solid #22c55e; }
@@ -72,49 +72,61 @@ strong { color: #e4e4e7; }
 .card-teal { border-left: 3px solid #14b8a6; }
 
 table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: clamp(10px, 2.2vw, 13px); }
-th { background: #1e1e2e; color: #a78bfa; padding: 8px 10px; text-align: left; border-bottom: 2px solid #a112ff44; font-weight: 700; }
-td { padding: 7px 10px; border-bottom: 1px solid #27272a; color: #a1a1aa; }
-tr:hover td { background: #1a1a2e; }
+th { background:#fbf8ee; color:#12457a; padding: 8px 10px; text-align: left; border-bottom: 2px solid #a112ff44; font-weight: 700; }
+td { padding: 7px 10px; border-bottom: 1px solid #27272a; color:#6b6353; }
+tr:hover td { background:#fbf8ee; }
 
 .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 600px) { .grid2 { grid-template-columns: 1fr; } }
 
 .hero-icon { font-size: 48px; margin-bottom: 10px; }
-.divider { height: 1px; background: linear-gradient(90deg, transparent, #a112ff44, transparent); margin: 14px 0; }
+.divider { height: 1px; background:linear-gradient(90deg, transparent, #e3dabf44, transparent); margin: 14px 0; }
 
 .phase-tag { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 10px; font-weight: 700; margin-bottom: 4px; }
-.phase1 { background: #3b82f633; color: #60a5fa; }
-.phase2 { background: #22c55e33; color: #4ade80; }
-.phase3 { background: #f9731633; color: #fb923c; }
-.phase4 { background: #ec489933; color: #f472b6; }
-.phase5 { background: #14b8a633; color: #2dd4bf; }
+.phase1 { background:#3b82f633; color:#12457a; }
+.phase2 { background:#22c55e33; color:#2f6b3a; }
+.phase3 { background:#f9731633; color:#b8322a; }
+.phase4 { background:#ec489933; color:#f4eedc; }
+.phase5 { background:#14b8a633; color:#12457a; }
 
-.oss-tag { display: inline-block; background: #22c55e22; color: #4ade80; border: 1px solid #22c55e44; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; }
+.oss-tag { display: inline-block; background:#22c55e22; color:#2f6b3a; border: 1px solid #22c55e44; padding: 1px 6px; border-radius: 4px; font-size: 9px; font-weight: 700; }
 
-.tbd { font-size: clamp(20px, 4vw, 32px); font-weight: 800; color: #a78bfa; }
+.tbd { font-size: clamp(20px, 4vw, 32px); font-weight: 800; color:#12457a; }
 
 /* Block diagram styles */
 .block-diagram { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
 .block-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .block { padding: 10px 14px; border-radius: 10px; text-align: center; font-size: 11px; font-weight: 600; min-width: 120px; flex: 1; max-width: 200px; }
-.block-purple { background: #a112ff22; border: 2px solid #a112ff; color: #c084fc; }
-.block-blue { background: #3b82f622; border: 2px solid #3b82f6; color: #60a5fa; }
-.block-green { background: #22c55e22; border: 2px solid #22c55e; color: #4ade80; }
-.block-orange { background: #f9731622; border: 2px solid #f97316; color: #fb923c; }
-.block-pink { background: #ec489922; border: 2px solid #ec4899; color: #f472b6; }
-.block-teal { background: #14b8a622; border: 2px solid #14b8a6; color: #2dd4bf; }
-.block-dark { background: #27272a; border: 2px solid #555; color: #a1a1aa; }
-.arrow-down { text-align: center; font-size: 20px; color: #555; line-height: 1; }
-.arrow-right { font-size: 18px; color: #555; display: flex; align-items: center; }
+.block-purple { background:#fbf8ee22; border: 2px solid #a112ff; color:#6b3a6b; }
+.block-blue { background:#3b82f622; border: 2px solid #3b82f6; color:#12457a; }
+.block-green { background:#22c55e22; border: 2px solid #22c55e; color:#2f6b3a; }
+.block-orange { background:#f9731622; border: 2px solid #f97316; color:#b8322a; }
+.block-pink { background:#ec489922; border: 2px solid #ec4899; color:#f4eedc; }
+.block-teal { background:#14b8a622; border: 2px solid #14b8a6; color:#12457a; }
+.block-dark { background:#fbf8ee; border: 2px solid #555; color:#6b6353; }
+.arrow-down { text-align: center; font-size: 20px; color:#555; line-height: 1; }
+.arrow-right { font-size: 18px; color:#555; display: flex; align-items: center; }
 
 .flow-step { display: flex; align-items: center; gap: 6px; margin: 4px 0; flex-wrap: wrap; }
 .flow-box { padding: 6px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; white-space: nowrap; }
 
 .swipe-hint {
   position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
-  font-size: 11px; color: #555; animation: pulse 2s infinite;
+  font-size: 11px; color:#555; animation: pulse 2s infinite;
 }
 @keyframes pulse { 0%,100% { opacity: .3; } 50% { opacity: .8; } }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -134,7 +146,7 @@ tr:hover td { background: #1a1a2e; }
     </svg>
   </div>
   <h1 style="font-size:clamp(24px,5.5vw,40px);">Unified Enterprise<br>Intelligence Platform</h1>
-  <p class="subtitle" style="max-width:500px; margin:8px auto;">Powered by <strong style="color:#a78bfa;">Sourcegraph</strong> + <strong style="color:#60a5fa;">Amp</strong><br>Code · Knowledge · Design · Project Management</p>
+  <p class="subtitle" style="max-width:500px; margin:8px auto;">Powered by <strong style="color:#12457a;">Sourcegraph</strong> + <strong style="color:#12457a;">Amp</strong><br>Code · Knowledge · Design · Project Management</p>
   <div style="margin:16px 0;">
     <span class="badge badge-purple">TECHNICAL PROPOSAL</span>
     <span class="badge badge-blue">ARCHITECTURE</span>
@@ -180,8 +192,8 @@ tr:hover td { background: #1a1a2e; }
     </div>
   </div>
 
-  <div class="card" style="background:#1a0a0a; border-color:#ef444444; border-left:3px solid #ef4444;">
-    <h3 style="color:#f87171;">⚠️ Additional Complexity</h3>
+  <div class="card" style="background:#fbf8ee; border-color:#ef444444; border-left:3px solid #ef4444;">
+    <h3 style="color:#b8322a;">⚠️ Additional Complexity</h3>
     <ul>
       <li><strong>Image/Multimodal RAG</strong> — attachments include Visio, Draw.io, screenshots</li>
       <li><strong>Contradicting sources</strong> — 150K pages with overlapping/outdated info</li>
@@ -202,8 +214,8 @@ tr:hover td { background: #1a1a2e; }
   <h1>Market Reality: No Single Tool Exists</h1>
   <p class="subtitle">The requirements span 3 distinct product categories that have never been unified</p>
 
-  <div class="card" style="border-left:3px solid #ef4444; background:#1a0a0a;">
-    <h3 style="color:#f87171;">⛔ The Hard Truth</h3>
+  <div class="card" style="border-left:3px solid #ef4444; background:#fbf8ee;">
+    <h3 style="color:#b8322a;">⛔ The Hard Truth</h3>
     <p>We evaluated every major platform on the market. <strong>No single tool in the world addresses 100% of these requirements.</strong> The needs cross three fundamentally different product domains that no vendor has ever unified.</p>
   </div>
 
@@ -213,7 +225,7 @@ tr:hover td { background: #1a1a2e; }
   <table>
     <tr>
       <th>Capability</th>
-      <th style="background:#a112ff; font-size:12px;">✦ Sourcegraph</th>
+      <th style="background:#fbf8ee; font-size:12px;">✦ Sourcegraph</th>
       <th>Glean</th>
       <th>Elastic / OpenSearch</th>
       <th>Coveo</th>
@@ -221,91 +233,91 @@ tr:hover td { background: #1a1a2e; }
     </tr>
     <tr>
       <td><strong>Cross-repo code search</strong></td>
-      <td style="color:#4ade80;">✅ SCIP semantic</td>
-      <td style="color:#fb923c;">⚠️ Text-only</td>
-      <td style="color:#fb923c;">⚠️ Text-only</td>
-      <td style="color:#f87171;">❌ Not for code</td>
-      <td style="color:#f87171;">❌ None</td>
+      <td style="color:#2f6b3a;">✅ SCIP semantic</td>
+      <td style="color:#b8322a;">⚠️ Text-only</td>
+      <td style="color:#b8322a;">⚠️ Text-only</td>
+      <td style="color:#b8322a;">❌ Not for code</td>
+      <td style="color:#b8322a;">❌ None</td>
     </tr>
     <tr>
       <td><strong>Go-to-def / Find-refs across repos</strong></td>
-      <td style="color:#4ade80;">✅ SCIP native</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
+      <td style="color:#2f6b3a;">✅ SCIP native</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
     </tr>
     <tr>
       <td><strong>AI / NLP semantic search</strong></td>
-      <td style="color:#4ade80;">✅ Deep Search 7.0</td>
-      <td style="color:#4ade80;">✅ Strong</td>
-      <td style="color:#fb923c;">⚠️ ELSER basic</td>
-      <td style="color:#4ade80;">✅ Relevance AI</td>
-      <td style="color:#4ade80;">✅ Rovo AI</td>
+      <td style="color:#2f6b3a;">✅ Deep Search 7.0</td>
+      <td style="color:#2f6b3a;">✅ Strong</td>
+      <td style="color:#b8322a;">⚠️ ELSER basic</td>
+      <td style="color:#2f6b3a;">✅ Relevance AI</td>
+      <td style="color:#2f6b3a;">✅ Rovo AI</td>
     </tr>
     <tr>
       <td><strong>Batch Changes across repos</strong></td>
-      <td style="color:#4ade80;">✅ Native</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
+      <td style="color:#2f6b3a;">✅ Native</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
     </tr>
     <tr>
       <td><strong>Code review (CI-integrated)</strong></td>
-      <td style="color:#4ade80;">✅ Amp Review</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
+      <td style="color:#2f6b3a;">✅ Amp Review</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
     </tr>
     <tr>
       <td><strong>MCP server (agentic access)</strong></td>
-      <td style="color:#4ade80;">✅ GA</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
+      <td style="color:#2f6b3a;">✅ GA</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
     </tr>
     <tr>
       <td><strong>Confluence indexing</strong></td>
-      <td style="color:#60a5fa;">🔌 MCP extension</td>
-      <td style="color:#4ade80;">✅ Native</td>
-      <td style="color:#4ade80;">✅ Connector</td>
-      <td style="color:#4ade80;">✅ Native</td>
-      <td style="color:#4ade80;">✅ Native</td>
+      <td style="color:#12457a;">🔌 MCP extension</td>
+      <td style="color:#2f6b3a;">✅ Native</td>
+      <td style="color:#2f6b3a;">✅ Connector</td>
+      <td style="color:#2f6b3a;">✅ Native</td>
+      <td style="color:#2f6b3a;">✅ Native</td>
     </tr>
     <tr>
       <td><strong>Figma indexing</strong></td>
-      <td style="color:#60a5fa;">🔌 MCP extension</td>
-      <td style="color:#fb923c;">⚠️ Basic</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
+      <td style="color:#12457a;">🔌 MCP extension</td>
+      <td style="color:#b8322a;">⚠️ Basic</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
     </tr>
     <tr>
       <td><strong>Image / multimodal search</strong></td>
-      <td style="color:#4ade80;">✅ Deep Search 7.0</td>
-      <td style="color:#fb923c;">⚠️ Limited</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#fb923c;">⚠️ Basic</td>
+      <td style="color:#2f6b3a;">✅ Deep Search 7.0</td>
+      <td style="color:#b8322a;">⚠️ Limited</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">⚠️ Basic</td>
     </tr>
     <tr>
       <td><strong>Multi code-host support</strong></td>
-      <td style="color:#4ade80;">✅ GitHub, GitLab, BB, Perforce</td>
-      <td style="color:#fb923c;">⚠️ GitHub only</td>
-      <td style="color:#f87171;">❌ Manual</td>
-      <td style="color:#f87171;">❌</td>
-      <td style="color:#fb923c;">⚠️ Bitbucket focus</td>
+      <td style="color:#2f6b3a;">✅ GitHub, GitLab, BB, Perforce</td>
+      <td style="color:#b8322a;">⚠️ GitHub only</td>
+      <td style="color:#b8322a;">❌ Manual</td>
+      <td style="color:#b8322a;">❌</td>
+      <td style="color:#b8322a;">⚠️ Bitbucket focus</td>
     </tr>
     <tr>
       <td><strong>Scale (repos)</strong></td>
-      <td style="color:#4ade80;">✅ 1M+ repos</td>
-      <td style="color:#fb923c;">⚠️ Limited</td>
-      <td style="color:#4ade80;">✅ Scalable</td>
-      <td style="color:#4ade80;">✅ Scalable</td>
-      <td style="color:#fb923c;">⚠️ Atlassian only</td>
+      <td style="color:#2f6b3a;">✅ 1M+ repos</td>
+      <td style="color:#b8322a;">⚠️ Limited</td>
+      <td style="color:#2f6b3a;">✅ Scalable</td>
+      <td style="color:#2f6b3a;">✅ Scalable</td>
+      <td style="color:#b8322a;">⚠️ Atlassian only</td>
     </tr>
   </table>
   </div>
@@ -401,7 +413,7 @@ tr:hover td { background: #1a1a2e; }
   </div>
 
   <div class="card" style="border-left:3px solid #22c55e;">
-    <p><strong style="color:#4ade80;">✅ This entire layer is production-ready. Zero custom development needed.</strong></p>
+    <p><strong style="color:#2f6b3a;">✅ This entire layer is production-ready. Zero custom development needed.</strong></p>
   </div>
 </div>
 
@@ -578,7 +590,7 @@ tr:hover td { background: #1a1a2e; }
       </div>
     </div>
     <div class="block-row">
-      <div class="block" style="background:#8b5cf622; border:2px solid #8b5cf6; color:#c084fc;">
+      <div class="block" style="background:#8b5cf622; border:2px solid #8b5cf6; color:#6b3a6b;">
         ⚡ <strong>Amp Agent</strong><br>
         Code Review · Checks<br>Oracle · Librarian<br>Thread Sharing
       </div>
@@ -945,7 +957,7 @@ tr:hover td { background: #1a1a2e; }
   </div>
 
   <div class="card" style="border-left:3px solid #f59e0b; margin-top:8px;">
-    <h3 style="color:#fbbf24;">🏢 Enterprise Trust</h3>
+    <h3 style="color:#9a5b10;">🏢 Enterprise Trust</h3>
     <ul>
       <li>Used by <strong>Databricks, Uber, Lyft, Reddit, GE, Dropbox, Palo Alto Networks, Leidos</strong></li>
       <li>SOC 2 Type II · Zero data retention on LLM inference · SSO (Okta, SAML)</li>
@@ -987,7 +999,7 @@ tr:hover td { background: #1a1a2e; }
   </div>
 
   <div class="divider"></div>
-  <p style="color:#a78bfa; margin-top:10px; font-size: 14px; font-weight:600;">
+  <p style="color:#12457a; margin-top:10px; font-size: 14px; font-weight:600;">
     Let's build the intelligence layer your engineering team deserves.
   </p>
   <p style="color:#71717a; margin-top:8px; font-size: 12px;">
@@ -1052,7 +1064,7 @@ document.addEventListener('touchstart', () => hint.style.display = 'none', { onc
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

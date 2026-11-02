@@ -11,18 +11,18 @@
   .app-content { display: contents; }
 
   :root {
-    --bg-primary: #050B18;
-    --bg-slide: #0A1628;
-    --bg-card: #111D33;
-    --accent-red: #E21E26;
-    --accent-cyan: #00BFFF;
-    --accent-green: #00E676;
-    --accent-yellow: #FFD700;
-    --accent-orange: #FF9100;
-    --text-primary: #FFFFFF;
-    --text-secondary: #A0B4CC;
-    --text-muted: #5A7A9A;
-    --border: #1A2D48;
+    --bg-primary:#f4eedc;
+    --bg-slide:#fbf8ee;
+    --bg-card:#fbf8ee;
+    --accent-red:#b8322a;
+    --accent-cyan:#12457a;
+    --accent-green:#2f6b3a;
+    --accent-yellow:#9a5b10;
+    --accent-orange:#9a5b10;
+    --text-primary:#1d1a16;
+    --text-secondary:#4a443a;
+    --text-muted:#6b6353;
+    --border:#b9ae90;
     --gradient-red: linear-gradient(135deg, #E21E26, #FF4444);
     --gradient-cyan: linear-gradient(135deg, #00BFFF, #0080FF);
     --gradient-green: linear-gradient(135deg, #00E676, #00C853);
@@ -59,7 +59,7 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 2000;
-    background: rgba(0, 191, 255, 0.1);
+    background:rgba(0, 191, 255, 0.1);
     border: 1px solid rgba(0, 191, 255, 0.25);
     color: var(--accent-cyan);
     font-size: 36px;
@@ -77,9 +77,9 @@
   }
 
   .arrow-btn:hover {
-    background: rgba(0, 191, 255, 0.22);
-    border-color: rgba(0, 191, 255, 0.5);
-    color: #fff;
+    background:rgba(0, 191, 255, 0.22);
+    border-color:rgba(18,69,122,0.5);
+    color:#1d1a16;
     transform: translateY(-50%) scale(1.08);
     box-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
   }
@@ -106,7 +106,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(5, 11, 24, 0.85);
+    background:rgba(251,248,238,0.85);
     backdrop-filter: blur(16px);
     border: 1px solid var(--border);
     border-radius: 30px;
@@ -157,7 +157,7 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(5, 11, 24, 0.92);
+    background:rgba(251,248,238,0.92);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     padding: 0 40px;
@@ -214,7 +214,7 @@
 
   .nav-links a:hover {
     color: var(--text-primary);
-    background: rgba(0, 191, 255, 0.1);
+    background:rgba(0, 191, 255, 0.1);
   }
 
   /* Slide System */
@@ -239,8 +239,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at 20% 50%, rgba(0, 191, 255, 0.03) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(226, 30, 38, 0.02) 0%, transparent 50%);
+    background:#f4eedc;
     pointer-events: none;
   }
 
@@ -286,7 +285,7 @@
     font-weight: 900;
     letter-spacing: -1.5px;
     margin-bottom: 16px;
-    background: linear-gradient(135deg, #FFFFFF, #A0B4CC);
+    background:linear-gradient(135deg, #FFFFFF, #A0B4CC);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.15;
@@ -309,14 +308,14 @@
   .classification-badge {
     display: inline-block;
     padding: 6px 20px;
-    background: rgba(226, 30, 38, 0.15);
+    background:rgba(226, 30, 38, 0.15);
     border: 1px solid rgba(226, 30, 38, 0.4);
     border-radius: 20px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #FF6B6B;
+    color:#f4eedc;
     margin-top: 20px;
   }
 
@@ -372,7 +371,7 @@
   }
 
   .card:hover {
-    border-color: rgba(0, 191, 255, 0.3);
+    border-color:rgba(18,69,122,0.3);
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
@@ -388,11 +387,11 @@
     margin-bottom: 16px;
   }
 
-  .card-icon.red { background: rgba(226, 30, 38, 0.15); }
-  .card-icon.cyan { background: rgba(0, 191, 255, 0.15); }
-  .card-icon.green { background: rgba(0, 230, 118, 0.15); }
-  .card-icon.yellow { background: rgba(255, 215, 0, 0.15); }
-  .card-icon.orange { background: rgba(255, 145, 0, 0.15); }
+  .card-icon.red { background:rgba(226, 30, 38, 0.15); }
+  .card-icon.cyan { background:rgba(0, 191, 255, 0.15); }
+  .card-icon.green { background:rgba(0, 230, 118, 0.15); }
+  .card-icon.yellow { background:rgba(255, 215, 0, 0.15); }
+  .card-icon.orange { background:rgba(255, 145, 0, 0.15); }
 
   .card h4 {
     font-size: 16px;
@@ -429,7 +428,7 @@
 
   .card ul li.negative::before {
     content: '✗';
-    color: #FF6B6B;
+    color:#b8322a;
   }
 
   /* Status Badges */
@@ -443,11 +442,11 @@
     text-transform: uppercase;
   }
 
-  .badge-green { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
-  .badge-cyan { background: rgba(0, 191, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 191, 255, 0.3); }
-  .badge-yellow { background: rgba(255, 215, 0, 0.15); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
-  .badge-red { background: rgba(226, 30, 38, 0.15); color: #FF6B6B; border: 1px solid rgba(226, 30, 38, 0.3); }
-  .badge-orange { background: rgba(255, 145, 0, 0.15); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
+  .badge-green { background:rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
+  .badge-cyan { background:rgba(0, 191, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 191, 255, 0.3); }
+  .badge-yellow { background:rgba(255, 215, 0, 0.15); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
+  .badge-red { background:rgba(226, 30, 38, 0.15); color:#f4eedc; border: 1px solid rgba(226, 30, 38, 0.3); }
+  .badge-orange { background:rgba(255, 145, 0, 0.15); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
 
   /* Table */
   .data-table {
@@ -460,7 +459,7 @@
   .data-table thead th {
     text-align: left;
     padding: 12px 16px;
-    background: rgba(0, 191, 255, 0.06);
+    background:rgba(0, 191, 255, 0.06);
     border-bottom: 1px solid var(--border);
     font-weight: 700;
     font-size: 11px;
@@ -477,7 +476,7 @@
   }
 
   .data-table tbody tr:hover td {
-    background: rgba(0, 191, 255, 0.03);
+    background:rgba(0, 191, 255, 0.03);
   }
 
   /* Risk Matrix */
@@ -509,10 +508,10 @@
     text-transform: uppercase;
   }
 
-  .risk-low { background: rgba(0, 230, 118, 0.12); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
-  .risk-medium { background: rgba(255, 215, 0, 0.12); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
-  .risk-high { background: rgba(255, 145, 0, 0.12); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
-  .risk-critical { background: rgba(226, 30, 38, 0.12); color: #FF6B6B; border: 1px solid rgba(226, 30, 38, 0.3); }
+  .risk-low { background:rgba(0, 230, 118, 0.12); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
+  .risk-medium { background:rgba(255, 215, 0, 0.12); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
+  .risk-high { background:rgba(255, 145, 0, 0.12); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
+  .risk-critical { background:rgba(226, 30, 38, 0.12); color:#f4eedc; border: 1px solid rgba(226, 30, 38, 0.3); }
 
   .risk-details h5 {
     font-size: 14px;
@@ -537,17 +536,17 @@
   }
 
   .callout-info {
-    background: rgba(0, 191, 255, 0.06);
+    background:rgba(0, 191, 255, 0.06);
     border: 1px solid rgba(0, 191, 255, 0.2);
   }
 
   .callout-warn {
-    background: rgba(255, 215, 0, 0.06);
+    background:rgba(255, 215, 0, 0.06);
     border: 1px solid rgba(255, 215, 0, 0.2);
   }
 
   .callout-danger {
-    background: rgba(226, 30, 38, 0.06);
+    background:rgba(226, 30, 38, 0.06);
     border: 1px solid rgba(226, 30, 38, 0.2);
   }
 
@@ -584,8 +583,8 @@
   }
 
   .ref-link:hover {
-    color: #66D9FF;
-    border-bottom-color: #66D9FF;
+    color:#12457a;
+    border-bottom-color:#b9ae90;
   }
 
   /* Checklist */
@@ -647,10 +646,10 @@
     min-width: 140px;
   }
 
-  .arch-box.client { background: rgba(0, 191, 255, 0.12); border: 1px solid rgba(0, 191, 255, 0.3); color: var(--accent-cyan); }
-  .arch-box.server { background: rgba(226, 30, 38, 0.12); border: 1px solid rgba(226, 30, 38, 0.3); color: #FF6B6B; }
-  .arch-box.provider { background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.3); color: var(--accent-yellow); }
-  .arch-box.infra { background: rgba(0, 230, 118, 0.12); border: 1px solid rgba(0, 230, 118, 0.3); color: var(--accent-green); }
+  .arch-box.client { background:rgba(0, 191, 255, 0.12); border: 1px solid rgba(0, 191, 255, 0.3); color: var(--accent-cyan); }
+  .arch-box.server { background:rgba(226, 30, 38, 0.12); border: 1px solid rgba(226, 30, 38, 0.3); color:#f4eedc; }
+  .arch-box.provider { background:rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.3); color: var(--accent-yellow); }
+  .arch-box.infra { background:rgba(0, 230, 118, 0.12); border: 1px solid rgba(0, 230, 118, 0.3); color: var(--accent-green); }
 
   .arch-arrow {
     font-size: 20px;
@@ -693,7 +692,7 @@
   }
 
   .compliance-item:hover {
-    border-color: rgba(0, 230, 118, 0.3);
+    border-color:rgba(47,107,58,0.3);
     transform: translateY(-2px);
   }
 
@@ -779,7 +778,7 @@
   }
 
   .verdict-box.conditional {
-    border-color: rgba(226, 30, 38, 0.4);
+    border-color:rgba(226, 30, 38, 0.4);
   }
 
   .verdict-box h3 {
@@ -790,7 +789,7 @@
   .verdict-box .verdict-score {
     font-size: 48px;
     font-weight: 900;
-    background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+    background:linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1;
@@ -798,13 +797,13 @@
   }
 
   .verdict-box.conditional .verdict-score {
-    background: linear-gradient(135deg, var(--accent-orange), var(--accent-red));
+    background:linear-gradient(135deg, var(--accent-orange), var(--accent-red));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
 
   .verdict-box p {
-    color: var(--text-secondary);
+    color:#f4eedc;
     font-size: 13px;
     max-width: 600px;
     margin: 0 auto;
@@ -816,7 +815,7 @@
   .score-good { color: var(--accent-green); font-weight: 700; }
   .score-ok { color: var(--accent-yellow); font-weight: 700; }
   .score-weak { color: var(--accent-orange); font-weight: 700; }
-  .score-bad { color: #FF6B6B; font-weight: 800; }
+  .score-bad { color:#b8322a; font-weight: 800; }
 
   /* Print */
   @media print {
@@ -824,7 +823,7 @@
     .slides-wrapper { display: block; transform: none !important; }
     .slide { page-break-after: always; min-height: auto; height: auto; min-width: auto; width: auto; padding: 40px; overflow: visible; }
     body, html { overflow: visible; height: auto; }
-    body { background: #fff; color: #000; }
+    body { background:#fff; color:#000; }
   }
 
   /* Tablet */
@@ -902,6 +901,18 @@
     .slide-number { display: none; }
   }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
 
@@ -959,12 +970,12 @@
     <div style="font-size:16px; color:var(--text-secondary); margin-bottom:8px;">Ampcode vs Cursor vs Claude Code vs OpenAI Codex</div>
     <p class="meta">
       Prepared for: Chief Information Security Officer<br>
-      Assessment Date: June 22, 2026 &mdash; <span style="color:#fbbf24">Re-verified July 27, 2026</span><br>
+      Assessment Date: June 22, 2026 &mdash; <span style="color:#9a5b10">Re-verified July 27, 2026</span><br>
       Classification: Public — Point-in-Time Assessment<br>
       Scope: Comparative Security Analysis of Four AI Coding Agents
     </p>
     <div class="classification-badge">Public — Point-in-Time Assessment</div>
-    <details style="margin-top:18px;text-align:left;border:1px solid #f59e0b;border-radius:12px;background:rgba(245,158,11,0.10);padding:12px 16px;color:var(--text-primary);max-width:680px;"><summary style="cursor:pointer;font-weight:700;color:#fbbf24;">Updated July 27, 2026 &mdash; re-verification &amp; new capability notes (click to expand)</summary><ul style="margin:10px 0 0 18px;line-height:1.6;font-size:.9rem;color:var(--text-secondary);"><li><strong>No scorecard conclusions changed.</strong> All scores and verdicts stand as assessed June 22, 2026; no new CVE or policy evidence warranted a change.</li><li><strong>Claude Code &mdash; new surfaces, same governance:</strong> Since the June assessment, Claude Code added <em>background subagents</em>, <em>agent teams</em>, and <em>web/desktop</em> surfaces, plus expanded <em>managed policy</em> and <em>permission modes</em>. These expand the operational attack surface but inherit the existing permission-gated, sandboxed-bash, fs/net-isolation model already scored 5/5 on Slide 8. Enterprises should confirm managed-policy enforcement covers background/agent-team execution before broad rollout.</li><li><strong>Amp &mdash; mode rename only:</strong> Amp retired the <em>Smart/Deep/Rush</em> mode names in favour of <em>Low/Medium/High/Ultra</em>. The security controls assessed here (user approval for destructive actions, automatic secret redaction, bug-bounty prompt-injection coverage) are unchanged by the rename.</li><li><strong>Re-verification:</strong> CVE sources, vendor trust portals, and data-retention claims were re-checked July 27, 2026; no new qualifying CVEs found against Amp, Claude Code, or Codex in the review window.</li><li><strong>Not changed:</strong> All compliance, data-retention, auth, audit, architecture, shared-responsibility, scoring, and verdict slides remain as originally assessed.</li></ul></details>
+    <details style="margin-top:18px;text-align:left;border:1px solid #f59e0b;border-radius:12px;background:rgba(245,158,11,0.10);padding:12px 16px;color:var(--text-primary);max-width:680px;"><summary style="cursor:pointer;font-weight:700;color:#9a5b10;">Updated July 27, 2026 &mdash; re-verification &amp; new capability notes (click to expand)</summary><ul style="margin:10px 0 0 18px;line-height:1.6;font-size:.9rem;color:var(--text-secondary);"><li><strong>No scorecard conclusions changed.</strong> All scores and verdicts stand as assessed June 22, 2026; no new CVE or policy evidence warranted a change.</li><li><strong>Claude Code &mdash; new surfaces, same governance:</strong> Since the June assessment, Claude Code added <em>background subagents</em>, <em>agent teams</em>, and <em>web/desktop</em> surfaces, plus expanded <em>managed policy</em> and <em>permission modes</em>. These expand the operational attack surface but inherit the existing permission-gated, sandboxed-bash, fs/net-isolation model already scored 5/5 on Slide 8. Enterprises should confirm managed-policy enforcement covers background/agent-team execution before broad rollout.</li><li><strong>Amp &mdash; mode rename only:</strong> Amp retired the <em>Smart/Deep/Rush</em> mode names in favour of <em>Low/Medium/High/Ultra</em>. The security controls assessed here (user approval for destructive actions, automatic secret redaction, bug-bounty prompt-injection coverage) are unchanged by the rename.</li><li><strong>Re-verification:</strong> CVE sources, vendor trust portals, and data-retention claims were re-checked July 27, 2026; no new qualifying CVEs found against Amp, Claude Code, or Codex in the review window.</li><li><strong>Not changed:</strong> All compliance, data-retention, auth, audit, architecture, shared-responsibility, scoring, and verdict slides remain as originally assessed.</li></ul></details>
   </div>
   <div class="slide-footer">
     <span>AI Coding Tools CISO Security Comparison 2026</span>
@@ -1178,7 +1189,7 @@
         </ul>
         <br><span class="badge badge-green">Best-in-Class</span>
       </div>
-      <div class="card" style="border-color: rgba(226,30,38,0.3);">
+      <div class="card" style="border-color:rgba(226,30,38,0.3);">
         <div class="card-icon red">🔴</div>
         <h4>Cursor — Mixed Modes</h4>
         <ul>
@@ -1546,7 +1557,7 @@
           </tbody>
         </table>
 
-        <div style="margin-top:10px;background:rgba(59,130,246,0.10);border-left:3px solid #3b82f6;padding:8px 12px;border-radius:0 8px 8px 0;font-size:.8rem;color:var(--text-secondary);line-height:1.45">  <strong style="color:#60a5fa">July 27, 2026 update &mdash; new surfaces, unchanged scores:</strong>   Claude Code's <em>background agents</em>, <em>agent teams</em>, and <em>web/desktop</em> run under the same permission-gated sandbox model scored above (no score change).   Amp's <em>Low/Medium/High/Ultra</em> mode rename does not alter approval-gate or redaction controls. No new qualifying CVEs in the re-check window.</div>
+        <div style="margin-top:10px;background:rgba(59,130,246,0.10);border-left:3px solid #3b82f6;padding:8px 12px;border-radius:0 8px 8px 0;font-size:.8rem;color:var(--text-secondary);line-height:1.45">  <strong style="color:#12457a">July 27, 2026 update &mdash; new surfaces, unchanged scores:</strong>   Claude Code's <em>background agents</em>, <em>agent teams</em>, and <em>web/desktop</em> run under the same permission-gated sandbox model scored above (no score change).   Amp's <em>Low/Medium/High/Ultra</em> mode rename does not alter approval-gate or redaction controls. No new qualifying CVEs in the re-check window.</div>
           <div class="callout callout-danger" style="margin-top:16px">
           <div class="callout-icon">🚨</div>
           <div class="callout-text">
@@ -1569,7 +1580,7 @@
     <div class="section-label">🚨 Critical Security Finding</div>
     <h2>Known Vulnerabilities &amp; CVE History</h2>
     <p class="slide-intro">
-      Cursor has <strong style="color:#FF6B6B">multiple publicly disclosed CVEs</strong>; several enable or contribute to command execution / RCE paths and require strict patch validation.
+      Cursor has <strong style="color:#b8322a">multiple publicly disclosed CVEs</strong>; several enable or contribute to command execution / RCE paths and require strict patch validation.
     </p>
 
     <div class="callout callout-danger">
@@ -1686,7 +1697,7 @@
     </p>
 
     <div class="split-container">
-      <div class="split-col vendor" style="border-color:rgba(0,230,118,0.3)">
+      <div class="split-col vendor" style="border-color:rgba(47,107,58,0.3)">
         <h4><span style="color:var(--accent-green)">🟢</span> Vendor Responsibility (All Tools)</h4>
         <ul>
           <li>Application security (secure SDLC, code reviews, pentesting)</li>
@@ -1698,19 +1709,19 @@
           <li>LLM provider agreement enforcement</li>
         </ul>
       </div>
-      <div class="split-col customer" style="border-color:rgba(255,215,0,0.3)">
+      <div class="split-col customer" style="border-color:rgba(29,26,22,0.3)">
         <h4><span style="color:var(--accent-yellow)">🟡</span> Your Organization's Responsibility</h4>
         <ul>
-          <li><strong style="color:#fff">Tool selection</strong> — choose tools matching your risk tolerance</li>
-          <li><strong style="color:#fff">Access management</strong> — SSO config, user lifecycle, offboarding</li>
-          <li><strong style="color:#fff">Privacy mode enforcement</strong> — ensure training is disabled</li>
-          <li><strong style="color:#fff">Secret hygiene</strong> — vault usage, rotation, .cursorignore / .env</li>
-          <li><strong style="color:#fff">Developer training</strong> — AI agent risks, prompt injection awareness</li>
-          <li><strong style="color:#fff">Code review</strong> — review all AI-generated code before merge</li>
-          <li><strong style="color:#fff">CVE monitoring</strong> — track vendor vulnerability disclosures</li>
-          <li><strong style="color:#fff">Version management</strong> — pin and update tool versions</li>
-          <li><strong style="color:#fff">Incident response</strong> — playbooks for secret exposure scenarios</li>
-          <li><strong style="color:#fff">Compliance</strong> — understand regulatory impact of AI tool usage</li>
+          <li><strong style="color:#1d1a16">Tool selection</strong> — choose tools matching your risk tolerance</li>
+          <li><strong style="color:#1d1a16">Access management</strong> — SSO config, user lifecycle, offboarding</li>
+          <li><strong style="color:#1d1a16">Privacy mode enforcement</strong> — ensure training is disabled</li>
+          <li><strong style="color:#1d1a16">Secret hygiene</strong> — vault usage, rotation, .cursorignore / .env</li>
+          <li><strong style="color:#1d1a16">Developer training</strong> — AI agent risks, prompt injection awareness</li>
+          <li><strong style="color:#1d1a16">Code review</strong> — review all AI-generated code before merge</li>
+          <li><strong style="color:#1d1a16">CVE monitoring</strong> — track vendor vulnerability disclosures</li>
+          <li><strong style="color:#1d1a16">Version management</strong> — pin and update tool versions</li>
+          <li><strong style="color:#1d1a16">Incident response</strong> — playbooks for secret exposure scenarios</li>
+          <li><strong style="color:#1d1a16">Compliance</strong> — understand regulatory impact of AI tool usage</li>
         </ul>
       </div>
     </div>
@@ -1736,7 +1747,7 @@
     <div class="section-label">Security Scoring</div>
     <h2>Comparative Scoring Matrix (1–5)</h2>
     <p class="slide-intro">
-      Each tool scored across nine security dimensions. <span style="color:var(--accent-green)">Green (4-5)</span> = strong, <span style="color:var(--accent-yellow)">Yellow (3)</span> = adequate, <span style="color:#FF6B6B">Red (1-2)</span> = concerning.
+      Each tool scored across nine security dimensions. <span style="color:var(--accent-green)">Green (4-5)</span> = strong, <span style="color:var(--accent-yellow)">Yellow (3)</span> = adequate, <span style="color:#b8322a">Red (1-2)</span> = concerning.
     </p>
 
     <table class="data-table">
@@ -1847,9 +1858,9 @@
         <p style="font-size:28px;font-weight:900;color:var(--accent-yellow)">38/45</p>
       </div>
       <div class="card" style="text-align:center; border-top:3px solid #FF6B6B;">
-        <h4 style="color:#FF6B6B">4th</h4>
+        <h4 style="color:#b8322a">4th</h4>
         <p style="font-size:20px;font-weight:800;color:var(--text-primary)">Cursor</p>
-        <p style="font-size:28px;font-weight:900;color:#FF6B6B">27/45</p>
+        <p style="font-size:28px;font-weight:900;color:#b8322a">27/45</p>
       </div>
     </div>
   </div>
@@ -2048,7 +2059,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

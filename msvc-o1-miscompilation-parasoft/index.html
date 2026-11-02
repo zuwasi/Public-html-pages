@@ -10,12 +10,12 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: dark; --bg: #0d1321; --surface: #151e30; --text: #e8ecf4; --muted: #aeb8ca; --link: #4fc3f7; --border: #344158; }
+    :root { color-scheme: dark; --bg:#f4eedc; --surface:#fbf8ee; --text:#1d1a16; --muted:#6b6353; --link:#12457a; --border:#b9ae90; }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body { margin: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem); line-height: 1.75; }
     a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 3px; overflow-wrap: anywhere; }
-    a:hover, a:focus-visible { color: #8cddff; }
+    a:hover, a:focus-visible { color:#1d1a16; }
     .page { width: min(800px, calc(100% - 2rem)); margin: 0 auto; }
     .origin { margin-top: 1.25rem; padding: .85rem 1rem; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); color: var(--muted); font-size: .92rem; }
     header { padding: clamp(2.5rem, 7vw, 5.5rem) 0 2rem; border-bottom: 1px solid var(--border); }
@@ -26,11 +26,11 @@
     h3 { margin: 2.2rem 0 .7rem; font-size: clamp(1.2rem, 2vw, 1.45rem); line-height: 1.35; }
     p, ul, ol { margin: 0 0 1.25rem; }
     li + li { margin-top: .45rem; }
-    blockquote { margin: 1.7rem 0; padding: 1rem 1.25rem; border-left: 4px solid var(--link); background: var(--surface); color: #d7deea; }
+    blockquote { margin: 1.7rem 0; padding: 1rem 1.25rem; border-left: 4px solid var(--link); background: var(--surface); color:#1d1a16; }
     blockquote p { margin: 0; }
-    pre { margin: 1.5rem 0; padding: 1.15rem; overflow-x: auto; border: 1px solid var(--border); border-radius: 9px; background: #172235; color: #f0f3f8; font: .9em/1.55 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; tab-size: 4; }
+    pre { margin: 1.5rem 0; padding: 1.15rem; overflow-x: auto; border: 1px solid var(--border); border-radius: 9px; background:#fbf8ee; color:#1d1a16; font: .9em/1.55 ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; tab-size: 4; }
     code { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
-    :not(pre) > code { padding: .12em .32em; border-radius: 4px; background: #1b2840; }
+    :not(pre) > code { padding: .12em .32em; border-radius: 4px; background:#fbf8ee; }
     .table-wrap { margin: 1.5rem 0; overflow-x: auto; }
     table { width: 100%; border-collapse: collapse; font-size: .95em; }
     th, td { padding: .7rem .8rem; border: 1px solid var(--border); text-align: left; vertical-align: top; }
@@ -40,12 +40,24 @@
     .hashtags { color: var(--link); overflow-wrap: anywhere; }
     footer { padding: 2rem 0 4rem; border-top: 1px solid var(--border); color: var(--muted); }
     footer a + a::before { content: " · "; color: var(--muted); text-decoration: none; }
-    #back-to-top { position: fixed; right: 1rem; bottom: 1rem; width: 3rem; height: 3rem; border: 1px solid #60819a; border-radius: 50%; background: #17263a; color: var(--link); font-size: 1.35rem; cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(8px); transition: .2s ease; }
+    #back-to-top { position: fixed; right: 1rem; bottom: 1rem; width: 3rem; height: 3rem; border: 1px solid #60819a; border-radius: 50%; background:#fbf8ee; color: var(--link); font-size: 1.35rem; cursor: pointer; opacity: 0; visibility: hidden; transform: translateY(8px); transition: .2s ease; }
     #back-to-top.visible { opacity: 1; visibility: visible; transform: none; }
-    #back-to-top:hover, #back-to-top:focus-visible { background: #213650; outline: 2px solid var(--link); outline-offset: 2px; }
+    #back-to-top:hover, #back-to-top:focus-visible { background:#fbf8ee; outline: 2px solid var(--link); outline-offset: 2px; }
     @media (max-width: 520px) { .page { width: min(100% - 1.25rem, 800px); } th, td { padding: .55rem; } }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body id="top">
   <div class="page">

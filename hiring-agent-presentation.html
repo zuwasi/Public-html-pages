@@ -9,9 +9,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #0f1117; --bg2: #141826; --panel: #171a23; --panel2: #1e2230; --line: #2a2f3d;
-    --txt: #e6e9ef; --muted: #9aa3b2; --accent: #5b8cff; --accent2: #9b6bff;
-    --good: #3ecf8e; --warn: #ffb020; --bad: #ff5c5c;
+    --bg:#f4eedc; --bg2:#ece4cc; --panel:#fbf8ee; --panel2:#f4eedc; --line:#b9ae90;
+    --txt:#1d1a16; --muted:#6b6353; --accent:#b8322a; --accent2:#9a5b10;
+    --good:#2f6b3a; --warn:#9a5b10; --bad:#b8322a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; overflow: hidden; }
@@ -27,8 +27,7 @@
   }
   .slide::before {
     content: ''; position: absolute; inset: 0; z-index: 0;
-    background:
-      radial-gradient(900px 500px at 85% -10%, rgba(91,140,255,.16), transparent 60%),
+    background:radial-gradient(900px 500px at 85% -10%, rgba(91,140,255,.16), transparent 60%),
       radial-gradient(700px 500px at -10% 110%, rgba(155,107,255,.14), transparent 60%);
   }
   .slide > * { position: relative; z-index: 1; }
@@ -39,29 +38,29 @@
   h3 { font-size: clamp(16px, 1.9vw, 22px); font-weight: 600; }
   p, li { font-size: clamp(14px, 1.7vw, 21px); line-height: 1.6; color: var(--muted); }
   .lead { font-size: clamp(16px, 2.1vw, 26px); color: var(--txt); max-width: 60ch; margin-top: 18px; }
-  .grad { background: linear-gradient(100deg, var(--accent), var(--accent2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .grad { background:#f4eedc; -webkit-background-clip: text; background-clip: text; color: transparent; }
   .grid { display: grid; gap: clamp(14px, 1.8vw, 22px); }
   .cols-2 { grid-template-columns: 1fr 1fr; }
   .cols-3 { grid-template-columns: repeat(3, 1fr); }
   .cols-4 { grid-template-columns: repeat(4, 1fr); }
   .card {
-    background: linear-gradient(180deg, var(--panel), var(--bg2));
+    background:linear-gradient(180deg, var(--panel), var(--bg2));
     border: 1px solid var(--line); border-radius: 18px; padding: clamp(16px, 2vw, 26px);
   }
   .card h3 { margin-bottom: 8px; }
   .card .ic { font-size: clamp(22px, 3vw, 34px); margin-bottom: 8px; }
   .tag { display: inline-block; font-size: clamp(11px,1.3vw,14px); font-weight: 600; padding: 5px 12px;
     border-radius: 20px; border: 1px solid var(--line); color: var(--muted); }
-  .tag.good { color: var(--good); border-color: rgba(62,207,142,.4); background: rgba(62,207,142,.08); }
-  .tag.bad { color: var(--bad); border-color: rgba(255,92,92,.4); background: rgba(255,92,92,.08); }
-  .tag.warn { color: var(--warn); border-color: rgba(255,176,32,.4); background: rgba(255,176,32,.08); }
-  .tag.acc { color: var(--accent); border-color: rgba(91,140,255,.4); background: rgba(91,140,255,.08); }
+  .tag.good { color: var(--good); border-color:rgba(47,107,58,.4); background:rgba(62,207,142,.08); }
+  .tag.bad { color: var(--bad); border-color:rgba(184,50,42,.4); background:rgba(255,92,92,.08); }
+  .tag.warn { color: var(--warn); border-color:rgba(184,50,42,.4); background:rgba(255,176,32,.08); }
+  .tag.acc { color: var(--accent); border-color:rgba(18,69,122,.4); background:rgba(91,140,255,.08); }
   ul.clean { list-style: none; } ul.clean li { padding: 7px 0 7px 30px; position: relative; }
   ul.clean li::before { content: '▸'; position: absolute; left: 4px; color: var(--accent); }
   .mono { font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace; }
   pre.diagram {
     font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--txt);
-    background: #0b0d14; border: 1px solid var(--line); border-radius: 14px;
+    background:#fbf8ee; border: 1px solid var(--line); border-radius: 14px;
     padding: clamp(14px, 2vw, 26px); font-size: clamp(10px, 1.35vw, 16px); line-height: 1.45;
     white-space: pre; overflow: auto;
   }
@@ -69,11 +68,11 @@
   .step { flex: 1; min-width: 150px; background: var(--panel); border: 1px solid var(--line);
     border-radius: 16px; padding: clamp(14px,1.8vw,22px); }
   .step .n { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center;
-    border-radius: 9px; background: rgba(91,140,255,.15); color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+    border-radius: 9px; background:rgba(91,140,255,.15); color: var(--accent); font-weight: 700; margin-bottom: 10px; }
   .arrow { align-self: center; color: var(--muted); font-size: 22px; }
   .bar { height: 12px; background: var(--panel2); border-radius: 8px; overflow: hidden; margin: 6px 0; }
-  .bar > span { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-  .bar.r > span { background: linear-gradient(90deg, var(--warn), var(--bad)); }
+  .bar > span { display: block; height: 100%; background:linear-gradient(90deg, var(--accent), var(--accent2)); }
+  .bar.r > span { background:linear-gradient(90deg, var(--warn), var(--bad)); }
   table.t { width: 100%; border-collapse: collapse; }
   table.t th, table.t td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line);
     font-size: clamp(13px, 1.5vw, 19px); }
@@ -83,14 +82,14 @@
 
   /* nav + chrome */
   .nav { position: fixed; top: 50%; transform: translateY(-50%); width: 52px; height: 52px;
-    border-radius: 50%; background: rgba(30,34,48,.7); border: 1px solid var(--line); color: var(--txt);
+    border-radius: 50%; background:rgba(251,248,238,.7); border: 1px solid var(--line); color: var(--txt);
     font-size: 24px; cursor: pointer; z-index: 50; display: flex; align-items: center; justify-content: center;
     backdrop-filter: blur(8px); transition: opacity .2s, background .2s; }
   .nav:hover { background: var(--accent); }
   #prev { left: 22px; } #next { right: 22px; }
   .nav.hidden { opacity: 0; pointer-events: none; }
   #progress { position: fixed; bottom: 0; left: 0; height: 4px; z-index: 50;
-    background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .4s ease; }
+    background:linear-gradient(90deg, var(--accent), var(--accent2)); transition: width .4s ease; }
   #counter { position: fixed; bottom: 16px; right: 22px; z-index: 50; color: var(--muted);
     font-size: 13px; font-weight: 500; letter-spacing: .05em; }
   #hint { position: fixed; bottom: 38px; left: 50%; transform: translateX(-50%); z-index: 50;
@@ -103,6 +102,18 @@
     .flow { flex-direction: column; } .arrow { transform: rotate(90deg); }
     .nav { width: 42px; height: 42px; font-size: 20px; }
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -418,7 +429,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

@@ -9,28 +9,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --bg:#0a0e1a;
-    --bg-2:#111827;
-    --panel:#151b2d;
-    --panel-2:#1c2440;
-    --line:#2a3358;
-    --text:#e7ecf6;
-    --muted:#8995b3;
-    --accent:#00d9ff;
-    --accent-2:#7c5cff;
-    --warn:#ffb020;
-    --good:#22c55e;
-    --bad:#ef4444;
-    --gold:#f5c542;
-    --silver:#cfd8dc;
-    --bronze:#cd7f32;
+    --bg:#f4eedc;
+    --bg-2:#ece4cc;
+    --panel:#fbf8ee;
+    --panel-2:#f4eedc;
+    --line:#b9ae90;
+    --text:#1d1a16;
+    --muted:#6b6353;
+    --accent:#b8322a;
+    --accent-2:#9a5b10;
+    --warn:#9a5b10;
+    --good:#2f6b3a;
+    --bad:#b8322a;
+    --gold:#9a5b10;
+    --silver:#1d1a16;
+    --bronze:#b8322a;
     --mono:'JetBrains Mono', ui-monospace, monospace;
   }
   *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
   body{
     font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-    background:radial-gradient(ellipse at top, #131a30 0%, var(--bg) 60%, #06080f 100%);
+    background:radial-gradient(ellipse at top, #e3dabf 0%, var(--bg) 60%, #e3dabf 100%);
     color:var(--text);
     overflow:hidden;
     -webkit-font-smoothing:antialiased;
@@ -74,7 +74,7 @@
   .esl-logo{
     width:clamp(34px,3.6vw,42px);height:clamp(34px,3.6vw,42px);
     border-radius:10px;
-    background:linear-gradient(135deg,var(--accent) 0%, var(--accent-2) 100%);
+    background:#f4eedc;
     display:flex;align-items:center;justify-content:center;
     font-weight:900;font-size:clamp(13px,1.4vw,16px);color:#06080f;
     box-shadow:0 4px 24px rgba(0,217,255,.25);
@@ -101,10 +101,10 @@
   .pill{display:inline-block;padding:4px 12px;border-radius:999px;
         background:rgba(0,217,255,.1);color:var(--accent);font-size:clamp(11px,1.1vw,13px);font-weight:600;
         border:1px solid rgba(0,217,255,.3);}
-  .pill.purple{background:rgba(124,92,255,.12);color:var(--accent-2);border-color:rgba(124,92,255,.3);}
-  .pill.warn{background:rgba(255,176,32,.12);color:var(--warn);border-color:rgba(255,176,32,.3);}
-  .pill.bad{background:rgba(239,68,68,.12);color:var(--bad);border-color:rgba(239,68,68,.3);}
-  .pill.good{background:rgba(34,197,94,.12);color:var(--good);border-color:rgba(34,197,94,.3);}
+  .pill.purple{background:rgba(124,92,255,.12);color:#f4eedc;border-color:rgba(124,92,255,.3);}
+  .pill.warn{background:rgba(255,176,32,.12);color:var(--warn);border-color:rgba(184,50,42,.3);}
+  .pill.bad{background:rgba(239,68,68,.12);color:#f4eedc;border-color:rgba(239,68,68,.3);}
+  .pill.good{background:rgba(34,197,94,.12);color:var(--good);border-color:rgba(47,107,58,.3);}
 
   .card{
     background:var(--panel);
@@ -173,11 +173,11 @@
   .hero{text-align:center;}
   .hero h1{margin-top:8px;background:linear-gradient(135deg,var(--accent) 0%,var(--accent-2) 100%);
            -webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block;}
-  .hero .sub{color:var(--muted);font-size:clamp(15px,1.8vw,22px);margin-top:14px;font-weight:500;}
+  .hero .sub{color:#f4eedc;font-size:clamp(15px,1.8vw,22px);margin-top:14px;font-weight:500;}
   .hero .meta{display:flex;justify-content:center;gap:clamp(10px,1.5vw,18px);margin-top:clamp(20px,3.5vh,36px);flex-wrap:wrap;}
 
   .winner-card{
-    background:linear-gradient(135deg,rgba(0,217,255,.08),rgba(124,92,255,.08));
+    background:#f4eedc;
     border:2px solid rgba(0,217,255,.4);
     border-radius:18px;
     padding:clamp(20px,3.5vw,40px);
@@ -195,11 +195,11 @@
   .bar-chart{display:flex;flex-direction:column;gap:10px;}
   .bar-row{display:grid;grid-template-columns:minmax(120px,2fr) 5fr 1fr;gap:10px;align-items:center;font-size:clamp(11px,1.25vw,14px);}
   .bar-track{background:rgba(255,255,255,.05);border-radius:6px;height:24px;position:relative;overflow:hidden;}
-  .bar-fill{height:100%;border-radius:6px;background:linear-gradient(90deg,var(--accent),var(--accent-2));transition:width .5s ease;}
-  .bar-fill.faded{background:linear-gradient(90deg,#555,#777);opacity:.6;}
-  .bar-fill.gold{background:linear-gradient(90deg,var(--gold),#ffec8b);}
+  .bar-fill{height:100%;border-radius:6px;background:#f4eedc;transition:width .5s ease;}
+  .bar-fill.faded{background:#f4eedc;opacity:.6;}
+  .bar-fill.gold{background:#f4eedc;}
   .bar-fill.silver{background:linear-gradient(90deg,#cfd8dc,#eceff1);}
-  .bar-fill.bronze{background:linear-gradient(90deg,var(--bronze),#deb887);}
+  .bar-fill.bronze{background:#f4eedc;}
   .bar-label{font-family:var(--mono);font-weight:700;text-align:right;}
 
   .flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:clamp(8px,1.2vw,14px);}
@@ -217,17 +217,17 @@
   .checklist li{display:flex;gap:10px;align-items:flex-start;}
   .checklist .ic{flex:0 0 auto;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:3px;font-weight:800;}
   .checklist .ic.ok{background:rgba(34,197,94,.15);color:var(--good);}
-  .checklist .ic.no{background:rgba(239,68,68,.15);color:var(--bad);}
+  .checklist .ic.no{background:rgba(239,68,68,.15);color:#f4eedc;}
   .checklist .ic.warn{background:rgba(255,176,32,.15);color:var(--warn);}
 
   .footer-cta{
-    background:linear-gradient(135deg,rgba(0,217,255,.06),rgba(124,92,255,.06));
+    background:#f4eedc;
     border:1px solid var(--line);border-radius:18px;
     padding:clamp(20px,3vw,36px);text-align:center;
   }
   .cta-btn{
     display:inline-block;margin-top:clamp(14px,2vh,22px);
-    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    background:#f4eedc;
     color:#06080f;font-weight:800;
     padding:clamp(12px,1.6vw,16px) clamp(22px,3vw,34px);
     border-radius:999px;text-decoration:none;
@@ -240,12 +240,12 @@
   .kicker{color:var(--accent);font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:clamp(11px,1.2vw,13px);margin-bottom:8px;}
 
   /* code block */
-  pre.code{background:#06080f;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
+  pre.code{background:#fbf8ee;border:1px solid var(--line);border-radius:8px;padding:10px 12px;
            font-family:var(--mono);font-size:clamp(9.5px,.95vw,12px);line-height:1.45;
-           overflow:hidden;color:#cfd8dc;white-space:pre-wrap;word-break:break-word;}
+           overflow:hidden;color:#1d1a16;white-space:pre-wrap;word-break:break-word;}
   pre.code .k{color:var(--accent);}
   pre.code .c{color:var(--muted);font-style:italic;}
-  pre.code .s{color:#a5e0a5;}
+  pre.code .s{color:#1d1a16;}
 
   .badge-row{display:flex;flex-wrap:wrap;gap:8px;}
 
@@ -253,7 +253,7 @@
   ul.tight li{margin:4px 0;}
 
   /* selection */
-  ::selection{background:rgba(0,217,255,.25);color:#fff;}
+  ::selection{background:rgba(0,217,255,.25);color:#1d1a16;}
 
   /* mobile tweaks */
   @media (max-width:560px){
@@ -262,6 +262,18 @@
     th,td{padding:5px 6px;font-size:11px;}
     pre.code{font-size:10.5px;}
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -673,7 +685,7 @@
       </div>
     </div>
 
-    <div class="card" style="border-color:rgba(255,176,32,.3);background:rgba(255,176,32,.04);">
+    <div class="card" style="border-color:rgba(184,50,42,.3);background:rgba(255,176,32,.04);">
       <h3 class="warn">What CAN get merged · opt-in hardening parameters</h3>
       <ul class="tight">
         <li><code class="mono">FTP_OPTIONS</code> bitmask · <code class="mono">FTP_REQUIRE_SIGNING</code>, <code class="mono">FTP_ALLOWLIST_PATHS</code></li>
@@ -773,7 +785,7 @@
       </div>
     </div>
 
-    <div class="card" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+    <div class="card" style="border-color:rgba(47,107,58,.3);background:rgba(34,197,94,.04);">
       <p><span class="good">Threat closed.</span> Against an <code class="mono">AP_SIGNED_FIRMWARE</code> board that was never provisioned (or wiped via <code class="mono">REMOVE_PUBLIC_KEYS</code>), an attacker can no longer install keys, leak the session key, or flash signed bootloader payloads.</p>
     </div>
     </div>
@@ -822,7 +834,7 @@
       </div>
     </div>
 
-    <div class="card" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+    <div class="card" style="border-color:rgba(47,107,58,.3);background:rgba(34,197,94,.04);">
       <p><span class="good">Threat closed.</span> A malicious or buggy GCS can no longer push 127 bytes of stack contents onto a hardware bus via <code class="mono">DEVICE_OP_WRITE</code>.</p>
     </div>
     </div>
@@ -882,7 +894,7 @@ memcpy(buf,
       </div>
     </div>
 
-    <div class="card" style="border-color:rgba(34,197,94,.3);background:rgba(34,197,94,.04);">
+    <div class="card" style="border-color:rgba(47,107,58,.3);background:rgba(34,197,94,.04);">
       <p><span class="good">Threat closed.</span> Any MAVFTP client could <code class="mono">OpenFileRO /@SYS/storage.bin</code> and lseek to a negative offset; the buffer base is live EEPROM or <code class="mono">0x08000000</code> flash — leaking MAVLink2 signing keys. Negative offsets now return <code class="mono">EINVAL</code>.</p>
     </div>
     </div>
@@ -1000,7 +1012,7 @@ memcpy(buf,
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

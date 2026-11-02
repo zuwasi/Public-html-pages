@@ -8,42 +8,54 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
   <style>
-    :root{--bg:#0f172a;--card:#1e293b;--card2:#172033;--blue:#3b82f6;--amber:#f59e0b;--red:#ef4444;--green:#22c55e;--text:#f8fafc;--muted:#94a3b8;--line:#334155}
+    :root{--bg:#f4eedc;--card:#fbf8ee;--card2:#f4eedc;--blue:#12457a;--amber:#9a5b10;--red:#b8322a;--green:#2f6b3a;--text:#1d1a16;--muted:#6b6353;--line:#b9ae90}
     *{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif}
-    body{background:radial-gradient(circle at 85% 10%,#172554 0,transparent 30%),var(--bg)}
+    body{background:radial-gradient(circle at 85% 10%,#e3dabf 0,transparent 30%),var(--bg)}
     .deck{height:100vh;display:flex;transition:transform .55s cubic-bezier(.22,.75,.28,1);will-change:transform}
     .slide{position:relative;flex:0 0 100vw;width:100vw;height:100vh;padding:clamp(34px,5vh,68px) clamp(40px,6vw,96px) 64px;overflow-y:auto;display:flex;flex-direction:column;justify-content:center}
-    .slide::before{content:"";position:absolute;left:0;top:8%;height:84%;width:3px;background:linear-gradient(transparent,var(--blue),transparent);opacity:.7}
+    .slide::before{content:"";position:absolute;left:0;top:8%;height:84%;width:3px;background:#f4eedc;opacity:.7}
     h1,h2,h3,p{margin-top:0} h1{font-size:clamp(2.5rem,5.8vw,5.4rem);line-height:1.02;letter-spacing:-.055em;max-width:1000px}
     h2{font-size:clamp(1.8rem,3.3vw,3.1rem);letter-spacing:-.035em;margin-bottom:clamp(18px,3vh,34px)} h2 span{color:var(--blue)}
     h3{font-size:clamp(.95rem,1.4vw,1.25rem);margin-bottom:10px} p,li,td,th{font-size:clamp(.72rem,1.15vw,1.03rem);line-height:1.45}
-    .eyebrow{text-transform:uppercase;letter-spacing:.18em;font-weight:700;color:#60a5fa;font-size:clamp(.7rem,1vw,.9rem);margin-bottom:18px}
-    .subtitle{font-size:clamp(1.1rem,2vw,1.7rem);color:#cbd5e1;max-width:900px;line-height:1.5}.date{color:var(--muted);margin-top:28px}
+    .eyebrow{text-transform:uppercase;letter-spacing:.18em;font-weight:700;color:#12457a;font-size:clamp(.7rem,1vw,.9rem);margin-bottom:18px}
+    .subtitle{font-size:clamp(1.1rem,2vw,1.7rem);color:#1d1a16;max-width:900px;line-height:1.5}.date{color:var(--muted);margin-top:28px}
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(12px,1.7vw,22px)} .grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
-    .card{background:linear-gradient(145deg,rgba(30,41,59,.97),rgba(23,32,51,.97));border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:clamp(14px,1.8vw,24px);box-shadow:0 12px 30px rgba(0,0,0,.18)}
+    .card{background:linear-gradient(145deg,rgba(227,218,191,.97),rgba(227,218,191,.97));border:1px solid rgba(148,163,184,.15);border-radius:16px;padding:clamp(14px,1.8vw,24px);box-shadow:0 12px 30px rgba(0,0,0,.18)}
     .card.accent{border-top:3px solid var(--blue)} .card.warn{border-top:3px solid var(--amber)} .card.danger{border-top:3px solid var(--red)} .card.success{border-top:3px solid var(--green)}
     .stat{text-align:center;display:flex;flex-direction:column;justify-content:center;min-height:145px}.stat strong{display:block;font-size:clamp(2.3rem,5vw,4.8rem);line-height:1;font-weight:800}.stat span{color:var(--muted);margin-top:10px;font-size:clamp(.75rem,1.1vw,1rem)}
-    .red{color:var(--red)}.amber{color:var(--amber)}.green{color:var(--green)}.blue{color:#60a5fa}.muted{color:var(--muted)}
-    .verdict{margin-top:20px;border-radius:14px;padding:16px;text-align:center;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.5);color:#fca5a5;font-size:clamp(1.2rem,2vw,1.8rem);font-weight:800;letter-spacing:.12em}
-    ul{padding-left:1.15em;margin:0} li{margin:.38em 0;color:#dbe5f1} li::marker{color:var(--blue)}
-    .file-list{display:grid;gap:10px}.file{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;background:#111b2d;border-radius:10px;border-left:3px solid var(--blue)}
-    table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(.68rem,1vw,.92rem);overflow:hidden;border-radius:12px} th{text-align:left;color:#93c5fd;background:#172033;font-weight:600}th,td{padding:clamp(7px,1vh,12px) clamp(7px,1vw,14px);border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:rgba(30,41,59,.48)}
-    .bar-cell{min-width:150px}.bar-bg{height:9px;background:#0b1220;border-radius:9px;overflow:hidden;margin-top:5px}.bar{height:100%;border-radius:9px;background:linear-gradient(90deg,var(--blue),#60a5fa)}.bar.req{background:linear-gradient(90deg,#b91c1c,var(--red))}.bar.adv{background:linear-gradient(90deg,#b45309,var(--amber))}
-    .badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.72rem;font-weight:700}.required{color:#fecaca;background:rgba(239,68,68,.18)}.advisory{color:#fde68a;background:rgba(245,158,11,.18)}.high{color:#fecaca;background:rgba(239,68,68,.18)}.medium{color:#fde68a;background:rgba(245,158,11,.18)}.low{color:#bbf7d0;background:rgba(34,197,94,.18)}
-    .rule-chart{display:grid;grid-template-columns:112px 1fr 78px;gap:7px 12px;align-items:center}.rule-chart .label{font-size:clamp(.67rem,.95vw,.87rem);font-weight:600}.rule-chart .count{text-align:right;color:var(--muted);font-size:.8rem}.rule-chart .track{height:14px;background:#111827;border-radius:8px;overflow:hidden}.rule-chart .fill{height:100%;background:linear-gradient(90deg,#b91c1c,var(--red));border-radius:8px}.rule-chart .fill.adv{background:linear-gradient(90deg,#b45309,var(--amber))}
-    .impact-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.impact{padding:12px 14px;background:rgba(30,41,59,.75);border:1px solid var(--line);border-radius:11px;font-size:clamp(.68rem,1vw,.91rem);line-height:1.38}.impact b{color:#93c5fd}
+    .red{color:var(--red)}.amber{color:var(--amber)}.green{color:var(--green)}.blue{color:#12457a}.muted{color:var(--muted)}
+    .verdict{margin-top:20px;border-radius:14px;padding:16px;text-align:center;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.5);color:#f4eedc;font-size:clamp(1.2rem,2vw,1.8rem);font-weight:800;letter-spacing:.12em}
+    ul{padding-left:1.15em;margin:0} li{margin:.38em 0;color:#1d1a16} li::marker{color:var(--blue)}
+    .file-list{display:grid;gap:10px}.file{display:flex;justify-content:space-between;gap:12px;padding:12px 14px;background:#fbf8ee;border-radius:10px;border-left:3px solid var(--blue)}
+    table{width:100%;border-collapse:separate;border-spacing:0;font-size:clamp(.68rem,1vw,.92rem);overflow:hidden;border-radius:12px} th{text-align:left;color:#12457a;background:#fbf8ee;font-weight:600}th,td{padding:clamp(7px,1vh,12px) clamp(7px,1vw,14px);border-bottom:1px solid var(--line)}tr:last-child td{border-bottom:0}tbody tr:nth-child(even){background:rgba(251,248,238,.48)}
+    .bar-cell{min-width:150px}.bar-bg{height:9px;background:#fbf8ee;border-radius:9px;overflow:hidden;margin-top:5px}.bar{height:100%;border-radius:9px;background:#f4eedc}.bar.req{background:#f4eedc}.bar.adv{background:#f4eedc}
+    .badge{display:inline-block;padding:3px 9px;border-radius:999px;font-size:.72rem;font-weight:700}.required{color:#f4eedc;background:rgba(239,68,68,.18)}.advisory{color:#1d1a16;background:rgba(245,158,11,.18)}.high{color:#f4eedc;background:rgba(239,68,68,.18)}.medium{color:#1d1a16;background:rgba(245,158,11,.18)}.low{color:#1d1a16;background:rgba(34,197,94,.18)}
+    .rule-chart{display:grid;grid-template-columns:112px 1fr 78px;gap:7px 12px;align-items:center}.rule-chart .label{font-size:clamp(.67rem,.95vw,.87rem);font-weight:600}.rule-chart .count{text-align:right;color:var(--muted);font-size:.8rem}.rule-chart .track{height:14px;background:#fbf8ee;border-radius:8px;overflow:hidden}.rule-chart .fill{height:100%;background:linear-gradient(90deg,#e3dabf,var(--red));border-radius:8px}.rule-chart .fill.adv{background:linear-gradient(90deg,#b45309,var(--amber))}
+    .impact-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.impact{padding:12px 14px;background:rgba(251,248,238,.75);border:1px solid var(--line);border-radius:11px;font-size:clamp(.68rem,1vw,.91rem);line-height:1.38}.impact b{color:#12457a}
     .metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.metric strong{font-size:clamp(1.35rem,2.6vw,2.4rem);display:block}.metric small{color:var(--muted)}
-    .quality{display:grid;gap:13px}.qrow{display:grid;grid-template-columns:145px 1fr 75px;gap:12px;align-items:center}.qtrack{height:14px;background:#111827;border-radius:10px;overflow:hidden}.qfill{height:100%;border-radius:10px}.qrow span{font-size:.85rem}
-    .security-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-item{padding:10px 12px;border-radius:10px;background:rgba(30,41,59,.75);border-left:3px solid var(--amber);font-size:clamp(.65rem,.92vw,.85rem);line-height:1.35}.security-item.high-risk{border-left-color:var(--red)}
+    .quality{display:grid;gap:13px}.qrow{display:grid;grid-template-columns:145px 1fr 75px;gap:12px;align-items:center}.qtrack{height:14px;background:#fbf8ee;border-radius:10px;overflow:hidden}.qfill{height:100%;border-radius:10px}.qrow span{font-size:.85rem}
+    .security-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.security-item{padding:10px 12px;border-radius:10px;background:rgba(251,248,238,.75);border-left:3px solid var(--amber);font-size:clamp(.65rem,.92vw,.85rem);line-height:1.35}.security-item.high-risk{border-left-color:rgba(29,26,22,0.55)}
     .roadmap{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:16px}.roadmap ol,.roadmap ul{padding-left:1.15em}.roadmap li{font-size:clamp(.67rem,.95vw,.88rem)}
-    .paths{display:grid;gap:8px}.path{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#111827;border:1px solid var(--line);padding:10px 13px;border-radius:9px;font-size:clamp(.62rem,.9vw,.83rem);overflow-wrap:anywhere}.path b{color:#93c5fd;font-family:Inter,system-ui,sans-serif;margin-right:8px}
-    .nav{position:fixed;z-index:10;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid #475569;background:rgba(30,41,59,.9);color:white;font-size:31px;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 24px #0008;transition:.2s}.nav:hover{background:var(--blue);transform:translateY(-50%) scale(1.06)}.prev{left:18px}.next{right:18px}.nav[hidden]{display:none}
-    .progress{position:fixed;z-index:12;left:0;bottom:0;width:100%;height:5px;background:#1e293b}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),#8b5cf6,var(--green));transition:width .5s ease}
-    .counter{position:fixed;z-index:12;right:22px;bottom:16px;color:#cbd5e1;background:rgba(15,23,42,.8);padding:6px 11px;border-radius:999px;font-size:.78rem;border:1px solid var(--line)}
-    .hint{position:absolute;bottom:11%;left:50%;transform:translateX(-50%);color:#93c5fd;font-size:.9rem;animation:pulse 1.8s infinite;white-space:nowrap}.hint.hidden{opacity:0;pointer-events:none}@keyframes pulse{50%{opacity:.38;transform:translateX(-50%) translateY(5px)}}
-    .kicker{display:inline-block;border:1px solid #3b82f6;color:#93c5fd;padding:6px 10px;border-radius:8px;font-size:.8rem;margin-bottom:18px}.conclusion{font-size:clamp(.86rem,1.25vw,1.08rem)}
+    .paths{display:grid;gap:8px}.path{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;background:#fbf8ee;border:1px solid var(--line);padding:10px 13px;border-radius:9px;font-size:clamp(.62rem,.9vw,.83rem);overflow-wrap:anywhere}.path b{color:#12457a;font-family:Inter,system-ui,sans-serif;margin-right:8px}
+    .nav{position:fixed;z-index:10;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:1px solid #475569;background:rgba(251,248,238,.9);color:#1d1a16;font-size:31px;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 24px #0008;transition:.2s}.nav:hover{background:var(--blue);transform:translateY(-50%) scale(1.06)}.prev{left:18px}.next{right:18px}.nav[hidden]{display:none}
+    .progress{position:fixed;z-index:12;left:0;bottom:0;width:100%;height:5px;background:#fbf8ee}.progress-fill{height:100%;width:0;background:#f4eedc;transition:width .5s ease}
+    .counter{position:fixed;z-index:12;right:22px;bottom:16px;color:#1d1a16;background:rgba(251,248,238,.8);padding:6px 11px;border-radius:999px;font-size:.78rem;border:1px solid var(--line)}
+    .hint{position:absolute;bottom:11%;left:50%;transform:translateX(-50%);color:#12457a;font-size:.9rem;animation:pulse 1.8s infinite;white-space:nowrap}.hint.hidden{opacity:0;pointer-events:none}@keyframes pulse{50%{opacity:.38;transform:translateX(-50%) translateY(5px)}}
+    .kicker{display:inline-block;border:1px solid #3b82f6;color:#12457a;padding:6px 10px;border-radius:8px;font-size:.8rem;margin-bottom:18px}.conclusion{font-size:clamp(.86rem,1.25vw,1.08rem)}
     @media(max-width:760px){.slide{padding:54px 28px 70px;justify-content:flex-start}.grid,.grid.three,.grid.four,.impact-list,.security-list,.roadmap,.metrics{grid-template-columns:1fr}.slide{overflow-y:auto}.nav{width:40px;height:40px;font-size:25px;opacity:.75}.prev{left:7px}.next{right:7px}.rule-chart{grid-template-columns:78px 1fr 45px}.qrow{grid-template-columns:100px 1fr 55px}.stat{min-height:100px}.grid.four{grid-template-columns:repeat(2,1fr)}table{min-width:670px}.table-wrap{overflow-x:auto}.impact-list,.security-list{padding-bottom:15px}}
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
   <main class="deck" id="deck">
@@ -91,19 +103,19 @@
         <div style="display:grid;gap:10px">
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
             <span style="font-weight:600">Total (all scope)</span>
-            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">174</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#e3dabf,#ef4444)"></div></div><b class="red" style="font-size:.78rem">174</b></div>
             <div style="display:flex;align-items:center;gap:6px"><span class="amber" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:75.9%;background:linear-gradient(90deg,#b45309,#f59e0b)"></div></div><b class="amber" style="font-size:.78rem">132</b></div>
             <b class="green" style="font-size:.78rem;text-align:right">−24.1%</b>
           </div>
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
             <span style="font-weight:600">Prod .c only</span>
-            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">174</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#e3dabf,#ef4444)"></div></div><b class="red" style="font-size:.78rem">174</b></div>
             <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:37.4%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">65</b></div>
             <b class="green" style="font-size:.78rem;text-align:right">−62.6%</b>
           </div>
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
             <span style="font-weight:600">Required</span>
-            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">83</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#e3dabf,#ef4444)"></div></div><b class="red" style="font-size:.78rem">83</b></div>
             <div style="display:flex;align-items:center;gap:6px"><span class="amber" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b45309,#f59e0b)"></div></div><b class="amber" style="font-size:.78rem">91</b></div>
             <b class="amber" style="font-size:.78rem;text-align:right">+8 new</b>
           </div>
@@ -115,7 +127,7 @@
           </div>
           <div style="display:grid;grid-template-columns:130px 1fr 1fr 80px;gap:8px;align-items:center;font-size:.82rem">
             <span style="font-weight:600">Density/100 LOC</span>
-            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#b91c1c,#ef4444)"></div></div><b class="red" style="font-size:.78rem">27.9</b></div>
+            <div style="display:flex;align-items:center;gap:6px"><span class="red" style="font-size:.72rem;width:22px">V1</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:100%;background:linear-gradient(90deg,#e3dabf,#ef4444)"></div></div><b class="red" style="font-size:.78rem">27.9</b></div>
             <div style="display:flex;align-items:center;gap:6px"><span class="green" style="font-size:.72rem;width:22px">V2</span><div class="bar-bg" style="flex:1"><div class="bar" style="width:37.3%;background:linear-gradient(90deg,#15803d,#22c55e)"></div></div><b class="green" style="font-size:.78rem">10.4</b></div>
             <b class="green" style="font-size:.78rem;text-align:right">−62.6%</b>
           </div>
@@ -316,7 +328,7 @@
       <div class="eyebrow">13 · Baseline assessment</div><h2>Original Code <span>Conclusion</span></h2>
       <div class="grid">
         <div class="card conclusion"><ul><li>Functionally correct: <b class="green">48/48 tests pass</b>, but <b class="red">NOT MISRA C:2023 compliant</b>.</li><li><b>83 Required</b> findings block safety-critical certification.</li><li>Three functions have <b class="red">HIGH complexity (&gt;10)</b> and need refactoring.</li><li>Unit tests exposed a genuine async sensor report TX logic bug.</li><li>Security review found <b class="red">1 HIGH</b> authorization design gap and <b class="amber">3 MEDIUM</b> issues.</li><li>Violation density is <b>27.9 per 100 code lines</b> — systematic remediation is needed.</li></ul></div>
-        <div class="card accent"><span class="kicker">RECOMMENDED SEQUENCE</span><h3 style="font-size:clamp(1.3rem,2.3vw,2rem)">Mechanical identifiers<br><span class="muted">↓</span><br><span class="blue">Type safety</span><br><span class="muted">↓</span><br>Advisory cleanup</h3><p class="muted">Resolve identifier lengths first, then conversion and essential-type defects, followed by portability and maintainability items.</p><div class="verdict" style="background:rgba(34,197,94,.1);border-color:var(--green);color:#86efac;font-size:1rem;letter-spacing:.03em">With remediation, this codebase can achieve MISRA C:2023 compliance.</div></div>
+        <div class="card accent"><span class="kicker">RECOMMENDED SEQUENCE</span><h3 style="font-size:clamp(1.3rem,2.3vw,2rem)">Mechanical identifiers<br><span class="muted">↓</span><br><span class="blue">Type safety</span><br><span class="muted">↓</span><br>Advisory cleanup</h3><p class="muted">Resolve identifier lengths first, then conversion and essential-type defects, followed by portability and maintainability items.</p><div class="verdict" style="background:rgba(34,197,94,.1);border-color:var(--green);color:#1d1a16;font-size:1rem;letter-spacing:.03em">With remediation, this codebase can achieve MISRA C:2023 compliance.</div></div>
       </div>
     </section>
 
@@ -496,7 +508,7 @@
             <div class="stat" style="min-height:80px"><strong class="amber">22.4%</strong><span>formal deviations</span></div>
             <div class="stat" style="min-height:80px"><strong class="green">100%</strong><span>findings accounted for</span></div>
           </div>
-          <div class="verdict" style="background:rgba(34,197,94,.1);border-color:var(--green);color:#86efac;font-size:1rem;letter-spacing:.03em;margin-top:20px">Upon deviation approval, this codebase achieves MISRA C:2023 compliance.</div>
+          <div class="verdict" style="background:rgba(34,197,94,.1);border-color:var(--green);color:#1d1a16;font-size:1rem;letter-spacing:.03em;margin-top:20px">Upon deviation approval, this codebase achieves MISRA C:2023 compliance.</div>
         </div>
       </div>
     </section>
@@ -518,7 +530,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

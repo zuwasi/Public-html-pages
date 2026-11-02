@@ -6,8 +6,8 @@
 <title>Skills Anthropic Hires For: Software Engineering Roles</title>
 <style>
   :root {
-    --bg: #faf9f5; --card: #ffffff; --ink: #191919; --muted: #6b6a66; --line: #e8e6dc;
-    --accent: #d97757;
+    --bg:#f4eedc; --card:#fbf8ee; --ink:#1d1a16; --muted:#6b6353; --line:#b9ae90;
+    --accent:#b8322a;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink);
@@ -25,9 +25,9 @@
   .card { padding: 22px; margin-bottom: 20px; }
   .card p.hint { color: var(--muted); margin: 0 0 16px; font-size: 13.5px; }
   .controls { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; align-items: center; }
-  .chip { border: 1px solid var(--line); background: #fff; border-radius: 999px; padding: 5px 12px;
+  .chip { border: 1px solid var(--line); background:#fff; border-radius: 999px; padding: 5px 12px;
     cursor: pointer; font: inherit; font-size: 13px; display: inline-flex; align-items: center; gap: 6px; }
-  .chip.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .chip.on { background: var(--ink); color:#f4eedc; border-color:rgba(29,26,22,0.55); }
   .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
   .sep { flex: 1; }
   .row { display: grid; grid-template-columns: 34px minmax(150px, 270px) 1fr 64px 62px; gap: 10px;
@@ -35,18 +35,18 @@
   .row:last-child { border-bottom: 0; }
   .rank { color: var(--muted); font-size: 12px; text-align: right; }
   .name { font-weight: 550; font-size: 14px; }
-  a.skill { color: inherit; text-decoration: underline; text-decoration-color: #d9d4c4; text-underline-offset: 3px; }
+  a.skill { color: inherit; text-decoration: underline; text-decoration-color:#1d1a16; text-underline-offset: 3px; }
   a.skill:hover { color: var(--accent); text-decoration-color: var(--accent); }
   .name small { display: block; color: var(--muted); font-weight: 400; font-size: 11.5px; }
-  .track { position: relative; height: 22px; background: #f3f1ea; border-radius: 6px; overflow: hidden; }
+  .track { position: relative; height: 22px; background:#f3f1ea; border-radius: 6px; overflow: hidden; }
   .bar { position: absolute; inset: 0 auto 0 0; border-radius: 6px; transition: width .5s ease; }
-  .pctbar { position: absolute; left: 0; bottom: 0; height: 4px; background: rgba(0,0,0,.45); border-radius: 2px; transition: width .5s ease; }
+  .pctbar { position: absolute; left: 0; bottom: 0; height: 4px; background:rgba(251,248,238,.45); border-radius: 2px; transition: width .5s ease; }
   .score { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }
   .pct { color: var(--muted); text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; }
   .head { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid var(--line); }
   .tier { display: inline-block; font-size: 10.5px; padding: 1px 7px; border-radius: 999px; margin-left: 6px; vertical-align: 1px; font-weight: 600; }
-  .t1 { background: #191919; color: #fff; } .t2 { background: #d97757; color: #fff; }
-  .t3 { background: #e9e4d4; color: #5a5545; } .t4 { background: #f3f1ea; color: #8a877c; }
+  .t1 { background:#fbf8ee; color:#1d1a16; } .t2 { background:#d97757; color:#1d1a16; }
+  .t3 { background:#e9e4d4; color:#5a5545; } .t4 { background:#f3f1ea; color:#6b6353; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .cat { display: grid; grid-template-columns: 170px 1fr 48px; gap: 10px; align-items: center; margin: 8px 0; font-size: 14px; }
   .lang { display: flex; align-items: flex-end; gap: 10px; height: 230px; padding-top: 10px; }
@@ -54,7 +54,7 @@
   .lang div { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; font-size: 12px; }
   .lang i { display: block; width: 100%; max-width: 46px; border-radius: 6px 6px 0 0; background: var(--accent); transition: height .5s; }
   .lang b { font-size: 12.5px; margin-bottom: 4px; }
-  .lang span { margin-top: 6px; color: var(--muted); white-space: nowrap; }
+  .lang span { margin-top: 6px; color:#f4eedc; white-space: nowrap; }
   .plan ol { margin: 0; padding-left: 20px; } .plan li { margin: 6px 0; }
   table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
   th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -65,11 +65,11 @@
   details summary { cursor: pointer; font-weight: 600; }
   .method { color: var(--muted); font-size: 13.5px; }
   .brand { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 12px 18px; margin-bottom: 24px;
-    background: #fff; border: 1px solid var(--line); border-radius: 14px; }
+    background:#fff; border: 1px solid var(--line); border-radius: 14px; }
   .brand img.esl { height: 40px; display: block; }
   .brand img.anth { height: 16px; display: block; }
   .brand .x { color: var(--muted); font-size: 20px; }
-  .brand .partner { font-size: 13px; font-weight: 600; color: var(--ink); background: #f3f1ea; padding: 5px 12px; border-radius: 999px; }
+  .brand .partner { font-size: 13px; font-weight: 600; color: var(--ink); background:#f3f1ea; padding: 5px 12px; border-radius: 999px; }
   .by { margin: -14px 0 24px; font-size: 14px; }
   .by a, .contact a { color: var(--accent); font-weight: 600; }
   .contact { display: flex; gap: 24px; align-items: flex-start; }
@@ -78,7 +78,7 @@
   .contact .links { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-size: 14px; }
   .about h3 { font-size: 15px; margin: 18px 0 6px; }
   .about ol { margin: 0; padding-left: 20px; } .about li { margin: 6px 0; }
-  blockquote { margin: 0 0 10px; padding: 10px 14px; border-left: 3px solid var(--accent); background: #f6f3ea;
+  blockquote { margin: 0 0 10px; padding: 10px 14px; border-left: 3px solid var(--accent); background:#f6f3ea;
     border-radius: 0 8px 8px 0; font-style: italic; overflow-wrap: anywhere; }
   @media (max-width: 760px) {
     .grid2 { grid-template-columns: 1fr; }
@@ -92,6 +92,18 @@
     .lang span { white-space: normal; text-align: center; font-size: 10.5px; line-height: 1.2; }
     .lang b { font-size: 11px; }
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>

@@ -7,17 +7,17 @@
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
-  body{font-family:'Inter','Segoe UI',sans-serif;background:#0a0e1a;color:#e0e6f0;overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased;}
+  body{font-family:'Inter','Segoe UI',sans-serif;background:#fbf8ee;color:#1d1a16;overflow:hidden;height:100vh;width:100vw;-webkit-font-smoothing:antialiased;}
 
   /* === SLIDE CONTAINER === */
   .slides-wrapper{display:flex;transition:transform 0.55s cubic-bezier(.4,0,.2,1);height:100vh;width:100vw;}
   .slide{min-width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 60px;position:relative;overflow:hidden;}
 
   /* === BACKGROUNDS === */
-  .bg-hero{background:linear-gradient(135deg,#0a0e1a 0%,#111830 40%,#0d1528 100%);}
-  .bg-dark{background:linear-gradient(160deg,#0b1020 0%,#121a30 100%);}
-  .bg-deep{background:linear-gradient(145deg,#080c18 0%,#0f1628 50%,#0a1020 100%);}
-  .bg-accent{background:linear-gradient(135deg,#0a1025 0%,#141e38 50%,#0d1528 100%);}
+  .bg-hero{background:linear-gradient(135deg,#e3dabf 0%,#e3dabf 40%,#e3dabf 100%);}
+  .bg-dark{background:linear-gradient(160deg,#e3dabf 0%,#e3dabf 100%);}
+  .bg-deep{background:linear-gradient(145deg,#e3dabf 0%,#e3dabf 50%,#e3dabf 100%);}
+  .bg-accent{background:linear-gradient(135deg,#e3dabf 0%,#e3dabf 50%,#e3dabf 100%);}
 
   /* === CIRCUIT PATTERN OVERLAY === */
   .slide::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;
@@ -29,37 +29,37 @@
   /* === NAVIGATION === */
   .nav-arrows{position:fixed;bottom:30px;right:30px;display:flex;gap:12px;z-index:100;}
   .nav-btn{width:48px;height:48px;border-radius:50%;border:2px solid rgba(255,255,255,0.15);
-    background:rgba(15,20,40,0.85);color:#8899bb;font-size:20px;cursor:pointer;
+    background:rgba(251,248,238,0.85);color:#6b6353;font-size:20px;cursor:pointer;
     display:flex;align-items:center;justify-content:center;transition:all 0.25s;backdrop-filter:blur(8px);}
-  .nav-btn:hover{background:rgba(59,130,246,0.3);border-color:rgba(59,130,246,0.5);color:#fff;}
+  .nav-btn:hover{background:rgba(59,130,246,0.3);border-color:rgba(18,69,122,0.5);color:#1d1a16;}
   .nav-btn:active{transform:scale(0.92);}
-  .slide-counter{position:fixed;bottom:38px;left:30px;font-size:14px;color:#556;z-index:100;font-weight:600;letter-spacing:1px;}
+  .slide-counter{position:fixed;bottom:38px;left:30px;font-size:14px;color:#f4eedc;z-index:100;font-weight:600;letter-spacing:1px;}
 
   /* === LOGOS BAR === */
   .logos-bar{position:fixed;top:16px;right:20px;display:flex;align-items:center;gap:16px;z-index:100;opacity:0.85;}
   .logos-bar img{height:28px;filter:brightness(1.1);}
   .logo-text{font-size:13px;font-weight:700;letter-spacing:0.5px;}
-  .logo-esl{color:#00b4d8;font-weight:800;font-size:15px;letter-spacing:1px;}
-  .logo-amp{color:#3b82f6;}
+  .logo-esl{color:#12457a;font-weight:800;font-size:15px;letter-spacing:1px;}
+  .logo-amp{color:#12457a;}
   .logo-wolfram{color:#dd1100;}
 
   /* === TYPOGRAPHY === */
   h1{font-size:clamp(28px,4vw,52px);font-weight:800;line-height:1.15;margin-bottom:16px;}
   h2{font-size:clamp(22px,3vw,38px);font-weight:700;line-height:1.2;margin-bottom:12px;}
   h3{font-size:clamp(16px,2vw,24px);font-weight:600;margin-bottom:10px;}
-  .subtitle{font-size:clamp(14px,1.5vw,20px);color:#8899bb;font-weight:300;line-height:1.5;}
-  .gradient-text{background:linear-gradient(135deg,#3b82f6,#8b5cf6,#ec4899);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-  .accent-blue{color:#60a5fa;}
-  .accent-green{color:#34d399;}
-  .accent-orange{color:#fb923c;}
-  .accent-red{color:#f87171;}
-  .accent-purple{color:#a78bfa;}
+  .subtitle{font-size:clamp(14px,1.5vw,20px);color:#6b6353;font-weight:300;line-height:1.5;}
+  .gradient-text{background:#f4eedc;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .accent-blue{color:#12457a;}
+  .accent-green{color:#2f6b3a;}
+  .accent-orange{color:#b8322a;}
+  .accent-red{color:#b8322a;}
+  .accent-purple{color:#12457a;}
 
   /* === CARDS & BOXES === */
-  .card{background:rgba(20,30,55,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px 32px;backdrop-filter:blur(12px);}
+  .card{background:rgba(251,248,238,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:28px 32px;backdrop-filter:blur(12px);}
   .card-glow{box-shadow:0 0 30px rgba(59,130,246,0.08);}
-  .code-box{background:#0d1117;border:1px solid #21262d;border-radius:10px;padding:20px 24px;font-family:'Consolas','Fira Code',monospace;font-size:clamp(12px,1.2vw,16px);color:#7ee787;line-height:1.7;white-space:pre-wrap;overflow-x:auto;}
-  .prompt-prefix{color:#79c0ff;}
+  .code-box{background:#fbf8ee;border:1px solid #21262d;border-radius:10px;padding:20px 24px;font-family:'Consolas','Fira Code',monospace;font-size:clamp(12px,1.2vw,16px);color:#2f6b3a;line-height:1.7;white-space:pre-wrap;overflow-x:auto;}
+  .prompt-prefix{color:#12457a;}
 
   /* === GRID LAYOUTS === */
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:32px;width:100%;max-width:1100px;}
@@ -68,33 +68,33 @@
 
   /* === STEP BADGES === */
   .step-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:16px;}
-  .step-blue{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3);}
-  .step-green{background:rgba(52,211,153,0.15);color:#34d399;border:1px solid rgba(52,211,153,0.3);}
-  .step-orange{background:rgba(251,146,60,0.15);color:#fb923c;border:1px solid rgba(251,146,60,0.3);}
-  .step-purple{background:rgba(167,139,250,0.15);color:#a78bfa;border:1px solid rgba(167,139,250,0.3);}
-  .step-red{background:rgba(248,113,113,0.15);color:#f87171;border:1px solid rgba(248,113,113,0.3);}
+  .step-blue{background:rgba(59,130,246,0.15);color:#12457a;border:1px solid rgba(59,130,246,0.3);}
+  .step-green{background:rgba(52,211,153,0.15);color:#2f6b3a;border:1px solid rgba(52,211,153,0.3);}
+  .step-orange{background:rgba(251,146,60,0.15);color:#b8322a;border:1px solid rgba(251,146,60,0.3);}
+  .step-purple{background:rgba(167,139,250,0.15);color:#12457a;border:1px solid rgba(167,139,250,0.3);}
+  .step-red{background:rgba(248,113,113,0.15);color:#b8322a;border:1px solid rgba(248,113,113,0.3);}
 
   /* === BULLET LISTS === */
   .bullet-list{list-style:none;padding:0;}
-  .bullet-list li{padding:6px 0;font-size:clamp(13px,1.3vw,17px);color:#c0cce0;line-height:1.5;}
-  .bullet-list li::before{content:'▸ ';color:#60a5fa;font-weight:700;margin-right:4px;}
-  .bullet-list.green li::before{color:#34d399;}
-  .bullet-list.orange li::before{color:#fb923c;}
-  .bullet-list.red li::before{color:#f87171;}
+  .bullet-list li{padding:6px 0;font-size:clamp(13px,1.3vw,17px);color:#6b6353;line-height:1.5;}
+  .bullet-list li::before{content:'▸ ';color:#12457a;font-weight:700;margin-right:4px;}
+  .bullet-list.green li::before{color:#2f6b3a;}
+  .bullet-list.orange li::before{color:#b8322a;}
+  .bullet-list.red li::before{color:#b8322a;}
 
   /* === FLOW ARROWS === */
-  .arrow{font-size:28px;color:#3b82f6;font-weight:300;}
-  .flow-box{background:rgba(20,30,55,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 20px;text-align:center;min-width:140px;flex:1;}
+  .arrow{font-size:28px;color:#12457a;font-weight:300;}
+  .flow-box{background:rgba(251,248,238,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:16px 20px;text-align:center;min-width:140px;flex:1;}
   .flow-box h4{font-size:14px;font-weight:700;margin-bottom:6px;}
-  .flow-box p{font-size:12px;color:#8899bb;}
+  .flow-box p{font-size:12px;color:#6b6353;}
 
   /* === IMAGE SLIDES === */
   .slide-image{max-width:90vw;max-height:70vh;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.5);object-fit:contain;}
 
   /* === COMPARISON TABLE === */
   .compare-table{width:100%;max-width:900px;border-collapse:collapse;margin-top:16px;}
-  .compare-table th{padding:12px 16px;text-align:left;font-size:14px;font-weight:700;border-bottom:2px solid rgba(59,130,246,0.3);color:#60a5fa;}
-  .compare-table td{padding:10px 16px;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.05);color:#c0cce0;}
+  .compare-table th{padding:12px 16px;text-align:left;font-size:14px;font-weight:700;border-bottom:2px solid rgba(59,130,246,0.3);color:#12457a;}
+  .compare-table td{padding:10px 16px;font-size:14px;border-bottom:1px solid rgba(255,255,255,0.05);color:#6b6353;}
   .compare-table tr:hover td{background:rgba(59,130,246,0.05);}
 
   /* === DIVIDER === */
@@ -123,6 +123,18 @@
   /* === ANIMATIONS === */
   @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
   .slide.active .animate{animation:fadeInUp 0.6s ease forwards;}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -225,22 +237,22 @@ for a scientific presentation to Professor Gilo.</div>
   <h2>What Happens <span class="accent-blue">Automatically</span></h2>
   <div class="divider"></div>
   <div class="flow-row" style="margin-top:24px;">
-    <div class="flow-box" style="border-color:rgba(59,130,246,0.3);">
+    <div class="flow-box" style="border-color:rgba(18,69,122,0.3);">
       <h4 class="accent-blue">📄 Step 1</h4>
       <p>AI reads the full PDF and extracts every equation</p>
     </div>
     <span class="arrow">→</span>
-    <div class="flow-box" style="border-color:rgba(52,211,153,0.3);">
+    <div class="flow-box" style="border-color:rgba(47,107,58,0.3);">
       <h4 class="accent-green">📚 Step 2</h4>
       <p>CandleKeep library provides Wolfram Language syntax reference</p>
     </div>
     <span class="arrow">→</span>
-    <div class="flow-box" style="border-color:rgba(251,146,60,0.3);">
+    <div class="flow-box" style="border-color:rgba(184,50,42,0.3);">
       <h4 class="accent-orange">⚙️ Step 3</h4>
       <p>Skill generates validated .nb with 12 sections</p>
     </div>
     <span class="arrow">→</span>
-    <div class="flow-box" style="border-color:rgba(167,139,250,0.3);">
+    <div class="flow-box" style="border-color:rgba(18,69,122,0.3);">
       <h4 class="accent-purple">✅ Step 4</h4>
       <p>Syntax validation: brackets, characters, structure</p>
     </div>
@@ -308,7 +320,7 @@ Ra(A) = γ / A    (DARA)</div>
          / (α·q·H²·(1−α))</div>
     </div>
   </div>
-  <p style="margin-top:20px;font-size:14px;color:#8899bb;text-align:center;">All 6 equations (14–19) from the Appendix verified computationally in the notebook.</p>
+  <p style="margin-top:20px;font-size:14px;color:#6b6353;text-align:center;">All 6 equations (14–19) from the Appendix verified computationally in the notebook.</p>
 </div>
 
 <!-- SLIDE 8: NOTEBOOK FEATURES -->
@@ -373,7 +385,7 @@ Ra(A) = γ / A    (DARA)</div>
   <h2>Ampcode + Wolfram vs. <span class="accent-red">GPT-5</span></h2>
   <div class="divider"></div>
   <div class="two-col" style="max-width:950px;margin-top:20px;">
-    <div class="card" style="border-color:rgba(248,113,113,0.2);">
+    <div class="card" style="border-color:rgba(184,50,42,0.2);">
       <h3 class="accent-red">❌ GPT-5 (ChatGPT Plus)</h3>
       <ul class="bullet-list red">
         <li>Multiple attempts, repeated algebraic errors</li>
@@ -385,7 +397,7 @@ Ra(A) = γ / A    (DARA)</div>
         <li>Hours of manual correction needed</li>
       </ul>
     </div>
-    <div class="card" style="border-color:rgba(52,211,153,0.2);">
+    <div class="card" style="border-color:rgba(47,107,58,0.2);">
       <h3 class="accent-green">✅ Ampcode + Wolfram Skill</h3>
       <ul class="bullet-list green">
         <li>Single prompt → complete solution</li>
@@ -408,19 +420,19 @@ Ra(A) = γ / A    (DARA)</div>
   <div style="max-width:700px;margin-top:24px;">
     <div class="card" style="margin-bottom:12px;border-left:3px solid #3b82f6;">
       <h3 class="accent-blue" style="font-size:16px;">🤖 Ampcode Agent</h3>
-      <p style="font-size:14px;color:#8899bb;">AI orchestrator that reads papers, plans the approach, writes code, and validates output</p>
+      <p style="font-size:14px;color:#6b6353;">AI orchestrator that reads papers, plans the approach, writes code, and validates output</p>
     </div>
     <div class="card" style="margin-bottom:12px;border-left:3px solid #34d399;">
       <h3 class="accent-green" style="font-size:16px;">📚 CandleKeep Library (60+ docs)</h3>
-      <p style="font-size:14px;color:#8899bb;">RAG-backed Wolfram Language reference — correct syntax for Manipulate, FindRoot, Plot, etc.</p>
+      <p style="font-size:14px;color:#6b6353;">RAG-backed Wolfram Language reference — correct syntax for Manipulate, FindRoot, Plot, etc.</p>
     </div>
     <div class="card" style="margin-bottom:12px;border-left:3px solid #fb923c;">
       <h3 class="accent-orange" style="font-size:16px;">⚙️ Wolfram-Mathematica Skill</h3>
-      <p style="font-size:14px;color:#8899bb;">Custom skill with notebook generation rules, .nb format constraints, and validation checklist</p>
+      <p style="font-size:14px;color:#6b6353;">Custom skill with notebook generation rules, .nb format constraints, and validation checklist</p>
     </div>
     <div class="card" style="border-left:3px solid #a78bfa;">
       <h3 class="accent-purple" style="font-size:16px;">🔒 6-Point Syntax Validator</h3>
-      <p style="font-size:14px;color:#8899bb;">Invalid characters, BoxData check, bracket balance, notebook structure, string escaping — all automated</p>
+      <p style="font-size:14px;color:#6b6353;">Invalid characters, BoxData check, bracket balance, notebook structure, string escaping — all automated</p>
     </div>
   </div>
 </div>
@@ -433,7 +445,7 @@ Ra(A) = γ / A    (DARA)</div>
     <p class="subtitle">From Research Paper to Working Mathematica Notebook</p>
   </div>
   <div style="margin-top:28px;text-align:center;">
-    <h2 style="font-size:clamp(18px,2.5vw,30px);font-weight:300;color:#8899bb;">
+    <h2 style="font-size:clamp(18px,2.5vw,30px);font-weight:300;color:#6b6353;">
       One prompt. Verified proof. Interactive notebook.
     </h2>
     <p style="margin-top:16px;font-size:16px;color:#556;">
@@ -485,7 +497,7 @@ document.addEventListener('touchend', e => {
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

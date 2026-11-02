@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0a1a;--card:#12122a;--amp:#00d4ff;--claude:#d97706;--green:#22c55e;--red:#ef4444;--text:#e2e8f0;--muted:#94a3b8;--border:#1e293b}
+:root{--bg:#f4eedc;--card:#fbf8ee;--amp:#12457a;--claude:#b8322a;--green:#2f6b3a;--red:#b8322a;--text:#1d1a16;--muted:#6b6353;--border:#b9ae90}
 body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;width:100vw}
 .deck{display:flex;height:100vh;transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .slide{min-width:100vw;height:100vh;padding:clamp(20px,4vw,60px);display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow-y:auto}
@@ -25,35 +25,47 @@ body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t
 .stat-box.claude-box{border-color:var(--claude);box-shadow:0 0 20px rgba(217,119,6,.15)}
 .bar-group{margin:.6em 0;width:100%;max-width:700px}
 .bar-label{display:flex;justify-content:space-between;font-size:clamp(.75rem,1.1vw,.95rem);margin-bottom:4px}
-.bar-track{height:28px;background:#1e293b;border-radius:6px;overflow:hidden;margin-bottom:2px;position:relative}
+.bar-track{height:28px;background:#fbf8ee;border-radius:6px;overflow:hidden;margin-bottom:2px;position:relative}
 .bar-fill{height:100%;border-radius:6px;display:flex;align-items:center;padding-left:10px;font-size:.75rem;font-weight:600;transition:width 1s ease}
-.bar-fill.amp{background:linear-gradient(90deg,var(--amp),#0099cc)}
-.bar-fill.claude{background:linear-gradient(90deg,var(--claude),#b45309)}
+.bar-fill.amp{background:#f4eedc}
+.bar-fill.claude{background:#f4eedc}
 table{width:100%;border-collapse:collapse;font-size:clamp(.65rem,.9vw,.85rem)}
-th{background:#1a1a3a;padding:8px 6px;text-align:left;font-weight:600;position:sticky;top:0;z-index:1}
+th{background:#fbf8ee;padding:8px 6px;text-align:left;font-weight:600;position:sticky;top:0;z-index:1}
 td{padding:6px;border-bottom:1px solid var(--border)}
 tr:hover{background:rgba(255,255,255,.03)}
 a.task-link{color:var(--amp);text-decoration:none;font-weight:700;border-bottom:1px dashed rgba(0,212,255,.3)}
-a.task-link:hover{color:#fff;border-bottom-color:var(--amp)}
+a.task-link:hover{color:#1d1a16;border-bottom-color:var(--amp)}
 .pass{color:var(--green)}.fail{color:var(--red)}.skip{color:var(--muted)}
 .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600}
-.badge-easy{background:#166534;color:#86efac}.badge-medium{background:#854d0e;color:#fde68a}
-.badge-hard{background:#991b1b;color:#fca5a5}.badge-extreme{background:#581c87;color:#d8b4fe}
+.badge-easy{background:#166534;color:#f4eedc}.badge-medium{background:#854d0e;color:#f4eedc}
+.badge-hard{background:#fbf8ee;color:#6b6353}.badge-extreme{background:#fbf8ee;color:#6b6353}
 .table-scroll{max-height:65vh;overflow-y:auto;border-radius:12px;border:1px solid var(--border)}
 .verdict-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,24px);width:100%;max-width:800px;margin:1em 0}
 @media(max-width:700px){.verdict-grid{grid-template-columns:1fr}.stats-row{flex-direction:column;align-items:center}}
-.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:2px solid var(--border);background:rgba(10,10,26,.8);color:var(--text);font-size:1.5rem;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px);transition:all .2s}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:2px solid var(--border);background:rgba(251,248,238,.8);color:var(--text);font-size:1.5rem;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(5px);transition:all .2s}
 .nav-btn:hover{border-color:var(--amp);color:var(--amp);box-shadow:0 0 15px rgba(0,212,255,.3)}
 #prevBtn{left:12px}#nextBtn{right:12px}
 .progress{position:fixed;bottom:0;left:0;width:100%;height:4px;background:var(--border);z-index:100}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--amp),#7c3aed);transition:width .4s ease}
+.progress-fill{height:100%;background:#f4eedc;transition:width .4s ease}
 .counter{position:fixed;bottom:12px;right:16px;font-size:.8rem;color:var(--muted);z-index:100}
 .swipe-hint{position:absolute;bottom:60px;text-align:center;width:100%;font-size:.9rem;color:var(--muted);animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
 .failure-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin:6px 0;width:100%;max-width:800px}
 .failure-card .task-id{font-weight:700;color:var(--red)}
 .failure-card .desc{color:var(--muted);font-size:.85rem}
-.highlight{background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(124,58,237,.1));border:1px solid rgba(0,212,255,.3);border-radius:12px;padding:clamp(12px,2vw,20px);margin:.5em 0;text-align:center;max-width:800px}
+.highlight{background:#f4eedc;border:1px solid rgba(0,212,255,.3);border-radius:12px;padding:clamp(12px,2vw,20px);margin:.5em 0;text-align:center;max-width:800px}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -70,7 +82,7 @@ a.task-link:hover{color:#fff;border-bottom-color:var(--amp)}
 <p>April 17, 2026 &nbsp;|&nbsp; 41 Valid Tasks &nbsp;|&nbsp; WSL2 + CUDA 12.8 + g++ 13.3</p>
 <p style="margin-top:.5em;font-size:.8rem">22 C++ tasks (easy → extreme) &nbsp;•&nbsp; 19 CUDA tasks (easy → extreme)</p>
 <div style="max-width:680px;margin:1.2em auto 0;padding:14px 18px;background:rgba(255,213,79,.08);border:1px solid rgba(255,213,79,.35);border-radius:10px;text-align:center">
-<p style="font-size:.82rem;color:#ffd54f;margin:0"><b>Update — July 2026:</b> This page reports an April 17, 2026 QuickSWE v2 run using Amp Deep³ and Claude Opus 4.7. Newer experiments test <b>Amp Ultra/Rush</b> and <b>Claude Fable 5</b> with different tasks and methodology, so their scores are not directly comparable to the 97.6% vs 82.9% results shown here. See <a href="baboons-benchmark-report.html" style="color:#4fc3f7">Baboons Benchmark</a> · <a href="harness-beats-model.html" style="color:#4fc3f7">Harness Beats the Model</a> · <a href="final-scores.html" style="color:#4fc3f7">Final Scores</a></p>
+<p style="font-size:.82rem;color:#1d1a16;margin:0"><b>Update — July 2026:</b> This page reports an April 17, 2026 QuickSWE v2 run using Amp Deep³ and Claude Opus 4.7. Newer experiments test <b>Amp Ultra/Rush</b> and <b>Claude Fable 5</b> with different tasks and methodology, so their scores are not directly comparable to the 97.6% vs 82.9% results shown here. See <a href="baboons-benchmark-report.html" style="color:#12457a">Baboons Benchmark</a> · <a href="harness-beats-model.html" style="color:#12457a">Harness Beats the Model</a> · <a href="final-scores.html" style="color:#12457a">Final Scores</a></p>
 </div>
 <div class="swipe-hint" id="swipeHint">← Swipe to navigate →</div>
 </div>
@@ -340,7 +352,7 @@ document.addEventListener('click',e=>{if(isLink(e.target)){e.stopPropagation()}}
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

@@ -8,18 +8,18 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
   :root {
-    --bg-primary: #050B18;
-    --bg-slide: #0A1628;
-    --bg-card: #111D33;
-    --accent-red: #E21E26;
-    --accent-cyan: #00BFFF;
-    --accent-green: #00E676;
-    --accent-yellow: #FFD700;
-    --accent-orange: #FF9100;
-    --text-primary: #FFFFFF;
-    --text-secondary: #A0B4CC;
-    --text-muted: #5A7A9A;
-    --border: #1A2D48;
+    --bg-primary:#f4eedc;
+    --bg-slide:#fbf8ee;
+    --bg-card:#fbf8ee;
+    --accent-red:#b8322a;
+    --accent-cyan:#12457a;
+    --accent-green:#2f6b3a;
+    --accent-yellow:#9a5b10;
+    --accent-orange:#9a5b10;
+    --text-primary:#1d1a16;
+    --text-secondary:#4a443a;
+    --text-muted:#6b6353;
+    --border:#b9ae90;
     --gradient-red: linear-gradient(135deg, #E21E26, #FF4444);
     --gradient-cyan: linear-gradient(135deg, #00BFFF, #0080FF);
     --gradient-green: linear-gradient(135deg, #00E676, #00C853);
@@ -56,7 +56,7 @@
     top: 50%;
     transform: translateY(-50%);
     z-index: 2000;
-    background: rgba(0, 191, 255, 0.1);
+    background:rgba(0, 191, 255, 0.1);
     border: 1px solid rgba(0, 191, 255, 0.25);
     color: var(--accent-cyan);
     font-size: 36px;
@@ -74,9 +74,9 @@
   }
 
   .arrow-btn:hover {
-    background: rgba(0, 191, 255, 0.22);
-    border-color: rgba(0, 191, 255, 0.5);
-    color: #fff;
+    background:rgba(0, 191, 255, 0.22);
+    border-color:rgba(18,69,122,0.5);
+    color:#1d1a16;
     transform: translateY(-50%) scale(1.08);
     box-shadow: 0 0 30px rgba(0, 191, 255, 0.2);
   }
@@ -103,7 +103,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    background: rgba(5, 11, 24, 0.85);
+    background:rgba(251,248,238,0.85);
     backdrop-filter: blur(16px);
     border: 1px solid var(--border);
     border-radius: 30px;
@@ -154,7 +154,7 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background: rgba(5, 11, 24, 0.92);
+    background:rgba(251,248,238,0.92);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     padding: 0 40px;
@@ -211,7 +211,7 @@
 
   .nav-links a:hover {
     color: var(--text-primary);
-    background: rgba(0, 191, 255, 0.1);
+    background:rgba(0, 191, 255, 0.1);
   }
 
   /* Slide System */
@@ -236,8 +236,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: radial-gradient(ellipse at 20% 50%, rgba(0, 191, 255, 0.03) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, rgba(226, 30, 38, 0.02) 0%, transparent 50%);
+    background:#f4eedc;
     pointer-events: none;
   }
 
@@ -283,7 +282,7 @@
     font-weight: 900;
     letter-spacing: -1.5px;
     margin-bottom: 16px;
-    background: linear-gradient(135deg, #FFFFFF, #A0B4CC);
+    background:linear-gradient(135deg, #FFFFFF, #A0B4CC);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1.15;
@@ -306,14 +305,14 @@
   .classification-badge {
     display: inline-block;
     padding: 6px 20px;
-    background: rgba(226, 30, 38, 0.15);
+    background:rgba(226, 30, 38, 0.15);
     border: 1px solid rgba(226, 30, 38, 0.4);
     border-radius: 20px;
     font-size: 11px;
     font-weight: 700;
     letter-spacing: 2px;
     text-transform: uppercase;
-    color: #FF6B6B;
+    color:#f4eedc;
     margin-top: 20px;
   }
 
@@ -369,7 +368,7 @@
   }
 
   .card:hover {
-    border-color: rgba(0, 191, 255, 0.3);
+    border-color:rgba(18,69,122,0.3);
     transform: translateY(-2px);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   }
@@ -385,11 +384,11 @@
     margin-bottom: 16px;
   }
 
-  .card-icon.red { background: rgba(226, 30, 38, 0.15); }
-  .card-icon.cyan { background: rgba(0, 191, 255, 0.15); }
-  .card-icon.green { background: rgba(0, 230, 118, 0.15); }
-  .card-icon.yellow { background: rgba(255, 215, 0, 0.15); }
-  .card-icon.orange { background: rgba(255, 145, 0, 0.15); }
+  .card-icon.red { background:rgba(226, 30, 38, 0.15); }
+  .card-icon.cyan { background:rgba(0, 191, 255, 0.15); }
+  .card-icon.green { background:rgba(0, 230, 118, 0.15); }
+  .card-icon.yellow { background:rgba(255, 215, 0, 0.15); }
+  .card-icon.orange { background:rgba(255, 145, 0, 0.15); }
 
   .card h4 {
     font-size: 16px;
@@ -435,11 +434,11 @@
     text-transform: uppercase;
   }
 
-  .badge-green { background: rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
-  .badge-cyan { background: rgba(0, 191, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 191, 255, 0.3); }
-  .badge-yellow { background: rgba(255, 215, 0, 0.15); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
-  .badge-red { background: rgba(226, 30, 38, 0.15); color: #FF6B6B; border: 1px solid rgba(226, 30, 38, 0.3); }
-  .badge-orange { background: rgba(255, 145, 0, 0.15); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
+  .badge-green { background:rgba(0, 230, 118, 0.15); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
+  .badge-cyan { background:rgba(0, 191, 255, 0.15); color: var(--accent-cyan); border: 1px solid rgba(0, 191, 255, 0.3); }
+  .badge-yellow { background:rgba(255, 215, 0, 0.15); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
+  .badge-red { background:rgba(226, 30, 38, 0.15); color:#f4eedc; border: 1px solid rgba(226, 30, 38, 0.3); }
+  .badge-orange { background:rgba(255, 145, 0, 0.15); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
 
   /* Table */
   .data-table {
@@ -452,7 +451,7 @@
   .data-table thead th {
     text-align: left;
     padding: 12px 16px;
-    background: rgba(0, 191, 255, 0.06);
+    background:rgba(0, 191, 255, 0.06);
     border-bottom: 1px solid var(--border);
     font-weight: 700;
     font-size: 11px;
@@ -469,7 +468,7 @@
   }
 
   .data-table tbody tr:hover td {
-    background: rgba(0, 191, 255, 0.03);
+    background:rgba(0, 191, 255, 0.03);
   }
 
   /* Risk Matrix */
@@ -501,9 +500,9 @@
     text-transform: uppercase;
   }
 
-  .risk-low { background: rgba(0, 230, 118, 0.12); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
-  .risk-medium { background: rgba(255, 215, 0, 0.12); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
-  .risk-high { background: rgba(255, 145, 0, 0.12); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
+  .risk-low { background:rgba(0, 230, 118, 0.12); color: var(--accent-green); border: 1px solid rgba(0, 230, 118, 0.3); }
+  .risk-medium { background:rgba(255, 215, 0, 0.12); color: var(--accent-yellow); border: 1px solid rgba(255, 215, 0, 0.3); }
+  .risk-high { background:rgba(255, 145, 0, 0.12); color: var(--accent-orange); border: 1px solid rgba(255, 145, 0, 0.3); }
 
   .risk-details h5 {
     font-size: 14px;
@@ -528,17 +527,17 @@
   }
 
   .callout-info {
-    background: rgba(0, 191, 255, 0.06);
+    background:rgba(0, 191, 255, 0.06);
     border: 1px solid rgba(0, 191, 255, 0.2);
   }
 
   .callout-warn {
-    background: rgba(255, 215, 0, 0.06);
+    background:rgba(255, 215, 0, 0.06);
     border: 1px solid rgba(255, 215, 0, 0.2);
   }
 
   .callout-danger {
-    background: rgba(226, 30, 38, 0.06);
+    background:rgba(226, 30, 38, 0.06);
     border: 1px solid rgba(226, 30, 38, 0.2);
   }
 
@@ -575,8 +574,8 @@
   }
 
   .ref-link:hover {
-    color: #66D9FF;
-    border-bottom-color: #66D9FF;
+    color:#12457a;
+    border-bottom-color:#b9ae90;
   }
 
   /* Checklist */
@@ -631,10 +630,10 @@
     min-width: 140px;
   }
 
-  .arch-box.client { background: rgba(0, 191, 255, 0.12); border: 1px solid rgba(0, 191, 255, 0.3); color: var(--accent-cyan); }
-  .arch-box.server { background: rgba(226, 30, 38, 0.12); border: 1px solid rgba(226, 30, 38, 0.3); color: #FF6B6B; }
-  .arch-box.provider { background: rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.3); color: var(--accent-yellow); }
-  .arch-box.infra { background: rgba(0, 230, 118, 0.12); border: 1px solid rgba(0, 230, 118, 0.3); color: var(--accent-green); }
+  .arch-box.client { background:rgba(0, 191, 255, 0.12); border: 1px solid rgba(0, 191, 255, 0.3); color: var(--accent-cyan); }
+  .arch-box.server { background:rgba(226, 30, 38, 0.12); border: 1px solid rgba(226, 30, 38, 0.3); color:#f4eedc; }
+  .arch-box.provider { background:rgba(255, 215, 0, 0.12); border: 1px solid rgba(255, 215, 0, 0.3); color: var(--accent-yellow); }
+  .arch-box.infra { background:rgba(0, 230, 118, 0.12); border: 1px solid rgba(0, 230, 118, 0.3); color: var(--accent-green); }
 
   .arch-arrow {
     font-size: 20px;
@@ -677,7 +676,7 @@
   }
 
   .compliance-item:hover {
-    border-color: rgba(0, 230, 118, 0.3);
+    border-color:rgba(47,107,58,0.3);
     transform: translateY(-2px);
   }
 
@@ -769,7 +768,7 @@
   .verdict-box .verdict-score {
     font-size: 64px;
     font-weight: 900;
-    background: linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
+    background:linear-gradient(135deg, var(--accent-green), var(--accent-cyan));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1;
@@ -777,7 +776,7 @@
   }
 
   .verdict-box p {
-    color: var(--text-secondary);
+    color:#f4eedc;
     font-size: 14px;
     max-width: 600px;
     margin: 0 auto;
@@ -790,7 +789,7 @@
     .slides-wrapper { display: block; transform: none !important; }
     .slide { page-break-after: always; min-height: auto; height: auto; min-width: auto; width: auto; padding: 40px; overflow: visible; }
     body, html { overflow: visible; height: auto; }
-    body { background: #fff; color: #000; }
+    body { background:#fff; color:#000; }
   }
 
   /* Tablet */
@@ -867,6 +866,18 @@
     .slide-dots { display: none; }
     .slide-number { display: none; }
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -952,7 +963,7 @@
       <div class="card">
         <div class="card-icon green">🔐</div>
         <h4>Data Protection</h4>
-        <p>Enterprise plan provides <strong style="color:#fff">zero data retention</strong> on all LLM providers. AES-256 encryption at rest. TLS 1.2+ in transit. No model training on customer data.</p>
+        <p>Enterprise plan provides <strong style="color:#1d1a16">zero data retention</strong> on all LLM providers. AES-256 encryption at rest. TLS 1.2+ in transit. No model training on customer data.</p>
         <br><span class="badge badge-green">Enterprise-Grade</span>
       </div>
       <div class="card">
@@ -1147,8 +1158,8 @@
         <div class="card-icon green">🔒</div>
         <h4>Encryption Standards</h4>
         <ul>
-          <li><strong style="color:#fff">In Transit:</strong> TLS 1.2+ for all traffic</li>
-          <li><strong style="color:#fff">At Rest:</strong> AES-256 volume-level encryption</li>
+          <li><strong style="color:#1d1a16">In Transit:</strong> TLS 1.2+ for all traffic</li>
+          <li><strong style="color:#1d1a16">At Rest:</strong> AES-256 volume-level encryption</li>
           <li>Backups similarly encrypted</li>
           <li>GCP-managed encryption keys</li>
         </ul>
@@ -1160,8 +1171,8 @@
           <li>Enterprise plan: zero data retention on ALL LLM providers</li>
           <li>No input/output text retained beyond inference time</li>
           <li>Images: extremely limited retention for AUP compliance only</li>
-          <li>Amp does <strong style="color:#fff">NOT</strong> train models on your data</li>
-          <li>Training can <strong style="color:#fff">never</strong> be enabled on Enterprise plans</li>
+          <li>Amp does <strong style="color:#1d1a16">NOT</strong> train models on your data</li>
+          <li>Training can <strong style="color:#1d1a16">never</strong> be enabled on Enterprise plans</li>
         </ul>
       </div>
       <div class="card">
@@ -1287,7 +1298,7 @@
         <h4>Single Sign-On (SSO)</h4>
         <ul>
           <li>SSO via Okta, SAML, OAuth, OpenID Connect</li>
-          <li>SSO can be set as <strong style="color:#fff">exclusive</strong> auth method (disable passwords)</li>
+          <li>SSO can be set as <strong style="color:#1d1a16">exclusive</strong> auth method (disable passwords)</li>
           <li>Powered by <a class="ref-link" href="https://workos.com" target="_blank">WorkOS</a></li>
           <li>HTTP Proxy auth also supported (self-hosted)</li>
           <li>Workspace Admin configuration dashboard</li>
@@ -1350,18 +1361,18 @@
         <div class="card" style="margin-bottom:20px">
           <h4>Supported Secret Types</h4>
           <ul>
-            <li><strong style="color:#fff">Cloud Providers:</strong> AWS, Google Cloud, Azure credentials</li>
-            <li><strong style="color:#fff">Dev Platforms:</strong> GitHub, GitLab, Sourcegraph, Amp tokens</li>
-            <li><strong style="color:#fff">LLM Providers:</strong> OpenAI, Anthropic, HuggingFace API keys</li>
-            <li><strong style="color:#fff">Common Services:</strong> Stripe, Slack, npm tokens</li>
-            <li><strong style="color:#fff">Generic Patterns:</strong> API keys, webhook secrets, password fields</li>
+            <li><strong style="color:#1d1a16">Cloud Providers:</strong> AWS, Google Cloud, Azure credentials</li>
+            <li><strong style="color:#1d1a16">Dev Platforms:</strong> GitHub, GitLab, Sourcegraph, Amp tokens</li>
+            <li><strong style="color:#1d1a16">LLM Providers:</strong> OpenAI, Anthropic, HuggingFace API keys</li>
+            <li><strong style="color:#1d1a16">Common Services:</strong> Stripe, Slack, npm tokens</li>
+            <li><strong style="color:#1d1a16">Generic Patterns:</strong> API keys, webhook secrets, password fields</li>
           </ul>
         </div>
         <div class="card">
           <h4>How It Works</h4>
           <p style="margin-bottom:12px">Detected secrets are replaced with markers like:</p>
-          <code style="background:rgba(226,30,38,0.15); color:#FF6B6B; padding:6px 14px; border-radius:6px; font-size:13px; display:inline-block;">[REDACTED:amp]</code>
-          <p style="margin-top:12px">Redaction occurs <strong style="color:#fff">before</strong> data leaves the client — secrets never reach the LLM, local cache, or server.</p>
+          <code style="background:rgba(226,30,38,0.15); color:#b8322a; padding:6px 14px; border-radius:6px; font-size:13px; display:inline-block;">[REDACTED:amp]</code>
+          <p style="margin-top:12px">Redaction occurs <strong style="color:#1d1a16">before</strong> data leaves the client — secrets never reach the LLM, local cache, or server.</p>
         </div>
       </div>
       <div>
@@ -1423,56 +1434,56 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong style="color:#fff">Google Cloud Platform</strong></td>
+            <td><strong style="color:#1d1a16">Google Cloud Platform</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>Primary infrastructure, PostgreSQL, storage</td>
             <td><span class="badge badge-green">Low</span></td>
           </tr>
           <tr>
-            <td><strong style="color:#fff">Anthropic (Claude)</strong></td>
+            <td><strong style="color:#1d1a16">Anthropic (Claude)</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>Primary LLM inference</td>
             <td><span class="badge badge-green">Low</span></td>
           </tr>
           <tr>
-            <td><strong style="color:#fff">OpenAI</strong></td>
+            <td><strong style="color:#1d1a16">OpenAI</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>LLM inference (select models)</td>
             <td><span class="badge badge-green">Low</span></td>
           </tr>
           <tr>
-            <td><strong style="color:#fff">Google Vertex AI</strong></td>
+            <td><strong style="color:#1d1a16">Google Vertex AI</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>Gemini / Claude inference</td>
             <td><span class="badge badge-green">Low</span></td>
           </tr>
           <tr>
-            <td><strong style="color:#fff">Amazon Bedrock</strong></td>
+            <td><strong style="color:#1d1a16">Amazon Bedrock</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>Claude inference</td>
             <td><span class="badge badge-green">Low</span></td>
           </tr>
           <tr>
-            <td><strong style="color:#fff">xAI</strong></td>
+            <td><strong style="color:#1d1a16">xAI</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>LLM inference</td>
             <td><span class="badge badge-green">Low</span></td>
           </tr>
           <tr>
-            <td><strong style="color:#fff">Fireworks</strong></td>
+            <td><strong style="color:#1d1a16">Fireworks</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>Proprietary Amp model features</td>
             <td><span class="badge badge-green">Low</span></td>
           </tr>
           <tr>
-            <td><strong style="color:#fff">Baseten</strong></td>
+            <td><strong style="color:#1d1a16">Baseten</strong></td>
             <td>🇺🇸 USA</td>
             <td><span class="badge badge-yellow">Partial Code</span></td>
             <td>Proprietary Amp model features</td>
@@ -1573,14 +1584,14 @@
         <div class="risk-level risk-medium">MEDIUM</div>
         <div class="risk-details">
           <h5>Secret Exposure via LLM Context</h5>
-          <p>Automatic redaction is best-effort — non-standard secrets may pass through. <strong style="color:#FFD700">Mitigation:</strong> Developer training, secret rotation policy, custom secret pattern requests.</p>
+          <p>Automatic redaction is best-effort — non-standard secrets may pass through. <strong style="color:#1d1a16">Mitigation:</strong> Developer training, secret rotation policy, custom secret pattern requests.</p>
         </div>
       </div>
       <div class="risk-item">
         <div class="risk-level risk-medium">MEDIUM</div>
         <div class="risk-details">
           <h5>Prompt Injection / LLM Manipulation</h5>
-          <p>Inherent to all LLM-based agents. Ampcode has bash/tool execution capabilities. <strong style="color:#FFD700">Mitigation:</strong> User approval for destructive actions, bug bounty program covers prompt injection.</p>
+          <p>Inherent to all LLM-based agents. Ampcode has bash/tool execution capabilities. <strong style="color:#1d1a16">Mitigation:</strong> User approval for destructive actions, bug bounty program covers prompt injection.</p>
         </div>
       </div>
       <div class="risk-item">
@@ -1617,7 +1628,7 @@
     </p>
 
     <div class="split-container">
-      <div class="split-col vendor" style="border-color:rgba(0,230,118,0.3)">
+      <div class="split-col vendor" style="border-color:rgba(47,107,58,0.3)">
         <h4><span style="color:var(--accent-green)">🟢</span> Sourcegraph / Ampcode Responsibility</h4>
         <ul>
           <li>Application security (secure SDLC, code reviews, pentesting)</li>
@@ -1634,20 +1645,20 @@
           <li>Secure software supply chain (SBOMs, distroless images)</li>
         </ul>
       </div>
-      <div class="split-col customer" style="border-color:rgba(255,215,0,0.3)">
+      <div class="split-col customer" style="border-color:rgba(29,26,22,0.3)">
         <h4><span style="color:var(--accent-yellow)">🟡</span> Your Organization's Responsibility</h4>
         <ul>
-          <li><strong style="color:#fff">Access token management</strong> — secure storage, rotation, and revocation of tokens</li>
-          <li><strong style="color:#fff">Code host connection configuration</strong> — ensure correct repositories are linked and permissions are properly set</li>
-          <li><strong style="color:#fff">User access management</strong> — control who has access to your workspace and data</li>
-          <li><strong style="color:#fff">Repository permission configuration</strong> — enforce code host permissions</li>
-          <li><strong style="color:#fff">Secret hygiene</strong> — don't hardcode secrets; use vaults; train developers on non-standard secret risks</li>
-          <li><strong style="color:#fff">Thread privacy management</strong> — mark sensitive threads as private; review shared thread content</li>
-          <li><strong style="color:#fff">MCP server trust decisions</strong> — evaluate third-party MCP extensions before installation</li>
-          <li><strong style="color:#fff">Compliance awareness</strong> — understand how code sharing impacts your regulatory obligations</li>
-          <li><strong style="color:#fff">Developer training</strong> — educate teams on AI agent risks, prompt injection, and data exposure</li>
-          <li><strong style="color:#fff">Corporate proxy/firewall config</strong> — allowlist required Amp domains</li>
-          <li><strong style="color:#fff">Incident response coordination</strong> — maintain playbooks for secret exposure in LLM contexts</li>
+          <li><strong style="color:#1d1a16">Access token management</strong> — secure storage, rotation, and revocation of tokens</li>
+          <li><strong style="color:#1d1a16">Code host connection configuration</strong> — ensure correct repositories are linked and permissions are properly set</li>
+          <li><strong style="color:#1d1a16">User access management</strong> — control who has access to your workspace and data</li>
+          <li><strong style="color:#1d1a16">Repository permission configuration</strong> — enforce code host permissions</li>
+          <li><strong style="color:#1d1a16">Secret hygiene</strong> — don't hardcode secrets; use vaults; train developers on non-standard secret risks</li>
+          <li><strong style="color:#1d1a16">Thread privacy management</strong> — mark sensitive threads as private; review shared thread content</li>
+          <li><strong style="color:#1d1a16">MCP server trust decisions</strong> — evaluate third-party MCP extensions before installation</li>
+          <li><strong style="color:#1d1a16">Compliance awareness</strong> — understand how code sharing impacts your regulatory obligations</li>
+          <li><strong style="color:#1d1a16">Developer training</strong> — educate teams on AI agent risks, prompt injection, and data exposure</li>
+          <li><strong style="color:#1d1a16">Corporate proxy/firewall config</strong> — allowlist required Amp domains</li>
+          <li><strong style="color:#1d1a16">Incident response coordination</strong> — maintain playbooks for secret exposure in LLM contexts</li>
         </ul>
       </div>
     </div>
@@ -1704,7 +1715,7 @@
             <span class="badge badge-green" style="font-size:13px;padding:6px 16px;">RECOMMENDED FOR ENTERPRISE USE</span>
           </p>
           <p>
-            Ampcode/Sourcegraph demonstrates a <strong style="color:#fff">mature enterprise security posture</strong> with SOC 2 Type II certification, 
+            Ampcode/Sourcegraph demonstrates a <strong style="color:#1d1a16">mature enterprise security posture</strong> with SOC 2 Type II certification, 
             ISO 27001:2022, comprehensive encryption, zero LLM data retention on Enterprise plans, SSO/SCIM support, 
             and a well-defined shared responsibility model. All infrastructure is US-based with no China-based providers.
           </p>
@@ -1848,7 +1859,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

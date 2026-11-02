@@ -9,16 +9,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --esl-blue: #008dff;
+      --esl-blue:#12457a;
       --esl-blue-dark: #005bb8;
-      --esl-cyan: #00d4ff;
-      --esl-orange: #ff9f1c;
-      --esl-red: #ff4d4d;
-      --text: #101828;
-      --muted: #475467;
-      --bg: #eef7ff;
-      --card: #ffffff;
-      --line: rgba(0, 91, 184, 0.18);
+      --esl-cyan:#12457a;
+      --esl-orange:#b8322a;
+      --esl-red:#b8322a;
+      --text:#1d1a16;
+      --muted:#6b6353;
+      --bg:#f4eedc;
+      --card:#fbf8ee;
+      --line:#b9ae90;
       --shadow: 0 28px 90px rgba(0, 91, 184, 0.24);
       --radius: 28px;
     }
@@ -33,8 +33,7 @@
       height: 100%;
       margin: 0;
       overflow: hidden;
-      background:
-        radial-gradient(circle at 12% 14%, rgba(0, 212, 255, 0.34), transparent 28%),
+      background:radial-gradient(circle at 12% 14%, rgba(0, 212, 255, 0.34), transparent 28%),
         radial-gradient(circle at 84% 10%, rgba(255, 159, 28, 0.36), transparent 30%),
         radial-gradient(circle at 72% 86%, rgba(255, 77, 77, 0.18), transparent 26%),
         linear-gradient(135deg, #ffffff 0%, var(--bg) 38%, #d7ecff 100%);
@@ -77,7 +76,7 @@
       width: min(1188px, max(320px, calc(100% - clamp(170px, 13vw, 190px))));
       height: calc(100vh - clamp(28px, 5vw, 68px));
       min-height: 0;
-      background: rgba(255, 255, 255, 0.94);
+      background:rgba(255, 255, 255, 0.94);
       border: 1px solid rgba(255, 255, 255, 0.74);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -94,7 +93,7 @@
       gap: 16px;
       padding: clamp(12px, 1.5vw, 18px) clamp(16px, 2.4vw, 30px);
       border-bottom: 1px solid var(--line);
-      background: linear-gradient(90deg, rgba(0, 141, 255, 0.14), rgba(255, 255, 255, 0.88), rgba(255, 159, 28, 0.15));
+      background:linear-gradient(90deg, rgba(0, 141, 255, 0.14), rgba(255, 255, 255, 0.88), rgba(255, 159, 28, 0.15));
     }
 
     .brand {
@@ -195,7 +194,7 @@
       width: fit-content;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(74, 144, 226, 0.10);
+      background:rgba(74, 144, 226, 0.10);
       color: var(--esl-blue-dark);
       font-size: 0.82rem;
       font-weight: 900;
@@ -253,11 +252,11 @@
     }
 
     .card.blue {
-      background: linear-gradient(135deg, rgba(0, 141, 255, 0.22), #ffffff 62%);
+      background:linear-gradient(135deg, rgba(0, 141, 255, 0.22), #ffffff 62%);
     }
 
     .card.orange-card {
-      background: linear-gradient(135deg, rgba(255, 159, 28, 0.26), #ffffff 60%);
+      background:linear-gradient(135deg, rgba(255, 159, 28, 0.26), #ffffff 60%);
     }
 
     .mockup {
@@ -266,7 +265,7 @@
       border: 1px solid rgba(34, 34, 34, 0.12);
       box-shadow: 0 22px 55px rgba(0, 0, 0, 0.16);
       object-fit: cover;
-      background: #fff;
+      background:#fff;
     }
 
     .screenshot {
@@ -276,7 +275,7 @@
       border-radius: 18px;
       border: 1px solid var(--line);
       box-shadow: 0 18px 44px rgba(0, 0, 0, 0.13);
-      background: #151515;
+      background:#fbf8ee;
     }
 
     .screenshot-full {
@@ -286,7 +285,7 @@
       border-radius: 24px;
       border: 2px solid rgba(0, 141, 255, 0.28);
       box-shadow: 0 28px 70px rgba(0, 0, 0, 0.22);
-      background: #0b1220;
+      background:#fbf8ee;
     }
 
     .screenshot-slide {
@@ -300,7 +299,7 @@
       object-fit: contain;
       border-radius: 16px;
       border: 1px solid var(--line);
-      background: #111;
+      background:#fbf8ee;
       box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
       margin-bottom: 14px;
     }
@@ -319,7 +318,7 @@
       gap: 8px;
       padding: 10px 13px;
       border-radius: 999px;
-      background: #fff;
+      background:#fff;
       border: 1px solid var(--line);
       color: var(--muted);
       font-size: 0.88rem;
@@ -342,13 +341,13 @@
       padding: 12px 18px;
       border-radius: 999px;
       background: var(--esl-blue);
-      color: #fff;
+      color:#f4eedc;
       font-weight: 900;
       box-shadow: 0 12px 26px rgba(74, 144, 226, 0.28);
     }
 
     .button.secondary {
-      background: #fff;
+      background:#fff;
       color: var(--esl-blue-dark);
       border: 1px solid var(--line);
       box-shadow: none;
@@ -356,14 +355,14 @@
 
     .button:hover,
     .button:focus-visible {
-      color: #fff;
+      color:#f4eedc;
       text-decoration: none;
       transform: translateY(-1px);
     }
 
     .button.secondary:hover,
     .button.secondary:focus-visible {
-      color: var(--esl-orange);
+      color:#f4eedc;
     }
 
     .list {
@@ -390,14 +389,14 @@
       width: 10px;
       height: 10px;
       border-radius: 4px;
-      background: linear-gradient(135deg, var(--esl-blue), var(--esl-orange));
+      background:linear-gradient(135deg, var(--esl-blue), var(--esl-orange));
     }
 
     .formula {
       padding: 14px;
       border-radius: 18px;
-      background: linear-gradient(135deg, #071426, #102a4c);
-      color: #e0fbff;
+      background:linear-gradient(135deg, #e3dabf, #e3dabf);
+      color:#1d1a16;
       font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
       font-size: clamp(0.66rem, 0.96vw, 0.86rem);
       line-height: 1.45;
@@ -407,12 +406,12 @@
     }
 
     .formula .accent {
-      color: #ffd166;
+      color:#1d1a16;
     }
 
     .diagram-card {
-      background: #071426;
-      color: #e0fbff;
+      background:#fbf8ee;
+      color:#1d1a16;
       border-radius: 24px;
       padding: clamp(12px, 1.5vw, 18px);
       border: 1px solid rgba(0, 212, 255, 0.26);
@@ -433,7 +432,7 @@
     .tech-item {
       padding: 12px;
       border-radius: 18px;
-      background: #ffffff;
+      background:#ffffff;
       border: 1px solid var(--line);
       box-shadow: 0 12px 28px rgba(0, 91, 184, 0.08);
     }
@@ -460,7 +459,7 @@
     .metric {
       padding: 18px;
       border-radius: 20px;
-      background: #fff;
+      background:#fff;
       border: 1px solid var(--line);
     }
 
@@ -492,7 +491,7 @@
       align-items: start;
       padding: 11px;
       border-radius: 18px;
-      background: #fff;
+      background:#fff;
       border: 1px solid var(--line);
     }
 
@@ -503,8 +502,8 @@
       width: 34px;
       height: 34px;
       border-radius: 11px;
-      background: linear-gradient(135deg, var(--esl-blue), var(--esl-orange));
-      color: #fff;
+      background:#f4eedc;
+      color:#1d1a16;
       font-weight: 900;
     }
 
@@ -516,8 +515,8 @@
     }
 
     .terminal {
-      background: #111827;
-      color: #e5e7eb;
+      background:#fbf8ee;
+      color:#1d1a16;
       border-radius: 20px;
       padding: 14px;
       font-family: "JetBrains Mono", ui-monospace, Consolas, monospace;
@@ -529,11 +528,11 @@
     }
 
     .terminal .comment {
-      color: #9ca3af;
+      color:#6b6353;
     }
 
     .terminal .prompt {
-      color: #93c5fd;
+      color:#12457a;
     }
 
     .nav {
@@ -545,7 +544,7 @@
       height: clamp(42px, 5vw, 58px);
       border: 0;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.92);
+      background:rgba(255, 255, 255, 0.92);
       color: var(--text);
       font-size: clamp(2rem, 4vw, 3rem);
       line-height: 1;
@@ -581,14 +580,14 @@
       right: 0;
       bottom: 0;
       height: 8px;
-      background: rgba(34, 34, 34, 0.10);
+      background:rgba(251,248,238,0.10);
       z-index: 30;
     }
 
     .progress-fill {
       height: 100%;
       width: 0;
-      background: linear-gradient(90deg, var(--esl-blue), var(--esl-orange));
+      background:#f4eedc;
       transition: width 320ms ease;
     }
 
@@ -599,7 +598,7 @@
       z-index: 31;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.92);
+      background:rgba(255, 255, 255, 0.92);
       border: 1px solid var(--line);
       color: var(--muted);
       font-weight: 900;
@@ -615,8 +614,8 @@
       z-index: 32;
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(16, 24, 40, 0.88);
-      color: #fff;
+      background:rgba(251,248,238,0.88);
+      color:#1d1a16;
       font-weight: 900;
       font-size: 0.84rem;
       animation: pulseHint 1.8s ease-in-out infinite;
@@ -820,6 +819,18 @@
       }
     }
   </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
   <main class="deck" id="deck" aria-live="polite">
@@ -1239,7 +1250,7 @@ forecast = measured_total × devs × days × frequency
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

@@ -8,21 +8,21 @@
 <title>16 GB/s of JSON on a Laptop | ESL Benchmark</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>:root {
-  --blue: #3d7cdb; --blue-bg: #eef4fc; --amber: #ffb30b;
-  --ink: #1c2430; --muted: #566273; --line: #d6dce4; --panel: #f7f9fb;
-  --good: #17784c; --mono: "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+  --blue:#12457a; --blue-bg: #eef4fc; --amber:#9a5b10;
+  --ink:#1d1a16; --muted:#6b6353; --line:#b9ae90; --panel:#fbf8ee;
+  --good:#2f6b3a; --mono: "Cascadia Mono", Consolas, "Liberation Mono", monospace;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; overflow: hidden; background: white; }
+html, body { margin: 0; height: 100%; overflow: hidden; background:white; }
 body { font-family: Inter, "Segoe UI", Arial, sans-serif; color: var(--ink); }
 a { color: var(--blue); text-underline-offset: 3px; overflow-wrap: anywhere; }
 a:focus-visible, button:focus-visible { outline: 3px solid var(--amber); outline-offset: 4px; }
 button { font: inherit; }
 #slides { display: flex; width: 100vw; height: 100vh; height: 100dvh; transition: transform .3s ease; }
 .slide { flex: 0 0 100vw; width: 100vw; height: 100vh; height: 100dvh; position: relative;
-  display: flex; flex-direction: column; padding: 0 clamp(56px, 5vw, 90px); background: white; }
+  display: flex; flex-direction: column; padding: 0 clamp(56px, 5vw, 90px); background:white; }
 .slide::before { content: ""; position: absolute; inset: 0 0 auto; height: 6px;
-  background: linear-gradient(90deg, var(--blue) 82%, var(--amber) 82%); }
+  background:#f4eedc; }
 .hd { display: flex; align-items: center; justify-content: space-between; gap: 26px;
   flex: 0 0 auto; padding: clamp(22px, 3.5vh, 42px) 0 18px; border-bottom: 1px solid var(--ink); }
 .eyebrow, .label { font-family: var(--mono); font-size: clamp(11px, .94vw, 15px); text-transform: uppercase;
@@ -51,9 +51,9 @@ p, li { font-size: clamp(16px, 1.27vw, 21px); line-height: 1.55; }
 .row.wide { grid-template-columns: 1.35fr 1fr; }
 .col { display: flex; flex-direction: column; gap: 22px; min-width: 0; }
 .grow { flex: 1; }
-.card { padding: clamp(18px, 1.5vw, 24px); border: 1px solid var(--line); background: white; min-width: 0; }
+.card { padding: clamp(18px, 1.5vw, 24px); border: 1px solid var(--line); background:white; min-width: 0; }
 .edge { border-top: 3px solid var(--blue); }
-.amber { border-top: 3px solid var(--amber); background: #fffcf4; }
+.amber { border-top: 3px solid var(--amber); background:#fffcf4; }
 .note { background: var(--panel); }
 .blue-panel { background: var(--blue-bg); }
 .card p + p { margin-top: 14px; }
@@ -75,8 +75,8 @@ ol li { margin-bottom: 16px; padding-left: 7px; }
 ol li::marker { color: var(--blue); font-weight: 700; }
 code { font-family: var(--mono); font-size: .91em; overflow-wrap: anywhere; }
 pre { margin: 0; padding: 24px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere;
-  font: clamp(12px, 1.03vw, 16.5px)/1.65 var(--mono); background: #1e2530; color: #e3e9f2; border-left: 4px solid var(--amber); }
-pre .comment { color: #b0bdcf; }
+  font: clamp(12px, 1.03vw, 16.5px)/1.65 var(--mono); background:#fbf8ee; color:#1d1a16; border-left: 4px solid var(--amber); }
+pre .comment { color:#6b6353; }
 .code-label { font: 600 13px/1.5 var(--mono); text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
 .step { border: 1px solid var(--line); padding: 22px; }
@@ -90,7 +90,7 @@ pre .comment { color: #b0bdcf; }
 .cover-main .logo { width: 210px; }
 .cover-main .lead { max-width: 640px; }
 .grid-panel { padding: clamp(24px, 2vw, 32px); display: flex; flex-direction: column; justify-content: center;
-  gap: 22px; background-color: #f6f8fb; background-image: linear-gradient(#e6ebf1 1px, transparent 1px),
+  gap: 22px; background-color:#f6f8fb; background-image:linear-gradient(#e6ebf1 1px, transparent 1px),
   linear-gradient(90deg, #e6ebf1 1px, transparent 1px); background-size: 32px 32px; }
 .byline { border-top: 1px solid var(--line); padding-top: 20px; display: flex; align-items: center; gap: 18px; margin-top: auto; }
 .portrait { width: 82px; height: 82px; object-fit: cover; border-radius: 2px; }
@@ -105,33 +105,33 @@ pre .comment { color: #b0bdcf; }
 .bars { flex: 1; min-width: 0; }
 .bar-row { display: flex; gap: 12px; align-items: center; margin: 7px 0; font: 14px var(--mono); }
 .series-name { width: 50px; flex: 0 0 50px; font-size: 12px; color: var(--muted); }
-.bar-track { flex: 1; height: 20px; background: #f1f4f8; }
+.bar-track { flex: 1; height: 20px; background:#f1f4f8; }
 .bar { display: block; height: 100%; background: var(--blue); }
-.bar.lazy { background: #a7b1be; }
+.bar.lazy { background:#a7b1be; }
 .bar-row b { width: 54px; text-align: right; }
 .legend { display: flex; flex-wrap: wrap; gap: 22px; font: 13px var(--mono); margin-bottom: 24px; }
 .legend i { width: 12px; height: 12px; display: inline-block; margin-right: 7px; background: var(--blue); }
-.legend i.gray { background: #a7b1be; }
+.legend i.gray { background:#a7b1be; }
 .latency-label { display: flex; justify-content: space-between; font: 16px var(--mono); margin: 22px 0 12px; }
 .latency-bar { height: 42px; background: var(--blue); }
-.latency-bar.gray { background: #a7b1be; }
+.latency-bar.gray { background:#a7b1be; }
 .check { display: inline-block; color: var(--good); font-weight: 700; margin-right: 10px; }
 .links { display: flex; flex-direction: column; gap: 14px; }
 .links a { font-size: clamp(14px, 1.2vw, 19px); }
 .nav { position: fixed; top: 50%; transform: translateY(-50%); z-index: 5; width: 44px; height: 44px;
-  border-radius: 50%; border: 1px solid var(--line); color: var(--ink); background: #ffffffed; cursor: pointer;
+  border-radius: 50%; border: 1px solid var(--line); color: var(--ink); background:#ffffffed; cursor: pointer;
   display: grid; place-items: center; font-size: 32px; line-height: 1; box-shadow: 0 2px 8px #1c243015; }
-.nav:hover { background: var(--blue); color: white; }
+.nav:hover { background: var(--blue); color:#f4eedc; }
 .nav[hidden] { display: none; }
 #prev { left: 8px; } #next { right: 8px; }
-#home { position: fixed; left: 10px; bottom: 10px; z-index: 6; background: white;
+#home { position: fixed; left: 10px; bottom: 10px; z-index: 6; background:white;
   border: 1px solid var(--line); padding: 6px 10px; color: var(--muted); font: 11px var(--mono); cursor: pointer; }
-#counter { position: fixed; right: 10px; bottom: 10px; z-index: 6; background: white;
+#counter { position: fixed; right: 10px; bottom: 10px; z-index: 6; background:white;
   padding: 6px 10px; font: 12px var(--mono); color: var(--muted); }
-#progress { position: fixed; bottom: 0; left: 0; height: 4px; width: 100%; background: #e9edf2; z-index: 7; }
-#progress i { display: block; height: 100%; background: linear-gradient(90deg, var(--blue), var(--amber)); transition: width .3s; }
+#progress { position: fixed; bottom: 0; left: 0; height: 4px; width: 100%; background:#e9edf2; z-index: 7; }
+#progress i { display: block; height: 100%; background:linear-gradient(90deg, var(--blue), var(--amber)); transition: width .3s; }
 #hint { position: fixed; left: 50%; transform: translateX(-50%); bottom: 16px; z-index: 6;
-  color: var(--muted); background: #fffffff0; padding: 5px 12px; font: 12px var(--mono); animation: hint 2s ease-in-out infinite; }
+  color: var(--muted); background:#fffffff0; padding: 5px 12px; font: 12px var(--mono); animation: hint 2s ease-in-out infinite; }
 @keyframes hint { 50% { opacity: .5; } }
 .clean .nav, .clean #home, .clean #counter, .clean #progress, .clean #hint { display: none; }
 .clean .ft > .mono { display: inline; }
@@ -203,6 +203,18 @@ pre .comment { color: #b0bdcf; }
   .ft > .mono { display: inline; }
   .nav, #home, #counter, #progress, #hint { display: none; }
 }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>

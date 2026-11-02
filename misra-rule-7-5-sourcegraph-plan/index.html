@@ -8,11 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Cascadia+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#e2e5ea; --sheet:#f7f8fa; --sheet2:#eef0f4; --ink:#24282d; --muted:#5a626c; --line:#cfd4da;
-  --blue:#4f9efb; --blue-text:#1d6bd0; --amber:#ffb30b; --amber-text:#8a5e00;
-  --code-bg:#16181c; --code-cap:#1f2226; --on-dark:#e6e8eb;
-  --green:#1e7d33; --red:#c03535;
-  --sg:#ff554a; --sg-line:#dcdee2; --sg-mut:#6b7280;
+  --bg:#f4eedc; --sheet:#fbf8ee; --sheet2:#ece4cc; --ink:#1d1a16; --muted:#6b6353; --line:#b9ae90;
+  --blue:#12457a; --blue-text:#12457a; --amber:#9a5b10; --amber-text:#8a5e00;
+  --code-bg:#f6efdc; --code-cap:#d9d0b8; --on-dark:#1d1a16;
+  --green:#2f6b3a; --red:#b8322a;
+  --sg:#b8322a; --sg-line:#1d1a16; --sg-mut:#6b7280;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -53,27 +53,27 @@ li::marker{color:var(--amber)}
 .note.blue{border-left-color:var(--blue);background:#eaf2fd;color:#1d3f6e}
 .note.green{border-left-color:#2fae5c;background:#e9f7ee;color:#14532a}
 figure.code{background:var(--code-bg);border-radius:10px;overflow:hidden;margin:18px 0;box-shadow:0 2px 10px rgba(15,20,30,.25)}
-figure.code figcaption{padding:10px 18px;background:var(--code-cap);color:#b7bfc7;font-size:14px;border-top:3px solid var(--amber);border-bottom:1px solid #2a2e34}
+figure.code figcaption{padding:10px 18px;background:var(--code-cap);color:#6b6353;font-size:14px;border-top:3px solid var(--amber);border-bottom:1px solid #2a2e34}
 pre{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(13.5px,1.4vw,17.5px);line-height:1.68;padding:18px 20px;overflow-x:auto;color:var(--on-dark);tab-size:4}
-.tok-c{color:#6a9955} .tok-s{color:#ce9178} .tok-n{color:#b5cea8}
-.tok-k{color:#c586d9} .tok-t{color:#4ec9b0} .tok-v{color:#9cdcfe} .tok-key{color:#9cdcfe}
+.tok-c{color:#2f6b3a} .tok-s{color:#b8322a} .tok-n{color:#6b6353}
+.tok-k{color:#6b3a6b} .tok-t{color:#2f6b3a} .tok-v{color:#1d1a16} .tok-key{color:#1d1a16}
 pre span.la{display:inline-block;width:100%;background:rgba(46,160,67,.16)}
 pre span.lr{display:inline-block;width:100%;background:rgba(248,81,73,.13)}
 .tablewrap{overflow-x:auto;margin:16px 0;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
 table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.3vw,17px)}
 th,td{padding:11px 15px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-th{background:#2a2f36;color:#fff;font-weight:650}
+th{background:#fbf8ee;color:#1d1a16;font-weight:650}
 tbody tr:nth-child(even){background:#f0f2f6}
 tr:last-child td{border-bottom:0}
 td b{color:var(--ink)}
 .flow{display:flex;align-items:stretch;gap:0;margin:22px 0}
 .fstep{flex:1 1 0;min-width:0;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 10px;text-align:center;position:relative}
-.fstep .fn{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#fff;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
+.fstep .fn{width:30px;height:30px;border-radius:50%;background:var(--blue);color:#f4eedc;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px}
 .fstep:last-child .fn{background:#2fae5c}
 .fstep b{font-size:clamp(13px,1.3vw,17px);display:block}
-.fstep span{font-size:clamp(11px,1.1vw,14px);color:var(--muted);display:block;margin-top:4px;line-height:1.4}
+.fstep span{font-size:clamp(11px,1.1vw,14px);color:#f4eedc;display:block;margin-top:4px;line-height:1.4}
 .farrow{display:flex;align-items:center;justify-content:center;color:var(--blue-text);font-size:clamp(18px,2vw,26px);font-weight:800;padding:0 6px;flex:0 0 auto}
-.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:none;background:var(--blue);color:#fff;font-size:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,107,208,.45);transition:background .15s,transform .15s}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:none;background:var(--blue);color:#f4eedc;font-size:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,107,208,.45);transition:background .15s,transform .15s}
 .navbtn:hover{background:#1d6bd0;transform:translateY(-50%) scale(1.08)}
 #prev{left:16px} #next{right:16px}
 .navbtn[disabled]{opacity:.22;cursor:default;box-shadow:none;background:#9aa2ac}
@@ -82,7 +82,7 @@ td b{color:var(--ink)}
 #hint{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:30;font-size:15px;font-weight:600;color:var(--amber-text);animation:pulse 1.6s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
 .foot{margin-top:auto;padding-top:16px;font-size:clamp(13px,1.2vw,16px);color:var(--muted)}
-.logo-sg{height:24px;border-radius:6px;display:block;background:#0a0a0a;padding:3px 8px;box-sizing:content-box}
+.logo-sg{height:24px;border-radius:6px;display:block;background:#fbf8ee;padding:3px 8px;box-sizing:content-box}
 .logo-ps{height:24px;display:block}
 .toolstrip{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:16px}
 .toolstrip .trole{font-size:clamp(14px,1.4vw,18px)}
@@ -99,8 +99,8 @@ td b{color:var(--ink)}
 .sg-nav .ent{margin-left:auto;font-size:10px;background:#f3f4f6;border:1px solid var(--sg-line);border-radius:999px;padding:1px 7px;color:var(--sg-mut)}
 .sg-main{padding:14px 18px;min-width:0}
 .sg-query{display:flex;align-items:center;gap:8px;border:1.5px solid var(--blue);border-radius:8px;padding:8px 12px;font-family:"Cascadia Mono",Consolas,monospace;font-size:12.5px;background:#fff}
-.sg-query .rx{background:var(--blue);color:#fff;border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700}
-.sg-query .k{color:#a6419b} .sg-query .f{color:#0e7ac9} .sg-query .v{color:#111827}
+.sg-query .rx{background:var(--blue);color:#f4eedc;border-radius:6px;padding:1px 7px;font-size:11px;font-weight:700}
+.sg-query .k{color:#f4eedc} .sg-query .f{color:#f4eedc} .sg-query .v{color:#f4eedc}
 .sg-status{display:flex;justify-content:space-between;align-items:center;margin:12px 0 10px;color:var(--sg-mut);font-size:12px}
 .sg-status .pill{border:1px solid var(--sg-line);border-radius:8px;padding:3px 10px}
 .sg-repo{margin:14px 0 6px;font-weight:700;font-size:13px;color:#111827}
@@ -108,7 +108,7 @@ td b{color:var(--ink)}
 .sg-file{display:flex;gap:8px;align-items:baseline;color:#0e7ac9;font-family:"Cascadia Mono",Consolas,monospace;font-size:11.5px;margin:8px 0 2px}
 .sg-hl{background:#fff1a5;border-radius:2px;padding:0 1px;color:#111827}
 .sg-snip{background:#f6f8fa;border:1px solid var(--sg-line);border-radius:8px;padding:6px 10px;font-family:"Cascadia Mono",Consolas,monospace;font-size:12px;color:#111827;margin:2px 0 8px;overflow-x:auto;white-space:pre}
-.sg-snip .ln{color:#9ca3af;display:inline-block;width:34px}
+.sg-snip .ln{color:#6b6353;display:inline-block;width:34px}
 /* batch changes mock */
 .sg-bc-row{display:grid;grid-template-columns:1fr 130px 110px 90px;gap:10px;align-items:center;padding:9px 12px;border:1px solid var(--sg-line);border-radius:8px;margin:8px 0;background:#fbfbfc;font-size:12.5px}
 .sg-bc-row .st{border-radius:999px;padding:2px 10px;font-size:11px;font-weight:600;text-align:center}
@@ -117,7 +117,7 @@ td b{color:var(--ink)}
 .d-add{color:#1e7d33} .d-del{color:#c03535}
 /* dashboard (adapted from ThreadX compliance dashboard) */
 .dash{border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(15,20,30,.18);border:1px solid #c8d0da}
-.dash-head{background:linear-gradient(90deg,#0b1f3a,#132d52);color:#fff;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.dash-head{background:linear-gradient(90deg,#e3dabf,#e3dabf);color:#1d1a16;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .dash-head .logo{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,#2f6fd6,#14a3b8);display:grid;place-items:center;font-weight:700;font-size:13px}
 .dash-head h3{font-size:17px;margin:0}
 .dash-head .sub2{font-size:12px;opacity:.75;margin-top:2px}
@@ -125,12 +125,12 @@ td b{color:var(--ink)}
 .dash-body{background:#eef2f7;padding:16px 18px;display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
 .dk{grid-column:span 3;background:#fff;border-radius:10px;padding:12px 14px;border:1px solid #e6ebf2}
 .dk .v{font-size:26px;font-weight:700;line-height:1.1}
-.dk .l{font-size:11px;color:#6b7a90;margin-top:3px}
+.dk .l{font-size:11px;color:#6b6353;margin-top:3px}
 .dk .d{font-size:11px;margin-top:6px;font-weight:600}
-.up{color:#1f9d55} .warn{color:#e8a317}
+.up{color:#2f6b3a} .warn{color:#9a5b10}
 .d8{grid-column:span 8} .d4{grid-column:span 4}
 .dcard{background:#fff;border-radius:10px;padding:12px 14px;border:1px solid #e6ebf2}
-.dcard h4{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#6b7a90;margin:0 0 8px}
+.dcard h4{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#6b6353;margin:0 0 8px}
 .drow{display:flex;justify-content:space-between;font-size:12px;margin:8px 0 4px}
 .bar{height:9px;border-radius:5px;background:#edf1f6;overflow:hidden;display:flex}
 .bar>span{display:block;height:100%}
@@ -139,7 +139,7 @@ td b{color:var(--ink)}
 .shot-wrap{position:relative;margin:14px 0}
 .shot-wrap img{width:100%;display:block;border-radius:10px;border:1px solid var(--line);box-shadow:0 2px 10px rgba(15,20,30,.18)}
 .callout{position:absolute;border:3px solid var(--amber);border-radius:8px;box-shadow:0 0 0 9999px rgba(22,40,70,0);pointer-events:none}
-.callout::after{content:attr(data-l);position:absolute;top:-30px;left:0;background:var(--amber);color:#3d2c00;font-size:12px;font-weight:700;padding:2px 10px;border-radius:6px;white-space:nowrap}
+.callout::after{content:attr(data-l);position:absolute;top:-30px;left:0;background:var(--amber);color:#f4eedc;font-size:12px;font-weight:700;padding:2px 10px;border-radius:6px;white-space:nowrap}
 @media(max-width:900px){
   .grid2,.grid3,.grid4{grid-template-columns:1fr}
   .topbar .links{display:none}
@@ -152,6 +152,18 @@ td b{color:var(--ink)}
   .dk{grid-column:span 12}.d8,.d4{grid-column:span 12}
   .callout::after{font-size:10px}
 }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -203,18 +215,18 @@ td b{color:var(--ink)}
         <figure class="code">
           <figcaption>Noncompliant: unary minus or suffix inside the macro</figcaption>
           <pre><span class="tok-c">/* Calibration constants, as written today */</span>
-<span class="tok-k">#define</span> <span class="tok-v">TEMP_OFFSET</span>   <span style="color:#ff8580">INT32_C(-40)</span>
-<span class="tok-k">#define</span> <span class="tok-v">MIN_PRESSURE</span>  <span style="color:#ff8580">INT32_C(-100)</span>
-<span class="tok-k">#define</span> <span class="tok-v">DEFAULT_TRIM</span>  <span style="color:#ff8580">INT32_C(-25)</span>
-<span class="tok-k">#define</span> <span class="tok-v">MASK</span>          <span style="color:#ff8580">UINT32_C(0xFFUL)</span></pre>
+<span class="tok-k">#define</span> <span class="tok-v">TEMP_OFFSET</span>   <span style="color:#b8322a">INT32_C(-40)</span>
+<span class="tok-k">#define</span> <span class="tok-v">MIN_PRESSURE</span>  <span style="color:#b8322a">INT32_C(-100)</span>
+<span class="tok-k">#define</span> <span class="tok-v">DEFAULT_TRIM</span>  <span style="color:#b8322a">INT32_C(-25)</span>
+<span class="tok-k">#define</span> <span class="tok-v">MASK</span>          <span style="color:#b8322a">UINT32_C(0xFFUL)</span></pre>
         </figure>
         <figure class="code">
           <figcaption>Compliant: minus outside the macro, suffix removed</figcaption>
           <pre><span class="tok-c">/* Minus moved outside, no suffix inside */</span>
-<span class="tok-k">#define</span> <span class="tok-v">TEMP_OFFSET</span>   <span style="color:#6ee07a">(-INT32_C(40))</span>
-<span class="tok-k">#define</span> <span class="tok-v">MIN_PRESSURE</span>  <span style="color:#6ee07a">(-INT32_C(100))</span>
-<span class="tok-k">#define</span> <span class="tok-v">DEFAULT_TRIM</span>  <span style="color:#6ee07a">(-INT32_C(25))</span>
-<span class="tok-k">#define</span> <span class="tok-v">MASK</span>          <span style="color:#6ee07a">UINT32_C(0xFF)</span></pre>
+<span class="tok-k">#define</span> <span class="tok-v">TEMP_OFFSET</span>   <span style="color:#2f6b3a">(-INT32_C(40))</span>
+<span class="tok-k">#define</span> <span class="tok-v">MIN_PRESSURE</span>  <span style="color:#2f6b3a">(-INT32_C(100))</span>
+<span class="tok-k">#define</span> <span class="tok-v">DEFAULT_TRIM</span>  <span style="color:#2f6b3a">(-INT32_C(25))</span>
+<span class="tok-k">#define</span> <span class="tok-v">MASK</span>          <span style="color:#2f6b3a">UINT32_C(0xFF)</span></pre>
         </figure>
       </div>
       <div class="grid2">
@@ -401,10 +413,10 @@ td b{color:var(--ink)}
           <div class="sg-bc-row"><span>▸ our-org/<b>repoD</b> &nbsp;branch: misra-c2025-rule-7-5-cleanup</span><span class="st st-draft">Draft</span><span class="dstat"><span class="d-add">+440</span> <span class="d-del">&#8722;440</span></span><span class="st st-open">CI passing</span></div>
           <figure class="code" style="margin:14px 0 4px">
             <figcaption>Sample diff from the repoA changeset, drivers/calibration/trim_tables.c</figcaption>
-            <pre><span class="lr">&ndash; #define TEMP_OFFSET   <span style="color:#ff8580">INT32_C(-40)</span></span>
-<span class="la">+ #define TEMP_OFFSET   <span style="color:#6ee07a">(-INT32_C(40))</span></span>
-<span class="lr">&ndash; #define MIN_PRESSURE  <span style="color:#ff8580">INT32_C(-100)</span></span>
-<span class="la">+ #define MIN_PRESSURE  <span style="color:#6ee07a">(-INT32_C(100))</span></span></pre>
+            <pre><span class="lr">&ndash; #define TEMP_OFFSET   <span style="color:#b8322a">INT32_C(-40)</span></span>
+<span class="la">+ #define TEMP_OFFSET   <span style="color:#2f6b3a">(-INT32_C(40))</span></span>
+<span class="lr">&ndash; #define MIN_PRESSURE  <span style="color:#b8322a">INT32_C(-100)</span></span>
+<span class="la">+ #define MIN_PRESSURE  <span style="color:#2f6b3a">(-INT32_C(100))</span></span></pre>
           </figure>
         </div>
       </div>
@@ -424,11 +436,11 @@ td b{color:var(--ink)}
       <div class="grid2">
         <figure class="code">
           <figcaption>Applied automatically, at every occurrence in all 4 repos</figcaption>
-          <pre><span style="color:#ff8580">INT32_C(-40)</span>    &rarr;  <span style="color:#6ee07a">(-INT32_C(40))</span>
-<span style="color:#ff8580">INT32_C(-100)</span>   &rarr;  <span style="color:#6ee07a">(-INT32_C(100))</span>
-<span style="color:#ff8580">INT64_C(-500)</span>   &rarr;  <span style="color:#6ee07a">(-INT64_C(500))</span>
-<span style="color:#ff8580">UINT32_C(100U)</span>  &rarr;  <span style="color:#6ee07a">UINT32_C(100)</span>
-<span style="color:#ff8580">UINT32_C(0xFFUL)</span> &rarr;  <span style="color:#6ee07a">UINT32_C(0xFF)</span></pre>
+          <pre><span style="color:#b8322a">INT32_C(-40)</span>    &rarr;  <span style="color:#2f6b3a">(-INT32_C(40))</span>
+<span style="color:#b8322a">INT32_C(-100)</span>   &rarr;  <span style="color:#2f6b3a">(-INT32_C(100))</span>
+<span style="color:#b8322a">INT64_C(-500)</span>   &rarr;  <span style="color:#2f6b3a">(-INT64_C(500))</span>
+<span style="color:#b8322a">UINT32_C(100U)</span>  &rarr;  <span style="color:#2f6b3a">UINT32_C(100)</span>
+<span style="color:#b8322a">UINT32_C(0xFFUL)</span> &rarr;  <span style="color:#2f6b3a">UINT32_C(0xFF)</span></pre>
         </figure>
         <div>
           <div class="note green" style="margin-top:0"><b>Value never changes.</b> The numeric value is identical before and after; only the form moves. The compiler and CI protect anything the automation could get wrong, and every diff is human-reviewed before merge.</div>
@@ -513,7 +525,7 @@ td b{color:var(--ink)}
             <div class="bar"><span style="width:100%;background:#1f9d55"></span></div>
             <div class="drow"><span>repoD</span><span class="pill-ok">440 &rarr; 0</span></div>
             <div class="bar"><span style="width:100%;background:#1f9d55"></span></div>
-            <div style="font-size:11px;color:#6b7a90;margin-top:10px">Sourcegraph inventory queries return zero on all repos and indexed branches; the Parasoft scan is the evidence of record.</div>
+            <div style="font-size:11px;color:#6b6353;margin-top:10px">Sourcegraph inventory queries return zero on all repos and indexed branches; the Parasoft scan is the evidence of record.</div>
           </div>
         </div>
       </div>

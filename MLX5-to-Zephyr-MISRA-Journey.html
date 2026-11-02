@@ -6,13 +6,13 @@
 <title>🛡️ NVIDIA MLX5 → Zephyr RTOS: The MISRA C Journey</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;touch-action:pan-y}
+html,body{height:100%;overflow:hidden;background:#fbf8ee;color:#1d1a16;font-family:'Segoe UI',system-ui,sans-serif;line-height:1.6;touch-action:pan-y}
 
 .slides-wrapper{display:flex;height:100vh;transition:transform .45s cubic-bezier(.4,0,.2,1);will-change:transform}
 .slide{min-width:100vw;width:100vw;height:100vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:24px;display:flex;flex-direction:column}
 .slide-inner{max-width:1000px;width:100%;margin:0 auto;padding:16px 0 80px}
 
-.nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:200;width:56px;height:56px;border-radius:50%;background:rgba(0,221,200,.15);border:2px solid #0dc;color:#0dc;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;user-select:none}
+.nav-arrow{position:fixed;top:50%;transform:translateY(-50%);z-index:200;width:56px;height:56px;border-radius:50%;background:rgba(0,221,200,.15);border:2px solid #0dc;color:#12457a;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .25s;backdrop-filter:blur(8px);-webkit-tap-highlight-color:transparent;user-select:none}
 .nav-arrow:hover{background:rgba(0,221,200,.35);transform:translateY(-50%) scale(1.1)}
 .nav-arrow:active{transform:translateY(-50%) scale(.95)}
 .nav-arrow.left{left:12px}
@@ -20,19 +20,19 @@ html,body{height:100%;overflow:hidden;background:#0f0f1a;color:#d0d0e0;font-fami
 .nav-arrow.hidden{opacity:0;pointer-events:none}
 @media(max-width:600px){.nav-arrow{width:44px;height:44px;font-size:22px}.nav-arrow.left{left:6px}.nav-arrow.right{right:6px}}
 
-.progress-bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;padding:8px 16px;background:rgba(15,15,26,.85);border-radius:20px;backdrop-filter:blur(8px);border:1px solid #222}
-.dot{width:10px;height:10px;border-radius:50%;background:#333;cursor:pointer;transition:all .25s}
+.progress-bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:200;display:flex;gap:8px;padding:8px 16px;background:rgba(251,248,238,.85);border-radius:20px;backdrop-filter:blur(8px);border:1px solid #222}
+.dot{width:10px;height:10px;border-radius:50%;background:#fbf8ee;cursor:pointer;transition:all .25s}
 .dot.active{background:#0dc;transform:scale(1.3)}
 @media(max-width:600px){.dot{width:7px;height:7px}.progress-bar{gap:5px;padding:6px 12px}}
 
-.slide-counter{position:fixed;top:16px;right:16px;z-index:200;color:#555;font-size:14px;background:rgba(15,15,26,.8);padding:4px 12px;border-radius:12px;border:1px solid #222}
+.slide-counter{position:fixed;top:16px;right:16px;z-index:200;color:#555;font-size:14px;background:rgba(251,248,238,.8);padding:4px 12px;border-radius:12px;border:1px solid #222}
 
-h1{font-size:clamp(28px,6vw,52px);color:#0dc;margin-bottom:12px;letter-spacing:-1px}
-h2{font-size:clamp(22px,4.5vw,36px);color:#0dc;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #1a3a3a}
-h3{font-size:clamp(16px,3vw,22px);color:#a78bfa;margin:20px 0 10px}
+h1{font-size:clamp(28px,6vw,52px);color:#12457a;margin-bottom:12px;letter-spacing:-1px}
+h2{font-size:clamp(22px,4.5vw,36px);color:#12457a;margin-bottom:20px;padding-bottom:10px;border-bottom:2px solid #1a3a3a}
+h3{font-size:clamp(16px,3vw,22px);color:#12457a;margin:20px 0 10px}
 p,.subtitle{font-size:clamp(14px,2.5vw,18px)}
-.subtitle{color:#999;margin-bottom:8px}
-.tag{display:inline-block;background:#1a2a2a;color:#0dc;border:1px solid #0dc;border-radius:4px;padding:3px 10px;font-size:clamp(11px,2vw,13px);margin:3px}
+.subtitle{color:#6b6353;margin-bottom:8px}
+.tag{display:inline-block;background:#fbf8ee;color:#12457a;border:1px solid #0dc;border-radius:4px;padding:3px 10px;font-size:clamp(11px,2vw,13px);margin:3px}
 
 .hero-content{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;flex:1}
 .hero-content h1{font-size:clamp(32px,7vw,56px);background:linear-gradient(135deg,#ff6b6b,#0dc,#51cf66);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
@@ -41,62 +41,74 @@ p,.subtitle{font-size:clamp(14px,2.5vw,18px)}
 .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0}
 .grid4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;margin:16px 0}
 @media(max-width:700px){.grid2,.grid3,.grid4{grid-template-columns:1fr}}
-.card{background:#151528;border:1px solid #2a2a40;border-radius:10px;padding:20px;transition:border-color .3s}
-.card:hover{border-color:#0dc}
-.card h3{margin-top:0;color:#0dc;font-size:clamp(15px,2.8vw,20px)}
-.card.green{border-color:#51cf6633}.card.green h3{color:#51cf66}
-.card.red{border-color:#ff6b6b33}.card.red h3{color:#ff6b6b}
-.card.amber{border-color:#ffd43b33}.card.amber h3{color:#ffd43b}
-.card.purple{border-color:#a78bfa33}.card.purple h3{color:#a78bfa}
+.card{background:#fbf8ee;border:1px solid #2a2a40;border-radius:10px;padding:20px;transition:border-color .3s}
+.card:hover{border-color:#b9ae90}
+.card h3{margin-top:0;color:#12457a;font-size:clamp(15px,2.8vw,20px)}
+.card.green{border-color:#2f6b3a33}.card.green h3{color:#2f6b3a}
+.card.red{border-color:#b8322a33}.card.red h3{color:#b8322a}
+.card.amber{border-color:#b9ae9033}.card.amber h3{color:#1d1a16}
+.card.purple{border-color:#b9ae9033}.card.purple h3{color:#12457a}
 
 .flow{display:flex;align-items:center;justify-content:center;gap:0;margin:24px 0;flex-wrap:wrap}
-.flow .box{background:#151528;border:2px solid #0dc;border-radius:8px;padding:12px 16px;text-align:center;min-width:100px;margin:4px 0}
-.flow .box h4{color:#0dc;font-size:clamp(13px,2.5vw,16px);margin-bottom:2px}
-.flow .box p{color:#888;font-size:clamp(10px,1.8vw,12px)}
-.flow .arrow{color:#0dc;font-size:clamp(18px,3vw,28px);padding:0 6px}
+.flow .box{background:#fbf8ee;border:2px solid #0dc;border-radius:8px;padding:12px 16px;text-align:center;min-width:100px;margin:4px 0}
+.flow .box h4{color:#12457a;font-size:clamp(13px,2.5vw,16px);margin-bottom:2px}
+.flow .box p{color:#6b6353;font-size:clamp(10px,1.8vw,12px)}
+.flow .arrow{color:#12457a;font-size:clamp(18px,3vw,28px);padding:0 6px}
 @media(max-width:600px){.flow{flex-direction:column}.flow .arrow{transform:rotate(90deg)}}
 
 .flow-h{display:flex;align-items:center;justify-content:center;gap:0;margin:32px 0;flex-wrap:wrap}
 .flow-h .box{border-radius:10px;padding:16px 20px;text-align:center;min-width:160px;margin:4px 0}
 .flow-h .box h4{font-size:clamp(14px,3vw,18px);margin-bottom:4px}
-.flow-h .box p{font-size:clamp(11px,2vw,13px);color:#aaa}
+.flow-h .box p{font-size:clamp(11px,2vw,13px);color:#6b6353}
 .flow-h .arrow{font-size:clamp(20px,4vw,32px);padding:0 8px;color:#555}
 @media(max-width:600px){.flow-h{flex-direction:column}.flow-h .arrow{transform:rotate(90deg)}}
-.phase-scan{background:#1a1a3a;border:2px solid #ff6b6b}.phase-scan h4{color:#ff6b6b}
-.phase-rewrite{background:#1a1a3a;border:2px solid #a78bfa}.phase-rewrite h4{color:#a78bfa}
-.phase-fix{background:#1a2a2a;border:2px solid #0dc}.phase-fix h4{color:#0dc}
-.phase-verify{background:#1a2a1a;border:2px solid #51cf66}.phase-verify h4{color:#51cf66}
+.phase-scan{background:#fbf8ee;border:2px solid #ff6b6b}.phase-scan h4{color:#b8322a}
+.phase-rewrite{background:#fbf8ee;border:2px solid #a78bfa}.phase-rewrite h4{color:#12457a}
+.phase-fix{background:#fbf8ee;border:2px solid #0dc}.phase-fix h4{color:#12457a}
+.phase-verify{background:#fbf8ee;border:2px solid #51cf66}.phase-verify h4{color:#2f6b3a}
 
-pre{background:#0a0a18;border:1px solid #2a2a3a;border-radius:8px;padding:16px;overflow-x:auto;font-size:clamp(11px,2vw,14px);margin:12px 0;font-family:'Cascadia Code','Fira Code',monospace}
+pre{background:#fbf8ee;border:1px solid #2a2a3a;border-radius:8px;padding:16px;overflow-x:auto;font-size:clamp(11px,2vw,14px);margin:12px 0;font-family:'Cascadia Code','Fira Code',monospace}
 code{font-family:'Cascadia Code','Fira Code',monospace}
 
 table{width:100%;border-collapse:collapse;margin:16px 0;font-size:clamp(12px,2vw,15px)}
-th{background:#1a1a2e;color:#0dc;text-align:left;padding:10px 12px;border-bottom:2px solid #333}
+th{background:#fbf8ee;color:#12457a;text-align:left;padding:10px 12px;border-bottom:2px solid #333}
 td{padding:8px 12px;border-bottom:1px solid #222}
 
 .burndown{display:flex;align-items:flex-end;gap:clamp(6px,1.5vw,14px);height:200px;margin:24px auto;max-width:700px;border-bottom:2px solid #333;padding-bottom:4px}
 .burn-col{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
-.burn-bar{border-radius:4px 4px 0 0;width:100%;max-width:60px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:clamp(10px,1.8vw,13px);color:#fff;min-height:4px}
-.burn-lbl{font-size:clamp(8px,1.3vw,11px);color:#888;text-align:center}
+.burn-bar{border-radius:4px 4px 0 0;width:100%;max-width:60px;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:clamp(10px,1.8vw,13px);color:#1d1a16;min-height:4px}
+.burn-lbl{font-size:clamp(8px,1.3vw,11px);color:#6b6353;text-align:center}
 
 .stat{text-align:center;padding:20px}
-.stat .num{font-size:clamp(28px,5vw,44px);font-weight:800;color:#0dc}
-.stat .lbl{font-size:clamp(11px,2vw,14px);color:#888;margin-top:4px}
+.stat .num{font-size:clamp(28px,5vw,44px);font-weight:800;color:#12457a}
+.stat .lbl{font-size:clamp(11px,2vw,14px);color:#6b6353;margin-top:4px}
 
 .state-machine{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:16px 0}
-.state-machine .s{background:#1a1a2e;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:clamp(10px,1.8vw,13px);color:#ccc;font-family:monospace}
-.state-machine .s.active{border-color:#51cf66;color:#51cf66}
+.state-machine .s{background:#fbf8ee;border:1px solid #444;border-radius:6px;padding:6px 10px;font-size:clamp(10px,1.8vw,13px);color:#6b6353;font-family:monospace}
+.state-machine .s.active{border-color:#2f6b3a;color:#2f6b3a}
 .state-machine .sa{color:#555;font-size:clamp(14px,2vw,18px)}
 
-.big-arrow{text-align:center;font-size:clamp(36px,8vw,72px);margin:20px 0;color:#0dc;opacity:0.7}
+.big-arrow{text-align:center;font-size:clamp(36px,8vw,72px);margin:20px 0;color:#12457a;opacity:0.7}
 .vs-box{display:flex;align-items:stretch;gap:20px;margin:16px 0}
 @media(max-width:700px){.vs-box{flex-direction:column}}
 .vs-box > div{flex:1}
 
 ul{padding-left:20px}li{margin:4px 0}
-.done{color:#51cf66}.notdone{color:#ff6b6b}
+.done{color:#2f6b3a}.notdone{color:#b8322a}
 .highlight{background:rgba(0,221,200,.08);border:1px solid rgba(0,221,200,.3);border-radius:8px;padding:16px;margin:12px 0}
 .center{text-align:center}
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -113,7 +125,7 @@ ul{padding-left:20px}li{margin:4px 0}
 <div class="hero-content">
 <p class="subtitle">NVIDIA ConnectX-6 Dx / BlueField-2</p>
 <h1>From 13,143 MISRA Violations to Zero</h1>
-<p style="font-size:clamp(18px,4vw,28px);color:#ccc;margin-top:8px">Linux Kernel mlx5 → Automotive Zephyr RTOS</p>
+<p style="font-size:clamp(18px,4vw,28px);color:#6b6353;margin-top:8px">Linux Kernel mlx5 → Automotive Zephyr RTOS</p>
 <p class="subtitle" style="margin-top:16px">ISO 26262 ASIL-B Compliance Engineering</p>
 <div style="margin-top:24px">
 <span class="tag">13,143 → 0 Violations</span>
@@ -159,76 +171,76 @@ ul{padding-left:20px}li{margin:4px 0}
 </div>
 </div>
 <div class="highlight center" style="margin-top:20px">
-<p style="font-size:clamp(16px,3vw,22px);color:#ff6b6b;font-weight:bold">
+<p style="font-size:clamp(16px,3vw,22px);color:#b8322a;font-weight:bold">
 The Linux kernel deliberately violates 125+ MISRA rules by design
 </p>
-<p style="color:#888;margin-top:8px">Porting Linux code to safety-critical systems without a clean-room rewrite is fundamentally impossible</p>
+<p style="color:#6b6353;margin-top:8px">Porting Linux code to safety-critical systems without a clean-room rewrite is fundamentally impossible</p>
 </div>
 </div></div>
 
 <!-- ==================== SLIDE 3: Baseline Scan — The Horror ==================== -->
 <div class="slide"><div class="slide-inner">
 <h2>Step 1: Baseline Scan — The Reality</h2>
-<p style="color:#888;margin-bottom:12px">We ran Parasoft C/C++test against the original Linux mlx5 driver to quantify the gap:</p>
+<p style="color:#6b6353;margin-bottom:12px">We ran Parasoft C/C++test against the original Linux mlx5 driver to quantify the gap:</p>
 <div class="grid3">
-<div class="card stat"><div class="num" style="color:#ff6b6b">13,143</div><div class="lbl">Total MISRA Violations</div></div>
-<div class="card stat"><div class="num" style="color:#ff6b6b">125</div><div class="lbl">Distinct Rules Violated</div></div>
+<div class="card stat"><div class="num" style="color:#b8322a">13,143</div><div class="lbl">Total MISRA Violations</div></div>
+<div class="card stat"><div class="num" style="color:#b8322a">125</div><div class="lbl">Distinct Rules Violated</div></div>
 <div class="card stat"><div class="num">54</div><div class="lbl">Source Files Scanned</div></div>
 </div>
 <h3>Top Violations in the Linux Driver</h3>
 <table>
 <tr><th>MISRA Rule</th><th>Count</th><th>Issue</th></tr>
-<tr><td style="color:#ff6b6b">Dir 4.6 — Basic types</td><td style="color:#ff6b6b;font-weight:bold">2,400+</td><td>Kernel uses <code>int</code>, <code>unsigned long</code> everywhere — not <code>uint32_t</code></td></tr>
-<tr><td style="color:#ff6b6b">Rule 15.5 — Multiple returns</td><td style="color:#ff6b6b;font-weight:bold">1,800+</td><td>Kernel style: early returns for error checks</td></tr>
-<tr><td style="color:#ff6b6b">Rule 8.7 — Internal linkage</td><td style="color:#ff6b6b;font-weight:bold">1,400+</td><td>Functions could be <code>static</code> but kernel exports them</td></tr>
-<tr><td style="color:#ff6b6b">Rule 11.5 — void* casts</td><td style="color:#ff6b6b;font-weight:bold">900+</td><td>kmalloc/kzalloc return <code>void*</code></td></tr>
-<tr><td style="color:#ff6b6b">Rule 14.4 — Boolean exprs</td><td style="color:#ff6b6b;font-weight:bold">800+</td><td><code>if (ptr)</code> instead of <code>if (ptr != NULL)</code></td></tr>
-<tr><td style="color:#ff6b6b">Rule 17.12 — Variadic</td><td style="color:#ff6b6b;font-weight:bold">700+</td><td><code>mlx5_core_dbg()</code> uses printf-style logging</td></tr>
+<tr><td style="color:#b8322a">Dir 4.6 — Basic types</td><td style="color:#b8322a;font-weight:bold">2,400+</td><td>Kernel uses <code>int</code>, <code>unsigned long</code> everywhere — not <code>uint32_t</code></td></tr>
+<tr><td style="color:#b8322a">Rule 15.5 — Multiple returns</td><td style="color:#b8322a;font-weight:bold">1,800+</td><td>Kernel style: early returns for error checks</td></tr>
+<tr><td style="color:#b8322a">Rule 8.7 — Internal linkage</td><td style="color:#b8322a;font-weight:bold">1,400+</td><td>Functions could be <code>static</code> but kernel exports them</td></tr>
+<tr><td style="color:#b8322a">Rule 11.5 — void* casts</td><td style="color:#b8322a;font-weight:bold">900+</td><td>kmalloc/kzalloc return <code>void*</code></td></tr>
+<tr><td style="color:#b8322a">Rule 14.4 — Boolean exprs</td><td style="color:#b8322a;font-weight:bold">800+</td><td><code>if (ptr)</code> instead of <code>if (ptr != NULL)</code></td></tr>
+<tr><td style="color:#b8322a">Rule 17.12 — Variadic</td><td style="color:#b8322a;font-weight:bold">700+</td><td><code>mlx5_core_dbg()</code> uses printf-style logging</td></tr>
 </table>
 <div class="highlight center" style="margin-top:12px">
-<p style="color:#ffd43b">📊 Full 901-line manual review CSV generated — every violation classified by subsystem and criticality</p>
+<p style="color:#1d1a16">📊 Full 901-line manual review CSV generated — every violation classified by subsystem and criticality</p>
 </div>
 </div></div>
 
 <!-- ==================== SLIDE 4: 20 Unfixable Patterns ==================== -->
 <div class="slide"><div class="slide-inner">
 <h2>20 Unfixable Kernel Patterns</h2>
-<p style="color:#888;margin-bottom:12px">Analysis revealed <strong>20 patterns deeply embedded in the Linux kernel</strong> that can never be made MISRA-compliant without destroying the driver:</p>
+<p style="color:#6b6353;margin-bottom:12px">Analysis revealed <strong>20 patterns deeply embedded in the Linux kernel</strong> that can never be made MISRA-compliant without destroying the driver:</p>
 <div class="grid2">
 <div class="card red">
 <h3>Kernel API Forces Violations</h3>
 <table style="font-size:clamp(11px,1.8vw,13px)">
-<tr><td style="color:#ff6b6b">Rule 11.5</td><td>kmalloc/kzalloc return void*</td></tr>
-<tr><td style="color:#ff6b6b">Rule 14.4</td><td>if(ptr), while(count--)</td></tr>
-<tr><td style="color:#ff6b6b">Rule 15.1</td><td>goto err_out cleanup (mandated)</td></tr>
-<tr><td style="color:#ff6b6b">Rule 15.5</td><td>Multiple returns (kernel style)</td></tr>
-<tr><td style="color:#ff6b6b">Rule 15.6</td><td>No braces on single-line (kernel style)</td></tr>
-<tr><td style="color:#ff6b6b">Dir 4.6</td><td>int/long types (no stdint in kernel)</td></tr>
-<tr><td style="color:#ff6b6b">Rule 10.3</td><td>int → u8/u16 narrowing</td></tr>
-<tr><td style="color:#ff6b6b">Rule 10.4</td><td>Mixed signed/unsigned math</td></tr>
-<tr><td style="color:#ff6b6b">Rule 17.12</td><td>Variadic kernel logging</td></tr>
-<tr><td style="color:#ff6b6b">Rule 21.2</td><td>Reserved identifiers (__packed)</td></tr>
+<tr><td style="color:#b8322a">Rule 11.5</td><td>kmalloc/kzalloc return void*</td></tr>
+<tr><td style="color:#b8322a">Rule 14.4</td><td>if(ptr), while(count--)</td></tr>
+<tr><td style="color:#b8322a">Rule 15.1</td><td>goto err_out cleanup (mandated)</td></tr>
+<tr><td style="color:#b8322a">Rule 15.5</td><td>Multiple returns (kernel style)</td></tr>
+<tr><td style="color:#b8322a">Rule 15.6</td><td>No braces on single-line (kernel style)</td></tr>
+<tr><td style="color:#b8322a">Dir 4.6</td><td>int/long types (no stdint in kernel)</td></tr>
+<tr><td style="color:#b8322a">Rule 10.3</td><td>int → u8/u16 narrowing</td></tr>
+<tr><td style="color:#b8322a">Rule 10.4</td><td>Mixed signed/unsigned math</td></tr>
+<tr><td style="color:#b8322a">Rule 17.12</td><td>Variadic kernel logging</td></tr>
+<tr><td style="color:#b8322a">Rule 21.2</td><td>Reserved identifiers (__packed)</td></tr>
 </table>
 </div>
 <div class="card red">
 <h3>Hardware & Architecture</h3>
 <table style="font-size:clamp(11px,1.8vw,13px)">
-<tr><td style="color:#ff6b6b">Rule 19.2</td><td>Unions for register overlays</td></tr>
-<tr><td style="color:#ff6b6b">Rule 11.4</td><td>Pointer-integer for MMIO</td></tr>
-<tr><td style="color:#ff6b6b">Rule 18.4</td><td>Pointer arithmetic in buffers</td></tr>
-<tr><td style="color:#ff6b6b">Rule 20.7</td><td>BUG_ON, list_for_each_entry</td></tr>
-<tr><td style="color:#ff6b6b">Rule 20.10</td><td>TRACE_EVENT token pasting</td></tr>
-<tr><td style="color:#ff6b6b">Rule 8.6</td><td>BUILD_BUG_ON duplicates</td></tr>
-<tr><td style="color:#ff6b6b">Rule 5.8</td><td>Non-unique identifiers</td></tr>
-<tr><td style="color:#ff6b6b">Rule 8.7</td><td>EXPORT_SYMBOL_GPL linkage</td></tr>
-<tr><td style="color:#ff6b6b">Rule 10.1</td><td>Bitwise ops on signed types</td></tr>
-<tr><td style="color:#ff6b6b">Rule 21.1</td><td>__attribute__, _HEADER_H guards</td></tr>
+<tr><td style="color:#b8322a">Rule 19.2</td><td>Unions for register overlays</td></tr>
+<tr><td style="color:#b8322a">Rule 11.4</td><td>Pointer-integer for MMIO</td></tr>
+<tr><td style="color:#b8322a">Rule 18.4</td><td>Pointer arithmetic in buffers</td></tr>
+<tr><td style="color:#b8322a">Rule 20.7</td><td>BUG_ON, list_for_each_entry</td></tr>
+<tr><td style="color:#b8322a">Rule 20.10</td><td>TRACE_EVENT token pasting</td></tr>
+<tr><td style="color:#b8322a">Rule 8.6</td><td>BUILD_BUG_ON duplicates</td></tr>
+<tr><td style="color:#b8322a">Rule 5.8</td><td>Non-unique identifiers</td></tr>
+<tr><td style="color:#b8322a">Rule 8.7</td><td>EXPORT_SYMBOL_GPL linkage</td></tr>
+<tr><td style="color:#b8322a">Rule 10.1</td><td>Bitwise ops on signed types</td></tr>
+<tr><td style="color:#b8322a">Rule 21.1</td><td>__attribute__, _HEADER_H guards</td></tr>
 </table>
 </div>
 </div>
-<div class="highlight center" style="margin-top:12px;border-color:#ff6b6b">
-<p style="color:#ff6b6b;font-weight:bold;font-size:clamp(16px,3vw,20px)">❌ Conclusion: Fixing Linux code in-place is impossible</p>
-<p style="color:#888;margin-top:6px">The only path to MISRA compliance: <strong style="color:#0dc">Clean-Room Rewrite</strong></p>
+<div class="highlight center" style="margin-top:12px;border-color:#b8322a">
+<p style="color:#b8322a;font-weight:bold;font-size:clamp(16px,3vw,20px)">❌ Conclusion: Fixing Linux code in-place is impossible</p>
+<p style="color:#6b6353;margin-top:6px">The only path to MISRA compliance: <strong style="color:#12457a">Clean-Room Rewrite</strong></p>
 </div>
 </div></div>
 
@@ -241,8 +253,8 @@ The Linux kernel deliberately violates 125+ MISRA rules by design
 <p>~200K lines · GPL<br>13,143 MISRA violations<br>54 source files</p>
 </div>
 <span class="arrow">✗</span>
-<div class="box" style="background:#1a1a1a;border:2px dashed #ff6b6b;opacity:0.5">
-<h4 style="color:#ff6b6b;text-decoration:line-through">Port / Patch</h4>
+<div class="box" style="background:#fbf8ee;border:2px dashed #ff6b6b;opacity:0.5">
+<h4 style="color:#b8322a;text-decoration:line-through">Port / Patch</h4>
 <p style="color:#666">GPL contamination<br>Inherits all violations<br>Can never certify</p>
 </div>
 <span class="arrow">→</span>
@@ -269,13 +281,13 @@ The Linux kernel deliberately violates 125+ MISRA rules by design
 <div class="grid2" style="margin-top:8px">
 <div class="card">
 <h3>Size Reduction</h3>
-<p><span style="color:#ff6b6b;font-size:28px;font-weight:bold">~200,000</span> <span style="color:#555">→</span> <span style="color:#51cf66;font-size:28px;font-weight:bold">~5,800</span> lines</p>
-<p style="color:#888;margin-top:8px">97% reduction — focused only on Ethernet data plane for automotive use case</p>
+<p><span style="color:#b8322a;font-size:28px;font-weight:bold">~200,000</span> <span style="color:#555">→</span> <span style="color:#2f6b3a;font-size:28px;font-weight:bold">~5,800</span> lines</p>
+<p style="color:#6b6353;margin-top:8px">97% reduction — focused only on Ethernet data plane for automotive use case</p>
 </div>
 <div class="card">
 <h3>Files Reduction</h3>
-<p><span style="color:#ff6b6b;font-size:28px;font-weight:bold">54</span> <span style="color:#555">→</span> <span style="color:#51cf66;font-size:28px;font-weight:bold">14</span> files (5 modules)</p>
-<p style="color:#888;margin-top:8px">PCIe · Device · Queue · Interrupt · Ethernet — each with .c/.h pair</p>
+<p><span style="color:#b8322a;font-size:28px;font-weight:bold">54</span> <span style="color:#555">→</span> <span style="color:#2f6b3a;font-size:28px;font-weight:bold">14</span> files (5 modules)</p>
+<p style="color:#6b6353;margin-top:8px">PCIe · Device · Queue · Interrupt · Ethernet — each with .c/.h pair</p>
 </div>
 </div>
 </div></div>
@@ -285,7 +297,7 @@ The Linux kernel deliberately violates 125+ MISRA rules by design
 <h2>New Zephyr Driver Architecture</h2>
 <h3>Module Dependency Graph</h3>
 <div class="flow">
-<div class="box" style="border-color:#51cf66"><h4 style="color:#51cf66">cx6_eth</h4><p>Zephyr net_if</p></div>
+<div class="box" style="border-color:#2f6b3a"><h4 style="color:#2f6b3a">cx6_eth</h4><p>Zephyr net_if</p></div>
 <span class="arrow">←</span>
 <div class="box"><h4>cx6_interrupt</h4><p>MSI-X / k_work</p></div>
 <span class="arrow">←</span>
@@ -293,7 +305,7 @@ The Linux kernel deliberately violates 125+ MISRA rules by design
 <span class="arrow">←</span>
 <div class="box"><h4>cx6_device</h4><p>FW commands</p></div>
 <span class="arrow">←</span>
-<div class="box" style="border-color:#a78bfa"><h4 style="color:#a78bfa">cx6_pcie</h4><p>BAR/MSI-X</p></div>
+<div class="box" style="border-color:#b9ae90"><h4 style="color:#12457a">cx6_pcie</h4><p>BAR/MSI-X</p></div>
 </div>
 <h3>Device State Machine (8 ordered states)</h3>
 <div class="state-machine">
@@ -315,11 +327,11 @@ IRQ: MSI-X → cx6_isr() → k_work_submit() → drain EQ/CQ → rearm doorbells
 <!-- ==================== SLIDE 7: Safety by Design ==================== -->
 <div class="slide"><div class="slide-inner">
 <h2>MISRA C:2023 — Safety by Design</h2>
-<p style="color:#888;margin-bottom:12px">Every safety principle was built into the architecture from the first line of code:</p>
+<p style="color:#6b6353;margin-bottom:12px">Every safety principle was built into the architecture from the first line of code:</p>
 <div class="grid2">
 <div class="card green">
 <h3>🚫 No Dynamic Allocation</h3>
-<pre style="color:#51cf66">static cx6_cmd_slot_t cmd_slot_buf
+<pre style="color:#2f6b3a">static cx6_cmd_slot_t cmd_slot_buf
     __attribute__((aligned(4096)));
 static uint8_t fw_page_pool
     [FW_PAGES_MAX][4096]
@@ -331,7 +343,7 @@ _Static_assert(
 </div>
 <div class="card green">
 <h3>🔢 No Bitfields for Hardware</h3>
-<pre style="color:#51cf66">/* Byte arrays, not structs */
+<pre style="color:#2f6b3a">/* Byte arrays, not structs */
 typedef struct {
     uint8_t bytes[64];
 } cx6_cqe_t;
@@ -345,7 +357,7 @@ static inline void cx6_put_be32(
 </div>
 <div class="card green">
 <h3>🔒 Fixed-Width Types Only</h3>
-<pre style="color:#51cf66">int32_t cx6_pcie_init(
+<pre style="color:#2f6b3a">int32_t cx6_pcie_init(
     struct cx6_dev *dev) {
   int32_t  ret     = 0;
   uint32_t pcie_id = 0U;
@@ -354,7 +366,7 @@ static inline void cx6_put_be32(
 </div>
 <div class="card green">
 <h3>↩️ Single Return Point</h3>
-<pre style="color:#51cf66">int32_t func(args) {
+<pre style="color:#2f6b3a">int32_t func(args) {
   int32_t ret = 0;
   if (dev == NULL) {
     ret = -EINVAL;
@@ -375,13 +387,13 @@ out:
 <div class="card red" style="flex:1">
 <h3 style="font-size:clamp(16px,3vw,22px)">❌ Linux mlx5 (BEFORE)</h3>
 <table>
-<tr><td style="color:#ff6b6b;font-weight:bold;font-size:20px">13,143</td><td>Total violations</td></tr>
-<tr><td style="color:#ff6b6b;font-weight:bold">125</td><td>Rules violated</td></tr>
-<tr><td style="color:#ff6b6b;font-weight:bold">54</td><td>Source files</td></tr>
-<tr><td style="color:#ff6b6b;font-weight:bold">~200K</td><td>Lines of code</td></tr>
-<tr><td style="color:#ff6b6b;font-weight:bold">GPL-2.0</td><td>License (viral)</td></tr>
+<tr><td style="color:#b8322a;font-weight:bold;font-size:20px">13,143</td><td>Total violations</td></tr>
+<tr><td style="color:#b8322a;font-weight:bold">125</td><td>Rules violated</td></tr>
+<tr><td style="color:#b8322a;font-weight:bold">54</td><td>Source files</td></tr>
+<tr><td style="color:#b8322a;font-weight:bold">~200K</td><td>Lines of code</td></tr>
+<tr><td style="color:#b8322a;font-weight:bold">GPL-2.0</td><td>License (viral)</td></tr>
 </table>
-<p style="color:#888;margin-top:12px">Top file: <code>en_main.c</code> alone had <strong style="color:#ff6b6b">1,730 violations</strong></p>
+<p style="color:#6b6353;margin-top:12px">Top file: <code>en_main.c</code> alone had <strong style="color:#b8322a">1,730 violations</strong></p>
 </div>
 <div style="display:flex;align-items:center;padding:0 16px">
 <div class="big-arrow" style="margin:0">→</div>
@@ -389,54 +401,54 @@ out:
 <div class="card green" style="flex:1">
 <h3 style="font-size:clamp(16px,3vw,22px)">✅ Zephyr Driver (AFTER)</h3>
 <table>
-<tr><td style="color:#51cf66;font-weight:bold;font-size:20px">0</td><td>Driver violations</td></tr>
-<tr><td style="color:#51cf66;font-weight:bold">5</td><td>Formal deviations</td></tr>
-<tr><td style="color:#51cf66;font-weight:bold">14</td><td>Source files</td></tr>
-<tr><td style="color:#51cf66;font-weight:bold">~5,800</td><td>Lines of code</td></tr>
-<tr><td style="color:#51cf66;font-weight:bold">Apache-2.0</td><td>License (clean)</td></tr>
+<tr><td style="color:#2f6b3a;font-weight:bold;font-size:20px">0</td><td>Driver violations</td></tr>
+<tr><td style="color:#2f6b3a;font-weight:bold">5</td><td>Formal deviations</td></tr>
+<tr><td style="color:#2f6b3a;font-weight:bold">14</td><td>Source files</td></tr>
+<tr><td style="color:#2f6b3a;font-weight:bold">~5,800</td><td>Lines of code</td></tr>
+<tr><td style="color:#2f6b3a;font-weight:bold">Apache-2.0</td><td>License (clean)</td></tr>
 </table>
-<p style="color:#888;margin-top:12px">All remaining violations in Zephyr RTOS framework (out of scope)</p>
+<p style="color:#6b6353;margin-top:12px">All remaining violations in Zephyr RTOS framework (out of scope)</p>
 </div>
 </div>
 <div class="highlight center" style="margin-top:12px">
 <p style="font-size:clamp(20px,4vw,32px);font-weight:bold">
-<span style="color:#ff6b6b">13,143</span>
+<span style="color:#b8322a">13,143</span>
 <span style="color:#555"> → </span>
-<span style="color:#51cf66">0</span>
-<span style="color:#0dc"> Driver Violations</span>
+<span style="color:#2f6b3a">0</span>
+<span style="color:#12457a"> Driver Violations</span>
 </p>
-<p style="color:#888;margin-top:8px">100% compliant in project-owned code · 5 formal deviations for Zephyr/HW patterns</p>
+<p style="color:#6b6353;margin-top:8px">100% compliant in project-owned code · 5 formal deviations for Zephyr/HW patterns</p>
 </div>
 </div></div>
 
 <!-- ==================== SLIDE 9: Violation Burndown ==================== -->
 <div class="slide"><div class="slide-inner">
 <h2>Violation Burndown — Zephyr Driver</h2>
-<p style="color:#888;margin-bottom:8px">Iterative scan-fix-verify cycle using Parasoft C/C++test:</p>
+<p style="color:#6b6353;margin-bottom:8px">Iterative scan-fix-verify cycle using Parasoft C/C++test:</p>
 <div class="burndown">
 <div class="burn-col"><div class="burn-bar" style="height:195px;background:linear-gradient(to top,#ff6b6b,#ff6b6b)">13,143</div><div class="burn-lbl">Linux<br>Baseline</div></div>
-<div class="burn-col"><div class="burn-bar" style="height:2px;background:#555" title="Clean-room rewrite begins"></div><div class="burn-lbl" style="color:#a78bfa">Clean<br>Room</div></div>
+<div class="burn-col"><div class="burn-bar" style="height:2px;background:#555" title="Clean-room rewrite begins"></div><div class="burn-lbl" style="color:#12457a">Clean<br>Room</div></div>
 <div class="burn-col"><div class="burn-bar" style="height:160px;background:linear-gradient(to top,#ff6b6b,#ffd43b)">110</div><div class="burn-lbl">Zephyr<br>Scan 1</div></div>
 <div class="burn-col"><div class="burn-bar" style="height:115px;background:linear-gradient(to top,#ff6b6b,#ffd43b)">78</div><div class="burn-lbl">Scan 2</div></div>
 <div class="burn-col"><div class="burn-bar" style="height:68px;background:linear-gradient(to top,#ffd43b,#51cf66)">42</div><div class="burn-lbl">Scan 3</div></div>
 <div class="burn-col"><div class="burn-bar" style="height:34px;background:linear-gradient(to top,#ffd43b,#51cf66)">18</div><div class="burn-lbl">Scan 4</div></div>
 <div class="burn-col"><div class="burn-bar" style="height:12px;background:#51cf66">5</div><div class="burn-lbl">Scan 5</div></div>
-<div class="burn-col"><div class="burn-bar" style="height:4px;background:#51cf66">0</div><div class="burn-lbl" style="color:#51cf66">Final ✅</div></div>
+<div class="burn-col"><div class="burn-bar" style="height:4px;background:#51cf66">0</div><div class="burn-lbl" style="color:#2f6b3a">Final ✅</div></div>
 </div>
 <div class="grid3" style="margin-top:16px">
-<div class="card" style="border-color:#51cf66;text-align:center">
-<h3 style="color:#51cf66;font-size:24px">🔧</h3>
-<h3 style="color:#51cf66">Fixed</h3>
+<div class="card" style="border-color:#2f6b3a;text-align:center">
+<h3 style="color:#2f6b3a;font-size:24px">🔧</h3>
+<h3 style="color:#2f6b3a">Fixed</h3>
 <p>Code changes resolved the violation</p>
 </div>
-<div class="card" style="border-color:#ffd43b;text-align:center">
-<h3 style="color:#ffd43b;font-size:24px">📋</h3>
-<h3 style="color:#ffd43b">Deviated</h3>
+<div class="card" style="border-color:#b9ae90;text-align:center">
+<h3 style="color:#1d1a16;font-size:24px">📋</h3>
+<h3 style="color:#1d1a16">Deviated</h3>
 <p>Formal permit with safety rationale</p>
 </div>
-<div class="card" style="border-color:#888;text-align:center">
-<h3 style="color:#888;font-size:24px">🚫</h3>
-<h3 style="color:#888">Suppressed</h3>
+<div class="card" style="border-color:#6b6353;text-align:center">
+<h3 style="color:#6b6353;font-size:24px">🚫</h3>
+<h3 style="color:#6b6353">Suppressed</h3>
 <p>False positive — tool limitation</p>
 </div>
 </div>
@@ -445,25 +457,25 @@ out:
 <!-- ==================== SLIDE 10: Formal Deviations ==================== -->
 <div class="slide"><div class="slide-inner">
 <h2>Formal Deviations — ISO 26262 Justified</h2>
-<p style="color:#888;margin-bottom:12px">Only <strong style="color:#0dc">5 deviations</strong> needed in the Zephyr driver (vs. 15 that would be needed in Linux):</p>
+<p style="color:#6b6353;margin-bottom:12px">Only <strong style="color:#12457a">5 deviations</strong> needed in the Zephyr driver (vs. 15 that would be needed in Linux):</p>
 <table>
 <tr><th>ID</th><th>Rule</th><th>Category</th><th>Justification</th></tr>
-<tr><td style="color:#0dc">DEV-0001</td><td>Rule 11.4</td><td><span class="tag" style="padding:2px 6px;font-size:11px">HWI</span></td><td>MMIO register access requires pointer-integer casts (ioremap/readl/writel per PCIe spec)</td></tr>
-<tr><td style="color:#0dc">DEV-0002</td><td>Rule 11.3</td><td><span class="tag" style="padding:2px 6px;font-size:11px">ZAP</span></td><td>Zephyr CONTAINER_OF() macro requires pointer-to-struct casts</td></tr>
-<tr><td style="color:#0dc">DEV-0003</td><td>Rule 20.7</td><td><span class="tag" style="padding:2px 6px;font-size:11px">ZAP</span></td><td>Upstream Zephyr macros (K_WORK_INIT, SYS_SLIST_*) cannot be modified</td></tr>
-<tr><td style="color:#0dc">DEV-0004</td><td>Dir 4.9</td><td><span class="tag" style="padding:2px 6px;font-size:11px">PER</span></td><td>Hot-path TX/RX macros must guarantee inlining in data plane</td></tr>
-<tr><td style="color:#0dc">DEV-0005</td><td>Rule 21.6</td><td><span class="tag" style="padding:2px 6px;font-size:11px">ZAP</span></td><td>Zephyr LOG_* macros use stdio-like formatting internally — no alternative</td></tr>
+<tr><td style="color:#12457a">DEV-0001</td><td>Rule 11.4</td><td><span class="tag" style="padding:2px 6px;font-size:11px">HWI</span></td><td>MMIO register access requires pointer-integer casts (ioremap/readl/writel per PCIe spec)</td></tr>
+<tr><td style="color:#12457a">DEV-0002</td><td>Rule 11.3</td><td><span class="tag" style="padding:2px 6px;font-size:11px">ZAP</span></td><td>Zephyr CONTAINER_OF() macro requires pointer-to-struct casts</td></tr>
+<tr><td style="color:#12457a">DEV-0003</td><td>Rule 20.7</td><td><span class="tag" style="padding:2px 6px;font-size:11px">ZAP</span></td><td>Upstream Zephyr macros (K_WORK_INIT, SYS_SLIST_*) cannot be modified</td></tr>
+<tr><td style="color:#12457a">DEV-0004</td><td>Dir 4.9</td><td><span class="tag" style="padding:2px 6px;font-size:11px">PER</span></td><td>Hot-path TX/RX macros must guarantee inlining in data plane</td></tr>
+<tr><td style="color:#12457a">DEV-0005</td><td>Rule 21.6</td><td><span class="tag" style="padding:2px 6px;font-size:11px">ZAP</span></td><td>Zephyr LOG_* macros use stdio-like formatting internally — no alternative</td></tr>
 </table>
 <h3 style="margin-top:24px">Linux Driver Would Need 15 Deviations</h3>
 <div class="grid2">
 <div class="card red" style="text-align:center">
-<p style="font-size:clamp(28px,5vw,40px);font-weight:bold;color:#ff6b6b">15</p>
-<p style="color:#888">Formal deviations needed<br>in Linux mlx5 driver</p>
+<p style="font-size:clamp(28px,5vw,40px);font-weight:bold;color:#b8322a">15</p>
+<p style="color:#6b6353">Formal deviations needed<br>in Linux mlx5 driver</p>
 <p style="color:#555;font-size:12px;margin-top:8px">+ thousands of unfixable violations remaining</p>
 </div>
 <div class="card green" style="text-align:center">
-<p style="font-size:clamp(28px,5vw,40px);font-weight:bold;color:#51cf66">5</p>
-<p style="color:#888">Formal deviations needed<br>in Zephyr clean-room driver</p>
+<p style="font-size:clamp(28px,5vw,40px);font-weight:bold;color:#2f6b3a">5</p>
+<p style="color:#6b6353">Formal deviations needed<br>in Zephyr clean-room driver</p>
 <p style="color:#555;font-size:12px;margin-top:8px">All for Zephyr RTOS or hardware access patterns</p>
 </div>
 </div>
@@ -472,23 +484,23 @@ out:
 <!-- ==================== SLIDE 11: Tooling & Dashboard ==================== -->
 <div class="slide"><div class="slide-inner">
 <h2>Compliance Tooling & Dashboard</h2>
-<p style="color:#888;margin-bottom:12px">Custom PyQt6 dashboard (5,591 lines) manages the entire ISO 26262 workflow:</p>
+<p style="color:#6b6353;margin-bottom:12px">Custom PyQt6 dashboard (5,591 lines) manages the entire ISO 26262 workflow:</p>
 <div class="grid3" style="grid-template-columns:repeat(5,1fr)">
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📊</p><p style="color:#0dc;font-size:12px;font-weight:bold">Overview</p><p style="color:#888;font-size:10px">Violation trends</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">🔍</p><p style="color:#0dc;font-size:12px;font-weight:bold">Violations</p><p style="color:#888;font-size:10px">Filterable table</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📋</p><p style="color:#0dc;font-size:12px;font-weight:bold">Deviations</p><p style="color:#888;font-size:10px">Formal permits</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">✅</p><p style="color:#0dc;font-size:12px;font-weight:bold">Compliance</p><p style="color:#888;font-size:10px">GCS/GRP docs</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">🚫</p><p style="color:#0dc;font-size:12px;font-weight:bold">Suppressions</p><p style="color:#888;font-size:10px">False positives</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📝</p><p style="color:#0dc;font-size:12px;font-weight:bold">Diffs</p><p style="color:#888;font-size:10px">Change tracking</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">🧪</p><p style="color:#0dc;font-size:12px;font-weight:bold">Unit Tests</p><p style="color:#888;font-size:10px">58 tests / 5 modules</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📈</p><p style="color:#0dc;font-size:12px;font-weight:bold">Coverage</p><p style="color:#888;font-size:10px">LC/SC/DC/MC-DC</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">💻</p><p style="color:#0dc;font-size:12px;font-weight:bold">Terminal</p><p style="color:#888;font-size:10px">Scan & build</p></div>
-<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">⚙️</p><p style="color:#0dc;font-size:12px;font-weight:bold">Settings</p><p style="color:#888;font-size:10px">ASIL / tools</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📊</p><p style="color:#12457a;font-size:12px;font-weight:bold">Overview</p><p style="color:#6b6353;font-size:10px">Violation trends</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">🔍</p><p style="color:#12457a;font-size:12px;font-weight:bold">Violations</p><p style="color:#6b6353;font-size:10px">Filterable table</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📋</p><p style="color:#12457a;font-size:12px;font-weight:bold">Deviations</p><p style="color:#6b6353;font-size:10px">Formal permits</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">✅</p><p style="color:#12457a;font-size:12px;font-weight:bold">Compliance</p><p style="color:#6b6353;font-size:10px">GCS/GRP docs</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">🚫</p><p style="color:#12457a;font-size:12px;font-weight:bold">Suppressions</p><p style="color:#6b6353;font-size:10px">False positives</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📝</p><p style="color:#12457a;font-size:12px;font-weight:bold">Diffs</p><p style="color:#6b6353;font-size:10px">Change tracking</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">🧪</p><p style="color:#12457a;font-size:12px;font-weight:bold">Unit Tests</p><p style="color:#6b6353;font-size:10px">58 tests / 5 modules</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">📈</p><p style="color:#12457a;font-size:12px;font-weight:bold">Coverage</p><p style="color:#6b6353;font-size:10px">LC/SC/DC/MC-DC</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">💻</p><p style="color:#12457a;font-size:12px;font-weight:bold">Terminal</p><p style="color:#6b6353;font-size:10px">Scan & build</p></div>
+<div class="card" style="padding:12px;text-align:center"><p style="font-size:24px">⚙️</p><p style="color:#12457a;font-size:12px;font-weight:bold">Settings</p><p style="color:#6b6353;font-size:10px">ASIL / tools</p></div>
 </div>
 <h3>Three-Phase Workflow</h3>
 <div class="flow-h">
-<div class="box phase-scan" style="border-color:#a78bfa;background:#1a1a3a">
-<h4 style="color:#a78bfa">🔍 SCAN</h4>
+<div class="box phase-scan" style="border-color:#b9ae90;background:#fbf8ee">
+<h4 style="color:#12457a">🔍 SCAN</h4>
 <p>Parasoft C/C++test<br>MISRA C:2023<br>XML report output</p>
 </div>
 <span class="arrow">→</span>
@@ -508,7 +520,7 @@ out:
 <div class="slide"><div class="slide-inner">
 <h2>Systematic Fix Methodology</h2>
 <div class="card purple" style="margin-bottom:20px">
-<h3 style="color:#a78bfa">🔧 7-Phase Per-File Remediation</h3>
+<h3 style="color:#12457a">🔧 7-Phase Per-File Remediation</h3>
 <ol style="margin-top:8px">
 <li><strong>Research</strong> — look up the exact MISRA rule text and rationale in the standard</li>
 <li><strong>Analyse</strong> — read the violating file, understand context and surrounding code</li>
@@ -522,7 +534,7 @@ out:
 <div class="grid2">
 <div class="card">
 <h3>Workflow Per File</h3>
-<p style="color:#888;font-size:13px">Each source file has a dedicated <code>.md</code> workflow instruction file guiding the remediation:</p>
+<p style="color:#6b6353;font-size:13px">Each source file has a dedicated <code>.md</code> workflow instruction file guiding the remediation:</p>
 <pre style="font-size:11px">Phase 0: Read WORKFLOW.md + unfixable_patterns.md
 Phase 1: Parse Parasoft XML, cross-check deviation DB
 Phase 2: Backup source to md/backups/*.orig
@@ -534,7 +546,7 @@ Phase 7: Git commit with audit message</pre>
 </div>
 <div class="card">
 <h3>Fix Strategies Database</h3>
-<p style="color:#888;font-size:13px"><strong>63 rules auto-fixable</strong>, 8 manual-only. Each rule has before/after examples:</p>
+<p style="color:#6b6353;font-size:13px"><strong>63 rules auto-fixable</strong>, 8 manual-only. Each rule has before/after examples:</p>
 <pre style="font-size:11px">/* RULE 11.4 — pointer-integer cast */
 // BEFORE:
 reg_val = (unsigned long)mmio_ptr;
@@ -558,9 +570,9 @@ struct B *b = (struct B *)(void *)a_ptr;</pre>
 <h3>📋 GCS — Guidelines Compliance Summary</h3>
 <p>Per-rule status for ISO 26262 auditors:</p>
 <ul>
-<li><strong style="color:#51cf66">Compliant</strong> — no violations found</li>
-<li><strong style="color:#ffd43b">Deviated</strong> — formal permit filed with safety rationale</li>
-<li><strong style="color:#888">N/A</strong> — rule does not apply to project</li>
+<li><strong style="color:#2f6b3a">Compliant</strong> — no violations found</li>
+<li><strong style="color:#1d1a16">Deviated</strong> — formal permit filed with safety rationale</li>
+<li><strong style="color:#6b6353">N/A</strong> — rule does not apply to project</li>
 </ul>
 </div>
 <div class="card green">
@@ -575,20 +587,20 @@ struct B *b = (struct B *)(void *)a_ptr;</pre>
 <h3>ASIL Coverage Requirements (ISO 26262 Table 12)</h3>
 <table>
 <tr><th>ASIL</th><th>Method</th><th>Target</th><th>Status</th></tr>
-<tr><td style="color:#0dc;font-weight:bold">ASIL A</td><td>Statement Coverage (SC)</td><td>≥ 80%</td><td style="color:#51cf66">✅</td></tr>
-<tr><td style="color:#0dc;font-weight:bold">ASIL B ← Project</td><td>Branch / Decision Coverage (DC)</td><td>≥ 80%</td><td style="color:#51cf66">✅ Target</td></tr>
-<tr><td style="color:#888">ASIL C</td><td>MC/DC</td><td>≥ 80%</td><td style="color:#888">—</td></tr>
-<tr><td style="color:#888">ASIL D</td><td>MC/DC</td><td>≥ 80%</td><td style="color:#888">—</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ASIL A</td><td>Statement Coverage (SC)</td><td>≥ 80%</td><td style="color:#2f6b3a">✅</td></tr>
+<tr><td style="color:#12457a;font-weight:bold">ASIL B ← Project</td><td>Branch / Decision Coverage (DC)</td><td>≥ 80%</td><td style="color:#2f6b3a">✅ Target</td></tr>
+<tr><td style="color:#6b6353">ASIL C</td><td>MC/DC</td><td>≥ 80%</td><td style="color:#6b6353">—</td></tr>
+<tr><td style="color:#6b6353">ASIL D</td><td>MC/DC</td><td>≥ 80%</td><td style="color:#6b6353">—</td></tr>
 </table>
 <div class="card" style="margin-top:16px">
 <h3>58 Unit Tests × 5 Modules</h3>
 <div class="grid3" style="margin-top:8px;gap:8px">
-<div class="highlight"><p style="color:#0dc;font-weight:bold;text-align:center">cx6_pcie</p><p style="color:#888;font-size:12px;text-align:center">BAR mapping, NULL guards, MMIO</p></div>
-<div class="highlight"><p style="color:#0dc;font-weight:bold;text-align:center">cx6_device</p><p style="color:#888;font-size:12px;text-align:center">FW handshake, HCA lifecycle</p></div>
-<div class="highlight"><p style="color:#0dc;font-weight:bold;text-align:center">cx6_queue</p><p style="color:#888;font-size:12px;text-align:center">SQ/RQ/CQ/EQ, WQE post</p></div>
-<div class="highlight"><p style="color:#0dc;font-weight:bold;text-align:center">cx6_interrupt</p><p style="color:#888;font-size:12px;text-align:center">MSI-X ISR, EQE inject</p></div>
-<div class="highlight"><p style="color:#0dc;font-weight:bold;text-align:center">cx6_eth</p><p style="color:#888;font-size:12px;text-align:center">TX/RX path, net_if</p></div>
-<div class="highlight"><p style="color:#a78bfa;font-weight:bold;text-align:center">Stubs</p><p style="color:#888;font-size:12px;text-align:center">Fake BAR0, cmd completion</p></div>
+<div class="highlight"><p style="color:#12457a;font-weight:bold;text-align:center">cx6_pcie</p><p style="color:#6b6353;font-size:12px;text-align:center">BAR mapping, NULL guards, MMIO</p></div>
+<div class="highlight"><p style="color:#12457a;font-weight:bold;text-align:center">cx6_device</p><p style="color:#6b6353;font-size:12px;text-align:center">FW handshake, HCA lifecycle</p></div>
+<div class="highlight"><p style="color:#12457a;font-weight:bold;text-align:center">cx6_queue</p><p style="color:#6b6353;font-size:12px;text-align:center">SQ/RQ/CQ/EQ, WQE post</p></div>
+<div class="highlight"><p style="color:#12457a;font-weight:bold;text-align:center">cx6_interrupt</p><p style="color:#6b6353;font-size:12px;text-align:center">MSI-X ISR, EQE inject</p></div>
+<div class="highlight"><p style="color:#12457a;font-weight:bold;text-align:center">cx6_eth</p><p style="color:#6b6353;font-size:12px;text-align:center">TX/RX path, net_if</p></div>
+<div class="highlight"><p style="color:#12457a;font-weight:bold;text-align:center">Stubs</p><p style="color:#6b6353;font-size:12px;text-align:center">Fake BAR0, cmd completion</p></div>
 </div>
 </div>
 </div></div>
@@ -618,8 +630,8 @@ struct B *b = (struct B *)(void *)a_ptr;</pre>
 </div>
 </div>
 <div class="grid4" style="grid-template-columns:repeat(4,1fr)">
-<div class="card stat"><div class="num" style="color:#ff6b6b">13,143</div><div class="lbl">Linux Violations</div></div>
-<div class="card stat"><div class="num" style="color:#51cf66">0</div><div class="lbl">Zephyr Violations</div></div>
+<div class="card stat"><div class="num" style="color:#b8322a">13,143</div><div class="lbl">Linux Violations</div></div>
+<div class="card stat"><div class="num" style="color:#2f6b3a">0</div><div class="lbl">Zephyr Violations</div></div>
 <div class="card stat"><div class="num">97%</div><div class="lbl">Code Size Reduction</div></div>
 <div class="card stat"><div class="num">5</div><div class="lbl">Formal Deviations</div></div>
 </div>
@@ -631,8 +643,8 @@ struct B *b = (struct B *)(void *)a_ptr;</pre>
 <div class="card green" style="margin-top:20px;text-align:center">
 <h3 style="font-size:clamp(18px,4vw,24px)">Linux Kernel Driver → Automotive-Grade Zephyr RTOS</h3>
 <p style="margin-top:12px;font-size:clamp(14px,2.5vw,18px)">
-From <strong style="color:#ff6b6b">13,143 MISRA violations</strong> to
-<strong style="color:#51cf66;font-size:clamp(24px,5vw,36px)"> Zero</strong><br>
+From <strong style="color:#b8322a">13,143 MISRA violations</strong> to
+<strong style="color:#2f6b3a;font-size:clamp(24px,5vw,36px)"> Zero</strong><br>
 with full ISO 26262 ASIL-B compliance engineering
 </p>
 <div style="margin-top:16px">
@@ -697,7 +709,7 @@ wrapper.addEventListener('touchmove',e=>{
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

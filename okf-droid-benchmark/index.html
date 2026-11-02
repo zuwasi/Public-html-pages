@@ -10,15 +10,15 @@
 <meta property="og:title" content="Does project memory make a coding agent better?" />
 <meta property="og:description" content="OKF Agent Memory × Factory Droid: same accuracy, about 5% more cost. 48 blind-graded runs, all data public." />
 <style>
-  html, body { margin: 0; height: 100%; background: #e2e8f0; font-family: Arial, Helvetica, sans-serif; }
+  html, body { margin: 0; height: 100%; background:#e2e8f0; font-family: Arial, Helvetica, sans-serif; }
   .stage { position: fixed; inset: 0 0 56px 0; overflow: hidden; }
   .deck { position: absolute; left: 50%; top: 50%; width: 960px; height: 540px; transform-origin: center center; transform: translate(-50%, -50%); }
   .deck .slide { position: absolute; inset: 0; width: 960px; height: 540px; box-sizing: border-box; box-shadow: 0 10px 40px rgba(15,23,42,.25); border-radius: 6px; display: none; }
   .deck .slide.active { display: block; }
-  .nav { position: fixed; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; justify-content: center; gap: 14px; background: #0f172a; color: #e2e8f0; font-size: 15px; }
-  .nav button { background: #2563eb; color: #fff; border: 0; border-radius: 8px; padding: 9px 16px; font-size: 15px; cursor: pointer; }
-  .nav button:disabled { background: #334155; cursor: default; }
-  .nav a { color: #93c5fd; text-decoration: none; margin-left: 10px; }
+  .nav { position: fixed; left: 0; right: 0; bottom: 0; height: 56px; display: flex; align-items: center; justify-content: center; gap: 14px; background:#fbf8ee; color:#1d1a16; font-size: 15px; }
+  .nav button { background:#2563eb; color:#f4eedc; border: 0; border-radius: 8px; padding: 9px 16px; font-size: 15px; cursor: pointer; }
+  .nav button:disabled { background:#fbf8ee; cursor: default; }
+  .nav a { color:#f4eedc; text-decoration: none; margin-left: 10px; }
   .nav a:hover { text-decoration: underline; }
   .count { min-width: 64px; text-align: center; font-variant-numeric: tabular-nums; }
   @media (max-width: 640px) { .nav { gap: 8px; font-size: 12px; } .nav button { padding: 7px 10px; font-size: 13px; } .nav a { margin-left: 2px; } .count { min-width: 44px; } }
@@ -29,40 +29,52 @@
     .deck .slide { display: block; position: relative; page-break-after: always; box-shadow: none; margin: 0 auto; }
   }
   
-  .slide { font-family: Arial, Helvetica, sans-serif; color: #0f172a; background: #ffffff; padding: 0; position: relative; overflow: hidden; }
-  .bar { position: absolute; left: 0; top: 0; width: 12px; height: 100%; background: #2563eb; }
+  .slide { font-family: Arial, Helvetica, sans-serif; color:#0f172a; background:#ffffff; padding: 0; position: relative; overflow: hidden; }
+  .bar { position: absolute; left: 0; top: 0; width: 12px; height: 100%; background:#2563eb; }
   .inner { position: absolute; left: 64px; right: 56px; top: 44px; bottom: 36px; }
   h1 { font-size: 36px; margin: 0 0 18px; line-height: 1.15; }
-  h2 { font-size: 15px; letter-spacing: 2px; text-transform: uppercase; color: #2563eb; margin: 0 0 8px; font-weight: bold; }
+  h2 { font-size: 15px; letter-spacing: 2px; text-transform: uppercase; color:#2563eb; margin: 0 0 8px; font-weight: bold; }
   p, li { font-size: 21px; line-height: 1.45; }
   ul { margin: 0; padding-left: 26px; }
   li { margin-bottom: 10px; }
-  .muted { color: #64748b; }
-  .foot { position: absolute; left: 64px; bottom: 16px; font-size: 12px; color: #94a3b8; }
-  .dark { background: #0f172a; color: #f8fafc; }
-  .dark .muted { color: #94a3b8; }
-  .dark h2 { color: #60a5fa; }
+  .muted { color:#64748b; }
+  .foot { position: absolute; left: 64px; bottom: 16px; font-size: 12px; color:#6b6353; }
+  .dark { background:#fbf8ee; color:#1d1a16; }
+  .dark .muted { color:#6b6353; }
+  .dark h2 { color:#12457a; }
   .cols { display: flex; gap: 28px; }
   .card { flex: 1; border: 2px solid #e2e8f0; border-radius: 12px; padding: 18px 20px; }
   .card h3 { margin: 0 0 10px; font-size: 21px; }
   .card p, .card li { font-size: 17px; }
   .big { display: flex; gap: 22px; margin-top: 14px; }
-  .metric { flex: 1; border-radius: 14px; padding: 20px 18px; background: #f1f5f9; }
+  .metric { flex: 1; border-radius: 14px; padding: 20px 18px; background:#f1f5f9; }
   .metric .v { font-size: 50px; font-weight: bold; line-height: 1; }
-  .metric .l { font-size: 17px; margin-top: 10px; color: #334155; }
-  .metric .s { font-size: 14px; margin-top: 6px; color: #64748b; }
-  .good { color: #16a34a; } .bad { color: #dc2626; } .neutral { color: #2563eb; }
+  .metric .l { font-size: 17px; margin-top: 10px; color:#334155; }
+  .metric .s { font-size: 14px; margin-top: 6px; color:#64748b; }
+  .good { color:#2f6b3a; } .bad { color:#dc2626; } .neutral { color:#2563eb; }
   .chart { display: block; margin: 0 auto; }
   table { border-collapse: collapse; width: 100%; font-size: 17px; }
   th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #e2e8f0; }
-  th { color: #475569; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+  th { color:#475569; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
   td.n { text-align: right; font-variant-numeric: tabular-nums; }
-  .pill { display: inline-block; background: #dbeafe; color: #1d4ed8; border-radius: 999px; padding: 3px 12px; font-size: 14px; font-weight: bold; }
+  .pill { display: inline-block; background:#dbeafe; color:#1d4ed8; border-radius: 999px; padding: 3px 12px; font-size: 14px; font-weight: bold; }
 
-  .logo-box { position: absolute; top: 34px; right: 40px; background: #ffffff; border-radius: 10px; padding: 10px 14px; line-height: 0; }
+  .logo-box { position: absolute; top: 34px; right: 40px; background:#ffffff; border-radius: 10px; padding: 10px 14px; line-height: 0; }
   .logo-box img { height: 46px; width: auto; display: block; }
-  .dark a { color: #93c5fd; text-decoration: none; }
-  .credit { position: absolute; left: 64px; bottom: 44px; font-size: 18px; color: #cbd5e1; }
+  .dark a { color:#12457a; text-decoration: none; }
+  .credit { position: absolute; left: 64px; bottom: 44px; font-size: 18px; color:#1d1a16; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
@@ -122,8 +134,8 @@
           <li>Tools: Read, Grep, Glob, LS</li>
         </ul>
       </div>
-      <div class="card" style="border-color: #2563eb;">
-        <h3 style="color: #2563eb;">With OKF memory</h3>
+      <div class="card" style="border-color:#2563eb;">
+        <h3 style="color:#2563eb;">With OKF memory</h3>
         <ul>
           <li>Same clone + 20-concept OKF bundle</li>
           <li>OKF MCP server + OKF's AGENTS.md protocol</li>

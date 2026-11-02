@@ -9,16 +9,16 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #ffffff;
+    --bg:#f4eedc;
     --bg-soft: #f5f5f5;
-    --card: #fafafa;
-    --border: #dddddd;
-    --text: #111111;
-    --muted: #555555;
-    --accent: #dd1100;
-    --amber: #8a5200;
-    --green: #1a7f37;
-    --red: #b30f00;
+    --card:#fbf8ee;
+    --border:#b9ae90;
+    --text:#1d1a16;
+    --muted:#6b6353;
+    --accent:#b8322a;
+    --amber:#9a5b10;
+    --green:#2f6b3a;
+    --red:#b8322a;
     --charcoal: #222222;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -35,9 +35,8 @@
   .slide {
     flex: 0 0 100vw; height: 100vh; overflow-y: auto;
     padding: clamp(3.4rem, 8vh, 5.2rem) clamp(1.1rem, 5vw, 4.5rem) 5rem;
-    background:
-      radial-gradient(1200px 500px at 15% -10%, rgba(221,17,0,.05), transparent 60%),
-      radial-gradient(900px 480px at 95% 110%, rgba(34,34,34,.04), transparent 60%),
+    background:radial-gradient(1200px 500px at 15% -10%, rgba(227,218,191,.05), transparent 60%),
+      radial-gradient(900px 480px at 95% 110%, rgba(227,218,191,.04), transparent 60%),
       var(--bg);
   }
   .inner { max-width: 1150px; margin: 0 auto; }
@@ -57,7 +56,7 @@
   a:hover { text-decoration: underline; }
   code {
     font-family: ui-monospace, 'Cascadia Code', Consolas, monospace;
-    background: rgba(221,17,0,.05); border: 1px solid rgba(221,17,0,.18);
+    background:rgba(251,248,238,.05); border: 1px solid rgba(221,17,0,.18);
     padding: .08em .38em; border-radius: 6px; font-size: .9em; white-space: nowrap;
   }
   .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(.7rem, 1.6vw, 1.1rem); margin-top: clamp(.9rem, 2.4vh, 1.4rem); }
@@ -75,11 +74,11 @@
     display: inline-block; font-size: clamp(.58rem, 1.15vw, .68rem); font-weight: 800;
     letter-spacing: .08em; padding: .18rem .55rem; border-radius: 999px; margin-top: .55rem;
   }
-  .b-paper  { background: #f2f2f2; color: #555555; border: 1px solid #d0d0d0; }
-  .b-symbolic { background: rgba(221,17,0,.07); color: var(--accent); border: 1px solid rgba(221,17,0,.3); }
-  .b-proof  { background: #e6f4ea; color: var(--green); border: 1px solid rgba(26,127,55,.35); }
-  .b-numeric { background: #fdf3e0; color: var(--amber); border: 1px solid rgba(138,82,0,.3); }
-  .b-notest { background: #e9e9e9; color: #222222; border: 1px solid #999999; }
+  .b-paper  { background:#f2f2f2; color:#555555; border: 1px solid #d0d0d0; }
+  .b-symbolic { background:rgba(251,248,238,.07); color: var(--accent); border: 1px solid rgba(221,17,0,.3); }
+  .b-proof  { background:#e6f4ea; color: var(--green); border: 1px solid rgba(26,127,55,.35); }
+  .b-numeric { background:#fdf3e0; color: var(--amber); border: 1px solid rgba(138,82,0,.3); }
+  .b-notest { background:#e9e9e9; color:#222222; border: 1px solid #999999; }
   .footnote {
     margin-top: clamp(.8rem, 2.2vh, 1.3rem); color: var(--muted);
     font-size: clamp(.72rem, 1.4vw, .84rem); line-height: 1.5;
@@ -90,15 +89,15 @@
   .hero-fig img {
     display: block; width: auto; max-width: 100%; margin: 0 auto;
     max-height: min(56vh, calc(100vh - 21rem));
-    border: 1px solid var(--border); border-radius: 12px; background: #060d1a;
+    border: 1px solid var(--border); border-radius: 12px; background:#fbf8ee;
   }
   .h2-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
   .h2-row h2 { margin-bottom: 0; }
-  .tool-logo { height: clamp(2.6rem, 5.5vw, 3.4rem); width: auto; flex: 0 0 auto; background: #ffffff; border: 1px solid var(--border); border-radius: 8px; padding: .45rem .75rem; }
+  .tool-logo { height: clamp(2.6rem, 5.5vw, 3.4rem); width: auto; flex: 0 0 auto; background:#ffffff; border: 1px solid var(--border); border-radius: 8px; padding: .45rem .75rem; }
   .home-btn {
     position: fixed; top: .9rem; left: 1.2rem; z-index: 40;
     display: grid; place-items: center; width: 2.4rem; height: 2.4rem;
-    border: 1px solid var(--border); border-radius: 10px; background: rgba(255,255,255,.92);
+    border: 1px solid var(--border); border-radius: 10px; background:rgba(255,255,255,.92);
     color: var(--text); cursor: pointer; transition: border-color .2s, color .2s;
   }
   .home-btn:hover { border-color: var(--accent); color: var(--accent); }
@@ -122,7 +121,7 @@
     margin-top: clamp(.8rem, 2vh, 1.2rem); display: flex; flex-wrap: wrap; gap: .5rem;
   }
   .precedent span {
-    background: rgba(34,34,34,.05); border: 1px solid rgba(34,34,34,.25); color: #333333;
+    background:rgba(251,248,238,.05); border: 1px solid rgba(34,34,34,.25); color:#333333;
     border-radius: 999px; padding: .25rem .7rem; font-size: clamp(.62rem, 1.25vw, .76rem); font-weight: 600;
   }
 
@@ -148,7 +147,7 @@
 
   .chips { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .8rem; }
   .chips span {
-    background: rgba(221,17,0,.04); border: 1px solid rgba(221,17,0,.25); color: var(--text);
+    background:rgba(251,248,238,.04); border: 1px solid rgba(221,17,0,.25); color: var(--text);
     border-radius: 999px; padding: .25rem .7rem; font-size: clamp(.62rem, 1.25vw, .76rem);
   }
   .titlecard-meta { margin-top: clamp(1rem, 3vh, 1.8rem); display: flex; flex-wrap: wrap; gap: .5rem; }
@@ -167,15 +166,15 @@
   .nav {
     position: fixed; top: 50%; transform: translateY(-50%); z-index: 40;
     width: clamp(2.6rem, 5vw, 3.2rem); height: clamp(2.6rem, 5vw, 3.2rem);
-    border-radius: 50%; border: 1px solid var(--border); background: rgba(255,255,255,.92);
+    border-radius: 50%; border: 1px solid var(--border); background:rgba(255,255,255,.92);
     color: var(--text); font-size: clamp(1.2rem, 2.6vw, 1.6rem); line-height: 1;
     cursor: pointer; user-select: none; transition: border-color .2s, color .2s;
   }
   .nav:hover { border-color: var(--accent); color: var(--accent); }
   .nav.prev { left: .9rem; }
   .nav.next { right: .9rem; }
-  .progress { position: fixed; left: 0; right: 0; bottom: 0; height: 4px; background: #e5e5e5; z-index: 40; }
-  .progress div { height: 100%; width: 0; background: linear-gradient(90deg, #dd1100, #222222); transition: width .45s ease; }
+  .progress { position: fixed; left: 0; right: 0; bottom: 0; height: 4px; background:#e5e5e5; z-index: 40; }
+  .progress div { height: 100%; width: 0; background:linear-gradient(90deg, #e3dabf, #e3dabf); transition: width .45s ease; }
   .counter {
     position: fixed; right: 1.2rem; bottom: .8rem; z-index: 40; color: var(--muted);
     font-size: clamp(.66rem, 1.3vw, .8rem); font-weight: 600;
@@ -193,6 +192,18 @@
     .stage { width: 100%; }
     .brand { display: none; }
   }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>

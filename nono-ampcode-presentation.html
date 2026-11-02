@@ -8,18 +8,18 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
   :root {
-    --bg-dark: #0a0a0f;
-    --bg-card: #12121a;
-    --bg-card-alt: #181825;
-    --accent-cyan: #00d9ff;
-    --accent-green: #00ff88;
-    --accent-orange: #ff8800;
-    --accent-red: #ff3366;
-    --accent-purple: #b388ff;
-    --accent-yellow: #ffe066;
-    --text-primary: #e8e8f0;
-    --text-secondary: #9090a8;
-    --border: #2a2a3d;
+    --bg-dark:#d9d0b8;
+    --bg-card:#fbf8ee;
+    --bg-card-alt:#fbf8ee;
+    --accent-cyan:#12457a;
+    --accent-green:#2f6b3a;
+    --accent-orange:#9a5b10;
+    --accent-red:#b8322a;
+    --accent-purple:#6b3a6b;
+    --accent-yellow:#9a5b10;
+    --text-primary:#1d1a16;
+    --text-secondary:#4a443a;
+    --border:#b9ae90;
     --glow-cyan: 0 0 30px rgba(0,217,255,0.15);
     --glow-green: 0 0 30px rgba(0,255,136,0.15);
     --glow-orange: 0 0 30px rgba(255,136,0,0.15);
@@ -43,7 +43,7 @@
   nav {
     position: fixed; top: 0; left: 0; right: 0;
     z-index: 100;
-    background: rgba(10,10,15,0.85);
+    background:rgba(251,248,238,0.85);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border);
     padding: 0 40px;
@@ -54,7 +54,7 @@
   }
   nav .logo {
     font-weight: 800; font-size: 1.2rem;
-    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+    background:linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   nav .nav-links { display: flex; gap: 24px; }
@@ -106,7 +106,7 @@
     height: 52px;
     border-radius: 50%;
     border: 1px solid var(--border);
-    background: rgba(10,10,15,0.85);
+    background:rgba(251,248,238,0.85);
     backdrop-filter: blur(10px);
     color: var(--text-secondary);
     font-size: 1.4rem;
@@ -140,7 +140,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.75rem;
     color: var(--text-secondary);
-    background: rgba(10,10,15,0.85);
+    background:rgba(251,248,238,0.85);
     backdrop-filter: blur(10px);
     padding: 6px 18px;
     border-radius: 20px;
@@ -154,7 +154,7 @@
     top: 60px;
     left: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+    background:linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
     z-index: 101;
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 0 2px 2px 0;
@@ -175,23 +175,23 @@
     margin-bottom: 20px;
   }
   h1 .gradient-cyan {
-    background: linear-gradient(135deg, var(--accent-cyan), #66e0ff);
+    background:linear-gradient(135deg, var(--accent-cyan), #66e0ff);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   h1 .gradient-green {
-    background: linear-gradient(135deg, var(--accent-green), #66ffbb);
+    background:linear-gradient(135deg, var(--accent-green), #66ffbb);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   h1 .gradient-orange {
-    background: linear-gradient(135deg, var(--accent-orange), #ffbb66);
+    background:linear-gradient(135deg, var(--accent-orange), #ffbb66);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   h1 .gradient-red {
-    background: linear-gradient(135deg, var(--accent-red), #ff6699);
+    background:linear-gradient(135deg, var(--accent-red), #ff6699);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   h1 .gradient-purple {
-    background: linear-gradient(135deg, var(--accent-purple), #d4b8ff);
+    background:linear-gradient(135deg, var(--accent-purple), #d4b8ff);
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
 
@@ -225,11 +225,11 @@
     margin-right: 8px;
     margin-bottom: 8px;
   }
-  .tag-cyan   { background: rgba(0,217,255,0.12); color: var(--accent-cyan); border: 1px solid rgba(0,217,255,0.25); }
-  .tag-green  { background: rgba(0,255,136,0.12); color: var(--accent-green); border: 1px solid rgba(0,255,136,0.25); }
-  .tag-orange { background: rgba(255,136,0,0.12); color: var(--accent-orange); border: 1px solid rgba(255,136,0,0.25); }
-  .tag-red    { background: rgba(255,51,102,0.12); color: var(--accent-red); border: 1px solid rgba(255,51,102,0.25); }
-  .tag-purple { background: rgba(179,136,255,0.12); color: var(--accent-purple); border: 1px solid rgba(179,136,255,0.25); }
+  .tag-cyan   { background:rgba(0,217,255,0.12); color: var(--accent-cyan); border: 1px solid rgba(0,217,255,0.25); }
+  .tag-green  { background:rgba(0,255,136,0.12); color: var(--accent-green); border: 1px solid rgba(0,255,136,0.25); }
+  .tag-orange { background:rgba(255,136,0,0.12); color: var(--accent-orange); border: 1px solid rgba(255,136,0,0.25); }
+  .tag-red    { background:rgba(255,51,102,0.12); color:#f4eedc; border: 1px solid rgba(255,51,102,0.25); }
+  .tag-purple { background:rgba(179,136,255,0.12); color: var(--accent-purple); border: 1px solid rgba(179,136,255,0.25); }
 
   /* ── Grid layouts ── */
   .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 20px; }
@@ -246,12 +246,12 @@
   }
   .card:hover {
     transform: translateY(-4px);
-    border-color: rgba(0,217,255,0.3);
+    border-color:rgba(18,69,122,0.3);
     box-shadow: var(--glow-cyan);
   }
-  .card.glow-green:hover { border-color: rgba(0,255,136,0.3); box-shadow: var(--glow-green); }
-  .card.glow-orange:hover { border-color: rgba(255,136,0,0.3); box-shadow: var(--glow-orange); }
-  .card.glow-red:hover { border-color: rgba(255,51,102,0.3); box-shadow: var(--glow-red); }
+  .card.glow-green:hover { border-color:rgba(47,107,58,0.3); box-shadow: var(--glow-green); }
+  .card.glow-orange:hover { border-color:rgba(184,50,42,0.3); box-shadow: var(--glow-orange); }
+  .card.glow-red:hover { border-color:rgba(255,51,102,0.3); box-shadow: var(--glow-red); }
 
   .card-icon {
     font-size: 2rem;
@@ -263,7 +263,7 @@
 
   /* ── Code blocks ── */
   .code-block {
-    background: #0d0d14;
+    background:#fbf8ee;
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 20px 24px;
@@ -277,7 +277,7 @@
   .code-block .cmd { color: var(--accent-cyan); }
   .code-block .flag { color: var(--accent-orange); }
   .code-block .val { color: var(--accent-green); }
-  .code-block .comment { color: #555570; font-style: italic; }
+  .code-block .comment { color:#555570; font-style: italic; }
 
   /* ── Comparison table ── */
   .comparison-table {
@@ -305,7 +305,7 @@
     border-top: 1px solid var(--border);
     color: var(--text-secondary);
   }
-  .comparison-table tr:nth-child(even) td { background: rgba(18,18,26,0.5); }
+  .comparison-table tr:nth-child(even) td { background:rgba(251,248,238,0.5); }
   .comparison-table .check { color: var(--accent-green); font-weight: 700; }
   .comparison-table .cross { color: var(--accent-red); font-weight: 700; }
 
@@ -315,7 +315,7 @@
     content: '';
     position: absolute; left: 8px; top: 0; bottom: 0;
     width: 2px;
-    background: linear-gradient(180deg, var(--accent-cyan), var(--accent-green), var(--accent-purple));
+    background:#f4eedc;
   }
   .timeline-item {
     position: relative; margin-bottom: 32px; padding-left: 20px;
@@ -338,10 +338,10 @@
     font-size: 0.75rem; color: var(--accent-cyan);
     margin-bottom: 4px; letter-spacing: 1px;
   }
-  .timeline-item:nth-child(2) .timeline-date { color: var(--accent-green); }
-  .timeline-item:nth-child(3) .timeline-date { color: var(--accent-orange); }
-  .timeline-item:nth-child(4) .timeline-date { color: var(--accent-purple); }
-  .timeline-item:nth-child(5) .timeline-date { color: var(--accent-yellow); }
+  .timeline-item:nth-child(2) .timeline-date { color:#f4eedc; }
+  .timeline-item:nth-child(3) .timeline-date { color:#f4eedc; }
+  .timeline-item:nth-child(4) .timeline-date { color:#f4eedc; }
+  .timeline-item:nth-child(5) .timeline-date { color:#f4eedc; }
 
   /* ── Callout ── */
   .callout {
@@ -361,7 +361,7 @@
   .stat-item { text-align: center; }
   .stat-value {
     font-size: 2.5rem; font-weight: 900;
-    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-green));
+    background:#f4eedc;
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   }
   .stat-label { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
@@ -397,7 +397,7 @@
     border-color: var(--accent-green);
     box-shadow: var(--glow-green);
     color: var(--accent-green);
-    background: rgba(0,255,136,0.05);
+    background:rgba(0,255,136,0.05);
   }
   .diagram-arrow {
     font-size: 1.5rem; color: var(--text-secondary);
@@ -405,7 +405,7 @@
 
   /* ── Warning / Alpha banner ── */
   .alpha-banner {
-    background: rgba(255,136,0,0.08);
+    background:rgba(255,136,0,0.08);
     border: 1px solid rgba(255,136,0,0.25);
     border-radius: 12px;
     padding: 18px 24px;
@@ -430,7 +430,7 @@
     font-weight: 500;
     transition: color 0.3s;
   }
-  .links-list a:hover { color: #66e0ff; text-decoration: underline; }
+  .links-list a:hover { color:#12457a; text-decoration: underline; }
   .links-list .link-desc { color: var(--text-secondary); font-size: 0.85rem; }
 
   /* ── Hero background effect ── */
@@ -443,7 +443,7 @@
     position: absolute;
     top: -50%; left: -50%;
     width: 200%; height: 200%;
-    background: radial-gradient(ellipse at 30% 50%, rgba(0,217,255,0.06) 0%, transparent 60%),
+    background:radial-gradient(ellipse at 30% 50%, rgba(0,217,255,0.06) 0%, transparent 60%),
                 radial-gradient(ellipse at 70% 30%, rgba(0,255,136,0.04) 0%, transparent 50%);
     animation: pulse 8s ease-in-out infinite alternate;
   }
@@ -501,13 +501,13 @@
     transition: border-color 0.3s, box-shadow 0.3s;
   }
   .esl-badge:hover {
-    border-color: rgba(0,217,255,0.4);
+    border-color:rgba(18,69,122,0.4);
     box-shadow: var(--glow-cyan);
   }
   .esl-badge-text {
     font-weight: 700;
     font-size: 1rem;
-    background: linear-gradient(135deg, #0077cc, #00aaff);
+    background:#f4eedc;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -593,6 +593,18 @@
     .grid-2, .grid-3, .grid-4 { gap: 10px; }
   }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
 
@@ -640,7 +652,7 @@
 <section class="slide" id="hero">
   <div class="slide-number">01 / 10</div>
   <div class="logo-row" style="margin-bottom:20px;">
-    <img src="nono-logo.png" alt="nono" class="logo-img-lg" style="background:#000;padding:6px 16px;">
+    <img src="nono-logo.png" alt="nono" class="logo-img-lg" style="background:#fbf8ee;padding:6px 16px;">
     <span style="font-size:2rem;color:var(--text-secondary);font-weight:200;">×</span>
     <img src="amp-logo.png" alt="Ampcode" class="logo-img-lg">
     <div class="logo-divider"></div>
@@ -726,7 +738,7 @@
 <section class="slide" id="what-is-nono">
   <div class="slide-number">03 / 10</div>
   <div class="logo-row" style="margin-bottom:12px;">
-    <img src="nono-logo.png" alt="nono" class="logo-img" style="background:#000;padding:4px 14px;">
+    <img src="nono-logo.png" alt="nono" class="logo-img" style="background:#fbf8ee;padding:4px 14px;">
   </div>
   <h1>What is <span class="gradient-cyan">nono</span>?</h1>
   <p class="subtitle">
@@ -739,7 +751,7 @@
     <div class="diagram-flow">
       <div class="diagram-node highlight">👤 Developer</div>
       <div class="diagram-arrow">→</div>
-      <div class="diagram-node nono-node"><img src="nono-logo.png" alt="nono" style="height:22px;background:#000;padding:2px 6px;border-radius:4px;margin-bottom:4px;"><br>nono sandbox<br><small style="font-weight:400;color:var(--text-secondary);">Kernel-enforced</small></div>
+      <div class="diagram-node nono-node"><img src="nono-logo.png" alt="nono" style="height:22px;background:#fbf8ee;padding:2px 6px;border-radius:4px;margin-bottom:4px;"><br>nono sandbox<br><small style="font-weight:400;color:var(--text-secondary);">Kernel-enforced</small></div>
       <div class="diagram-arrow">→</div>
       <div class="diagram-node highlight"><img src="amp-logo.png" alt="Amp" style="height:22px;border-radius:4px;margin-bottom:4px;"><br>AI Agent<br><small style="font-weight:400;color:var(--text-secondary);">Amp / Claude / Codex</small></div>
       <div class="diagram-arrow">→</div>
@@ -833,7 +845,7 @@
   <div class="logo-row" style="margin-bottom:12px;">
     <img src="amp-logo.png" alt="Ampcode" class="logo-img">
     <span style="font-size:1.2rem;color:var(--text-secondary);font-weight:300;">+</span>
-    <img src="nono-logo.png" alt="nono" class="logo-img" style="background:#000;padding:4px 14px;">
+    <img src="nono-logo.png" alt="nono" class="logo-img" style="background:#fbf8ee;padding:4px 14px;">
   </div>
   <h1>Why nono Matters for <span class="gradient-purple">Ampcode</span></h1>
   <p class="subtitle">
@@ -1134,7 +1146,7 @@
 <section class="slide" id="links">
   <div class="slide-number">10 / 10</div>
   <div class="logo-row" style="margin-bottom:12px;">
-    <img src="nono-logo.png" alt="nono" class="logo-img-sm" style="background:#000;padding:3px 10px;">
+    <img src="nono-logo.png" alt="nono" class="logo-img-sm" style="background:#fbf8ee;padding:3px 10px;">
     <img src="amp-logo.png" alt="Ampcode" class="logo-img-sm">
     <a href="https://eswlab.com/products/amp/amp/" target="_blank" class="esl-badge" style="padding:4px 12px;border-radius:8px;">
       <span class="esl-badge-text" style="font-size:0.8rem;">ESL Software</span>
@@ -1221,7 +1233,7 @@
 
   <div style="margin-top:auto; padding-top:24px; text-align:center; border-top:1px solid var(--border);">
     <div class="footer-logos" style="display:flex;align-items:center;justify-content:center;gap:24px;margin-bottom:12px;">
-      <a href="https://nono.sh" target="_blank"><img src="nono-logo.png" alt="nono" style="height:24px;background:#000;padding:2px 8px;border-radius:6px;opacity:0.7;"></a>
+      <a href="https://nono.sh" target="_blank"><img src="nono-logo.png" alt="nono" style="height:24px;background:#fbf8ee;padding:2px 8px;border-radius:6px;opacity:0.7;"></a>
       <a href="https://ampcode.com" target="_blank"><img src="amp-logo.png" alt="Ampcode" style="height:24px;border-radius:6px;opacity:0.7;"></a>
       <a href="https://eswlab.com/products/amp/amp/" target="_blank" style="font-weight:700;font-size:0.9rem;color:var(--accent-cyan);text-decoration:none;opacity:0.7;">ESL</a>
     </div>
@@ -1336,7 +1348,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

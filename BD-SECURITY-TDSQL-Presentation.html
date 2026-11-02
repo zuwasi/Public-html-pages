@@ -8,27 +8,27 @@
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
   :root {
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --surface-2: #1a2236;
-    --surface-3: #1e293b;
-    --border: #2a3550;
-    --accent: #3b82f6;
-    --accent-glow: #60a5fa;
-    --danger: #ef4444;
-    --danger-glow: #f87171;
-    --success: #10b981;
-    --success-glow: #34d399;
-    --warning: #f59e0b;
-    --warning-glow: #fbbf24;
-    --purple: #8b5cf6;
-    --purple-glow: #a78bfa;
-    --text: #e2e8f0;
-    --text-dim: #94a3b8;
-    --text-muted: #64748b;
-    --code-bg: #0d1117;
-    --tainted: #ff6b6b;
-    --clean: #4ade80;
+    --bg:#f4eedc;
+    --surface:#fbf8ee;
+    --surface-2:#fbf8ee;
+    --surface-3:#fbf8ee;
+    --border:#b9ae90;
+    --accent:#b8322a;
+    --accent-glow:#12457a;
+    --danger:#b8322a;
+    --danger-glow:#b8322a;
+    --success:#2f6b3a;
+    --success-glow:#2f6b3a;
+    --warning:#9a5b10;
+    --warning-glow:#9a5b10;
+    --purple:#6b3a6b;
+    --purple-glow:#12457a;
+    --text:#1d1a16;
+    --text-dim:#12457a;
+    --text-muted:#6b6353;
+    --code-bg:#f6efdc;
+    --tainted:#b8322a;
+    --clean:#2f6b3a;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -90,7 +90,7 @@
     height: 52px;
     border-radius: 50%;
     border: 1.5px solid var(--border);
-    background: rgba(17,24,39,.85);
+    background:rgba(251,248,238,.85);
     backdrop-filter: blur(8px);
     color: var(--text);
     font-size: 1.3rem;
@@ -101,7 +101,7 @@
     transition: background .2s, border-color .2s, transform .15s;
   }
   .nav-arrow:hover {
-    background: rgba(59,130,246,.15);
+    background:rgba(59,130,246,.15);
     border-color: var(--accent);
   }
   .nav-arrow:active { transform: translateY(-50%) scale(.92); }
@@ -118,7 +118,7 @@
     position: fixed;
     top: 0; left: 0;
     height: 3px;
-    background: linear-gradient(90deg, var(--accent), var(--purple));
+    background:linear-gradient(90deg, var(--accent), var(--purple));
     z-index: 200;
     transition: width .4s ease;
   }
@@ -154,7 +154,7 @@
     font-size: .75rem;
     color: var(--text-muted);
     z-index: 100;
-    background: rgba(17,24,39,.7);
+    background:rgba(251,248,238,.7);
     backdrop-filter: blur(6px);
     padding: .25rem .65rem;
     border-radius: 6px;
@@ -174,11 +174,11 @@
     padding: .3rem .8rem;
     border-radius: 100px;
   }
-  .section-label.blue   { color: var(--accent-glow); background: rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.2); }
-  .section-label.red    { color: var(--danger-glow); background: rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); }
-  .section-label.green  { color: var(--success-glow); background: rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.2); }
-  .section-label.purple { color: var(--purple-glow); background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.2); }
-  .section-label.amber  { color: var(--warning-glow); background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2); }
+  .section-label.blue   { color: var(--accent-glow); background:rgba(59,130,246,.1); border: 1px solid rgba(59,130,246,.2); }
+  .section-label.red    { color:#f4eedc; background:rgba(239,68,68,.1); border: 1px solid rgba(239,68,68,.2); }
+  .section-label.green  { color: var(--success-glow); background:rgba(16,185,129,.1); border: 1px solid rgba(16,185,129,.2); }
+  .section-label.purple { color:#f4eedc; background:rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.2); }
+  .section-label.amber  { color: var(--warning-glow); background:rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.2); }
 
   .slide-title {
     font-size: clamp(1.5rem, 4vw, 2.2rem);
@@ -204,12 +204,12 @@
     align-items: center;
     gap: .5rem;
     padding: .4rem 1.1rem;
-    background: rgba(239,68,68,.12);
+    background:rgba(239,68,68,.12);
     border: 1px solid rgba(239,68,68,.25);
     border-radius: 100px;
     font-size: .75rem;
     font-weight: 600;
-    color: var(--danger-glow);
+    color:#f4eedc;
     letter-spacing: .06em;
     text-transform: uppercase;
     margin-bottom: 1.5rem;
@@ -229,7 +229,7 @@
     font-weight: 900;
     line-height: 1.08;
     margin-bottom: 1.25rem;
-    background: linear-gradient(135deg, #fff 30%, var(--accent-glow) 100%);
+    background:#f4eedc;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
@@ -246,7 +246,7 @@
     padding: .35rem .9rem;
     border: 1px solid rgba(59,130,246,.3);
     border-radius: 6px;
-    background: rgba(59,130,246,.08);
+    background:rgba(59,130,246,.08);
     display: inline-block;
     margin-bottom: 2rem;
   }
@@ -274,10 +274,10 @@
     top: 0; left: 0; right: 0;
     height: 3px;
   }
-  .card.danger::before  { background: linear-gradient(90deg, var(--danger), var(--warning)); }
-  .card.safe::before    { background: linear-gradient(90deg, var(--success), var(--accent)); }
-  .card.info::before    { background: linear-gradient(90deg, var(--accent), var(--purple)); }
-  .card.warn::before    { background: linear-gradient(90deg, var(--warning), var(--danger)); }
+  .card.danger::before  { background:#f4eedc; }
+  .card.safe::before    { background:#f4eedc; }
+  .card.info::before    { background:#f4eedc; }
+  .card.warn::before    { background:#f4eedc; }
 
   .card h3 {
     font-size: 1.1rem;
@@ -318,18 +318,18 @@
     padding: .15rem .5rem;
     border-radius: 4px;
   }
-  .code-label.vuln { background: rgba(239,68,68,.15); color: var(--danger-glow); }
-  .code-label.safe { background: rgba(16,185,129,.15); color: var(--success-glow); }
-  .code-label.llm  { background: rgba(139,92,246,.15); color: var(--purple-glow); }
+  .code-label.vuln { background:rgba(239,68,68,.15); color:#f4eedc; }
+  .code-label.safe { background:rgba(16,185,129,.15); color: var(--success-glow); }
+  .code-label.llm  { background:rgba(139,92,246,.15); color:#f4eedc; }
 
   .t  { color: var(--tainted); font-weight: 600; }
   .c  { color: var(--clean); font-weight: 600; }
-  .kw { color: #7dd3fc; }
-  .fn { color: #c4b5fd; }
-  .str{ color: #86efac; }
-  .cmt{ color: #64748b; font-style: italic; }
-  .typ{ color: #93c5fd; }
-  .num{ color: #fcd34d; }
+  .kw { color:#12457a; }
+  .fn { color:#6b6353; }
+  .str{ color:#1d1a16; }
+  .cmt{ color:#64748b; font-style: italic; }
+  .typ{ color:#12457a; }
+  .num{ color:#1d1a16; }
 
   /* ═══════════════════ FLOW DIAGRAM ═══════════════════ */
   .flow-diagram {
@@ -349,10 +349,10 @@
     text-align: center;
     white-space: nowrap;
   }
-  .flow-node.source    { background: rgba(239,68,68,.12); border: 1.5px solid rgba(239,68,68,.4); color: var(--danger-glow); }
-  .flow-node.process   { background: rgba(245,158,11,.1); border: 1.5px solid rgba(245,158,11,.3); color: var(--warning-glow); }
-  .flow-node.sink      { background: rgba(239,68,68,.2); border: 2px solid rgba(239,68,68,.6); color: #fca5a5; box-shadow: 0 0 20px rgba(239,68,68,.15); }
-  .flow-node.sanitized { background: rgba(16,185,129,.1); border: 1.5px solid rgba(16,185,129,.3); color: var(--success-glow); }
+  .flow-node.source    { background:rgba(239,68,68,.12); border: 1.5px solid rgba(239,68,68,.4); color:#f4eedc; }
+  .flow-node.process   { background:rgba(245,158,11,.1); border: 1.5px solid rgba(245,158,11,.3); color: var(--warning-glow); }
+  .flow-node.sink      { background:rgba(239,68,68,.2); border: 2px solid rgba(239,68,68,.6); color:#f4eedc; box-shadow: 0 0 20px rgba(239,68,68,.15); }
+  .flow-node.sanitized { background:rgba(16,185,129,.1); border: 1.5px solid rgba(16,185,129,.3); color: var(--success-glow); }
   .flow-arrow { font-size: 1.2rem; padding: 0 .35rem; }
   .flow-arrow.tainted { color: var(--danger); }
   .flow-arrow.safe    { color: var(--success); }
@@ -365,11 +365,11 @@
     margin: 1rem 0;
     font-size: .88rem;
   }
-  .callout.danger { border-color: var(--danger); background: rgba(239,68,68,.06); color: var(--danger-glow); }
-  .callout.info   { border-color: var(--accent); background: rgba(59,130,246,.06); color: var(--accent-glow); }
-  .callout.warn   { border-color: var(--warning); background: rgba(245,158,11,.06); color: var(--warning-glow); }
-  .callout.purple { border-color: var(--purple); background: rgba(139,92,246,.06); color: var(--purple-glow); }
-  .callout strong { color: #fff; }
+  .callout.danger { border-color:rgba(29,26,22,0.55); background:rgba(239,68,68,.06); color:#f4eedc; }
+  .callout.info   { border-color: var(--accent); background:rgba(59,130,246,.06); color: var(--accent-glow); }
+  .callout.warn   { border-color: var(--warning); background:rgba(245,158,11,.06); color: var(--warning-glow); }
+  .callout.purple { border-color:rgba(29,26,22,0.55); background:rgba(139,92,246,.06); color:#f4eedc; }
+  .callout strong { color:#f4eedc; }
   .callout code { font-size: .78rem; }
 
   /* ═══════════════════ STATS ═══════════════════ */
@@ -392,10 +392,10 @@
     line-height: 1;
     margin-bottom: .2rem;
   }
-  .stat-card .number.red    { color: var(--danger-glow); }
+  .stat-card .number.red    { color:#f4eedc; }
   .stat-card .number.amber  { color: var(--warning-glow); }
   .stat-card .number.blue   { color: var(--accent-glow); }
-  .stat-card .number.purple { color: var(--purple-glow); }
+  .stat-card .number.purple { color:#f4eedc; }
   .stat-card .label { font-size: .72rem; color: var(--text-muted); font-weight: 500; }
 
   /* ═══════════════════ TABLE ═══════════════════ */
@@ -432,9 +432,9 @@
     padding: .12rem .45rem;
     border-radius: 4px;
   }
-  .tag.tainted { background: rgba(239,68,68,.15); color: var(--danger-glow); }
-  .tag.clean   { background: rgba(16,185,129,.15); color: var(--success-glow); }
-  .tag.sink    { background: rgba(245,158,11,.15); color: var(--warning-glow); }
+  .tag.tainted { background:rgba(239,68,68,.15); color:#f4eedc; }
+  .tag.clean   { background:rgba(16,185,129,.15); color: var(--success-glow); }
+  .tag.sink    { background:rgba(245,158,11,.15); color: var(--warning-glow); }
 
   /* ═══════════════════ TIMELINE ═══════════════════ */
   .timeline {
@@ -447,7 +447,7 @@
     position: absolute;
     left: .6rem; top: 0; bottom: 0;
     width: 2px;
-    background: linear-gradient(180deg, var(--accent), var(--danger), var(--warning));
+    background:#f4eedc;
   }
   .timeline-item { position: relative; padding-bottom: 1.25rem; }
   .timeline-item::before {
@@ -577,6 +577,18 @@
     .stat-card .number { font-size: 1.5rem; }
   }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+</style>
 </head>
 <body>
 
@@ -597,7 +609,7 @@
     <h1 class="hero-title">SQL Injection<br>Data Flow Analysis</h1>
     <p class="hero-sub">
       Known since 1996. Still #3 on OWASP Top 10.
-      Why the oldest vulnerability class can become a <strong style="color:#f87171;">zero-day</strong> any day — through data flow blind spots, bad practices, and LLM-generated code.
+      Why the oldest vulnerability class can become a <strong style="color:#b8322a;">zero-day</strong> any day — through data flow blind spots, bad practices, and LLM-generated code.
     </p>
     <span class="rule-id">BD-SECURITY-TDSQL — Parasoft C/C++test</span>
     <div class="hero-hint">Use <span class="kbd">←</span> <span class="kbd">→</span> arrows or swipe to navigate</div>
@@ -704,7 +716,7 @@
     </div>
 
     <div class="callout danger">
-      <strong>Attack:</strong> Input <code>' or ''='</code> → <code style="color:#fca5a5;">WHERE user_name = '' or ''='' and password = '' or ''=''</code><br>
+      <strong>Attack:</strong> Input <code>' or ''='</code> → <code style="color:#6b6353;">WHERE user_name = '' or ''='' and password = '' or ''=''</code><br>
       → All rows returned. Attacker authenticated as first user.
     </div>
   </div>
@@ -870,7 +882,7 @@
       <div class="flow-arrow tainted">━▶</div>
       <div class="flow-node process">url_decode()</div>
       <div class="flow-arrow tainted">━▶</div>
-      <div class="flow-node process">strlen() check<br><small style="color:#f87171;">NOT a sanitizer!</small></div>
+      <div class="flow-node process">strlen() check<br><small style="color:#b8322a;">NOT a sanitizer!</small></div>
       <div class="flow-arrow tainted">━▶</div>
       <div class="flow-node process">snprintf()</div>
       <div class="flow-arrow tainted">━▶</div>
@@ -1101,7 +1113,7 @@
 
 <!-- esl-home-btn -->
 <a id="esl-home-btn" href="javascript:void(0)" title="Back to first slide" aria-label="Back to first slide"
-   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(20,25,40,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
+   onclick="location.href=location.pathname+location.search" style="position:fixed;top:14px;left:14px;z-index:9999;width:42px;height:42px;border-radius:50%;background:rgba(251,248,238,.55);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;cursor:pointer;text-decoration:none;transition:background .2s">
 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/></svg>
 </a>
 </body>

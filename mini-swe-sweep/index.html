@@ -8,25 +8,37 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#0d1117; color:#e6edf3; line-height:1.55; padding:clamp(14px,3vw,44px); }
+  body { font-family:'Inter',Arial,-apple-system,sans-serif; background:#fbf8ee; color:#1d1a16; line-height:1.55; padding:clamp(14px,3vw,44px); }
   .wrap { max-width:1200px; margin:0 auto; }
   h1 { font-size:clamp(1.4rem,3.6vw,2.2rem); font-weight:800; margin-bottom:.2em; }
-  h2 { font-size:clamp(1.05rem,2.6vw,1.4rem); color:#4fc3f7; margin:1.8em 0 .6em; border-bottom:1px solid #263048; padding-bottom:.3em; }
-  .sub { color:#7d8aa5; margin-bottom:1.2em; font-size:clamp(.78rem,1.6vw,.92rem); }
+  h2 { font-size:clamp(1.05rem,2.6vw,1.4rem); color:#12457a; margin:1.8em 0 .6em; border-bottom:1px solid #263048; padding-bottom:.3em; }
+  .sub { color:#6b6353; margin-bottom:1.2em; font-size:clamp(.78rem,1.6vw,.92rem); }
   table { border-collapse:collapse; width:100%; margin:1em 0; font-size:clamp(.68rem,1.5vw,.86rem); }
   td, th { border:1px solid #30363d; padding:6px 10px; text-align:left; vertical-align:top; }
-  th { background:#161b22; color:#4fc3f7; }
-  tr:nth-child(even) { background:#10161f; }
-  small { color:#8b98ad; font-size:.86em; }
-  .good { background:#173a22; color:#66bb6a; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
-  .zero { background:#3d1212; color:#f28b82; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
-  .trunc { background:#3a2e12; color:#ffd54f; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
-  .warn { background:#2a2410; border:1px solid #665015; border-radius:12px; padding:12px 16px; margin:1.2em 0; font-size:clamp(.75rem,1.6vw,.9rem); color:#ffd54f; }
-  .note { color:#9aa7c0; font-size:clamp(.73rem,1.5vw,.86rem); margin:.6em 0; }
-  a { color:#4fc3f7; }
-  code { background:#161b22; padding:1px 6px; border-radius:5px; color:#79c0ff; }
-  ul { margin:.4em 0 0 1.2em; color:#c9d4e5; font-size:clamp(.76rem,1.6vw,.9rem); }
+  th { background:#fbf8ee; color:#12457a; }
+  tr:nth-child(even) { background:#fbf8ee; }
+  small { color:#6b6353; font-size:.86em; }
+  .good { background:#fbf8ee; color:#2f6b3a; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
+  .zero { background:#fbf8ee; color:#b8322a; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
+  .trunc { background:#fbf8ee; color:#1d1a16; font-weight:700; padding:1px 9px; border-radius:10px; display:inline-block; }
+  .warn { background:#fbf8ee; border:1px solid #665015; border-radius:12px; padding:12px 16px; margin:1.2em 0; font-size:clamp(.75rem,1.6vw,.9rem); color:#1d1a16; }
+  .note { color:#6b6353; font-size:clamp(.73rem,1.5vw,.86rem); margin:.6em 0; }
+  a { color:#12457a; }
+  code { background:#fbf8ee; padding:1px 6px; border-radius:5px; color:#12457a; }
+  ul { margin:.4em 0 0 1.2em; color:#1d1a16; font-size:clamp(.76rem,1.6vw,.9rem); }
   li { margin-bottom:.45em; }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Special+Elite&display=swap" rel="stylesheet">
+<style id="casefile-theme">
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
 </style>
 </head>
 <body>
