@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Findings Report - 25 C++ Cases That Will Humble You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--navy:#0b1f3a;--navy2:#132d52;--bg:#eef2f7;--card:#fff;--ink:#1c2738;--mute:#6b7a90;--line:#dde3ec;--blue:#2f6fd6}
+*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.brand{display:flex;align-items:center;gap:14px}.logo{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,#2f6fd6,#14a3b8);display:grid;place-items:center;font-weight:700}
+h1{font-size:20px;margin:0}.sub{font-size:13px;opacity:.75;margin-top:2px}
+.meta{text-align:right;font-size:12px;opacity:.85}
+main{max-width:1100px;margin:24px auto;padding:0 20px}
+.card{background:var(--card);border-radius:12px;box-shadow:0 1px 3px rgba(16,32,64,.08);padding:24px 30px;border:1px solid #e6ebf2}
+.report h1{font-size:24px;color:var(--navy);margin:4px 0 14px}
+.report h2{font-size:16px;color:var(--navy);border-bottom:2px solid var(--line);padding-bottom:6px;margin:28px 0 12px}
+.report p,.report li{font-size:14px;line-height:1.65}
+.report code{background:#f0f4f9;border-radius:4px;padding:1px 5px;font-size:12.5px}
+.report a{color:var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:12.5px;margin:12px 0}
+th{text-align:left;color:var(--mute);font-weight:600;font-size:11px;text-transform:uppercase;padding:7px 8px;border-bottom:2px solid var(--line);background:#f7f9fc}
+td{padding:7px 8px;border-bottom:1px solid #f0f3f7;vertical-align:top}
+tr:nth-child(even) td{background:#fbfcfe}
+@media(max-width:800px){.card{padding:16px}table{font-size:11.5px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">ESL</div>
+    <div><h1>Findings Report: 25 C++ Cases That Will Humble You</h1>
+    <div class="sub">Parasoft C++test vs the book &middot; companion to the <a href="index.html" style="color:#9cc4f5">dashboard</a></div></div>
+  </div>
+  <div class="meta">C++test Professional 2025.2.0<br>2026-11-04 &middot; full written report</div>
+</header>
+<main><div class="card report">
+<h1>Parasoft C++test vs "25 C++ Cases That Will Humble You": Findings Report</h1>
+<p>2026-11-04 · Parasoft C++test Professional 2025.2.0 · GCC 13.3.0 / C++23 · one translation unit per case</p>
+<p>Interactive dashboard version (severity pills, linked rule docs): <a href="index.html">index.html</a></p>
+<h2>Headline</h2>
+<p>Across four configurations the best result is the custom merged <strong>MISRA C++ 2023 + Flow Analysis Aggressive</strong> config: <strong>9 of 25 bugs get a purposeful finding</strong> (6 detected outright, 3 flagged on the right line for the right hazard family), plus 3 incidental style hits on bug lines. <strong>12 of 25 cases produce no finding anywhere near the bug.</strong> Recommended Rules alone finds 2 of 25; Flow Analysis alone 5.</p>
+<h2>Configurations and totals</h2>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Findings</th>
+<th>On a bug line</th>
+<th>Detected</th>
+<th>Flagged</th>
+<th>Incidental</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recommended Rules</td>
+<td>39</td>
+<td>2 (cases 13, 22)</td>
+<td>2</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Flow Analysis Standard</td>
+<td>8</td>
+<td>5 (cases 11, 12, 13, 15, 22)</td>
+<td>4</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>Flow Analysis Aggressive</td>
+<td>8</td>
+<td>5</td>
+<td>4</td>
+<td>1</td>
+<td>-</td>
+</tr>
+<tr>
+<td>MISRA C++ 2023 + Flow Analysis Aggressive (custom merged, 277 rules + 147 checkers)</td>
+<td>177</td>
+<td>13</td>
+<td>6</td>
+<td>3</td>
+<td>3 + 1 no-bug</td>
+</tr>
+</tbody>
+</table>
+<p>Flow Analysis Aggressive added nothing over Standard on these files. The merged config's gain comes almost entirely from MISRA semantic rules: MISRACPP2023-4_6_1-b (case 19), 7_0_2-a (case 24), 8_0_1-b (case 13), 15_1_1-a (case 15), 9_5_2-a (case 16), 7_0_3-a (case 20).</p>
+<h2>The findings that hit a bug line (merged config)</h2>
+<table>
+<thead>
+<tr>
+<th>Case</th>
+<th>Line</th>
+<th>Rule</th>
+<th>Severity</th>
+<th>Tier</th>
+<th>Message</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11 Greetings From Who?</td>
+<td>13</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=BD-CO-STRMOD">BD-CO-STRMOD</a></td>
+<td>1 (highest)</td>
+<td>detected</td>
+<td>The invalidated "ptr" pointer to the "text" container is used</td>
+</tr>
+<tr>
+<td>12 Think You're a Bit Wise?</td>
+<td>13</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=BD-PB-VALRANGE">BD-PB-VALRANGE</a></td>
+<td>4</td>
+<td>detected</td>
+<td>The "this-&gt;ages" variable may be accessed out of bounds at index "person", which may be greater or equal to the container size</td>
+</tr>
+<tr>
+<td>12</td>
+<td>13</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-7_0_4-a">MISRACPP2023-7_0_4-a</a></td>
+<td>2</td>
+<td>detected</td>
+<td>The LHS/RHS operand of bitwise operator '&amp;=' should be unsigned (bitwise AND on a bool, the exact construct)</td>
+</tr>
+<tr>
+<td>13 An Offer You Can't Refuse</td>
+<td>12</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-8_0_1-b">MISRACPP2023-8_0_1-b</a></td>
+<td>4</td>
+<td>detected</td>
+<td>The condition of the '?:' operator should be in parentheses; plus BD-PB-CC and 0_0_2-a: condition "price + (int)isMember" always evaluates to true</td>
+</tr>
+<tr>
+<td>15 Works In Production</td>
+<td>15</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=BD-PB-VCTOR">BD-PB-VCTOR</a> + <a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-15_1_1-a">MISRACPP2023-15_1_1-a</a></td>
+<td>2</td>
+<td>detected</td>
+<td>Virtual method "getSpecialty" called on the "CppDoctor" object ("specialist") which is under construction</td>
+</tr>
+<tr>
+<td>19 A Wrong Move</td>
+<td>22</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-4_6_1-b">MISRACPP2023-4_6_1-b</a></td>
+<td>2</td>
+<td>detected</td>
+<td>The code depends on the order of evaluation of 'getBody' function arguments: the exact use-after-move bug; clang-tidy is the only other tool that catches it</td>
+</tr>
+<tr>
+<td>24 No Strings Attached</td>
+<td>34</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-7_0_2-a">MISRACPP2023-7_0_2-a</a></td>
+<td>2</td>
+<td>detected</td>
+<td>Do not convert type 'const char [4]' to type 'bool' (plus 8_2_7-c / 8_2_8-b)</td>
+</tr>
+<tr>
+<td>16 Have You Tried Upgrading?</td>
+<td>23</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-9_5_2-a">MISRACPP2023-9_5_2-a</a></td>
+<td>2</td>
+<td>flagged</td>
+<td>The for-range-initializer contains 2 function calls: a rule built precisely for the range-for temporary trap</td>
+</tr>
+<tr>
+<td>20 Is Anybody Playing?</td>
+<td>11</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-7_0_3-a">MISRACPP2023-7_0_3-a</a></td>
+<td>2</td>
+<td>flagged</td>
+<td>The numerical value of a character shall not be used: fires on the char-promotion comparison the bug needs</td>
+</tr>
+<tr>
+<td>22 Running in Circles</td>
+<td>29</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-0_3_1-d">MISRACPP2023-0_3_1-d</a> + <a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=BD-PB-ZERO">BD-PB-ZERO</a></td>
+<td>4 + 1</td>
+<td>flagged</td>
+<td>Infinity or NaN may be returned as a result of division by zero constant; plus 0_3_1-b on the float '!=': the NaN entrance is flagged, the mutual recursion is not</td>
+</tr>
+<tr>
+<td>18 A Short Stack</td>
+<td>23</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-6_9_2-a">MISRACPP2023-6_9_2-a</a></td>
+<td>4</td>
+<td>incidental</td>
+<td>Do not use the 'int' standard integer type: on the line, wrong reason</td>
+</tr>
+<tr>
+<td>21 What Comes First?</td>
+<td>16</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-9_3_1-b">MISRACPP2023-9_3_1-b</a></td>
+<td>2</td>
+<td>incidental</td>
+<td>'if' should be followed by a block: style, coincidental</td>
+</tr>
+<tr>
+<td>25 The Uninvited Temporary</td>
+<td>28</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-8_1_2-a">MISRACPP2023-8_1_2-a</a></td>
+<td>4</td>
+<td>incidental</td>
+<td>Implicitly captured variables in a non-transient lambda: style, coincidental</td>
+</tr>
+<tr>
+<td>6 255 + 1</td>
+<td>10</td>
+<td><a target="_blank" rel="noopener" href="https://docs.parasoft.com/dosearchsite.action?queryString=MISRACPP2023-7_0_5-a">MISRACPP2023-7_0_5-a</a></td>
+<td>2</td>
+<td>no bug</td>
+<td>Integral promotion shall not change signedness 'uint8_t' to 'int': flags the puzzle construct; case 6 is not a defect</td>
+</tr>
+</tbody>
+</table>
+<p>Severity is the Parasoft severity level C++test reports per finding (scale 1 highest to 5 lowest; levels 1-4 occur here), taken from the <code>sev</code> attribute of each violation in <code>report.xml</code>. Each rule links to the Parasoft documentation search for that rule ID: docs.parasoft.com does not host per-rule pages for C++test, the full rule documentation ships inside the product (<code>rules/docs.zip</code>, <code>manuals/cpptest_rules.pdf</code>); the C++test 2026.1 documentation space is at <a target="_blank" rel="noopener" href="https://docs.parasoft.com/display/CPPTEST20261">https://docs.parasoft.com/display/CPPTEST20261</a></p>
+<h2>The other findings (wrong line, wrong bug, or noise)</h2>
+<table>
+<thead>
+<tr>
+<th>Config</th>
+<th>Finding</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FA Std/Aggr</td>
+<td>case18:20 BD-PB-VALRANGE</td>
+<td>False positive: flags <code>pop()</code>, which the <code>index == 0</code> guard protects; the real bug is the <code>buffer{Size}</code> trap</td>
+</tr>
+<tr>
+<td>FA Std/Aggr</td>
+<td>case24:17 BD-PB-INTDL</td>
+<td>Wrong bug: flags the intended uint16-to-byte truncation</td>
+</tr>
+<tr>
+<td>FA Std/Aggr</td>
+<td>case13:9 BD-PB-VOVR</td>
+<td>Consequence finding, downstream of the precedence bug</td>
+</tr>
+<tr>
+<td>Merged</td>
+<td>30x MISRACPP2023-6_0_3-a, 25x 18_3_1-a, 25x 6_2_3-a, 16x 6_9_2-a, 11x 6_5_1-a</td>
+<td>Structural rules that fire on every single-file demo program by design; they are the noise floor</td>
+</tr>
+</tbody>
+</table>
+<p>Recommended Rules inventory (39): 25x MISRA2004-16_8 on <code>main</code>, 5x OPT-14, 4x OOP-23, 2x CODSTA-CPP-04, plus the BD-PB-CC (13) and BD-PB-ZERO (22) hits.</p>
+<h2>Per-case verdicts (merged config)</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Case</th>
+<th>Verdict</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>The Eternal Button</td>
+<td>missed</td>
+<td>shared_ptr ownership-cycle reasoning absent (LeakSanitizer catches it)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Timing Is Everything</td>
+<td>missed</td>
+<td>thread start in ctor / join in dtor / cross-thread access not modeled (TSan)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Self Destruction</td>
+<td>missed</td>
+<td>std::function re-entry not traced (ASan)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Self Destruction II</td>
+<td>missed</td>
+<td>lambda-object capture model absent (ASan)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Calling Into the Void</td>
+<td>missed</td>
+<td>join-in-destructor vs running thread not modeled; aborts at runtime on GCC</td>
+</tr>
+<tr>
+<td>6</td>
+<td>255 + 1</td>
+<td>no bug</td>
+<td>puzzle; MISRA 7_0_5-a flags the promotion itself</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Starting From Zero</td>
+<td>missed</td>
+<td>conversion hidden in std headers (GCC -Wconversion catches it)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Hello World</td>
+<td>missed</td>
+<td>assignment sequencing semantics; no rule</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Did It Even Count?</td>
+<td>missed</td>
+<td>std::thread value semantics not modeled</td>
+</tr>
+<tr>
+<td>10</td>
+<td>G4rb&amp;g#</td>
+<td>missed</td>
+<td>whole-program static destruction order not modeled</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Greetings From Who?</td>
+<td>detected</td>
+<td>BD-CO-STRMOD</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Think You're a Bit Wise?</td>
+<td>detected</td>
+<td>BD-PB-VALRANGE + MISRA 7_0_1-a / 7_0_4-a</td>
+</tr>
+<tr>
+<td>13</td>
+<td>An Offer You Can't Refuse</td>
+<td>detected</td>
+<td>MISRA 8_0_1-b + BD-PB-CC + 0_0_2-a</td>
+</tr>
+<tr>
+<td>14</td>
+<td>A Wrong Status Report</td>
+<td>missed</td>
+<td>ternary common-type temporary lifetime not modeled (ASan)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Works In Production</td>
+<td>detected</td>
+<td>BD-PB-VCTOR + MISRA 15_1_1-a</td>
+</tr>
+<tr>
+<td>16</td>
+<td>Have You Tried Upgrading?</td>
+<td>flagged</td>
+<td>MISRA 9_5_2-a, the rule built for this trap</td>
+</tr>
+<tr>
+<td>17</td>
+<td>A Changing Reference</td>
+<td>missed</td>
+<td>aliasing logic, not lifetime or bounds</td>
+</tr>
+<tr>
+<td>18</td>
+<td>A Short Stack</td>
+<td>incidental</td>
+<td>6_9_2-a on the line, unrelated reason</td>
+</tr>
+<tr>
+<td>19</td>
+<td>A Wrong Move</td>
+<td>detected</td>
+<td>MISRA 4_6_1-b argument evaluation order</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Is Anybody Playing?</td>
+<td>flagged</td>
+<td>MISRA 7_0_3-a on the char promotion</td>
+</tr>
+<tr>
+<td>21</td>
+<td>What Comes First?</td>
+<td>incidental</td>
+<td>9_3_1-b style hit; strict weak ordering not checked (libc++ hardening asserts it)</td>
+</tr>
+<tr>
+<td>22</td>
+<td>Running in Circles</td>
+<td>flagged</td>
+<td>0_3_1-d + BD-PB-ZERO + 0_3_1-b; recursion not modeled</td>
+</tr>
+<tr>
+<td>23</td>
+<td>A Lock You Can't See</td>
+<td>missed</td>
+<td>needs Clang RealtimeSanitizer</td>
+</tr>
+<tr>
+<td>24</td>
+<td>No Strings Attached</td>
+<td>detected</td>
+<td>MISRA 7_0_2-a + 8_2_7-c + 8_2_8-b</td>
+</tr>
+<tr>
+<td>25</td>
+<td>The Uninvited Temporary</td>
+<td>incidental</td>
+<td>8_1_2-a style hit; invalidation path not modeled (ASan)</td>
+</tr>
+</tbody>
+</table>
+<h2>Why the 12 invisible bugs stay invisible</h2>
+<ol>
+<li><strong>Dynamic behavior absent</strong> (cases 1, 2, 3, 4, 5, 9, 10, 17, 25): refcount cycles, thread joins, callback re-entry, thread argument copies, static destruction order, aliasing. Flow analysis is path/value based and has no model of std::function dispatch, std::thread copies, or jthread join-in-destructor.</li>
+<li><strong>Temporary semantics</strong> (7, 8, 14): truncation hidden in std headers, ofstream recreation ordering, ternary common-type temporaries. String invalidation <em>is</em> modeled (case 11); these siblings are not.</li>
+<li><strong>Contracts outside the type system</strong> (21, 23): strict weak ordering and real-time no-locking need libc++ hardening and RealtimeSanitizer.</li>
+</ol>
+<h2>Method and reproduction</h2>
+<p>Repository: <code>C:\Projects\CPPdoctor\cppdoctor-25-cases</code> (25 case files verbatim from the book, the book's fixes, ground-truth bug lines in <code>cases.json</code>, merged config in <code>MISRA-CPP-2023-FA-Aggressive.properties</code>). Scans: <code>./run_cpptest.sh</code> (builtin Recommended Rules / Flow Analysis Standard / Flow Analysis Aggressive + the custom merged config), GCC 13.3 import (<code>bdf.import.compiler.family=gcc_13-64</code>), reports parsed from <code>report.xml</code> with <code>parse_findings.py</code>. A finding counts as a hit only if its line equals a ground-truth bug line for that case; tiers: detected (finding expresses the bug), flagged (right line and hazard family), incidental (style rule coincidentally on the line).</p>
+</div></main>
+</body>
+</html>
