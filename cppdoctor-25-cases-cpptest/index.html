@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>C++test Findings Dashboard - 25 C++ Cases That Will Humble You</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{--navy:#0b1f3a;--navy2:#132d52;--bg:#eef2f7;--card:#fff;--ink:#1c2738;--mute:#6b7a90;--line:#dde3ec;
+--green:#1f9d55;--amber:#e8a317;--red:#d64545;--blue:#2f6fd6;--teal:#14a3b8;--violet:#7a5ad6}
+*{box-sizing:border-box}body{margin:0;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:linear-gradient(90deg,var(--navy),var(--navy2));color:#fff;padding:18px 28px;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:14px}.logo{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,#2f6fd6,#14a3b8);display:grid;place-items:center;font-weight:700}
+h1{font-size:20px;margin:0}.sub{font-size:13px;opacity:.75;margin-top:2px}
+.meta{text-align:right;font-size:12px;opacity:.85;line-height:1.6}
+nav{background:#fff;border-bottom:1px solid var(--line);padding:0 28px;display:flex;gap:26px;font-size:13px;flex-wrap:wrap}
+nav a{padding:11px 0;color:var(--mute);text-decoration:none}nav a:hover{color:var(--blue)}
+main{padding:22px 28px;display:grid;grid-template-columns:repeat(12,1fr);gap:18px;max-width:1600px;margin:auto}
+.card{background:var(--card);border-radius:12px;box-shadow:0 1px 3px rgba(16,32,64,.08);padding:16px 18px;border:1px solid #e6ebf2}
+.card h2{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute);margin:0 0 12px;font-weight:600;display:flex;justify-content:space-between}
+.s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}
+.kpi .v{font-size:34px;font-weight:700;line-height:1.1}.kpi .l{font-size:12px;color:var(--mute);margin-top:4px}
+.up{color:var(--green)}.warn{color:var(--amber)}.bad{color:var(--red)}.info{color:var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:13px}th{text-align:left;color:var(--mute);font-weight:600;font-size:11px;text-transform:uppercase;padding:6px 8px;border-bottom:1px solid var(--line)}
+td{padding:7px 8px;border-bottom:1px solid #f0f3f7;vertical-align:top}
+.pill{padding:2px 8px;border-radius:999px;font-size:11px;font-weight:600;white-space:nowrap}
+.p-found{background:#e3f6ec;color:#16794a}.p-flag{background:#fff4dc;color:#9a6b00}.p-inc{background:#efe8fd;color:#5b3bb5}
+.p-miss{background:#fde8e8;color:#b23535}.p-nobug{background:#e8edf4;color:#5a6b82}.p-rule{background:#e8f0fc;color:#2f6fd6}
+.bar{height:9px;border-radius:5px;background:#edf1f6;overflow:hidden;display:flex}.bar>span{display:block;height:100%}
+.row{display:flex;justify-content:space-between;font-size:12px;margin:10px 0 4px}
+.note{font-size:11.5px;color:var(--mute);margin-top:10px;line-height:1.5}
+code{background:#f0f4f9;border-radius:4px;padding:1px 5px;font-size:12px}
+.why{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.why>div{background:#f7f9fc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.5}
+.why b{display:block;margin-bottom:4px}
+@media(max-width:1100px){.s3,.s4,.s5,.s6,.s7,.s8{grid-column:span 12}.why{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">ESL</div>
+    <div><h1>25 C++ Cases That Will Humble You</h1>
+    <div class="sub">Parasoft C++test findings dashboard &middot; C++ Doctor (Jelle Bakker) case repo &middot; C++23 / GCC 13.3</div></div>
+  </div>
+  <div class="meta">C++test Professional 2025.2.0<br>2026-11-04 &middot; 25 standalone cases &middot; line-level scoring</div>
+</header>
+<nav>
+  <a href="#overview"><span style="color:var(--blue);font-weight:600;border-bottom:2px solid var(--blue);padding:11px 0;display:inline-block">Overview</span></a>
+  <a href="#hits">Findings on bug lines</a>
+  <a href="#verdicts">Per-case verdicts</a>
+  <a href="#rules">Rule mix</a>
+  <a href="#why">Why the misses</a>
+  <a href="#method">Method</a>
+</nav>
+<main>
+
+<div class="card kpi s3"><div class="v">6<span style="font-size:18px;color:var(--mute)">/25</span></div><div class="l">bugs detected outright<br>MISRA C++ 2023 + FA Aggressive</div><div class="d up">&#9650; 4 more than Recommended Rules</div></div>
+<div class="card kpi s3"><div class="v">3</div><div class="l">flagged: right line, right hazard family<br>(cases 16, 20, 22)</div><div class="d warn">indirect but purposeful rules</div></div>
+<div class="card kpi s3"><div class="v">12<span style="font-size:18px;color:var(--mute)">/25</span></div><div class="l">fully invisible<br>no finding anywhere on the bug</div><div class="d bad">&#9660; needs sanitizers / other tools</div></div>
+<div class="card kpi s3"><div class="v">177</div><div class="l">findings in the combined config<br>13 land on bug lines</div><div class="d info">39 in Recommended Rules</div></div>
+
+<div class="card s7" id="overview">
+  <h2>Configuration comparison <span>best-of per config</span></h2>
+  <table>
+    <tr><th>Configuration</th><th>Findings</th><th>On bug line</th><th>Detected</th><th>Flagged</th><th>Incidental</th></tr>
+    <tr><td>Recommended Rules</td><td>39</td><td>2 / 25</td><td><span class="pill p-miss">2</span></td><td>&mdash;</td><td>&mdash;</td></tr>
+    <tr><td>Flow Analysis Standard</td><td>8</td><td>5 / 25</td><td><span class="pill p-found">4</span></td><td><span class="pill p-flag">1</span></td><td>&mdash;</td></tr>
+    <tr><td>Flow Analysis Aggressive</td><td>8</td><td>5 / 25</td><td><span class="pill p-found">4</span></td><td><span class="pill p-flag">1</span></td><td>&mdash;</td></tr>
+    <tr><td><b>MISRA C++ 2023 + Flow Analysis Aggressive</b> (custom merged)</td><td>177</td><td><b>13 / 25</b></td><td><span class="pill p-found">6</span></td><td><span class="pill p-flag">3</span></td><td><span class="pill p-inc">3</span></td></tr>
+  </table>
+  <div class="note">Flow Analysis Aggressive alone added nothing over Standard on these 25 files. Merging a coding standard with aggressive flow analysis more than doubles real coverage: <b>9 of 25 bugs</b> get a purposeful finding (6 detected + 3 flagged) versus 5 with flow analysis alone and 2 with Recommended Rules.</div>
+</div>
+
+<div class="card s5">
+  <h2>Verdict split <span>25 cases</span></h2>
+  <div class="row"><span>Detected outright</span><b>6 &middot; 24%</b></div>
+  <div class="bar"><span style="width:24%;background:var(--green)"></span></div>
+  <div class="row"><span>Flagged (right line, right hazard family)</span><b>3 &middot; 12%</b></div>
+  <div class="bar"><span style="width:12%;background:var(--amber)"></span></div>
+  <div class="row"><span>Incidental style hit on the bug line</span><b>3 &middot; 12%</b></div>
+  <div class="bar"><span style="width:12%;background:var(--violet)"></span></div>
+  <div class="row"><span>Case is a puzzle, not a bug</span><b>1 &middot; 4%</b></div>
+  <div class="bar"><span style="width:4%;background:#9aa8bc"></span></div>
+  <div class="row"><span>Fully invisible</span><b>12 &middot; 48%</b></div>
+  <div class="bar"><span style="width:48%;background:var(--red)"></span></div>
+  <div class="note">MISRA C++ 2023 + Flow Analysis Aggressive, line-level scoring against <code>cases.json</code> ground truth.</div>
+</div>
+
+<div class="card s12" id="hits">
+  <h2>The 13 findings that land on a bug line <span>MISRA C++ 2023 + Flow Analysis Aggressive</span></h2>
+  <table>
+    <tr><th>Case</th><th>Line</th><th>Rule</th><th>Tier</th><th>Message</th></tr>
+    <tr><td>11 Greetings From Who?</td><td>13</td><td><span class="pill p-rule">BD-CO-STRMOD</span></td><td><span class="pill p-found">detected</span></td><td>The invalidated "ptr" pointer to the "text" container is used</td></tr>
+    <tr><td>12 Think You're a Bit Wise?</td><td>13</td><td><span class="pill p-rule">BD-PB-VALRANGE</span></td><td><span class="pill p-found">detected</span></td><td>The "this-&gt;ages" variable may be accessed out of bounds at index "person", which may be greater or equal to the container size</td></tr>
+    <tr><td>12</td><td>13</td><td><span class="pill p-rule">MISRACPP2023-7_0_4-a</span></td><td><span class="pill p-found">detected</span></td><td>The LHS/RHS operand of bitwise operator '&=' should be unsigned (bitwise AND on a bool, the exact construct)</td></tr>
+    <tr><td>13 An Offer You Can't Refuse</td><td>12</td><td><span class="pill p-rule">MISRACPP2023-8_0_1-b</span></td><td><span class="pill p-found">detected</span></td><td>The condition of the '?:' operator should be in parentheses, plus BD-PB-CC and 0_0_2-a: condition "price + (int)isMember" always evaluates to true</td></tr>
+    <tr><td>15 Works In Production</td><td>15</td><td><span class="pill p-rule">BD-PB-VCTOR</span> <span class="pill p-rule">MISRACPP2023-15_1_1-a</span></td><td><span class="pill p-found">detected</span></td><td>Virtual method "getSpecialty" called on the "CppDoctor" object ("specialist") which is under construction</td></tr>
+    <tr><td>19 A Wrong Move</td><td>22</td><td><span class="pill p-rule">MISRACPP2023-4_6_1-b</span></td><td><span class="pill p-found">detected</span></td><td>The code depends on the order of evaluation of 'getBody' function arguments &mdash; the exact use-after-move bug; clang-tidy is the only other tool that catches it</td></tr>
+    <tr><td>24 No Strings Attached</td><td>34</td><td><span class="pill p-rule">MISRACPP2023-7_0_2-a</span></td><td><span class="pill p-found">detected</span></td><td>Do not convert type 'const char [4]' to type 'bool' &mdash; the exact overload-resolution bug (plus 8_2_7-c / 8_2_8-b)</td></tr>
+    <tr><td>16 Have You Tried Upgrading?</td><td>23</td><td><span class="pill p-rule">MISRACPP2023-9_5_2-a</span></td><td><span class="pill p-flag">flagged</span></td><td>The for-range-initializer contains 2 function calls &mdash; a rule built precisely for the range-for temporary trap</td></tr>
+    <tr><td>20 Is Anybody Playing?</td><td>11</td><td><span class="pill p-rule">MISRACPP2023-7_0_3-a</span></td><td><span class="pill p-flag">flagged</span></td><td>The numerical value of a character shall not be used &mdash; fires on the char-promotion comparison the bug needs</td></tr>
+    <tr><td>22 Running in Circles</td><td>29</td><td><span class="pill p-rule">MISRACPP2023-0_3_1-d</span> <span class="pill p-rule">BD-PB-ZERO</span></td><td><span class="pill p-flag">flagged</span></td><td>Infinity or NaN may be returned as a result of division by zero constant, plus 0_3_1-b on the float '!=' &mdash; the NaN entrance is flagged; the mutual recursion is not</td></tr>
+    <tr><td>18 A Short Stack</td><td>23</td><td><span class="pill p-rule">MISRACPP2023-6_9_2-a</span></td><td><span class="pill p-inc">incidental</span></td><td>Do not use the 'int' standard integer type &mdash; on the line, wrong reason</td></tr>
+    <tr><td>21 What Comes First?</td><td>16</td><td><span class="pill p-rule">MISRACPP2023-9_3_1-b</span></td><td><span class="pill p-inc">incidental</span></td><td>'if' should be followed by a block &mdash; style, coincidental</td></tr>
+    <tr><td>25 The Uninvited Temporary</td><td>28</td><td><span class="pill p-rule">MISRACPP2023-8_1_2-a</span></td><td><span class="pill p-inc">incidental</span></td><td>Implicitly captured variables in a non-transient lambda &mdash; style, coincidental</td></tr>
+    <tr><td>6 255 + 1</td><td>10</td><td><span class="pill p-rule">MISRACPP2023-7_0_5-a</span></td><td><span class="pill p-nobug">no bug</span></td><td>Integral promotion shall not change signedness 'uint8_t' to 'int' &mdash; flags the puzzle construct; case 6 is not a defect</td></tr>
+  </table>
+</div>
+
+<div class="card s12" id="verdicts">
+  <h2>Per-case verdicts <span>MISRA C++ 2023 + Flow Analysis Aggressive &middot; 177 findings</span></h2>
+  <table>
+    <tr><th>#</th><th>Case</th><th>Root cause</th><th>Findings</th><th>Verdict</th><th>What C++test says (or why silent)</th></tr>
+    <tr><td>1</td><td>The Eternal Button</td><td>shared_ptr reference cycle</td><td>6</td><td><span class="pill p-miss">missed</span></td><td>Ownership-cycle reasoning absent; LeakSanitizer catches it</td></tr>
+    <tr><td>2</td><td>Timing Is Everything</td><td>member order vs thread lifetime</td><td>4</td><td><span class="pill p-miss">missed</span></td><td>thread start in ctor / join in dtor not modeled; TSan catches it</td></tr>
+    <tr><td>3</td><td>Self Destruction</td><td>use-after-free via callback</td><td>5</td><td><span class="pill p-miss">missed</span></td><td>std::function re-entry not traced; ASan catches it</td></tr>
+    <tr><td>4</td><td>Self Destruction II</td><td>lambda destroys own captures</td><td>5</td><td><span class="pill p-miss">missed</span></td><td>lambda-object capture model absent; ASan catches it</td></tr>
+    <tr><td>5</td><td>Calling Into the Void</td><td>pure virtual call during destruction</td><td>8</td><td><span class="pill p-miss">missed</span></td><td>join-in-destructor vs running thread not modeled; aborts at runtime on GCC</td></tr>
+    <tr><td>6</td><td>255 + 1</td><td>integral promotion (puzzle)</td><td>4</td><td><span class="pill p-nobug">no bug</span></td><td>MISRA 7_0_5-a flags the promotion twice, on the exact line</td></tr>
+    <tr><td>7</td><td>Starting From Zero</td><td>accumulate initial-value type</td><td>2</td><td><span class="pill p-miss">missed</span></td><td>conversion hidden in std headers; GCC -Wconversion catches it</td></tr>
+    <tr><td>8</td><td>Hello World</td><td>ofstream recreation ordering</td><td>2</td><td><span class="pill p-miss">missed</span></td><td>assignment sequencing semantics; no rule</td></tr>
+    <tr><td>9</td><td>Did It Even Count?</td><td>thread copies arguments</td><td>6</td><td><span class="pill p-miss">missed</span></td><td>std::thread value semantics not modeled</td></tr>
+    <tr><td>10</td><td>G4rb&g#</td><td>static destruction order fiasco</td><td>10</td><td><span class="pill p-miss">missed</span></td><td>whole-program static destruction ordering not modeled</td></tr>
+    <tr><td>11</td><td>Greetings From Who?</td><td>dangling data() pointer</td><td>3</td><td><span class="pill p-found">detected</span></td><td>BD-CO-STRMOD on the use line</td></tr>
+    <tr><td>12</td><td>Think You're a Bit Wise?</td><td>&amp;= without short-circuit, OOB</td><td>7</td><td><span class="pill p-found">detected</span></td><td>BD-PB-VALRANGE + MISRA 7_0_1-a, 7_0_4-a</td></tr>
+    <tr><td>13</td><td>An Offer You Can't Refuse</td><td>ternary precedence</td><td>12</td><td><span class="pill p-found">detected</span></td><td>MISRA 8_0_1-b + BD-PB-CC + MISRA 0_0_2-a</td></tr>
+    <tr><td>14</td><td>A Wrong Status Report</td><td>dangling string_view from ternary</td><td>8</td><td><span class="pill p-miss">missed</span></td><td>ternary common-type temporary lifetime not modeled</td></tr>
+    <tr><td>15</td><td>Works In Production</td><td>virtual call on sibling base in ctor</td><td>10</td><td><span class="pill p-found">detected</span></td><td>BD-PB-VCTOR + MISRA 15_1_1-a</td></tr>
+    <tr><td>16</td><td>Have You Tried Upgrading?</td><td>dangling range-for temporary</td><td>7</td><td><span class="pill p-flag">flagged</span></td><td>MISRA 9_5_2-a: 2 function calls in for-range-initializer</td></tr>
+    <tr><td>17</td><td>A Changing Reference</td><td>aliasing reference mutated in loop</td><td>4</td><td><span class="pill p-miss">missed</span></td><td>aliasing logic, not lifetime or bounds</td></tr>
+    <tr><td>18</td><td>A Short Stack</td><td>initializer-list ctor trap</td><td>9</td><td><span class="pill p-inc">incidental</span></td><td>6_9_2-a on the line for an unrelated reason; constructor selection legal</td></tr>
+    <tr><td>19</td><td>A Wrong Move</td><td>unspecified evaluation order / use-after-move</td><td>7</td><td><span class="pill p-found">detected</span></td><td>MISRA 4_6_1-b: code depends on argument evaluation order</td></tr>
+    <tr><td>20</td><td>Is Anybody Playing?</td><td>char signedness portability</td><td>11</td><td><span class="pill p-flag">flagged</span></td><td>MISRA 7_0_3-a on the char promotion comparison</td></tr>
+    <tr><td>21</td><td>What Comes First?</td><td>comparator breaks strict weak ordering</td><td>9</td><td><span class="pill p-inc">incidental</span></td><td>9_3_1-b style hit; semantic contract not checked</td></tr>
+    <tr><td>22</td><td>Running in Circles</td><td>NaN + mutual recursion stack overflow</td><td>9</td><td><span class="pill p-flag">flagged</span></td><td>0_3_1-d NaN may result + BD-PB-ZERO + 0_3_1-b float !=</td></tr>
+    <tr><td>23</td><td>A Lock You Can't See</td><td>static-init mutex in real-time code</td><td>4</td><td><span class="pill p-miss">missed</span></td><td>needs Clang RealtimeSanitizer</td></tr>
+    <tr><td>24</td><td>No Strings Attached</td><td>string literal converts to bool</td><td>14</td><td><span class="pill p-found">detected</span></td><td>MISRA 7_0_2-a + 8_2_7-c + 8_2_8-b on the call line</td></tr>
+    <tr><td>25</td><td>The Uninvited Temporary</td><td>implicit conversion mutates vector mid-iteration</td><td>11</td><td><span class="pill p-inc">incidental</span></td><td>8_1_2-a style hit; invalidation path not modeled</td></tr>
+  </table>
+</div>
+
+<div class="card s6" id="rules">
+  <h2>Rule mix <span>177 findings, top rules</span></h2>
+  <div class="row"><span>6_0_3-a global namespace shall only contain main/namespaces</span><b>30</b></div>
+  <div class="bar"><span style="width:100%;background:var(--violet)"></span></div>
+  <div class="row"><span>18_3_1-a at least one catch-all exception handler</span><b>25</b></div>
+  <div class="bar"><span style="width:83%;background:var(--violet)"></span></div>
+  <div class="row"><span>6_2_3-a external linkage, one external definition</span><b>25</b></div>
+  <div class="bar"><span style="width:83%;background:var(--violet)"></span></div>
+  <div class="row"><span>6_9_2-a do not use standard signed/unsigned integer types</span><b>16</b></div>
+  <div class="bar"><span style="width:53%;background:var(--violet)"></span></div>
+  <div class="row"><span>6_5_1-a external-linkage objects declared in headers</span><b>11</b></div>
+  <div class="bar"><span style="width:37%;background:var(--violet)"></span></div>
+  <div class="row"><span>15_0_1-a special member functions provided appropriately</span><b>8</b></div>
+  <div class="bar"><span style="width:27%;background:var(--violet)"></span></div>
+  <div class="row"><span>7_0_3-a numerical value of a character shall not be used</span><b>6</b></div>
+  <div class="bar"><span style="width:20%;background:var(--amber)"></span></div>
+  <div class="row"><span>everything else (34 rules)</span><b>56</b></div>
+  <div class="bar"><span style="width:56%;background:var(--teal)"></span></div>
+  <div class="note">The 13 bug-line findings come from 11 distinct rules. The violet structural rules dominate the noise floor: in 25 single-file demo programs they fire on every translation unit by design.</div>
+</div>
+
+<div class="card s6" id="why">
+  <h2>Why the 12 invisible bugs stay invisible</h2>
+  <div class="why">
+    <div><b class="bad">Dynamic behavior (9)</b>1, 2, 3, 4, 5, 9, 10, 17, 25: refcount cycles, thread join in destructor, callback re-entry, thread argument copies, static destruction order, aliasing. Flow analysis is path/value based; it has no model of std::function dispatch, std::thread copies or jthread joins.</div>
+    <div><b class="warn">Temporary semantics (3)</b>7, 8, 14: truncation hidden in std headers, ofstream recreation ordering, ternary common-type temporaries. String invalidation <i>is</i> modeled (case 11 was caught); these siblings are not.</div>
+    <div><b class="info">Contracts (2)</b>21 strict weak ordering and 23 real-time no-locking live outside the type system: they need libc++ hardening and RealtimeSanitizer.</div>
+    <div><b>What C++test cannot replace</b>Sanitizers catch 1, 2, 3, 4, 5, 14, 25; Clang warnings catch 13, 24 (also caught here); clang-tidy catches 19 (also caught here); GCC -Wconversion catches 7. Cases 6, 17, 18, 20 are the book's true "understand the language" territory.</div>
+  </div>
+  <div class="note">Recommended Rules found 2/25. Flow Analysis alone 5/25. MISRA C++ 2023 + Flow Analysis Aggressive: 9/25 purposeful (6 detected + 3 flagged) plus 3 incidental style hits. The delta over flow analysis alone comes almost entirely from MISRA semantic rules: 4_6_1-b (19), 7_0_2-a (24), 8_0_1-b (13), 15_1_1-a (15), 9_5_2-a (16), 7_0_3-a (20).</div>
+</div>
+
+<div class="card s12" id="method">
+  <h2>Method</h2>
+  <table>
+    <tr><th>Item</th><th>Value</th></tr>
+    <tr><td>Tool</td><td>Parasoft C++test Professional 2025.2.0 (10.7.3.20251120B2939), cpptestcli</td></tr>
+    <tr><td>Cases</td><td>25 standalone programs transcribed verbatim from "25 C++ Cases That Will Humble You" (Jelle Bakker, C++ Doctor, 2026)</td></tr>
+    <tr><td>Compiler import</td><td>GCC 13.3.0, C++23, pthreads; custom &lt;print&gt; shim for libstdc++ 13</td></tr>
+    <tr><td>Configurations</td><td>builtin Recommended Rules / Flow Analysis Standard / Flow Analysis Aggressive; custom merged config: 277 MISRA C++ 2023 rules + 147 aggressive flow checkers (reportUnvalidatedViolations + aggressiveMode on)</td></tr>
+    <tr><td>Scoring</td><td>A case is "hit" only if a finding's line equals a ground-truth bug line in <code>cases.json</code>. Tiers: detected = finding expresses the bug; flagged = right line and hazard family, indirect rule; incidental = style rule coincidentally on the line</td></tr>
+    <tr><td>Repository</td><td><code>C:\Projects\CPPdoctor\cppdoctor-25-cases</code> &middot; reproduce with <code>./run_cpptest.sh</code> + <code>python3 parse_findings.py</code></td></tr>
+  </table>
+</div>
+
+</main>
+</body>
+</html>
