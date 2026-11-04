@@ -293,6 +293,9 @@ Last updated: 2026-11-04
 • cpp26-reflection-misra-parasoft
   https://zuwasi.github.io/Public-html-pages/cpp26-reflection-misra-parasoft
 
+• cppdoctor-25-cases-cpptest
+  https://zuwasi.github.io/Public-html-pages/cppdoctor-25-cases-cpptest
+
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
 
