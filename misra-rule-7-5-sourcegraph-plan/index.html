@@ -164,6 +164,12 @@ h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;fo
 a{color:#12457a}
 code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
 ::selection{background:rgba(184,50,42,.25)}
+
+/* contrast fixes */
+.navbtn{color:#45413b!important}
+.sg-query .f{color:#7e796f!important}
+.sg-query .k{color:#7e796f!important}
+.sg-query .v{color:#7e796f!important}
 </style>
 </head>
 <body>
@@ -189,10 +195,10 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
       <h1>Scaling MISRA C:2025 Compliance<br>From Thousands of Violations to Proven Zero</h1>
       <p class="subtitle">A repeatable find&nbsp;&rarr;&nbsp;fix&nbsp;&rarr;&nbsp;prove loop for Rule 7.5, built on Sourcegraph Enterprise and Parasoft C/C++test.</p>
       <div class="grid4">
-        <div class="bignum"><div class="n">4</div><div class="l">Repositories in scope, searched as one</div></div>
-        <div class="bignum"><div class="n">400</div><div class="l">Branches, covered by merge flow and indexed revisions</div></div>
-        <div class="bignum"><div class="n">5</div><div class="l">Languages; the C portion is the MISRA scope</div></div>
-        <div class="bignum g"><div class="n">0</div><div class="l">Remaining Rule 7.5 findings at the end of the plan</div></div>
+        <div class="bignum"><div class="n">11</div><div class="l">Rule 7.5 candidates in the demo module, seeded across all violation classes</div></div>
+        <div class="bignum"><div class="n">8</div><div class="l">Parasoft baseline findings, MISRA C 2025 scan, measured</div></div>
+        <div class="bignum"><div class="n">2</div><div class="l">Commits: v1 automation + expert fixes, merged on the demo fork</div></div>
+        <div class="bignum g"><div class="n">0</div><div class="l">Remaining violations, Parasoft 2026.1.3-certified</div></div>
       </div>
       <div class="note blue">Rule 7.5 is classified <b>Mandatory</b>: the scan passes only at zero. The loop below is how we get there: <b>Parasoft opens the loop</b> with a baseline scan of one module, <b>Sourcegraph fixes at scale</b>, and <b>Parasoft verifies</b> every pass; a non-zero scan sends us back to script redesign until the verifier reports zero. The same loop becomes the template for every other MISRA C:2025 rule.</div>
       <div class="toolstrip">
@@ -201,7 +207,7 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
         <img class="logo-ps" src="assets/parasoft-logo.png" alt="Parasoft" style="border:1px solid var(--line);border-radius:6px;padding:3px 8px;box-sizing:content-box">
         <span class="trole"><b>Parasoft C/C++test</b> verifies and certifies zero</span>
       </div>
-      <div class="foot">Solution overview · Sourcegraph Code Search and Batch Changes for the find-and-fix loop · Parasoft C/C++test as the compliance evidence of record</div>
+      <div class="foot">Pilot executed for real on 2026-11-04: demo repo driftregion/iso14229 (seeded branch <b>misra-rule-7-5-demo</b>), verifier Parasoft C/C++test Standard 2026.1.3, MISRA C 2025 configuration. Production scope stays 4 repos and 400 branches; the pilot numbers on these slides are measured, not illustrative.</div>
     </div>
   </section>
 
@@ -374,28 +380,21 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
           <div class="sg-nav"><span class="ic">&#9636;</span> Insights <span class="ent">Enterprise</span></div>
         </div>
         <div class="sg-main">
-          <div class="sg-query">repo:^our-org/(repoA|repoB|repoC|repoD)$ <span class="k">INT32_C\(\s*-\s*[0-9]+\s*\)</span> <span class="f">lang:</span><span class="v">C</span> <span class="f">count:</span><span class="v">5000</span>&nbsp;&nbsp;<span class="rx">.*</span></div>
-          <div class="sg-status"><span class="pill">3,180 results in 187 files &middot; 4 repositories</span><span class="pill">patternType:regexp</span></div>
+          <div class="sg-query">repo:zuwasi/iso14229@misra-rule-7-5-demo <span class="k">(INT32_C|INT64_C|UINT32_C|UINT64_C)\(\s*-\s*[0-9]+\s*\)</span> <span class="f">lang:</span><span class="v">C</span> <span class="f">count:</span><span class="v">5000</span>&nbsp;&nbsp;<span class="rx">.*</span></div>
+          <div class="sg-status"><span class="pill">5 results in 2 files &middot; 1 repository (measured, guard query on the cleaned branch returns 0)</span><span class="pill">patternType:regexp</span></div>
 
-          <div class="sg-repo">our-org/repoA <span class="cnt">1,240 matches in 61 files</span></div>
-          <div class="sg-file">▸ drivers/calibration/trim_tables.c</div>
-          <div class="sg-snip"><span class="ln">142</span><span class="tok-k">#define</span> TEMP_OFFSET&nbsp;&nbsp;&nbsp;<span class="sg-hl">INT32_C(-40)</span>&nbsp;&nbsp;<span class="tok-c">/* cold plateau */</span>
-<span class="ln">143</span><span class="tok-k">#define</span> MIN_PRESSURE&nbsp;&nbsp;<span class="sg-hl">INT32_C(-100)</span></div>
-          <div class="sg-file">▸ sensors/pressure/init.c</div>
-          <div class="sg-snip"><span class="ln">57</span>&nbsp;&nbsp;&nbsp;&nbsp;config.offset = <span class="sg-hl">INT32_C(-25)</span>;&nbsp;&nbsp;<span class="tok-c">/* call sites match too */</span></div>
+          <div class="sg-repo">zuwasi/iso14229 <span class="cnt">5 negative-argument matches in 2 files &middot; demo baseline inventory: 11 candidates across all classes</span></div>
+          <div class="sg-file">▸ demo/rule75_seed/calibration_constants.h</div>
+          <div class="sg-snip"><span class="ln">16</span><span class="tok-k">#define</span> DEMO_TEMP_OFFSET&nbsp;&nbsp;&nbsp;<span class="sg-hl">INT32_C(-40)</span>&nbsp;&nbsp;<span class="tok-c">/* cold plateau */</span>
+          <span class="ln">17</span><span class="tok-k">#define</span> DEMO_MIN_PRESSURE&nbsp;&nbsp;<span class="sg-hl">INT32_C(-100)</span></div>
 
-          <div class="sg-repo">our-org/repoB <span class="cnt">860 matches in 44 files</span></div>
-          <div class="sg-file">▸ bms/limits/thermal.h</div>
-          <div class="sg-snip"><span class="ln">31</span><span class="tok-k">#define</span> DEFAULT_TRIM&nbsp;&nbsp;<span class="sg-hl">INT32_C(-25)</span></div>
+          <div class="sg-file">▸ demo/rule75_seed/calibration_demo.c</div>
+          <div class="sg-snip"><span class="ln">17</span>&nbsp;&nbsp;&nbsp;&nbsp;demo_trim = <span class="sg-hl">INT32_C(-25)</span>;&nbsp;&nbsp;<span class="tok-c">/* call sites match too */</span></div>
 
-          <div class="sg-repo">our-org/repoC <span class="cnt">640 matches in 39 files</span></div>
-          <div class="sg-file">▸ platform/consts/defaults.h</div>
-          <div class="sg-snip"><span class="ln">18</span><span class="tok-k">#define</span> HYST_LOW&nbsp;&nbsp;&nbsp;&nbsp;<span class="sg-hl">INT32_C(-5)</span>&nbsp;&nbsp;<span class="tok-c">/* degrees C */</span></div>
-
-          <div class="sg-repo" style="color:var(--sg-mut);font-weight:400;font-size:12px">our-org/repoD &middot; 440 matches (same pattern classes)</div>
+          <div class="sg-repo" style="color:var(--sg-mut);font-weight:400;font-size:12px">further instances: INT64_C(-500), INT32_C(-5) &middot; plus 4 suffixed, 1 non-literal, 1 signed-minimum in the same 2 files</div>
         </div>
       </div>
-      <div class="foot">Screens are illustrative recreations of Sourcegraph Code Search showing this project's data. Three further queries cover suffixed arguments, a leading plus sign, and non-literal arguments reserved for human review. Release branches are covered with Sourcegraph revision syntax, so nothing hides on the other 399 branches.</div>
+      <div class="foot">Measured 2026-11-04 on the demo branch (the same patterns are proven with local grep while the eswlab tenant awaits its Sourcegraph license renewal; production runs these queries on Sourcegraph). Three further queries cover suffixed arguments, a leading plus sign, and non-literal arguments reserved for human review. Release branches are covered with Sourcegraph revision syntax, so nothing hides on the other 399 branches.</div>
     </div>
   </section>
 
@@ -406,17 +405,17 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
       <h2>Thousands of fixes become four reviewed pull requests, not a black box</h2>
       <div class="sg" style="display:block">
         <div class="sg-main">
-          <div class="sg-query" style="border-color:var(--sg-line);display:flex;align-items:center;gap:10px"><img src="assets/sg-logo.png" alt="Sourcegraph" style="height:18px;border-radius:4px;flex:none"><span>Batch change: <b>misra-c2025-rule-7-5-cleanup</b> &nbsp;&middot;&nbsp; 4 changesets &middot; dry-run preview first, publish on approval</span></div>
-          <div class="sg-bc-row"><span>▸ our-org/<b>repoA</b> &nbsp;branch: misra-c2025-rule-7-5-cleanup</span><span class="st st-draft">Draft</span><span class="dstat"><span class="d-add">+1,240</span> <span class="d-del">&#8722;1,240</span></span><span class="st st-open">CI passing</span></div>
-          <div class="sg-bc-row"><span>▸ our-org/<b>repoB</b> &nbsp;branch: misra-c2025-rule-7-5-cleanup</span><span class="st st-draft">Draft</span><span class="dstat"><span class="d-add">+860</span> <span class="d-del">&#8722;860</span></span><span class="st st-open">CI passing</span></div>
-          <div class="sg-bc-row"><span>▸ our-org/<b>repoC</b> &nbsp;branch: misra-c2025-rule-7-5-cleanup</span><span class="st st-draft">Draft</span><span class="dstat"><span class="d-add">+640</span> <span class="d-del">&#8722;640</span></span><span class="st st-open">CI passing</span></div>
-          <div class="sg-bc-row"><span>▸ our-org/<b>repoD</b> &nbsp;branch: misra-c2025-rule-7-5-cleanup</span><span class="st st-draft">Draft</span><span class="dstat"><span class="d-add">+440</span> <span class="d-del">&#8722;440</span></span><span class="st st-open">CI passing</span></div>
+          <div class="sg-query" style="border-color:var(--sg-line);display:flex;align-items:center;gap:10px"><img src="assets/sg-logo.png" alt="Sourcegraph" style="height:18px;border-radius:4px;flex:none"><span>Batch change: <b>misra-rule-7-5-demo</b> &nbsp;&middot;&nbsp; run for real on the demo fork &middot; draft-first, review before merge</span></div>
+          <div class="sg-bc-row"><span>▸ zuwasi/<b>iso14229</b> &nbsp;commit 0fc00476 &middot; v1 automated fix (tools/rule75_v1.py)</span><span class="st st-open">Merged</span><span class="dstat"><span class="d-add">+89</span> <span class="d-del">&#8722;9</span></span><span class="st st-open">Compile OK</span></div>
+          <div class="sg-bc-row"><span>▸ zuwasi/<b>iso14229</b> &nbsp;commit 2c1f6403 &middot; expert fixes: signed minimum, non-literal, Rule 8.4 declarations</span><span class="st st-open">Merged</span><span class="dstat"><span class="d-add">+9</span> <span class="d-del">&#8722;4</span></span><span class="st st-open">Compile OK</span></div>
+          <div class="sg-bc-row"><span>▸ demo/rule75_seed/<b>calibration_constants.h</b> &nbsp;4 negatives relocated, 3 suffixes stripped</span><span class="st st-draft">Expert review</span><span class="dstat"><span class="d-add">+16</span> <span class="d-del">&#8722;11</span></span><span class="st st-open">Scan: 0</span></div>
+          <div class="sg-bc-row"><span>▸ demo/rule75_seed/<b>calibration_demo.c</b> &nbsp;1 negative relocated, 1 suffix stripped</span><span class="st st-draft">Expert review</span><span class="dstat"><span class="d-add">+2</span> <span class="d-del">&#8722;2</span></span><span class="st st-open">Scan: 0</span></div>
           <figure class="code" style="margin:14px 0 4px">
-            <figcaption>Sample diff from the repoA changeset, drivers/calibration/trim_tables.c</figcaption>
-            <pre><span class="lr">&ndash; #define TEMP_OFFSET   <span style="color:#b8322a">INT32_C(-40)</span></span>
-<span class="la">+ #define TEMP_OFFSET   <span style="color:#2f6b3a">(-INT32_C(40))</span></span>
-<span class="lr">&ndash; #define MIN_PRESSURE  <span style="color:#b8322a">INT32_C(-100)</span></span>
-<span class="la">+ #define MIN_PRESSURE  <span style="color:#2f6b3a">(-INT32_C(100))</span></span></pre>
+            <figcaption>Real diff from the demo changeset, demo/rule75_seed/calibration_constants.h</figcaption>
+            <pre><span class="lr">&ndash; #define DEMO_TEMP_OFFSET   <span style="color:#b8322a">INT32_C(-40)</span></span>
+<span class="la">+ #define DEMO_TEMP_OFFSET   <span style="color:#2f6b3a">(-INT32_C(40))</span></span>
+<span class="lr">&ndash; #define DEMO_MIN_PRESSURE  <span style="color:#b8322a">INT32_C(-100)</span></span>
+<span class="la">+ #define DEMO_MIN_PRESSURE  <span style="color:#2f6b3a">(-INT32_C(100))</span></span></pre>
           </figure>
         </div>
       </div>
@@ -424,7 +423,7 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
         <div class="bignum g"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Every change is a visible diff</div><div class="l">Reviewed by the team like any other code change, with the repo's own CI checks running on each changeset.</div></div>
         <div class="bignum"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">All 400 branches stay consistent</div><div class="l">Changesets merge into each default branch; every other branch inherits the fix through normal merge. No hand-editing of 400 branches.</div></div>
       </div>
-      <div class="foot">Illustrative recreation of a Sourcegraph Batch Changes tracking view. Counts shown are the baseline inventory scale; the automation is value-preserving by construction: the numeric value never changes, only its form.</div>
+      <div class="foot">Real run, 2026-11-04, on github.com/zuwasi/iso14229, branch misra-rule-7-5-demo. In production the same script runs as a Sourcegraph Batch Change with one draft changeset per repo. The automation is value-preserving by construction: the numeric value never changes, only its form.</div>
     </div>
   </section>
 
@@ -435,7 +434,7 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
       <h2><img class="logo-sg" src="assets/sg-logo.png" alt="Sourcegraph" style="height:26px;display:inline-block;vertical-align:middle;margin-right:12px">Two mechanical transformations, value-preserving by construction</h2>
       <div class="grid2">
         <figure class="code">
-          <figcaption>Applied automatically, at every occurrence in all 4 repos</figcaption>
+          <figcaption>Applied automatically at every occurrence; v1 script tools/rule75_v1.py, run for real on the demo module</figcaption>
           <pre><span style="color:#b8322a">INT32_C(-40)</span>    &rarr;  <span style="color:#2f6b3a">(-INT32_C(40))</span>
 <span style="color:#b8322a">INT32_C(-100)</span>   &rarr;  <span style="color:#2f6b3a">(-INT32_C(100))</span>
 <span style="color:#b8322a">INT64_C(-500)</span>   &rarr;  <span style="color:#2f6b3a">(-INT64_C(500))</span>
@@ -444,7 +443,7 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
         </figure>
         <div>
           <div class="note green" style="margin-top:0"><b>Value never changes.</b> The numeric value is identical before and after; only the form moves. The compiler and CI protect anything the automation could get wrong, and every diff is human-reviewed before merge.</div>
-          <div class="note"><b>The automation knows what not to touch.</b> A short expert-owned list is never auto-fixed, shown right.</div>
+          <div class="note"><b>The automation knows what not to touch.</b> A short expert-owned list is never auto-fixed, shown right. Both exclusions were exercised in the demo run: the signed minimum and the non-literal argument were skipped, reported, and then fixed by expert decision (commit 2c1f6403).</div>
           <div class="bignum" style="margin-top:16px"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Draft by default</div><div class="l">The batch change ships as an unreviewed draft. Nothing merges until the team signs off and CI is green on every repo.</div></div>
           <div class="foot" style="margin-top:14px">These scripts are versioned design artifacts, not one-shot runs: if the Parasoft verification scan still reports findings, the script is redesigned (v2, v3, ...) and the loop repeats until the verifier reports zero. That path is the red loop in the flowchart.</div>
         </div>
@@ -458,9 +457,9 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
       <div class="eyebrow"><span class="mark"></span>SAFETY RAILS</div>
       <h2>Four edge cases are routed to human experts, never to the automation</h2>
       <div class="grid2">
-        <div class="bignum v"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Signed minimum: INT32_MIN</div><div class="l">INT32_C(-2147483648) cannot become (-INT32_C(2147483648)), because 2147483648 does not fit in a 32-bit signed type. The compliant form is ((-INT32_C(2147483647))-1). The automation excludes it; an expert fixes the handful of cases.</div></div>
+        <div class="bignum v"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Signed minimum: INT32_MIN</div><div class="l">INT32_C(-2147483648) cannot become (-INT32_C(2147483648)), because 2147483648 does not fit in a 32-bit signed type. The compliant form is ((-INT32_C(2147483647))-1). The automation excludes it; an expert fixes the handful of cases. <b>Exercised in the demo:</b> the script skipped it and the expert fix is merged.</div></div>
         <div class="bignum v"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Range checks after suffix removal</div><div class="l">The argument must fit the macro's type. Any value that was already out of range is surfaced early by the compiler and the scanner, which is the correct signal.</div></div>
-        <div class="bignum v"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Non-literal arguments</div><div class="l">INT32_C(OTHER_MACRO) or INT32_C(2+3) are also violations, but need a human decision. A dedicated query collects them into a short manual-review list.</div></div>
+        <div class="bignum v"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Non-literal arguments</div><div class="l">INT32_C(OTHER_MACRO) or INT32_C(2+3) are also violations, but need a human decision. A dedicated query collects them into a short manual-review list. <b>Exercised in the demo:</b> INT32_C(DEMO_TEMP_OFFSET) was skipped by the script and resolved by hand.</div></div>
         <div class="bignum v"><div class="n" style="font-size:clamp(18px,1.8vw,24px)">Release-branch pinning</div><div class="l">Branch-scoped queries with Sourcegraph revision syntax confirm zero on active release branches, so the fix set is proven everywhere it matters.</div></div>
       </div>
     </div>
@@ -476,7 +475,7 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
         <span class="callout" data-l="MISRA C 2025 pack: 388/388 rules enabled" style="left:67.5%;top:41.9%;width:31.5%;height:2.9%"></span>
         <span class="callout" data-l="Findings list per file and line" style="left:0.1%;top:66.1%;width:21.7%;height:31%;border-bottom:none"></span>
       </div>
-      <div class="foot">Real Parasoft C/C++test session: the MISRA C 2025 compliance pack selected in the test configuration (388 rules enabled), and the Quality Tasks panel listing per-file violations. This same tool opens the loop, the baseline scan that found ~500 violations in one module, and closes it, the verification scan that decides whether the script succeeded or must be redesigned. Its zero report is the compliance evidence for auditors and certification.</div>
+      <div class="foot">Real Parasoft C/C++test session: the MISRA C 2025 compliance pack selected in the test configuration (388 rules enabled), and the Quality Tasks panel listing per-file violations. This same tool opens the loop and closes it. <b>Measured in the demo pilot, 2026-11-04:</b> the baseline scan found 8 violations in the demo module (5 Rule 7.5, 3 Rule 8.4) and the verification scan after the v1 script plus expert fixes reported 0, on C/C++test Standard 2026.1.3 (the same verdict was confirmed on 2025.2). Its zero report is the compliance evidence for auditors and certification.</div>
     </div>
   </section>
 
@@ -484,52 +483,47 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
   <section class="slide">
     <div class="inner">
       <div class="eyebrow"><span class="mark"></span>WHAT THE RESULT LOOKS LIKE · COMPLIANCE DASHBOARD</div>
-      <h2>Rule 7.5 counts per repository, from baseline to held zero</h2>
+      <h2>Rule 7.5 counts, from baseline to held zero: measured in the demo pilot</h2>
       <div class="dash">
         <div class="dash-head">
           <div style="display:flex;align-items:center;gap:14px">
             <div class="logo">ESL</div>
-            <div><h3>MISRA C:2025 Rule 7.5 Cleanup &mdash; 4-Repository Program</h3><div class="sub2">Static analysis compliance dashboard &middot; Mandatory Rule 7.5 &middot; Sourcegraph inventory + Parasoft C/C++test evidence</div></div>
+            <div><h3>MISRA C:2025 Rule 7.5 Cleanup &mdash; Demo Pilot: driftregion/iso14229</h3><div class="sub2">Static analysis compliance dashboard &middot; Mandatory Rule 7.5 &middot; Sourcegraph inventory + Parasoft C/C++test evidence</div></div>
           </div>
-          <div class="meta2">Parasoft C/C++test 2026.x<br>Updated after each re-scan</div>
+          <div class="meta2">Parasoft C/C++test Standard 2026.1.3<br>Measured 2026-11-04</div>
         </div>
         <div class="dash-body">
-          <div class="dk"><div class="v">3,180 &rarr; 0</div><div class="l">Rule 7.5 violations, total</div><div class="d up">&#9660; -100% after batch merge</div></div>
-          <div class="dk"><div class="v">4 / 4</div><div class="l">Repositories at zero findings</div><div class="d up">Parasoft-certified</div></div>
-          <div class="dk"><div class="v">400</div><div class="l">Branches covered</div><div class="d up">Inherited via merge + indexed revisions</div></div>
+          <div class="dk"><div class="v">8 &rarr; 0</div><div class="l">Violations, total (5 Rule 7.5 + 3 Rule 8.4)</div><div class="d up">&#9660; -100% after v1 + expert merge</div></div>
+          <div class="dk"><div class="v">1 / 1</div><div class="l">Demo modules at zero findings</div><div class="d up">Parasoft-certified, 2026.1.3</div></div>
+          <div class="dk"><div class="v">11</div><div class="l">Source-level candidates reconciled vs scan</div><div class="d up">Divergence documented, see below</div></div>
           <div class="dk"><div class="v">100%</div><div class="l">Mandatory rules in scope</div><div class="d up">No deviations filed</div></div>
           <div class="dcard d8">
-            <h4>Violations per scan (total across repos, illustrative baseline)</h4>
-            <svg viewBox="0 0 720 210" width="100%" role="img" aria-label="Line chart: violations drop from 3180 at baseline to 0 after the batch change merges">
+            <h4>Violations per scan (demo module, measured)</h4>
+            <svg viewBox="0 0 720 210" width="100%" role="img" aria-label="Line chart: violations drop from 8 at the measured baseline to 0 at the verification scan">
               <line x1="40" y1="20" x2="40" y2="170" stroke="#dde3ec" stroke-width="1"/>
               <line x1="40" y1="170" x2="700" y2="170" stroke="#dde3ec" stroke-width="1"/>
               <line x1="40" y1="95" x2="700" y2="95" stroke="#eef1f6" stroke-width="1"/>
               <line x1="40" y1="20" x2="700" y2="20" stroke="#eef1f6" stroke-width="1"/>
               <text x="32" y="174" font-size="10" fill="#6b7a90" text-anchor="end">0</text>
-              <text x="32" y="99" font-size="10" fill="#6b7a90" text-anchor="end">1,590</text>
-              <text x="32" y="24" font-size="10" fill="#6b7a90" text-anchor="end">3,180</text>
-              <polyline points="120,20 360,170 600,170" fill="none" stroke="#c03535" stroke-width="3"/>
-              <circle cx="120" cy="20" r="5" fill="#c03535"/><circle cx="360" cy="170" r="5" fill="#c03535"/><circle cx="600" cy="170" r="5" fill="#1f9d55"/>
-              <text x="120" y="192" font-size="11" fill="#1c2738" text-anchor="middle">Scan 1: baseline</text>
-              <text x="360" y="192" font-size="11" fill="#1c2738" text-anchor="middle">Scan 2: batch merged</text>
-              <text x="600" y="192" font-size="11" fill="#1c2738" text-anchor="middle">Scan 3: re-scan</text>
+              <text x="32" y="99" font-size="10" fill="#6b7a90" text-anchor="end">4</text>
+              <text x="32" y="24" font-size="10" fill="#6b7a90" text-anchor="end">8</text>
+              <polyline points="160,20 560,170" fill="none" stroke="#c03535" stroke-width="3"/>
+              <circle cx="160" cy="20" r="5" fill="#c03535"/><circle cx="560" cy="170" r="5" fill="#1f9d55"/>
+              <text x="160" y="192" font-size="11" fill="#1c2738" text-anchor="middle">Scan 1: baseline (8 = 5 Rule 7.5 + 3 Rule 8.4)</text>
+              <text x="560" y="192" font-size="11" fill="#1c2738" text-anchor="middle">Scan 2: verification (0)</text>
             </svg>
           </div>
           <div class="dcard d4">
-            <h4>Per-repository zero proof</h4>
-            <div class="drow"><span>repoA</span><span class="pill-ok">1,240 &rarr; 0</span></div>
+            <h4>Per-file zero proof (demo module)</h4>
+            <div class="drow"><span>calibration_constants.h</span><span class="pill-ok">4 &rarr; 0</span></div>
             <div class="bar"><span style="width:100%;background:#1f9d55"></span></div>
-            <div class="drow"><span>repoB</span><span class="pill-ok">860 &rarr; 0</span></div>
+            <div class="drow"><span>calibration_demo.c</span><span class="pill-ok">1 &rarr; 0</span></div>
             <div class="bar"><span style="width:100%;background:#1f9d55"></span></div>
-            <div class="drow"><span>repoC</span><span class="pill-ok">640 &rarr; 0</span></div>
-            <div class="bar"><span style="width:100%;background:#1f9d55"></span></div>
-            <div class="drow"><span>repoD</span><span class="pill-ok">440 &rarr; 0</span></div>
-            <div class="bar"><span style="width:100%;background:#1f9d55"></span></div>
-            <div style="font-size:11px;color:#6b6353;margin-top:10px">Sourcegraph inventory queries return zero on all repos and indexed branches; the Parasoft scan is the evidence of record.</div>
+            <div style="font-size:11px;color:#6b6353;margin-top:10px">Rule 7.5 findings per file, baseline to verification. Source-level guard queries return zero on the demo branch; the Parasoft scan is the evidence of record.</div>
           </div>
         </div>
       </div>
-      <div class="foot">Dashboard adapted from the ESL ThreadX LoongArch64 compliance dashboard format to this program. Baseline counts are illustrative inventory-scale figures; the dashboard populates from the real baseline scan in week one of the pilot.</div>
+      <div class="foot">Dashboard adapted from the ESL ThreadX LoongArch64 compliance dashboard format to this program. All counts are measured, 2026-11-04: Parasoft C/C++test Standard 2026.1.3, MISRA C 2025 configuration, gcc 12, demo repo driftregion/iso14229 (seeded branch misra-rule-7-5-demo). <b>Verifier finding:</b> on both 2025.2 and 2026.1.3, Rule 7.5 flags the suffix and non-literal forms; the negative-in-macro form is accepted by the scanner, so the zero gate covers the suffix and non-literal classes, while the v1 script also normalizes negatives as value-preserving cleanup. In production the same dashboard is populated from the real per-repo baseline scans.</div>
     </div>
   </section>
 
@@ -544,11 +538,11 @@ code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
       </div>
       <div class="note green">Zero violations become a property of the process, not a one-time achievement: the guard query stops new violations at the pull request, and the scanner re-certifies the merged result continuously.</div>
       <div class="grid3">
-        <div class="bignum g"><div class="n">Week 1</div><div class="l">Pilot: pilot module scanned, inventory sized, dashboard populated with real numbers</div></div>
+        <div class="bignum g"><div class="n">Week 1</div><div class="l">Pilot: pilot module scanned, inventory sized, dashboard populated with real numbers &mdash; <b>executed in the demo pilot, 2026-11-04</b></div></div>
         <div class="bignum g"><div class="n">Weeks 2-3</div><div class="l">Batch change across all 4 repos, reviewed and merged; release-branch queries confirm zero</div></div>
         <div class="bignum g"><div class="n">Week 4+</div><div class="l">Standing gate: guard query in CI, Parasoft scan in the pipeline, dashboard shows held zero</div></div>
       </div>
-      <div class="foot">Elapsed time from pilot to proven zero: under one month. The workflow is then a template: the next MISRA C:2025 rule gets the same search, fix, and proof loop with no new tooling.</div>
+      <div class="foot">Elapsed time in the demo pilot, seed to verified zero: under one day. Production estimate stays under one month. The workflow is then a template: the next MISRA C:2025 rule gets the same search, fix, and proof loop with no new tooling.</div>
     </div>
   </section>
 
