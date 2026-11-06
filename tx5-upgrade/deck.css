@@ -83,3 +83,16 @@ button{padding:8px 11px;font-size:13px}#position{min-width:61px;font-size:12px}.
 .ready .slide,.slide{display:block!important;break-after:page;animation:none!important}.slide:last-child{break-after:auto}
 h1{font-size:27px}p,li{font-size:12px}pre{font-size:10px}td{font-size:11px}.table-scroll{overflow:visible}.sources{columns:1}
 .code,.replay,th{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+
+/* ===== case-file theme (moved from inline block; CSP style-src) ===== */
+
+/* Shared "paper case-file" theme (matches sbomator-cra-reporting-demo) */
+:root{--paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;--stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--type:"Special Elite","Courier New",Courier,monospace;--body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)!important;color:#1d1a16!important;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif!important}
+h1,h2,h3,h4,h5,h6{font-family:"Special Elite","Courier New",Courier,monospace;font-weight:400;letter-spacing:-.01em}
+a{color:#12457a}
+code,kbd,pre,samp{font-family:"Courier New",Courier,monospace}
+::selection{background:rgba(184,50,42,.25)}
+/* contrast fixes */
+figure.code span{color:#f4eedc!important}
+
