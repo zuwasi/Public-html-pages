@@ -215,6 +215,9 @@ Last updated: 2026-11-06
 • ESL-AI-LOGOS.png
   https://zuwasi.github.io/Public-html-pages/ESL-AI-LOGOS.png
 
+• ESL_Logo.png
+  https://zuwasi.github.io/Public-html-pages/ESL_Logo.png
+
 • Jahalin-reports
   https://zuwasi.github.io/Public-html-pages/Jahalin-reports
 
@@ -295,6 +298,9 @@ Last updated: 2026-11-06
 
 • cppdoctor-25-cases-cpptest
   https://zuwasi.github.io/Public-html-pages/cppdoctor-25-cases-cpptest
+
+• daniel.jpg
+  https://zuwasi.github.io/Public-html-pages/daniel.jpg
 
 • early-dos-html
   https://zuwasi.github.io/Public-html-pages/early-dos-html
