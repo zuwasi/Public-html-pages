@@ -371,9 +371,6 @@ Last updated: 2026-11-07
 • mini-swe-sweep
   https://zuwasi.github.io/Public-html-pages/mini-swe-sweep
 
-• misra-rule-7-5-sourcegraph-plan
-  https://zuwasi.github.io/Public-html-pages/misra-rule-7-5-sourcegraph-plan
-
 • misra-rule-7-5-zero-program
   https://zuwasi.github.io/Public-html-pages/misra-rule-7-5-zero-program
 
