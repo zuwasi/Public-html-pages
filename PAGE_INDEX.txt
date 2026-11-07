@@ -374,6 +374,9 @@ Last updated: 2026-11-07
 • misra-rule-7-5-sourcegraph-plan
   https://zuwasi.github.io/Public-html-pages/misra-rule-7-5-sourcegraph-plan
 
+• misra-rule-7-5-zero-program
+  https://zuwasi.github.io/Public-html-pages/misra-rule-7-5-zero-program
+
 • msvc-o1-miscompilation-parasoft
   https://zuwasi.github.io/Public-html-pages/msvc-o1-miscompilation-parasoft
 
