@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#e2e5ea">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'unsafe-inline'">
+<meta name="description" content="ESL technical brief: the MISRA C:2025 Rule 7.5 zero program on driftregion/iso14229, a measured Sourcegraph + Parasoft closed loop, from an 8-finding seeded pilot to zero, then scaled to 1,095 whole-repo findings with three mechanical batch fixes.">
+<title>MISRA C:2025 Rule 7.5 Zero Program | Sourcegraph + Parasoft | ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4eedc;--sheet:#fbf8ee;--sheet2:#ece4cc;--ink:#1d1a16;--muted:#6b6353;--line:#b9ae90;--blue:#12457a;--blue-text:#12457a;--amber:#9a5b10;--amber-text:#8a5e00;--red:#b8322a;--code-bg:#f6efdc;--code-cap:#d9d0b8;--on-dark:#1d1a16;--top:56px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--blue-text);text-decoration:none}a:hover{text-decoration:underline}
+code{font-family:"Cascadia Mono",Consolas,monospace;font-size:.88em;background:#e7eaef;border:1px solid var(--line);border-radius:5px;padding:0 .3em;color:#1b3f73}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;height:var(--top);display:flex;justify-content:space-between;align-items:center;gap:16px;padding:0 3vw;background:#f7f8faf5;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.homebtn{font-size:22px;line-height:1;filter:grayscale(.2)}
+.homebtn:hover{text-decoration:none;transform:scale(1.15)}
+.topbar img{height:32px;width:auto;display:block}
+#brand{font-weight:600;font-size:14px;color:var(--ink);border-left:2px solid var(--line);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.links{display:flex;gap:18px;flex:none}
+.links a{font-size:14px;color:var(--ink);border-bottom:2px solid transparent}
+.links a:hover{border-bottom-color:var(--amber);text-decoration:none}
+.viewport{position:fixed;inset:0;overflow:hidden}
+#track{display:flex;height:100%;transition:transform .45s cubic-bezier(.2,.7,.25,1);will-change:transform}
+.slide{--shot-h:calc(100vh - 300px);flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding:calc(var(--top) + 26px) max(5.5vw,96px) 70px}
+.slide.tall{--shot-h:calc(100vh - 330px)}
+.slide.wide{--shot-h:calc(100vh - 425px)}
+.slide.prompt{--shot-h:calc(100vh - 560px)}
+.slide.layers{--shot-h:calc(100vh - 640px)}
+.inner{width:100%;max-width:1360px;margin:auto}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:clamp(12px,1vw,14px);letter-spacing:.18em;font-weight:700;text-transform:uppercase}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{left:0;top:0;border-color:var(--blue)}
+.mark::after{left:8px;top:7px;border-color:var(--amber)}
+h1{font-size:clamp(30px,3.6vw,52px);line-height:1.1;letter-spacing:-.02em;margin:12px 0 8px;font-weight:800}
+.title h1{font-size:clamp(34px,4.6vw,64px)}
+h3{font-size:clamp(18px,1.6vw,23px);line-height:1.25;margin-bottom:8px;font-weight:700}
+p.subtitle{font-size:clamp(18px,1.85vw,25px);color:var(--blue-text);margin:0 0 20px;line-height:1.4}
+p,li{font-size:clamp(16px,1.55vw,21px)}
+p+p{margin-top:10px}
+ul{padding-left:26px}
+li{margin:9px 0;padding-left:4px}
+li::marker{color:var(--amber)}
+.grid2,.grid3,.grid4{display:grid;gap:22px;margin:14px 0}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mid{align-items:center}
+.stack{display:grid;gap:18px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(16px,1.7vw,24px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card.v{border-top-color:var(--amber)}
+.card p,.card li{font-size:clamp(15px,1.35vw,19px)}
+.card ul{padding-left:22px}
+.tag{display:inline-block;color:var(--blue-text);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.card.v .tag{color:var(--amber-text)}
+.n{font-size:clamp(30px,3.4vw,50px);font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums}
+.l{font-size:clamp(14px,1.3vw,18px);color:var(--muted);margin-top:8px;line-height:1.45}
+.note{padding:14px 20px;border-left:5px solid var(--amber);background:#fdf6e3;color:#5c470e;font-size:clamp(15px,1.4vw,19px);margin:16px 0 0;border-radius:0 8px 8px 0;line-height:1.5}
+.note.red{border-left-color:var(--red);background:#fbeaea;color:#6e1c1c}
+.foot{margin-top:16px;font-size:clamp(13px,1.15vw,16px);color:var(--muted)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pill{display:inline-flex;border-radius:999px;padding:5px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:13px;font-weight:700}
+.pill.a{background:#fdf3dc;border-color:rgba(29,26,22,0.55);color:var(--amber-text)}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:12px 0 4px}
+.step{position:relative;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:18px 20px 18px 76px;min-height:118px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.step b{position:absolute;left:18px;top:18px;width:40px;height:40px;border-radius:50%;background:var(--blue);color:#f4eedc;display:grid;place-items:center;font-size:19px}
+.step:nth-child(even) b{background:var(--amber);color:#f4eedc}
+.step strong{display:block;font-size:clamp(17px,1.5vw,21px);margin-bottom:4px}
+.step span{display:block;font-size:clamp(14px,1.25vw,17px);color:#f4eedc;line-height:1.45}
+.flow.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+.flow.five .step{padding:18px}
+.flow.five .step b{position:static;margin-bottom:12px}
+.diagram{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(12px,1.25vw,17px);line-height:1.6;background:var(--code-bg);color:var(--on-dark);border-radius:10px;padding:18px 22px;overflow-x:auto;white-space:pre;margin:16px 0 0;box-shadow:0 2px 10px rgba(15,20,30,.25)}
+.diagram .k{color:#1d1a16}.diagram .b{color:#12457a}
+.tablewrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:clamp(14px,1.4vw,19px)}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#fbf8ee;color:#1d1a16;font-weight:650}
+tbody tr:nth-child(even){background:#f0f2f6}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+figure.shot{width:min(100%,calc(var(--w) + 16px),calc(var(--shot-h) * var(--r) + 16px));margin:0 auto;background:var(--code-bg);border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(15,20,30,.28)}
+figure.shot figcaption{padding:9px 16px;background:var(--code-cap);color:#6b6353;font-size:clamp(13px,1.1vw,15px);line-height:1.4;border-top:3px solid var(--amber);border-bottom:1px solid #2a2e34}
+figure.shot figcaption code{background:#fbf8ee;border-color:#b9ae90;color:#1d1a16}
+a.zoom{display:block;position:relative;padding:8px;line-height:0;cursor:zoom-in}
+a.zoom img{display:block;width:100%;height:auto;border-radius:6px;background:#fff;-webkit-user-drag:none;user-select:none}
+a.zoom::after{content:"Click to enlarge";position:absolute;right:16px;bottom:16px;background:rgba(251,248,238,.82);color:#1d1a16;font-size:13px;font-weight:600;line-height:1;padding:7px 11px;border-radius:20px;opacity:.85}
+a.zoom:hover::after,a.zoom:focus-visible::after{opacity:1;background:var(--blue-text)}
+.wideshot{margin-top:14px}
+.shotrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.42fr);gap:28px;align-items:center;margin-top:14px}
+.shotrow.tall{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.side p.subtitle{font-size:clamp(17px,1.6vw,22px);margin-bottom:12px}
+.side p,.side li{font-size:clamp(15px,1.35vw,19px)}
+.side .note{font-size:clamp(14px,1.25vw,17px)}
+.chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
+.chip{background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:10px 14px;font-size:clamp(14px,1.2vw,17px);line-height:1.4}
+.chip:nth-child(even){border-left-color:var(--amber)}
+.rule-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
+.rule{background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:10px;padding:16px 18px;min-height:112px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.rule:nth-child(even){border-top-color:var(--amber)}
+.rule code{display:block;background:none;border:0;padding:0;color:var(--blue-text);font-size:clamp(14px,1.2vw,17px);font-weight:700;margin-bottom:6px}
+.rule span{display:block;font-size:clamp(16px,1.45vw,20px);line-height:1.35}
+.person-card{display:flex;gap:22px;padding:22px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.person-card img{width:140px;height:140px;object-fit:cover;border-radius:8px;flex:none}
+.person-card strong{font-size:clamp(18px,1.8vw,23px);display:block}
+.person-card span{color:var(--blue-text);font-weight:600;font-size:clamp(14px,1.4vw,17px)}
+.person-card p{margin:10px 0;font-size:clamp(15px,1.35vw,18px)}
+.contact{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:20px;padding:16px 22px;background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--amber);border-radius:10px}
+.contact img{height:52px;width:auto;display:block}
+.contact p{font-size:clamp(15px,1.35vw,18px)}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:none;background:var(--blue);color:#f4eedc;font-size:34px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,107,208,.45);transition:background .15s,transform .15s,opacity .2s}
+.navbtn:hover{background:var(--blue-text);transform:translateY(-50%) scale(1.08)}
+.navbtn.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#prev{left:16px}#next{right:16px}
+#progress{position:fixed;bottom:0;left:0;height:6px;width:0;background:linear-gradient(90deg,var(--blue),var(--amber));z-index:30;transition:width .3s}
+#counter{position:fixed;bottom:14px;right:20px;z-index:30;font-size:15px;font-weight:600;color:var(--ink);background:#f7f8fad9;border:1px solid var(--line);border-radius:14px;padding:3px 13px;font-variant-numeric:tabular-nums}
+#hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:30;font-size:15px;font-weight:600;color:var(--amber-text);white-space:nowrap;animation:pulse 1.6s infinite}
+#hint.gone{opacity:0;visibility:hidden}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+dialog#lightbox{width:100vw;height:100vh;height:100dvh;max-width:100vw;max-height:none;margin:0;border:0;padding:0;background:#fbf8ee;color:var(--on-dark);overflow:auto}
+#lightbox::backdrop{background:rgba(251,248,238,.7)}
+#lbbar{position:fixed;top:0;left:0;right:0;z-index:2;display:flex;gap:12px;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(251,248,238,.92);font-size:14px}
+#lbcap{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.lbbtns{display:flex;gap:8px;flex:none}
+#lightbox button{font:inherit;font-weight:600;color:#f4eedc;background:var(--blue-text);border:0;border-radius:18px;padding:7px 14px;cursor:pointer}
+#lightbox #lbclose{background:#fbf8ee}
+#lbwrap{display:flex;width:max-content;min-width:100%;min-height:100%;padding:60px 16px 20px}
+#lbwrap img{display:block;margin:auto;height:auto;max-width:none;border-radius:6px;background:#fff;box-shadow:0 6px 30px rgba(0,0,0,.5)}
+#lightbox.canzoom img{cursor:zoom-in}
+#lightbox.canzoom.full img{cursor:zoom-out}
+@media(max-width:1100px){
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shotrow,.shotrow.tall{grid-template-columns:1fr}
+  .flow.five{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:761px) and (max-height:820px){
+  .slide{padding-top:calc(var(--top) + 16px);padding-bottom:58px}
+  h1{font-size:clamp(28px,3.1vw,44px);margin:8px 0 6px}
+  p.subtitle{font-size:clamp(16px,1.6vw,21px);margin-bottom:14px}
+  p,li{font-size:clamp(15px,1.35vw,18px)}
+  .card p,.card li,.side p,.side li{font-size:clamp(14px,1.2vw,17px)}
+  .n{font-size:clamp(26px,2.8vw,40px)}
+  .step{min-height:0;padding-top:14px;padding-bottom:14px}
+  .rule{min-height:0}
+}
+@media(max-width:760px){
+  :root{--top:52px}
+  .slide,.slide.tall,.slide.wide,.slide.prompt,.slide.layers{--shot-h:9999px;padding:calc(var(--top) + 18px) 18px 96px}
+  .inner{margin:0 auto}
+  .topbar{gap:10px;padding:0 12px}
+  .topbar img{height:26px}
+  #brand{font-size:12.5px;padding-left:10px}
+  .links{display:none}
+  .grid2,.grid3,.flow,.flow.five,.chips,.rule-grid{grid-template-columns:1fr}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .step,.rule{min-height:0}
+  .person-card{flex-direction:column}
+  .contact{gap:14px}
+  a.zoom::after{content:"Tap to enlarge"}
+  .navbtn{width:46px;height:46px;font-size:26px;top:auto;bottom:16px;transform:none}
+  .navbtn:hover{transform:scale(1.05)}
+  #prev{left:12px}#next{right:12px}
+  #counter{right:auto;left:50%;transform:translateX(-50%);bottom:26px}
+  #hint{bottom:74px;font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}</style>
+<style>
+.step span{color:#4a443a}
+.slide{padding-top:calc(var(--top) + 12px);padding-bottom:50px}
+h1{margin:8px 0 6px}
+p.subtitle{margin-bottom:12px}
+p,li{line-height:1.42}
+.diagram{line-height:1.42;font-size:clamp(11px,1.08vw,14.5px);padding:12px 18px;margin:10px 0 0}
+table{font-size:clamp(13px,1.22vw,16px)}
+th,td{padding:8px 12px}
+.card{padding:12px 16px}
+.card p,.card li{font-size:clamp(13px,1.18vw,16px);line-height:1.4}
+.grid2,.grid3,.grid4{gap:16px;margin:10px 0}
+.note{padding:10px 16px;margin:10px 0 0;font-size:clamp(13px,1.2vw,16px);line-height:1.42}
+.n{font-size:clamp(24px,2.6vw,38px)}
+.shotrow{margin-top:10px;gap:22px}
+.foot{margin-top:12px;font-size:clamp(12px,1.05vw,14px)}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="homebtn" href="#1" title="Back to slide 1" aria-label="Back to slide 1">&#127968;</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener"><img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+    <span id="brand">MISRA C:2025 Rule 7.5 Zero Program · Sourcegraph + Parasoft</span>
+  </div>
+  <nav class="links" aria-label="Related links">
+    <a href="https://zuwasi.github.io/Public-html-pages/misra-rule-7-5-sourcegraph-plan/" target="_blank" rel="noopener">Plan deck</a>
+    <a href="https://eswlab.sourcegraphcloud.com/search" target="_blank" rel="noopener">eswlab tenant</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a>
+    <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a>
+  </nav>
+</header>
+<main class="viewport" aria-label="MISRA C 2025 Rule 7.5 zero program presentation">
+<div id="track">
+<section class="slide title"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Technical program brief · 01</div>
+  <h1>The Rule 7.5 Zero Program: Sourcegraph finds, Parasoft decides</h1>
+  <p class="subtitle">MISRA C:2025 Rule 7.5 taken to certified zero on a real open-source code base, then the same closed loop scaled to 1,095 findings across the top mechanical rules: the measured evidence, the scripts, the tenant queries, and the revertable branch topology</p>
+  <div class="grid2 mid">
+    <div class="stack">
+      <div class="card v"><div class="n">1095 &rarr; 766</div><div class="l">Whole-repo Parasoft MISRA C 2025 findings before and after three mechanical batch fixes; seed module went 8 &rarr; 0 in the pilot</div></div>
+      <div class="card"><div class="n">1 loop, 2 tools</div><div class="l">Parasoft C/C++test 2026.1.3 opens and closes the loop as evidence of record; Sourcegraph Cloud (eswlab tenant) finds, fixes at scale, and guards</div></div>
+    </div>
+    <div class="person-card">
+      <img src="../assets/daniel-liezrowice.jpg" width="140" height="140" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years. This brief documents the ESL Sourcegraph + Parasoft zero-program demonstration.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Engineering Software Lab Ltd. · 7 November 2026 · Every number in this deck was measured, every screenshot is a genuine capture of the eswlab tenant, the local Parasoft reports, or the GitHub fork</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The workflow · 02</div>
+  <h1>A closed loop with one decision point, executed on a real repo</h1>
+  <p class="subtitle">The published ESL workflow (slide 4 of the plan deck), executed end to end on <code>driftregion/iso14229</code></p>
+<div class="diagram">┌────────────────────────────────────────────────────────┐
+│ 1. PARASOFT BASELINE SCAN        opens the loop        │
+│ 2. SOURCEGRAPH MATCH QUERIES     step 5                │
+│ 3. BATCH CHANGE SCRIPT DESIGN    v1, v2, ...           │
+│ 4. DRY RUN → REVIEW → MERGE      step 6, revertable    │
+│ 5. PARASOFT VERIFICATION SCAN    closes the loop       │
+│    zero? ── no ──▶ back to step 3 (script v2, v3)      │
+│ 6. HOLD ZERO  guard query in CI · pipeline scan ·      │
+│    Code Monitor · dashboard · release-branch proof     │
+└────────────────────────────────────────────────────────┘</div>
+  <div class="grid2">
+    <div class="card"><span class="tag">Parasoft decides</span><h3>Evidence of record</h3><p>Measures the problem (baseline), verifies the fix (zero or residual), re-measures on every pipeline run. Its report is the compliance artifact.</p></div>
+    <div class="card v"><span class="tag">Sourcegraph finds &amp; fixes</span><h3>Scale and guard</h3><p>Turns each mechanical class into a search query, drives the batch fix, and holds zero with a standing guard query.</p></div>
+  </div>
+</div></section>
+
+<section class="slide layers"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Tool chain · 03</div>
+  <h1>The exact tool chain, versions, and invocation</h1>
+  <p class="subtitle">Everything runs from one Windows host with WSL2 as the execution environment</p>
+  <div class="grid3">
+    <div class="card"><span class="tag">Verifier</span><h3>Parasoft C/C++test Standard 2026.1.3</h3><p>Linux build 2026.1.3 (internal 10.7.4), driven headless with <code>cpptestcli</code>, config <code>builtin://MISRA C 2025</code>, compiler <code>gcc_12-64</code>, licensed from the DTP server on the Windows host.</p></div>
+    <div class="card v"><span class="tag">Finder / fixer</span><h3>Sourcegraph Cloud, eswlab tenant</h3><p><a href="https://eswlab.sourcegraphcloud.com/search" target="_blank" rel="noopener">eswlab.sourcegraphcloud.com</a>, site admin <code>daniell</code>, dedicated external service indexing the fork. Search API (<code>/search/stream</code>) and GraphQL for automation.</p></div>
+    <div class="card"><span class="tag">Code host</span><h3>GitHub fork + branches</h3><p>Upstream <code>driftregion/iso14229</code> is never touched; all work lives on the fork's own branches. Verified: no PR exists upstream.</p></div>
+  </div>
+<figure class="shot" style="--w:900px;--r:1.684"><figcaption>C/C++test 2026.1.3 HTML report header: the whole-repo baseline run that opens the loop at 1,095 findings</figcaption><a class="zoom" href="../assets/parasoft_baseline_seed_top.png" draggable="false"><img src="../assets/parasoft_baseline_seed_top.png" width="900" height="534" decoding="async" draggable="false" alt="C/C++test 2026.1.3 HTML report header: the whole-repo baseline run that opens the loop at 1,095 findings"></a></figure>
+<div class="note">Gotchas: the DTP license server has <code>start_deactivated=true</code> (re-activate in the legacy <code>/pst</code> console after a restart); after a Windows reboot the three Parasoft services must be restarted first; a full scan takes 15-20 minutes.</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The demo repo · 04</div>
+  <h1>Why iso14229: real automotive-relevant C, one honest catch</h1>
+  <p class="subtitle">ISO 14229 (Unified Diagnostic Services) is the road-vehicle diagnostics layer every ECU speaks; the library is a C99 amalgamation, exactly the shape MISRA C programs look like</p>
+  <div class="shotrow">
+    <div class="side">
+      <p>The upstream <code>driftregion/iso14229</code> tree contains <strong>zero</strong> <code>INTn_C</code>/<code>UINTn_C</code> uses, so a fair Rule 7.5 demo needs a seeded branch: <code>demo/rule75_seed/</code> adds 11 realistic calibration constants and call sites. The seeding commit is <code>3d3f7ab9</code>, pushed to the fork branch <code>misra-rule-7-5-seed</code> and pinned there so Sourcegraph always shows the before-state.</p>
+      <p>The amalgamation itself (<code>iso14229.c</code>, 2,657 KB with the header) compiles standalone with gcc 12, which makes the Parasoft on-the-fly <code>gcc -c</code> invocation trivial.</p>
+      <div class="note">Honesty rule for the demo: seeded violations are labeled "Demo seed only" in the file headers; the 1,095-finding whole-repo campaign later in this brief runs on the untouched upstream code, no seed involved.</div>
+    </div>
+<figure class="shot" style="--w:1434px;--r:1.714"><figcaption>The fork github.com/zuwasi/iso14229: all demo work lives here; upstream driftregion/iso14229 is never touched</figcaption><a class="zoom" href="../assets/gh-fork-home.png" draggable="false"><img src="../assets/gh-fork-home.png" width="1434" height="836" decoding="async" draggable="false" alt="The fork github.com/zuwasi/iso14229: all demo work lives here; upstream driftregion/iso14229 is never touched"></a></figure>
+  </div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The seed · 05</div>
+  <h1>Eleven seeded candidates across three mechanical classes and two expert exclusions</h1>
+  <p class="subtitle">The seed as committed (<code>3d3f7ab9</code>, branch <code>misra-rule-7-5-seed</code>); Rule 7.5 applies at call sites too</p>
+<div class="diagram">/* Mechanical class 1: unary minus inside the macro argument */
+#define DEMO_TEMP_OFFSET   INT32_C(-40)
+/*   (+3 more: -100, -500L, -5) */
+
+/* Mechanical class 2: suffix inside the macro argument */
+#define DEMO_MASK          UINT32_C(0xFFUL)
+#define DEMO_SAMPLE_RATE   UINT32_C(100U)
+#define DEMO_TIMEOUT_MS    UINT64_C(5000ULL)
+/* Excluded from automation: signed minimum (no in-macro fix exists) */
+#define DEMO_INT32_MIN_SENTINEL INT32_C(-2147483648)
+/* Manual-review class: non-literal argument */
+#define DEMO_DERIVED_GAIN  INT32_C(DEMO_TEMP_OFFSET)
+/* calibration_demo.c call sites, same violation classes */
+demo_trim         = INT32_C(-25);
+demo_mask_applied = UINT32_C(0xFFUL);</div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Class</th><th class="num">Instances</th><th>Automation</th></tr></thead>
+    <tbody>
+      <tr><td>Negative inside macro, incl. signed minimum</td><td class="num">6</td><td>value-preserving relocation; signed minimum to expert</td></tr>
+      <tr><td>Literal suffix inside macro (hex and decimal)</td><td class="num">4</td><td>strip suffix, value preserved</td></tr>
+      <tr><td>Non-literal argument</td><td class="num">1</td><td>expert decision, never automated</td></tr>
+      <tr><td><strong>Total seeded candidates</strong></td><td class="num"><strong>11</strong></td><td>3 mechanical + 2 human classes; plus 2 compliant reference forms</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section class="slide tall"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Phase 1 · 06</div>
+  <h1>The seed baseline is 8 violations</h1>
+  <p class="subtitle">C/C++test Standard 2026.1.3, <code>builtin://MISRA C 2025</code>, gcc_12-64, module <code>demo/rule75_seed</code>; cross-verified on 2025.2 with identical verdicts before the upgrade</p>
+<div class="diagram">cpptestcli \
+  -localsettings .amp/in/cpptest_local.properties \
+  -config "builtin://MISRA C 2025" -compiler gcc_12-64 -module demo/rule75_seed \
+  -- gcc -I demo/rule75_seed -c demo/rule75_seed/calibration_demo.c</div>
+  <div class="shotrow">
+<figure class="shot" style="--w:600px;--r:1.615"><figcaption>Baseline findings by severity: 8 total, 5 at severity 1 (Rule 7.5), 3 at severity 2 (Rule 8.4)</figcaption><a class="zoom" href="../assets/donut_seed_baseline_8.jpeg" draggable="false"><img src="../assets/donut_seed_baseline_8.jpeg" width="600" height="372" decoding="async" draggable="false" alt="Baseline findings by severity: 8 total, 5 at severity 1 (Rule 7.5), 3 at severity 2 (Rule 8.4)"></a></figure>
+    <div class="side">
+      <div class="tablewrap"><table style="table-layout:fixed;width:100%;min-width:0">
+        <thead><tr><th>Rule</th><th class="num">Findings</th><th>Detail</th></tr></thead>
+        <tbody>
+          <tr><td>Rule 7.5 (Mandatory)</td><td class="num">5</td><td>4 suffix + 1 non-literal</td></tr>
+          <tr><td>Rule 8.4 (Required)</td><td class="num">3</td><td>missing header declarations</td></tr>
+        </tbody>
+      </table></div>
+      <p>The baseline is the contract: the verification scan must show the mechanical classes at zero, and the dashboard numbers come from this report.</p>
+    </div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Verifier finding · 07</div>
+  <h1>The deck assumed negatives violate; the verifier disagrees, on two versions</h1>
+  <p class="subtitle">The most valuable discovery of the pilot, found because the loop starts from the scanner, not from the standard's text</p>
+  <div class="grid2">
+    <div class="card"><span class="tag">Premise</span><h3>What the published plan assumed</h3><p>Rule 7.5 bans the minus inside <code>INTn_C(-N)</code>, so the demo would gate on negatives, suffixes, and non-literals: three automated classes.</p></div>
+    <div class="card v"><span class="tag">Measured</span><h3>What Parasoft actually flags</h3><p>On <strong>both</strong> 2025.2 and 2026.1.3 with the MISRA C 2025 config: <strong>zero</strong> findings on any of the five <code>INTn_C(-N)</code> forms, including the signed minimum. Only suffix and non-literal forms are flagged (the 5 severity-1 findings).</p></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><span class="tag">Consequence 1</span><h3>The zero gate redefines itself from the scan</h3><p>Zero means the suffix + non-literal classes reach zero. The v1 script still normalizes negatives (value-preserving, matches the compliant style), but negatives no longer gate.</p></div>
+    <div class="card v"><span class="tag">Consequence 2</span><h3>Reconciliation becomes a demo highlight</h3><p>Source inventory (11 candidates) vs scan (5 findings) diverges by design. The demo shows the divergence and explains it instead of hiding it: exactly what the reconciliation step exists to catch.</p></div>
+  </div>
+  <div class="note">Method note: this is why the loop's decision point must be the scanner. A workflow that trusted the standard's prose would have declared the seed non-compliant in a class the verifier does not measure.</div>
+</div></section>
+
+<section class="slide tall"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Phase 2 · 08</div>
+  <h1>Three query lessons the tenant taught</h1>
+  <p class="subtitle">eswlab tenant, license renewed 2026-11-06, fork indexed via a dedicated external service</p>
+<figure class="shot" style="--w:560px;--r:1.714"><figcaption>The eswlab Sourcegraph Cloud tenant (https://eswlab.sourcegraphcloud.com), authenticated as site admin daniell</figcaption><a class="zoom" href="../assets/tenant-home.png" draggable="false"><img src="../assets/tenant-home.png" width="560" height="326" decoding="async" draggable="false" alt="The eswlab Sourcegraph Cloud tenant (https://eswlab.sourcegraphcloud.com), authenticated as site admin daniell"></a></figure>
+  <div class="grid3">
+    <div class="card"><span class="tag">Lesson 1</span><h3><code>fork:yes</code> is mandatory</h3><p>The repo is a GitHub fork; without the <code>fork:yes</code> predicate every query silently returns zero because fork filtering excludes it by default.</p></div>
+    <div class="card v"><span class="tag">Lesson 2</span><h3><code>patternType:regexp</code></h3><p>The default is literal matching. Every structural pattern in this program is a regular expression and must opt in explicitly.</p></div>
+    <div class="card"><span class="tag">Lesson 3</span><h3>Zoekt cannot negate</h3><p>Negated character classes (<code>[^)]</code>) silently return zero results. Every query uses positive classes instead of "anything but a paren".</p></div>
+  </div>
+</div></section>
+
+<section class="slide layers"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Phase 2 · 09</div>
+  <h1>The three class queries, run live on the seed branch</h1>
+  <p class="subtitle">Each mechanical class is one query; counts below are what the tenant returned on 2026-11-06</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Class</th><th>Query (patternType:regexp)</th><th class="num">Seed</th><th class="num">Cleaned</th></tr></thead>
+    <tbody>
+      <tr><td>Negative argument</td><td><code>(INT32_C|INT64_C|UINT32_C|UINT64_C)\(\s*-\s*[0-9]+\s*\)</code></td><td class="num">6</td><td class="num">0</td></tr>
+      <tr><td>Literal suffix</td><td><code>(\...)\(\s*(0[xX][0-9a-fA-F]+|[0-9]+)\s*[uUlL]+\s*\)</code></td><td class="num">4</td><td class="num">0</td></tr>
+      <tr><td>Non-literal argument</td><td><code>(\...)\(\s*[A-Za-z_][A-Za-z0-9_]*\s*\)</code></td><td class="num">1</td><td class="num">0</td></tr>
+      <tr><td>Signed minimum (expert)</td><td><code>INT32_C\(\s*-\s*2147483648\s*\)</code></td><td class="num">1</td><td class="num">0</td></tr>
+    </tbody>
+  </table></div>
+<figure class="shot" style="--w:1200px;--r:1.714"><figcaption>Negative-argument query on @misra-rule-7-5-seed: 6 results in 0.07s, including the signed-minimum sentinel at calibration_constants.h line 27</figcaption><a class="zoom" href="../assets/tenant-query-negative-seed.png" draggable="false"><img src="../assets/tenant-query-negative-seed.png" width="1200" height="700" decoding="async" draggable="false" alt="Negative-argument query on @misra-rule-7-5-seed: 6 results in 0.07s, including the signed-minimum sentinel at calibration_constants.h line 27"></a></figure>
+</div></section>
+
+<section class="slide prompt"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Phase 2 · 10</div>
+  <h1>One combined guard query: 11 before, 0 after</h1>
+  <p class="subtitle">The all-mechanical-classes query with <code>lang:C</code> so the fix script's own docstring cannot match; this is the exact query the PR gate runs</p>
+<div class="diagram">repo:zuwasi/iso14229@BRANCH fork:yes lang:C patternType:regexp
+  (INT32_C|INT64_C|UINT32_C|UINT64_C)\(\s*
+    (-\s*[0-9]+[uUlL]*            negative decimal
+    |0[xX][0-9a-fA-F]+\s*[uUlL]+  suffixed hex
+    |[0-9]+\s*[uUlL]+             suffixed decimal
+    |[A-Za-z_][A-Za-z0-9_]*)      non-literal identifier
+  \s*\)</div>
+  <div class="shotrow tall">
+<figure class="shot" style="--w:1434px;--r:1.714"><figcaption>Seed branch: 11 results in 0.13s, the full seeded inventory in one query</figcaption><a class="zoom" href="../assets/tenant-seed-combined.png" draggable="false"><img src="../assets/tenant-seed-combined.png" width="1434" height="836" decoding="async" draggable="false" alt="Seed branch: 11 results in 0.13s, the full seeded inventory in one query"></a></figure><figure class="shot" style="--w:1434px;--r:1.714"><figcaption>Cleaned branch: "No results matched your search", 0 results in 0.12s</figcaption><a class="zoom" href="../assets/tenant-demo-combined-zero.png" draggable="false"><img src="../assets/tenant-demo-combined-zero.png" width="1434" height="836" decoding="async" draggable="false" alt="Cleaned branch: "No results matched your search", 0 results in 0.12s"></a></figure>
+  </div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Reconciliation · 11</div>
+  <h1>Inventory, scan, and search tell one story once you reconcile them</h1>
+  <p class="subtitle">The step most teams skip, and the one that makes the demo credible</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>View</th><th class="num">Count</th><th>Why it differs</th></tr></thead>
+    <tbody>
+      <tr><td>Source inventory (seeded candidates)</td><td class="num">11</td><td>ground truth at source level, all shapes</td></tr>
+      <tr><td>Sourcegraph combined query (seed)</td><td class="num">11</td><td>search sees every shape, including the negatives the verifier accepts</td></tr>
+      <tr><td>Parasoft baseline (seed)</td><td class="num">5</td><td>verifier accepts the negative form on both tool versions (slide 07); flags suffix + non-literal only</td></tr>
+      <tr><td>Parasoft verification (seed)</td><td class="num">0</td><td>all flagged classes zeroed by the v1 script + expert commit</td></tr>
+      <tr><td>Sourcegraph combined query (cleaned)</td><td class="num">0</td><td>guard query goes green; Proof 1 for the hold-zero phase</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">The 6-finding gap between inventory and scan is not noise: 5 negative forms + 1 non-literal mismatch. The non-literal <em>is</em> flagged; the negatives are not. Once explained, the divergence becomes the strongest slide in the compliance conversation.</div>
+</div></section>
+
+<section class="slide tall"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Phase 3 · 12</div>
+  <h1>The v1 transform script: two value-preserving rewrites, three exclusions</h1>
+  <p class="subtitle"><code>iso14229/tools/rule75_v1.py</code>, commit <code>0fc00476</code>, fixture-tested before it ever touched the seed</p>
+<div class="diagram">Transform 1 - suffix removal (value preserved):
+  UINT32_C(0xFFUL)   ->  UINT32_C(0xFF)
+  UINT64_C(5000ULL)  ->  UINT64_C(5000)
+
+Transform 2 - minus relocation (value preserved):
+  INT32_C(-40)       ->  (-INT32_C(40))
+
+Excluded, reported for expert handling:
+  INT32_C(-2147483648)      signed minimum: the "obvious" rewrite
+                            (-INT32_C(2147483648)) is still
+                            non-compliant; the fix is
+                            ((-INT32_C(2147483647))-1)
+  INT32_C(DEMO_TEMP_OFFSET) non-literal: needs a design decision,
+                            not a rewrite
+  out-of-range arguments    surfaced by compiler + scanner</div>
+  <div class="grid2">
+    <div class="card"><span class="tag">Fixture test</span><h3>Values identical before and after</h3><p>The fixture covers every transform and every exclusion; the test asserts <code>-40</code> stays <code>-40</code>, <code>0xFF</code> stays <code>0xFF</code>, and the excluded lines are untouched, then compiles the result.</p></div>
+    <div class="card v"><span class="tag">Design rule</span><h3>Versioned scripts, never a one-off patch</h3><p>Every Parasoft non-zero verification produces a v2, v3, ... of the script. The script is the reviewable, reusable unit; the demo branch is disposable.</p></div>
+  </div>
+</div></section>
+
+<section class="slide tall"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Expert pass · 13</div>
+  <h1>What automation must not touch: the expert commit</h1>
+  <p class="subtitle">Commit <code>2c1f6403</code> (+9 &minus;4) closes the two exclusions and the three Rule 8.4 demo artifacts</p>
+<div class="diagram">/* signed minimum: the only compliant spelling in C */
+- #define DEMO_INT32_MIN_SENTINEL INT32_C(-2147483648)
++ #define DEMO_INT32_MIN_SENTINEL ((-INT32_C(2147483647))-1)
+
+/* non-literal argument: use the constant directly */
+- #define DEMO_DERIVED_GAIN  INT32_C(DEMO_TEMP_OFFSET)
++ #define DEMO_DERIVED_GAIN  DEMO_TEMP_OFFSET
+
+/* Rule 8.4 (demo artifact): the three seed functions now have
+   external declarations in the header */
++ void demo_seed_call_sites(void);
++ int32_t demo_get_trim(void);
++ uint32_t demo_get_mask(void);</div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Commit</th><th>Branch</th><th>Content</th></tr></thead>
+    <tbody>
+      <tr><td><code>3d3f7ab9</code></td><td><code>misra-rule-7-5-seed</code></td><td>seed: 11 candidates, pinned before-state</td></tr>
+      <tr><td><code>0fc00476</code></td><td><code>misra-rule-7-5-demo</code></td><td>v1 script + mechanical fixes (+89 &minus;9)</td></tr>
+      <tr><td><code>2c1f6403</code></td><td><code>misra-rule-7-5-demo</code></td><td>expert fixes: exclusions + declarations</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Both commits are pushed to the fork. The seed branch stays pinned so every before-query in this deck reproduces exactly, forever.</div>
+</div></section>
+
+<section class="slide tall"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Phase 5 · 14</div>
+  <h1>Parasoft closes the loop: the seed is certified zero</h1>
+  <p class="subtitle">Same command, same module, same config: 8 violations in, 0 violations out</p>
+  <div class="shotrow tall">
+<figure class="shot" style="--w:760px;--r:1.615"><figcaption>Verification scan findings: 0 total across all severities (the compliance evidence of record for the seed)</figcaption><a class="zoom" href="../assets/donut_seed_zero.jpeg" draggable="false"><img src="../assets/donut_seed_zero.jpeg" width="760" height="470" decoding="async" draggable="false" alt="Verification scan findings: 0 total across all severities (the compliance evidence of record for the seed)"></a></figure><figure class="shot" style="--w:1.714px;--r:1.714"><figcaption>The other half of the proof: the tenant guard query on the cleaned branch returns 0 results</figcaption><a class="zoom" href="../assets/tenant-demo-combined-zero.png" draggable="false"><img src="../assets/tenant-demo-combined-zero.png" width="0" height="0" decoding="async" draggable="false" alt="The other half of the proof: the tenant guard query on the cleaned branch returns 0 results"></a></figure>
+  </div>
+  <div class="note">Report of record: <code>iso14229/reports/report.html</code>, regenerated by the 2026.1.3 verification run. Zero suppressed findings, zero exclusions in the config: the seed demo is a genuine zero, not a filtered one.</div>
+</div></section>
+
+<section class="slide prompt"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Scaling up · 15</div>
+  <h1>The same loop on upstream code: 1,095 findings</h1>
+  <p class="subtitle">Full amalgamation, 7,438 lines, no seed involved, MISRA C 2025 config, 2026.1.3</p>
+<figure class="shot" style="--w:1000px;--r:1.684"><figcaption>Whole-repo baseline: 1,095 findings, 0 suppressed, 1,472 per 10,000 lines</figcaption><a class="zoom" href="../assets/parasoft_baseline_seed_top.png" draggable="false"><img src="../assets/parasoft_baseline_seed_top.png" width="1000" height="594" decoding="async" draggable="false" alt="Whole-repo baseline: 1,095 findings, 0 suppressed, 1,472 per 10,000 lines"></a></figure>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Rule</th><th class="num">Findings</th><th>Nature</th><th>Mechanical?</th></tr></thead>
+    <tbody>
+      <tr><td>Rule 15.5 (single point of exit)</td><td class="num">383</td><td>structural rewrites</td><td>no</td></tr>
+      <tr><td>Rule 15.6 (bodies must be blocks)</td><td class="num">82</td><td><strong>all 82 are assert-expansion artifacts</strong></td><td>yes, one macro</td></tr>
+      <tr><td>Dir 4.6 (stdint typedefs)</td><td class="num">68</td><td>type-word rewrites</td><td>yes</td></tr>
+      <tr><td>Rules 14.4 / 12.3 / 21.8 / 2.2 / 11.11</td><td class="num">251</td><td>mixed; 12.3, 21.8, 2.2 are largely assert artifacts</td><td>partly</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Experiments · 16</div>
+  <h1>Three micro-scans to find the fix that actually zeroes 123 findings</h1>
+  <p class="subtitle">All 82 Rule 15.6 and 41 Rule 21.8 findings trace to one macro: <code>#define UDS_ASSERT(x) assert(x)</code>, because glibc's assert expands to an unbraced <code>if</code></p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Variant</th><th>Macro</th><th class="num">15.6</th><th class="num">21.8</th><th>Verdict</th></tr></thead>
+    <tbody>
+      <tr><td>A (as shipped)</td><td><code>#define UDS_ASSERT(x) assert(x)</code></td><td class="num">2 / site</td><td class="num">1 / site</td><td>the 123-finding source</td></tr>
+      <tr><td>B (wrap only)</td><td><code>do { assert(x); } while (0)</code></td><td class="num">2 / site</td><td class="num">1 / site</td><td>does not help: glibc's assert still leaks the unbraced if</td></tr>
+      <tr><td>C (hook)</td><td><code>do { if (!(x)) { UDS_AssertFail(); } } while (0)</code></td><td class="num">0</td><td class="num">0</td><td><strong>clean</strong></td></tr>
+      <tr><td>D (abort)</td><td>hook calling <code>abort()</code></td><td class="num">0</td><td class="num">1 / site</td><td>Rule 21.8 covers abort too: "The 'abort' library function should not be used"</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Each micro-variant was verified with its own Parasoft scan on a small fixture, because a full amalgamation scan costs 15-20 minutes: cheap experiments first, one expensive verification last. The final fix keeps a fault hook (an application-replaceable spin function), not abort, preserving fail-loud semantics the embedded way.</div>
+</div></section>
+
+<section class="slide prompt"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Batch fix 1 of 3 · 17</div>
+  <h1><code>video/rule-assert</code>: one macro rewrite, 123 findings gone</h1>
+  <p class="subtitle">Commit <code>2ed57bf9</code>, stackable and revertable; the header gained a <code>UDS_AssertFail</code> hook any application can override</p>
+<div class="diagram">- #define UDS_ASSERT(x) assert(x)
++ #define UDS_ASSERT(x)  do { if (!(x)) { UDS_AssertFail(); } } while (0)
++ static void UDS_AssertFail(void) { for (;;) { } }  /* replace with your fault handler */</div>
+<figure class="shot" style="--w:900px;--r:1.714"><figcaption>Before-state on the tenant: 58 UDS_ASSERT call sites on the demo branch; the fix needs no call-site changes</figcaption><a class="zoom" href="../assets/tenant-assert-before.png" draggable="false"><img src="../assets/tenant-assert-before.png" width="900" height="526" decoding="async" draggable="false" alt="Before-state on the tenant: 58 UDS_ASSERT call sites on the demo branch; the fix needs no call-site changes"></a></figure>
+</div></section>
+
+<section class="slide wide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Batch fix 2 of 3 · 18</div>
+  <h1>Branch <code>video/dir-4-6</code>: comment-aware type rewriting, 88 search hits to 17</h1>
+  <p class="subtitle">Commit <code>2524ee36</code>, script <code>tools/dir46_typedefs.py</code>: int&rarr;int32_t, unsigned&rarr;uint32_t, short&rarr;int16_t, long&rarr;int64_t, with <code>long long</code>, comments, and strings handled</p>
+  <div class="shotrow tall">
+<figure class="shot" style="--w:1434px;--r:1.714"><figcaption>Before (demo branch): 88 bare-type hits in the amalgamation</figcaption><a class="zoom" href="../assets/tenant-dir46-before.png" draggable="false"><img src="../assets/tenant-dir46-before.png" width="1434" height="836" decoding="async" draggable="false" alt="Before (demo branch): 88 bare-type hits in the amalgamation"></a></figure><figure class="shot" style="--w:1434px;--r:1.714"><figcaption>After (video/dir-4-6): 17 hits, all in comments and build files; the verifier reports 0 Dir 4.6 findings</figcaption><a class="zoom" href="../assets/tenant-dir46-after.png" draggable="false"><img src="../assets/tenant-dir46-after.png" width="1434" height="836" decoding="async" draggable="false" alt="After (video/dir-4-6): 17 hits, all in comments and build files; the verifier reports 0 Dir 4.6 findings"></a></figure>
+  </div>
+  <div class="note">Compile-verified after the rewrite: type-preserving on targets where int is 32 bits and long is 64 bits.</div>
+</div></section>
+
+<section class="slide wide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Batch fix 3 of 3 · 19</div>
+  <h1>Branch <code>video/rule-14-4</code>: 34 implicit zero tests made explicit</h1>
+  <p class="subtitle">Commits <code>3bbda370</code> + <code>7d1ce9ae</code>, script <code>tools/rule144_explicit_zero.py</code>; <code>!= 0</code> is value-preserving for integer, enum, and pointer operands (0 is a null pointer constant)</p>
+<div class="diagram">if (ret)          ->  if (ret != 0)          while (link->busy)  ->  while (link->busy != 0)
+UDS_ASSERT(src)   ->  UDS_ASSERT(src != 0)
+/* left alone: */ if (a == b)   if (x && y)   while (p->next != NULL)</div>
+  <div class="shotrow tall">
+<figure class="shot" style="--w:1434px;--r:1.714"><figcaption>Before (video/dir-4-6): 36 bare if/while/UDS_ASSERT conditionals</figcaption><a class="zoom" href="../assets/tenant-rule144-before.png" draggable="false"><img src="../assets/tenant-rule144-before.png" width="1434" height="836" decoding="async" draggable="false" alt="Before (video/dir-4-6): 36 bare if/while/UDS_ASSERT conditionals"></a></figure><figure class="shot" style="--w:1434px;--r:1.714"><figcaption>After (video/rule-14-4): 1 hit, the macro definition line itself</figcaption><a class="zoom" href="../assets/tenant-rule144-after.png" draggable="false"><img src="../assets/tenant-rule144-after.png" width="1434" height="836" decoding="async" draggable="false" alt="After (video/rule-14-4): 1 hit, the macro definition line itself"></a></figure>
+  </div>
+</div></section>
+
+<section class="slide prompt"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Verification · 20</div>
+  <h1>The loop closes at repo scale: 1,095 &rarr; 766</h1>
+  <p class="subtitle">One verification scan on the tip branch (<code>video/rule-14-4</code>), same config, 7,456 lines, 0 suppressed</p>
+<figure class="shot" style="--w:1434px;--r:1.684"><figcaption>Verification report: 766 total findings, severity 2 down 467 to 246, severity 4 down 241 to 133, severity 1 unchanged at 4</figcaption><a class="zoom" href="../assets/parasoft_verify_full_top.png" draggable="false"><img src="../assets/parasoft_verify_full_top.png" width="1434" height="852" decoding="async" draggable="false" alt="Verification report: 766 total findings, severity 2 down 467 to 246, severity 4 down 241 to 133, severity 1 unchanged at 4"></a></figure>
+  <div class="grid3">
+    <div class="card v"><div class="n">-329</div><div class="l">findings removed by three batch fixes, verified in one scan</div></div>
+    <div class="card"><div class="n">5 classes at 0</div><div class="l">Rules 15.6, 21.8, 12.3, 2.2 and Dir 4.6 all reach zero</div></div>
+    <div class="card v"><div class="n">9 left</div><div class="l">Rule 14.4 residuals routed to expert review, exactly like the seed exclusions</div></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Verification · 21</div>
+  <h1>Per-rule evidence: where the 329 findings went</h1>
+  <p class="subtitle">Extracted from the Parasoft XML reports of both scans, not from the HTML rendering</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Rule</th><th class="num">Before</th><th class="num">After</th><th class="num">Delta</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Rule 15.6 (assert artifact)</td><td class="num">82</td><td class="num">0</td><td class="num">-82</td><td>UDS_ASSERT block-form macro (slide 17)</td></tr>
+      <tr><td>Dir 4.6 (stdint typedefs)</td><td class="num">68</td><td class="num">0</td><td class="num">-68</td><td>type rewrites (slide 18)</td></tr>
+      <tr><td>Rule 21.8 (assert/abort)</td><td class="num">41</td><td class="num">0</td><td class="num">-41</td><td>no assert, no abort: hook instead</td></tr>
+      <tr><td>Rule 12.3 + Rule 2.2 (assert artifacts)</td><td class="num">81</td><td class="num">0</td><td class="num">-81</td><td>side-effect and dead-code findings lived inside the assert expansion</td></tr>
+      <tr><td>Rule 14.4 (explicit zero tests)</td><td class="num">43</td><td class="num">9</td><td class="num">-34</td><td>34 sites made explicit; 9 residuals to expert review</td></tr>
+      <tr><td>Rule 11.11 (typedefs removed casts)</td><td class="num">45</td><td class="num">7</td><td class="num">-38</td><td>side effect of the Dir 4.6 typedefs</td></tr>
+      <tr><td><strong>Total</strong></td><td class="num"><strong>1,095</strong></td><td class="num"><strong>766</strong></td><td class="num"><strong>-329</strong></td><td></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">What remains is the honest part: Rule 15.5 single-exit (383) is a structural rewrite program, Rule 4.4 commented-out code (45) and Rule 5.2 shadowing (29) need human judgment. That is the next loop iteration, script v2 onwards.</div>
+</div></section>
+
+<section class="slide prompt"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Revertability · 22</div>
+  <h1>One commit per branch: reversal is one command</h1>
+  <p class="subtitle">No fix ever lands on a shared branch; the upstream repo is never touched</p>
+<div class="diagram">misra-rule-7-5-seed   3d3f7ab9  pinned before-state (never moves)
+       │
+misra-rule-7-5-demo   0fc00476  v1 script + fixes     2c1f7403  expert fixes (pilot: 8 -> 0)
+       │
+video/rule-assert     2ed57bf9  assert macro fix      (-123 findings)
+       │
+video/dir-4-6         2524ee36  stdint typedefs       (-68 findings)
+       │
+video/rule-14-4       3bbda370  fix script            7d1ce9ae  explicit zero tests (-34)
+revert one step: git revert 7d1ce9ae          one rule: git reset --hard 3bbda370 && git push --force-with-lease
+delete the whole campaign: git push fork --delete video/rule-14-4</div>
+<figure class="shot" style="--w:1200px;--r:1.714"><figcaption>The fork branch list after the campaign: each branch independently revertable</figcaption><a class="zoom" href="../assets/gh-fork-branches.png" draggable="false"><img src="../assets/gh-fork-branches.png" width="1200" height="700" decoding="async" draggable="false" alt="The fork branch list after the campaign: each branch independently revertable"></a></figure>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Agentic path · 23</div>
+  <h1>Agentic Batch Changes: licensed on the tenant, quota-gated today</h1>
+  <p class="subtitle">The 2026-11-02 Sourcegraph update (agentic batch changes + MCP connectors) mapped onto this program</p>
+  <div class="grid2">
+    <div class="card"><span class="tag">Verified on the tenant</span><h3>The full agent API exists</h3><p>GraphQL exposes <code>createBatchChangeAgent</code>, <code>createBatchChangeAgentThread</code>, <code>submitBatchChangeAgentThreadMessage</code>, and tool-approval mutations. The feature is licensed; a prepared agent prompt is ready to run.</p></div>
+    <div class="card v"><span class="tag">Current blocker</span><h3>Deep Search quota</h3><p><code>createBatchChangeAgent</code> fails with <code>"Deep Search quota exceeded"</code>. Agent runs consume Deep Search quota, which the tenant plan has exhausted. Until it clears, the recorded demo uses local batch scripts + branch publishing.</p></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><span class="tag">Connectors (MCP)</span><h3>What they add to this loop</h3><p>The agent can pull CI state (Buildkite, GitHub checks) into its own loop, plus ticket and docs context. The human keeps the draft-first review gate.</p></div>
+    <div class="card v"><span class="tag">What does not change</span><h3>Parasoft stays the evidence of record</h3><p>Whatever drives the edits (script, agent, or IDE), the decision point remains the Parasoft verification scan; Sourcegraph still owns find, fix-at-scale, and the hold-zero guard.</p></div>
+  </div>
+</div></section>
+
+<section class="slide tall"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Hold zero · 24</div>
+  <h1>Holding zero: detect with Sourcegraph, enforce on the code host</h1>
+  <p class="subtitle">Sourcegraph does not natively block PRs; it respects the code host's merge gates. The gate is therefore two parts: Sourcegraph detects, GitHub/GitLab enforces.</p>
+  <div class="flow">
+    <div class="step"><b>1</b><strong>PR guard as a required check</strong><span>A CI job runs the combined guard query per PR via the search API or src-cli and exits non-zero on any match; the code host registers it as a required status check. Proof 1 executed on the tenant: 0 on cleaned, 11 on seed, under 1s per query.</span></div>
+    <div class="step"><b>2</b><strong>Parasoft in the pipeline</strong><span>Every merged change runs the verification scan; the report is the release evidence.</span></div>
+    <div class="step"><b>3</b><strong>Code Monitor safety net</strong><span>Queries run over future code changes and notify by email, Slack, or webhook (open a ticket, trigger the re-scan), covering branches the PR gate does not.</span></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Week</th><th>Milestone</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Pilot: seed module baseline 8, scripts v1, tenant queries, zero certified</td><td><strong>executed 2026-11-04/06, seed-to-zero under one day</strong></td></tr>
+      <tr><td>2-3</td><td>Scale: whole-repo campaign, three mechanical classes zeroed (1,095 to 766)</td><td><strong>executed 2026-11-06</strong></td></tr>
+      <tr><td>4+</td><td>Standing gate: guard query in CI, Parasoft scan in pipeline, Code Monitor live</td><td>design fixed, Proof 1 done; wiring scheduled</td></tr>
+    </tbody>
+  </table></div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Thank you · 25</div>
+  <h1>Run the same loop on your code base</h1>
+  <p class="subtitle">The pattern generalizes: seed it, measure it with Parasoft, find it with Sourcegraph, fix it with a versioned script, verify zero, hold zero</p>
+  <div class="person-card">
+    <img src="../assets/daniel-liezrowice.jpg" width="140" height="140" alt="Daniel Liezrowice">
+    <div>
+      <strong>Daniel Liezrowice</strong>
+      <span>CTO, ESL - Engineering Software Lab</span>
+      <p>ESL is an embedded software consultancy and Parasoft and Perforce partner in Israel for over 20 years. This demonstration used only open-source code, a Sourcegraph Cloud trial tenant, and Parasoft C/C++test Standard 2026.1.3.</p>
+    </div>
+  </div>
+  <div class="contact">
+    <img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab">
+    <p><a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> · Companion briefs: <a href="https://zuwasi.github.io/Public-html-pages/misra-rule-7-5-sourcegraph-plan/" target="_blank" rel="noopener">the plan deck</a> and <a href="https://zuwasi.github.io/Public-html-pages/parasoft-cuda-bridge/technical/" target="_blank" rel="noopener">Parasoft CUDA Bridge</a></p>
+  </div>
+  <div class="foot">All measurements from 3-7 November 2026. Sources: Parasoft C/C++test HTML/XML reports (1,095 / 766 / 8 / 0), the eswlab.sourcegraphcloud.com tenant (all query counts), and the git history of github.com/zuwasi/iso14229.</div>
+</div></section>
+</div>
+</main>
+
+<button class="navbtn hidden" id="prev" type="button" aria-label="Previous slide">&#8249;</button>
+<button class="navbtn" id="next" type="button" aria-label="Next slide">&#8250;</button>
+<div id="progress"></div>
+<div id="counter" aria-live="polite"></div>
+<div id="hint">&#8592; Swipe or use arrow keys &#8594;</div>
+<dialog id="lightbox" aria-label="Enlarged screenshot"><div id="lbbar"><span id="lbcap"></span><span class="lbbtns"><button type="button" id="lbsize" hidden>Actual size</button><button type="button" id="lbclose" autofocus>Close &#10005;</button></span></div><div id="lbwrap"></div></dialog>
+
+<script>
+const track=document.getElementById("track"),slides=[...document.querySelectorAll(".slide")],viewport=document.querySelector(".viewport"),prev=document.getElementById("prev"),next=document.getElementById("next"),counter=document.getElementById("counter"),progress=document.getElementById("progress"),hint=document.getElementById("hint"),lb=document.getElementById("lightbox"),lbwrap=document.getElementById("lbwrap"),lbcap=document.getElementById("lbcap"),lbsize=document.getElementById("lbsize");
+let index=0,touchX=0,touchY=0,touchSkip=false,mouseX=0,dragging=false,mouseSkip=false,suppressClick=false,lbImg=null,lbFull=false,lbFrom=null;
+function show(n){const k=Math.max(0,Math.min(slides.length-1,n));if(k!==index){if(slides[index].contains(document.activeElement))document.activeElement.blur();index=k;slides[index].scrollTop=0;viewport.scrollLeft=0}slides.forEach((s,i)=>{s.inert=i!==index;s.setAttribute("aria-hidden",i===index?"false":"true")});track.style.transform=`translate3d(${-index*100}vw,0,0)`;prev.classList.toggle("hidden",index===0);next.classList.toggle("hidden",index===slides.length-1);counter.textContent=`${index+1} / ${slides.length}`;progress.style.width=`${(index+1)/slides.length*100}%`;if(index>0)hint.classList.add("gone");if(location.hash!=="#"+(index+1)){try{history.replaceState(null,"","#"+(index+1))}catch(e){}}}
+function fromHash(){const k=parseInt(location.hash.slice(1),10);return isNaN(k)?0:k-1}
+const skip=t=>lb.open||Boolean(t.closest&&t.closest(".tablewrap"));
+prev.addEventListener("click",()=>show(index-1));next.addEventListener("click",()=>show(index+1));
+window.addEventListener("hashchange",()=>{const k=fromHash();if(k!==index)show(k)});
+document.addEventListener("keydown",e=>{if(lb.open)return;if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();show(index+1)}else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();show(index-1)}else if(e.key==="Home"){e.preventDefault();show(0)}else if(e.key==="End"){e.preventDefault();show(slides.length-1)}});
+document.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchX=t.clientX;touchY=t.clientY;touchSkip=skip(e.target)},{passive:true});
+document.addEventListener("touchend",e=>{if(touchSkip)return;const t=e.changedTouches[0],dx=t.clientX-touchX,dy=t.clientY-touchY;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(index+(dx<0?1:-1))},{passive:true});
+document.addEventListener("mousedown",e=>{if(e.button!==0)return;mouseX=e.clientX;mouseSkip=skip(e.target);dragging=true});
+document.addEventListener("mouseup",e=>{if(!dragging)return;dragging=false;const d=e.clientX-mouseX;if(!mouseSkip&&Math.abs(d)>50){suppressClick=true;setTimeout(()=>{suppressClick=false},0);show(index+(d<0?1:-1))}});
+document.addEventListener("dragstart",e=>e.preventDefault());
+function lbScale(){return Math.min(2,(innerWidth-32)/lbImg.naturalWidth,(innerHeight-88)/lbImg.naturalHeight)}
+function lbLayout(){if(!lbImg||!lbImg.naturalWidth)return;const fit=lbScale();lbImg.style.width=Math.round(lbImg.naturalWidth*(lbFull?1:fit))+"px";lb.classList.toggle("full",lbFull);lb.classList.toggle("canzoom",fit<1);lbsize.hidden=fit>=1;lbsize.textContent=lbFull?"Fit to screen":"Actual size"}
+function lbOpen(a){lbFrom=a;const thumb=a.querySelector("img"),cap=a.closest("figure")?.querySelector("figcaption");lbImg=new Image();lbImg.alt=thumb.alt;lbImg.draggable=false;lbImg.addEventListener("load",()=>{lbFull=innerWidth<=760&&lbScale()<1;lbLayout()},{once:true});lbImg.src=a.getAttribute("href");lbwrap.replaceChildren(lbImg);lbcap.textContent=cap?cap.textContent:thumb.alt;lbsize.hidden=true;lb.showModal();lb.scrollTop=0;lb.scrollLeft=0}
+document.querySelectorAll("a.zoom").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();if(!suppressClick)lbOpen(a)}));
+lbsize.addEventListener("click",()=>{lbFull=!lbFull;lbLayout()});
+document.getElementById("lbclose").addEventListener("click",()=>lb.close());
+lbwrap.addEventListener("click",e=>{if(e.target===lbwrap)lb.close();else if(e.target===lbImg&&lbScale()<1){lbFull=!lbFull;lbLayout()}});
+lb.addEventListener("close",()=>{lbwrap.replaceChildren();lbImg=null;lb.classList.remove("full","canzoom");if(lbFrom)lbFrom.focus({preventScroll:true})});
+window.addEventListener("resize",lbLayout);
+show(fromHash());</script>
+</body>
+</html>
