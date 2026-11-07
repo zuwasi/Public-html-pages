@@ -231,7 +231,7 @@ th,td{padding:8px 12px}
 <section class="slide"><div class="inner">
   <div class="eyebrow"><span class="mark"></span>The workflow · 02</div>
   <h1>A closed loop with one decision point, executed on a real repo</h1>
-  <p class="subtitle">The published ESL workflow (slide 4 of the plan deck), executed end to end on <code>driftregion/iso14229</code></p>
+  <p class="subtitle">The published ESL workflow, executed end to end on <code>driftregion/iso14229</code></p>
 <div class="diagram">┌────────────────────────────────────────────────────────┐
 │ 1. PARASOFT BASELINE SCAN        opens the loop        │
 │ 2. SOURCEGRAPH MATCH QUERIES     step 5                │
@@ -248,8 +248,28 @@ th,td{padding:8px 12px}
   </div>
 </div></section>
 
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The workflow · 03</div>
+  <h1>The loop in nine steps, as executed on the demo</h1>
+  <p class="subtitle">Parasoft opens the loop and closes it; Sourcegraph acts in between; zero is when the verifier says zero</p>
+<div class="diagram">1 PARASOFT BASELINE    measure one module, small scope      measured: 8 in the seed, 1,095 repo-wide
+2 EXTRAPOLATE          size the campaign                    4 repos, 400 branches in the program
+3 DECIDE               hand-fix or automate?                mechanical classes become scripts
+4 SOURCEGRAPH          match queries + value-preserving     replacement rules, versioned
+5 BATCH CHANGE         dry run, review, merge               every fix revertable
+6 PARASOFT VERIFIES    re-scan: did the fix succeed?        the scanner is the judge
+                            zero?  no --> back to step 4 (script v2, v3)
+7 ZERO PROVEN          scale the proven script              all repos, branches inherit
+8 HOLD AT ZERO         SG guard query at the PR             Parasoft scans in CI
+9 DASHBOARD            compliance evidence for auditors     every count measured</div>
+  <div class="grid2">
+    <div class="card"><span class="tag">Why it converges</span><h3>Iteration is cheap by design</h3><p>Each pass is a script edit plus a Batch Change preview: minutes of work, not another thousand hand edits. A non-zero scan goes straight back to step 4, exactly as the red loop shows.</p></div>
+    <div class="card v"><span class="tag">Why it is trusted</span><h3>Zero is when the verifier says zero</h3><p>Sourcegraph never certifies its own fixes. The verification re-scan is the verdict on every pass, and its report is the compliance artifact.</p></div>
+  </div>
+</div></section>
+
 <section class="slide layers"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Tool chain · 03</div>
+  <div class="eyebrow"><span class="mark"></span>Tool chain · 04</div>
   <h1>The exact tool chain, versions, and invocation</h1>
   <p class="subtitle">Everything runs from one Windows host with WSL2 as the execution environment</p>
   <div class="grid3">
@@ -262,7 +282,7 @@ th,td{padding:8px 12px}
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>The demo repo · 04</div>
+  <div class="eyebrow"><span class="mark"></span>The demo repo · 05</div>
   <h1>Why iso14229: real automotive-relevant C, one honest catch</h1>
   <p class="subtitle">ISO 14229 (Unified Diagnostic Services) is the road-vehicle diagnostics layer every ECU speaks; the library is a C99 amalgamation, exactly the shape MISRA C programs look like</p>
   <div class="shotrow">
@@ -276,7 +296,7 @@ th,td{padding:8px 12px}
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>The seed · 05</div>
+  <div class="eyebrow"><span class="mark"></span>The seed · 06</div>
   <h1>Eleven seeded candidates across three mechanical classes and two expert exclusions</h1>
   <p class="subtitle">The seed as committed (<code>3d3f7ab9</code>, branch <code>misra-rule-7-5-seed</code>); Rule 7.5 applies at call sites too</p>
 <div class="diagram">/* Mechanical class 1: unary minus inside the macro argument */
@@ -306,7 +326,7 @@ demo_mask_applied = UINT32_C(0xFFUL);</div>
 </div></section>
 
 <section class="slide tall"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Phase 1 · 06</div>
+  <div class="eyebrow"><span class="mark"></span>Phase 1 · 07</div>
   <h1>The seed baseline is 8 violations</h1>
   <p class="subtitle">C/C++test Standard 2026.1.3, <code>builtin://MISRA C 2025</code>, gcc_12-64, module <code>demo/rule75_seed</code>; cross-verified on 2025.2 with identical verdicts before the upgrade</p>
 <div class="diagram">cpptestcli \
@@ -329,7 +349,7 @@ demo_mask_applied = UINT32_C(0xFFUL);</div>
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Verifier finding · 07</div>
+  <div class="eyebrow"><span class="mark"></span>Verifier finding · 08</div>
   <h1>The deck assumed negatives violate; the verifier disagrees, on two versions</h1>
   <p class="subtitle">The most valuable discovery of the pilot, found because the loop starts from the scanner, not from the standard's text</p>
   <div class="grid2">
@@ -344,7 +364,7 @@ demo_mask_applied = UINT32_C(0xFFUL);</div>
 </div></section>
 
 <section class="slide tall"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Phase 2 · 08</div>
+  <div class="eyebrow"><span class="mark"></span>Phase 2 · 09</div>
   <h1>Three query lessons the tenant taught</h1>
   <p class="subtitle">eswlab tenant, license renewed 2026-11-06, fork indexed via a dedicated external service</p>
 <figure class="shot" style="--w:560px;--r:1.714"><figcaption>The eswlab Sourcegraph Cloud tenant (https://eswlab.sourcegraphcloud.com), authenticated as site admin daniell</figcaption><a class="zoom" href="../assets/tenant-home.png" draggable="false"><img src="../assets/tenant-home.png" width="560" height="326" decoding="async" draggable="false" alt="The eswlab Sourcegraph Cloud tenant (https://eswlab.sourcegraphcloud.com), authenticated as site admin daniell"></a></figure>
@@ -356,7 +376,7 @@ demo_mask_applied = UINT32_C(0xFFUL);</div>
 </div></section>
 
 <section class="slide layers"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Phase 2 · 09</div>
+  <div class="eyebrow"><span class="mark"></span>Phase 2 · 10</div>
   <h1>The three class queries, run live on the seed branch</h1>
   <p class="subtitle">Each mechanical class is one query; counts below are what the tenant returned on 2026-11-06</p>
   <div class="tablewrap"><table>
@@ -372,7 +392,7 @@ demo_mask_applied = UINT32_C(0xFFUL);</div>
 </div></section>
 
 <section class="slide prompt"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Phase 2 · 10</div>
+  <div class="eyebrow"><span class="mark"></span>Phase 2 · 11</div>
   <h1>One combined guard query: 11 before, 0 after</h1>
   <p class="subtitle">The all-mechanical-classes query with <code>lang:C</code> so the fix script's own docstring cannot match; this is the exact query the PR gate runs</p>
 <div class="diagram">repo:zuwasi/iso14229@BRANCH fork:yes lang:C patternType:regexp
@@ -388,7 +408,7 @@ demo_mask_applied = UINT32_C(0xFFUL);</div>
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Reconciliation · 11</div>
+  <div class="eyebrow"><span class="mark"></span>Reconciliation · 12</div>
   <h1>Inventory, scan, and search tell one story once you reconcile them</h1>
   <p class="subtitle">The step most teams skip, and the one that makes the demo credible</p>
   <div class="tablewrap"><table>
@@ -405,7 +425,7 @@ demo_mask_applied = UINT32_C(0xFFUL);</div>
 </div></section>
 
 <section class="slide tall"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Phase 3 · 12</div>
+  <div class="eyebrow"><span class="mark"></span>Phase 3 · 13</div>
   <h1>The v1 transform script: two value-preserving rewrites, three exclusions</h1>
   <p class="subtitle"><code>iso14229/tools/rule75_v1.py</code>, commit <code>0fc00476</code>, fixture-tested before it ever touched the seed</p>
 <div class="diagram">Transform 1 - suffix removal (value preserved):
@@ -430,7 +450,7 @@ Excluded, reported for expert handling:
 </div></section>
 
 <section class="slide tall"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Expert pass · 13</div>
+  <div class="eyebrow"><span class="mark"></span>Expert pass · 14</div>
   <h1>What automation must not touch: the expert commit</h1>
   <p class="subtitle">Commit <code>2c1f6403</code> (+9 &minus;4) closes the two exclusions and the three Rule 8.4 demo artifacts</p>
 <div class="diagram">/* signed minimum: the only compliant spelling in C */
@@ -458,7 +478,7 @@ Excluded, reported for expert handling:
 </div></section>
 
 <section class="slide tall"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Phase 5 · 14</div>
+  <div class="eyebrow"><span class="mark"></span>Phase 5 · 15</div>
   <h1>Parasoft closes the loop: the seed is certified zero</h1>
   <p class="subtitle">Same command, same module, same config: 8 violations in, 0 violations out</p>
   <div class="shotrow tall">
@@ -467,8 +487,40 @@ Excluded, reported for expert handling:
   <div class="note">Report of record: <code>iso14229/reports/report.html</code>, regenerated by the 2026.1.3 verification run. Zero suppressed findings, zero exclusions in the config: the seed demo is a genuine zero, not a filtered one.</div>
 </div></section>
 
+<section class="slide layers"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The verifier · 16</div>
+  <h1>Parasoft enforces MISRA C 2025 and certifies the zero</h1>
+  <p class="subtitle">The compliance pack in the test configuration: 388 of 388 MISRA C 2025 rules and directives enabled</p>
+<figure class="shot" style="--w:1100px;--r:1.778"><figcaption>Real Parasoft C/C++test session: the MISRA C 2025 compliance pack selected in the test configuration (388 rules enabled), and the Quality Tasks panel listing per-file violations</figcaption><a class="zoom" href="../assets/parasoft-misra-config.png" draggable="false"><img src="../assets/parasoft-misra-config.png" width="1100" height="618" decoding="async" draggable="false" alt="Real Parasoft C/C++test session: the MISRA C 2025 compliance pack selected in the test configuration (388 rules enabled), and the Quality Tasks panel listing per-file violations"></a></figure>
+  <div class="grid3">
+    <div class="card"><span class="tag">Standard config</span><h3><code>builtin://MISRA C 2025</code></h3><p>The built-in compliance pack, no cherry-picking: every MISRA C 2025 rule and directive enabled, compiler profile gcc_12-64.</p></div>
+    <div class="card v"><span class="tag">Cross-version</span><h3>Same verdict on 2025.2 and 2026.1.3</h3><p>The pilot was verified on both versions before the upgrade: suffix and non-literal forms flagged, negative-in-macro accepted.</p></div>
+    <div class="card"><span class="tag">Evidence</span><h3>The zero report is the artifact</h3><p>The verification scan's HTML report is what auditors and certification bodies see; it is the evidence of record for the whole program.</p></div>
+  </div>
+</div></section>
+
+<section class="slide wide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The verifier · 17</div>
+  <h1>Pilot dashboard: 8 &rarr; 0, measured</h1>
+  <p class="subtitle">MISRA C 2025 Rule 7.5 cleanup, demo pilot on <code>driftregion/iso14229</code>, measured 2026-11-04, C/C++test Standard 2026.1.3</p>
+  <div class="grid4">
+    <div class="card v"><div class="n">8 &rarr; 0</div><div class="l">violations, total (5 Rule 7.5 + 3 Rule 8.4); -100% after v1 + expert merge</div></div>
+    <div class="card"><div class="n">1 / 1</div><div class="l">demo modules at zero findings, Parasoft-certified on 2026.1.3</div></div>
+    <div class="card"><div class="n">11</div><div class="l">source-level candidates reconciled against the scan, divergence documented</div></div>
+    <div class="card v"><div class="n">100%</div><div class="l">mandatory rules in scope, no deviations filed</div></div>
+  </div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Per-file zero proof (demo module)</th><th class="num">Baseline</th><th class="num">Verification</th></tr></thead>
+    <tbody>
+      <tr><td><code>calibration_constants.h</code></td><td class="num">4</td><td class="num">0</td></tr>
+      <tr><td><code>calibration_demo.c</code></td><td class="num">1</td><td class="num">0</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Verifier finding: on both 2025.2 and 2026.1.3, Rule 7.5 flags the suffix and non-literal forms; the negative-in-macro form is accepted by the scanner. The zero gate therefore covers the suffix and non-literal classes, while the v1 script also normalizes negatives as value-preserving cleanup. Dashboard adapted from the ESL ThreadX LoongArch64 compliance dashboard format.</div>
+</div></section>
+
 <section class="slide prompt"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Scaling up · 15</div>
+  <div class="eyebrow"><span class="mark"></span>Scaling up · 18</div>
   <h1>The same loop on upstream code: 1,095 findings</h1>
   <p class="subtitle">Full amalgamation, 7,438 lines, no seed involved, MISRA C 2025 config, 2026.1.3</p>
 <figure class="shot" style="--w:1000px;--r:1.684"><figcaption>Whole-repo baseline: 1,095 findings, 0 suppressed, 1,472 per 10,000 lines</figcaption><a class="zoom" href="../assets/parasoft_baseline_seed_top.png" draggable="false"><img src="../assets/parasoft_baseline_seed_top.png" width="1000" height="594" decoding="async" draggable="false" alt="Whole-repo baseline: 1,095 findings, 0 suppressed, 1,472 per 10,000 lines"></a></figure>
@@ -484,7 +536,7 @@ Excluded, reported for expert handling:
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Experiments · 16</div>
+  <div class="eyebrow"><span class="mark"></span>Experiments · 19</div>
   <h1>Three micro-scans to find the fix that actually zeroes 123 findings</h1>
   <p class="subtitle">All 82 Rule 15.6 and 41 Rule 21.8 findings trace to one macro: <code>#define UDS_ASSERT(x) assert(x)</code>, because glibc's assert expands to an unbraced <code>if</code></p>
   <div class="tablewrap"><table>
@@ -500,7 +552,7 @@ Excluded, reported for expert handling:
 </div></section>
 
 <section class="slide prompt"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Batch fix 1 of 3 · 17</div>
+  <div class="eyebrow"><span class="mark"></span>Batch fix 1 of 3 · 20</div>
   <h1><code>video/rule-assert</code>: one macro rewrite, 123 findings gone</h1>
   <p class="subtitle">Commit <code>2ed57bf9</code>, stackable and revertable; the header gained a <code>UDS_AssertFail</code> hook any application can override</p>
 <div class="diagram">- #define UDS_ASSERT(x) assert(x)
@@ -510,7 +562,7 @@ Excluded, reported for expert handling:
 </div></section>
 
 <section class="slide wide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Batch fix 2 of 3 · 18</div>
+  <div class="eyebrow"><span class="mark"></span>Batch fix 2 of 3 · 21</div>
   <h1>Branch <code>video/dir-4-6</code>: comment-aware type rewriting, 88 search hits to 17</h1>
   <p class="subtitle">Commit <code>2524ee36</code>, script <code>tools/dir46_typedefs.py</code>: int&rarr;int32_t, unsigned&rarr;uint32_t, short&rarr;int16_t, long&rarr;int64_t, with <code>long long</code>, comments, and strings handled</p>
   <div class="shotrow tall">
@@ -520,7 +572,7 @@ Excluded, reported for expert handling:
 </div></section>
 
 <section class="slide wide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Batch fix 3 of 3 · 19</div>
+  <div class="eyebrow"><span class="mark"></span>Batch fix 3 of 3 · 22</div>
   <h1>Branch <code>video/rule-14-4</code>: 34 implicit zero tests made explicit</h1>
   <p class="subtitle">Commits <code>3bbda370</code> + <code>7d1ce9ae</code>, script <code>tools/rule144_explicit_zero.py</code>; <code>!= 0</code> is value-preserving for integer, enum, and pointer operands (0 is a null pointer constant)</p>
 <div class="diagram">if (ret)          ->  if (ret != 0)          while (link->busy)  ->  while (link->busy != 0)
@@ -532,7 +584,7 @@ UDS_ASSERT(src)   ->  UDS_ASSERT(src != 0)
 </div></section>
 
 <section class="slide prompt"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Verification · 20</div>
+  <div class="eyebrow"><span class="mark"></span>Verification · 23</div>
   <h1>The loop closes at repo scale: 1,095 &rarr; 766</h1>
   <p class="subtitle">One verification scan on the tip branch (<code>video/rule-14-4</code>), same config, 7,456 lines, 0 suppressed</p>
 <figure class="shot" style="--w:1434px;--r:1.684"><figcaption>Verification report: 766 total findings, severity 2 down 467 to 246, severity 4 down 241 to 133, severity 1 unchanged at 4</figcaption><a class="zoom" href="../assets/parasoft_verify_full_top.png" draggable="false"><img src="../assets/parasoft_verify_full_top.png" width="1434" height="852" decoding="async" draggable="false" alt="Verification report: 766 total findings, severity 2 down 467 to 246, severity 4 down 241 to 133, severity 1 unchanged at 4"></a></figure>
@@ -544,7 +596,7 @@ UDS_ASSERT(src)   ->  UDS_ASSERT(src != 0)
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Verification · 21</div>
+  <div class="eyebrow"><span class="mark"></span>Verification · 24</div>
   <h1>Per-rule evidence: where the 329 findings went</h1>
   <p class="subtitle">Extracted from the Parasoft XML reports of both scans, not from the HTML rendering</p>
   <div class="tablewrap"><table>
@@ -563,7 +615,7 @@ UDS_ASSERT(src)   ->  UDS_ASSERT(src != 0)
 </div></section>
 
 <section class="slide prompt"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Revertability · 22</div>
+  <div class="eyebrow"><span class="mark"></span>Revertability · 25</div>
   <h1>One commit per branch: reversal is one command</h1>
   <p class="subtitle">No fix ever lands on a shared branch; the upstream repo is never touched</p>
 <div class="diagram">misra-rule-7-5-seed   3d3f7ab9  pinned before-state (never moves)
@@ -581,7 +633,7 @@ delete the whole campaign: git push fork --delete video/rule-14-4</div>
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Agentic path · 23</div>
+  <div class="eyebrow"><span class="mark"></span>Agentic path · 26</div>
   <h1>Agentic Batch Changes: licensed on the tenant, quota-gated today</h1>
   <p class="subtitle">The 2026-11-02 Sourcegraph update (agentic batch changes + MCP connectors) mapped onto this program</p>
   <div class="grid2">
@@ -595,7 +647,7 @@ delete the whole campaign: git push fork --delete video/rule-14-4</div>
 </div></section>
 
 <section class="slide tall"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Hold zero · 24</div>
+  <div class="eyebrow"><span class="mark"></span>Hold zero · 27</div>
   <h1>Holding zero: detect with Sourcegraph, enforce on the code host</h1>
   <p class="subtitle">Sourcegraph does not natively block PRs; it respects the code host's merge gates. The gate is therefore two parts: Sourcegraph detects, GitHub/GitLab enforces.</p>
   <div class="flow">
@@ -614,7 +666,7 @@ delete the whole campaign: git push fork --delete video/rule-14-4</div>
 </div></section>
 
 <section class="slide"><div class="inner">
-  <div class="eyebrow"><span class="mark"></span>Thank you · 25</div>
+  <div class="eyebrow"><span class="mark"></span>Thank you · 28</div>
   <h1>Run the same loop on your code base</h1>
   <p class="subtitle">The pattern generalizes: seed it, measure it with Parasoft, find it with Sourcegraph, fix it with a versioned script, verify zero, hold zero</p>
   <div class="person-card">
@@ -627,7 +679,7 @@ delete the whole campaign: git push fork --delete video/rule-14-4</div>
   </div>
   <div class="contact">
     <img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab">
-    <p><a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> · Companion briefs: <a href="https://zuwasi.github.io/Public-html-pages/misra-rule-7-5-sourcegraph-plan/" target="_blank" rel="noopener">the plan deck</a> and <a href="https://zuwasi.github.io/Public-html-pages/parasoft-cuda-bridge/technical/" target="_blank" rel="noopener">Parasoft CUDA Bridge</a></p>
+    <p><a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> · Watch the recorded demo (2 min 47 s): <a href="https://www.youtube.com/watch?v=StzLdcFgW-E" target="_blank" rel="noopener">youtube.com/watch?v=StzLdcFgW-E</a> &middot; Companion brief: <a href="https://zuwasi.github.io/Public-html-pages/parasoft-cuda-bridge/technical/" target="_blank" rel="noopener">Parasoft CUDA Bridge</a></p>
   </div>
   <div class="foot">All measurements from 3-7 November 2026. Sources: Parasoft C/C++test HTML/XML reports (1,095 / 766 / 8 / 0), the eswlab.sourcegraphcloud.com tenant (all query counts), and the git history of github.com/zuwasi/iso14229.</div>
 </div></section>
