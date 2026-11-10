@@ -24,6 +24,7 @@ h1 .hl{color:var(--blue)}
 .card.amber{border-top-color:var(--amber-hi)}
 .card.red{border-top-color:var(--red)}
 .card.green{border-top-color:var(--green)}
+.card.blue{border-top-color:var(--blue)}
 .card h3{font-size:clamp(16px,1.4vw,20px);font-weight:800;margin-bottom:8px}
 .card p,.card li{font-size:clamp(14px,1.25vw,18px);color:var(--muted);line-height:1.55}
 .card ul{padding-left:18px}
@@ -648,9 +649,33 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">Paths as deployed on the WSL2 host; Windows view via \\wsl.localhost\&lt;distro&gt;\home\danie\KernelBench.</div>
 </section>
 
-<!-- 18 THANK YOU -->
+<!-- 18 EXECUTIVE SUMMARY -->
 <section class="slide">
-  <div class="kicker">Thank you · <b>18</b></div>
+  <div class="kicker"><span class="mark"></span>Executive summary · <b>18</b></div>
+  <h1>The skill <span class="hl">doubles the win</span> where speed is real</h1>
+  <p class="sub">One glance: the same agent, with and without the CUDA skill, scored by one honest evaluator</p>
+  <div class="bigrow">
+    <div class="card green"><div class="label">Peak speedup</div><div class="stat green">2.81×</div><p>with the skill, vs <b>1.43×</b> plain: the fastest kernel of the pilot</p></div>
+    <div class="card blue"><div class="label">Average speedup (correct runs)</div><div class="stat blue">1.53×</div><p>with the skill vs <b>1.22×</b> plain; compute-bound gain roughly doubles</p></div>
+    <div class="card red"><div class="label">Correctness</div><div class="stat red">3 / 4</div><p>with the skill vs <b>4 / 4</b> plain; the one failure was a grader-gaming shortcut, now banned by the skill</p></div>
+  </div>
+  <table style="max-width:1100px;margin:20px auto 0">
+    <tr><th>Problem</th><th>Plain agent</th><th>With CUDA skill</th><th>Reading</th></tr>
+    <tr><td><b>Square matmul</b> (compute-bound)</td><td>1.43×</td><td><b style="color:var(--green)">2.81×</b></td><td>skill doubles the GPU-time saving</td></tr>
+    <tr><td><b>GEMM + LeakyReLU</b> (fusion)</td><td>1.71×</td><td><b style="color:var(--red)">DNF</b> (3.69× raw)</td><td>fastest kernel, judged incorrect; fix known</td></tr>
+    <tr><td><b>Softmax</b> (memory-bound)</td><td>0.95×</td><td>0.80×</td><td>parity; the hardware wall decides, not the agent</td></tr>
+    <tr><td><b>Sum reduction</b> (memory-bound)</td><td>0.79×</td><td>0.97×</td><td>parity at the 540 GB/s bandwidth limit</td></tr>
+  </table>
+  <div class="card amber" style="max-width:1100px;margin:18px auto 0">
+    <div class="label">Bottom line</div>
+    <p style="font-size:clamp(15px,1.4vw,19px);color:var(--ink)">Where GPU time costs money (compute-bound kernels), the skill roughly <b>doubles the agent's speedup</b> up to 2.81×. Where the reference already saturates memory, nothing wins. The plain agent is the safer default today; with the robustness fix already written into the skill, the skill condition is the one to bet on.</p>
+  </div>
+  <div class="foot">All numbers: single scoring session, 10 November 2026, RTX 5080 Laptop (55 W), 100 interleaved L2-flushed reps per comparison, two-seed correctness gate.</div>
+</section>
+
+<!-- 19 THANK YOU -->
+<section class="slide">
+  <div class="kicker">Thank you · <b>19</b></div>
   <h1>Seed it, split it, measure it, and let the benchmark write back</h1>
   <p class="sub">The pattern generalizes beyond CUDA: one question, two conditions, one honest evaluator, and every harness bug becomes a rule the next run starts with</p>
   <div class="bigrow">
