@@ -46,9 +46,32 @@ svg{display:block;width:100%;height:auto}
 .legend span.ns::before{background:#5a626c}
 .legend span.sk::before{background:var(--accent)}
 .legend span.fail::before{background:var(--red)}
-.top{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--sheet2);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(3vw,32px);z-index:50}
-.top .brand{font-weight:800;font-size:clamp(12px,1.1vw,15px);color:var(--ink);text-decoration:none}
-.top .brand em{font-style:normal;color:var(--blue)}
+.top{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--sheet2);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(3vw,32px);z-index:50;gap:16px}
+.top .brand{display:flex;align-items:center;gap:14px;min-width:0;text-decoration:none}
+.top .brand img{height:32px;width:auto;display:block}
+.top .homebtn{font-size:20px;line-height:1;text-decoration:none;filter:grayscale(.2)}
+.top .homebtn:hover{transform:scale(1.15)}
+.top #brand{font-weight:600;font-size:clamp(12px,1.1vw,14px);color:var(--ink);border-left:2px solid var(--line);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.kicker{display:flex;align-items:center;gap:12px;font-size:clamp(11px,1vw,13px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kicker b{color:var(--blue)}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{left:0;top:0;border-color:var(--blue)}
+.mark::after{left:8px;top:7px;border-color:var(--amber-hi)}
+.brandrow{display:flex;gap:14px;margin:16px 0 0;flex-wrap:wrap;align-items:center}
+.brandchip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 14px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.brandchip img{height:27px;width:auto;display:block}
+.brandchip span{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--ink)}
+.brandchip.dark{background:#1a1a1a;border-color:#1a1a1a}
+.brandchip.dark span{color:#fff}
+.brandchip.dark img{height:24px;background:#fff;border-radius:6px;padding:3px}
+.person-card{display:flex;gap:22px;padding:20px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);box-shadow:0 1px 4px rgba(20,30,50,.06);min-width:280px}
+.person-card img{width:120px;height:120px;object-fit:cover;border-radius:8px;flex:none}
+.person-card strong{font-size:clamp(16px,1.6vw,21px);display:block}
+.person-card span{color:var(--blue);font-weight:600;font-size:clamp(13px,1.3vw,16px);display:block}
+.person-card p{margin:8px 0;font-size:clamp(12px,1.05vw,14px);color:var(--muted);line-height:1.5}
+.person-card a{color:var(--accent);font-size:clamp(11px,.95vw,13px);text-decoration:none;font-weight:600}
+.cardlogo{float:right;height:26px;width:auto;margin:0 0 6px 10px}
 .top nav a{color:var(--muted);text-decoration:none;font-size:clamp(10px,.9vw,13px);margin-left:18px;font-weight:600}
 .top nav a:hover{color:var(--blue)}
 .nav-arrows{position:fixed;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--sheet);color:var(--ink);font-size:22px;cursor:pointer;z-index:60;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(20,30,50,.12);user-select:none}
@@ -70,10 +93,15 @@ svg{display:block;width:100%;height:auto}
 <body>
 
 <div class="top">
-  <a class="brand" href="https://eswlab.com/"><em>ESL</em> - Engineering Software Lab</a>
+  <div class="brand">
+    <a class="homebtn" href="#1" title="Back to slide 1" aria-label="Back to slide 1">&#127968;</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener"><img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+    <span id="brand">KernelBench CUDA Skill A/B Pilot · RTX 5080 Laptop</span>
+  </div>
   <nav>
     <a href="https://github.com/ScalingIntelligence/KernelBench">KernelBench</a>
     <a href="https://ampcode.com/artifacts/kernelbench-cuda-skill-a-b-pilot-bb3c3ee9-fb50-4698-bec6-809906b117dd">Pilot artifact</a>
+    <a href="https://eswlab.com/">eswlab.com</a>
     <a href="https://eswlab.com/contact-us/">Contact ESL</a>
   </nav>
 </div>
@@ -82,18 +110,27 @@ svg{display:block;width:100%;height:auto}
 
 <!-- 01 COVER -->
 <section class="slide">
-  <div class="kicker">Technical program brief · <b>01</b></div>
+  <div class="kicker"><span class="mark"></span>Technical program brief · <b>01</b></div>
   <h1>Does a <span class="hl">CUDA super skill</span> make the coding agent measurably better at GPU kernels?</h1>
   <p class="sub">A controlled A/B benchmark of the same agent model with and without a custom <code>cuda-kernel-super</code> skill, on KernelBench problems, executed end to end on one RTX 5080 Laptop GPU: the measured evidence, the harness bugs both agents caught, and the honest verdict</p>
+  <div class="brandrow">
+    <div class="brandchip dark"><img src="../assets/amp-logo.png" alt="Amp"><span>Amp (ampcode.com) · the agent under test</span></div>
+    <div class="brandchip"><img src="../assets/esl-logo.png" alt="ESL"><span>ESL · skill design, hardware, scoring</span></div>
+  </div>
   <div class="bigrow">
     <div class="card"><div class="label">Experiment</div><div class="stat blue">4 <small>problems</small> × 2 <small>conditions</small></div><p>Eight independent agent runs, one base model, one serial evaluator</p></div>
     <div class="card amber"><div class="label">Peak result (skill)</div><div class="stat amber">2.81×</div><p>fp16 tensor-core GEMM vs fp32 cuBLAS reference, 4096×4096</p></div>
     <div class="card red"><div class="label">Skill failure</div><div class="stat red">1 / 4</div><p>One solution passed the buggy harness and failed the correct one</p></div>
   </div>
-  <div class="row">
-    <div class="card">
-      <div class="label">Author</div>
-      <p><b style="color:var(--ink)">Daniel Liezrowice</b> · CTO, ESL - Engineering Software Lab<br>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years.</p>
+  <div class="row" style="align-items:stretch">
+    <div class="person-card" style="flex:1">
+      <img src="../assets/daniel-liezrowice.jpg" width="120" height="120" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years. This brief documents the ESL KernelBench agent skill pilot.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
     </div>
   </div>
   <div class="foot">Engineering Software Lab Ltd. · 10 November 2026 · Every number in this deck was measured on the documented hardware; the harness, solutions, and scoring scripts are all on disk and reproducible. Charts are inline SVG plotted from the recorded values.</div>
@@ -621,10 +658,23 @@ svg{display:block;width:100%;height:auto}
     <div class="card"><div class="label">The skill</div><p style="color:var(--ink)"><b>cuda-kernel-super</b><br>KernelFlow methodology + KernelBench contract + machine truths</p></div>
     <div class="card"><div class="label">The evidence</div><p style="color:var(--ink)"><b>Pilot artifact, rev 6</b><br>all scores, reports, and decisions</p></div>
   </div>
-  <div class="row">
-    <div class="card">
-      <div class="label">Author</div>
-      <p><b style="color:var(--ink)">Daniel Liezrowice</b> · CTO, ESL - Engineering Software Lab<br>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years.<br><a href="https://www.linkedin.com/in/liezrowice/" style="color:var(--blue)">linkedin.com/in/liezrowice</a></p>
+  <div class="row" style="align-items:stretch">
+    <div class="person-card" style="flex:1">
+      <img src="../assets/daniel-liezrowice.jpg" width="120" height="120" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+    <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <img class="cardlogo" src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab" style="align-self:flex-end;float:none">
+      <div class="label">Contact ESL</div>
+      <p style="font-size:clamp(13px,1.2vw,16px);color:var(--ink);line-height:1.7">
+        <a href="https://eswlab.com/" style="color:var(--accent);font-weight:700">eswlab.com</a><br>
+        <a href="https://eswlab.com/contact-us/" style="color:var(--accent);font-weight:700">eswlab.com/contact-us</a>
+      </p>
     </div>
   </div>
   <div class="foot">ESL - Engineering Software Lab · <a href="https://eswlab.com/" style="color:var(--blue)">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" style="color:var(--blue)">Contact ESL</a> · All measurements 9-10 November 2026 on the documented RTX 5080 Laptop / WSL2 host.</div>
