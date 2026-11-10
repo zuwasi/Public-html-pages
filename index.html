@@ -282,8 +282,14 @@
 </section>
 
 <section class="catalog-section" data-section="sec-new" id="sec-new">
-  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">8</span></h2>
+  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">9</span></h2>
   <div class="grid">
+    <article class="card card-new" dir="ltr">
+      <div class="card-top"><span class="card-tag badge-new">NEW · MISRA FOR UNSAFE RUST · SLIDE DECK</span></div>
+      <a class="card-title" href="misra-unsafe-rust-volatile/">MISRA for Unsafe Rust: Rule UR-09.3, Volatile Hardware Access</a>
+      <div class="card-dates">Published: 2026-11-10</div>
+      <p class="card-desc">7-slide worked example for a MISRA-style standard over unsafe Rust: polling an MMIO status register through a raw pointer, why a non-volatile read lets the optimizer hoist or delete the wait loop (identical semantics to C), the one-method fix with read_volatile, and the full mandatory rule card: rationale, static decidability, CI enforcement on integer-to-pointer provenance, and the deviation process.</p>
+    </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · KERNELBENCH · AGENT A/B BENCHMARK · TECHNICAL BRIEF</span><button class="stamp" type="button" data-note="kernelbench-cuda-skill-ab/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="kernelbench-cuda-skill-ab/technical/">Does a CUDA Super Skill Make the Coding Agent Measurably Better at GPU Kernels?</a>
