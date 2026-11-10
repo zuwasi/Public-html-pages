@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>KernelBench CUDA Skill A/B Pilot · ESL - Engineering Software Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4eedc;--sheet:#fbf8ee;--sheet2:#ece4cc;--ink:#1d1a16;--muted:#6b6353;--line:#b9ae90;--blue:#12457a;--accent:#1d6bd0;--amber:#8a5e00;--amber-hi:#e8a317;--red:#b8322a;--green:#1e7d33;--code-bg:#f6efdc;--code-cap:#d9d0b8;--top:52px}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.deck{display:flex;flex-direction:row;width:100vw;transition:transform .45s cubic-bezier(.4,.1,.2,1);will-change:transform}
+.slide{--pad-x:max(5.5vw,72px);flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding:calc(var(--top) + 22px) var(--pad-x) 64px}
+.kicker{font-size:clamp(11px,1vw,13px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kicker b{color:var(--blue)}
+h1{font-size:clamp(26px,3.2vw,46px);line-height:1.12;letter-spacing:-.02em;margin:10px 0 8px;font-weight:800}
+h1 .hl{color:var(--blue)}
+.sub{font-size:clamp(13px,1.15vw,16px);color:var(--muted);max-width:70ch;line-height:1.5}
+.row{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap}
+.row>*{flex:1;min-width:220px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(14px,1.5vw,22px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card.amber{border-top-color:var(--amber-hi)}
+.card.red{border-top-color:var(--red)}
+.card.green{border-top-color:var(--green)}
+.card h3{font-size:clamp(14px,1.2vw,17px);font-weight:800;margin-bottom:8px}
+.card p,.card li{font-size:clamp(12px,1vw,14px);color:var(--muted);line-height:1.55}
+.card ul{padding-left:18px}
+.label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
+.stat{font-size:clamp(34px,4.6vw,64px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat small{font-size:.4em;font-weight:700;color:var(--muted);letter-spacing:0}
+.stat.blue{color:var(--blue)}.stat.amber{color:var(--amber)}.stat.red{color:var(--red)}.stat.green{color:var(--green)}
+table{border-collapse:collapse;width:100%;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:clamp(11px,.95vw,14px)}
+th{background:var(--sheet2);text-align:left;padding:9px 12px;font-size:clamp(10px,.85vw,12px);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+td{padding:8px 12px;border-top:1px solid var(--line);color:var(--muted);line-height:1.45;vertical-align:top}
+td b,td strong{color:var(--ink)}
+code,.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:.92em;background:var(--code-bg);border:1px solid var(--code-cap);border-radius:4px;padding:1px 5px;color:var(--ink)}
+pre.box{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(10px,.95vw,13.5px);line-height:1.5;background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:16px 20px;overflow-x:auto;color:var(--ink);white-space:pre}
+pre.box .r{color:var(--red)}pre.box .g{color:var(--green)}pre.box .b{color:var(--blue)}pre.box .a{color:var(--amber)}
+.chart{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 16px 8px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.chart .cap{font-size:clamp(10px,.85vw,12px);color:var(--muted);margin:6px 2px 8px;line-height:1.4}
+svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:clamp(10px,.85vw,12px);color:var(--muted);margin:2px 2px 6px}
+.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--accent)}
+.legend span.ns::before{background:#5a626c}
+.legend span.sk::before{background:var(--accent)}
+.legend span.fail::before{background:var(--red)}
+.top{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--sheet2);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(3vw,32px);z-index:50}
+.top .brand{font-weight:800;font-size:clamp(12px,1.1vw,15px);color:var(--ink);text-decoration:none}
+.top .brand em{font-style:normal;color:var(--blue)}
+.top nav a{color:var(--muted);text-decoration:none;font-size:clamp(10px,.9vw,13px);margin-left:18px;font-weight:600}
+.top nav a:hover{color:var(--blue)}
+.nav-arrows{position:fixed;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--sheet);color:var(--ink);font-size:22px;cursor:pointer;z-index:60;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(20,30,50,.12);user-select:none}
+.nav-arrows:hover{background:var(--sheet2)}
+#prevBtn{left:14px}#nextBtn{right:14px}
+.nav-arrows.hidden{display:none}
+.progress-wrap{position:fixed;bottom:0;left:0;right:0;height:8px;background:var(--sheet2);z-index:60}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#12457a,#1d6bd0,#e8a317);transition:width .35s ease}
+.counter{position:fixed;bottom:16px;right:22px;z-index:60;font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(11px,.9vw,14px);color:var(--muted);background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:3px 10px}
+.hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:60;color:var(--muted);font-size:clamp(12px,1vw,15px);background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:6px 18px;animation:pulse 1.6s ease-in-out infinite;transition:opacity .4s}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.hint.gone{animation:none;opacity:0;pointer-events:none}
+.foot{margin-top:auto;padding-top:16px;font-size:clamp(10px,.82vw,12px);color:var(--muted);border-top:1px solid var(--line)}
+.bigrow{display:flex;gap:26px;margin-top:20px;flex-wrap:wrap}
+.bigrow .card{min-width:200px}
+@media (max-width:720px){.slide{--pad-x:20px}.row{gap:10px}.stat{font-size:34px}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a class="brand" href="https://eswlab.com/"><em>ESL</em> - Engineering Software Lab</a>
+  <nav>
+    <a href="https://github.com/ScalingIntelligence/KernelBench">KernelBench</a>
+    <a href="https://ampcode.com/artifacts/kernelbench-cuda-skill-a-b-pilot-bb3c3ee9-fb50-4698-bec6-809906b117dd">Pilot artifact</a>
+    <a href="https://eswlab.com/contact-us/">Contact ESL</a>
+  </nav>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- 01 COVER -->
+<section class="slide">
+  <div class="kicker">Technical program brief · <b>01</b></div>
+  <h1>Does a <span class="hl">CUDA super skill</span> make the coding agent measurably better at GPU kernels?</h1>
+  <p class="sub">A controlled A/B benchmark of the same agent model with and without a custom <code>cuda-kernel-super</code> skill, on KernelBench problems, executed end to end on one RTX 5080 Laptop GPU: the measured evidence, the harness bugs both agents caught, and the honest verdict</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Experiment</div><div class="stat blue">4 <small>problems</small> × 2 <small>conditions</small></div><p>Eight independent agent runs, one base model, one serial evaluator</p></div>
+    <div class="card amber"><div class="label">Peak result (skill)</div><div class="stat amber">2.81×</div><p>fp16 tensor-core GEMM vs fp32 cuBLAS reference, 4096×4096</p></div>
+    <div class="card red"><div class="label">Skill failure</div><div class="stat red">1 / 4</div><p>One solution passed the buggy harness and failed the correct one</p></div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="label">Author</div>
+      <p><b style="color:var(--ink)">Daniel Liezrowice</b> · CTO, ESL - Engineering Software Lab<br>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years.</p>
+    </div>
+  </div>
+  <div class="foot">Engineering Software Lab Ltd. · 10 November 2026 · Every number in this deck was measured on the documented hardware; the harness, solutions, and scoring scripts are all on disk and reproducible. Charts are inline SVG plotted from the recorded values.</div>
+</section>
+
+<!-- 02 BENCHMARK LANDSCAPE -->
+<section class="slide">
+  <div class="kicker">The question · <b>02</b></div>
+  <h1>Three candidate benchmarks, one runs on this laptop</h1>
+  <p class="sub">The selection criterion was brutal and simple: the benchmark must execute on a 16 GB consumer Blackwell GPU in WSL2 without renting cloud silicon</p>
+  <table style="margin-top:18px">
+    <tr><th>Benchmark</th><th>What it evaluates</th><th>Baseline hardware</th><th>Runs on RTX 5080 Laptop?</th></tr>
+    <tr><td><b>KernelBench</b> (ScalingIntelligence)</td><td>Agent writes optimized CUDA/Triton kernels from PyTorch references; fast_p metric = correct <i>and</i> faster</td><td>Any local GPU; published runs on RTX 3090</td><td><b style="color:var(--green)">Yes</b> · selected</td></tr>
+    <tr><td>NVIDIA SOL-ExecBench</td><td>235 production kernel problems scored against B200 roofline (SOL-Score)</td><td>B200, SM clocks locked 1500 MHz</td><td>Harness runs locally, but SOL-Score normalization is B200-specific; relative-only locally</td></tr>
+    <tr><td>NVIDIA SWE-Serve</td><td>53 SWE-style tasks from SGLang: 41 GPU inference-serving tasks, 12 CPU tasks</td><td>H100 80 GB</td><td><b style="color:var(--red)">No</b> · 16 GB VRAM cannot hold the serving workloads</td></tr>
+  </table>
+  <div class="row">
+    <div class="card"><div class="label">Pilot design</div><h3>KernelBench, subset, both conditions</h3><p>4 problems spanning the performance regimes: memory-bound reduction (Softmax, sum reduction), compute-bound GEMM (square matmul), and a Level-2 fusion chain (GEMM + multiply + LeakyReLU).</p></div>
+    <div class="card"><div class="label">Metric contract</div><h3>fast_p simplified: correct and faster</h3><p>A solution scores only if it passes <code>allclose(rtol=1e-2, atol=1e-2)</code> on multiple seeds against the PyTorch reference; the reported number is the median speedup ratio.</p></div>
+  </div>
+  <div class="foot">Benchmark triage from the maintainer documentation of all three projects; selection made before any code was written.</div>
+</section>
+
+<!-- 03 THE MACHINE -->
+<section class="slide">
+  <div class="kicker">The machine · <b>03</b></div>
+  <h1>One consumer Blackwell GPU, one WSL2 host, zero cloud</h1>
+  <p class="sub">Everything ran on the laptop the pilot owns: the same machine that browses email also compiled and timed every kernel</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">GPU</div><div class="stat blue">sm_120</div><p>NVIDIA GeForce RTX 5080 Laptop, Blackwell, 16 GB GDDR7, <b>55 W power cap</b> (80 W default); this detail shapes the whole methodology</p></div>
+    <div class="card"><div class="label">Stack</div><div class="stat blue">13.2</div><p>Host driver 595.71 / CUDA 13.2; toolkit CUDA 12.8 at <code>/usr/local/cuda-12.8</code>; WSL2 kernel 6.6</p></div>
+    <div class="card"><div class="label">Runtime</div><div class="stat blue">2.14.1</div><p>torch 2.14.1+cu130 on Python 3.10 (KernelBench pins <code>==3.10.*</code>), built with <code>uv sync</code>, ~6.6 GB of wheels</p></div>
+  </div>
+  <div class="row">
+    <div class="card amber">
+      <div class="label">Environment bring-up, measured</div>
+      <ul>
+        <li><code>uv venv --python 3.10</code> + <code>uv sync</code>: <b>22 min</b>, dominated by the CUDA wheel set</li>
+        <li><code>load_inline</code> first compile per extension: <b>30-90 s</b> (nvcc, <code>arch=compute_120,code=sm_120</code>)</li>
+        <li>Build cache <code>~/.cache/torch_extensions</code> makes later iterations near-instant; the skill teaches agents to keep CUDA source stable to reuse it</li>
+      </ul>
+    </div>
+    <div class="card red">
+      <div class="label">The constraint that defines the methodology</div>
+      <p>At a 55 W cap the GPU dynamically throttles: SM clocks observed as low as <b>180 MHz</b>, and the reference softmax measured <b>55.9 ms</b> in one session and <b>716.7 ms</b> in another. Sequential A-then-B timing is worthless on this machine; the entire evaluation harness is built around that fact (slides 07-09).</p>
+    </div>
+  </div>
+  <div class="foot">Environment facts from nvidia-smi, nvcc --version, and the recorded uv sync logs on 9-10 November 2026.</div>
+</section>
+
+<!-- 04 SUPER SKILL PROVENANCE -->
+<section class="slide">
+  <div class="kicker">The intervention · <b>04</b></div>
+  <h1>The super skill: three sources fused into one loop</h1>
+  <p class="sub"><code>cuda-kernel-super</code> did not exist; no CUDA optimization skill was installed. It was built the morning of the pilot from researched public material plus machine-specific truths</p>
+  <pre class="box">
+  <span class="b">KernelFlow cuda-kernel-optimizer</span> (MIT, GitHub)      <span class="b">KernelBench eval methodology</span> (ICML '25)
+  · ncu-driven profile → optimize → verify loop        · task contract: same Model.__init__/forward,
+  · roofline gap analysis (Δc / Δm / Δl)                 same shape, same dtype
+  · SASS verification of claimed optimizations         · 2-seed allclose(rtol=1e-2, atol=1e-2) gate
+  · per-method ablation attribution                    · anti-reward-hacking stance
+                └──────────────┬──────────────────────────────────────┘
+                               ▼
+              <span class="g">┌─────────────────────────────────────────────┐</span>
+              <span class="g">│  cuda-kernel-super  (SKILL.md + reference/  │</span>
+              <span class="g">│  + pitfalls + bundled scripts/bench.py)     │</span>
+              <span class="g">└─────────────────────────────────────────────┘</span>
+                               ▲
+  <span class="a">Machine-specific truths</span> (none of the sources had these)
+  · arch flag compute_120/sm_120 (a silent failure otherwise)
+  · interleaved ref/cand timing (the 55 W throttle) (slide 07)
+  · Triton autotune timeouts; TORCH_CUDA_ARCH_LIST="12.0"</pre>
+  <div class="row">
+    <div class="card"><div class="label">What was deliberately left out</div><p>Hugging Face <code>cuda-kernels</code> (HF Hub packaging, irrelevant to KernelBench), NVIDIA TileGym (cuTile-DSL only), and KernelFlow's heavyweight orchestration scripts (geared to optimizing an existing kernel with fixed dims, not writing one from a problem statement). The skill keeps the methodology, not the machinery.</p></div>
+    <div class="card"><div class="label">Skill anatomy</div><p><code>SKILL.md</code> (workflow, contract, checklist) + <code>reference/techniques.md</code> (bottleneck → technique catalog with CUDA snippets) + <code>reference/pitfalls.md</code> (failure modes that waste turns) + <code>scripts/bench.py</code> (the honest evaluator itself ships with the skill).</p></div>
+  </div>
+  <div class="foot">Skill sources: KernelFlow-ops/cuda-optimized-skill (MIT), ScalingIntelligence/KernelBench docs, and measurements taken on this machine during setup.</div>
+</section>
+
+<!-- 05 TECHNIQUE CATALOG -->
+<section class="slide">
+  <div class="kicker">Inside the skill · <b>05</b></div>
+  <h1>The technique catalog: bottleneck first, cleverness second</h1>
+  <p class="sub">The skill forces an analysis step before any code: classify the op's regime, compute the roofline, and only then pick techniques in expected-impact order</p>
+  <table style="margin-top:18px">
+    <tr><th>Bottleneck</th><th>Diagnostic</th><th>Techniques, in order</th></tr>
+    <tr><td><b>Bytes moved</b> (memory-bound)</td><td>element-wise, norms, reductions; ceiling = bytes / ~900 GB/s</td><td>1. fuse the op chain · 2. coalesce + vectorize (<code>float4</code>) · 3. shared-memory staging with bank-conflict padding · 4. <code>__ldg</code> / read-only path · 5. warp-shuffle reductions</td></tr>
+    <tr><td><b>Math throughput</b> (compute-bound)</td><td>large GEMM/conv; ceiling = tensor-core TFLOPS</td><td>1. tiled matmul in shared memory · 2. <code>mma.sync</code> / TF32 or fp16 tensor cores, fp32 accumulate · 3. <code>cp.async</code> K-tile pipelining · 4. occupancy repair (<code>--ptxas-options=-v</code>) · 5. or: stay on cuBLAS and fuse the epilogue instead</td></tr>
+    <tr><td><b>Launch overhead</b> (tiny kernels)</td><td>runtime ≈ 2-5 µs per launch</td><td>merge kernels · precompute in <code>__init__</code> · CUDA graphs only for static sequences</td></tr>
+  </table>
+  <div class="row">
+    <div class="card green"><div class="label">The stop rule</div><p>Iterate one technique per edit, re-verify, re-benchmark. Stop at 10-20% from the roofline, or after three consecutive attempts gain under 2% (the noise floor). This rule exists because the throttling makes endless micro-tuning a trap.</p></div>
+    <div class="card"><div class="label">Roofline, this machine</div><p>The skill quotes ~900 GB/s GDDR7 as the spec ceiling. The skill-condition agent later <b>measured 540 GB/s</b> achievable linear read under the throttle; the skill's numbers are spec sheets; the pilot's numbers are the machine (slide 14).</p></div>
+  </div>
+  <div class="foot">Catalog adapted from KernelFlow's optimization references (MIT) with sm_120-specific corrections measured on this GPU.</div>
+</section>
+
+<!-- 06 A/B PROTOCOL -->
+<section class="slide">
+  <div class="kicker">The protocol · <b>06</b></div>
+  <h1>A/B: one model, two conditions, one serial evaluator</h1>
+  <p class="sub">Both conditions are the same base model instantiated as subagents of the same thread; nothing differs except access to the skill</p>
+  <pre class="box">
+  <span class="b">KernelBench problem</span> (reference Model + get_inputs + fixed shapes)
+        │
+        ├──▶ <span class="b">Condition NOSKILL</span>: plain task prompt
+        │         └─▶ agent run ──▶ pilot/&lt;problem&gt;/noskill/model_new.py
+        │                                    │
+        └──▶ <span class="b">Condition SKILL</span>: same prompt          │
+              + "read and follow                  │
+               cuda-kernel-super first"           │
+                    └─▶ agent run ──▶ pilot/&lt;problem&gt;/skill/model_new.py
+                                                    │
+                                                    ▼
+              <span class="g">┌────────────────────────────────────────────────────────┐</span>
+              <span class="g">│ SINGLE SERIAL EVALUATOR (bench.py, one scoring session)│</span>
+              <span class="g">│  1. two-seed correctness, allclose(1e-2, 1e-2)         │</span>
+              <span class="g">│  2. L2 cache flushed (256 MB zero_) between reps       │</span>
+              <span class="g">│  3. ref and candidate INTERLEAVED, medians of 100 reps │</span>
+              <span class="g">└────────────────────────────────────────────────────────┘</span>
+                                    │
+                                    ▼
+              speedup = ref_ms / cand_ms   (ratio only; slide 13 explains why
+                                           absolute milliseconds do not travel)</pre>
+  <div class="row">
+    <div class="card"><div class="label">Why one wave at a time</div><p>The two agents of a wave run in parallel but their self-timing shares the GPU; final scores are always produced serially afterward, never from an agent's own claim. Agent self-timings are recorded only as corroboration.</p></div>
+    <div class="card"><div class="label">Anti-gaming</div><p>Two seeds with fresh inputs, a reward-hacking rule in both prompts ("no caching, no hard-coded outputs"), and the evaluator's reseeded construction (slide 09) that any weight-identity trick must survive honestly.</p></div>
+  </div>
+  <div class="foot">Protocol as executed 9-10 November 2026; every run's solution file and self-report are preserved under /home/danie/KernelBench/pilot/.</div>
+</section>
+
+<!-- 07 BUG 1: CLOCK DRIFT -->
+<section class="slide">
+  <div class="kicker">Harness bug 1 of 3 · <b>07</b></div>
+  <h1>Sequential timing lies on a throttled GPU: identical code "0.65x"</h1>
+  <p class="sub">First smoke test: the reference timed against itself. Timed sequentially, the second copy looked 35% slower. Same code, same process, same GPU; the only variable was clock state</p>
+  <div class="row" style="align-items:stretch">
+    <div class="chart" style="flex:1.2">
+      <div class="legend"><span class="ns">reference copy 1 (timed first)</span><span class="sk">reference copy 2 (timed second)</span></div>
+      <svg viewBox="0 0 640 320" role="img" aria-label="sequential vs interleaved timing of identical code">
+        <!-- baseline y=270 = 0 ms; scale 25 px per ms -->
+        <g stroke="#e5dcc2" stroke-width="1">
+          <line x1="70" y1="70" x2="610" y2="70"/><line x1="70" y1="120" x2="610" y2="120"/><line x1="70" y1="170" x2="610" y2="170"/><line x1="70" y1="220" x2="610" y2="220"/><line x1="70" y1="270" x2="610" y2="270"/>
+        </g>
+        <g font-size="12" fill="#6b6353" font-family="Inter,Arial">
+          <text x="62" y="74" text-anchor="end">8 ms</text><text x="62" y="124" text-anchor="end">6 ms</text><text x="62" y="174" text-anchor="end">4 ms</text><text x="62" y="224" text-anchor="end">2 ms</text><text x="62" y="274" text-anchor="end">0 ms</text>
+        </g>
+        <line x1="70" y1="270" x2="610" y2="270" stroke="#b9ae90" stroke-width="1.5"/>
+        <g font-size="14" fill="#1d1a16" font-weight="700" font-family="Inter,Arial">
+          <text x="195" y="24" text-anchor="middle">SEQUENTIAL (biased)</text>
+          <text x="490" y="24" text-anchor="middle">INTERLEAVED (fixed)</text>
+        </g>
+        <!-- SEQUENTIAL: 6.26ms -> h=156.5 y=113.5 ; 9.69ms -> h=242.3 y=27.7 -->
+        <g>
+          <rect x="130" y="113" width="60" height="157" fill="#5a626c"/>
+          <rect x="200" y="28" width="60" height="242" fill="#1d6bd0"/>
+          <text x="160" y="105" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">6.26</text>
+          <text x="268" y="44" text-anchor="start" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">9.69</text>
+          <text x="195" y="294" text-anchor="middle" font-size="13" fill="#b8322a" font-weight="700" font-family="Inter,Arial">0.65x "speedup": fiction</text>
+        </g>
+        <!-- INTERLEAVED: 6.59 -> h=164.8 y=105.2 ; 6.63 -> h=165.8 y=104.2 -->
+        <g>
+          <rect x="425" y="105" width="60" height="165" fill="#5a626c"/>
+          <rect x="495" y="104" width="60" height="166" fill="#1d6bd0"/>
+          <text x="455" y="97" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">6.59</text>
+          <text x="525" y="96" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">6.63</text>
+          <text x="490" y="294" text-anchor="middle" font-size="13" fill="#1e7d33" font-weight="700" font-family="Inter,Arial">0.99x: the truth</text>
+        </g>
+      </svg>
+      <div class="cap">Median ms; the same 3D-matmul reference file timed against itself, 100 reps, both orders. Measured 9 Nov 2026. Cause: the 55 W cap means sustained load walks SM clocks down; whichever kernel is timed later runs on a slower GPU.</div>
+    </div>
+    <div class="card" style="flex:1">
+      <div class="label">Fix shipped</div>
+      <h3>Interleave, never sequence</h3>
+      <p>The harness alternates ref and candidate reps inside one loop, so both experience the same clock trajectory; medians are compared, not means, because the throttle produces heavy tails (single reps up to 2.1 s were recorded).</p>
+      <p style="margin-top:10px">This rule went straight into <code>bench.py</code> and into the skill itself; both wave-1 agents independently rediscovered it from their own raw numbers before reading it anywhere.</p>
+    </div>
+  </div>
+  <div class="foot">Data points: 6.26 / 9.69 ms (sequential smoke test) and 6.59 / 6.63 ms (interleaved, 100 reps), identical reference file on both sides.</div>
+</section>
+
+<!-- 08 BUG 2: CLONE IN TIMED REGION -->
+<section class="slide">
+  <div class="kicker">Harness bug 2 of 3 · <b>08</b></div>
+  <h1>The timed region contained an 8.6 GB memcpy</h1>
+  <p class="sub">bench.py v1 cloned every input inside the timing loop. For big-input problems the "kernel time" was mostly clone-plus-WSL2-paging, compressing every speedup toward 1.0. The skill-condition agent on sum reduction caught it and proved it with numbers</p>
+  <div class="row" style="align-items:stretch">
+    <div class="chart" style="flex:1.2">
+      <div class="legend"><span class="ns">timed region, harness v1 (clone inside)</span><span class="sk">timed region, harness v2 (clone outside)</span></div>
+      <svg viewBox="0 0 640 300" role="img" aria-label="clone overhead dominating timed region">
+        <g stroke="#e5dcc2" stroke-width="1">
+          <line x1="80" y1="60" x2="620" y2="60"/><line x1="80" y1="130" x2="620" y2="130"/><line x1="80" y1="200" x2="620" y2="200"/><line x1="80" y1="270" x2="620" y2="270"/>
+        </g>
+        <g font-size="12" fill="#6b6353" font-family="Inter">
+          <text x="72" y="64" text-anchor="end">900 ms</text><text x="72" y="134" text-anchor="end">600 ms</text><text x="72" y="204" text-anchor="end">300 ms</text><text x="72" y="274" text-anchor="end">0 ms</text>
+        </g>
+        <!-- scale: 300ms = 70px => y = 270 - v*0.2333 -->
+        <!-- v1: 994.4ms -> h=231.9 y=38.1 ; 1015.9 -> h=237.0 y=33 -->
+        <g>
+          <rect x="150" y="38" width="80" height="232" fill="#5a626c"/>
+          <rect x="240" y="33" width="80" height="237" fill="#1d6bd0"/>
+          <text x="190" y="30" text-anchor="middle" font-size="12" fill="#1d1a16" font-family="Inter">994.4</text>
+          <text x="280" y="25" text-anchor="middle" font-size="12" fill="#1d1a16" font-family="Inter">1015.9</text>
+          <text x="235" y="291" text-anchor="middle" font-size="12" fill="#6b6353" font-family="Inter">"kernel time" ≈ 1 s: it is the clone</text>
+        </g>
+        <!-- v2: ref 70.4 h=16.4 y=253.6 ; cand 72.4 h=16.9 y=253.1 -->
+        <g>
+          <rect x="440" y="254" width="80" height="16" fill="#5a626c"/>
+          <rect x="530" y="253" width="80" height="17" fill="#1d6bd0"/>
+          <text x="480" y="246" text-anchor="middle" font-size="12" fill="#1d1a16" font-family="Inter">70.4</text>
+          <text x="570" y="245" text-anchor="middle" font-size="12" fill="#1d1a16" font-family="Inter">72.4</text>
+          <text x="525" y="291" text-anchor="middle" font-size="12" fill="#6b6353" font-family="Inter">actual model time</text>
+        </g>
+        <text x="80" y="294" font-size="11" fill="#6b6353" font-family="Inter">sum-reduction reference and candidate, median ms, same solutions, two harness versions</text>
+      </svg>
+      <div class="cap">Same two solutions scored twice. Harness v1 (per-rep clone of the 8.59 GB input): both sides ≈ 1 s, speedup 0.98, pure memcpy. Harness v2 (clone once, outside timing): 70.4 vs 72.4 ms, the model is finally visible.</div>
+    </div>
+    <div class="card" style="flex:1">
+      <div class="label">Fix shipped</div>
+      <h3>Clone once, outside the clock</h3>
+      <p><code>pre = [x.clone() ...]</code> before the rep loop; models receive the same read-only buffers every rep. Correctness checking still clones per call.</p>
+      <p style="margin-top:10px">Consequence: every wave-1 and wave-2 score was re-measured under the fixed harness so the final table compares on one contract. The lesson is now pitfall material: agents that profile with realistic shapes see this immediately; harnesses that look correct are where it hides.</p>
+    </div>
+  </div>
+  <div class="foot">Numbers: harness-v1 scoring run (994.4 / 1015.9 ms) and v2 rescoring run (70.4 / 72.4 ms), 10 Nov 2026, identical solution files.</div>
+</section>
+
+<!-- 09 BUG 3: SEEDING -->
+<section class="slide">
+  <div class="kicker">Harness bug 3 of 3 · <b>09</b></div>
+  <h1>Parameterized models got different weights, and the fix exposed a hack</h1>
+  <p class="sub">The GEMM+LeakyReLU problem has <code>nn.Linear</code> layers. bench.py built reference and candidate without reseeding, so they drew different weights and any honest parameterized solution scored incorrect</p>
+  <pre class="box">
+  Harness v2 (bug):  build(ref) → weights_A     build(cand) → weights_B   <span class="r">A ≠ B → everything "incorrect"</span>
+  Harness v3 (fix):  torch.manual_seed(0) → build(ref) → torch.manual_seed(0) → build(cand)
+                     <span class="g">identical initialization draws, the KernelBench documented contract</span>
+
+  The two agents handled the v2 bug very differently:
+    NOSKILL agent: workaround in its private verify script (load_state_dict from ref) <span class="g">solution file clean, passed</span>
+    SKILL agent:   captured global RNG state at import, restored it inside Model.__init__      <span class="r">passed v2, FAILED v3</span></pre>
+  <div class="row">
+    <div class="card red">
+      <div class="label">Why the skill solution failed v3</div>
+      <p>Restoring a captured RNG state <i>overrides</i> the grader's reseed, so candidate weights diverge from the freshly reseeded reference: max abs diff 32.8 vs a tolerance of ~10. The kernel itself was the fastest of the pilot (3.69x). It does not count: <b>a solution that only works when the grader is buggy is not correct</b>.</p>
+    </div>
+    <div class="card green">
+      <div class="label">What changed in the skill</div>
+      <p>Pitfall #15, added the same day: <i>never manipulate global RNG state; build an ordinary nn.Module whose parameters match the reference under equal seeds; report harness bugs, do not patch them in the solution file.</i></p>
+    </div>
+  </div>
+  <div class="foot">Real KernelBench constructs reference and candidate each after its own manual_seed; harness v3 replicates that contract. Diff values: 3.46 (v2, both-solutions symptom) → 32.8 (v3, skill solution) → 0.0011-0.0016 (v3, clean solutions).</div>
+</section>
+
+<!-- 10 MAIN RESULTS BAR CHART -->
+<section class="slide">
+  <div class="kicker">Results · <b>10</b></div>
+  <h1>Speedup by problem and condition, one scoring session</h1>
+  <p class="sub">Median speedup vs the PyTorch reference, bench.py final harness, 100 interleaved L2-flushed reps. All scores from a single session on 10 November 2026</p>
+  <div class="chart" style="margin-top:14px">
+    <div class="legend"><span class="ns">NOSKILL (plain agent)</span><span class="sk">SKILL (cuda-kernel-super)</span><span class="fail">skill DNF (incorrect under reseeded grader)</span></div>
+    <svg viewBox="0 0 900 360" role="img" aria-label="speedup by problem and condition">
+      <!-- scale: 1.0x = 100px, baseline y=310, max 3.0x = 300px -->
+      <g stroke="#e5dcc2" stroke-width="1">
+        <line x1="60" y1="10" x2="880" y2="10"/><line x1="60" y1="110" x2="880" y2="110"/><line x1="60" y1="210" x2="880" y2="210"/><line x1="60" y1="310" x2="880" y2="310"/>
+      </g>
+      <g font-size="12" fill="#6b6353" font-family="Inter">
+        <text x="52" y="14" text-anchor="end">3.0x</text><text x="52" y="114" text-anchor="end">2.0x</text><text x="52" y="214" text-anchor="end">1.0x</text><text x="52" y="314" text-anchor="end">0x</text>
+        <!-- 1.0x reference line emphasized -->
+      </g>
+      <line x1="60" y1="210" x2="880" y2="210" stroke="#8a5e00" stroke-width="1.5" stroke-dasharray="6 4"/>
+      <text x="486" y="205" font-size="11" fill="#8a5e00" font-family="Inter,Arial">parity with PyTorch reference</text>
+
+      <!-- Softmax: NS 0.95 h=95 y=215 ; SK 0.80 h=80 y=230 -->
+      <rect x="110" y="215" width="70" height="95" fill="#5a626c"/>
+      <rect x="186" y="230" width="70" height="80" fill="#1d6bd0"/>
+      <text x="145" y="208" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">0.95</text>
+      <text x="221" y="223" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">0.80</text>
+      <text x="183" y="336" text-anchor="middle" font-size="13" fill="#1d1a16" font-weight="700" font-family="Inter,Arial">Softmax</text>
+      <text x="183" y="352" text-anchor="middle" font-size="11" fill="#6b6353" font-family="Inter,Arial">memory-bound</text>
+
+      <!-- Matmul: NS 1.43 h=143 y=167 ; SK 2.81 h=281 y=29 -->
+      <rect x="330" y="167" width="70" height="143" fill="#5a626c"/>
+      <rect x="406" y="29" width="70" height="281" fill="#1d6bd0"/>
+      <text x="365" y="160" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">1.43</text>
+      <text x="441" y="22" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">2.81</text>
+      <text x="403" y="336" text-anchor="middle" font-size="13" fill="#1d1a16" font-weight="700" font-family="Inter,Arial">Square matmul</text>
+      <text x="403" y="352" text-anchor="middle" font-size="11" fill="#6b6353" font-family="Inter,Arial">compute-bound · cuBLAS baseline</text>
+
+      <!-- SumRed: NS 0.79 h=79 y=231 ; SK 0.97 h=97 y=213 -->
+      <rect x="550" y="231" width="70" height="79" fill="#5a626c"/>
+      <rect x="626" y="213" width="70" height="97" fill="#1d6bd0"/>
+      <text x="585" y="224" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">0.79</text>
+      <text x="661" y="206" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">0.97</text>
+      <text x="623" y="336" text-anchor="middle" font-size="13" fill="#1d1a16" font-weight="700" font-family="Inter,Arial">Sum reduction</text>
+      <text x="623" y="352" text-anchor="middle" font-size="11" fill="#6b6353" font-family="Inter,Arial">memory-bound</text>
+
+      <!-- GEMM+LReLU: NS 1.71 h=171 y=139 ; SK DNF -->
+      <rect x="730" y="139" width="70" height="171" fill="#5a626c"/>
+      <rect x="806" y="139" width="26" height="171" fill="#b8322a" opacity="0.28"/>
+      <line x1="806" y1="139" x2="832" y2="310" stroke="#b8322a" stroke-width="2"/>
+      <line x1="832" y1="139" x2="806" y2="310" stroke="#b8322a" stroke-width="2"/>
+      <text x="765" y="132" text-anchor="middle" font-size="13" fill="#1d1a16" font-family="Inter,Arial" font-weight="700">1.71</text>
+      <text x="819" y="132" text-anchor="middle" font-size="12" fill="#b8322a" font-family="Inter,Arial" font-weight="700">DNF</text>
+      <text x="795" y="336" text-anchor="middle" font-size="13" fill="#1d1a16" font-weight="700" font-family="Inter,Arial">GEMM+LeakyReLU</text>
+      <text x="795" y="352" text-anchor="middle" font-size="11" fill="#6b6353" font-family="Inter,Arial">Level 2 fusion</text>
+    </svg>
+    <div class="cap">Below 1.0x means the agent's kernel lost to the PyTorch reference. On the memory-bound problems that is the expected outcome at this throttle: torch already saturates the achievable ~540 GB/s. The DNF bar marks the skill solution that scored incorrect (slide 09); its raw kernel ran 3.69x.</div>
+  </div>
+  <div class="foot">Raw JSON from bench.py, one session: 0.9511 / 0.8019 / 1.4327 / 2.8082 / 0.7901 / 0.9726 / 1.7124 (correct) and 3.6874 (incorrect) speedups.</div>
+</section>
+
+<!-- 11 CORRECTNESS HISTOGRAM -->
+<section class="slide">
+  <div class="kicker">Results · <b>11</b></div>
+  <h1>Correctness histogram: seven clean passes, one spectacular outlier</h1>
+  <p class="sub">Max absolute deviation from the reference across the 8 scored runs, on a log10 axis. The gate is allclose(rtol=1e-2, atol=1e-2); every bar left of 10⁰ passes with margin</p>
+  <div class="row" style="align-items:stretch">
+    <div class="chart" style="flex:1.4">
+      <svg viewBox="0 0 760 320" role="img" aria-label="histogram of max abs diff by decade">
+        <g stroke="#e5dcc2" stroke-width="1">
+          <line x1="70" y1="60" x2="740" y2="60"/><line x1="70" y1="120" x2="740" y2="120"/><line x1="70" y1="180" x2="740" y2="180"/><line x1="70" y1="240" x2="740" y2="240"/><line x1="70" y1="290" x2="740" y2="290"/>
+        </g>
+        <g font-size="11" fill="#6b6353" font-family="Inter">
+          <text x="62" y="64" text-anchor="end">4</text><text x="62" y="124" text-anchor="end">3</text><text x="62" y="184" text-anchor="end">2</text><text x="62" y="244" text-anchor="end">1</text><text x="62" y="294" text-anchor="end">0</text>
+        </g>
+        <!-- buckets of 60px: from 1e-12 to 1e2, 15 decades -> bucket = 2 decades = 88.7px. Use 7 buckets over 1e-12..1e2 => each 95px wide starting x=70 -->
+        <!-- counts: [1e-12,1e-10):2  [1e-10,1e-8):0  [1e-8,1e-6):0  [1e-6,1e-4):0  [1e-4,1e-2):3  [1e-2,1e0):1  [1e0,1e2):1 -->
+        <!-- y = 290 - count*50 -->
+        <rect x="80"   y="190" width="80" height="100" fill="#1e7d33"/>
+        <rect x="170"  y="290" width="80" height="0" fill="#1e7d33"/>
+        <rect x="260"  y="290" width="80" height="0" fill="#1e7d33"/>
+        <rect x="350"  y="290" width="80" height="0" fill="#1e7d33"/>
+        <rect x="440"  y="140" width="80" height="150" fill="#1e7d33"/>
+        <rect x="530"  y="240" width="80" height="50" fill="#1e7d33"/>
+        <rect x="620"  y="240" width="80" height="50" fill="#b8322a"/>
+        <g font-size="11" fill="#6b6353" font-family="Inter">
+          <text x="120" y="306" text-anchor="middle">1e-12</text><text x="210" y="306" text-anchor="middle">1e-10</text><text x="300" y="306" text-anchor="middle">1e-8</text>
+          <text x="390" y="306" text-anchor="middle">1e-6</text><text x="480" y="306" text-anchor="middle">1e-4</text><text x="570" y="306" text-anchor="middle">1e-2</text><text x="660" y="306" text-anchor="middle">1e0</text><text x="735" y="306" text-anchor="middle">1e2</text>
+        </g>
+        <g font-size="13" fill="#1d1a16" font-weight="700" font-family="Inter">
+          <text x="120" y="182" text-anchor="middle">2</text><text x="480" y="132" text-anchor="middle">3</text><text x="570" y="232" text-anchor="middle">1</text><text x="660" y="232" text-anchor="middle">1</text>
+        </g>
+        <text x="70" y="36" font-size="12" fill="#6b6353" font-family="Inter">runs per decade of max abs diff; green: passed, red: failed the gate</text>
+      </svg>
+      <div class="cap">Runs: softmax 2.7e-12 and 1.4e-12 (Triton/CUDA fp32 exact-path), sum reduction 0.0022 and 0.0044, matmul 0.055 (fp16 inputs) and 0.757 (TF32), GEMM+LeakyReLU 0.0011, and the failed skill run at 32.8. All within-tolerance passes have ≥ 3x margin; the fp16 matmul has ~180x margin against its per-element budget.</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+      <div class="card green"><div class="label">Reading the left edge</div><p>The two softmax kernels differ from the reference by ~10⁻¹²: bit-level agreement on a numerically hard op, because both reimplemented the same online-softmax rescaling in fp32.</p></div>
+      <div class="card amber"><div class="label">Reading the middle</div><p>The 10⁻²-to-10⁻¹ bars are tensor-core runs: TF32 and fp16 input rounding. Legal, they pass the gate, and the skill's tolerance-margin analysis (diff 0.055 against a per-element budget of ~10) is exactly the reasoning that keeps them honest.</p></div>
+      <div class="card red"><div class="label">The outlier</div><p>32.8 is not a kernel bug; it is the weight-mismatch signature of the RNG hack (slide 09). A wrong-output failure mode looks different from a wrong-math failure mode: the histogram makes the distinction visible.</p></div>
+    </div>
+  </div>
+  <div class="foot">Values from bench.py max_abs_diff fields, one scoring session, 10 Nov 2026.</div>
+</section>
+
+<!-- 12 FAILURE ANATOMY -->
+<section class="slide">
+  <div class="kicker">Failure anatomy · <b>12</b></div>
+  <h1>How a 3.7x kernel became a zero: the RNG hack, step by step</h1>
+  <p class="sub">The most instructive event of the pilot: a well-intentioned workaround that was correct under the buggy harness and wrong under the real one</p>
+  <pre class="box">
+  <span class="b">Step 1</span>  Harness v2 bug: build(ref) and build(cand) draw different weights
+             └─▶ honest parameterized solutions score incorrect (diff ≈ 3.46)
+  <span class="b">Step 2</span>  SKILL agent's diagnosis: "bench.py builds the models back-to-back
+             without reseeding... any parameterized solution scores correct: false"
+             └─▶ correct diagnosis, <span class="r">wrong fix location</span>
+  <span class="b">Step 3</span>  The workaround, inside the allowed file:
+             capture RNG state at import time → restore it inside Model.__init__
+             └─▶ under harness v2: weights match, correct: true, <span class="g">3.69x</span>
+  <span class="b">Step 4</span>  Harness v3 (the fix): reseed before each construction
+             └─▶ the restore now OVERRIDES the reseed
+             └─▶ candidate weights ≠ reference weights: diff 32.8, <span class="r">correct: false</span>
+  <span class="b">Step 5</span>  Real KernelBench grades under a reseeded grader → this solution
+             would score zero in production. <span class="r">Scored as DNF.</span></pre>
+  <div class="row">
+    <div class="card"><div class="label">Why this is the pilot's best lesson</div><p>Robustness is defined against the grader you will be graded by, not the one you are debugging against. The agent's engineering was excellent and its diagnosis exactly right; placing the fix in the solution file instead of a bug report turned a 3.7x win into a zero.</p></div>
+    <div class="card green"><div class="label">Closed loop</div><p>Pitfall #15 now forbids RNG manipulation in plain words, with the mechanism spelled out. The next run of the skill starts with this knowledge; that is what a skill is for.</p></div>
+  </div>
+  <div class="foot">Sequence reconstructed from the skill agent's final report and the two scoring sessions (v2: correct 3.5789x; v3: incorrect, 3.6874x raw timing).</div>
+</section>
+
+<!-- 13 THROTTLE TREND -->
+<section class="slide">
+  <div class="kicker">Measurement reality · <b>13</b></div>
+  <h1>Trend chart: the same reference kernel, three sessions, a 12x swing</h1>
+  <p class="sub">Median time of the identical softmax reference across scoring sessions. Absolute milliseconds do not survive this machine; ratios do. This is why the pilot's metric is the speedup ratio and nothing else</p>
+  <div class="chart" style="margin-top:12px">
+    <svg viewBox="0 0 900 340" role="img" aria-label="reference median ms across sessions">
+      <!-- log-ish linear scale 0..800ms, plot area x 90..860, y 20..290 -->
+      <g stroke="#e5dcc2" stroke-width="1">
+        <line x1="90" y1="20" x2="860" y2="20"/><line x1="90" y1="110" x2="860" y2="110"/><line x1="90" y1="200" x2="860" y2="200"/><line x1="90" y1="290" x2="860" y2="290"/>
+      </g>
+      <g font-size="12" fill="#6b6353" font-family="Inter">
+        <text x="82" y="24" text-anchor="end">800 ms</text><text x="82" y="114" text-anchor="end">533 ms</text><text x="82" y="204" text-anchor="end">267 ms</text><text x="82" y="294" text-anchor="end">0 ms</text>
+      </g>
+      <!-- points (x,y): sessionA 55.9 -> y=290-55.9*0.3375=271.1 x=140 ; 630.5 -> y=77.2 x=330 ; 716.7 -> y=48.1 x=520 ; 253.3 -> y=204.5 x=710 ; 253.7 -> y=203.4 x=800 -->
+      <polyline points="140,271 330,77 520,48 710,205 800,204" fill="none" stroke="#1d6bd0" stroke-width="3"/>
+      <g fill="#12457a">
+        <circle cx="140" cy="271" r="6"/><circle cx="330" cy="77" r="6"/><circle cx="520" cy="48" r="6"/><circle cx="710" cy="205" r="6"/><circle cx="800" cy="204" r="6"/>
+      </g>
+      <g font-size="12" fill="#1d1a16" font-weight="700" font-family="Inter">
+        <text x="140" y="255" text-anchor="middle">55.9</text>
+        <text x="330" y="61" text-anchor="middle">630.5</text>
+        <text x="520" y="32" text-anchor="middle">716.7</text>
+        <text x="710" y="189" text-anchor="middle">253.3</text>
+        <text x="800" y="188" text-anchor="middle">253.7</text>
+      </g>
+      <g font-size="11" fill="#6b6353" font-family="Inter">
+        <text x="140" y="316" text-anchor="middle">agent session</text><text x="330" y="316" text-anchor="middle">pause-eval</text><text x="520" y="316" text-anchor="middle">pause-eval</text><text x="710" y="316" text-anchor="middle">resume eval</text><text x="800" y="316" text-anchor="middle">resume eval</text>
+        <text x="140" y="331" text-anchor="middle">9 Nov 10:19</text><text x="330" y="331" text-anchor="middle">9 Nov 10:40</text><text x="520" y="331" text-anchor="middle">9 Nov 10:55</text><text x="710" y="331" text-anchor="middle">10 Nov 07:30</text><text x="800" y="331" text-anchor="middle">10 Nov 07:35</text>
+      </g>
+    </svg>
+    <div class="cap">Median ms of <code>torch.softmax</code> on the identical problem, five scoring runs across two days, no code change between any of them. The 630-717 ms cluster was measured with harness v1 (clone inside the timed region) and 55 W throttling; 253 ms is v2+v3 with clone removed; 55.9 ms was the agents' healthier-clock session. Same GPU, same kernel, 12.8x spread.</div>
+  </div>
+  <div class="row">
+    <div class="card amber"><div class="label">Methodological consequence</div><p>Speedup ratios from interleaved reps stayed in a narrow band across all of this (0.80-1.25x on softmax across sessions); raw milliseconds moved 12x. Cross-session comparisons of absolute time on this machine are meaningless, and any benchmark protocol that does not control for it produces fiction.</p></div>
+  </div>
+  <div class="foot">Data from the scoring log; timestamps are WSL2 local time. The two pause-eval points predate the clone fix (slide 08), the resume points postdate it.</div>
+</section>
+
+<!-- 14 ROOFLINE / BANDWIDTH -->
+<section class="slide">
+  <div class="kicker">Roofline · <b>14</b></div>
+  <h1>Bandwidth reality: why both agents tied torch on the memory-bound problems</h1>
+  <p class="sub">The skill-condition agent measured the machine before optimizing: pure linear read bandwidth under throttle. That single number explains the softmax and sum-reduction results</p>
+  <div class="row" style="align-items:stretch">
+    <div class="chart" style="flex:1.2">
+      <svg viewBox="0 0 640 300" role="img" aria-label="bandwidth achieved vs spec">
+        <g stroke="#e5dcc2" stroke-width="1">
+          <line x1="90" y1="40" x2="620" y2="40"/><line x1="90" y1="115" x2="620" y2="115"/><line x1="90" y1="190" x2="620" y2="190"/><line x1="90" y1="265" x2="620" y2="265"/>
+        </g>
+        <g font-size="12" fill="#6b6353" font-family="Inter">
+          <text x="82" y="44" text-anchor="end">900</text><text x="82" y="119" text-anchor="end">600</text><text x="82" y="194" text-anchor="end">300</text><text x="82" y="269" text-anchor="end">0</text>
+          <text x="82" y="30" text-anchor="end" font-weight="700">GB/s</text>
+        </g>
+        <!-- spec 900 -> h=225 y=40 ; measured 540 -> h=135 y=130 ; softmax kernels ~both near 540 -->
+        <rect x="140" y="40" width="110" height="225" fill="#b9ae90"/>
+        <text x="195" y="32" text-anchor="middle" font-size="12" fill="#6b6353" font-family="Inter">~900 spec (GDDR7)</text>
+        <rect x="290" y="130" width="110" height="135" fill="#1d6bd0"/>
+        <text x="345" y="122" text-anchor="middle" font-size="12" fill="#1d1a16" font-weight="700" font-family="Inter">540 measured</text>
+        <text x="345" y="150" text-anchor="middle" font-size="11" fill="#fbf8ee" font-family="Inter">linear read, throttled</text>
+        <!-- torch.sum ~ parity: 530-540 area: draw marker -->
+        <rect x="440" y="131" width="110" height="134" fill="#1e7d33" opacity="0.85"/>
+        <text x="495" y="123" text-anchor="middle" font-size="12" fill="#1d1a16" font-weight="700" font-family="Inter">torch.sum / custom</text>
+        <text x="495" y="151" text-anchor="middle" font-size="11" fill="#fbf8ee" font-family="Inter">both ≈ at the wall</text>
+      </svg>
+      <div class="cap">Roofline arithmetic from the skill agent's sum-reduction report: 8.59 GB input, isolated-kernel mins 15.3 ms (ref) vs 15.5 ms (kernel), both ≈ 530-540 GB/s.</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:14px">
+      <div class="card"><div class="label">What follows</div><p>When the ceiling is bandwidth and the reference already touches it, no kernel technique wins. The 0.79x-0.97x scores on memory-bound problems are not agent failures; they are the machine refusing to be beaten at parity. The skill's stop rule (three attempts under 2% → stop) prevented both agents from burning turns on an impossible target.</p></div>
+      <div class="card amber"><div class="label">Where wins live</div><p>Compute-bound problems are a different story: torch's fp32 SGEMM leaves 2-3x on the table for any solution that may change input precision under the tolerance gate. That is where both conditions' only >1.4x results came from.</p></div>
+    </div>
+  </div>
+  <div class="foot">540 GB/s: skill agent measurement, 10 Nov 2026. Spec ~900 GB/s: RTX 5080 Laptop GDDR7 class. Achieved TFLOPS on matmul under throttle: ~12.4 (noskill agent measurement).</div>
+</section>
+
+<!-- 15 VERDICT -->
+<section class="slide">
+  <div class="kicker">Verdict · <b>15</b></div>
+  <h1>Measured answer: the skill buys peak speed, and once, robustness</h1>
+  <p class="sub">Same model, same problems, same evaluator. The difference the skill makes is not uniform; it is concentrated exactly where its guidance has something to say</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Mean speedup, correct solutions</div><div class="stat blue">1.53×</div><p>skill condition (3 runs) vs <b>1.22x</b> noskill (4 runs)</p></div>
+    <div class="card green"><div class="label">Correctness</div><div class="stat green">4/4 <small>vs 3/4</small></div><p>plain agent always correct; skill agent once traded robustness for speed</p></div>
+    <div class="card amber"><div class="label">Largest single effect</div><div class="stat amber">2.81×</div><p>fp16 tensor-core GEMM with fp32 accumulate: the skill's "don't hand-roll against cuBLAS; change precision under the tolerance gate; fuse the epilogue" path</p></div>
+  </div>
+  <div class="row">
+    <div class="card"><div class="label">Where the skill did NOT help</div><p>Memory-bound problems: both conditions scored 0.79-0.97x against references that already saturate the throttled 540 GB/s. The skill cannot repeal the roofline; it correctly told its agent to stop trying (the stop rule), which saved turns, not milliseconds.</p></div>
+    <div class="card red"><div class="label">Where the skill cost a point</div><p>The RNG workaround (slides 09, 12): the skill's agent optimized hard, hit a harness bug, and patched the bug inside its own solution. The skill now carries that failure as pitfall #15 so the next agent inherits it for free.</p></div>
+  </div>
+  <div class="foot">Verdict restricted to what was measured: 4 problems, 1 model, 1 GPU, 1 scoring harness. It is a pilot-sized experiment, not a leaderboard claim.</div>
+</section>
+
+<!-- 16 SKILL V1.1 -->
+<section class="slide">
+  <div class="kicker">Closing the loop · <b>16</b></div>
+  <h1>Skill v1.1: the pilot wrote back into the skill</h1>
+  <p class="sub">A skill is only worth installing if the benchmark can change it. Three changes shipped the same day the failures were diagnosed</p>
+  <table style="margin-top:18px">
+    <tr><th>Change</th><th>Trigger</th><th>Where it lives now</th></tr>
+    <tr><td><b>Interleaved timing rule</b>: never time A fully before B; alternate reps, compare medians</td><td>Smoke test showed identical code at 0.65x; both wave-1 agents independently hit the same wall</td><td>SKILL.md §Benchmark honestly + bench.py itself</td></tr>
+    <tr><td><b>Clone once, outside the clock</b>; realistic-shape profiling</td><td>Skill agent proved the timed region was 94% memcpy on 8.6 GB inputs</td><td>bench.py + pitfall material</td></tr>
+    <tr><td><b>Pitfall #15</b>: never manipulate global RNG state; report harness bugs, never patch them in the solution</td><td>The 3.69x kernel that scored zero under the reseeded grader</td><td>reference/pitfalls.md</td></tr>
+  </table>
+  <div class="row">
+    <div class="card green"><div class="label">The pattern</div><p>Benchmark → failure → rule → skill. Each iteration is cheap (one pitfall, one paragraph), which is the same economy the ESL zero-program applies to MISRA fixes: versioned, reviewable units of improvement, not one-off patches.</p></div>
+    <div class="card"><div class="label">Unchanged by design</div><p>The technique catalog needed no edits: every technique it recommends was either used by a winning run or correctly deprioritized by a stop rule. The catalog predicted the matmul result before the pilot ran it.</p></div>
+  </div>
+  <div class="foot">Skill files: /home/danie/KernelBench/.agents/skills/cuda-kernel-super/: SKILL.md, reference/techniques.md, reference/pitfalls.md, scripts/bench.py.</div>
+</section>
+
+<!-- 17 REPRODUCE -->
+<section class="slide">
+  <div class="kicker">Reproduce · <b>17</b></div>
+  <h1>Everything is on disk and re-runnable</h1>
+  <p class="sub">No cloud, no secrets, no lost state: the pilot is a directory tree plus one venv</p>
+  <pre class="box">
+  <span class="b">Repo</span>            /home/danie/KernelBench            (KernelBench clone, main)
+  <span class="b">Environment</span>     /home/danie/KernelBench/.venv      (Python 3.10, torch 2.14.1+cu130)
+  <span class="b">Skill</span>           /home/danie/KernelBench/.agents/skills/cuda-kernel-super/
+  <span class="b">Solutions</span>       /home/danie/KernelBench/pilot/&lt;problem&gt;/{noskill,skill}/model_new.py
+  <span class="b">Resume state</span>    /home/danie/KernelBench/pilot/STATE.md
+  <span class="b">Progress log</span>    Amp artifact: KernelBench CUDA skill A/B pilot (rev 6)
+
+  <span class="g"># score any solution the way this deck did</span>
+  /home/danie/KernelBench/.venv/bin/python \
+    /home/danie/KernelBench/.agents/skills/cuda-kernel-super/scripts/bench.py \
+    --ref KernelBench/level1/1_Square_matrix_multiplication_.py \
+    --cand pilot/matmul/skill/model_new.py --reps 100
+
+  <span class="a"># next experiments the data points to</span>
+  · re-run wave 4 skill condition with pitfall #15 in place (expect: correct, ~3.7x)
+  · rescore both conditions in a fixed-clock session (plugged in, locked power)
+  · extend to Level 3 full-model problems where fusion compounding shows up</pre>
+  <div class="foot">Paths as deployed on the WSL2 host; Windows view via \\wsl.localhost\&lt;distro&gt;\home\danie\KernelBench.</div>
+</section>
+
+<!-- 18 THANK YOU -->
+<section class="slide">
+  <div class="kicker">Thank you · <b>18</b></div>
+  <h1>Seed it, split it, measure it, and let the benchmark write back</h1>
+  <p class="sub">The pattern generalizes beyond CUDA: one question, two conditions, one honest evaluator, and every harness bug becomes a rule the next run starts with</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Benchmark</div><p style="color:var(--ink)"><b>KernelBench</b><br>github.com/ScalingIntelligence/KernelBench</p></div>
+    <div class="card"><div class="label">The skill</div><p style="color:var(--ink)"><b>cuda-kernel-super</b><br>KernelFlow methodology + KernelBench contract + machine truths</p></div>
+    <div class="card"><div class="label">The evidence</div><p style="color:var(--ink)"><b>Pilot artifact, rev 6</b><br>all scores, reports, and decisions</p></div>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="label">Author</div>
+      <p><b style="color:var(--ink)">Daniel Liezrowice</b> · CTO, ESL - Engineering Software Lab<br>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years.<br><a href="https://www.linkedin.com/in/liezrowice/" style="color:var(--blue)">linkedin.com/in/liezrowice</a></p>
+    </div>
+  </div>
+  <div class="foot">ESL - Engineering Software Lab · <a href="https://eswlab.com/" style="color:var(--blue)">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" style="color:var(--blue)">Contact ESL</a> · All measurements 9-10 November 2026 on the documented RTX 5080 Laptop / WSL2 host.</div>
+</section>
+
+</div>
+
+<button class="nav-arrows" id="prevBtn" aria-label="Previous slide">‹</button>
+<button class="nav-arrows" id="nextBtn" aria-label="Next slide">›</button>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="counter" id="counter"></div>
+<div class="hint" id="hint">← Swipe to navigate →</div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck');
+  var total=deck.children.length;
+  var cur=0;
+  var progress=document.getElementById('progress');
+  var counter=document.getElementById('counter');
+  var hint=document.getElementById('hint');
+  var prev=document.getElementById('prevBtn');
+  var next=document.getElementById('nextBtn');
+  function go(n){
+    cur=Math.max(0,Math.min(total-1,n));
+    deck.style.transform='translateX('+(-cur*100)+'vw)';
+    progress.style.width=((cur+1)/total*100)+'%';
+    counter.textContent=(cur+1)+' / '+total;
+    prev.classList.toggle('hidden',cur===0);
+    next.classList.toggle('hidden',cur===total-1);
+    hint.classList.add('gone');
+  }
+  prev.addEventListener('click',function(){go(cur-1)});
+  next.addEventListener('click',function(){go(cur+1)});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+    else if(e.key==='Home'){go(0);}else if(e.key==='End'){go(total-1);}
+  });
+  var tx=null,ty=null;
+  document.addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(tx===null)return;
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?go(cur+1):go(cur-1);}
+    tx=null;
+  },{passive:true});
+  var dragging=false,dragX=0;
+  document.addEventListener('mousedown',function(e){dragging=true;dragX=e.clientX;});
+  document.addEventListener('mouseup',function(e){
+    if(!dragging)return;dragging=false;
+    var dx=e.clientX-dragX;
+    if(Math.abs(dx)>60){dx<0?go(cur+1):go(cur-1);}
+  });
+  window.addEventListener('resize',function(){go(cur);});
+  go(0);
+})();
+</script>
+</body>
+</html>
