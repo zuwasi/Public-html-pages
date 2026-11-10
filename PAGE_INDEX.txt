@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-11-07
+Last updated: 2026-11-10
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -352,6 +352,9 @@ Last updated: 2026-11-07
 
 • jev-decision-safeguards
   https://zuwasi.github.io/Public-html-pages/jev-decision-safeguards
+
+• kernelbench-cuda-skill-ab
+  https://zuwasi.github.io/Public-html-pages/kernelbench-cuda-skill-ab
 
 • level5-safety-pipeline
   https://zuwasi.github.io/Public-html-pages/level5-safety-pipeline
