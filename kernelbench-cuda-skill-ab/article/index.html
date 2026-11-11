@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>The CUDA super skill, measured: a KernelBench A/B pilot | Engineering Software Lab</title>
+<meta name="description" content="We gave the Amp coding agent a CUDA skill and measured what happened on four KernelBench problems: 2.81x peak speedup, 1.53x average vs 1.22x plain, on one RTX 5080 Laptop GPU.">
+<style>
+:root{--paper:#f6f1e3;--sheet:#fbf8ee;--sheet2:#f0e9d4;--ink:#1d1a16;--muted:#6b6353;--line:#e5dcc2;--blue:#12457a;--accent:#1d6bd0;--amber:#e8a317;--green:#1e7d33;--red:#b8322a}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--paper);color:var(--ink);line-height:1.75;font-size:18px}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:14px;padding:10px max(4vw,24px);background:rgba(246,241,227,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.topbar img{height:38px}
+.topbar .tt{font-weight:700;font-size:15px;color:var(--ink)}
+.topbar .links{margin-left:auto;display:flex;gap:18px}
+.topbar a{color:var(--blue);text-decoration:none;font-weight:600;font-size:14px}
+.topbar a:hover{text-decoration:underline}
+main{max-width:880px;margin:0 auto;padding:48px max(4vw,24px) 80px}
+.kicker{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.14em;font-size:13px;color:var(--blue);text-transform:uppercase}
+.kicker .mark{width:22px;height:22px;background:linear-gradient(135deg,var(--amber) 0 50%,transparent 50% 62%,var(--blue) 62% 100%);border:2.5px solid var(--blue);display:inline-block}
+h1{font-size:clamp(30px,4.6vw,46px);line-height:1.14;margin:16px 0 14px;letter-spacing:-.02em}
+h1 .hl{color:var(--accent)}
+.sub{font-size:clamp(16px,2vw,20px);color:var(--muted);max-width:100%}
+.meta{font-size:13px;color:var(--muted);margin:14px 0 26px}
+.meta b{color:var(--ink)}
+.video-wrap{position:relative;width:100%;aspect-ratio:16/9;background:#14110c;border-radius:14px;overflow:hidden;box-shadow:0 12px 34px rgba(29,26,22,.18);margin:8px 0 10px}
+.video-wrap video{width:100%;height:100%;object-fit:cover;display:block}
+.vcap{font-size:13.5px;color:var(--muted);margin:0 0 34px}
+h2{font-size:clamp(22px,2.6vw,29px);margin:44px 0 12px;letter-spacing:-.01em;color:var(--blue)}
+p{margin:0 0 16px}
+ol,ul{margin:0 0 18px 26px}
+li{margin-bottom:8px}
+code{font-family:'Cascadia Mono',Consolas,monospace;font-size:.88em;background:var(--sheet2);border:1px solid var(--line);border-radius:6px;padding:1px 7px}
+.statrow{display:flex;gap:16px;flex-wrap:wrap;margin:26px 0}
+.stat{flex:1;min-width:180px;background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--green);border-radius:12px;padding:18px 20px}
+.stat.amber{border-top-color:var(--amber)}
+.stat.blue{border-top-color:var(--accent)}
+.stat .n{font-size:clamp(34px,4vw,48px);font-weight:800;color:var(--green);letter-spacing:-.02em}
+.stat.amber .n{color:var(--amber)}
+.stat.blue .n{color:var(--blue)}
+.stat .l{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+table{width:100%;border-collapse:collapse;margin:20px 0 8px;background:var(--sheet);border:1px solid var(--line);border-radius:12px;overflow:hidden;font-size:16px}
+th{background:var(--sheet2);text-align:left;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:10px 14px}
+td{padding:12px 14px;border-top:1px solid var(--line);vertical-align:top}
+td.g{color:var(--green);font-weight:800}
+.note{background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--amber);border-radius:10px;padding:16px 20px;margin:22px 0;font-size:16px}
+.cta{display:flex;gap:14px;flex-wrap:wrap;margin:34px 0 8px}
+.cta a{display:inline-block;background:var(--blue);color:#fff;font-weight:700;text-decoration:none;padding:13px 26px;border-radius:10px;font-size:15.5px}
+.cta a.ghost{background:transparent;color:var(--blue);border:2px solid var(--blue)}
+footer{border-top:1px solid var(--line);padding:26px max(4vw,24px);display:flex;gap:18px;align-items:center;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+footer img{height:30px}
+footer a{color:var(--blue);font-weight:600;text-decoration:none}
+@media (max-width:640px){body{font-size:16.5px}.statrow{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a href="https://zuwasi.github.io/Public-html-pages/"><img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+  <span class="tt">KernelBench CUDA skill A/B pilot</span>
+  <nav class="links"><a href="../technical/">Technical deck</a><a href="https://www.eswlab.com/">eswlab.com</a></nav>
+</div>
+<main>
+  <div class="kicker"><span class="mark"></span>Engineering report · 10 November 2026</div>
+  <h1>We gave a coding agent a <span class="hl">CUDA skill</span> and measured what happened</h1>
+  <p class="sub">Same agent, same four KernelBench problems, twice: once with a custom <code>cuda-kernel-super</code> skill, once without. The full text of the pilot, with the complete narrated walkthrough embedded below.</p>
+  <p class="meta">By <b>Daniel Liezrowice</b>, CTO, ESL - Engineering Software Lab · RTX 5080 Laptop GPU · torch 2.14.1+cu130 · Amp agent</p>
+
+  <div class="video-wrap">
+    <video controls preload="metadata" poster="video/poster.png">
+      <source src="video/kernelbench-cuda-skill-demo.mp4" type="video/mp4">
+      Your browser does not support embedded video. <a href="video/kernelbench-cuda-skill-demo.mp4">Download the video</a>.
+    </video>
+  </div>
+  <p class="vcap">The narrated 4:32 walkthrough of the whole pilot, with burned-in subtitles.</p>
+
+  <div class="statrow">
+    <div class="stat"><div class="l">Peak speedup</div><div class="n">2.81×</div></div>
+    <div class="stat blue"><div class="l">Average with skill</div><div class="n">1.53×</div></div>
+    <div class="stat amber"><div class="l">Fastest kernel</div><div class="n">3.69×</div></div>
+  </div>
+
+  <h2>The question</h2>
+  <p>KernelBench (ScalingIntelligence's public benchmark) asks an agent to write a CUDA kernel from a problem statement and scores it against a PyTorch reference with an <code>allclose</code> gate (rtol 1e-2, atol 1e-2). The question we cared about is narrow: does a well built "CUDA super skill" make a coding agent measurably better at this job, or does it just make it more confident?</p>
+
+  <h2>The experiment</h2>
+  <p>One agent (Amp), four KernelBench problems, two conditions, eight independent runs:</p>
+  <ol>
+    <li>Softmax, 4096×393216 fp32, memory bound</li>
+    <li>Square matrix multiplication, 4096×4096 fp32, compute bound, cuBLAS baseline</li>
+    <li>Sum reduction over dim 1, 128×512×4095 fp32, memory bound</li>
+    <li>GEMM + bias + scale + LeakyReLU, 1024×8192, fusion</li>
+  </ol>
+  <p>The "plain" runs got no skill. The "skill" runs got <code>cuda-kernel-super</code>, a skill assembled from three open source bodies of knowledge: KernelFlow's optimization methodology, KernelBench's evaluation contract, and NVIDIA kernel guidance. We then added what no source had: machine truths measured on the target GPU (sm_120 architecture flags, Triton autotune timeouts, the measured bandwidth ceiling).</p>
+  <p>The hardware is an RTX 5080 Laptop, 16 GB, running under a 55 W power cap inside WSL2, torch 2.14.1+cu130. That constraint shaped everything.</p>
+
+  <h2>The measurement discipline</h2>
+  <p>At 55 W the GPU throttles dynamically: we observed SM clocks as low as 180 MHz, and the identical softmax reference measured 55.9 ms in one session and 716.7 ms in another. Same GPU, same kernel, 12.8× spread. Two consequences:</p>
+  <ul>
+    <li>Every score comes from a serial evaluator that interleaves reference and candidate reps in one loop (medians of 100 reps), zeroing a 256 MB buffer between reps to flush the L2 cache. Sequential A-then-B timing is banned; it lies on a throttled GPU.</li>
+    <li>The metric is only ever the speedup ratio. Raw milliseconds do not travel across sessions on this machine.</li>
+  </ul>
+  <p>Correctness was gated on two seeds with fresh inputs, with a reward-hacking rule in both prompts: no caching, no hard-coded outputs.</p>
+
+  <h2>The results</h2>
+  <table>
+    <tr><th>Problem</th><th>Plain agent</th><th>With skill</th><th>What won</th></tr>
+    <tr><td>Square matmul (compute bound)</td><td>1.43×</td><td class="g">2.81×</td><td>fp16 tensor-core GEMM, fp32 accumulate, no extra conversion epilogue</td></tr>
+    <tr><td>GEMM + LeakyReLU (fusion)</td><td>1.71×</td><td class="g">3.69×</td><td>fp16 GEMM + one fused Triton epilogue for bias, scale and activation; fastest kernel of the pilot</td></tr>
+    <tr><td>Softmax (memory bound)</td><td>0.95×</td><td>0.80×</td><td>parity; the 540 GB/s wall decides</td></tr>
+    <tr><td>Sum reduction (memory bound)</td><td>0.79×</td><td>0.97×</td><td>parity at the bandwidth limit</td></tr>
+  </table>
+  <p>Mean speedup among scored runs: 1.22× plain vs 1.53× with the skill. At peak, the skill's matmul kernel does the same work in 36% of the reference's GPU time.</p>
+  <p>The numerics are worth a sentence. The winning matmul changes input precision to fp16 with fp32 accumulation: input rounding of 2⁻¹¹, the same structural error class as TF32, verified with ~180× margin against the per-element tolerance budget. That is not cheating under KernelBench's gate; it is exactly the reasoning the skill teaches: never hand-roll what cuBLAS does well, move precision under the tolerance gate, fuse the epilogue.</p>
+
+  <h2>The wall</h2>
+  <p>On the memory bound problems, the skill's agent measured the machine before optimizing: 540 GB/s of achievable linear read against a ~900 GB/s GDDR7 spec. <code>torch.sum</code> already saturates that wall. Nothing can win there, and the skill's stop rule (three consecutive attempts under 2% gain) stopped both agents from burning turns on an impossible target.</p>
+
+  <h2>What the benchmark wrote back into the skill</h2>
+  <p>A skill is only worth installing if the benchmark can change it. Three rules shipped into <code>cuda-kernel-super</code> during the pilot itself: interleaved A/B timing, clone once outside the clock (and profile realistic shapes), and a robustness rule: never manipulate global RNG state, and never patch a harness anomaly inside your own solution file; report it. The next agent inherits all three for free. That feedback loop, benchmark to failure to rule to skill, is the part we care about most.</p>
+
+  <h2>Honest limits</h2>
+  <div class="note">One GPU, one model, one pilot-sized sample, one scoring harness. This is not a leaderboard claim. It is a controlled A/B with every artifact on disk: solutions, scoring script, state file, all re-runnable with one command.</div>
+
+  <div class="cta">
+    <a href="../technical/">Open the full technical deck</a>
+    <a class="ghost" href="https://github.com/ScalingIntelligence/KernelBench">KernelBench on GitHub</a>
+  </div>
+</main>
+<footer>
+  <img src="../assets/esl-logo.png" alt="ESL">
+  <span>Engineering Software Lab Ltd. · <a href="https://www.eswlab.com/">eswlab.com</a> · <a href="mailto:sales@eswlab.com">sales@eswlab.com</a></span>
+</footer>
+</body>
+</html>
