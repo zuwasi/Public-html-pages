@@ -269,7 +269,7 @@ svg{display:block;width:100%;height:auto}
   <h1>Speedup by problem and condition, one scoring session</h1>
   <p class="sub">Median speedup vs the PyTorch reference, bench.py final harness, 100 interleaved L2-flushed reps. All scores from a single session on 10 November 2026</p>
   <div class="chart" style="margin-top:14px">
-    <div class="legend"><span class="ns">NOSKILL (plain agent)</span><span class="sk">SKILL (cuda-kernel-super)</span></div>
+    <div class="legend"><span class="ns">NOSKILL (plain agent)</span><span class="sk">SKILL (cuda-kernel-super)</span><span style="color:#8a5e00">- - parity with PyTorch reference</span></div>
     <svg viewBox="0 0 900 360" role="img" aria-label="speedup by problem and condition">
       <!-- scale: 1.0x = 75px, baseline y=310, max 4.0x = 300px -->
       <g stroke="#e5dcc2" stroke-width="1">
@@ -279,7 +279,6 @@ svg{display:block;width:100%;height:auto}
         <text x="52" y="14" text-anchor="end">4.0x</text><text x="52" y="89" text-anchor="end">3.0x</text><text x="52" y="164" text-anchor="end">2.0x</text><text x="52" y="239" text-anchor="end">1.0x</text><text x="52" y="314" text-anchor="end">0x</text>
       </g>
       <line x1="60" y1="235" x2="880" y2="235" stroke="#8a5e00" stroke-width="1.5" stroke-dasharray="6 4"/>
-      <text x="486" y="230" font-size="11" fill="#8a5e00" font-family="Inter,Arial">parity with PyTorch reference</text>
 
       <!-- Softmax: NS 0.95 h=71 y=239 ; SK 0.80 h=60 y=250 -->
       <rect x="110" y="239" width="70" height="71" fill="#5a626c"/>
