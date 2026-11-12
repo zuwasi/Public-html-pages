@@ -413,6 +413,9 @@ Last updated: 2026-11-12
 • parasoft-ti-armclang-misra-setup
   https://zuwasi.github.io/Public-html-pages/parasoft-ti-armclang-misra-setup
 
+• parasoft-vs-swe-sweep
+  https://zuwasi.github.io/Public-html-pages/parasoft-vs-swe-sweep
+
 • prediction-is-not-permission
   https://zuwasi.github.io/Public-html-pages/prediction-is-not-permission
 
