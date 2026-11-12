@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-11-11
+Last updated: 2026-11-12
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -229,6 +229,9 @@ Last updated: 2026-11-11
 
 • agent-halflife-tester-guide.md
   https://zuwasi.github.io/Public-html-pages/agent-halflife-tester-guide.md
+
+• agent-injection-test-review
+  https://zuwasi.github.io/Public-html-pages/agent-injection-test-review
 
 • agent-memory-benchmark
   https://zuwasi.github.io/Public-html-pages/agent-memory-benchmark
