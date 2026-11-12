@@ -127,10 +127,10 @@ svg{display:block;width:100%;height:auto}
   </div>
   <div class="bigrow">
     <div class="card"><div class="label">Bugs analyzed</div><div class="stat blue">488 <small>real defects</small></div><p>Across 14 C/C++ repositories, bug-era code from git blob hashes</p></div>
-    <div class="card green"><div class="label">Parasoft flagged</div><div class="stat green">37.5%</div><p>183 of 488 bugs on the changed lines; 20.5% on the exact fixed line</p></div>
+    <div class="card green"><div class="label">Parasoft flagged</div><div class="stat green">37.5%</div><p>183 of 488 bugs on the changed lines; 21.1% on the exact fixed line</p></div>
     <div class="card red"><div class="label">Best agent resolved</div><div class="stat red">~4.5%</div><p>SWE-sweep's best published result across these same repositories</p></div>
   </div>
-  <div class="foot">Engineering Software Lab (eswlab.com) · 12 November 2026 · Tool: Parasoft C/C++test Standard 2025.2.0, Linux x64. All data, scripts, and raw tool output public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
+  <div class="foot">Engineering Software Lab (eswlab.com) · 12 November 2026 · Tool: Parasoft C/C++test Standard 2026.1.3 (C repos) / 2025.2.0 (C++ repos), Linux x64. All data, scripts, and raw tool output public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
 </section>
 
 <!-- 02 THE DEBATE -->
@@ -189,13 +189,13 @@ svg{display:block;width:100%;height:auto}
    |  CMake compile_commands.json (11 repos), make -n (2), scons compiledb (godot)
    v
 <span class="b">run cpptestcli</span> with the deployed rule sets, gcc_13-64, 6 parallel runs
-   |  C repos:  Flow Analysis Standard + MISRA C 2025 + CERT C      (700 rules)
-   |  C++ repos: Flow Analysis Standard + MISRA C++ 2023 + CERT C++ (676 rules)
+   |  C repos:  Flow Analysis Standard + MISRA C 2025 + CERT C           (685 rules)
+   |  C++ repos: Flow Analysis Standard + MISRA C++ 2023 + CERT C++/C  (660 rules)
    v
 <span class="b">map every violation back to bugs</span>
       found (region): any violation on any changed line
       strict: violation on a line the eventual fix removed or rewrote</pre>
-  <div class="foot">Parasoft C/C++test Standard 2025.2.0 (cpptestcli), WSL2 Linux x64, compiler id gcc_13-64, 12 November 2026. Full pipeline public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
+  <div class="foot">Parasoft C/C++test Standard 2026.1.3 (C repos, MISRA C 2025) and 2025.2.0 (C++ repos, MISRA C++ 2023), cpptestcli, WSL2 Linux x64, gcc_13-64, 12 November 2026. Full pipeline public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
 </section>
 
 <!-- 05 RESULTS TABLE PART 1 -->
@@ -205,12 +205,12 @@ svg{display:block;width:100%;height:auto}
   <p class="sub">Parasoft flags 183 of 488 bugs on the changed lines; the best agent resolved about 22 of 488 on the same repositories</p>
   <table style="margin-top:14px">
     <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
-    <tr><td><b>jerryscript</b></td><td>C</td><td>15</td><td>13</td><td><b>86.7%</b></td><td>66.7%</td><td>20.0%</td></tr>
+    <tr><td><b>jerryscript</b></td><td>C</td><td>15</td><td>13</td><td><b>86.7%</b></td><td>80.0%</td><td>20.0%</td></tr>
     <tr><td><b>opencv</b></td><td>C++</td><td>47</td><td>32</td><td><b>68.1%</b></td><td>29.8%</td><td>2.1%</td></tr>
     <tr><td><b>duckdb</b></td><td>C++</td><td>109</td><td>56</td><td><b>51.4%</b></td><td>25.7%</td><td>2.8%</td></tr>
-    <tr><td><b>libexpat</b></td><td>C</td><td>9</td><td>5</td><td>55.6%</td><td>33.3%</td><td>44.4%</td></tr>
+    <tr><td><b>libexpat</b></td><td>C</td><td>9</td><td>6</td><td><b>66.7%</b></td><td>44.4%</td><td>44.4%</td></tr>
     <tr><td><b>proj</b></td><td>C++</td><td>21</td><td>10</td><td>47.6%</td><td>28.6%</td><td>9.5%</td></tr>
-    <tr><td><b>php-src</b></td><td>C</td><td>26</td><td>12</td><td>46.2%</td><td>30.8%</td><td>0.0%</td></tr>
+    <tr><td><b>php-src</b></td><td>C</td><td>26</td><td>11</td><td>42.3%</td><td>26.9%</td><td>0.0%</td></tr>
     <tr><td><b>cvc5</b></td><td>C++</td><td>38</td><td>17</td><td>44.7% <span class="mono">(lower bound)</span></td><td>26.3%</td><td>2.6%</td></tr>
     <tr><td><b>hdf5</b></td><td>C</td><td>14</td><td>6</td><td>42.9%</td><td>28.6%</td><td>28.6%</td></tr>
   </table>
@@ -221,20 +221,20 @@ svg{display:block;width:100%;height:auto}
 <section class="slide compact">
   <div class="kicker">Results · <b>06</b></div>
   <h1>The scoreboard (part 2 of 2): <span class="hl">183 of 488 flagged</span></h1>
-  <p class="sub">Strictly counting findings on the exact line the maintainer's fix changed, Parasoft still found 20.5% of all bugs</p>
+  <p class="sub">Strictly counting findings on the exact line the maintainer's fix changed, Parasoft still found 21.1% of all bugs</p>
   <table style="margin-top:14px">
     <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
     <tr><td><b>godot</b></td><td>C++</td><td>17</td><td>7</td><td>41.2%</td><td>35.3%</td><td>0.0%</td></tr>
     <tr><td>z3</td><td>C++</td><td>11</td><td>3</td><td>27.3%</td><td>9.1%</td><td>0.0%</td></tr>
     <tr><td>arrow</td><td>C++</td><td>47</td><td>10</td><td>21.3%</td><td>8.5%</td><td>2.1%</td></tr>
     <tr><td>micropython</td><td>C</td><td>22</td><td>4</td><td>18.2%</td><td>13.6%</td><td>0.0%</td></tr>
-    <tr><td>tarantool</td><td>C</td><td>40</td><td>5</td><td>12.5%</td><td>5.0%</td><td>7.5%</td></tr>
+    <tr><td>tarantool</td><td>C</td><td>40</td><td>5</td><td>12.5%</td><td>7.5%</td><td>7.5%</td></tr>
     <tr><td>gdal</td><td>C++</td><td>72</td><td>3</td><td>4.2%</td><td>1.4%</td><td>0.0%</td></tr>
-    <tr><td><b>Total</b></td><td></td><td><b>488</b></td><td><b>183</b></td><td><b>37.5%</b></td><td><b>20.5%</b></td><td><b>~4.5%</b></td></tr>
+    <tr><td><b>Total</b></td><td></td><td><b>488</b></td><td><b>183</b></td><td><b>37.5%</b></td><td><b>21.1%</b></td><td><b>~4.5%</b></td></tr>
   </table>
   <div class="bigrow">
     <div class="card green"><div class="label">Any rule, changed lines</div><div class="stat green">37.5%</div><p>183 of 488 bugs</p></div>
-    <div class="card blue"><div class="label">Exact fixed line only</div><div class="stat blue">20.5%</div><p>100 of 488 bugs</p></div>
+    <div class="card blue"><div class="label">Exact fixed line only</div><div class="stat blue">21.1%</div><p>103 of 488 bugs</p></div>
     <div class="card red"><div class="label">SWE-sweep best agent</div><div class="stat red">~4.5%</div><p>about 22 of 488 bugs</p></div>
   </div>
   <div class="foot">gdal: large generated-code surface defeated preprocessing for many files. Sources: swesweep.com, results/ in the benchmark repository.</div>
@@ -247,24 +247,22 @@ svg{display:block;width:100%;height:auto}
   <p class="sub">Percentage of bugs detected, per repository: Parasoft on the pre-fix code vs SWE-sweep's best published agent</p>
   <div class="chart" style="margin-top:14px">
     <div class="legend"><span class="par">Parasoft found (region) %</span><span class="ns">SWE-sweep best agent %</span></div>
-    <svg viewBox="0 0 1240 548" role="img" aria-label="Grouped horizontal bar chart of Parasoft versus SWE-sweep detection by repository">
-      <g font-family="Inter,system-ui,sans-serif" fill="#6b6353"><text x="118" y="21" text-anchor="end" font-size="17" font-weight="600">jerryscript</text><rect x="130" y="8" width="954" height="15" fill="#12457a"/><rect x="130" y="27" width="220" height="15" fill="#5a626c"/><text x="1091.7" y="20" font-size="15">86.7</text><text x="358.0" y="39" font-size="15">20</text>
-<text x="118" y="59" text-anchor="end" font-size="17" font-weight="600">opencv</text><rect x="130" y="46" width="749" height="15" fill="#12457a"/><rect x="130" y="65" width="23" height="15" fill="#5a626c"/><text x="887.0999999999999" y="58" font-size="15">68.1</text><text x="161.1" y="77" font-size="15">2.1</text>
-<text x="118" y="97" text-anchor="end" font-size="17" font-weight="600">libexpat</text><rect x="130" y="84" width="612" height="15" fill="#12457a"/><rect x="130" y="103" width="488" height="15" fill="#5a626c"/><text x="749.6" y="96" font-size="15">55.6</text><text x="626.4" y="115" font-size="15">44.4</text>
-<text x="118" y="135" text-anchor="end" font-size="17" font-weight="600">duckdb</text><rect x="130" y="122" width="565" height="15" fill="#12457a"/><rect x="130" y="141" width="31" height="15" fill="#5a626c"/><text x="703.4" y="134" font-size="15">51.4</text><text x="168.8" y="153" font-size="15">2.8</text>
-<text x="118" y="173" text-anchor="end" font-size="17" font-weight="600">proj</text><rect x="130" y="160" width="524" height="15" fill="#12457a"/><rect x="130" y="179" width="104" height="15" fill="#5a626c"/><text x="661.6" y="172" font-size="15">47.6</text><text x="242.5" y="191" font-size="15">9.5</text>
-<text x="118" y="211" text-anchor="end" font-size="17" font-weight="600">php-src</text><rect x="130" y="198" width="508" height="15" fill="#12457a"/><rect x="130" y="217" width="2" height="15" fill="#5a626c"/><text x="646.2" y="210" font-size="15">46.2</text><text x="136" y="229" font-size="15">0.0</text>
-<text x="118" y="249" text-anchor="end" font-size="17" font-weight="600">cvc5</text><rect x="130" y="236" width="492" height="15" fill="#12457a"/><rect x="130" y="255" width="29" height="15" fill="#5a626c"/><text x="629.7" y="248" font-size="15">44.7 (lower bound)</text><text x="166.6" y="267" font-size="15">2.6</text>
-<text x="118" y="287" text-anchor="end" font-size="17" font-weight="600">hdf5</text><rect x="130" y="274" width="472" height="15" fill="#12457a"/><rect x="130" y="293" width="315" height="15" fill="#5a626c"/><text x="609.9" y="286" font-size="15">42.9</text><text x="452.6" y="305" font-size="15">28.6</text>
-<text x="118" y="325" text-anchor="end" font-size="17" font-weight="600">godot</text><rect x="130" y="312" width="453" height="15" fill="#12457a"/><rect x="130" y="331" width="2" height="15" fill="#5a626c"/><text x="591.2" y="324" font-size="15">41.2</text><text x="136" y="343" font-size="15">0.0</text>
-<text x="118" y="363" text-anchor="end" font-size="17" font-weight="600">z3</text><rect x="130" y="350" width="300" height="15" fill="#12457a"/><rect x="130" y="369" width="2" height="15" fill="#5a626c"/><text x="438.3" y="362" font-size="15">27.3</text><text x="136" y="381" font-size="15">0.0</text>
-<text x="118" y="401" text-anchor="end" font-size="17" font-weight="600">arrow</text><rect x="130" y="388" width="234" height="15" fill="#12457a"/><rect x="130" y="407" width="23" height="15" fill="#5a626c"/><text x="372.3" y="400" font-size="15">21.3</text><text x="161.1" y="419" font-size="15">2.1</text>
-<text x="118" y="439" text-anchor="end" font-size="17" font-weight="600">micropython</text><rect x="130" y="426" width="200" height="15" fill="#12457a"/><rect x="130" y="445" width="2" height="15" fill="#5a626c"/><text x="338.2" y="438" font-size="15">18.2</text><text x="136" y="457" font-size="15">0.0</text>
-<text x="118" y="477" text-anchor="end" font-size="17" font-weight="600">tarantool</text><rect x="130" y="464" width="138" height="15" fill="#12457a"/><rect x="130" y="483" width="82" height="15" fill="#5a626c"/><text x="275.5" y="476" font-size="15">12.5</text><text x="220.5" y="495" font-size="15">7.5</text>
-<text x="118" y="515" text-anchor="end" font-size="17" font-weight="600">gdal</text><rect x="130" y="502" width="46" height="15" fill="#12457a"/><rect x="130" y="521" width="2" height="15" fill="#5a626c"/><text x="184.2" y="514" font-size="15">4.2</text><text x="136" y="533" font-size="15">0.0</text>
+          <g font-family="Inter,system-ui,sans-serif" fill="#6b6353"><text x="118" y="21" text-anchor="end" font-size="17" font-weight="600">jerryscript</text><rect x="130" y="8" width="953.7" height="15" fill="#12457a"/><rect x="130" y="27" width="220.0" height="15" fill="#5a626c"/><text x="1091.7" y="20" font-size="15">86.7</text><text x="356.0" y="39" font-size="15">20.0</text>
+<text x="118" y="59" text-anchor="end" font-size="17" font-weight="600">opencv</text><rect x="130" y="46" width="749.1" height="15" fill="#12457a"/><rect x="130" y="65" width="23.1" height="15" fill="#5a626c"/><text x="887.1" y="58" font-size="15">68.1</text><text x="159.1" y="77" font-size="15">2.1</text>
+<text x="118" y="97" text-anchor="end" font-size="17" font-weight="600">libexpat</text><rect x="130" y="84" width="733.7" height="15" fill="#12457a"/><rect x="130" y="103" width="488.4" height="15" fill="#5a626c"/><text x="871.7" y="96" font-size="15">66.7</text><text x="624.4" y="115" font-size="15">44.4</text>
+<text x="118" y="135" text-anchor="end" font-size="17" font-weight="600">duckdb</text><rect x="130" y="122" width="565.4" height="15" fill="#12457a"/><rect x="130" y="141" width="30.8" height="15" fill="#5a626c"/><text x="703.4" y="134" font-size="15">51.4</text><text x="166.8" y="153" font-size="15">2.8</text>
+<text x="118" y="173" text-anchor="end" font-size="17" font-weight="600">proj</text><rect x="130" y="160" width="523.6" height="15" fill="#12457a"/><rect x="130" y="179" width="104.5" height="15" fill="#5a626c"/><text x="661.6" y="172" font-size="15">47.6</text><text x="240.5" y="191" font-size="15">9.5</text>
+<text x="118" y="211" text-anchor="end" font-size="17" font-weight="600">cvc5</text><rect x="130" y="198" width="491.7" height="15" fill="#12457a"/><rect x="130" y="217" width="28.6" height="15" fill="#5a626c"/><text x="629.7" y="210" font-size="15">44.7 (lower bound)</text><text x="164.6" y="229" font-size="15">2.6</text>
+<text x="118" y="249" text-anchor="end" font-size="17" font-weight="600">hdf5</text><rect x="130" y="236" width="471.9" height="15" fill="#12457a"/><rect x="130" y="255" width="314.6" height="15" fill="#5a626c"/><text x="609.9" y="248" font-size="15">42.9</text><text x="450.6" y="267" font-size="15">28.6</text>
+<text x="118" y="287" text-anchor="end" font-size="17" font-weight="600">php-src</text><rect x="130" y="274" width="465.3" height="15" fill="#12457a"/><rect x="130" y="293" width="0.0" height="15" fill="#5a626c"/><text x="603.3" y="286" font-size="15">42.3</text><text x="136.0" y="305" font-size="15">0.0</text>
+<text x="118" y="325" text-anchor="end" font-size="17" font-weight="600">godot</text><rect x="130" y="312" width="453.2" height="15" fill="#12457a"/><rect x="130" y="331" width="0.0" height="15" fill="#5a626c"/><text x="591.2" y="324" font-size="15">41.2</text><text x="136.0" y="343" font-size="15">0.0</text>
+<text x="118" y="363" text-anchor="end" font-size="17" font-weight="600">z3</text><rect x="130" y="350" width="300.3" height="15" fill="#12457a"/><rect x="130" y="369" width="0.0" height="15" fill="#5a626c"/><text x="438.3" y="362" font-size="15">27.3</text><text x="136.0" y="381" font-size="15">0.0</text>
+<text x="118" y="401" text-anchor="end" font-size="17" font-weight="600">arrow</text><rect x="130" y="388" width="234.3" height="15" fill="#12457a"/><rect x="130" y="407" width="23.1" height="15" fill="#5a626c"/><text x="372.3" y="400" font-size="15">21.3</text><text x="159.1" y="419" font-size="15">2.1</text>
+<text x="118" y="439" text-anchor="end" font-size="17" font-weight="600">micropython</text><rect x="130" y="426" width="200.2" height="15" fill="#12457a"/><rect x="130" y="445" width="0.0" height="15" fill="#5a626c"/><text x="338.2" y="438" font-size="15">18.2</text><text x="136.0" y="457" font-size="15">0.0</text>
+<text x="118" y="477" text-anchor="end" font-size="17" font-weight="600">tarantool</text><rect x="130" y="464" width="137.5" height="15" fill="#12457a"/><rect x="130" y="483" width="82.5" height="15" fill="#5a626c"/><text x="275.5" y="476" font-size="15">12.5</text><text x="218.5" y="495" font-size="15">7.5</text>
+<text x="118" y="515" text-anchor="end" font-size="17" font-weight="600">gdal</text><rect x="130" y="502" width="46.2" height="15" fill="#12457a"/><rect x="130" y="521" width="0.0" height="15" fill="#5a626c"/><text x="184.2" y="514" font-size="15">4.2</text><text x="136.0" y="533" font-size="15">0.0</text>
       </g>
-    </svg>
-    <div class="cap">Detection measured on byte-identical pre-fix code, 679 file versions; agent percentages from swesweep.com per-repository results. Parasoft C/C++test Standard 2025.2.0, Flow Analysis Standard + MISRA/CERT rule sets.</div>
+    <div class="cap">Detection measured on byte-identical pre-fix code, 679 file versions; agent percentages from swesweep.com per-repository results. Parasoft C/C++test Standard (2026.1.3 C repos with MISRA C 2025, 2025.2.0 C++ repos with MISRA C++ 2023), Flow Analysis Standard + MISRA/CERT rule sets.</div>
   </div>
   <div class="foot">Full per-bug detail: github.com/zuwasi/swe-sweep-parasoft-benchmark, results/ and raw-reports/</div>
 </section>
@@ -310,10 +308,10 @@ svg{display:block;width:100%;height:auto}
     </ul></div>
     <div class="card"><div class="label">jerryscript · 13 found</div><ul>
       <li>CERT INT31-j essential type category: 8 / 7</li>
-      <li>MISRA 7.0.5-a conversion signedness: 6 / 3</li>
-      <li>MISRA 10.2.3-a unscoped enum value: 6 / 4</li>
+      <li>MISRA C 2025 10.4-a compatible operands: 8 / 7</li>
+      <li>MISRA C 2025 15.5-a single point of exit: 4 / 3</li>
       <li>CERT INT31-i cross-category assign: 4 / 2</li>
-      <li>CERT EXP39-b pointer-pointer cast: 3 / 1</li>
+      <li>MISRA C 2025 10.3-b enum to other type: 4 / 2</li>
       <li>BD-PB-NOTINIT use before init: 2 / 0</li>
     </ul></div>
   </div>
