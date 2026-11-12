@@ -36,9 +36,17 @@
     max-width:960px; margin:0 auto; padding:9px clamp(14px,3vw,28px);
     display:flex; align-items:center; gap:12px; flex-wrap:wrap;
   }
-  .topbar .type { font-size:.92rem; letter-spacing:-.01em; color:var(--ink); }
-  .topbar-links { margin-inline-start:auto; font-size:.78rem; font-weight:600; }
+  .brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--ink); }
+  .brand img { height:38px; width:auto; display:block; }
+  .brand-name {
+    font-family:"Special Elite","Courier New",monospace;
+    font-size:.92rem; letter-spacing:-.01em; line-height:1.25;
+  }
+  .brand-name small { display:block; font-family:Inter,sans-serif; font-size:.66rem;
+                      font-weight:600; color:var(--ink2); letter-spacing:.02em; }
+  .topbar-links { margin-inline-start:auto; display:flex; gap:16px; font-size:.78rem; font-weight:600; }
   .topbar-links a { text-decoration:none; white-space:nowrap; }
+  .topbar-links a:hover { text-decoration:underline; }
 
   main { max-width:960px; margin:0 auto; padding:clamp(18px,4vw,40px) clamp(14px,3vw,28px) 70px; }
 
@@ -83,6 +91,9 @@
   }
 
   footer { border-top:1px solid var(--rule); margin-top:48px; padding-top:18px; font-size:.82rem; color:var(--ink2); }
+  .footer-contact { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; margin-top:16px; padding-top:14px; border-top:1px dashed var(--rule); }
+  .footer-contact b { color:var(--ink); }
+  .footer-contact a { display:inline-block; margin-top:2px; }
   @media (max-width:640px){ th,td{padding:.4em .5em;} }
 </style>
 </head>
@@ -90,8 +101,15 @@
 
 <div class="topbar">
   <div class="topbar-inner">
-    <span class="type">Peer-Review Response · Agent Security</span>
-    <span class="topbar-links"><a href="https://zuwasi.github.io/Public-html-pages/">← All pages</a></span>
+    <a class="brand" href="https://eswlab.com/" target="_blank" rel="noopener noreferrer">
+      <img src="../assets/esl-logo.png" alt="ESL, Engineering Software Lab">
+      <span class="brand-name">Engineering Software Lab<small>AI SDLC · Security · Verification</small></span>
+    </a>
+    <span class="topbar-links">
+      <a href="https://eswlab.com/" target="_blank" rel="noopener noreferrer">eswlab.com</a>
+      <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer">Contact</a>
+      <a href="https://zuwasi.github.io/Public-html-pages/">← All pages</a>
+    </span>
   </div>
 </div>
 
@@ -101,7 +119,7 @@
   <div class="kicker">Methodology Review · Prompt-Injection Simulation Study Design</div>
   <h1>Agent Social-Engineering Test: An Improved Study Design</h1>
   <p class="lede">A constructive peer-review response to the November 2026 LinkedIn post by Assaf Ben-ari and Michael Shklover, in which a fake "DeveloperOnboardingDiag" repository was used to test whether current coding agents execute malicious diagnostics scripts and exfiltrate secrets.</p>
-  <p class="meta"><b>Responds to:</b> the original post and its comment thread · <b>Scope:</b> study design only; no attack code is included · <b>Stance:</b> the original core observation stands; this design lets it carry the weight the conclusions put on it.</p>
+  <p class="meta"><b>By</b> <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener noreferrer">Daniel Liezrowice</a>, ESL, Engineering Software Lab · <b>Responds to:</b> the original post and its comment thread · <b>Scope:</b> study design only; no attack code is included · <b>Stance:</b> the original core observation stands; this design lets it carry the weight the conclusions put on it.</p>
 </header>
 
 <section class="block">
@@ -242,7 +260,26 @@
 
 <footer>
   <p>Designed as a constructive response to the original post's findings. The core observation stands; this design is what lets it carry the weight the conclusions put on it.</p>
-  <p style="margin-top:.6em"><a href="https://zuwasi.github.io/Public-html-pages/">zuwasi.github.io/Public-html-pages</a> · Published 12.11.2026</p>
+  <div class="footer-contact">
+    <div>
+      <b>ESL, Engineering Software Lab</b><br>
+      AI SDLC applications, consultancy and evidence-first engineering.<br>
+      <a href="https://eswlab.com/" target="_blank" rel="noopener noreferrer">https://eswlab.com/</a>
+    </div>
+    <div>
+      <b>Contact</b><br>
+      <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener noreferrer">eswlab.com/contact-us</a><br>
+      <a href="mailto:sales@eswlab.com">sales@eswlab.com</a><br>
+      <a href="tel:+97298855803">+972 9 885 5803</a><br>
+      Ha-Nagar 24 A, Hod Hasharon, Israel
+    </div>
+    <div>
+      <b>More from ESL</b><br>
+      <a href="https://zuwasi.github.io/Public-html-pages/">Presentations &amp; reports catalog</a><br>
+      <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener noreferrer">Daniel Liezrowice on LinkedIn</a>
+    </div>
+  </div>
+  <p style="margin-top:14px">Published 12.11.2026 · Study design document; no attack code included. ESL is not affiliated with or endorsed by Anthropic or OpenAI.</p>
 </footer>
 
 </main>
