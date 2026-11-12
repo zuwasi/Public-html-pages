@@ -15,34 +15,34 @@ body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color
 .slide{--pad-x:max(4vw,48px);flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding:calc(var(--top) + 22px) var(--pad-x) 64px}
 .kicker{font-size:clamp(11px,1vw,13px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .kicker b{color:var(--blue)}
-h1{font-size:clamp(30px,3.8vw,58px);line-height:1.12;letter-spacing:-.02em;margin:10px 0 8px;font-weight:800}
+h1{font-size:clamp(32px,4.4vw,68px);line-height:1.1;letter-spacing:-.02em;margin:10px 0 8px;font-weight:800}
 h1 .hl{color:var(--blue)}
-.sub{font-size:clamp(15px,1.5vw,21px);color:var(--muted);max-width:none;line-height:1.5}
-.row{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap}
+.sub{font-size:clamp(17px,1.9vw,27px);color:var(--muted);max-width:none;line-height:1.45}
+.row{display:flex;gap:18px;margin-top:20px;flex-wrap:wrap}
 .row>*{flex:1;min-width:220px}
-.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(14px,1.5vw,22px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(16px,1.7vw,26px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
 .card.amber{border-top-color:var(--amber-hi)}
 .card.red{border-top-color:var(--red)}
 .card.green{border-top-color:var(--green)}
 .card.blue{border-top-color:var(--blue)}
-.card h3{font-size:clamp(16px,1.4vw,20px);font-weight:800;margin-bottom:8px}
-.card p,.card li{font-size:clamp(14px,1.25vw,18px);color:var(--muted);line-height:1.55}
-.card ul{padding-left:18px}
-.label{font-size:clamp(11px,1vw,13px);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
-.stat{font-size:clamp(38px,5.4vw,84px);font-weight:800;letter-spacing:-.03em;line-height:1}
-.stat small{font-size:.4em;font-weight:700;color:var(--muted);letter-spacing:0}
+.card h3{font-size:clamp(18px,1.7vw,25px);font-weight:800;margin-bottom:8px}
+.card p,.card li{font-size:clamp(16px,1.55vw,23px);color:var(--muted);line-height:1.5}
+.card ul{padding-left:20px}
+.label{font-size:clamp(12px,1.2vw,17px);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.stat{font-size:clamp(44px,6vw,96px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat small{font-size:.42em;font-weight:700;color:var(--muted);letter-spacing:0}
 .stat.blue{color:var(--blue)}.stat.amber{color:var(--amber)}.stat.red{color:var(--red)}.stat.green{color:var(--green)}
-table{border-collapse:collapse;width:100%;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:clamp(13px,1.15vw,17px)}
-th{background:var(--sheet2);text-align:left;padding:10px 14px;font-size:clamp(12px,1.05vw,15px);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
-td{padding:8px 12px;border-top:1px solid var(--line);color:var(--muted);line-height:1.45;vertical-align:top}
+table{border-collapse:collapse;width:100%;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:clamp(15px,1.45vw,21px)}
+th{background:var(--sheet2);text-align:left;padding:9px 14px;font-size:clamp(13px,1.25vw,18px);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+td{padding:7px 12px;border-top:1px solid var(--line);color:var(--muted);line-height:1.4;vertical-align:top}
 td b,td strong{color:var(--ink)}
 code,.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:1em;background:var(--code-bg);border:1px solid var(--code-cap);border-radius:4px;padding:1px 5px;color:var(--ink)}
-pre.box{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.5;background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:16px 20px;overflow-x:auto;color:var(--ink);white-space:pre}
+pre.box{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(14px,1.45vw,21px);line-height:1.55;background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:18px 22px;overflow-x:auto;color:var(--ink);white-space:pre}
 pre.box .r{color:var(--red)}pre.box .g{color:var(--green)}pre.box .b{color:var(--blue)}pre.box .a{color:var(--amber)}
-.chart{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 16px 8px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:1240px;margin-left:auto;margin-right:auto}
-.chart .cap{font-size:clamp(12px,1vw,15px);color:var(--muted);margin:6px 2px 8px;line-height:1.4}
+.chart{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 18px 8px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:1440px;margin-left:auto;margin-right:auto}
+.chart .cap{font-size:clamp(13px,1.3vw,19px);color:var(--muted);margin:6px 2px 8px;line-height:1.4}
 svg{display:block;width:100%;height:auto}
-.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:clamp(12px,1vw,15px);color:var(--muted);margin:2px 2px 6px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:clamp(14px,1.4vw,20px);color:var(--muted);margin:2px 2px 6px}
 .legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--accent)}
 .legend span.ns::before{background:#5a626c}
 .legend span.fail::before{background:var(--red)}
@@ -53,7 +53,7 @@ svg{display:block;width:100%;height:auto}
 .top .homebtn{font-size:20px;line-height:1;text-decoration:none;filter:grayscale(.2)}
 .top .homebtn:hover{transform:scale(1.15)}
 .top #brand{font-weight:600;font-size:clamp(12px,1.1vw,14px);color:var(--ink);border-left:2px solid var(--line);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.kicker{display:flex;align-items:center;gap:12px;font-size:clamp(13px,1.2vw,17px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kicker{display:flex;align-items:center;gap:12px;font-size:clamp(14px,1.35vw,19px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
 .kicker b{color:var(--blue)}
 .mark{position:relative;width:24px;height:22px;flex:none}
 .mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
@@ -62,18 +62,18 @@ svg{display:block;width:100%;height:auto}
 .brandrow{display:flex;gap:14px;margin:16px 0 0;flex-wrap:wrap;align-items:center}
 .brandchip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 14px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
 .brandchip img{height:27px;width:auto;display:block}
-.brandchip span{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--ink)}
+.brandchip span{font-size:clamp(15px,1.4vw,20px);font-weight:600;color:var(--ink)}
 .brandchip.dark{background:#1a1a1a;border-color:#1a1a1a}
 .brandchip.dark span{color:#fff}
 .brandchip.dark img{height:24px;background:#fff;border-radius:6px;padding:3px}
 .person-card{display:flex;gap:22px;padding:20px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);box-shadow:0 1px 4px rgba(20,30,50,.06);min-width:280px}
 .person-card img{width:120px;height:120px;object-fit:cover;border-radius:8px;flex:none}
-.person-card strong{font-size:clamp(16px,1.6vw,21px);display:block}
-.person-card span{color:var(--blue);font-weight:600;font-size:clamp(13px,1.3vw,16px);display:block}
-.person-card p{margin:8px 0;font-size:clamp(12px,1.05vw,14px);color:var(--muted);line-height:1.5}
-.person-card a{color:var(--accent);font-size:clamp(11px,.95vw,13px);text-decoration:none;font-weight:600}
+.person-card strong{font-size:clamp(18px,1.8vw,25px);display:block}
+.person-card span{color:var(--blue);font-weight:600;font-size:clamp(15px,1.5vw,21px);display:block}
+.person-card p{margin:8px 0;font-size:clamp(14px,1.3vw,19px);color:var(--muted);line-height:1.5}
+.person-card a{color:var(--accent);font-size:clamp(13px,1.2vw,17px);text-decoration:none;font-weight:600}
 .cardlogo{float:right;height:26px;width:auto;margin:0 0 6px 10px}
-.top nav a{color:var(--muted);text-decoration:none;font-size:clamp(10px,.9vw,13px);margin-left:18px;font-weight:600}
+.top nav a{color:var(--muted);text-decoration:none;font-size:clamp(12px,1.05vw,15px);margin-left:18px;font-weight:600}
 .top nav a:hover{color:var(--blue)}
 .nav-arrows{position:fixed;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--sheet);color:var(--ink);font-size:22px;cursor:pointer;z-index:60;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(20,30,50,.12);user-select:none}
 .nav-arrows:hover{background:var(--sheet2)}
@@ -85,10 +85,16 @@ svg{display:block;width:100%;height:auto}
 .hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:60;color:var(--muted);font-size:clamp(12px,1vw,15px);background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:6px 18px;animation:pulse 1.6s ease-in-out infinite;transition:opacity .4s}
 @keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
 .hint.gone{animation:none;opacity:0;pointer-events:none}
-.foot{margin-top:auto;padding-top:16px;font-size:clamp(12px,1vw,14px);color:var(--muted);border-top:1px solid var(--line)}
-.bigrow{display:flex;gap:26px;margin-top:20px;flex-wrap:wrap}
-.bigrow .card{flex:1;min-width:240px}
+.foot{margin-top:auto;padding-top:14px;font-size:clamp(13px,1.2vw,18px);color:var(--muted);border-top:1px solid var(--line)}
+.bigrow{display:flex;gap:22px;margin-top:20px;flex-wrap:wrap}
+.bigrow .card{flex:1;min-width:250px}
 @media (max-width:720px){.slide{--pad-x:20px}.row{gap:10px}.stat{font-size:34px}}
+/* compact mode: data-dense slides (big tables, charts, pipelines) */
+.compact h1{font-size:clamp(28px,3.2vw,50px)}
+.compact .sub{font-size:clamp(15px,1.6vw,23px)}
+.compact pre.box{font-size:clamp(13px,1.3vw,19px);line-height:1.5}
+.compact .chart svg{max-height:532px;margin:0 auto}
+.compact table td{padding:6px 12px}
 </style>
 </head>
 <body>
@@ -112,8 +118,8 @@ svg{display:block;width:100%;height:auto}
 <!-- 01 COVER -->
 <section class="slide">
   <div class="kicker"><span class="mark"></span>Technical benchmark brief · <b>01</b></div>
-  <h1>Static analysis vs autonomous agents: Parasoft C/C++test measured on <span class="hl">488 real-world C/C++ bugs</span></h1>
-  <p class="sub">Flow Analysis Standard with MISRA C 2025, MISRA C++ 2023, and SEI CERT, on the exact pre-fix code of every accepted SWE-sweep bug, compared with SWE-sweep's best published agent result</p>
+  <h1>Static analysis vs autonomous agents on <span class="hl">488 real C/C++ bugs</span></h1>
+  <p class="sub">Parasoft C/C++test (Flow Analysis + MISRA/CERT) on SWE-sweep's exact pre-fix code, against its best published agent result</p>
   <div class="brandrow">
     <div class="brandchip"><img src="../assets/parasoft-logo.png" alt="Parasoft"><span>Parasoft C/C++test · the tool under test</span></div>
     <div class="brandchip dark"><img src="../assets/amp-logo.png" alt="SWE-sweep"><span>SWE-sweep (Meta FAIR) · the agent benchmark</span></div>
@@ -123,17 +129,6 @@ svg{display:block;width:100%;height:auto}
     <div class="card"><div class="label">Bugs analyzed</div><div class="stat blue">488 <small>real defects</small></div><p>Across 14 C/C++ repositories, bug-era code from git blob hashes</p></div>
     <div class="card green"><div class="label">Parasoft flagged</div><div class="stat green">37.5%</div><p>183 of 488 bugs on the changed lines; 20.5% on the exact fixed line</p></div>
     <div class="card red"><div class="label">Best agent resolved</div><div class="stat red">~4.5%</div><p>SWE-sweep's best published result across these same repositories</p></div>
-  </div>
-  <div class="row" style="align-items:stretch">
-    <div class="person-card" style="flex:1">
-      <img src="../assets/daniel-liezrowice.jpg" width="120" height="120" alt="Daniel Liezrowice">
-      <div>
-        <strong>Daniel Liezrowice</strong>
-        <span>CTO, ESL - Engineering Software Lab</span>
-        <p>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years. Benchmark born from the MISRA Conference debate: are traditional methods still relevant?</p>
-        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
-      </div>
-    </div>
   </div>
   <div class="foot">Engineering Software Lab (eswlab.com) · 12 November 2026 · Tool: Parasoft C/C++test Standard 2025.2.0, Linux x64. All data, scripts, and raw tool output public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
 </section>
@@ -179,7 +174,7 @@ svg{display:block;width:100%;height:auto}
 </section>
 
 <!-- 04 OUR METHOD -->
-<section class="slide">
+<section class="slide compact">
   <div class="kicker">Method · <b>04</b></div>
   <h1>What we did: <span class="hl">byte-identical bug-era code</span>, real flags, the deployed rule sets</h1>
   <p class="sub">14 C/C++ repositories from SWE-sweep, 488 accepted bugs, one analysis unit per (file, blob hash)</p>
@@ -203,10 +198,10 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">Parasoft C/C++test Standard 2025.2.0 (cpptestcli), WSL2 Linux x64, compiler id gcc_13-64, 12 November 2026. Full pipeline public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
 </section>
 
-<!-- 05 RESULTS TABLE -->
-<section class="slide">
+<!-- 05 RESULTS TABLE PART 1 -->
+<section class="slide compact">
   <div class="kicker">Results · <b>05</b></div>
-  <h1>The scoreboard: <span class="hl">37.5% vs ~4.5%</span></h1>
+  <h1>The scoreboard: <span class="hl">37.5% vs ~4.5%</span> (part 1 of 2)</h1>
   <p class="sub">Parasoft flags 183 of 488 bugs on the changed lines; the best agent resolved about 22 of 488 on the same repositories</p>
   <table style="margin-top:14px">
     <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
@@ -218,6 +213,17 @@ svg{display:block;width:100%;height:auto}
     <tr><td><b>php-src</b></td><td>C</td><td>26</td><td>12</td><td>46.2%</td><td>30.8%</td><td>0.0%</td></tr>
     <tr><td><b>cvc5</b></td><td>C++</td><td>38</td><td>17</td><td>44.7% <span class="mono">(lower bound)</span></td><td>26.3%</td><td>2.6%</td></tr>
     <tr><td><b>hdf5</b></td><td>C</td><td>14</td><td>6</td><td>42.9%</td><td>28.6%</td><td>28.6%</td></tr>
+  </table>
+  <div class="foot">SWE-sweep percentages are each repository's best published agent result. cvc5: only 2 of 54 files preprocessed against bug-era headers, so its figure is a floor.</div>
+</section>
+
+<!-- 06 RESULTS TABLE PART 2 -->
+<section class="slide compact">
+  <div class="kicker">Results · <b>06</b></div>
+  <h1>The scoreboard (part 2 of 2): <span class="hl">183 of 488 flagged</span></h1>
+  <p class="sub">Strictly counting findings on the exact line the maintainer's fix changed, Parasoft still found 20.5% of all bugs</p>
+  <table style="margin-top:14px">
+    <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
     <tr><td><b>godot</b></td><td>C++</td><td>17</td><td>7</td><td>41.2%</td><td>35.3%</td><td>0.0%</td></tr>
     <tr><td>z3</td><td>C++</td><td>11</td><td>3</td><td>27.3%</td><td>9.1%</td><td>0.0%</td></tr>
     <tr><td>arrow</td><td>C++</td><td>47</td><td>10</td><td>21.3%</td><td>8.5%</td><td>2.1%</td></tr>
@@ -226,31 +232,36 @@ svg{display:block;width:100%;height:auto}
     <tr><td>gdal</td><td>C++</td><td>72</td><td>3</td><td>4.2%</td><td>1.4%</td><td>0.0%</td></tr>
     <tr><td><b>Total</b></td><td></td><td><b>488</b></td><td><b>183</b></td><td><b>37.5%</b></td><td><b>20.5%</b></td><td><b>~4.5%</b></td></tr>
   </table>
-  <div class="foot">SWE-sweep percentages are each repository's best published agent result. cvc5: only 2 of 54 files preprocessed against bug-era headers, so its figure is a floor. gdal: large generated-code surface defeated preprocessing.</div>
+  <div class="bigrow">
+    <div class="card green"><div class="label">Any rule, changed lines</div><div class="stat green">37.5%</div><p>183 of 488 bugs</p></div>
+    <div class="card blue"><div class="label">Exact fixed line only</div><div class="stat blue">20.5%</div><p>100 of 488 bugs</p></div>
+    <div class="card red"><div class="label">SWE-sweep best agent</div><div class="stat red">~4.5%</div><p>about 22 of 488 bugs</p></div>
+  </div>
+  <div class="foot">gdal: large generated-code surface defeated preprocessing for many files. Sources: swesweep.com, results/ in the benchmark repository.</div>
 </section>
 
-<!-- 06 CHART -->
-<section class="slide">
-  <div class="kicker">Results · <b>06</b></div>
+<!-- 07 CHART -->
+<section class="slide compact">
+  <div class="kicker">Results · <b>07</b></div>
   <h1>Same picture, drawn: the gap holds in <span class="hl">13 of 14 repos</span></h1>
   <p class="sub">Percentage of bugs detected, per repository: Parasoft on the pre-fix code vs SWE-sweep's best published agent</p>
   <div class="chart" style="margin-top:14px">
     <div class="legend"><span class="par">Parasoft found (region) %</span><span class="ns">SWE-sweep best agent %</span></div>
-    <svg viewBox="0 0 1240 492" role="img" aria-label="Grouped horizontal bar chart of Parasoft versus SWE-sweep detection by repository">
-      <g font-family="Inter,system-ui,sans-serif" font-size="15" fill="#6b6353"><text x="118" y="23" text-anchor="end">jerryscript</text><rect x="130" y="8" width="347" height="13" fill="#12457a"/><rect x="130" y="25" width="80" height="13" fill="#5a626c"/><text x="482.8" y="19" font-size="12">86.7</text><text x="216.0" y="36" font-size="12">20</text>
-<text x="118" y="57" text-anchor="end">opencv</text><rect x="130" y="42" width="272" height="13" fill="#12457a"/><rect x="130" y="59" width="8" height="13" fill="#5a626c"/><text x="408.4" y="53" font-size="12">68.1</text><text x="144.4" y="70" font-size="12">2.1</text>
-<text x="118" y="91" text-anchor="end">libexpat</text><rect x="130" y="76" width="222" height="13" fill="#12457a"/><rect x="130" y="93" width="178" height="13" fill="#5a626c"/><text x="358.4" y="87" font-size="12">55.6</text><text x="313.6" y="104" font-size="12">44.4</text>
-<text x="118" y="125" text-anchor="end">duckdb</text><rect x="130" y="110" width="206" height="13" fill="#12457a"/><rect x="130" y="127" width="11" height="13" fill="#5a626c"/><text x="341.6" y="121" font-size="12">51.4</text><text x="147.2" y="138" font-size="12">2.8</text>
-<text x="118" y="159" text-anchor="end">proj</text><rect x="130" y="144" width="190" height="13" fill="#12457a"/><rect x="130" y="161" width="38" height="13" fill="#5a626c"/><text x="326.4" y="155" font-size="12">47.6</text><text x="174.0" y="172" font-size="12">9.5</text>
-<text x="118" y="193" text-anchor="end">php-src</text><rect x="130" y="178" width="185" height="13" fill="#12457a"/><rect x="130" y="195" width="2" height="13" fill="#5a626c"/><text x="320.8" y="189" font-size="12">46.2</text><text x="134" y="206" font-size="12">0.0</text>
-<text x="118" y="227" text-anchor="end">cvc5</text><rect x="130" y="212" width="179" height="13" fill="#12457a"/><rect x="130" y="229" width="10" height="13" fill="#5a626c"/><text x="314.8" y="223" font-size="12">44.7 (lower bound)</text><text x="146.4" y="240" font-size="12">2.6</text>
-<text x="118" y="261" text-anchor="end">hdf5</text><rect x="130" y="246" width="172" height="13" fill="#12457a"/><rect x="130" y="263" width="114" height="13" fill="#5a626c"/><text x="307.6" y="257" font-size="12">42.9</text><text x="250.4" y="274" font-size="12">28.6</text>
-<text x="118" y="295" text-anchor="end">godot</text><rect x="130" y="280" width="165" height="13" fill="#12457a"/><rect x="130" y="297" width="2" height="13" fill="#5a626c"/><text x="300.8" y="291" font-size="12">41.2</text><text x="134" y="308" font-size="12">0.0</text>
-<text x="118" y="329" text-anchor="end">z3</text><rect x="130" y="314" width="109" height="13" fill="#12457a"/><rect x="130" y="331" width="2" height="13" fill="#5a626c"/><text x="245.2" y="325" font-size="12">27.3</text><text x="134" y="342" font-size="12">0.0</text>
-<text x="118" y="363" text-anchor="end">arrow</text><rect x="130" y="348" width="85" height="13" fill="#12457a"/><rect x="130" y="365" width="8" height="13" fill="#5a626c"/><text x="221.2" y="359" font-size="12">21.3</text><text x="144.4" y="376" font-size="12">2.1</text>
-<text x="118" y="397" text-anchor="end">micropython</text><rect x="130" y="382" width="73" height="13" fill="#12457a"/><rect x="130" y="399" width="2" height="13" fill="#5a626c"/><text x="208.8" y="393" font-size="12">18.2</text><text x="134" y="410" font-size="12">0.0</text>
-<text x="118" y="431" text-anchor="end">tarantool</text><rect x="130" y="416" width="50" height="13" fill="#12457a"/><rect x="130" y="433" width="30" height="13" fill="#5a626c"/><text x="186.0" y="427" font-size="12">12.5</text><text x="166.0" y="444" font-size="12">7.5</text>
-<text x="118" y="465" text-anchor="end">gdal</text><rect x="130" y="450" width="17" height="13" fill="#12457a"/><rect x="130" y="467" width="2" height="13" fill="#5a626c"/><text x="152.8" y="461" font-size="12">4.2</text><text x="134" y="478" font-size="12">0.0</text>
+    <svg viewBox="0 0 1240 548" role="img" aria-label="Grouped horizontal bar chart of Parasoft versus SWE-sweep detection by repository">
+      <g font-family="Inter,system-ui,sans-serif" fill="#6b6353"><text x="118" y="21" text-anchor="end" font-size="17" font-weight="600">jerryscript</text><rect x="130" y="8" width="954" height="15" fill="#12457a"/><rect x="130" y="27" width="220" height="15" fill="#5a626c"/><text x="1091.7" y="20" font-size="15">86.7</text><text x="358.0" y="39" font-size="15">20</text>
+<text x="118" y="59" text-anchor="end" font-size="17" font-weight="600">opencv</text><rect x="130" y="46" width="749" height="15" fill="#12457a"/><rect x="130" y="65" width="23" height="15" fill="#5a626c"/><text x="887.0999999999999" y="58" font-size="15">68.1</text><text x="161.1" y="77" font-size="15">2.1</text>
+<text x="118" y="97" text-anchor="end" font-size="17" font-weight="600">libexpat</text><rect x="130" y="84" width="612" height="15" fill="#12457a"/><rect x="130" y="103" width="488" height="15" fill="#5a626c"/><text x="749.6" y="96" font-size="15">55.6</text><text x="626.4" y="115" font-size="15">44.4</text>
+<text x="118" y="135" text-anchor="end" font-size="17" font-weight="600">duckdb</text><rect x="130" y="122" width="565" height="15" fill="#12457a"/><rect x="130" y="141" width="31" height="15" fill="#5a626c"/><text x="703.4" y="134" font-size="15">51.4</text><text x="168.8" y="153" font-size="15">2.8</text>
+<text x="118" y="173" text-anchor="end" font-size="17" font-weight="600">proj</text><rect x="130" y="160" width="524" height="15" fill="#12457a"/><rect x="130" y="179" width="104" height="15" fill="#5a626c"/><text x="661.6" y="172" font-size="15">47.6</text><text x="242.5" y="191" font-size="15">9.5</text>
+<text x="118" y="211" text-anchor="end" font-size="17" font-weight="600">php-src</text><rect x="130" y="198" width="508" height="15" fill="#12457a"/><rect x="130" y="217" width="2" height="15" fill="#5a626c"/><text x="646.2" y="210" font-size="15">46.2</text><text x="136" y="229" font-size="15">0.0</text>
+<text x="118" y="249" text-anchor="end" font-size="17" font-weight="600">cvc5</text><rect x="130" y="236" width="492" height="15" fill="#12457a"/><rect x="130" y="255" width="29" height="15" fill="#5a626c"/><text x="629.7" y="248" font-size="15">44.7 (lower bound)</text><text x="166.6" y="267" font-size="15">2.6</text>
+<text x="118" y="287" text-anchor="end" font-size="17" font-weight="600">hdf5</text><rect x="130" y="274" width="472" height="15" fill="#12457a"/><rect x="130" y="293" width="315" height="15" fill="#5a626c"/><text x="609.9" y="286" font-size="15">42.9</text><text x="452.6" y="305" font-size="15">28.6</text>
+<text x="118" y="325" text-anchor="end" font-size="17" font-weight="600">godot</text><rect x="130" y="312" width="453" height="15" fill="#12457a"/><rect x="130" y="331" width="2" height="15" fill="#5a626c"/><text x="591.2" y="324" font-size="15">41.2</text><text x="136" y="343" font-size="15">0.0</text>
+<text x="118" y="363" text-anchor="end" font-size="17" font-weight="600">z3</text><rect x="130" y="350" width="300" height="15" fill="#12457a"/><rect x="130" y="369" width="2" height="15" fill="#5a626c"/><text x="438.3" y="362" font-size="15">27.3</text><text x="136" y="381" font-size="15">0.0</text>
+<text x="118" y="401" text-anchor="end" font-size="17" font-weight="600">arrow</text><rect x="130" y="388" width="234" height="15" fill="#12457a"/><rect x="130" y="407" width="23" height="15" fill="#5a626c"/><text x="372.3" y="400" font-size="15">21.3</text><text x="161.1" y="419" font-size="15">2.1</text>
+<text x="118" y="439" text-anchor="end" font-size="17" font-weight="600">micropython</text><rect x="130" y="426" width="200" height="15" fill="#12457a"/><rect x="130" y="445" width="2" height="15" fill="#5a626c"/><text x="338.2" y="438" font-size="15">18.2</text><text x="136" y="457" font-size="15">0.0</text>
+<text x="118" y="477" text-anchor="end" font-size="17" font-weight="600">tarantool</text><rect x="130" y="464" width="138" height="15" fill="#12457a"/><rect x="130" y="483" width="82" height="15" fill="#5a626c"/><text x="275.5" y="476" font-size="15">12.5</text><text x="220.5" y="495" font-size="15">7.5</text>
+<text x="118" y="515" text-anchor="end" font-size="17" font-weight="600">gdal</text><rect x="130" y="502" width="46" height="15" fill="#12457a"/><rect x="130" y="521" width="2" height="15" fill="#5a626c"/><text x="184.2" y="514" font-size="15">4.2</text><text x="136" y="533" font-size="15">0.0</text>
       </g>
     </svg>
     <div class="cap">Detection measured on byte-identical pre-fix code, 679 file versions; agent percentages from swesweep.com per-repository results. Parasoft C/C++test Standard 2025.2.0, Flow Analysis Standard + MISRA/CERT rule sets.</div>
@@ -258,9 +269,9 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">Full per-bug detail: github.com/zuwasi/swe-sweep-parasoft-benchmark, results/ and raw-reports/</div>
 </section>
 
-<!-- 07 DEEP FLOW ANALYSIS -->
+<!-- 08 DEEP FLOW ANALYSIS -->
 <section class="slide">
-  <div class="kicker">Deep checks · <b>07</b></div>
+  <div class="kicker">Deep checks · <b>08</b></div>
   <h1>Flow Analysis alone caught <span class="hl">16 real defects</span>, the classes that kill in safety-critical code</h1>
   <p class="sub">Deep interprocedural checks (BD-* rules), independent of any coding-standard convention</p>
   <div class="row">
@@ -275,9 +286,9 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">16 of 488 bugs (3.3%) from Flow Analysis alone, close to the agents' 4.5%: the big gap lives in the MISRA/CERT rule sweep of the buggy lines</div>
 </section>
 
-<!-- 08 RULE BREAKDOWN -->
+<!-- 09 RULE BREAKDOWN -->
 <section class="slide">
-  <div class="kicker">Anatomy · <b>08</b></div>
+  <div class="kicker">Anatomy · <b>09</b></div>
   <h1>What the rules saw on the <span class="hl">buggy lines</span></h1>
   <p class="sub">Top rules flagging bug lines in the three most-analyzed repositories (bugs region / strict)</p>
   <div class="row">
@@ -309,9 +320,9 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">32 of duckdb's 56 found bugs, 25 of opencv's 32, and 12 of jerryscript's 13 were flagged by more than one rule. Full rule tables per repo: results/REPORT.md in the benchmark repository</div>
 </section>
 
-<!-- 09 HONEST READING -->
+<!-- 10 HONEST READING -->
 <section class="slide">
-  <div class="kicker">Honest reading · <b>09</b></div>
+  <div class="kicker">Honest reading · <b>10</b></div>
   <h1>What this comparison <span class="hl">does and does not</span> say</h1>
   <p class="sub">Two numbers this far apart invite over-reading; the fine print is what makes the result trustworthy</p>
   <div class="bigrow">
@@ -323,9 +334,9 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">The fair summary: static analysis pointed at suspicious code flags far more real bugs than agents find and fix end to end. Nobody should read it as "the tool replaces the agent's search"</div>
 </section>
 
-<!-- 10 SAFETY-CRITICAL -->
+<!-- 11 SAFETY-CRITICAL -->
 <section class="slide">
-  <div class="kicker">Safety-critical view · <b>10</b></div>
+  <div class="kicker">Safety-critical view · <b>11</b></div>
   <h1>For DO-178C, ISO 26262, and IEC 62304: the decisive argument is <span class="hl">qualification</span>, not percentages</h1>
   <p class="sub">In avionics, automotive, and medical software the objective is minimizing escaped defects; labor cost of triage is part of the certification budget, not a reason to skip the check</p>
   <div class="bigrow">
@@ -345,9 +356,9 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">62.5% of bugs went unflagged even with the files pointed out: static analysis is necessary, never sufficient. The certification case rests on the full stack</div>
 </section>
 
-<!-- 11 DIVISION OF LABOR -->
+<!-- 12 DIVISION OF LABOR -->
 <section class="slide">
-  <div class="kicker">Verdict · <b>11</b></div>
+  <div class="kicker">Verdict · <b>12</b></div>
   <h1>Division of labor: tools find, <span class="hl">humans judge</span>, agents assist behind verifying gates</h1>
   <p class="sub">The data suggests a concrete hybrid for the next 3 to 5 years, not a replacement story in either direction</p>
   <pre class="box" style="margin-top:16px">
@@ -367,9 +378,9 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">Born from the MISRA Conference 2026 debate on whether traditional methods remain relevant over the next 3 to 5 years</div>
 </section>
 
-<!-- 12 REPRODUCE -->
+<!-- 13 REPRODUCE -->
 <section class="slide">
-  <div class="kicker">Reproduce · <b>12</b></div>
+  <div class="kicker">Reproduce · <b>13</b></div>
   <h1>Everything is public: <span class="hl">recompute or challenge</span> every number</h1>
   <p class="sub">github.com/zuwasi/swe-sweep-parasoft-benchmark: pipeline, manifests, results, raw Parasoft XML evidence</p>
   <div class="row">
@@ -392,7 +403,7 @@ svg{display:block;width:100%;height:auto}
 
 <!-- 13 THANK YOU -->
 <section class="slide">
-  <div class="kicker">Thank you · <b>13</b></div>
+  <div class="kicker">Thank you · <b>14</b></div>
   <h1>Traditional methods are not the past of safety-critical software. <span class="hl">They are its audit trail.</span></h1>
   <p class="sub">Deterministic, qualifiable, layered: measured on 488 real bugs against the best autonomous agents</p>
   <div class="brandrow">
