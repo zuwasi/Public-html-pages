@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Parasoft C/C++test vs SWE-sweep · ESL - Engineering Software Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4eedc;--sheet:#fbf8ee;--sheet2:#ece4cc;--ink:#1d1a16;--muted:#6b6353;--line:#b9ae90;--blue:#12457a;--accent:#1d6bd0;--amber:#8a5e00;--amber-hi:#e8a317;--red:#b8322a;--green:#1e7d33;--code-bg:#f6efdc;--code-cap:#d9d0b8;--top:52px}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.deck{display:flex;flex-direction:row;width:100vw;transition:transform .45s cubic-bezier(.4,.1,.2,1);will-change:transform}
+.slide{--pad-x:max(4vw,48px);flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding:calc(var(--top) + 22px) var(--pad-x) 64px}
+.kicker{font-size:clamp(11px,1vw,13px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kicker b{color:var(--blue)}
+h1{font-size:clamp(30px,3.8vw,58px);line-height:1.12;letter-spacing:-.02em;margin:10px 0 8px;font-weight:800}
+h1 .hl{color:var(--blue)}
+.sub{font-size:clamp(15px,1.5vw,21px);color:var(--muted);max-width:none;line-height:1.5}
+.row{display:flex;gap:18px;margin-top:18px;flex-wrap:wrap}
+.row>*{flex:1;min-width:220px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(14px,1.5vw,22px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card.amber{border-top-color:var(--amber-hi)}
+.card.red{border-top-color:var(--red)}
+.card.green{border-top-color:var(--green)}
+.card.blue{border-top-color:var(--blue)}
+.card h3{font-size:clamp(16px,1.4vw,20px);font-weight:800;margin-bottom:8px}
+.card p,.card li{font-size:clamp(14px,1.25vw,18px);color:var(--muted);line-height:1.55}
+.card ul{padding-left:18px}
+.label{font-size:clamp(11px,1vw,13px);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
+.stat{font-size:clamp(38px,5.4vw,84px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat small{font-size:.4em;font-weight:700;color:var(--muted);letter-spacing:0}
+.stat.blue{color:var(--blue)}.stat.amber{color:var(--amber)}.stat.red{color:var(--red)}.stat.green{color:var(--green)}
+table{border-collapse:collapse;width:100%;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:clamp(13px,1.15vw,17px)}
+th{background:var(--sheet2);text-align:left;padding:10px 14px;font-size:clamp(12px,1.05vw,15px);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+td{padding:8px 12px;border-top:1px solid var(--line);color:var(--muted);line-height:1.45;vertical-align:top}
+td b,td strong{color:var(--ink)}
+code,.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:1em;background:var(--code-bg);border:1px solid var(--code-cap);border-radius:4px;padding:1px 5px;color:var(--ink)}
+pre.box{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.5;background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:16px 20px;overflow-x:auto;color:var(--ink);white-space:pre}
+pre.box .r{color:var(--red)}pre.box .g{color:var(--green)}pre.box .b{color:var(--blue)}pre.box .a{color:var(--amber)}
+.chart{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 16px 8px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:1240px;margin-left:auto;margin-right:auto}
+.chart .cap{font-size:clamp(12px,1vw,15px);color:var(--muted);margin:6px 2px 8px;line-height:1.4}
+svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:clamp(12px,1vw,15px);color:var(--muted);margin:2px 2px 6px}
+.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--accent)}
+.legend span.ns::before{background:#5a626c}
+.legend span.fail::before{background:var(--red)}
+.legend span.par::before{background:var(--blue)}
+.top{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--sheet2);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(3vw,32px);z-index:50;gap:16px}
+.top .brand{display:flex;align-items:center;gap:14px;min-width:0;text-decoration:none}
+.top .brand img{height:32px;width:auto;display:block}
+.top .homebtn{font-size:20px;line-height:1;text-decoration:none;filter:grayscale(.2)}
+.top .homebtn:hover{transform:scale(1.15)}
+.top #brand{font-weight:600;font-size:clamp(12px,1.1vw,14px);color:var(--ink);border-left:2px solid var(--line);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.kicker{display:flex;align-items:center;gap:12px;font-size:clamp(13px,1.2vw,17px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kicker b{color:var(--blue)}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{left:0;top:0;border-color:var(--blue)}
+.mark::after{left:8px;top:7px;border-color:var(--amber-hi)}
+.brandrow{display:flex;gap:14px;margin:16px 0 0;flex-wrap:wrap;align-items:center}
+.brandchip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 14px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.brandchip img{height:27px;width:auto;display:block}
+.brandchip span{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--ink)}
+.brandchip.dark{background:#1a1a1a;border-color:#1a1a1a}
+.brandchip.dark span{color:#fff}
+.brandchip.dark img{height:24px;background:#fff;border-radius:6px;padding:3px}
+.person-card{display:flex;gap:22px;padding:20px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);box-shadow:0 1px 4px rgba(20,30,50,.06);min-width:280px}
+.person-card img{width:120px;height:120px;object-fit:cover;border-radius:8px;flex:none}
+.person-card strong{font-size:clamp(16px,1.6vw,21px);display:block}
+.person-card span{color:var(--blue);font-weight:600;font-size:clamp(13px,1.3vw,16px);display:block}
+.person-card p{margin:8px 0;font-size:clamp(12px,1.05vw,14px);color:var(--muted);line-height:1.5}
+.person-card a{color:var(--accent);font-size:clamp(11px,.95vw,13px);text-decoration:none;font-weight:600}
+.cardlogo{float:right;height:26px;width:auto;margin:0 0 6px 10px}
+.top nav a{color:var(--muted);text-decoration:none;font-size:clamp(10px,.9vw,13px);margin-left:18px;font-weight:600}
+.top nav a:hover{color:var(--blue)}
+.nav-arrows{position:fixed;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--sheet);color:var(--ink);font-size:22px;cursor:pointer;z-index:60;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(20,30,50,.12);user-select:none}
+.nav-arrows:hover{background:var(--sheet2)}
+#prevBtn{left:14px}#nextBtn{right:14px}
+.nav-arrows.hidden{display:none}
+.progress-wrap{position:fixed;bottom:0;left:0;right:0;height:8px;background:var(--sheet2);z-index:60}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#12457a,#1d6bd0,#e8a317);transition:width .35s ease}
+.counter{position:fixed;bottom:16px;right:22px;z-index:60;font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(11px,.9vw,14px);color:var(--muted);background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:3px 10px}
+.hint{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);z-index:60;color:var(--muted);font-size:clamp(12px,1vw,15px);background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:6px 18px;animation:pulse 1.6s ease-in-out infinite;transition:opacity .4s}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.hint.gone{animation:none;opacity:0;pointer-events:none}
+.foot{margin-top:auto;padding-top:16px;font-size:clamp(12px,1vw,14px);color:var(--muted);border-top:1px solid var(--line)}
+.bigrow{display:flex;gap:26px;margin-top:20px;flex-wrap:wrap}
+.bigrow .card{flex:1;min-width:240px}
+@media (max-width:720px){.slide{--pad-x:20px}.row{gap:10px}.stat{font-size:34px}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">
+    <a class="homebtn" href="#1" title="Back to slide 1" aria-label="Back to slide 1">&#127968;</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener"><img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+    <span id="brand">Parasoft C/C++test vs SWE-sweep · 488 real C/C++ bugs</span>
+  </div>
+  <nav>
+    <a href="https://swesweep.com/paper">SWE-sweep paper</a>
+    <a href="https://github.com/zuwasi/swe-sweep-parasoft-benchmark">Benchmark repo</a>
+    <a href="https://eswlab.com/">eswlab.com</a>
+    <a href="https://eswlab.com/contact-us/">Contact ESL</a>
+  </nav>
+</div>
+
+<div class="deck" id="deck">
+
+<!-- 01 COVER -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>Technical benchmark brief · <b>01</b></div>
+  <h1>Static analysis vs autonomous agents: Parasoft C/C++test measured on <span class="hl">488 real-world C/C++ bugs</span></h1>
+  <p class="sub">Flow Analysis Standard with MISRA C 2025, MISRA C++ 2023, and SEI CERT, on the exact pre-fix code of every accepted SWE-sweep bug, compared with SWE-sweep's best published agent result</p>
+  <div class="brandrow">
+    <div class="brandchip"><img src="../assets/parasoft-logo.png" alt="Parasoft"><span>Parasoft C/C++test · the tool under test</span></div>
+    <div class="brandchip dark"><img src="../assets/amp-logo.png" alt="SWE-sweep"><span>SWE-sweep (Meta FAIR) · the agent benchmark</span></div>
+    <div class="brandchip"><img src="../assets/esl-logo.png" alt="ESL"><span>ESL · benchmark design and execution</span></div>
+  </div>
+  <div class="bigrow">
+    <div class="card"><div class="label">Bugs analyzed</div><div class="stat blue">488 <small>real defects</small></div><p>Across 14 C/C++ repositories, bug-era code from git blob hashes</p></div>
+    <div class="card green"><div class="label">Parasoft flagged</div><div class="stat green">37.5%</div><p>183 of 488 bugs on the changed lines; 20.5% on the exact fixed line</p></div>
+    <div class="card red"><div class="label">Best agent resolved</div><div class="stat red">~4.5%</div><p>SWE-sweep's best published result across these same repositories</p></div>
+  </div>
+  <div class="row" style="align-items:stretch">
+    <div class="person-card" style="flex:1">
+      <img src="../assets/daniel-liezrowice.jpg" width="120" height="120" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years. Benchmark born from the MISRA Conference debate: are traditional methods still relevant?</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Engineering Software Lab (eswlab.com) · 12 November 2026 · Tool: Parasoft C/C++test Standard 2025.2.0, Linux x64. All data, scripts, and raw tool output public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
+</section>
+
+<!-- 02 THE DEBATE -->
+<section class="slide">
+  <div class="kicker">Context · <b>02</b></div>
+  <h1>The MISRA Conference question: are the traditional methods <span class="hl">still relevant</span>?</h1>
+  <p class="sub">LLM agents now resolve GitHub issues end to end. Should avionics, automotive, and medical teams keep paying for static analysis, MISRA, coverage, and review?</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">The traditional stack</div><ul>
+      <li>Static analysis with coding-standard rule sets (MISRA C/C++, CERT)</li>
+      <li>Deep flow analysis for data-flow defects</li>
+      <li>Requirements-based testing, structural coverage up to MC/DC</li>
+      <li>Human review, deterministic and qualifiable tools (DO-330, ISO 26262 TCL)</li>
+    </ul></div>
+    <div class="card amber"><div class="label">The new challenger</div><ul>
+      <li>Autonomous LLM agents: give them a repo, they find and fix bugs</li>
+      <li>No hints, no locations, no failing tests</li>
+      <li>Seductive promise: fewer tools, fewer engineers, one prompt</li>
+      <li>Open question: what do they actually catch, and can they be qualified?</li>
+    </ul></div>
+    <div class="card blue"><div class="label">Our answer shape</div><p style="color:var(--ink)">Stop arguing. Find the hardest published agent benchmark, run the same bugs through a commercial static analysis tool, and let the numbers speak.</p></div>
+  </div>
+  <div class="foot">SWE-sweep: Lieret et al., Meta FAIR, Harvard, Stanford, Washington, "SWE-sweep: Can Agents Autonomously Find and Fix Bugs?", October 2026, swesweep.com/paper</div>
+</section>
+
+<!-- 03 SWE-SWEEP -->
+<section class="slide">
+  <div class="kicker">The benchmark · <b>03</b></div>
+  <h1>SWE-sweep: agents must <span class="hl">find the bugs themselves</span></h1>
+  <p class="sub">A repository with dozens of confirmed real bugs, one instruction: fix as many as you can, no hints about location or nature</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Construction</div><ul>
+      <li>100 serious open-source repos, mean 292k lines of code, mean 690 contributors</li>
+      <li>Real issue + PR pairs; every bug confirmed by the maintainers' own fix commit</li>
+      <li>4,068 accepted bugs in the released dataset</li>
+    </ul></div>
+    <div class="card red"><div class="label">Agent scoreboard</div><div class="stat red">4.7%</div><p>Best model (Sol 5.6 xhigh) resolved 4.7% of all bugs for $7k of compute; second place resolved about half at $224</p></div>
+    <div class="card amber"><div class="label">Why it is hard</div><p style="color:var(--ink)">Discovery, understanding, and repair in one trajectory, inside repos of up to 1.9M lines. When SWE-sweep's authors gave line ranges as hints, scores roughly doubled or tripled.</p></div>
+  </div>
+  <div class="foot">Source: swesweep.com/paper, Table 4 and ablations. Dataset and harness open-sourced by the authors</div>
+</section>
+
+<!-- 04 OUR METHOD -->
+<section class="slide">
+  <div class="kicker">Method · <b>04</b></div>
+  <h1>What we did: <span class="hl">byte-identical bug-era code</span>, real flags, the deployed rule sets</h1>
+  <p class="sub">14 C/C++ repositories from SWE-sweep, 488 accepted bugs, one analysis unit per (file, blob hash)</p>
+  <pre class="box" style="margin-top:18px">
+<span class="b">oracle patch</span> (one per bug, from SWE-sweep dataset)
+   |  parses to: pre-fix file + git blob hash + changed lines
+   v
+<span class="b">materialize</span> 679 bug-era file versions from git, byte-identical
+   |  13 of 679 blobs absent from fetched history: skipped, reported
+   v
+<span class="b">capture real compile flags</span> from each project's own build system
+   |  CMake compile_commands.json (11 repos), make -n (2), scons compiledb (godot)
+   v
+<span class="b">run cpptestcli</span> with the deployed rule sets, gcc_13-64, 6 parallel runs
+   |  C repos:  Flow Analysis Standard + MISRA C 2025 + CERT C      (700 rules)
+   |  C++ repos: Flow Analysis Standard + MISRA C++ 2023 + CERT C++ (676 rules)
+   v
+<span class="b">map every violation back to bugs</span>
+      found (region): any violation on any changed line
+      strict: violation on a line the eventual fix removed or rewrote</pre>
+  <div class="foot">Parasoft C/C++test Standard 2025.2.0 (cpptestcli), WSL2 Linux x64, compiler id gcc_13-64, 12 November 2026. Full pipeline public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
+</section>
+
+<!-- 05 RESULTS TABLE -->
+<section class="slide">
+  <div class="kicker">Results · <b>05</b></div>
+  <h1>The scoreboard: <span class="hl">37.5% vs ~4.5%</span></h1>
+  <p class="sub">Parasoft flags 183 of 488 bugs on the changed lines; the best agent resolved about 22 of 488 on the same repositories</p>
+  <table style="margin-top:14px">
+    <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
+    <tr><td><b>jerryscript</b></td><td>C</td><td>15</td><td>13</td><td><b>86.7%</b></td><td>66.7%</td><td>20.0%</td></tr>
+    <tr><td><b>opencv</b></td><td>C++</td><td>47</td><td>32</td><td><b>68.1%</b></td><td>29.8%</td><td>2.1%</td></tr>
+    <tr><td><b>duckdb</b></td><td>C++</td><td>109</td><td>56</td><td><b>51.4%</b></td><td>25.7%</td><td>2.8%</td></tr>
+    <tr><td><b>libexpat</b></td><td>C</td><td>9</td><td>5</td><td>55.6%</td><td>33.3%</td><td>44.4%</td></tr>
+    <tr><td><b>proj</b></td><td>C++</td><td>21</td><td>10</td><td>47.6%</td><td>28.6%</td><td>9.5%</td></tr>
+    <tr><td><b>php-src</b></td><td>C</td><td>26</td><td>12</td><td>46.2%</td><td>30.8%</td><td>0.0%</td></tr>
+    <tr><td><b>cvc5</b></td><td>C++</td><td>38</td><td>17</td><td>44.7% <span class="mono">(lower bound)</span></td><td>26.3%</td><td>2.6%</td></tr>
+    <tr><td><b>hdf5</b></td><td>C</td><td>14</td><td>6</td><td>42.9%</td><td>28.6%</td><td>28.6%</td></tr>
+    <tr><td><b>godot</b></td><td>C++</td><td>17</td><td>7</td><td>41.2%</td><td>35.3%</td><td>0.0%</td></tr>
+    <tr><td>z3</td><td>C++</td><td>11</td><td>3</td><td>27.3%</td><td>9.1%</td><td>0.0%</td></tr>
+    <tr><td>arrow</td><td>C++</td><td>47</td><td>10</td><td>21.3%</td><td>8.5%</td><td>2.1%</td></tr>
+    <tr><td>micropython</td><td>C</td><td>22</td><td>4</td><td>18.2%</td><td>13.6%</td><td>0.0%</td></tr>
+    <tr><td>tarantool</td><td>C</td><td>40</td><td>5</td><td>12.5%</td><td>5.0%</td><td>7.5%</td></tr>
+    <tr><td>gdal</td><td>C++</td><td>72</td><td>3</td><td>4.2%</td><td>1.4%</td><td>0.0%</td></tr>
+    <tr><td><b>Total</b></td><td></td><td><b>488</b></td><td><b>183</b></td><td><b>37.5%</b></td><td><b>20.5%</b></td><td><b>~4.5%</b></td></tr>
+  </table>
+  <div class="foot">SWE-sweep percentages are each repository's best published agent result. cvc5: only 2 of 54 files preprocessed against bug-era headers, so its figure is a floor. gdal: large generated-code surface defeated preprocessing.</div>
+</section>
+
+<!-- 06 CHART -->
+<section class="slide">
+  <div class="kicker">Results · <b>06</b></div>
+  <h1>Same picture, drawn: the gap holds in <span class="hl">13 of 14 repos</span></h1>
+  <p class="sub">Percentage of bugs detected, per repository: Parasoft on the pre-fix code vs SWE-sweep's best published agent</p>
+  <div class="chart" style="margin-top:14px">
+    <div class="legend"><span class="par">Parasoft found (region) %</span><span class="ns">SWE-sweep best agent %</span></div>
+    <svg viewBox="0 0 1240 492" role="img" aria-label="Grouped horizontal bar chart of Parasoft versus SWE-sweep detection by repository">
+      <g font-family="Inter,system-ui,sans-serif" font-size="15" fill="#6b6353"><text x="118" y="23" text-anchor="end">jerryscript</text><rect x="130" y="8" width="347" height="13" fill="#12457a"/><rect x="130" y="25" width="80" height="13" fill="#5a626c"/><text x="482.8" y="19" font-size="12">86.7</text><text x="216.0" y="36" font-size="12">20</text>
+<text x="118" y="57" text-anchor="end">opencv</text><rect x="130" y="42" width="272" height="13" fill="#12457a"/><rect x="130" y="59" width="8" height="13" fill="#5a626c"/><text x="408.4" y="53" font-size="12">68.1</text><text x="144.4" y="70" font-size="12">2.1</text>
+<text x="118" y="91" text-anchor="end">libexpat</text><rect x="130" y="76" width="222" height="13" fill="#12457a"/><rect x="130" y="93" width="178" height="13" fill="#5a626c"/><text x="358.4" y="87" font-size="12">55.6</text><text x="313.6" y="104" font-size="12">44.4</text>
+<text x="118" y="125" text-anchor="end">duckdb</text><rect x="130" y="110" width="206" height="13" fill="#12457a"/><rect x="130" y="127" width="11" height="13" fill="#5a626c"/><text x="341.6" y="121" font-size="12">51.4</text><text x="147.2" y="138" font-size="12">2.8</text>
+<text x="118" y="159" text-anchor="end">proj</text><rect x="130" y="144" width="190" height="13" fill="#12457a"/><rect x="130" y="161" width="38" height="13" fill="#5a626c"/><text x="326.4" y="155" font-size="12">47.6</text><text x="174.0" y="172" font-size="12">9.5</text>
+<text x="118" y="193" text-anchor="end">php-src</text><rect x="130" y="178" width="185" height="13" fill="#12457a"/><rect x="130" y="195" width="2" height="13" fill="#5a626c"/><text x="320.8" y="189" font-size="12">46.2</text><text x="134" y="206" font-size="12">0.0</text>
+<text x="118" y="227" text-anchor="end">cvc5</text><rect x="130" y="212" width="179" height="13" fill="#12457a"/><rect x="130" y="229" width="10" height="13" fill="#5a626c"/><text x="314.8" y="223" font-size="12">44.7 (lower bound)</text><text x="146.4" y="240" font-size="12">2.6</text>
+<text x="118" y="261" text-anchor="end">hdf5</text><rect x="130" y="246" width="172" height="13" fill="#12457a"/><rect x="130" y="263" width="114" height="13" fill="#5a626c"/><text x="307.6" y="257" font-size="12">42.9</text><text x="250.4" y="274" font-size="12">28.6</text>
+<text x="118" y="295" text-anchor="end">godot</text><rect x="130" y="280" width="165" height="13" fill="#12457a"/><rect x="130" y="297" width="2" height="13" fill="#5a626c"/><text x="300.8" y="291" font-size="12">41.2</text><text x="134" y="308" font-size="12">0.0</text>
+<text x="118" y="329" text-anchor="end">z3</text><rect x="130" y="314" width="109" height="13" fill="#12457a"/><rect x="130" y="331" width="2" height="13" fill="#5a626c"/><text x="245.2" y="325" font-size="12">27.3</text><text x="134" y="342" font-size="12">0.0</text>
+<text x="118" y="363" text-anchor="end">arrow</text><rect x="130" y="348" width="85" height="13" fill="#12457a"/><rect x="130" y="365" width="8" height="13" fill="#5a626c"/><text x="221.2" y="359" font-size="12">21.3</text><text x="144.4" y="376" font-size="12">2.1</text>
+<text x="118" y="397" text-anchor="end">micropython</text><rect x="130" y="382" width="73" height="13" fill="#12457a"/><rect x="130" y="399" width="2" height="13" fill="#5a626c"/><text x="208.8" y="393" font-size="12">18.2</text><text x="134" y="410" font-size="12">0.0</text>
+<text x="118" y="431" text-anchor="end">tarantool</text><rect x="130" y="416" width="50" height="13" fill="#12457a"/><rect x="130" y="433" width="30" height="13" fill="#5a626c"/><text x="186.0" y="427" font-size="12">12.5</text><text x="166.0" y="444" font-size="12">7.5</text>
+<text x="118" y="465" text-anchor="end">gdal</text><rect x="130" y="450" width="17" height="13" fill="#12457a"/><rect x="130" y="467" width="2" height="13" fill="#5a626c"/><text x="152.8" y="461" font-size="12">4.2</text><text x="134" y="478" font-size="12">0.0</text>
+      </g>
+    </svg>
+    <div class="cap">Detection measured on byte-identical pre-fix code, 679 file versions; agent percentages from swesweep.com per-repository results. Parasoft C/C++test Standard 2025.2.0, Flow Analysis Standard + MISRA/CERT rule sets.</div>
+  </div>
+  <div class="foot">Full per-bug detail: github.com/zuwasi/swe-sweep-parasoft-benchmark, results/ and raw-reports/</div>
+</section>
+
+<!-- 07 DEEP FLOW ANALYSIS -->
+<section class="slide">
+  <div class="kicker">Deep checks · <b>07</b></div>
+  <h1>Flow Analysis alone caught <span class="hl">16 real defects</span>, the classes that kill in safety-critical code</h1>
+  <p class="sub">Deep interprocedural checks (BD-* rules), independent of any coding-standard convention</p>
+  <div class="row">
+    <div class="card red"><div class="label">hdf5 · 5 of 6 found bugs</div><p><b>BD-PB-VOVR</b> (unused value) on 5 bugs, 4 strictly on fixed lines: H5Tconv.c, H5Aint.c twice, H5Fint.c, H5T.c</p></div>
+    <div class="card red"><div class="label">duckdb · 4</div><p><b>BD-PB-INTWRAP</b> integer wraparound in cast helpers and the optimizer; <b>BD-PB-VALRANGE</b> container index out of range; <b>BD-PB-SWITCH</b> unreachable branches</p></div>
+    <div class="card red"><div class="label">jerryscript · 4</div><p><b>BD-PB-NOTINIT</b> use before initialization; <b>BD-PB-ERRNO</b>, <b>BD-PB-CC</b> always-same condition, <b>BD-PB-VOVR</b>, <b>BD-PB-CHECKRET</b></p></div>
+  </div>
+  <div class="row">
+    <div class="card amber"><div class="label">Verified true positive</div><p>JerryScript's date-<code>fmod</code> bug: BD-PB-ERRNO fires on line 75, the exact <code>fmod(time, ECMA_DATE_MS_PER_DAY)</code> call the maintainers later rewrote to normalize negative results</p></div>
+    <div class="card blue"><div class="label">Also caught</div><p>opencv: unchecked return value (BD-PB-CHECKRET) and errno misuse (BD-PB-ERRNO); php-src: unused value in versioning.c. The other 9 repos: zero deep catches, all matches from rule-based sweep</p></div>
+  </div>
+  <div class="foot">16 of 488 bugs (3.3%) from Flow Analysis alone, close to the agents' 4.5%: the big gap lives in the MISRA/CERT rule sweep of the buggy lines</div>
+</section>
+
+<!-- 08 RULE BREAKDOWN -->
+<section class="slide">
+  <div class="kicker">Anatomy · <b>08</b></div>
+  <h1>What the rules saw on the <span class="hl">buggy lines</span></h1>
+  <p class="sub">Top rules flagging bug lines in the three most-analyzed repositories (bugs region / strict)</p>
+  <div class="row">
+    <div class="card"><div class="label">duckdb · 56 found</div><ul>
+      <li>CERT MSC41-a hard-coded strings: 22 / 9</li>
+      <li>MISRA 8.0.1-b precedence parentheses: 20 / 9</li>
+      <li>MISRA 9.5.1-a legacy for loops: 11 / 1</li>
+      <li>MISRA 8.2.10-a recursion: 10 / 3</li>
+      <li>MISRA 0.1.2-a unused return value: 8 / 6</li>
+      <li>CERT ARR39-b pointer arithmetic: 5 / 2</li>
+    </ul></div>
+    <div class="card"><div class="label">opencv · 32 found</div><ul>
+      <li>MISRA 9.3.1-b if/else compound body: 14 / 5</li>
+      <li>MISRA 6.9.2-a std type names: 12 / 4</li>
+      <li>MISRA 8.0.1-b precedence: 11 / 7</li>
+      <li>MISRA 8.2.2-b C-style casts: 10 / 4</li>
+      <li>MISRA 11.6.1-a explicit init: 8 / 2</li>
+      <li>CERT ARR39-b pointer arithmetic: 4 / 3</li>
+    </ul></div>
+    <div class="card"><div class="label">jerryscript · 13 found</div><ul>
+      <li>CERT INT31-j essential type category: 8 / 7</li>
+      <li>MISRA 7.0.5-a conversion signedness: 6 / 3</li>
+      <li>MISRA 10.2.3-a unscoped enum value: 6 / 4</li>
+      <li>CERT INT31-i cross-category assign: 4 / 2</li>
+      <li>CERT EXP39-b pointer-pointer cast: 3 / 1</li>
+      <li>BD-PB-NOTINIT use before init: 2 / 0</li>
+    </ul></div>
+  </div>
+  <div class="foot">32 of duckdb's 56 found bugs, 25 of opencv's 32, and 12 of jerryscript's 13 were flagged by more than one rule. Full rule tables per repo: results/REPORT.md in the benchmark repository</div>
+</section>
+
+<!-- 09 HONEST READING -->
+<section class="slide">
+  <div class="kicker">Honest reading · <b>09</b></div>
+  <h1>What this comparison <span class="hl">does and does not</span> say</h1>
+  <p class="sub">Two numbers this far apart invite over-reading; the fine print is what makes the result trustworthy</p>
+  <div class="bigrow">
+    <div class="card amber"><div class="label">Different tasks</div><p>Parasoft was pointed at the known buggy files. SWE-sweep agents searched whole repos (up to 1.9M lines) with no hints and had to produce passing fixes. Detection on located buggy code vs autonomous discovery and repair</p></div>
+    <div class="card amber"><div class="label">A flag is not a fix</div><p>37.5% means a human gets a pointer to the defect line. Someone still judges it, fixes it, and proves the fix. SWE-sweep's number requires hidden tests to pass</p></div>
+    <div class="card amber"><div class="label">Deep checks are close</div><p>Flow Analysis alone: 3.3%. Agents: 4.5%. On true-defect detection the two approaches are comparable; the headline gap comes from the rule sweep of the buggy lines</p></div>
+    <div class="card amber"><div class="label">Coverage gaps</div><p>13 of 679 bug-era files unrecoverable from git history; cvc5 is a lower bound; gdal lost many files to preprocessing failures on generated code. All documented and reproducible</p></div>
+  </div>
+  <div class="foot">The fair summary: static analysis pointed at suspicious code flags far more real bugs than agents find and fix end to end. Nobody should read it as "the tool replaces the agent's search"</div>
+</section>
+
+<!-- 10 SAFETY-CRITICAL -->
+<section class="slide">
+  <div class="kicker">Safety-critical view · <b>10</b></div>
+  <h1>For DO-178C, ISO 26262, and IEC 62304: the decisive argument is <span class="hl">qualification</span>, not percentages</h1>
+  <p class="sub">In avionics, automotive, and medical software the objective is minimizing escaped defects; labor cost of triage is part of the certification budget, not a reason to skip the check</p>
+  <div class="bigrow">
+    <div class="card green"><div class="label">The traditional stack</div><ul>
+      <li>Deterministic: same inputs, same outputs, every time</li>
+      <li>Qualifiable under DO-330 and ISO 26262 TCL with documented criteria</li>
+      <li>Layered: static analysis + requirements-based testing + MC/DC + review</li>
+      <li>A miss produces no false confidence; the other layers back it up</li>
+    </ul></div>
+    <div class="card red"><div class="label">The autonomous agent</div><ul>
+      <li>Nondeterministic: reruns give different results</li>
+      <li>Silent failures: reports success on code that does not work</li>
+      <li>No accepted qualification scheme today as a development tool</li>
+      <li>4.5% resolution on this benchmark; even doubled, it cannot enter the certification evidence</li>
+    </ul></div>
+  </div>
+  <div class="foot">62.5% of bugs went unflagged even with the files pointed out: static analysis is necessary, never sufficient. The certification case rests on the full stack</div>
+</section>
+
+<!-- 11 DIVISION OF LABOR -->
+<section class="slide">
+  <div class="kicker">Verdict · <b>11</b></div>
+  <h1>Division of labor: tools find, <span class="hl">humans judge</span>, agents assist behind verifying gates</h1>
+  <p class="sub">The data suggests a concrete hybrid for the next 3 to 5 years, not a replacement story in either direction</p>
+  <pre class="box" style="margin-top:16px">
+<span class="b">Safety case</span> (certification evidence): deterministic tools + humans, always
+   static analysis (MISRA/CERT + Flow Analysis)  -->  human triage and fix
+   requirements-based testing, structural coverage to MC/DC, review
+   LLM agents: <span class="r">not in this path</span> until a qualification scheme exists
+
+<span class="b">Productivity layer</span> (outside the safety case): agents behind gates
+   <span class="g">agent triages static analysis findings</span> --> human judges
+   <span class="g">agent drafts candidate fixes</span> --> deterministic tests verify
+   <span class="g">agent drafts test cases</span> --> reviewed, then executed by qualified tools
+
+<span class="b">What never to do</span>: send an agent hunting a 1.9M-line repo for bugs and
+   accept what it reports. On this benchmark it closes <span class="r">4.5%</span>, silently
+   missing the rest, with no way to know which half it checked</pre>
+  <div class="foot">Born from the MISRA Conference 2026 debate on whether traditional methods remain relevant over the next 3 to 5 years</div>
+</section>
+
+<!-- 12 REPRODUCE -->
+<section class="slide">
+  <div class="kicker">Reproduce · <b>12</b></div>
+  <h1>Everything is public: <span class="hl">recompute or challenge</span> every number</h1>
+  <p class="sub">github.com/zuwasi/swe-sweep-parasoft-benchmark: pipeline, manifests, results, raw Parasoft XML evidence</p>
+  <div class="row">
+    <div class="card"><div class="label">Pipeline (14 scripts)</div><ul>
+      <li>fetch_repos.sh: clones the 14 repos at pinned base refs</li>
+      <li>extract_bugs.py, materialize_preimages.py: byte-identical bug-era code from blob hashes</li>
+      <li>capture_flags*.sh, gen_bdf.py, run_analysis.py: real flags, cpptestcli runs</li>
+      <li>map_findings.py, build_report.py: violation-to-bug mapping</li>
+    </ul></div>
+    <div class="card"><div class="label">Evidence</div><ul>
+      <li>manifests/: per-bug file, blob hash, changed lines</li>
+      <li>results/: 14 per-repo JSONs, REPORT.md, category breakdown</li>
+      <li>raw-reports/: gzipped Parasoft XML from every run</li>
+      <li>parasoft-configs/: the exact 700/676-rule test configurations</li>
+    </ul></div>
+    <div class="card green"><div class="label">Extend it</div><p>Recomputed without a license from raw XML, or rerun the pipeline on any static analysis tool and compare. The SWE-sweep dataset itself comes from its authors at swesweep.com under their license</p></div>
+  </div>
+  <div class="foot">Benchmark repository: github.com/zuwasi/swe-sweep-parasoft-benchmark · SWE-sweep: swesweep.com/paper (Lieret et al., 2026)</div>
+</section>
+
+<!-- 13 THANK YOU -->
+<section class="slide">
+  <div class="kicker">Thank you · <b>13</b></div>
+  <h1>Traditional methods are not the past of safety-critical software. <span class="hl">They are its audit trail.</span></h1>
+  <p class="sub">Deterministic, qualifiable, layered: measured on 488 real bugs against the best autonomous agents</p>
+  <div class="brandrow">
+    <div class="brandchip"><img src="../assets/parasoft-logo.png" alt="Parasoft"><span>Parasoft C/C++test · static analysis, coverage, MC/DC</span></div>
+    <div class="brandchip"><img src="../assets/esl-logo.png" alt="ESL"><span>ESL · tooling, training, and services</span></div>
+  </div>
+  <div class="row" style="align-items:stretch">
+    <div class="person-card" style="flex:1">
+      <img src="../assets/daniel-liezrowice.jpg" width="120" height="120" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+    <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <img class="cardlogo" src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab" style="align-self:flex-end;float:none">
+      <div class="label">Contact ESL</div>
+      <p style="font-size:clamp(13px,1.2vw,16px);color:var(--ink);line-height:1.7">
+        <a href="https://eswlab.com/" style="color:var(--accent);font-weight:700">eswlab.com</a><br>
+        <a href="https://eswlab.com/contact-us/" style="color:var(--accent);font-weight:700">eswlab.com/contact-us</a>
+      </p>
+    </div>
+  </div>
+  <div class="foot">Disclosure: ESL is a Parasoft reseller; other static analysis tools were not evaluated. Benchmark data and scripts: github.com/zuwasi/swe-sweep-parasoft-benchmark. Analysis executed 12 November 2026 on WSL2 Linux x64.</div>
+</section>
+
+</div>
+
+<button class="nav-arrows" id="prevBtn" aria-label="Previous slide">&#8249;</button>
+<button class="nav-arrows" id="nextBtn" aria-label="Next slide">&#8250;</button>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="counter" id="counter"></div>
+<div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck');
+  var total=deck.children.length;
+  var cur=0;
+  var progress=document.getElementById('progress');
+  var counter=document.getElementById('counter');
+  var hint=document.getElementById('hint');
+  var prev=document.getElementById('prevBtn');
+  var next=document.getElementById('nextBtn');
+  function go(n){
+    cur=Math.max(0,Math.min(total-1,n));
+    deck.style.transform='translateX('+(-cur*100)+'vw)';
+    progress.style.width=((cur+1)/total*100)+'%';
+    counter.textContent=(cur+1)+' / '+total;
+    prev.classList.toggle('hidden',cur===0);
+    next.classList.toggle('hidden',cur===total-1);
+    hint.classList.add('gone');
+  }
+  prev.addEventListener('click',function(){go(cur-1)});
+  next.addEventListener('click',function(){go(cur+1)});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(cur+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();go(cur-1);}
+    else if(e.key==='Home'){go(0);}else if(e.key==='End'){go(total-1);}
+  });
+  var tx=null,ty=null;
+  document.addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(tx===null)return;
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?go(cur+1):go(cur-1);}
+    tx=null;
+  },{passive:true});
+  var dragging=false,dragX=0;
+  document.addEventListener('mousedown',function(e){dragging=true;dragX=e.clientX;});
+  document.addEventListener('mouseup',function(e){
+    if(!dragging)return;dragging=false;
+    var dx=e.clientX-dragX;
+    if(Math.abs(dx)>60){dx<0?go(cur+1):go(cur-1);}
+  });
+  window.addEventListener('resize',function(){go(cur);});
+  go(0);
+})();
+</script>
+</body>
+</html>
