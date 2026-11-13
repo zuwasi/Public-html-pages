@@ -137,7 +137,8 @@ svg{display:block;width:100%;height:auto}
 <section class="slide">
   <div class="kicker">Context · <b>02</b></div>
   <h1>The MISRA Conference question: are the traditional methods <span class="hl">still relevant</span>?</h1>
-  <p class="sub">LLM agents now resolve GitHub issues end to end. Should avionics, automotive, and medical teams keep paying for static analysis, MISRA, coverage, and review?</p>
+  <p class="sub">Raised at MISRA Conference 2026, Manchester, UK, 10 November 2026: LLM agents now resolve GitHub issues end to end. Should avionics, automotive, and medical teams keep paying for static analysis, MISRA, coverage, and review?</p>
+  <div style="display:flex;justify-content:flex-end;margin-top:-8px"><img src="../assets/misra-logo.png" alt="MISRA" style="height:110px"></div>
   <div class="bigrow">
     <div class="card"><div class="label">The traditional stack</div><ul>
       <li>Static analysis with coding-standard rule sets (MISRA C/C++, CERT)</li>
@@ -318,9 +319,25 @@ svg{display:block;width:100%;height:auto}
   <div class="foot">32 of duckdb's 56 found bugs, 25 of opencv's 32, and 12 of jerryscript's 13 were flagged by more than one rule. Full rule tables per repo: results/REPORT.md in the benchmark repository</div>
 </section>
 
-<!-- 10 HONEST READING -->
+<!-- 10 CLASSIFICATION -->
+<section class="slide compact">
+  <div class="kicker">Classification · <b>10</b></div>
+  <h1>What static analysis could <span class="hl">even see</span>: only a third of the bugs are its kind of bug</h1>
+  <p class="sub">All 488 bugs classified by defect mechanism, judged from the lines the maintainers' fix removed; two independent blind passes, every disagreement adjudicated, rubric and per-bug labels published</p>
+  <div class="row">
+    <div class="card blue"><div class="label">Static-analysis-addressable · 162 of 488 (33.2%)</div><p><b>MEMORY</b> 119: overflow, UAF, null deref, uninitialized · <b>RESOURCE</b> 16: leaks, races · <b>ERROR</b> 27: unchecked returns, contract violations</p></div>
+    <div class="card"><div class="label">Not analyzable by mechanism · 326</div><p><b>LOGIC</b> 300 (61.5%): wrong operator, constant, branch, protocol step, spec reading · <b>OTHER</b> 7 · <b>UNKNOWN</b> 19 (no snippet; excluded)</p></div>
+  </div>
+  <div class="row">
+    <div class="card green"><div class="label">Conditional detection on the 162</div><p><b>38.9%</b> flagged at the changed region (63 of 162), <b>23.5%</b> on the exact removed line, vs 37.5% / 21.1% over all bugs: the hit rate on its home ground matches the overall rate</p></div>
+    <div class="card amber"><div class="label">Division of labor</div><p>One third of real bugs are mechanism defects a deterministic tool flags with auditable findings. The logic two thirds are what review, requirements-based testing, and structural coverage are for, and agents (4.5%) find neither layer reliably</p></div>
+  </div>
+  <div class="foot">Robust across both blind passes (32.8% and 34.6% conditional before adjudication). SWE-sweep's paper: most of its bugs are only recognizable by inferring intended behavior from the repository</div>
+</section>
+
+<!-- 11 HONEST READING -->
 <section class="slide">
-  <div class="kicker">Honest reading · <b>10</b></div>
+  <div class="kicker">Honest reading · <b>11</b></div>
   <h1>What this comparison <span class="hl">does and does not</span> say</h1>
   <p class="sub">Two numbers this far apart invite over-reading; the fine print is what makes the result trustworthy</p>
   <div class="bigrow">
@@ -334,7 +351,7 @@ svg{display:block;width:100%;height:auto}
 
 <!-- 11 SAFETY-CRITICAL -->
 <section class="slide">
-  <div class="kicker">Safety-critical view · <b>11</b></div>
+  <div class="kicker">Safety-critical view · <b>12</b></div>
   <h1>For DO-178C, ISO 26262, and IEC 62304: the decisive argument is <span class="hl">qualification</span>, not percentages</h1>
   <p class="sub">In avionics, automotive, and medical software the objective is minimizing escaped defects; labor cost of triage is part of the certification budget, not a reason to skip the check</p>
   <div class="bigrow">
@@ -356,7 +373,7 @@ svg{display:block;width:100%;height:auto}
 
 <!-- 12 DIVISION OF LABOR -->
 <section class="slide">
-  <div class="kicker">Verdict · <b>12</b></div>
+  <div class="kicker">Verdict · <b>13</b></div>
   <h1>Division of labor: tools find, <span class="hl">humans judge</span>, agents assist behind verifying gates</h1>
   <p class="sub">The data suggests a concrete hybrid for the next 3 to 5 years, not a replacement story in either direction</p>
   <pre class="box" style="margin-top:16px">
@@ -378,7 +395,7 @@ svg{display:block;width:100%;height:auto}
 
 <!-- 13 REPRODUCE -->
 <section class="slide">
-  <div class="kicker">Reproduce · <b>13</b></div>
+  <div class="kicker">Reproduce · <b>14</b></div>
   <h1>Everything is public: <span class="hl">recompute or challenge</span> every number</h1>
   <p class="sub">github.com/zuwasi/swe-sweep-parasoft-benchmark: pipeline, manifests, results, raw Parasoft XML evidence</p>
   <div class="row">
@@ -401,7 +418,7 @@ svg{display:block;width:100%;height:auto}
 
 <!-- 13 THANK YOU -->
 <section class="slide">
-  <div class="kicker">Thank you · <b>14</b></div>
+  <div class="kicker">Thank you · <b>15</b></div>
   <h1>Traditional methods are not the past of safety-critical software. <span class="hl">They are its audit trail.</span></h1>
   <p class="sub">Deterministic, qualifiable, layered: measured on 488 real bugs against the best autonomous agents</p>
   <div class="brandrow">
