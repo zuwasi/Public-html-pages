@@ -323,16 +323,16 @@ svg{display:block;width:100%;height:auto}
 <section class="slide compact">
   <div class="kicker">Classification · <b>10</b></div>
   <h1>What static analysis could <span class="hl">even see</span>: only a third of the bugs are its kind of bug</h1>
-  <p class="sub">All 488 bugs classified by defect mechanism, judged from the lines the maintainers' fix removed; two independent blind passes, every disagreement adjudicated, rubric and per-bug labels published</p>
+  <p class="sub">All 488 bugs classified by defect mechanism, judged from the lines the maintainers' fix removed; two independent blind passes plus a third boundary pass over 228 uncertain cases with pre-image context, rubric and per-bug labels published</p>
   <div class="row">
     <div class="card blue"><div class="label">Static-analysis-addressable · 162 of 488 (33.2%)</div><p><b>MEMORY</b> 119: overflow, UAF, null deref, uninitialized · <b>RESOURCE</b> 16: leaks, races · <b>ERROR</b> 27: unchecked returns, contract violations</p></div>
     <div class="card"><div class="label">Not analyzable by mechanism · 326</div><p><b>LOGIC</b> 300 (61.5%): wrong operator, constant, branch, protocol step, spec reading · <b>OTHER</b> 7 · <b>UNKNOWN</b> 19 (no snippet; excluded)</p></div>
   </div>
   <div class="row">
-    <div class="card green"><div class="label">Conditional detection on the 162</div><p><b>38.9%</b> flagged at the changed region (63 of 162), <b>23.5%</b> on the exact removed line, vs 37.5% / 21.1% over all bugs: the hit rate on its home ground matches the overall rate</p></div>
+    <div class="card green"><div class="label">Conditional detection on the 162</div><p><b>41.4%</b> flagged at the changed region (67 of 162), <b>24.7%</b> on the exact removed line, vs 37.5% / 21.1% over all bugs: on its home ground the tool clears the 40% mark and beats the overall rate</p></div>
     <div class="card amber"><div class="label">Division of labor</div><p>One third of real bugs are mechanism defects a deterministic tool flags with auditable findings. The logic two thirds are what review, requirements-based testing, and structural coverage are for, and agents (4.5%) find neither layer reliably</p></div>
   </div>
-  <div class="foot">Robust across both blind passes (32.8% and 34.6% conditional before adjudication). SWE-sweep's paper: most of its bugs are only recognizable by inferring intended behavior from the repository</div>
+  <div class="foot">Range across independent passes: 38.8% to 41.4% conditional; the third pass re-judged the 228 boundary cases with full pre-image context (10 flips, 5 each way). SWE-sweep's paper: most of its bugs are only recognizable by inferring intended behavior from the repository</div>
 </section>
 
 <!-- 11 HONEST READING -->
