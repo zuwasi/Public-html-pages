@@ -342,7 +342,7 @@ svg{display:block;width:100%;height:auto}
   <h1>What this comparison <span class="hl">does and does not</span> say</h1>
   <p class="sub">Two numbers this far apart invite over-reading; the fine print is what makes the result trustworthy</p>
   <div class="bigrow">
-    <div class="card amber"><div class="label">Different tasks</div><p>Parasoft was pointed at the known buggy files. SWE-sweep agents searched whole repos (up to 1.9M lines) with no hints and had to produce passing fixes. Detection on located buggy code vs autonomous discovery and repair</p></div>
+    <div class="card amber"><div class="label">Different tasks</div><p>We pointed Parasoft at the 679 known buggy files, exactly as the benchmark defines. SWE-sweep agents searched whole repos (up to 1.9M lines) with no hints and had to produce passing fixes. Detection on located buggy code vs autonomous discovery and repair</p></div>
     <div class="card amber"><div class="label">A flag is not a fix</div><p>37.5% overall, 41.4% on the mechanism bugs: a human gets a pointer to the defect line. Someone still judges it, fixes it, and proves the fix. SWE-sweep's number requires hidden tests to pass</p></div>
     <div class="card amber"><div class="label">Deep checks are close</div><p>Flow Analysis alone: 3.3%. Agents: 4.5%. On true-defect detection the two approaches are comparable; the headline gap comes from the rule sweep of the buggy lines</p></div>
     <div class="card amber"><div class="label">Coverage gaps</div><p>13 of 679 bug-era files unrecoverable from git history; cvc5 is a lower bound; gdal lost many files to preprocessing failures on generated code. All documented and reproducible</p></div>
