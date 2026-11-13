@@ -127,7 +127,7 @@ svg{display:block;width:100%;height:auto}
   </div>
   <div class="bigrow">
     <div class="card"><div class="label">Bugs analyzed</div><div class="stat blue">488 <small>real defects</small></div><p>Across 14 C/C++ repositories, bug-era code from git blob hashes</p></div>
-    <div class="card green"><div class="label">Parasoft flagged</div><div class="stat green">37.5%</div><p>183 of 488 bugs on the changed lines; 21.1% on the exact fixed line</p></div>
+    <div class="card green"><div class="label">Parasoft flagged, on the bugs of its kind</div><div class="stat green">41.4%</div><p>67 of the 162 mechanism bugs on the changed lines; 37.5% (183 of 488) across all bugs; 24.7% on the exact fixed line</p></div>
     <div class="card red"><div class="label">Best agent resolved</div><div class="stat red">~4.5%</div><p>SWE-sweep's best published result across these same repositories</p></div>
   </div>
   <div class="foot">Engineering Software Lab (eswlab.com) · 12 November 2026 · Tool: Parasoft C/C++test Standard 2026.1.3 (C repos) / 2025.2.0 (C++ repos), Linux x64. All data, scripts, and raw tool output public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
@@ -215,7 +215,7 @@ svg{display:block;width:100%;height:auto}
     <tr><td><b>cvc5</b></td><td>C++</td><td>38</td><td>17</td><td>44.7% <span class="mono">(lower bound)</span></td><td>26.3%</td><td>2.6%</td></tr>
     <tr><td><b>hdf5</b></td><td>C</td><td>14</td><td>6</td><td>42.9%</td><td>28.6%</td><td>28.6%</td></tr>
   </table>
-  <div class="foot">SWE-sweep percentages are each repository's best published agent result. cvc5: only 2 of 54 files preprocessed against bug-era headers, so its figure is a floor.</div>
+  <div class="foot">SWE-sweep percentages are each repository's best published agent result. cvc5: only 2 of 54 files preprocessed against bug-era headers, so its figure is a floor. Conditional on the 162 mechanism bugs, the region rate is 41.4% (slide 10).</div>
 </section>
 
 <!-- 06 RESULTS TABLE PART 2 -->
@@ -234,7 +234,8 @@ svg{display:block;width:100%;height:auto}
     <tr><td><b>Total</b></td><td></td><td><b>488</b></td><td><b>183</b></td><td><b>37.5%</b></td><td><b>21.1%</b></td><td><b>~4.5%</b></td></tr>
   </table>
   <div class="bigrow">
-    <div class="card green"><div class="label">Any rule, changed lines</div><div class="stat green">37.5%</div><p>183 of 488 bugs</p></div>
+    <div class="card green"><div class="label">Any rule, all 488 bugs</div><div class="stat green">37.5%</div><p>183 of 488 bugs on the changed lines</p></div>
+    <div class="card green"><div class="label">On the 162 mechanism bugs</div><div class="stat green">41.4%</div><p>67 of 162 at the changed region; 24.7% on the exact line</p></div>
     <div class="card blue"><div class="label">Exact fixed line only</div><div class="stat blue">21.1%</div><p>103 of 488 bugs</p></div>
     <div class="card red"><div class="label">SWE-sweep best agent</div><div class="stat red">~4.5%</div><p>about 22 of 488 bugs</p></div>
   </div>
@@ -342,7 +343,7 @@ svg{display:block;width:100%;height:auto}
   <p class="sub">Two numbers this far apart invite over-reading; the fine print is what makes the result trustworthy</p>
   <div class="bigrow">
     <div class="card amber"><div class="label">Different tasks</div><p>Parasoft was pointed at the known buggy files. SWE-sweep agents searched whole repos (up to 1.9M lines) with no hints and had to produce passing fixes. Detection on located buggy code vs autonomous discovery and repair</p></div>
-    <div class="card amber"><div class="label">A flag is not a fix</div><p>37.5% means a human gets a pointer to the defect line. Someone still judges it, fixes it, and proves the fix. SWE-sweep's number requires hidden tests to pass</p></div>
+    <div class="card amber"><div class="label">A flag is not a fix</div><p>37.5% overall, 41.4% on the mechanism bugs: a human gets a pointer to the defect line. Someone still judges it, fixes it, and proves the fix. SWE-sweep's number requires hidden tests to pass</p></div>
     <div class="card amber"><div class="label">Deep checks are close</div><p>Flow Analysis alone: 3.3%. Agents: 4.5%. On true-defect detection the two approaches are comparable; the headline gap comes from the rule sweep of the buggy lines</p></div>
     <div class="card amber"><div class="label">Coverage gaps</div><p>13 of 679 bug-era files unrecoverable from git history; cvc5 is a lower bound; gdal lost many files to preprocessing failures on generated code. All documented and reproducible</p></div>
   </div>
