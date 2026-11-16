@@ -274,7 +274,7 @@
   <h1>Table of Contents — <em>Presentations &amp; Reports</em></h1>
   <p class="sub">Every public page published on zuwasi.github.io/Public-html-pages, grouped by topic, with the first publication date and the latest update date from git history. Type to search, or click a section to filter.</p>
   <div class="stats">
-    <span class="stat"><b>134</b> pages</span>
+    <span class="stat"><b>135</b> pages</span>
     <span class="stat"><b>7</b> sections</span>
     <span class="stat">Updated <b>16.11.2026</b></span>
   </div>
@@ -282,8 +282,14 @@
 </section>
 
 <section class="catalog-section" data-section="sec-new" id="sec-new">
-  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">12</span></h2>
+  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">13</span></h2>
   <div class="grid">
+    <article class="card card-new" dir="ltr">
+      <div class="card-top"><span class="card-tag badge-new">NEW · THREADX · LOONGARCH64 · IEC 61508 SIL 3 · TECHNICAL BRIEF</span></div>
+      <a class="card-title" href="threadx-loongarch64-technical-brief/">Technical Brief: Eclipse ThreadX on LoongArch64, What Was Done in Four Days</a>
+      <div class="card-dates">Published: 2026-11-16 · Companion to <a href="threadx-loongarch64-sil3-presentation/" style="color:var(--accent,#1d6bd0);font-weight:700">the full slide deck</a></div>
+      <p class="card-desc">The short version of the ThreadX LoongArch64 case, for readers who do not need all 36 slides: what was built (7 assembly and 3 C files in the port, a QEMU virt BSP, kernel unmodified as a pinned submodule), how it was verified (576/576 upstream regression tests across 6 kernel configurations, 7/7 CI images, T2 tool validation 8/8), the MISRA C:2025 result with Parasoft C/C++test (143 findings to 0 in ESL code, 15 deviation records, 613 kernel findings triaged report-only), 92% line coverage with every gap justified, the day-by-day four-day timeline, and an explicit list of what the process did not produce: approvals, independent reviews, MC/DC reports, real silicon and assessment.</p>
+    </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · THREADX · LOONGARCH64 · IEC 61508 SIL 3 · MISRA C:2025 · PARASOFT · SLIDE DECK</span></div>
       <a class="card-title" href="threadx-loongarch64-sil3-presentation/">Eclipse ThreadX on LoongArch64: From No Port to an IEC 61508 SIL 3 Release Candidate in Four Days</a>

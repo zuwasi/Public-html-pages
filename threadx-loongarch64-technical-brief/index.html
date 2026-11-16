@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="description" content="Technical brief: ESL ported Eclipse ThreadX 6.5.2 to Loongson LoongArch64 with a QEMU virt BSP in four days, with 576/576 upstream regression tests, MISRA C:2025 at 0 findings in ESL code and the IEC 61508-3 SC 3 evidence package.">
+<title>Technical Brief: Eclipse ThreadX on LoongArch64 in Four Days | ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper:#f4eedc; --paper2:#faf6e8; --ink:#1d1a16; --ink2:#4a443a;
+    --rule:#b9ae90; --stamp:#b8322a; --blue:#12457a; --ok:#2f6b3a; --warn:#9a5b10;
+    --mono:"Courier New",monospace; --type:"Special Elite","Courier New",monospace;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,.035) 0 1px, transparent 1px 34px),
+               radial-gradient(ellipse at 50% 0%, #eee6cd, #d9d0b8 90%);
+    color:var(--ink); line-height:1.65; min-height:100vh;
+  }
+  a { color:var(--blue); }
+  .sheet {
+    max-width:900px; margin:28px auto 60px; background:var(--paper2);
+    border:1px solid var(--rule); box-shadow:0 2px 0 #cfc4a4, 0 18px 40px rgba(60,45,20,.30);
+    padding:clamp(20px,4vw,48px);
+  }
+  .filehead {
+    display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap;
+    border-bottom:2px solid var(--ink); padding-bottom:10px; margin-bottom:22px;
+    font-family:var(--type); font-size:.85rem; letter-spacing:.05em; text-transform:uppercase; color:var(--ink2);
+  }
+  .filehead b { color:var(--ink); }
+  h1 { font-family:var(--type); font-weight:400; font-size:clamp(1.6rem,4vw,2.5rem); line-height:1.15; letter-spacing:-.01em; }
+  .kicker { font-family:var(--type); text-transform:uppercase; letter-spacing:.08em; font-size:.8rem; color:var(--ink2); margin:4px 0 10px; }
+  .sub { color:var(--ink2); max-width:75ch; margin-top:10px; }
+  .stamps { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .stamp {
+    font-family:var(--type); text-transform:uppercase; color:var(--stamp);
+    border:3px double var(--stamp); border-radius:6px; padding:3px 11px;
+    letter-spacing:.1em; font-size:.78rem; transform:rotate(-2deg); opacity:.92;
+  }
+  .stamp.green { color:var(--ok); border-color:var(--ok); }
+  h2 {
+    font-family:var(--type); font-weight:400; font-size:1.25rem; letter-spacing:-.01em;
+    margin:34px 0 10px; padding-bottom:6px; border-bottom:1px solid var(--rule);
+  }
+  h3 { font-size:.98rem; font-weight:700; margin:18px 0 6px; }
+  p { margin:0 0 10px; max-width:80ch; }
+  ul, ol { margin:0 0 10px 22px; max-width:80ch; }
+  li { margin-bottom:5px; }
+  code, .mono { font-family:var(--mono); font-size:.88em; background:#eee6cd; padding:1px 5px; border-radius:3px; }
+  .metrics { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; margin:18px 0 6px; }
+  .metric {
+    background:var(--paper); border:1px solid var(--rule); padding:12px 14px; text-align:center;
+  }
+  .metric b { display:block; font-size:1.45rem; font-weight:800; color:var(--blue); line-height:1.2; }
+  .metric span { font-size:.74rem; color:var(--ink2); display:block; margin-top:4px; line-height:1.35; }
+  table { width:100%; border-collapse:collapse; margin:10px 0 14px; font-size:.9rem; }
+  th, td { border:1px solid var(--rule); padding:7px 10px; text-align:left; vertical-align:top; }
+  th { background:#ece4cc; font-family:var(--type); font-weight:400; letter-spacing:.04em; text-transform:uppercase; font-size:.76rem; }
+  .note {
+    background:#fff7e3; border:1px solid #f2d17b; border-left:4px solid var(--warn);
+    padding:10px 14px; margin:12px 0; font-size:.92rem;
+  }
+  .timeline { margin:10px 0 6px; }
+  .timeline li { margin-bottom:8px; }
+  .timeline b { color:var(--blue); }
+  .links { list-style:none; margin:8px 0 0; }
+  .links li { margin-bottom:7px; }
+  footer {
+    margin-top:36px; padding-top:14px; border-top:2px solid var(--ink);
+    font-size:.8rem; color:var(--ink2);
+  }
+</style>
+</head>
+<body>
+<main class="sheet">
+  <div class="filehead">
+    <span>Engineering Software Lab (ESL) · Case file <b>TXLA64-2026-10</b></span>
+    <span>Technical brief · 2026-11-16</span>
+  </div>
+
+  <p class="kicker">Eclipse ThreadX RTOS · Loongson LoongArch64 · QEMU virt · IEC 61508-3 SC 3 · MISRA C:2025 · Parasoft C/C++test</p>
+  <h1>Eclipse ThreadX on LoongArch64: what was done, in four days</h1>
+  <p class="sub">Condensed technical brief on the ThreadX LoongArch64 port project: what was built, how it was verified, what the static-analysis and coverage evidence shows, and what is still open. The full 36-slide walkthrough is in the <a href="../threadx-loongarch64-sil3-presentation/">companion presentation</a>; this page is the short version.</p>
+  <div class="stamps">
+    <span class="stamp">v1.0.0-rc1 pre-release</span>
+    <span class="stamp">Real code, real tool output</span>
+    <span class="stamp green">Kernel unmodified</span>
+  </div>
+
+  <h2>The result in numbers</h2>
+  <div class="metrics">
+    <div class="metric"><b>576/576</b><span>upstream ThreadX regression tests, 96 tests × 6 kernel configurations, on QEMU</span></div>
+    <div class="metric"><b>7/7</b><span>bring-up and demo images, Debug and Release, green in CI</span></div>
+    <div class="metric"><b>143 → 0</b><span>MISRA C:2025 findings in ESL port and BSP code</span></div>
+    <div class="metric"><b>15</b><span>deviation records, each with risk analysis and an ID in every suppression</span></div>
+    <div class="metric"><b>92%</b><span>line coverage of port and BSP C code, every gap justified</span></div>
+    <div class="metric"><b>4 days</b><span>first commit 19 Oct 17:24 → tag <code>v1.0.0-rc1</code> 22 Oct 13:04</span></div>
+  </div>
+
+  <h2>What was built</h2>
+  <p>Eclipse ThreadX had no LoongArch port and no BSP for any Loongson board. The project added both, without touching the kernel:</p>
+  <table>
+    <tr><th>Layer</th><th>Location</th><th>Content</th></tr>
+    <tr>
+      <td>Port</td>
+      <td><code>ports/loongarch64/gnu/</code></td>
+      <td>7 assembly files and 3 C files: context save and restore with full integer and FP state, scheduler, atomic interrupt posture via <code>csrxchg</code>, stack build, tick, freestanding <code>memcpy</code>/<code>memmove</code>/<code>memset</code>/<code>memcmp</code>.</td>
+    </tr>
+    <tr>
+      <td>BSP</td>
+      <td><code>bsp/qemu_virt/</code></td>
+      <td>Reset entry, linker script with a stack guard, constant timer, NS16550 UART with interrupt-driven receive through PCH-PIC and EXTIOI, fatal handler, test exit.</td>
+    </tr>
+    <tr>
+      <td>Kernel</td>
+      <td><code>external/threadx/</code> at <code>v6.5.2.202603_rel</code></td>
+      <td>Eclipse ThreadX as a pinned submodule. <b>0 kernel lines changed</b> across 17 commits.</td>
+    </tr>
+  </table>
+  <p>The port was derived from the upstream RISC-V64 port, not a MIPS port: LoongArch is its own ISA (no CP0, no delay slots, CSR-based traps), and <code>ports/</code> contained no MIPS port to start from. All CSR and IOCSR access lives in assembly, so C contains no inline assembly (MISRA C:2025 Dir 4.3).</p>
+
+  <h2>How it was verified</h2>
+  <ul>
+    <li><b>Bring-up images on QEMU.</b> Seven test images (timer and interrupt posture, fatal exception, memory functions, long idle, relinquish, UART RX interrupt, 8-thread demo with FP context checks) run under <code>qemu-system-loongarch64 -M virt -cpu la464</code> with exit code as part of the verdict.</li>
+    <li><b>Upstream regression suite.</b> The vendor's own test suite built for LoongArch and run on QEMU, 96 tests × 6 kernel configurations (default, optimized, stack checking, random fill, trace, no notify callbacks): 576/576 on every push.</li>
+    <li><b>CI matrix.</b> 8 GitHub Actions jobs on Ubuntu 24.04: Debug and Release builds with QEMU tests, a freestanding-libc check (<code>nm -u</code> empty, closing deviation DEV-001), and one job per kernel configuration.</li>
+    <li><b>Tool confidence.</b> Parasoft C/C++test classified as a T2 tool per IEC 61508-3 7.4.4 and validated with 8 seeded violations, 8/8 detected.</li>
+  </ul>
+
+  <h2>MISRA C:2025 with Parasoft C/C++test</h2>
+  <p>The analysis is wired to the real build: a GCC 14 LoongArch64 compiler model, <code>cpptestcli -trace</code> over the actual CMake/Ninja build with the product's exact flags (<code>-march=loongarch64 -mabi=lp64d -msimd=none -ffreestanding -nostdinc</code>), so findings match what ships. Five scans over two days took ESL code from 143 baseline findings to 0; every remaining suppression names a deviation record (DEV-001 to DEV-015) with rationale, risk analysis and approval status. The upstream kernel was analysed report-only: 613 findings across 19 guidelines, 0 Mandatory, triaged for focused review rather than claimed as compliant, because modifying ThreadX would fork it.</p>
+  <p>The compliance summary, dashboard and traceability are generated by scripts in <code>tools/</code> from the SARIF reports and the deviation records, so the evidence is regenerable, not hand-written.</p>
+
+  <h2>Structural coverage</h2>
+  <p>SIL 3 makes statement and branch coverage highly recommended (IEC 61508-3 Table B.2). Parasoft <code>cpptestcc</code> instruments only ESL-owned port and BSP C files; the coverage runtime emits frames as ASCII hex on QEMU's UART, decoded by <code>collect_coverage.py</code>. Result: 92% line coverage, with the 16 uncovered lines individually justified (measurement limit, failure paths, defensive code) and statement/branch/MC/DC reports listed as open items deferred to the audit phase.</p>
+
+  <h2>The four days</h2>
+  <ul class="timeline">
+    <li><b>Day 1:</b> freestanding build, <code>tx_port.h</code>, MISRA enforcement plan, safety plan and requirements committed before any port code; QEMU BSP and bring-up tests in CI.</li>
+    <li><b>Day 2:</b> context frames, scheduler, 8-thread demo; upstream regression 576/576 after fixing one defect found by the port analysis; MISRA scans 143 → 0.</li>
+    <li><b>Day 3:</b> compliance dashboard, UART RX interrupt route verified against QEMU source, memory/idle/relinquish tests, coverage on target, kernel gap analysis.</li>
+    <li><b>Day 4:</b> design record, compiler behaviour record, safety manual, traceability generator, verification report, release package, full re-validation, tag <code>v1.0.0-rc1</code>, CI 8/8 green.</li>
+  </ul>
+
+  <div class="note">
+    <b>What four days did not produce.</b> Human approvals (deviation records need the technical lead and safety manager; signed git tags will confirm them), independent reviews, statement/branch/MC/DC coverage reports, real silicon (everything ran on QEMU 8.2.2), and no independent assessment. This is an evidence package, not a certificate, and the release notes state all of it as open.
+  </div>
+
+  <h2>Links</h2>
+  <ul class="links">
+    <li>Full 36-slide presentation: <a href="https://zuwasi.github.io/Public-html-pages/threadx-loongarch64-sil3-presentation/">zuwasi.github.io/Public-html-pages/threadx-loongarch64-sil3-presentation/</a></li>
+    <li>Source and evidence repository: <a href="https://github.com/zuwasi/threadx-loongarch64">github.com/zuwasi/threadx-loongarch64</a> (release <a href="https://github.com/zuwasi/threadx-loongarch64/releases/tag/v1.0.0-rc1">v1.0.0-rc1</a>)</li>
+    <li>Live MISRA compliance dashboard: <a href="https://zuwasi.github.io/threadx-loongarch64/misra/reports/dashboard.html">zuwasi.github.io/threadx-loongarch64/misra/reports/dashboard.html</a></li>
+    <li>Project documentation site: <a href="https://zuwasi.github.io/threadx-loongarch64/">zuwasi.github.io/threadx-loongarch64/</a></li>
+  </ul>
+
+  <footer>
+    Engineering Software Lab (ESL), Israel · PX5 and RTOSX partner · Parasoft and Perforce partner ·
+    <a href="https://eswlab.com/">eswlab.com</a> · CTO and safety manager: Daniel Liezrowice
+  </footer>
+</main>
+</body>
+</html>
