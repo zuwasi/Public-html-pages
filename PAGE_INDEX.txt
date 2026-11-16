@@ -461,6 +461,9 @@ Last updated: 2026-11-16
 • threadx-loongarch64-sil3-presentation
   https://zuwasi.github.io/Public-html-pages/threadx-loongarch64-sil3-presentation
 
+• threadx-loongarch64-technical-brief
+  https://zuwasi.github.io/Public-html-pages/threadx-loongarch64-technical-brief
+
 • tools
   https://zuwasi.github.io/Public-html-pages/tools
 
