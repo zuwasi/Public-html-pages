@@ -128,7 +128,7 @@ svg{display:block;width:100%;height:auto}
   <div class="bigrow">
     <div class="card"><div class="label">Bugs analyzed</div><div class="stat blue">488 <small>real defects</small></div><p>Across 14 C/C++ repositories, each scanned whole at its bug-era base ref</p></div>
     <div class="card green"><div class="label">Parasoft flagged, on the bugs of its kind</div><div class="stat green">55.6%</div><p>90 of the 162 mechanism bugs on the changed lines; 53.1% (259 of 488) across all bugs; 32.1% on the exact fixed line</p></div>
-    <div class="card red"><div class="label">Best agent resolved</div><div class="stat red">~4.5%</div><p>SWE-sweep's best published result across these same repositories</p></div>
+    <div class="card red"><div class="label">Best agent resolved</div><div class="stat red">~5.1%</div><p>About 25 of 488 bugs: the best published leaderboard results across these same repositories</p></div>
   </div>
   <div class="foot">Engineering Software Lab (eswlab.com) · 16 November 2026 · Tool: Parasoft C/C++test Standard 2026.1.3 (C repos) / 2025.2.0 (C++ repos), Linux x64. All data, scripts, and raw tool output public at github.com/zuwasi/swe-sweep-parasoft-benchmark</div>
 </section>
@@ -154,7 +154,7 @@ svg{display:block;width:100%;height:auto}
     </ul></div>
     <div class="card blue"><div class="label">Our answer shape</div><p style="color:var(--ink)">Stop arguing. Find the hardest published agent benchmark, run the same bugs through a commercial static analysis tool, and let the numbers speak.</p></div>
   </div>
-  <div class="foot">SWE-sweep: Lieret et al., Meta FAIR, Harvard, Stanford, Washington, "SWE-sweep: Can Agents Autonomously Find and Fix Bugs?", October 2026, swesweep.com/paper</div>
+  <div class="foot">SWE-sweep: Lieret et al., Meta FAIR with Harvard, Stanford, and Washington (the team includes SWE-bench authors), October 2026, ICLR submission, open-sourced harness, swesweep.com/paper. Every agent look costs fresh inference; a static analysis scan re-runs nightly for machine time</div>
 </section>
 
 <!-- 03 SWE-SWEEP -->
@@ -167,8 +167,9 @@ svg{display:block;width:100%;height:auto}
       <li>100 serious open-source repos, mean 292k lines of code, mean 690 contributors</li>
       <li>Real issue + PR pairs; every bug confirmed by the maintainers' own fix commit</li>
       <li>4,068 accepted bugs in the released dataset</li>
+      <li>Method descends from SWE-bench: issue-PR mining, SZZ bug dating, hidden fail-to-pass tests, each repo's buggiest commit as the start</li>
     </ul></div>
-    <div class="card red"><div class="label">Agent scoreboard</div><div class="stat red">4.7%</div><p>Best model (Sol 5.6 xhigh) resolved 4.7% of all bugs for $7k of compute; second place resolved about half at $224</p></div>
+    <div class="card red"><div class="label">Agent scoreboard · 18 models evaluated</div><div class="stat red">9.5%</div><p>Live leader Astra 6 resolves 9.5% of all 4,068 bugs for $3,255 per full sweep; the paper's best (Sol 5.6 xhigh) resolved 4.7% for $7,230. On our 14 C/C++ repos, all leaderboard bests add up to 25 of 488 (5.1%)</p></div>
     <div class="card amber"><div class="label">Why it is hard</div><p style="color:var(--ink)">Discovery, understanding, and repair in one trajectory, inside repos of up to 1.9M lines. When SWE-sweep's authors gave line ranges as hints, scores roughly doubled or tripled.</p></div>
   </div>
   <div class="foot">Source: swesweep.com/paper, Table 4 and ablations. Dataset and harness open-sourced by the authors</div>
@@ -204,7 +205,7 @@ svg{display:block;width:100%;height:auto}
 <section class="slide compact">
   <div class="kicker">Results · <b>05</b></div>
   <h1>The scoreboard: <span class="hl">53.1% vs ~4.5%</span> (part 1 of 2)</h1>
-  <p class="sub">Parasoft flags 259 of 488 bugs on the changed lines; the best agent resolved about 22 of 488 on the same repositories</p>
+  <p class="sub">Parasoft flags 259 of 488 bugs on the changed lines; the best agent resolved about 25 of 488 on the same repositories</p>
   <table style="margin-top:14px">
     <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
     <tr><td><b>jerryscript</b></td><td>C</td><td>15</td><td>13</td><td><b>86.7%</b></td><td>80.0%</td><td>20.0%</td></tr>
@@ -213,7 +214,7 @@ svg{display:block;width:100%;height:auto}
     <tr><td><b>opencv</b></td><td>C++</td><td>47</td><td>35</td><td><b>74.5%</b></td><td>40.4%</td><td>2.1%</td></tr>
     <tr><td><b>cvc5</b></td><td>C++</td><td>38</td><td>27</td><td><b>71.1%</b></td><td>31.6%</td><td>2.6%</td></tr>
     <tr><td><b>duckdb</b></td><td>C++</td><td>109</td><td>75</td><td><b>68.8%</b></td><td>32.1%</td><td>2.8%</td></tr>
-    <tr><td><b>micropython</b></td><td>C</td><td>22</td><td>15</td><td><b>68.2%</b></td><td>31.8%</td><td>0.0%</td></tr>
+    <tr><td><b>micropython</b></td><td>C</td><td>22</td><td>15</td><td><b>68.2%</b></td><td>31.8%</td><td>9.1%</td></tr>
     <tr><td><b>proj</b></td><td>C++</td><td>21</td><td>13</td><td><b>61.9%</b></td><td>33.3%</td><td>9.5%</td></tr>
   </table>
   <div class="foot">SWE-sweep percentages are each repository's best published agent result. Conditional on the 162 mechanism bugs, the region rate is 55.6% (slide 10).</div>
@@ -227,18 +228,18 @@ svg{display:block;width:100%;height:auto}
   <table style="margin-top:14px">
     <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
     <tr><td><b>tarantool</b></td><td>C</td><td>40</td><td>23</td><td>57.5%</td><td>45.0%</td><td>7.5%</td></tr>
-    <tr><td><b>php-src</b></td><td>C</td><td>26</td><td>13</td><td>50.0%</td><td>26.9%</td><td>0.0%</td></tr>
+    <tr><td><b>php-src</b></td><td>C</td><td>26</td><td>13</td><td>50.0%</td><td>26.9%</td><td>3.8%</td></tr>
     <tr><td><b>hdf5</b></td><td>C</td><td>14</td><td>7</td><td>50.0%</td><td>42.9%</td><td>28.6%</td></tr>
     <tr><td><b>z3</b></td><td>C++</td><td>11</td><td>4</td><td>36.4%</td><td>27.3%</td><td>0.0%</td></tr>
     <tr><td><b>arrow</b></td><td>C++</td><td>47</td><td>11</td><td>23.4%</td><td>8.5%</td><td>2.1%</td></tr>
     <tr><td><b>gdal</b></td><td>C++</td><td>72</td><td>3</td><td>4.2%</td><td>1.4%</td><td>0.0%</td></tr>
-    <tr><td><b>Total</b></td><td></td><td><b>488</b></td><td><b>259</b></td><td><b>53.1%</b></td><td><b>28.9%</b></td><td><b>~4.5%</b></td></tr>
+    <tr><td><b>Total</b></td><td></td><td><b>488</b><br><small>best agents: 25</small></td><td><b>259</b></td><td><b>53.1%</b></td><td><b>28.9%</b></td><td><b>~5.1%</b></td></tr>
   </table>
   <div class="bigrow">
     <div class="card green"><div class="label">Any rule, all 488 bugs</div><div class="stat green">53.1%</div><p>259 of 488 bugs on the changed lines</p></div>
     <div class="card green"><div class="label">On the 162 mechanism bugs</div><div class="stat green">55.6%</div><p>90 of 162 at the changed region; 32.1% on the exact line</p></div>
     <div class="card blue"><div class="label">Exact fixed line only</div><div class="stat blue">28.9%</div><p>141 of 488 bugs</p></div>
-    <div class="card red"><div class="label">SWE-sweep best agent</div><div class="stat red">~4.5%</div><p>about 22 of 488 bugs</p></div>
+    <div class="card red"><div class="label">SWE-sweep best agent</div><div class="stat red">~5.1%</div><p>about 25 of 488 bugs</p></div>
   </div>
   <div class="foot">gdal: large generated-code surface defeated preprocessing for many files. Sources: swesweep.com, results/ in the benchmark repository.</div>
 </section>
@@ -258,10 +259,10 @@ svg{display:block;width:100%;height:auto}
 <text x="118" y="134" text-anchor="end" font-size="17" font-weight="600">opencv</text><rect x="130" y="122" width="819.5" height="15" fill="#12457a"/><rect x="130" y="141" width="23.1" height="15" fill="#5a626c"/><text x="957.5" y="134" font-size="15">74.5</text><text x="159.1" y="153" font-size="15">2.1</text>
 <text x="118" y="172" text-anchor="end" font-size="17" font-weight="600">cvc5</text><rect x="130" y="160" width="782.1" height="15" fill="#12457a"/><rect x="130" y="179" width="28.6" height="15" fill="#5a626c"/><text x="920.1" y="172" font-size="15">71.1</text><text x="164.6" y="191" font-size="15">2.6</text>
 <text x="118" y="210" text-anchor="end" font-size="17" font-weight="600">duckdb</text><rect x="130" y="198" width="756.8" height="15" fill="#12457a"/><rect x="130" y="217" width="30.8" height="15" fill="#5a626c"/><text x="894.8" y="210" font-size="15">68.8</text><text x="166.8" y="229" font-size="15">2.8</text>
-<text x="118" y="248" text-anchor="end" font-size="17" font-weight="600">micropython</text><rect x="130" y="236" width="750.2" height="15" fill="#12457a"/><rect x="130" y="255" width="0.0" height="15" fill="#5a626c"/><text x="888.2" y="248" font-size="15">68.2</text><text x="136.0" y="267" font-size="15">0.0</text>
+<text x="118" y="248" text-anchor="end" font-size="17" font-weight="600">micropython</text><rect x="130" y="236" width="750.2" height="15" fill="#12457a"/><rect x="130" y="255" width="100.1" height="15" fill="#5a626c"/><text x="888.2" y="248" font-size="15">68.2</text><text x="236.1" y="267" font-size="15">9.1</text>
 <text x="118" y="286" text-anchor="end" font-size="17" font-weight="600">proj</text><rect x="130" y="274" width="680.9" height="15" fill="#12457a"/><rect x="130" y="293" width="104.5" height="15" fill="#5a626c"/><text x="818.9" y="286" font-size="15">61.9</text><text x="240.5" y="305" font-size="15">9.5</text>
 <text x="118" y="324" text-anchor="end" font-size="17" font-weight="600">tarantool</text><rect x="130" y="312" width="632.5" height="15" fill="#12457a"/><rect x="130" y="331" width="82.5" height="15" fill="#5a626c"/><text x="770.5" y="324" font-size="15">57.5</text><text x="218.5" y="343" font-size="15">7.5</text>
-<text x="118" y="362" text-anchor="end" font-size="17" font-weight="600">php-src</text><rect x="130" y="350" width="550.0" height="15" fill="#12457a"/><rect x="130" y="369" width="0.0" height="15" fill="#5a626c"/><text x="688.0" y="362" font-size="15">50.0</text><text x="136.0" y="381" font-size="15">0.0</text>
+<text x="118" y="362" text-anchor="end" font-size="17" font-weight="600">php-src</text><rect x="130" y="350" width="550.0" height="15" fill="#12457a"/><rect x="130" y="369" width="41.8" height="15" fill="#5a626c"/><text x="688.0" y="362" font-size="15">50.0</text><text x="177.8" y="381" font-size="15">3.8</text>
 <text x="118" y="400" text-anchor="end" font-size="17" font-weight="600">hdf5</text><rect x="130" y="388" width="550.0" height="15" fill="#12457a"/><rect x="130" y="407" width="314.6" height="15" fill="#5a626c"/><text x="688.0" y="400" font-size="15">50.0</text><text x="450.6" y="419" font-size="15">28.6</text>
 <text x="118" y="438" text-anchor="end" font-size="17" font-weight="600">z3</text><rect x="130" y="426" width="400.4" height="15" fill="#12457a"/><rect x="130" y="445" width="0.0" height="15" fill="#5a626c"/><text x="538.4" y="438" font-size="15">36.4</text><text x="136.0" y="457" font-size="15">0.0</text>
 <text x="118" y="476" text-anchor="end" font-size="17" font-weight="600">arrow</text><rect x="130" y="464" width="257.4" height="15" fill="#12457a"/><rect x="130" y="483" width="23.1" height="15" fill="#5a626c"/><text x="395.4" y="476" font-size="15">23.4</text><text x="159.1" y="495" font-size="15">2.1</text>
@@ -335,7 +336,7 @@ svg{display:block;width:100%;height:auto}
   </div>
   <div class="row">
     <div class="card green"><div class="label">Conditional detection on the 162</div><p><b>55.6%</b> flagged at the changed region (90 of 162), <b>32.1%</b> on the exact removed line, vs 53.1% / 28.9% over all bugs: on its home ground the tool clears the 50% mark and beats the overall rate</p></div>
-    <div class="card amber"><div class="label">Division of labor</div><p>One third of real bugs are mechanism defects a deterministic tool flags with auditable findings, and it catches 55.6% of them. The logic two thirds are what review, requirements-based testing, and structural coverage are for, and agents (4.5%) find neither layer reliably</p></div>
+    <div class="card amber"><div class="label">Division of labor</div><p>One third of real bugs are mechanism defects a deterministic tool flags with auditable findings, and it catches 55.6% of them. The logic two thirds are what review, requirements-based testing, and structural coverage are for, and agents (5.1%) find neither layer reliably</p></div>
   </div>
   <div class="foot">SWE-sweep's paper: most of its bugs are only recognizable by inferring intended behavior from the repository. Classification rubric and per-bug labels are published in the benchmark repository</div>
 </section>
@@ -348,7 +349,7 @@ svg{display:block;width:100%;height:auto}
   <div class="bigrow">
     <div class="card amber"><div class="label">What each number measures</div><p>Parasoft scanned every file the build system compiles, 2,193,448 findings, with no knowledge of where the bugs are; detection is a finding on the defect the maintainers later fixed. SWE-sweep agents additionally had to locate, fix, and pass hidden tests</p></div>
     <div class="card amber"><div class="label">A flag is not a fix</div><p>53.1% overall, 55.6% on the mechanism bugs: a human gets a pointer to the defect line. Someone still judges it, fixes it, and proves the fix. SWE-sweep's number requires hidden tests to pass</p></div>
-    <div class="card amber"><div class="label">Deep checks are close</div><p>Flow Analysis alone: 4.1%. Agents: 4.5%. On search-heavy deep-defect discovery the two approaches are comparable; the headline gap comes from the full rule sweep over the whole codebase</p></div>
+    <div class="card amber"><div class="label">Deep checks are close</div><p>Flow Analysis alone: 4.1%. Agents: 5.1%. On search-heavy deep-defect discovery the two approaches are comparable; the headline gap comes from the full rule sweep over the whole codebase</p></div>
     <div class="card amber"><div class="label">Coverage gaps</div><p>One godot translation unit excluded after Flow Analysis exceeded 40 GB on a 64 GB machine; no benchmark bug lives in it. gdal's generated-code surface defeated preprocessing for many files. All documented and reproducible</p></div>
   </div>
   <div class="foot">The fair summary: a full-codebase scan flags far more real bugs than agents find and fix end to end. Nobody should read it as "the tool replaces the engineer": triage, fix, and proof stay human</div>
@@ -370,7 +371,7 @@ svg{display:block;width:100%;height:auto}
       <li>Nondeterministic: reruns give different results</li>
       <li>Silent failures: reports success on code that does not work</li>
       <li>No accepted qualification scheme today as a development tool</li>
-      <li>4.5% resolution on this benchmark; even doubled, it cannot enter the certification evidence</li>
+      <li>5.1% resolution on this benchmark; even doubled, it cannot enter the certification evidence</li>
     </ul></div>
   </div>
   <div class="foot">46.9% of bugs went unflagged: static analysis is necessary, never sufficient. The certification case rests on the full stack</div>
@@ -392,8 +393,12 @@ svg{display:block;width:100%;height:auto}
    <span class="g">agent drafts candidate fixes</span> --> deterministic tests verify
    <span class="g">agent drafts test cases</span> --> reviewed, then executed by qualified tools
 
+<span class="b">The price of a look</span>: the leaderboard bests on these 14 repos cost
+   about $500 of inference per sweep and resolve 25 bugs, once.
+   The Parasoft scan that flagged 259 re-runs nightly for machine time only
+
 <span class="b">What never to do</span>: send an agent hunting a 1.9M-line repo for bugs and
-   accept what it reports. On this benchmark it closes <span class="r">4.5%</span>, silently
+   accept what it reports. On this benchmark it closes <span class="r">5.1%</span>, silently
    missing the rest, with no way to know which half it checked</pre>
   <div class="foot">Born from the MISRA Conference 2026 debate on whether traditional methods remain relevant over the next 3 to 5 years</div>
 </section>
