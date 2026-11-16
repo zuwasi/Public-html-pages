@@ -204,7 +204,7 @@ svg{display:block;width:100%;height:auto}
 <!-- 05 RESULTS TABLE PART 1 -->
 <section class="slide compact">
   <div class="kicker">Results · <b>05</b></div>
-  <h1>The scoreboard: <span class="hl">53.1% vs ~4.5%</span> (part 1 of 2)</h1>
+  <h1>The scoreboard: <span class="hl">53.1% vs ~5.1%</span> (part 1 of 2)</h1>
   <p class="sub">Parasoft flags 259 of 488 bugs on the changed lines; the best agent resolved about 25 of 488 on the same repositories</p>
   <table style="margin-top:14px">
     <tr><th>Repo</th><th>Lang</th><th>Bugs</th><th>Parasoft found (region)</th><th>% region</th><th>% strict line</th><th>SWE-sweep best agent</th></tr>
@@ -288,7 +288,7 @@ svg{display:block;width:100%;height:auto}
     <div class="card amber"><div class="label">Verified true positive</div><p>JerryScript's date-<code>fmod</code> bug: BD-PB-ERRNO fires on line 75, the exact <code>fmod(time, ECMA_DATE_MS_PER_DAY)</code> call the maintainers later rewrote to normalize negative results</p></div>
     <div class="card blue"><div class="label">Also caught</div><p>arrow: use before initialization (BD-PB-NOTINIT); cvc5: buffer overflow check (BD-PB-COOB); micropython: integer wraparound (BD-PB-INTWRAP); php-src: unused value (BD-PB-VOVR). The other 8 repos: zero deep catches, all matches from the rule sweep</p></div>
   </div>
-  <div class="foot">20 of 488 bugs (4.1%) from Flow Analysis alone, close to the agents' 4.5%: the big gap lives in the MISRA/CERT rule sweep over the whole codebase</div>
+  <div class="foot">20 of 488 bugs (4.1%) from Flow Analysis alone, close to the agents' 5.1%: the big gap lives in the MISRA/CERT rule sweep over the whole codebase</div>
 </section>
 
 <!-- 09 RULE BREAKDOWN -->
