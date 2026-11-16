@@ -341,6 +341,9 @@ Last updated: 2026-11-16
 • harness-site.css
   https://zuwasi.github.io/Public-html-pages/harness-site.css
 
+• hidden
+  https://zuwasi.github.io/Public-html-pages/hidden
+
 • hummus-council
   https://zuwasi.github.io/Public-html-pages/hummus-council
 
