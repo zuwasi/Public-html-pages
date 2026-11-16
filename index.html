@@ -274,16 +274,22 @@
   <h1>Table of Contents — <em>Presentations &amp; Reports</em></h1>
   <p class="sub">Every public page published on zuwasi.github.io/Public-html-pages, grouped by topic, with the first publication date and the latest update date from git history. Type to search, or click a section to filter.</p>
   <div class="stats">
-    <span class="stat"><b>133</b> pages</span>
+    <span class="stat"><b>134</b> pages</span>
     <span class="stat"><b>7</b> sections</span>
-    <span class="stat">Updated <b>12.11.2026</b></span>
+    <span class="stat">Updated <b>16.11.2026</b></span>
   </div>
   <p class="status-line" id="status"></p>
 </section>
 
 <section class="catalog-section" data-section="sec-new" id="sec-new">
-  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">11</span></h2>
+  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">12</span></h2>
   <div class="grid">
+    <article class="card card-new" dir="ltr">
+      <div class="card-top"><span class="card-tag badge-new">NEW · THREADX · LOONGARCH64 · IEC 61508 SIL 3 · MISRA C:2025 · PARASOFT · SLIDE DECK</span></div>
+      <a class="card-title" href="threadx-loongarch64-sil3-presentation/">Eclipse ThreadX on LoongArch64: From No Port to an IEC 61508 SIL 3 Release Candidate in Four Days</a>
+      <div class="card-dates">Published: 2026-11-16 · <a href="https://github.com/zuwasi/threadx-loongarch64" style="color:var(--accent,#1d6bd0);font-weight:700">Full source and evidence repo</a> · <a href="https://zuwasi.github.io/threadx-loongarch64/misra/reports/dashboard.html" style="color:var(--accent,#1d6bd0);font-weight:700">Live MISRA dashboard</a></div>
+      <p class="card-desc">36-slide technical case file. Eclipse ThreadX had no LoongArch port, so ESL wrote one (7 assembly and 3 C files) plus a QEMU <code>virt</code> board support package for Loongson LoongArch64, keeping the kernel itself unmodified as a pinned submodule (v6.5.2). Delivered in four days together with the IEC 61508-3 systematic capability 3 work products a SIL 3 assessment expects: 576/576 upstream regression tests (96 tests × 6 kernel configurations on QEMU), 7/7 bring-up and demo images green in CI, MISRA C:2025 analyzed with Parasoft C/C++test from 143 findings down to 0 in ESL code with 15 documented deviation records, 92% line coverage with every gap justified, generated traceability and a self-contained compliance dashboard. The deck walks through why the RISC-V64 port was the right base and a MIPS port was not, the LP64D ABI and CSR map, the two context-frame layouts, the 4 KiB-aligned exception vector and the safety-critical assembly, the UART interrupt route verified against QEMU source, structural coverage collected on target over a UART, the hour-by-hour four-day timeline, and, honestly listed, what four days did not and could not produce: human approvals, independent reviews, statement/branch/MC/DC coverage and real silicon. Copy of the deck published at zuwasi.github.io/threadx-loongarch64/presentation/.</p>
+    </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · STATIC ANALYSIS VS LLM AGENTS · PARASOFT · SWE-SWEEP · TECHNICAL BRIEF</span><button class="stamp" type="button" data-note="parasoft-vs-swe-sweep/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="parasoft-vs-swe-sweep/technical/">Parasoft C/C++test vs SWE-sweep: Static Analysis Measured on 488 Real-World C/C++ Bugs</a>
