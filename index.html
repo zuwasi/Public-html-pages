@@ -387,19 +387,10 @@
       <p class="card-desc">22 interactive slides from two cold Bazel builds of Apollo's cyber and planning modules (24 cores, GCC 7.5), one with GNU ld.bfd and one with mold 2.0.0, with every link action timed through bazel --profile. Whole-build wall time moved +1.1% (462 s vs 467 s), within run-to-run noise. Per link, the median was 16.8% faster with mold and the best single link was 2.94x faster, but links under 1.5 s often got slower: 119 of 124 losses were in that range. Includes all 310 paired link timings, a comparison with the large single-link workloads in Rui Ueyama's arXiv:2608.23228 paper, the setup problems we hit, and when mold is worth adopting.</p>
     </article>
     <article class="card " dir="ltr">
-      <div class="card-top"><span class="card-tag">STATIC ANALYSIS / PARASOFT VS SONARQUBE</span></div>
-      <a class="card-title" href="threadx-parasoft-sonarqube.html">Parasoft C/C++test vs SonarQube CLI on ThreadX Win32: 50 Planted Defects</a>
-      <div class="card-dates">Published: 2026-10-11 · Updated: 2026-10-11</div>
-      <p class="card-desc">30 widescreen slides introduce both tools and the test method, show representative planted C defects beside Parasoft's actual rule IDs and messages, and list all 50 valid defects in the adjudication appendices. Parasoft's only scored configuration was Flow Analysis Aggressive, run on the clean and bugged states: 15 strict true positives out of 50 valid defects, plus one partial and one indirect signal (not counted as direct detections). It missed all eight concurrency defects and nine of eleven size-arithmetic defects. SonarQube's DEEP code scan was unavailable — Vortex returned 403 and every requested file was skipped — never zero findings; its local secrets scan completed with zero secrets. Links to the MIT repository, defect catalog, scan protocol, comparison report and detection matrix.</p>
-    </article>
-    <article class="card " dir="ltr">
       <div class="card-top"><span class="card-tag">THREADX / CORTEX-M / CLANG</span></div>
       <a class="card-title" href="tx5-upgrade/">ThreadX 5.6 to 6.5, Cortex-M4 to M85: Migration with Executable Evidence</a>
       <div class="card-dates">Published: 2026-10-11 · Updated: 2026-10-11</div>
       <p class="card-desc">41 ESL-branded slides plus PDF: ESL and CTO Daniel Liezrowice, five project challenges, and one Clang-built application run on the real ThreadX 5.6 Cortex-M4 kernel and on MIT ThreadX 6.5, then built for Cortex-M85. Verified TX5-M4, TX6-M4 and M55 QEMU runs, eleven code-diff discussions, binary-kernel inspection, measured memory charts and histograms. Mobile arrows, Home, a recorded LED/button replay and ESL contact links. M85 execution and real-board performance remain unverified.</p>
-    </article>
-    <article class="card " dir="ltr">
-      <a class="card-title" href="Jahalin-reports/">Jahalin-reports</a>
     </article>
     <article class="card " dir="ltr">
       <div class="card-top"><span class="card-tag">PARASOFT / APOLLO</span><button class="stamp" type="button" data-note="apollo-misra-demo/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
