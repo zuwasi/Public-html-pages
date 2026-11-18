@@ -172,7 +172,7 @@ a.zoom img{display:block;width:100%;height:auto;border-radius:6px;background:#ff
   <div class="grid2 mid">
     <div class="stack">
       <div class="card r"><div class="n">T<sub>3,2</sub> = 0 &ne; q</div><div class="l">The smallest counterexample: at (n, ell) = (4, 2) the true coefficient of s_(4) is q, the paper's formula gives 0. Verified in three independent systems.</div></div>
-      <div class="card g"><div class="n">17 / 17</div><div class="l">computer checks passed: 7 Wolfram suite checks, 10 audit checks, plus 9 Python identity groups and 12 Lean theorems</div></div>
+      <div class="card g"><div class="n">17 / 17</div><div class="l">computer checks passed: 7 Wolfram suite checks, 10 audit checks (plus 1 intentional warning documenting the counterexample), 9 Python identity groups and 12 Lean theorems</div></div>
     </div>
     <div class="person-card">
       <img src="../assets/daniel-liezrowice.jpg" width="140" height="140" alt="Daniel Liezrowice">
@@ -429,7 +429,7 @@ Out[2]=  q s_(4) - ...   (* nonzero: the theorem is false at the very first test
     <div>
       <div class="card g" style="margin-bottom:14px"><span class="tag">The identification</span>
       <p>A<sup>NC</sup>(m, ell) = number of noncrossing configurations on m-1 points with exactly m-ell chords: a Motzkin triangle number. Row sums are Motzkin numbers M(m-1); hook totals recover Narayana(n, ell) = C(n, ell) C(n, ell-1) / n.</p>
-      <p>Row m = 5: 0, 0, 2, 6, 1 with sum 9 = M(4). Verified m &le; 7 in Wolfram and Python, m &le; 7 in Lean (triangle_2_6, motzRows_2_7, narayana_2_5).</p></div>
+      <p>Row m = 5: 0, 0, 2, 6, 1 with sum 9 = M(4). Verified m &le; 7 in Wolfram and Python; in Lean, m &le; 7 (triangle_2_6, motzRows_2_7) and m &le; 5 (narayana_2_5).</p></div>
     </div>
     <div class="chart">
       <svg viewBox="0 0 560 300" role="img" aria-label="Narayana numbers for n=8 as a bar chart">
@@ -459,7 +459,7 @@ Out[2]=  q s_(4) - ...   (* nonzero: the theorem is false at the very first test
 
 <section class="slide"><div class="inner">
   <div class="eyebrow"><span class="mark"></span>The guard · 15</div>
-  <h1>The Lean 4 companion: pure core, twelve theorems, no trusted algebra kernel</h1>
+  <h1>The Lean 4 companion: pure core, twelve theorems proved by exhaustive evaluation</h1>
   <p class="subtitle">lean/Verify.lean re-derives the counting layer from first-order definitions; lake build proves everything by evaluation</p>
   <div class="grid2">
     <div class="card">
