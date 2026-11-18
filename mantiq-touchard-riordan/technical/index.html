@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#e2e5ea">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'unsafe-inline'">
+<meta name="description" content="ESL technical brief: the MantiQ Factor computer-aided audit of Bagno-Garber arXiv:2606.13149 (Touchard-Riordan polynomials and Schur-positivity of set partitions): a counterexample at (4,2), a corrected theorem with adjacency-free coefficients, the collapse lemma, and a Lean 4 companion.">
+<title>Touchard-Riordan Audit | Mathematica + Lean 4 | ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4eedc;--sheet:#fbf8ee;--sheet2:#ece4cc;--ink:#1d1a16;--muted:#6b6353;--line:#b9ae90;--blue:#12457a;--blue-text:#12457a;--amber:#9a5b10;--amber-text:#8a5e00;--red:#b8322a;--green:#1e7d33;--code-bg:#f6efdc;--code-cap:#d9d0b8;--on-dark:#1d1a16;--top:56px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--blue-text);text-decoration:none}a:hover{text-decoration:underline}
+code{font-family:"Cascadia Mono",Consolas,monospace;font-size:.88em;background:#e7eaef;border:1px solid var(--line);border-radius:5px;padding:0 .3em;color:#1b3f73}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;height:var(--top);display:flex;justify-content:space-between;align-items:center;gap:16px;padding:0 3vw;background:#f7f8faf5;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.homebtn{font-size:22px;line-height:1;filter:grayscale(.2)}
+.homebtn:hover{text-decoration:none;transform:scale(1.15)}
+.topbar img{height:32px;width:auto;display:block}
+#brand{font-weight:600;font-size:14px;color:var(--ink);border-left:2px solid var(--line);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.links{display:flex;gap:18px;flex:none}
+.links a{font-size:14px;color:var(--ink);border-bottom:2px solid transparent}
+.links a:hover{border-bottom-color:var(--amber);text-decoration:none}
+.viewport{position:fixed;inset:0;overflow:hidden}
+#track{display:flex;height:100%;transition:transform .45s cubic-bezier(.2,.7,.25,1);will-change:transform}
+.slide{--shot-h:calc(100vh - 300px);flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding:calc(var(--top) + 24px) max(5.5vw,96px) 52px}
+.inner{width:100%;max-width:1360px;margin:auto}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:clamp(12px,1vw,14px);letter-spacing:.18em;font-weight:700;text-transform:uppercase}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{left:0;top:0;border-color:var(--blue)}
+.mark::after{left:8px;top:7px;border-color:var(--amber)}
+h1{font-size:clamp(30px,3.6vw,52px);line-height:1.1;letter-spacing:-.02em;margin:12px 0 8px;font-weight:800}
+.title h1{font-size:clamp(30px,3.9vw,52px)}
+h3{font-size:clamp(18px,1.6vw,23px);line-height:1.25;margin-bottom:8px;font-weight:700}
+p.subtitle{font-size:clamp(17px,1.6vw,22px);color:var(--blue-text);margin:0 0 14px;line-height:1.35}
+p,li{font-size:clamp(16px,1.55vw,21px)}
+p+p{margin-top:10px}
+ul{padding-left:26px}
+li{margin:9px 0;padding-left:4px}
+li::marker{color:var(--amber)}
+.grid2,.grid3,.grid4{display:grid;gap:18px;margin:12px 0}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mid{align-items:center}
+.stack{display:grid;gap:18px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(14px,1.4vw,20px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card.v{border-top-color:var(--amber)}
+.card.g{border-top-color:var(--green)}
+.card.r{border-top-color:var(--red)}
+.card p,.card li{font-size:clamp(15px,1.35vw,19px)}
+.card ul{padding-left:22px}
+.tag{display:inline-block;color:var(--blue-text);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.card.v .tag{color:var(--amber-text)}
+.card.r .tag{color:var(--red)}
+.card.g .tag{color:var(--green)}
+.n{font-size:clamp(30px,3.4vw,50px);font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums}
+.l{font-size:clamp(14px,1.3vw,18px);color:var(--muted);margin-top:8px;line-height:1.45}
+.note{padding:14px 20px;border-left:5px solid var(--amber);background:#fdf6e3;color:#5c470e;font-size:clamp(15px,1.4vw,19px);margin:16px 0 0;border-radius:0 8px 8px 0;line-height:1.5}
+.note.red{border-left-color:var(--red);background:#fbeaea;color:#6e1c1c}
+.note.green{border-left-color:var(--green);background:#eaf6ec;color:#175227}
+.foot{margin-top:10px;font-size:clamp(13px,1.1vw,15px);color:var(--muted)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pill{display:inline-flex;border-radius:999px;padding:5px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:13px;font-weight:700}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:12px 0 4px}
+.step{position:relative;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:18px 20px 18px 76px;min-height:118px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.step b{position:absolute;left:18px;top:18px;width:40px;height:40px;border-radius:50%;background:var(--blue);color:#f4eedc;display:grid;place-items:center;font-size:19px}
+.step:nth-child(even) b{background:var(--amber);color:#f4eedc}
+.step strong{display:block;font-size:clamp(17px,1.5vw,21px);margin-bottom:4px}
+.step span{display:block;font-size:clamp(14px,1.25vw,17px);color:#4a443a;line-height:1.45}
+.flow.six{grid-template-columns:repeat(3,minmax(0,1fr))}
+.diagram{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(11px,1.08vw,14.5px);line-height:1.42;background:var(--code-bg);color:var(--on-dark);border-radius:10px;padding:12px 18px;overflow-x:auto;white-space:pre;margin:10px 0 0;box-shadow:0 2px 10px rgba(15,20,30,.25)}
+.tablewrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:clamp(13px,1.22vw,16px)}
+th,td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#fbf8ee;color:#1d1a16;font-weight:650}
+tbody tr:nth-child(even){background:#f0f2f6}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+figure.shot{width:min(100%,calc(var(--w) + 16px),calc(var(--shot-h) * var(--r) + 16px));margin:0 auto;background:var(--code-bg);border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(15,20,30,.28)}
+figure.shot figcaption{padding:9px 16px;background:var(--code-cap);color:#6b6353;font-size:clamp(13px,1.1vw,15px);line-height:1.4;border-top:3px solid var(--amber);border-bottom:1px solid #2a2e34}
+a.zoom{display:block;position:relative;padding:8px;line-height:0;cursor:zoom-in}
+a.zoom img{display:block;width:100%;height:auto;border-radius:6px;background:#fff;-webkit-user-drag:none;user-select:none}
+.person-card{display:flex;gap:22px;padding:22px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.person-card img{width:140px;height:140px;object-fit:cover;border-radius:8px;flex:none}
+.person-card strong{font-size:clamp(18px,1.8vw,23px);display:block}
+.person-card span{color:var(--blue-text);font-weight:600;font-size:clamp(14px,1.4vw,17px)}
+.person-card p{margin:10px 0;font-size:clamp(15px,1.35vw,18px)}
+.contact{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:20px;padding:16px 22px;background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--amber);border-radius:10px}
+.contact img{height:52px;width:auto;display:block}
+.contact p{font-size:clamp(15px,1.35vw,18px)}
+.brandrow{display:flex;gap:14px;margin:0 0 14px;flex-wrap:wrap;align-items:center}
+.brandchip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 14px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.brandchip img{height:27px;width:auto;display:block}
+.brandchip span{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--ink)}
+.toc{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;margin-top:14px}
+.toc a{display:flex;gap:12px;align-items:baseline;padding:9px 14px;border:1px solid var(--line);border-radius:8px;background:var(--sheet);text-decoration:none;color:var(--ink)}
+.toc a:hover{border-color:var(--amber)}
+.toc b{color:var(--blue-text);font-variant-numeric:tabular-nums;flex:none}
+.toc span{font-size:clamp(14px,1.3vw,18px);font-weight:600}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:none;background:var(--blue);color:#f4eedc;font-size:34px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,107,208,.45);transition:background .15s,transform .15s,opacity .2s}
+.navbtn:hover{background:var(--blue-text);transform:translateY(-50%) scale(1.08)}
+.navbtn.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#prev{left:16px}#next{right:16px}
+#progress{position:fixed;bottom:0;left:0;height:6px;width:0;background:linear-gradient(90deg,var(--blue),var(--amber));z-index:30;transition:width .3s}
+#counter{position:fixed;bottom:14px;right:20px;z-index:30;font-size:15px;font-weight:600;color:var(--ink);background:#f7f8fad9;border:1px solid var(--line);border-radius:14px;padding:3px 13px;font-variant-numeric:tabular-nums}
+#hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:30;font-size:15px;font-weight:600;color:var(--amber-text);white-space:nowrap;animation:pulse 1.6s infinite}
+#hint.gone{opacity:0;visibility:hidden}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.chart{max-width:1240px;margin:auto}
+.chart svg{width:100%;height:auto;display:block}
+@media(max-width:1100px){
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .flow.six{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .toc{grid-template-columns:1fr}
+}
+@media(max-width:1023px){
+  .grid2{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  :root{--top:52px}
+  .slide{padding:calc(var(--top) + 18px) 18px 96px}
+  .topbar{gap:10px;padding:0 12px}
+  .topbar img{height:26px}
+  #brand{font-size:12.5px;padding-left:10px}
+  .links{display:none}
+  .grid2,.grid3,.flow,.flow.six{grid-template-columns:1fr}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .person-card{flex-direction:column}
+  .contact{gap:14px}
+  .navbtn{width:46px;height:46px;font-size:26px;top:auto;bottom:16px;transform:none}
+  .navbtn:hover{transform:scale(1.05)}
+  #prev{left:12px}#next{right:12px}
+  #counter{right:auto;left:50%;transform:translateX(-50%);bottom:26px}
+  #hint{bottom:74px;font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="homebtn" href="#1" title="Back to slide 1" aria-label="Back to slide 1">&#127968;</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener"><img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+    <span id="brand">Touchard-Riordan Audit · Mathematica + Lean 4 · Bagno-Garber arXiv:2606.13149</span>
+  </div>
+  <nav class="links" aria-label="Related links">
+    <a href="https://github.com/zuwasi/mantiq-touchard-riordan" target="_blank" rel="noopener">public repo</a>
+    <a href="https://arxiv.org/abs/2606.13149" target="_blank" rel="noopener">the paper</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a>
+  </nav>
+</header>
+<main class="viewport" aria-label="Touchard-Riordan audit presentation">
+<div id="track">
+
+<section class="slide title"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Mathematical software brief · 01</div>
+  <h1>The theorem that failed at (4, 2): a MantiQ Factor audit of Bagno-Garber</h1>
+  <p class="subtitle">The paper "Touchard-Riordan Polynomials and Schur-positivity of Set Partitions" (arXiv:2606.13149) audited by computer: one counterexample, one corrected theorem, one structural lemma, and a fully reproducible Mathematica + Lean 4 workflow</p>
+  <div class="brandrow">
+    <div class="brandchip"><span>Wolfram Mathematica 15 · exact algebra workbench</span></div>
+    <div class="brandchip"><span>Python · independent cross-check</span></div>
+    <div class="brandchip"><span>Lean 4 · formal guard, pure core</span></div>
+  </div>
+  <div class="grid2 mid">
+    <div class="stack">
+      <div class="card r"><div class="n">T<sub>3,2</sub> = 0 &ne; q</div><div class="l">The smallest counterexample: at (n, ell) = (4, 2) the true coefficient of s_(4) is q, the paper's formula gives 0. Verified in three independent systems.</div></div>
+      <div class="card g"><div class="n">17 / 17</div><div class="l">computer checks passed: 7 Wolfram suite checks, 10 audit checks, plus 9 Python identity groups and 12 Lean theorems</div></div>
+    </div>
+    <div class="person-card">
+      <img src="../assets/daniel-liezrowice.jpg" width="140" height="140" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy in Israel for over 20 years. This brief documents the MantiQ Factor workflow: Mathematica as the symbolic workbench, cross-checked in Python, guarded in Lean 4, applied to a live combinatorics paper.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Engineering Software Lab Ltd. · 18 November 2026 · Every number in this deck is the output of the checked code in the public repo: github.com/zuwasi/mantiq-touchard-riordan</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Contents · 02</div>
+  <h1>Table of contents</h1>
+  <p class="subtitle">Eighteen slides: the paper, the audit, the failure, the correction, the formal guard, and what Dr. Bagno gains</p>
+  <div class="toc">
+    <a href="#3"><b>03</b><span>The paper's central object</span></a>
+    <a href="#4"><b>04</b><span>Theorem 3.1 as claimed</span></a>
+    <a href="#5"><b>05</b><span>The MantiQ Factor workflow</span></a>
+    <a href="#6"><b>06</b><span>How the computer checks it</span></a>
+    <a href="#7"><b>07</b><span>The counterexample (4, 2)</span></a>
+    <a href="#8"><b>08</b><span>The failure census</span></a>
+    <a href="#9"><b>09</b><span>Why the proof breaks</span></a>
+    <a href="#10"><b>10</b><span>The collapse lemma</span></a>
+    <a href="#11"><b>11</b><span>The corrected theorem</span></a>
+    <a href="#12"><b>12</b><span>The coefficients A(m, ell, q)</span></a>
+    <a href="#13"><b>13</b><span>Two new identities</span></a>
+    <a href="#14"><b>14</b><span>The noncrossing corollary</span></a>
+    <a href="#15"><b>15</b><span>The Lean 4 companion</span></a>
+    <a href="#16"><b>16</b><span>What Dr. Bagno gains</span></a>
+    <a href="#17"><b>17</b><span>Reproduce everything</span></a>
+    <a href="#18"><b>18</b><span>Thank you and contact</span></a>
+  </div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The paper · 03</div>
+  <h1>The object: a q-weighted quasisymmetric sum over set partitions</h1>
+  <p class="subtitle">Set(n, ell) = set partitions of [n] into ell blocks; each partition pi contributes q<sup>cr(pi)</sup> F<sub>n, Des(pi)</sub></p>
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Definitions (paper Sec. 2)</span>
+      <ul>
+        <li><b>Des(pi)</b> = { i : i and i+1 lie in the same block }</li>
+        <li><b>cr(pi)</b> = number of crossing arc pairs; arcs connect consecutive elements of a block</li>
+        <li><b>F<sub>n,D</sub></b> = Gessel's fundamental quasisymmetric function, paper Def. 2.3 with rises REQUIRED at D</li>
+        <li><b>s<sub>(n-k, 1<sup>k</sup>)</b></b> = hook Schur functions: a basis of degree-n symmetric functions</li>
+      </ul>
+      <p>Because every F<sub>n,D</sub> is symmetric, Q<sub>n</sub>(Set(n, ell)) expands uniquely in the hook Schur basis. The whole paper is about the coefficients.</p>
+    </div>
+    <div class="card v">
+      <span class="tag">The 7 partitions of Set(4, 2), drawn by the package</span>
+      <figure class="shot" style="--w:760px;--r:1.86;margin:0"><figcaption>Arc diagrams from <code>PartitionArcDiagram</code>: Des and cr annotated per partition</figcaption><a class="zoom" href="../assets/figure_set42_gallery.png" draggable="false"><img src="../assets/figure_set42_gallery.png" width="760" height="408" decoding="async" draggable="false" alt="Arc diagrams of the 7 partitions in Set(4,2) with descent sets and crossing numbers"></a></figure>
+    </div>
+  </div>
+  <div class="foot">Diagrams generated by src/SetPartitionQSym.wl, exports/figure_set42_gallery.png, Wolfram 15.0.1, November 2026</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The claim · 04</div>
+  <h1>Theorem 3.1 as claimed: hook coefficients are Touchard-Riordan values</h1>
+  <p class="subtitle">Q<sub>n</sub>(Set(n, ell)) = &sum;<sub>k</sub> T<sub>n-1-k, n-k-ell</sub>(q) &middot; s<sub>(n-k, 1<sup>k</sup>)</sub>, where T<sub>a,b</sub>(q) = C(a, 2b) T<sub>2b</sub>(q)</p>
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">The claim, in words</span>
+      <p>Each hook Schur coefficient of the q-weighted sum should be the classical Touchard-Riordan polynomial: the crossing polynomial of <b>all matchings</b> on a fixed point set, scaled by a binomial.</p>
+      <p>The heuristic: the paper's proof maps each partition to a chord diagram and transfers the Touchard-Riordan enumeration of matchings to the left side. The transfer step is where it breaks.</p>
+    </div>
+    <div class="card v">
+      <span class="tag">Where the claim is checkable by brute force</span>
+      <p>Both sides are explicit finite sums for small n. Transcribe the definitions once, compute both sides as polynomials in q and the variables x<sub>1</sub>, ..., x<sub>n</sub>, and subtract. No insight required, only exactness.</p>
+      <p>The smallest instance already decides: (n, ell) = (4, 2).</p>
+    </div>
+  </div>
+  <div class="note">Claim scope: Theorem 3.1 with the paper's Definition 2.3 reading of F<sub>n,D</sub> (rises required at D), confirmed against the paper's own examples before testing. Corollary 3.3 (1), (2) inherit the failure; Corollary 3.3 (3), (4) survive (slide 14).</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The workflow · 05</div>
+  <h1>The MantiQ Factor: six steps, three systems, one ledger</h1>
+  <p class="subtitle">Nothing is claimed that is not executable somewhere: the claim-by-claim ledger is docs/formalization_map.md in the repo</p>
+  <div class="flow six">
+    <div class="step"><b>1</b><strong>Transcribe</strong><span>The paper's definitions 1:1 into a Wolfram package: rgs partitions, descent sets, crossings, F&#832n,&#832D</span></div>
+    <div class="step"><b>2</b><strong>Compute</strong><span>Both sides of every claimed identity as exact polynomials; diff them with Expand and Simplify</span></div>
+    <div class="step"><b>3</b><strong>Census</strong><span>Sweep the parameter space (n, ell); find the smallest failing instance</span></div>
+    <div class="step"><b>4</b><strong>Cross-check</strong><span>Re-derive in Python from scratch: agreement rules out an implementation artifact</span></div>
+    <div class="step"><b>5</b><strong>Correct</strong><span>State the theorem that is actually true; prove the structural lemma that explains the failure</span></div>
+    <div class="step"><b>6</b><strong>Formalize</strong><span>Push the decisive small cases into Lean 4 so the correction cannot quietly rot</span></div>
+  </div>
+  <div class="diagram">mantiq-touchard-riordan/
+  mantiq-project/   SetPartitionQSym.wl  TouchardRiordanNotebook.nb  build_project.wls  proof_audit.wls
+                    docs/(plain_english_proof.md, formalization_map.md)  exports/(reports, figures)
+  prototype/        verify3.py           independent Python verification, n <= 7
+  lean/             Verify.lean          pure-core Lean 4 theorems, lake build</div>
+  <div class="foot">All three lanes run in minutes on a laptop: Wolfram build 19 s, Python under 30 s, Lean build under 2 s</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The method · 06</div>
+  <h1>How the computer checks a Schur-positivity claim</h1>
+  <p class="subtitle">Expand in variables, decompose into hook Schur functions by h-e pivoting, compare coefficients</p>
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">The pipeline in the package</span>
+      <ul>
+        <li><code>QSet[n, ell, q, vars]</code>: enumerates all rgs partitions, weights each by q^cr times its fundamental quasisymmetric monomial sum</li>
+        <li><code>HookSchur[a, b, vars]</code>: s_(a,1^b) = &sum;<sub>j</sub> (-1)<sup>j</sup> h<sub>a+j</sub> e<sub>b-j</sub>, with h and e computed from integer partitions</li>
+        <li><code>polyDiffZero</code>: the verdict primitive: Expand, Simplify, ask for identically 0</li>
+      </ul>
+    </div>
+    <div class="card v">
+      <span class="tag">Why exact arithmetic matters here</span>
+      <p>The failure is structural: T<sub>3,2</sub>(q) = C(3, 4) T<sub>4</sub>(q) = 0 because C(3, 4) = 0, while the true coefficient is the monomial q. A floating-point workflow could hide this; an exact one cannot.</p>
+      <p>The corrected coefficient A(m, ell, q) is a sum of monomials with nonnegative integer coefficients by construction, so Schur-positivity is visible by inspection, not by proof.</p>
+    </div>
+  </div>
+  <div class="diagram">In[1]:=  Get["src/SetPartitionQSym.wl"]; vars = Table[Symbol["x"<>ToString[i]], {i, 6}];
+In[2]:=  Simplify[QSet[4, 2, q, vars] - PaperRHS[4, 2, q, vars]]   (* the paper's claim *)
+Out[2]=  q s_(4) - ...   (* nonzero: the theorem is false at the very first testable case *)</div>
+  <div class="foot">Commands are the notebook's Section 5 cells; the notebook evaluates all 29 input cells without errors</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The failure · 07</div>
+  <h1>The counterexample: (n, ell) = (4, 2), hook k = 0</h1>
+  <p class="subtitle">The coefficient of s_(4) is q on the left, 0 on the right: one adjacency-free partition with one crossing against an impossible binomial</p>
+  <figure class="shot" style="--w:440px;--r:2.24;margin:0 auto"><figcaption> exports/figure_counterexample_4_2.png: the coefficient of s_(4) in Q_4(Set(4,2))</figcaption><a class="zoom" href="../assets/figure_counterexample_4_2.png" draggable="false"><img src="../assets/figure_counterexample_4_2.png" width="440" height="196" decoding="async" draggable="false" alt="Bar chart: corrected coefficient q versus paper coefficient 0"></a></figure>
+  <div class="grid2">
+    <div class="card g"><span class="tag">Left side, by enumeration</span><p>Exactly one partition of [4] into 2 blocks has empty descent set and a crossing: {{1,3},{2,4}}, with cr = 1. The s_(4) coefficient is q.</p></div>
+    <div class="card r"><span class="tag">Right side, structurally impossible</span><p>T<sub>3,2</sub>(q) = C(3, 4) T<sub>4</sub>(q) = 0: no matching on 3 points has 4 chords. The claim cannot hold anywhere the binomial vanishes while the left side does not.</p></div>
+  </div>
+  <div class="foot">Checked in Wolfram (ACoeff[4,2,q] === q, TouchardRiordanT[3,2,q] === 0), Python V6, and Lean theorems A_4_2, T_3_2, counterexample_4_2</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The census · 08</div>
+  <h1>When does Theorem 3.1 hold? A clean census</h1>
+  <p class="subtitle">Sweeping 2 &le; ell &le; n &le; 7 in three systems: holds exactly at the boundary, fails exactly on the interior</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Regime</th><th>(n, ell) with the paper's identity</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>ell = 1</td><td class="num">all n</td><td>one block: no descents, no crossings; reduces to e_n = s_(1^n)</td></tr>
+      <tr><td>ell = n</td><td class="num">all n</td><td>all singletons: s_(n), trivially both sides</td></tr>
+      <tr><td>n - ell = 1</td><td class="num">all n</td><td>Touchard-Riordan and adjacency-free coefficients coincide here</td></tr>
+      <tr><td><b>ell &ge; 2 and n - ell &ge; 2</b></td><td class="num">(4,2) (5,2) (5,3) (6,2) (6,3) (6,4) (7,2) (7,3) (7,4) (7,5)</td><td><b>all fail</b>, starting at (4, 2)</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Verification depth: Wolfram Language n &le; 6 (audit check A5: the failure set matches the recorded list exactly), Python n &le; 7 (verify3.py V2), Lean n &le; 5 (theorem census_5: exactly {(4,2), (5,2), (5,3)}). The interior pattern is a conjecture beyond n = 7, stated in the repo README.</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Root cause · 09</div>
+  <h1>Why the proof breaks: the chord-diagram map is injective, not surjective</h1>
+  <p class="subtitle">The paper's transfer step treats partition fibers as if they were as rich as full matching classes; they are not</p>
+  <div class="diagram">paper's implicit picture:            the actual situation:
+  partition pi ──> chord diagram      partition pi ──> chord diagram
+               (surjective onto          injective, NOT surjective:
+                matching classes)         many chord diagrams have no partition
+  fibers behave like matching classes   fibers are exactly the D-runs
+  => Touchard-Riordan counting applies  => counting must shift by |D|</div>
+  <div class="grid2">
+    <div class="card r"><span class="tag">What the transfer assumes</span><p>That the q-weight of a fiber of the chord-diagram map is governed by the Touchard-Riordan polynomial of a full matching class. That would require the map to hit every chord diagram in the class.</p></div>
+    <div class="card g"><span class="tag">What is actually true</span><p>The map is one-to-one: every partition determines its chord diagram. But chord diagrams whose chords force forbidden adjacencies are never hit. The surviving fibers are the D-runs, and they force the shift n &rarr; n - |D| (slide 10).</p></div>
+  </div>
+  <div class="foot">Diagnosis from docs/plain_english_proof.md; the collapse lemma below is the quantitative form of the shift</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>New result · 10</div>
+  <h1>The collapse lemma: the descent set only shifts</h1>
+  <p class="subtitle">For EVERY descent set D, the crossing polynomial of the Des = D fiber equals A(n - |D|, ell, q)</p>
+  <div class="grid2">
+    <div class="card g">
+      <span class="tag">Statement and proof idea</span>
+      <p>c<sub>D</sub>(n, ell) = A(n - |D|, ell, q), where A(m, ell, q) is the crossing polynomial of the <b>adjacency-free</b> partitions (Des = empty) of [m] into ell blocks.</p>
+      <p>Collapsing each maximal run of adjacent same-block elements removes a controlled local contribution; what remains is an adjacency-free partition of the remaining m points, and cr(pi) = cr(collapse(pi)). The fibers of the collapse map are the D-runs.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Verified, every descent set</span>
+      <ul>
+        <li>Wolfram: all D for (n, ell) up to n = 6 (suite V3) and the (4, 2) spot checks (A10)</li>
+        <li>Python: all D, n &le; 5 (V3)</li>
+        <li>Lean: (4, 2) over all 8 descent sets, (5, 3) over all 16, and every (n, ell) with n &le; 4 (theorems collapse_4_2_allD, collapse_5_3_allD, collapse_all_n4)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note">Consequence: the whole sum is determined by ONE family of polynomials A(m, ell, q) plus the hook decomposition. That is what makes the corrected theorem possible.</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The correction · 11</div>
+  <h1>The corrected theorem, and why it is better than a repair</h1>
+  <p class="subtitle">Q<sub>n</sub>(Set(n, ell)) = &sum;<sub>k=0..n-ell</sub> A(n-k, ell, q) &middot; s<sub>(n-k, 1<sup>k</sup>)</sub>, with A(m, ell, q) = &sum;<sub>pi adjacency-free</sub> q<sup>cr(pi)</sup></p>
+  <div class="grid3">
+    <div class="card g"><span class="tag">Manifestly Schur-positive</span><p>Every coefficient is a sum of monomials with nonnegative integer coefficients by construction. Schur-positivity is visible, not proven.</p></div>
+    <div class="card"><span class="tag">Combinatorially transparent</span><p>The s_(n-k, 1^k) coefficient literally counts crossings in one well-defined class of partitions: adjacency-free ones. A student can draw it.</p></div>
+    <div class="card v"><span class="tag">Correctly degenerate</span><p>At ell = 1: collapses to e_n = s_(1^n). At ell = n: s_(n). At n - ell = 1: A coincides with Touchard-Riordan, explaining why the paper's identity looked right in its tested regimes.</p></div>
+  </div>
+  <div class="note green">Verified: Wolfram n &le; 6 (A4), Python n &le; 7 (V1), and in Lean through the coefficient census at n &le; 5. The three systems agree on every overlapping claim.</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The data · 12</div>
+  <h1>The coefficients A(m, ell, q), computed and tabulated</h1>
+  <p class="subtitle">Row m, column ell; from exports/A_coefficients_table.csv, exact output of ACoeff[m, ell, q]</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>m \ ell</th><th class="num">1</th><th class="num">2</th><th class="num">3</th><th class="num">4</th><th class="num">5</th><th class="num">6</th><th class="num">7</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td class="num">1</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+      <tr><td>2</td><td class="num">0</td><td class="num">1</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+      <tr><td>3</td><td class="num">0</td><td class="num">1</td><td class="num">1</td><td class="num"></td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+      <tr><td>4</td><td class="num">0</td><td class="num">q</td><td class="num">3</td><td class="num">1</td><td class="num"></td><td class="num"></td><td class="num"></td></tr>
+      <tr><td>5</td><td class="num">0</td><td class="num">q<sup>2</sup></td><td class="num">2 + 5q</td><td class="num">6</td><td class="num">1</td><td class="num"></td><td class="num"></td></tr>
+      <tr><td>6</td><td class="num">0</td><td class="num">q<sup>3</sup></td><td class="num">5q + 9q<sup>2</sup> + q<sup>3</sup></td><td class="num">10 + 15q</td><td class="num">10</td><td class="num">1</td><td class="num"></td></tr>
+      <tr><td>7</td><td class="num">0</td><td class="num">q<sup>4</sup></td><td class="num">9q<sup>2</sup> + 16q<sup>3</sup> + 5q<sup>4</sup> + q<sup>5</sup></td><td class="num">5 + 36q + 42q<sup>2</sup> + 7q<sup>3</sup></td><td class="num">30 + 35q</td><td class="num">15</td><td class="num">1</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Reading the table: the ell = 2 column at q = 1 gives 1, 1, 1, 1, ...: exactly one adjacency-free bipartition for every m (the perfect alternation), a nice classroom sanity check. The whole table is one Manipulate in the notebook (Section 10).</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>New identities · 13</div>
+  <h1>Two new identities for the adjacency-free counts</h1>
+  <p class="subtitle">The corrected coefficients extend the Stirling numbers, and their row sums are Bell numbers shifted by one</p>
+  <div class="grid2">
+    <div class="card g">
+      <span class="tag">Inclusion-exclusion</span>
+      <p>a(m, ell) = A(m, ell, 1) = &sum;<sub>j</sub> (-1)<sup>j</sup> C(m-1, j) S(m-j, ell), with S the Stirling numbers of the second kind.</p>
+      <p>Verified: Wolfram m &le; 6, Python, Lean (inclusionExclusion_2_5, m &le; 5).</p>
+    </div>
+    <div class="card g">
+      <span class="tag">Bell row identity</span>
+      <p>&sum;<sub>ell</sub> a(m, ell) = Bell(m-1): adjacency-free partitions of [m] correspond bijectively to set partitions of [m-1].</p>
+      <p>Verified: Wolfram m &le; 6 (A11), Python (V9, to m = 7), Lean m &le; 6 (bell_2_6). Row m = 5: 0 + 1 + 7 + 6 + 1 = 15 = Bell(4).</p>
+    </div>
+  </div>
+  <div class="diagram">row sums at q = 1 (from the table on slide 12):
+  m = 2:  0 + 1                       =  1 = Bell(1)
+  m = 3:  0 + 1 + 1                   =  2 = Bell(2)
+  m = 4:  0 + 1 + 3 + 1               =  5 = Bell(3)
+  m = 5:  0 + 1 + 7 + 6 + 1           = 15 = Bell(4)
+  m = 6:  0 + 1 + 15 + 25 + 10 + 1    = 52 = Bell(5)</div>
+  <div class="foot">Each entry is A(m, ell, 1) from the table above; the identity was verified programmatically in all three lanes, not by these hand sums alone.</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The true part · 14</div>
+  <h1>The noncrossing corollary is correct: Motzkin triangle and Narayana</h1>
+  <p class="subtitle">Corollary 3.3 (3), (4) hold, with the coefficients identified exactly as Motzkin triangle numbers</p>
+  <div class="grid2 mid">
+    <div>
+      <div class="card g" style="margin-bottom:14px"><span class="tag">The identification</span>
+      <p>A<sup>NC</sup>(m, ell) = number of noncrossing configurations on m-1 points with exactly m-ell chords: a Motzkin triangle number. Row sums are Motzkin numbers M(m-1); hook totals recover Narayana(n, ell) = C(n, ell) C(n, ell-1) / n.</p>
+      <p>Row m = 5: 0, 0, 2, 6, 1 with sum 9 = M(4). Verified m &le; 7 in Wolfram and Python, m &le; 7 in Lean (triangle_2_6, motzRows_2_7, narayana_2_5).</p></div>
+    </div>
+    <div class="chart">
+      <svg viewBox="0 0 560 300" role="img" aria-label="Narayana numbers for n=8 as a bar chart">
+        <text x="280" y="18" text-anchor="middle" font-size="12" fill="#6b6353">Narayana(8, ell): hook totals, sum 1430</text>
+        <line x1="40" y1="260" x2="540" y2="260" stroke="#b9ae90"/>
+        <g fill="#1d6bd0">
+          <rect x="55"  y="247" width="46" height="13"/>
+          <rect x="112" y="203" width="46" height="57"/>
+          <rect x="169" y="105" width="46" height="155"/>
+          <rect x="226" y="22"  width="46" height="238"/>
+          <rect x="283" y="22"  width="46" height="238"/>
+          <rect x="340" y="105" width="46" height="155"/>
+          <rect x="397" y="203" width="46" height="57"/>
+          <rect x="454" y="247" width="46" height="13"/>
+        </g>
+        <g font-size="11" fill="#6b6353" text-anchor="middle">
+          <text x="78" y="276">1</text><text x="135" y="276">2</text><text x="192" y="276">3</text><text x="249" y="276">4</text><text x="306" y="276">5</text><text x="363" y="276">6</text><text x="420" y="276">7</text><text x="477" y="276">8</text>
+        </g>
+        <g font-size="11" fill="#1d1a16" text-anchor="middle">
+          <text x="78" y="241">1</text><text x="135" y="197">28</text><text x="192" y="99">196</text><text x="249" y="16">490</text><text x="306" y="16">490</text><text x="363" y="99">196</text><text x="420" y="197">28</text><text x="477" y="241">1</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="foot">Values from exports/figure_narayana_8.png data path: Binomial[8, ell] Binomial[8, ell-1] / 8, ell = 1..8; the paper's ell = 1..8 indexing. Chart drawn from the measured values.</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The guard · 15</div>
+  <h1>The Lean 4 companion: pure core, twelve theorems, no trusted algebra kernel</h1>
+  <p class="subtitle">lean/Verify.lean re-derives the counting layer from first-order definitions; lake build proves everything by evaluation</p>
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">What is formalized</span>
+      <ul>
+        <li>rgs partitions, descent sets, arcs, crossings (first-order definitions)</li>
+        <li>A(4, 2) = [0, 1] &ne; 0 against T<sub>3,2</sub> = 0: the counterexample (A_4_2, T_3_2, counterexample_4_2)</li>
+        <li>Census n &le; 5: fails exactly {(4,2), (5,2), (5,3)} (census_5)</li>
+        <li>Collapse lemma over every descent set (3 theorems)</li>
+        <li>Bell, inclusion-exclusion, Motzkin triangle, Motzkin rows, Narayana (5 theorems)</li>
+      </ul>
+    </div>
+    <div class="card v">
+      <span class="tag">Why run Lean next to Mathematica</span>
+      <p>A computer-algebra system can share a mistaken assumption with itself. Lean re-derives every fact from first-order definitions, so agreement between the two systems is strong evidence that a claim is a theorem of the combinatorics, not an artifact of one codebase.</p>
+      <p>Touchard-Riordan polynomials themselves are computed in Lean by enumerating all matchings and counting crossings: nothing is hardcoded.</p>
+    </div>
+  </div>
+  <div class="diagram">cd lean && lake build     # Lean 4.36.0, no dependencies
+Build completed successfully (4 jobs).   # 12 theorems, all by decide / native_decide</div>
+  <div class="foot">The formalization map (docs/formalization_map.md) records exactly which of the 15 ledger rows each system covers</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>For the author · 16</div>
+  <h1>What Dr. Bagno gains from this workflow</h1>
+  <p class="subtitle">The point is not that a theorem failed; it is how cheap the failure was to find, and how much stronger the corrected statement is</p>
+  <div class="grid3">
+    <div class="card g"><span class="tag">Mathematica: the applied-math workbench</span><p>Exact polynomial algebra, Schur decomposition, q-series, and Manipulate teaching material in one notebook. The whole audit ran in 19 seconds of wolframscript time. For enumeration-heavy combinatorics, this is the fastest path from a definition to a verified computation.</p></div>
+    <div class="card"><span class="tag">The peer-review multiplier</span><p>A census the size of this one (about 40 (n, ell) pairs by n = 7) is infeasible by hand and trivial by computer. Running it before submission converts referee reports into reading appointments.</p></div>
+    <div class="card v"><span class="tag">Lean: the deposit box</span><p>Once the corrected theorem's small cases are in Lean, the statement cannot silently change meaning in a revision, and collaborators can re-verify in one command.</p></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><span class="tag">A concrete offer</span><p>The package, notebook, and Lean project are public and MIT-of-effort reusable: every claim in Dr. Bagno's paper now has an executable checking home. Applying the same six-step loop to the other theorems of the paper (the full Schur-positivity statements) is a natural next collaboration.</p></div>
+    <div class="card v"><span class="tag">The open conjecture</span><p>"Fails exactly when ell &ge; 2 and n - ell &ge; 2" is verified to n = 7. The collapse lemma reduces a proof to comparing A(m, ell, q) with Touchard-Riordan values: a well-posed problem with computational support already in place.</p></div>
+  </div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Reproduce · 17</div>
+  <h1>Everything reruns from the public repo in minutes</h1>
+  <p class="subtitle">github.com/zuwasi/mantiq-touchard-riordan: Mathematica lane, Python lane, Lean lane, teaching notebook</p>
+  <div class="diagram">:: Wolfram lane: full build with suite, audit, figures, reports (about 20 s)
+wolframscript -file mantiq-project\build_project.wls
+
+:: Teaching notebook: open in Mathematica, Evaluate Notebook (3 Manipulates, 29 cells)
+mantiq-project\TouchardRiordanNotebook.nb
+
+:: Python cross-check, n <= 7 (V1-V9 all PASS)
+python prototype\verify3.py 7
+
+:: Lean formal lane (12 theorems)
+cd lean && lake build
+
+Prerequisites: Mathematica 14/15 with wolframscript; Python 3 (stdlib only); Lean 4 via elan (lean-toolchain pins v4.36.0)</div>
+  <div class="note">Expected output: the Wolfram build ends with "build OK: all exports present" after a 7-check suite (all PASS) and a 10-check audit (10 passed, 0 failed, 1 intentional WARN documenting the counterexample). verify3.py prints all nine identity groups PASS.</div>
+</div></section>
+
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Thank you · 18</div>
+  <h1>Mathematica finds it, Python confirms it, Lean keeps it</h1>
+  <p class="subtitle">The MantiQ Factor loop applied to a live research paper: counterexample at (4, 2), corrected theorem with adjacency-free coefficients, collapse lemma, Motzkin-Narayana corollary confirmed, all reproducible from the public repo</p>
+  <div class="brandrow">
+    <div class="brandchip"><span>Wolfram Mathematica 15.0.1</span></div>
+    <div class="brandchip"><span>Python 3 cross-check</span></div>
+    <div class="brandchip"><span>Lean 4.36.0, pure core</span></div>
+  </div>
+  <div class="person-card">
+    <img src="../assets/daniel-liezrowice.jpg" width="140" height="140" alt="Daniel Liezrowice">
+    <div>
+      <strong>Daniel Liezrowice</strong>
+      <span>CTO, ESL - Engineering Software Lab</span>
+      <p>ESL builds verification workflows for engineering mathematics: computer algebra as the workbench, independent cross-checks as the validator, formal proof as the deposit box. This audit is a complete worked example on a published combinatorics paper.</p>
+    </div>
+  </div>
+  <div class="contact">
+    <img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab">
+    <p><a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a> &middot; <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> &middot; Paper: <a href="https://arxiv.org/abs/2606.13149" target="_blank" rel="noopener">arXiv:2606.13149</a> &middot; Repo: <a href="https://github.com/zuwasi/mantiq-touchard-riordan" target="_blank" rel="noopener">github.com/zuwasi/mantiq-touchard-riordan</a></p>
+  </div>
+  <div class="foot">All computations from 18 November 2026 on a Windows 11 workstation: Wolfram 15.0.1, Python 3, Lean 4.36.0. Sources: the exports/ directory of the repo (audit_report.txt, validation_report.md, coefficient_census.csv, A_coefficients_table.csv) and the Lean build log.</div>
+</div></section>
+
+</div>
+</main>
+
+<button class="navbtn hidden" id="prev" type="button" aria-label="Previous slide">&#8249;</button>
+<button class="navbtn" id="next" type="button" aria-label="Next slide">&#8250;</button>
+<div id="progress"></div>
+<div id="counter" aria-live="polite"></div>
+<div id="hint">&#8592; Swipe or use arrow keys &#8594;</div>
+
+<script>
+const track=document.getElementById("track"),slides=[...document.querySelectorAll(".slide")],viewport=document.querySelector(".viewport"),prev=document.getElementById("prev"),next=document.getElementById("next"),counter=document.getElementById("counter"),progress=document.getElementById("progress"),hint=document.getElementById("hint");
+let index=0,touchX=0,touchY=0,touchSkip=false,mouseX=0,dragging=false,mouseSkip=false,suppressClick=false;
+function show(n){const k=Math.max(0,Math.min(slides.length-1,n));if(k!==index){if(slides[index].contains(document.activeElement))document.activeElement.blur();index=k;slides[index].scrollTop=0;viewport.scrollLeft=0}slides.forEach((s,i)=>{s.inert=i!==index;s.setAttribute("aria-hidden",i===index?"false":"true")});track.style.transform=`translate3d(${-index*100}vw,0,0)`;prev.classList.toggle("hidden",index===0);next.classList.toggle("hidden",index===slides.length-1);counter.textContent=`${index+1} / ${slides.length}`;progress.style.width=`${(index+1)/slides.length*100}%`;if(index>0)hint.classList.add("gone");if(location.hash!=="#"+(index+1)){try{history.replaceState(null,"",""+(index+1))}catch(e){}}}
+function fromHash(){const k=parseInt(location.hash.slice(1),10);return isNaN(k)?0:k-1}
+const skip=t=>Boolean(t.closest&&t.closest(".tablewrap"));
+prev.addEventListener("click",()=>show(index-1));next.addEventListener("click",()=>show(index+1));
+window.addEventListener("hashchange",()=>{const k=fromHash();if(k!==index)show(k)});
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();show(index+1)}else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();show(index-1)}else if(e.key==="Home"){e.preventDefault();show(0)}else if(e.key==="End"){e.preventDefault();show(slides.length-1)}});
+document.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchX=t.clientX;touchY=t.clientY;touchSkip=skip(e.target)},{passive:true});
+document.addEventListener("touchend",e=>{if(touchSkip)return;const t=e.changedTouches[0],dx=t.clientX-touchX,dy=t.clientY-touchY;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(index+(dx<0?1:-1))},{passive:true});
+document.addEventListener("mousedown",e=>{if(e.button!==0)return;mouseX=e.clientX;mouseSkip=skip(e.target);dragging=true});
+document.addEventListener("mouseup",e=>{if(!dragging)return;dragging=false;const d=e.clientX-mouseX;if(!mouseSkip&&Math.abs(d)>50){suppressClick=true;setTimeout(()=>{suppressClick=false},0);show(index+(d<0?1:-1))}});
+document.addEventListener("dragstart",e=>e.preventDefault());
+show(fromHash());</script>
+</body>
+</html>
