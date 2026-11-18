@@ -428,8 +428,8 @@ svg{display:block;width:100%;height:auto}
 
 <section class="slide">
   <div class="kicker">Appendix · <b>A</b></div>
-  <h1>And Claude Code itself? <span class="hl">We ran it cold on duckdb</span></h1>
-  <p class="sub">The agentic setup many treat as the yardstick: Claude Code with the open-source Claude-BugHunter bundle (83 hunting skills), zero prior knowledge, filesystem-isolated from this benchmark, no hints of any kind</p>
+  <h1>A calibration check: <span class="hl">Claude Code itself, cold, on duckdb</span></h1>
+  <p class="sub">Many treat Claude Code as the absolute yardstick, so we ran it as a calibration, not a headline: Claude Code with the open-source Claude-BugHunter bundle (83 hunting skills), zero prior knowledge, filesystem-isolated from this benchmark, no hints of any kind</p>
   <div class="row">
     <div class="card"><div class="label">What it did in about one hour</div><ul>
       <li>Built duckdb v0.10.0 with AddressSanitizer and UBSan</li>
@@ -437,7 +437,7 @@ svg{display:block;width:100%;height:auto}
       <li>79 findings, most verified with SQL reproductions</li>
       <li>Ended by its own judgment with a coverage statement</li>
     </ul></div>
-    <div class="card blue"><div class="label">On the 109 known duckdb bugs</div><div class="stat" style="color:var(--accent)">7 of 109</div><p>6.4% on the changed lines, 6 (5.5%) on the exact defect line. Better than the SWE-sweep leaderboard best (3 of 109, 2.8%), but only marginally, and still about ten times below Parasoft's 68.8%</p></div>
+    <div class="card blue"><div class="label">On the 109 known duckdb bugs</div><div class="stat" style="color:var(--accent)">7 of 109</div><p>6.4% on the changed lines, 6 (5.5%) on the exact defect line. Better than the SWE-sweep leaderboard best (3 of 109, 2.8%), but only marginally: Claude Code is not meaningfully better than the benchmark's agents, and both sit about ten times below Parasoft's 68.8%</p></div>
     <div class="card green"><div class="label">The other side of the ledger</div><p>72 of its 79 findings are defects the benchmark never cataloged: parquet decoder corruption, gzip over-read, C API defects, optimizer wrong-result bugs, verified on its own sanitizer build. Genuine novel discovery, at the price of nondeterminism and no qualification path</p></div>
   </div>
   <div class="foot">Cold start: fresh session, no CLAUDE.md, skills installed locally, deny rules blocking this repository. About one hour of engagement versus the agents' 12-hour budget: a data point, not an equal-budget comparison. Evidence: cbh-duckdb/ in the benchmark repository</div>
