@@ -377,6 +377,9 @@ Last updated: 2026-11-18
 • mantiq-solidity
   https://zuwasi.github.io/Public-html-pages/mantiq-solidity
 
+• mantiq-touchard-riordan
+  https://zuwasi.github.io/Public-html-pages/mantiq-touchard-riordan
+
 • mini-swe-sweep
   https://zuwasi.github.io/Public-html-pages/mini-swe-sweep
 
