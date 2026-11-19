@@ -419,6 +419,9 @@ Last updated: 2026-11-19
 • parasoft-esl-intro
   https://zuwasi.github.io/Public-html-pages/parasoft-esl-intro
 
+• parasoft-esl-intro-he
+  https://zuwasi.github.io/Public-html-pages/parasoft-esl-intro-he
+
 • parasoft-ti-armclang-misra-setup
   https://zuwasi.github.io/Public-html-pages/parasoft-ti-armclang-misra-setup
 
