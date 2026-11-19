@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Parasoft לתוכנה קריטית במערכות משובצות, עם ESL</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4eedc; --sheet:#fbf8ee; --sheet2:#ece4cc; --ink:#1d1a16; --muted:#6b6353;
+  --line:#b9ae90; --blue:#12457a; --accent:#1d6bd0; --amber:#8a5e00; --amber-hi:#e8a317;
+  --red:#b8322a; --green:#1e7d33; --code-bg:#f6efdc; --code-cap:#d9d0b8; --top:52px;
+  --pad-x:max(5vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:Heebo,'Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+#track{display:flex;direction:ltr;height:100vh;width:100vw;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.slide{flex:0 0 100vw;height:100vh;padding:calc(var(--top) + 3vh) var(--pad-x) 9vh;overflow:hidden;display:flex;flex-direction:column;text-align:right}
+.kicker{font-size:clamp(11px,1vw,14px);letter-spacing:.22em;color:var(--muted);font-weight:600;margin-bottom:1.2vh}
+.kicker span{color:var(--accent)}
+.kicker .mark{position:relative;display:inline-block;width:14px;height:14px;margin-left:10px;vertical-align:-2px}
+.kicker .mark::before{content:"";position:absolute;left:0;top:0;width:9px;height:9px;background:var(--blue)}
+.kicker .mark::after{content:"";position:absolute;left:5px;top:5px;width:9px;height:9px;background:var(--amber-hi)}
+h1{font-size:clamp(30px,3.8vw,58px);font-weight:800;line-height:1.08;margin-bottom:1.4vh}
+h1 .hl{color:var(--accent)}
+.sub{font-size:clamp(15px,1.5vw,21px);color:var(--muted);max-width:1200px;margin-bottom:2.6vh}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:3px solid var(--blue);
+  padding:clamp(14px,1.6vw,24px);border-radius:6px;flex:1;min-width:240px}
+.card.green{border-top-color:var(--green)} .card.red{border-top-color:var(--red)}
+.card.amber{border-top-color:var(--amber-hi)}
+.card .label{font-size:clamp(10px,.85vw,12px);letter-spacing:.18em;color:var(--muted);font-weight:700;margin-bottom:1.2vh}
+.card ul{list-style:none}
+.card li{font-size:clamp(14px,1.25vw,18px);line-height:1.5;padding:.55em 1.4em .55em 0;position:relative;border-bottom:1px solid var(--line)}
+.card li:last-child{border-bottom:0}
+.card li::before{content:"";position:absolute;right:0;top:1em;width:8px;height:8px;background:var(--amber-hi)}
+.row{display:flex;gap:clamp(10px,1.4vw,22px);flex:1;min-height:0;align-items:flex-start}
+.shot{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden}
+.shot img{max-width:100%;max-height:46vh;border:1px solid var(--line);border-radius:6px;background:#0d141c;box-shadow:0 8px 30px rgba(29,26,22,.18)}
+.shot.light img{background:#fff}
+.stat{font-size:clamp(38px,5.4vw,84px);font-weight:800;color:var(--blue);line-height:1;direction:ltr}
+.stat small{display:block;font-size:clamp(11px,1vw,14px);font-weight:600;color:var(--muted);margin-top:.6em;letter-spacing:.08em;direction:rtl}
+.foot{margin-top:auto;padding-top:1.6vh;font-size:clamp(10px,.9vw,13px);color:var(--muted)}
+.brandrow{display:flex;gap:14px;flex-wrap:wrap;margin:2.4vh 0}
+.brandchip{display:inline-flex;align-items:center;gap:10px;background:var(--sheet);border:1px solid var(--line);
+  border-radius:999px;padding:8px 18px;font-size:clamp(12px,1.05vw,15px);font-weight:600}
+.brandchip img{height:22px}
+.brandchip.dark{background:#16222e;color:#e8eef4;border-color:#16222e}
+.person-card{display:flex;gap:16px;align-items:center;background:var(--sheet);border:1px solid var(--line);
+  border-radius:6px;padding:14px 18px;max-width:560px;margin-top:2.4vh;margin-right:44px}
+.person-card img{width:84px;height:98px;object-fit:cover;border-radius:4px}
+.person-card .who{font-weight:800;font-size:clamp(14px,1.2vw,17px)}
+.person-card .role{color:var(--accent);font-weight:600;font-size:clamp(12px,1vw,14px);margin:.2em 0}
+.person-card .bio{color:var(--muted);font-size:clamp(11px,.95vw,13px);line-height:1.45}
+.person-card a{color:var(--accent);text-decoration:none;font-size:clamp(11px,.95vw,13px)}
+#topbar{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--sheet);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:14px;padding:0 18px;z-index:30}
+#topbar img{height:32px}
+#topbar #brand{font-weight:700;font-size:14px;border-right:1px solid var(--line);padding-right:14px;color:var(--ink)}
+#topbar .tright{margin-inline-start:auto;display:flex;gap:16px;font-size:12.5px}
+#topbar a{color:var(--accent);text-decoration:none}
+#home{font-size:18px;text-decoration:none;color:var(--ink)}
+.navbtn{position:fixed;top:50vh;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
+  background:var(--sheet);border:1px solid var(--line);font-size:24px;color:var(--ink);cursor:pointer;z-index:40;
+  display:flex;align-items:center;justify-content:center;user-select:none}
+#prev{left:10px} #next{right:10px}
+.navbtn.hidden{display:none}
+#progress{position:fixed;bottom:0;left:0;height:5px;width:0;background:linear-gradient(90deg,var(--blue),var(--amber-hi));z-index:40;transition:width .3s}
+#counter{position:fixed;bottom:14px;left:20px;font-size:13px;font-weight:700;color:var(--muted);z-index:40;direction:ltr}
+#hint{position:fixed;bottom:8vh;left:50%;transform:translateX(-50%);font-size:clamp(13px,1.2vw,16px);
+  color:var(--muted);letter-spacing:.06em;animation:pulse 1.6s infinite;z-index:40;white-space:nowrap}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+#hint.gone{animation:none;opacity:0;pointer-events:none}
+.bigcover{justify-content:center}
+.coverstats{display:flex;gap:clamp(20px,4vw,70px);margin-top:3vh;flex-wrap:wrap}
+@media(max-width:800px){
+  .row{flex-direction:column;overflow-y:auto}
+  .shot img{max-height:44vh}
+  .person-card{flex-direction:row;margin-right:0}
+  #topbar #brand{display:none}
+  .coverstats{gap:18px;flex-direction:column}
+  .slide{padding-bottom:18vh}
+  #hint{bottom:5vh}
+}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <a id="home" href="#" onclick="go(0);return false">&#127968;</a>
+  <img src="assets/esl-logo.png" alt="ESL - Engineering Software Lab">
+  <span id="brand">Parasoft לתוכנה קריטית במערכות משובצות</span>
+  <div class="tright">
+    <a href="https://www.eswlab.com/products/parasoft/" target="_blank">Parasoft ב-ESL</a>
+    <a href="https://www.esl-fda.io/case-studies" target="_blank">מקרי בוחן</a>
+    <a href="https://eswlab.com/contact-us/" target="_blank">צור קשר עם ESL</a>
+  </div>
+</div>
+
+<div id="track">
+
+<section class="slide bigcover">
+  <div class="kicker"><span class="mark"></span>ESL &middot; ENGINEERING SOFTWARE LAB &middot; <span>01</span></div>
+  <h1>Parasoft לתוכנה קריטית<br><span class="hl">במערכות משובצות</span></h1>
+  <p class="sub">איכות שאפשר להסמיך. DO-178C &middot; ISO 26262 &middot; IEC 62304 &middot; ביטחון. מה Parasoft עושה לפיתוח משובץ מוסדר, והערך ש-ESL מביאה כמשווקת, משלבת ובונה תוספות מאז 2008.</p>
+  <div class="brandrow">
+    <span class="brandchip dark"><img src="assets/esl-logo.png" alt="ESL">משווקת ומשלבת של Parasoft מאז 2008</span>
+    <span class="brandchip"><strong>Parasoft C/C++test</strong>&nbsp;ניתוח סטטי, בדיקות יחידה, כיסוי</span>
+    <span class="brandchip"><strong>ESL AI LogicLab</strong>&nbsp;FixCreator &middot; CUDA Bridge &middot; SBOMator</span>
+  </div>
+  <div class="coverstats">
+    <div class="stat">100%<small>כללי FDA 510(k) עברו,<br>מקרה Inovytec</small></div>
+    <div class="stat">8 &#8594; 0<small>MISRA Rule 7.5,<br>אפס מאומת</small></div>
+    <div class="stat">471,310<small>שורות C/C++ בתוכנית<br>ההדגמה של Apollo</small></div>
+  </div>
+  <div class="foot">מבוא שיווקי לשותפים &middot; Engineering Software Lab &middot; www.eswlab.com</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>למה זה חשוב &middot; <span>02</span></div>
+  <h1>תוכנה מוסדרת חייבת <span class="hl">להוכיח את עצמה</span></h1>
+  <p class="sub">הרגולטורים דורשים ראיות, וראיות דורשות את הכלים הנכונים.</p>
+  <div class="row">
+    <div class="card"><div class="label">תעופה</div><ul><li><strong>DO-178C</strong> מכתיב את התוכנה המוטסת, עם DO-330 להסמכת כלים</li></ul></div>
+    <div class="card"><div class="label">רכב</div><ul><li><strong>ISO 26262</strong> דורש ניתוחי בטיחות הקשורים לקוד עצמו</li></ul></div>
+    <div class="card"><div class="label">רפואה</div><ul><li><strong>IEC 62304</strong> וכללי FDA מכתיבים את הראיות לתוכנת המכשור</li></ul></div>
+    <div class="card amber"><div class="label">ביטחון</div><ul><li>תוכניות ביטחוניות דורשות את <strong>אותו עומק</strong>, לרוב ברשת מבודדת</li></ul></div>
+  </div>
+  <div class="foot">C ו-C++ משובצים חייבים אימות, לא רק בדיקות.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>ניתוח סטטי ל-C/C++ &middot; <span>03</span></div>
+  <h1>Parasoft C/C++test מוצא <span class="hl">מה שמפתחים מפספסים</span></h1>
+  <p class="sub">תקן התעשייה לאימות C ו-C++ בטיחות-קריטית.</p>
+  <div class="row">
+    <div class="card"><div class="label">תקני קידוד</div>
+      <ul><li>MISRA C 2012 ו-2025</li><li>MISRA C++ 2023</li><li>CERT C ו-CERT C++</li><li>CWE</li></ul></div>
+    <div class="card"><div class="label">Flow Analysis</div>
+      <ul><li>תקלות זיכרון</li><li>בעיות מקביליות</li><li>שגיאות לוגיקה</li><li>פגמים בין-פרוצדורליים עמוקים בבסיסי קוד של מיליוני שורות</li></ul></div>
+  </div>
+  <div class="foot">נמדד בפומבי על מאגרים אמיתיים: 14 פרויקטי C/C++, 488 תקלות אמיתיות, למעלה מ-2.1 מיליון ממצאים נותחו (מדד SWE-sweep של ESL, 2026).</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>בדיקות יחידה וכיסוי קוד &middot; <span>04</span></div>
+  <h1>בדיקות על מארח ועל יעד, <span class="hl">כיסוי עד MC/DC</span></h1>
+  <p class="sub">ניתוח סטטי לבדו אינו מספיק. כל תוצאה הופכת לראית אישור.</p>
+  <div class="row">
+    <div class="card green"><div class="label">בדיקות יחידה</div>
+      <ul><li>בדיקות יחידה אוטומטיות ל-C ול-C++</li><li>ריצה על המארח או על חומרת היעד</li><li>stubs ו-drivers לקוד משובץ</li></ul></div>
+    <div class="card green"><div class="label">כיסוי קוד</div>
+      <ul><li>כיסוי statement, branch ו-MC/DC</li><li>אינסטרומנטציה על היעד, מודול אחר מודול</li><li>דוחות מוכנים למבקר</li></ul></div>
+  </div>
+  <div class="foot">MC/DC הוא רמת הכיסוי הנדרשת לתוכנה הקריטית ביותר.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>הוכחה: מכשור רפואי &middot; <span>05</span></div>
+  <h1>Inovytec Ventway Sparrow: <span class="hl">FDA 510(k) עם C/C++test</span></h1>
+  <p class="sub">ESL הגדירה את Parasoft עם סט כללים הממופה ישירות לדרישות ה-FDA. כל כללי האישור עברו.</p>
+  <div class="shot"><img src="assets/deck-inovytec.png" alt="מקרה בוחן Inovytec Ventway Sparrow: לפני ואחרי ESL, מאה אחוז מכללי האישור של FDA 510(k) עברו"></div>
+  <div class="foot">מקור: מחקר מקרה מפורסם, esl-fda.io/case-studies/inovytec-ventway-sparrow</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>הוכחה: כיסוי תחת פיקוח FDA &middot; <span>06</span></div>
+  <h1>כיסוי הוא המקום שבו הרגולטורים <span class="hl">לוחצים הכי חזק</span></h1>
+  <p class="sub">כיסוי מדורג לפי סיכון: MC/DC למודולים קריטיים, branch לסיכון בינוני, statement לשאר, עם הצדקה לכל פער.</p>
+  <div class="shot"><img src="assets/deck-coverage.png" alt="מקרה בוחן כיסוי קוד FDA: לפני ואחרי ESL, כיסוי MC/DC מדורג לפי סיכון ואינסטרומנטציה על היעד"></div>
+  <div class="foot">מקור: מחקר מקרה מפורסם, esl-fda.io/case-studies/code-coverage-fda-issue. טיעון רגולטורי מתגונן, לא מספר.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>מי עומד מאחורי זה &middot; <span>07</span></div>
+  <h1>ESL: משווקת ומשלבת של Parasoft <span class="hl">בישראל מאז 2008</span></h1>
+  <p class="sub">אנחנו לא פשוט מוכרים רישיונות.</p>
+  <div class="row">
+    <div class="card"><div class="label">פריסה</div><ul><li>פריסה וסטי כללים מותאמים לכל תקן</li></ul></div>
+    <div class="card"><div class="label">אוטומציה</div><ul><li>אוטומציה של CI ושל צינורות בדיקה, מקומי או ברשת מבודדת</li></ul></div>
+    <div class="card"><div class="label">תמיכה</div><ul><li>הדרכה ותמיכה מקומית לטווח ארוך בישראל</li></ul></div>
+    <div class="card green"><div class="label">הוכחה</div><ul><li>ראיות הנדסיות מפורסמות, בפומבי</li></ul></div>
+  </div>
+  <div class="foot">Engineering Software Lab (ESL), ישראל. שותפת Parasoft מאז 2008.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>תוכנית מפורסמת &middot; <span>08</span></div>
+  <h1>MISRA C:2025 Rule 7.5 <span class="hl">תוכנית האפס</span></h1>
+  <p class="sub">Sourcegraph מוצא, Parasoft מכריע. סריקת האימות היא ראיית המקור.</p>
+  <div class="shot light"><img src="assets/scene08.png" alt="תוכנית האפס של Rule 7.5: בסיס 8 ממצאים, אפס מאומת"></div>
+  <div class="foot">מקור: דוחות Parasoft C/C++test, פורסם ב-zuwasi.github.io/Public-html-pages/misra-rule-7-5-zero-program</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>היקף: רכב &middot; <span>09</span></div>
+  <h1>Apollo: ניתוח MISRA מקבילי, <span class="hl">שיפור מאומת</span></h1>
+  <p class="sub">פלטפורמת הנהיגה האוטונומית של Baidu: 471,310 שורות C ו-C++, שישה pull requests, שישה שרתי Parasoft, שרת DTP אחד.</p>
+  <div class="shot"><img src="assets/scene09.png" alt="תוכנית ההדגמה של Apollo: מלאי 471,310 שורות מקור C ו-C++"></div>
+  <div class="foot">תוכנית הדגמה מפורסמת: יעדים מוצעים, לא תוצאות שנמדדו. zuwasi.github.io/Public-html-pages/apollo-misra-demo</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>תוספת ESL: ביטחון &middot; <span>10</span></div>
+  <h1>FixCreator: תיקונים ברשת מבודדת <span class="hl">לרשתות מסווגות</span></h1>
+  <p class="sub">מודל שפה מקומי מציע תיקונים בטוחים של שורה אחת לממצאי ניתוח סטטי. בלי אינטרנט, בלי ענן, שום נתון לא יוצא מההיקף.</p>
+  <div class="shot"><img src="assets/deck-fixcreator.png" alt="זרימת העבודה של ESL FixCreator: סריקה, סקירה, הצעת תיקונים עם מודל שפה מקומי, אימות עם Parasoft"></div>
+  <div class="foot">מגיע עם ערכת הסמכה DO-178C / DO-330. מקור: eswlab.com/products/esl-ailogiclabs/fixcreator</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>תוספת ESL: קוד GPU &middot; <span>11</span></div>
+  <h1>Parasoft CUDA Bridge: <span class="hl">נבנה על ידי ESL</span></h1>
+  <p class="sub">מביא קוד NVIDIA CUDA אל זרימת העבודה של C/C++test: 36 כללי הנחיה של CUDA, מיפוי ממצאים בחזרה לקבצי ה-.cu המקוריים, וכיסוי בדיקות יחידה בצד המארח.</p>
+  <div class="shot light"><img src="assets/scene11.png" alt="ESL Parasoft CUDA Bridge: לכידה אמיתית של Visual Studio 2026 עם ממצאי Flow Analysis על vectorAdd"></div>
+  <div class="foot">לכידה אמיתית של Visual Studio 2026. kernels בצד ההתקן מופעלים דרך קריאות מארח, לא באינסטרומנטציה. zuwasi.github.io/Public-html-pages/parasoft-cuda-bridge</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>החבילה &middot; <span>12</span></div>
+  <h1>פלטפורמה אחת. שותף אחד. <span class="hl">שרשרת ראיות אחת.</span></h1>
+  <p class="sub">מה אתה מביא ללקוחות שלך כשאתה מחבר אותם עם ESL.</p>
+  <div class="row">
+    <div class="card"><div class="label">פלטפורמה</div><ul><li>Parasoft: הפלטפורמה שהרגולטורים מכירים</li></ul></div>
+    <div class="card"><div class="label">שותף</div><ul><li>ESL: פריסה, התאמה ותמיכה מאז 2008, ברפואה, ברכב, בתעופה ובביטחון</li></ul></div>
+    <div class="card green"><div class="label">תוספות</div><ul><li>הכלים של ESL עצמה: FixCreator, CUDA Bridge, SBOMator</li></ul></div>
+    <div class="card green"><div class="label">ראיות</div><ul><li>חבילות ראיות ששורדות ביקורת רגולטורית</li></ul></div>
+  </div>
+  <div class="foot">סל ESL AI LogicLab: eswlab.com/products/esl-ailogiclabs/</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>תודה רבה &middot; <span>13</span></div>
+  <h1>חבילה אחת לתוכנה<br><span class="hl">קריטית משובצת.</span></h1>
+  <p class="sub">Parasoft ו-ESL. העמק פנימה, או הבא את אתגר ההסמכה של הלקוח שלך.</p>
+  <div class="stat" style="color:var(--accent)">www.eswlab.com<small>sales@eswlab.com</small></div>
+  <div class="person-card">
+    <img src="assets/esl-logo.png" alt="ESL" style="object-fit:contain;background:#fff">
+    <div>
+      <div class="who">Engineering Software Lab (ESL)</div>
+      <div class="role">משווקת ומשלבת של Parasoft בישראל מאז 2008</div>
+      <div class="bio">ייעוץ תוכנה משובץ: ניתוח סטטי, התאמה ל-MISRA ול-CERT, בדיקות יחידה וכיסוי על היעד, SBOMs, וסל התוספות ESL AI LogicLab.</div>
+      <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">דניאל לייזרוביץ', CTO, בלינקדאין</a>
+    </div>
+  </div>
+  <div class="foot">תודה שצפיתם. חומר שיווקי, מוצג מקומית.</div>
+</section>
+
+</div>
+
+<button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+<button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+<div id="progress"></div>
+<div id="counter">1 / 13</div>
+<div id="hint">&#8592; החלק לניווט &#8594;</div>
+
+<script>
+const total = document.querySelectorAll('.slide').length;
+const track = document.getElementById('track');
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+const hint = document.getElementById('hint');
+let idx = 0, moved = false;
+
+function go(n){
+  idx = Math.max(0, Math.min(total - 1, n));
+  track.style.transform = 'translateX(' + (-idx * 100) + 'vw)';
+  counter.textContent = (idx + 1) + ' / ' + total;
+  progress.style.width = ((idx + 1) / total * 100) + '%';
+  prev.classList.toggle('hidden', idx === 0);
+  next.classList.toggle('hidden', idx === total - 1);
+  if (!moved && idx > 0){ moved = true; hint.classList.add('gone'); }
+  if (idx === 0 && moved){ hint.classList.remove('gone'); }
+}
+prev.onclick = () => go(idx - 1);
+next.onclick = () => go(idx + 1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === ' ') { e.preventDefault(); go(idx + 1); }
+  if (e.key === 'ArrowRight') go(idx - 1);
+});
+let tx0 = null, mx0 = null;
+document.addEventListener('touchstart', e => tx0 = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  if (tx0 === null) return;
+  const dx = e.changedTouches[0].clientX - tx0;
+  if (Math.abs(dx) > 50) go(idx + (dx > 0 ? 1 : -1));
+  tx0 = null;
+});
+document.addEventListener('mousedown', e => mx0 = e.clientX);
+document.addEventListener('mouseup', e => {
+  if (mx0 === null) return;
+  const dx = e.clientX - mx0;
+  if (Math.abs(dx) > 50) go(idx + (dx > 0 ? 1 : -1));
+  mx0 = null;
+});
+go(0);
+</script>
+</body>
+</html>
