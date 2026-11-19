@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Parasoft for Embedded Critical Software, with ESL</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4eedc; --sheet:#fbf8ee; --sheet2:#ece4cc; --ink:#1d1a16; --muted:#6b6353;
+  --line:#b9ae90; --blue:#12457a; --accent:#1d6bd0; --amber:#8a5e00; --amber-hi:#e8a317;
+  --red:#b8322a; --green:#1e7d33; --code-bg:#f6efdc; --code-cap:#d9d0b8; --top:52px;
+  --pad-x:max(5vw,80px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--ink);
+  font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;-webkit-font-smoothing:antialiased}
+#track{display:flex;height:100vh;width:100vw;transition:transform .45s cubic-bezier(.4,0,.2,1)}
+.slide{flex:0 0 100vw;height:100vh;padding:calc(var(--top) + 3vh) var(--pad-x) 9vh;overflow:hidden;display:flex;flex-direction:column}
+.kicker{font-size:clamp(11px,1vw,14px);letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:1.2vh}
+.kicker span{color:var(--accent)}
+.kicker .mark{position:relative;display:inline-block;width:14px;height:14px;margin-right:10px;vertical-align:-2px}
+.kicker .mark::before{content:"";position:absolute;left:0;top:0;width:9px;height:9px;background:var(--blue)}
+.kicker .mark::after{content:"";position:absolute;left:5px;top:5px;width:9px;height:9px;background:var(--amber-hi)}
+h1{font-size:clamp(30px,3.8vw,58px);font-weight:800;line-height:1.08;letter-spacing:-.02em;margin-bottom:1.4vh}
+h1 .hl{color:var(--accent)}
+.sub{font-size:clamp(15px,1.5vw,21px);color:var(--muted);max-width:1200px;margin-bottom:2.6vh}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:3px solid var(--blue);
+  padding:clamp(14px,1.6vw,24px);border-radius:6px;flex:1;min-width:240px}
+.card.green{border-top-color:var(--green)} .card.red{border-top-color:var(--red)}
+.card.amber{border-top-color:var(--amber-hi)}
+.card .label{font-size:clamp(10px,.85vw,12px);letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:1.2vh}
+.card ul{list-style:none}
+.card li{font-size:clamp(14px,1.25vw,18px);line-height:1.5;padding:.55em 0 .55em 1.4em;position:relative;border-bottom:1px solid var(--line)}
+.card li:last-child{border-bottom:0}
+.card li::before{content:"";position:absolute;left:0;top:1em;width:8px;height:8px;background:var(--amber-hi)}
+.row{display:flex;gap:clamp(10px,1.4vw,22px);flex:1;min-height:0;align-items:flex-start}
+.shot{flex:1;display:flex;align-items:center;justify-content:center;min-height:0;overflow:hidden}
+.shot img{max-width:100%;max-height:46vh;border:1px solid var(--line);border-radius:6px;background:#0d141c;box-shadow:0 8px 30px rgba(29,26,22,.18)}
+.shot.light img{background:#fff}
+.stat{font-size:clamp(38px,5.4vw,84px);font-weight:800;color:var(--blue);line-height:1}
+.stat small{display:block;font-size:clamp(11px,1vw,14px);font-weight:600;color:var(--muted);margin-top:.6em;letter-spacing:.08em;text-transform:uppercase}
+.foot{margin-top:auto;padding-top:1.6vh;font-size:clamp(10px,.9vw,13px);color:var(--muted)}
+.brandrow{display:flex;gap:14px;flex-wrap:wrap;margin:2.4vh 0}
+.brandchip{display:inline-flex;align-items:center;gap:10px;background:var(--sheet);border:1px solid var(--line);
+  border-radius:999px;padding:8px 18px;font-size:clamp(12px,1.05vw,15px);font-weight:600}
+.brandchip img{height:22px}
+.brandchip.dark{background:#16222e;color:#e8eef4;border-color:#16222e}
+.person-card{display:flex;gap:16px;align-items:center;background:var(--sheet);border:1px solid var(--line);
+  border-radius:6px;padding:14px 18px;max-width:560px;margin-top:2.4vh;margin-left:44px}
+.person-card img{width:84px;height:98px;object-fit:cover;border-radius:4px}
+.person-card .who{font-weight:800;font-size:clamp(14px,1.2vw,17px)}
+.person-card .role{color:var(--accent);font-weight:600;font-size:clamp(12px,1vw,14px);margin:.2em 0}
+.person-card .bio{color:var(--muted);font-size:clamp(11px,.95vw,13px);line-height:1.45}
+.person-card a{color:var(--accent);text-decoration:none;font-size:clamp(11px,.95vw,13px)}
+#topbar{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--sheet);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:14px;padding:0 18px;z-index:30}
+#topbar img{height:32px}
+#topbar #brand{font-weight:700;font-size:14px;border-left:1px solid var(--line);padding-left:14px;color:var(--ink)}
+#topbar .tright{margin-left:auto;display:flex;gap:16px;font-size:12.5px}
+#topbar a{color:var(--accent);text-decoration:none}
+#home{font-size:18px;text-decoration:none;color:var(--ink)}
+.navbtn{position:fixed;top:50vh;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
+  background:var(--sheet);border:1px solid var(--line);font-size:24px;color:var(--ink);cursor:pointer;z-index:40;
+  display:flex;align-items:center;justify-content:center;user-select:none}
+#prev{left:10px} #next{right:10px}
+.navbtn.hidden{display:none}
+#progress{position:fixed;bottom:0;left:0;height:5px;width:0;background:linear-gradient(90deg,var(--blue),var(--amber-hi));z-index:40;transition:width .3s}
+#counter{position:fixed;bottom:14px;right:20px;font-size:13px;font-weight:700;color:var(--muted);z-index:40}
+#hint{position:fixed;bottom:8vh;left:50%;transform:translateX(-50%);font-size:clamp(13px,1.2vw,16px);
+  color:var(--muted);letter-spacing:.06em;animation:pulse 1.6s infinite;z-index:40;white-space:nowrap}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+#hint.gone{animation:none;opacity:0;pointer-events:none}
+.bigcover{justify-content:center}
+.coverstats{display:flex;gap:clamp(20px,4vw,70px);margin-top:3vh;flex-wrap:wrap}
+@media(max-width:800px){
+  .row{flex-direction:column;overflow-y:auto}
+  .shot img{max-height:44vh}
+  .person-card{flex-direction:row;margin-left:0}
+  #topbar #brand{display:none}
+  .coverstats{gap:18px;flex-direction:column}
+  .slide{padding-bottom:18vh}
+  #hint{bottom:5vh}
+}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <a id="home" href="#" onclick="go(0);return false">&#127968;</a>
+  <img src="assets/esl-logo.png" alt="ESL - Engineering Software Lab">
+  <span id="brand">Parasoft for Embedded Critical Software</span>
+  <div class="tright">
+    <a href="https://www.eswlab.com/products/parasoft/" target="_blank">Parasoft at ESL</a>
+    <a href="https://www.esl-fda.io/case-studies" target="_blank">Case studies</a>
+    <a href="https://eswlab.com/contact-us/" target="_blank">Contact ESL</a>
+  </div>
+</div>
+
+<div id="track">
+
+<section class="slide bigcover">
+  <div class="kicker"><span class="mark"></span>ESL &middot; ENGINEERING SOFTWARE LAB &middot; <span>01</span></div>
+  <h1>Parasoft for Embedded<br><span class="hl">Critical Software</span></h1>
+  <p class="sub">Quality you can certify. DO-178C &middot; ISO 26262 &middot; IEC 62304 &middot; Defence. What Parasoft does for regulated embedded development, and the value ESL brings as reseller, integrator and add-on builder since 2008.</p>
+  <div class="brandrow">
+    <span class="brandchip dark"><img src="assets/esl-logo.png" alt="ESL">Reseller and system integrator since 2008</span>
+    <span class="brandchip"><strong>Parasoft C/C++test</strong>&nbsp;static analysis, unit testing, coverage</span>
+    <span class="brandchip"><strong>ESL AI LogicLab</strong>&nbsp;FixCreator &middot; CUDA Bridge &middot; SBOMator</span>
+  </div>
+  <div class="coverstats">
+    <div class="stat">100%<small>FDA 510(k) rules passed,<br>Inovytec case study</small></div>
+    <div class="stat">8 &#8594; 0<small>MISRA Rule 7.5,<br>certified zero</small></div>
+    <div class="stat">471,310<small>lines of C/C++ analysed<br>in the Apollo demo plan</small></div>
+  </div>
+  <div class="foot">Marketing introduction for partners &middot; Engineering Software Lab &middot; www.eswlab.com</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>WHY IT MATTERS &middot; <span>02</span></div>
+  <h1>Regulated software must <span class="hl">prove itself</span></h1>
+  <p class="sub">Regulators demand evidence, and evidence needs the right tools.</p>
+  <div class="row">
+    <div class="card"><div class="label">Aerospace</div><ul><li><strong>DO-178C</strong> governs airborne software, with DO-330 for tool qualification</li></ul></div>
+    <div class="card"><div class="label">Automotive</div><ul><li><strong>ISO 26262</strong> demands safety analyses tied to the code itself</li></ul></div>
+    <div class="card"><div class="label">Medical</div><ul><li><strong>IEC 62304</strong> and FDA rules govern device software evidence</li></ul></div>
+    <div class="card amber"><div class="label">Defence</div><ul><li>Programmes demand assurance at the <strong>same depth</strong>, often air-gapped</li></ul></div>
+  </div>
+  <div class="foot">Embedded C and C++ must be verified, not just tested.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>STATIC ANALYSIS FOR C/C++ &middot; <span>03</span></div>
+  <h1>Parasoft C/C++test finds <span class="hl">what compilers forgive</span></h1>
+  <p class="sub">The industry standard for safety-critical C and C++ verification.</p>
+  <div class="row">
+    <div class="card"><div class="label">Coding standards</div>
+      <ul><li>MISRA C 2012 and 2025</li><li>MISRA C++ 2023</li><li>CERT C and CERT C++</li><li>CWE</li></ul></div>
+    <div class="card"><div class="label">Flow Analysis</div>
+      <ul><li>Memory faults</li><li>Concurrency problems</li><li>Logic errors</li><li>Deep interprocedural defects across code bases with millions of lines</li></ul></div>
+  </div>
+  <div class="foot">Measured publicly on real repositories: 14 C/C++ projects, 488 real bugs, over 2.1 million findings analysed (ESL SWE-sweep benchmark, 2026).</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>UNIT TESTING AND CODE COVERAGE &middot; <span>04</span></div>
+  <h1>Tests on host and on target, <span class="hl">coverage up to MC/DC</span></h1>
+  <p class="sub">Static analysis alone is not enough. Every result becomes certification evidence.</p>
+  <div class="row">
+    <div class="card green"><div class="label">Unit testing</div>
+      <ul><li>Auto-generated unit tests for C and C++</li><li>Run on the host or on the target hardware</li><li>Stubs and drivers for embedded code</li></ul></div>
+    <div class="card green"><div class="label">Code coverage</div>
+      <ul><li>Statement, branch and MC/DC coverage</li><li>On-target instrumentation, module by module</li><li>Reports ready for an auditor</li></ul></div>
+  </div>
+  <div class="foot">MC/DC is the coverage level demanded for the most critical software.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>PROOF: MEDICAL DEVICE &middot; <span>05</span></div>
+  <h1>Inovytec Ventway Sparrow: <span class="hl">FDA 510(k) with C/C++test</span></h1>
+  <p class="sub">ESL configured Parasoft with a rule set mapped directly to FDA requirements. Every certification rule passed.</p>
+  <div class="shot"><img src="assets/deck-inovytec.png" alt="Inovytec Ventway Sparrow case study: before and after ESL, 100% of FDA 510(k) certification rules passed"></div>
+  <div class="foot">Source: published case study, esl-fda.io/case-studies/inovytec-ventway-sparrow</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>PROOF: COVERAGE UNDER FDA SCRUTINY &middot; <span>06</span></div>
+  <h1>Coverage is where regulators <span class="hl">push hardest</span></h1>
+  <p class="sub">Risk-tiered coverage: MC/DC for safety-critical modules, branch for moderate risk, statement for the rest, with every gap justified.</p>
+  <div class="shot"><img src="assets/deck-coverage.png" alt="Code coverage FDA case study: before and after ESL, risk-tiered MC/DC coverage and on-target instrumentation"></div>
+  <div class="foot">Source: published case study, esl-fda.io/case-studies/code-coverage-fda-issue. A defensible regulatory argument, not a number.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>WHO STANDS BEHIND IT &middot; <span>07</span></div>
+  <h1>ESL: Parasoft reseller and <span class="hl">system integrator since 2008</span></h1>
+  <p class="sub">We do not simply sell licences.</p>
+  <div class="row">
+    <div class="card"><div class="label">Deploy</div><ul><li>Deployment and custom rule sets for each standard</li></ul></div>
+    <div class="card"><div class="label">Automate</div><ul><li>CI and pipeline automation, on-prem or air-gapped</li></ul></div>
+    <div class="card"><div class="label">Support</div><ul><li>Training and long-term local support in Israel</li></ul></div>
+    <div class="card green"><div class="label">Prove</div><ul><li>Published engineering evidence, in public</li></ul></div>
+  </div>
+  <div class="foot">Engineering Software Lab (ESL), Israel. Parasoft partner since 2008.</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>PUBLISHED PROGRAMME &middot; <span>08</span></div>
+  <h1>MISRA C:2025 Rule 7.5 <span class="hl">Zero Programme</span></h1>
+  <p class="sub">Sourcegraph finds, Parasoft decides. The verification scan is the evidence of record.</p>
+  <div class="shot light"><img src="assets/scene08.png" alt="Rule 7.5 zero programme: baseline 8 findings, verified 0 findings"></div>
+  <div class="foot">Source: Parasoft C/C++test reports, published at zuwasi.github.io/Public-html-pages/misra-rule-7-5-zero-program</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>SCALE: AUTOMOTIVE &middot; <span>09</span></div>
+  <h1>Apollo: parallel MISRA analysis, <span class="hl">verified improvement</span></h1>
+  <p class="sub">Baidu's open-source autonomous driving platform: 471,310 lines of C and C++, six pull requests, six Parasoft servers, one DTP.</p>
+  <div class="shot"><img src="assets/scene09.png" alt="Apollo demonstration plan: 471,310 lines of C and C++ source inventory"></div>
+  <div class="foot">Published demonstration plan: proposed targets, not measured results. zuwasi.github.io/Public-html-pages/apollo-misra-demo</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>ESL ADD-ON: DEFENCE &middot; <span>10</span></div>
+  <h1>FixCreator: air-gapped fixes for <span class="hl">classified networks</span></h1>
+  <p class="sub">A local language model proposes safe, single-line fixes for static analysis violations. No internet, no cloud, no data leaves the perimeter.</p>
+  <div class="shot"><img src="assets/deck-fixcreator.png" alt="ESL FixCreator workflow: scan, review, generate fixes with local LLM, verify with Parasoft"></div>
+  <div class="foot">Ships with a DO-178C / DO-330 qualification kit. Source: eswlab.com/products/esl-ailogiclabs/fixcreator</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>ESL ADD-ON: GPU CODE &middot; <span>11</span></div>
+  <h1>Parasoft CUDA Bridge: <span class="hl">built by ESL</span></h1>
+  <p class="sub">Brings NVIDIA CUDA source into the C/C++test workflow: 36 CUDA guideline rules, findings mapped back to the original .cu files, host-side unit test coverage.</p>
+  <div class="shot light"><img src="assets/scene11.png" alt="ESL Parasoft CUDA Bridge: genuine Visual Studio 2026 capture of Flow Analysis findings on vectorAdd"></div>
+  <div class="foot">Genuine Visual Studio 2026 capture. Device kernels are exercised through host calls, not instrumented. zuwasi.github.io/Public-html-pages/parasoft-cuda-bridge</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE PACKAGE &middot; <span>12</span></div>
+  <h1>One platform. One partner. <span class="hl">One evidence trail.</span></h1>
+  <p class="sub">What you bring your clients when you connect them with ESL.</p>
+  <div class="row">
+    <div class="card"><div class="label">Platform</div><ul><li>Parasoft: the platform regulators recognise</li></ul></div>
+    <div class="card"><div class="label">Partner</div><ul><li>ESL: deployment, customisation and support since 2008, across medical, automotive, aerospace and defence</li></ul></div>
+    <div class="card green"><div class="label">Add-ons</div><ul><li>ESL's own tools: FixCreator, CUDA Bridge, SBOMator</li></ul></div>
+    <div class="card green"><div class="label">Evidence</div><ul><li>Evidence packages that survive regulator review</li></ul></div>
+  </div>
+  <div class="foot">ESL AI LogicLab portfolio: eswlab.com/products/esl-ailogiclabs/</div>
+</section>
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THANK YOU &middot; <span>13</span></div>
+  <h1>One package for<br><span class="hl">critical embedded software.</span></h1>
+  <p class="sub">Parasoft and ESL. Learn more, or bring us your client's compliance challenge.</p>
+  <div class="stat" style="color:var(--accent)">www.eswlab.com<small>sales@eswlab.com</small></div>
+  <div class="person-card">
+    <img src="assets/esl-logo.png" alt="ESL" style="object-fit:contain;background:#fff">
+    <div>
+      <div class="who">Engineering Software Lab (ESL)</div>
+      <div class="role">Parasoft reseller and system integrator in Israel since 2008</div>
+      <div class="bio">Embedded software consultancy: static analysis, MISRA and CERT compliance, on-target unit testing and coverage, SBOMs, and the ESL AI LogicLab add-on portfolio.</div>
+      <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">Daniel Liezrowice, CTO, on LinkedIn</a>
+    </div>
+  </div>
+  <div class="foot">Thank you for watching. Local marketing material, not published.</div>
+</section>
+
+</div>
+
+<button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+<button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+<div id="progress"></div>
+<div id="counter">1 / 13</div>
+<div id="hint">&#8592; Swipe to navigate &#8594;</div>
+
+<script>
+const total = document.querySelectorAll('.slide').length;
+const track = document.getElementById('track');
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+const hint = document.getElementById('hint');
+let idx = 0, moved = false;
+
+function go(n){
+  idx = Math.max(0, Math.min(total - 1, n));
+  track.style.transform = 'translateX(' + (-idx * 100) + 'vw)';
+  counter.textContent = (idx + 1) + ' / ' + total;
+  progress.style.width = ((idx + 1) / total * 100) + '%';
+  prev.classList.toggle('hidden', idx === 0);
+  next.classList.toggle('hidden', idx === total - 1);
+  if (!moved && idx > 0){ moved = true; hint.classList.add('gone'); }
+  if (idx === 0 && moved){ hint.classList.remove('gone'); }
+}
+prev.onclick = () => go(idx - 1);
+next.onclick = () => go(idx + 1);
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(idx + 1); }
+  if (e.key === 'ArrowLeft') go(idx - 1);
+});
+let tx0 = null, mx0 = null;
+document.addEventListener('touchstart', e => tx0 = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  if (tx0 === null) return;
+  const dx = e.changedTouches[0].clientX - tx0;
+  if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+  tx0 = null;
+});
+document.addEventListener('mousedown', e => mx0 = e.clientX);
+document.addEventListener('mouseup', e => {
+  if (mx0 === null) return;
+  const dx = e.clientX - mx0;
+  if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+  mx0 = null;
+});
+go(0);
+</script>
+</body>
+</html>
