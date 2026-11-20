@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ESL: Fil-C vs MISRA C/C++ on 78 real bugs, the verdict</title>
+<meta name="description" content="ESL case file 02: the same 78 real-world C/C++ bugs from the SWE-sweep dataset, five real repositories. gcc passes its own QA, Fil-C 0.687 catches zero, Parasoft C/C++test with MISRA C 2025 / MISRA C++ 2023 and CERT catches 67% with no execution at all. Full methodology, public and reproducible.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;
+  --stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;
+  --type:"Special Elite","Courier New",Courier,monospace;
+  --body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:#d9d0b8;color:var(--ink);font-family:var(--body)}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%)}
+.deck{display:flex;height:100vh;height:100dvh;width:100vw;transition:transform .6s cubic-bezier(.2,.7,.3,1);will-change:transform}
+.slide{flex:0 0 100vw;height:100vh;height:100dvh;padding:clamp(14px,3vh,40px) clamp(16px,4.5vw,80px) clamp(56px,9vh,90px);position:relative;display:flex;justify-content:center;align-items:stretch;overflow:hidden}
+.page{position:relative;width:100%;max-width:1500px;background:var(--paper);border:1px solid #c8bc9c;box-shadow:0 2px 0 #cfc4a4,0 18px 40px rgba(60,45,20,.35);padding:clamp(16px,3vh,40px) clamp(18px,3.2vw,56px);display:flex;flex-direction:column;gap:clamp(12px,2.4vh,30px);overflow-y:auto;overflow-x:hidden;scrollbar-width:thin}
+.page.centered{justify-content:center}
+.page>.two,.page>.kpis,.page>.tw,.page>.notes,.page>.bars,.page>.chart{flex:0 0 auto}
+.page>.tw{display:flex;flex-direction:column}
+.page>.tw table.form{flex:0 0 auto}
+.page>.notes{justify-content:space-evenly}
+.page>.bars{align-content:space-evenly}
+.notes{justify-content:space-evenly}
+.kpi{display:flex;flex-direction:column;justify-content:center}
+.page::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 12px 50%,rgba(0,0,0,.08) 0 5px,transparent 6px),linear-gradient(90deg,rgba(0,0,0,.06),transparent 40px);background-size:100% 120px,100% 100%;opacity:.7}
+.page>*{position:relative;z-index:1}
+.filehead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:9px;font-family:var(--type);font-size:clamp(11px,1.05vw,14px);letter-spacing:.05em;text-transform:uppercase;color:var(--ink2)}
+.filehead>span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.filehead b{color:var(--ink)}
+h1,h2,h3{font-family:var(--type);font-weight:400;letter-spacing:-.01em;line-height:1.1}
+h1{font-size:clamp(26px,4.4vw,58px)}
+h2{font-size:clamp(23px,3.3vw,50px)}
+h2 a{color:var(--blue);text-decoration:none;border-bottom:2px solid var(--blue)}
+h2 a:hover{background:var(--blue);color:var(--paper)}
+h3{font-size:clamp(15px,1.5vw,20px);margin-bottom:6px}
+.sub{font-size:clamp(15px,1.6vw,21px);color:var(--ink2);max-width:88ch;line-height:1.55}
+p.t{font-size:clamp(12.5px,1.2vw,15px);line-height:1.5;color:var(--ink2)}
+.stamp{display:inline-block;font-family:var(--type);text-transform:uppercase;color:var(--stamp);border:3px double var(--stamp);border-radius:6px;padding:4px 12px;letter-spacing:.12em;font-size:clamp(11px,1.1vw,15px);transform:rotate(-3deg);mix-blend-mode:multiply;opacity:.9}
+.stamp.big{font-size:clamp(13px,1.7vw,22px);padding:7px 16px}
+.stamp.blue{color:var(--blue);border-color:var(--blue)}.stamp.ok{color:var(--ok);border-color:var(--ok)}.stamp.warn{color:var(--warn);border-color:var(--warn)}
+.stamps{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.notes{display:flex;flex-direction:column;gap:9px}
+.note{display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:start;padding:9px 12px;border-left:3px solid var(--ink);background:rgba(255,255,255,.4);opacity:0;transform:translateY(10px);transition:opacity .45s,transform .45s}
+.active .note{opacity:1;transform:none}
+.note .k{width:26px;height:26px;border-radius:50%;background:var(--stamp);color:#fff;display:grid;place-items:center;font-family:var(--type);font-size:13px;font-style:normal}
+.note.blue .k{background:var(--blue)}.note.ok .k{background:var(--ok)}.note.warn .k{background:var(--warn)}
+.note.blue{border-color:var(--blue)}.note.ok{border-color:var(--ok)}.note.warn{border-color:var(--warn)}
+.note b{display:block;font-size:clamp(14px,1.4vw,18px);font-weight:600}
+.note span{font-size:clamp(13px,1.2vw,16px);color:var(--ink2);line-height:1.5}
+code{font-family:var(--mono);font-size:.92em;background:rgba(0,0,0,.06);padding:0 4px}
+.code{background:#1e1e1e;border-radius:6px;box-shadow:0 10px 24px rgba(30,20,10,.35);overflow:hidden;min-width:0;border:1px solid #111}
+.code .bar{display:flex;align-items:center;gap:7px;background:#2d2d2d;padding:6px 10px;font-family:var(--mono);font-size:11.5px;color:#cfcfcf;border-bottom:1px solid #111}
+.code .bar i{width:10px;height:10px;border-radius:50%;background:#ff5f56;display:inline-block}
+.code .bar i:nth-child(2){background:#ffbd2e}.code .bar i:nth-child(3){background:#27c93f}
+.code .bar span{margin-left:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.code pre{font-variant-ligatures:none;margin:0;padding:12px 16px;font-family:var(--mono);font-size:clamp(12px,1.1vw,15px);line-height:1.6;color:#d4d4d4;overflow:auto;max-height:none;tab-size:4}
+.code .out{border-top:1px solid #111;background:#252526;padding:10px 16px;font-family:var(--mono);font-size:clamp(11.5px,1.05vw,14px);line-height:1.75;color:#d4d4d4}
+.out-ok{color:#89d185}.out-panic{color:#f48771}.out-dim{color:#9cdcfe}
+.code pre .hl{background:rgba(244,135,113,.22);display:block}
+.tw{overflow-x:auto;max-width:100%}
+table.form{width:100%;border-collapse:collapse;font-size:clamp(12.5px,1.25vw,16.5px);background:#fbf8ee;border:1px solid var(--ink)}
+table.form th,table.form td{padding:clamp(9px,1.4vh,14px) 12px;border:1px solid var(--rule);text-align:left;vertical-align:middle;line-height:1.45}
+table.form th{font-family:var(--type);font-weight:400;letter-spacing:.05em;text-transform:uppercase;font-size:.85em;background:var(--paper2)}
+table.form td.v,table.form td code{font-family:var(--mono)}
+table.form td.hl{background:#f3e3b8;font-weight:600}
+td.silent{color:var(--stamp);font-weight:600}td.caught{color:var(--ok);font-weight:600}td.runtime{color:var(--warn);font-weight:600}
+.list{display:grid;gap:12px;font-size:clamp(14px,1.5vw,19px);line-height:1.55}
+.list div{display:grid;grid-template-columns:22px 1fr;gap:8px}
+.list div::before{content:"\00a7";font-family:var(--type);color:var(--stamp)}
+.brand{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand img{height:clamp(44px,7vh,72px);width:auto;border:1px solid var(--rule);padding:3px;background:#fff}
+.brand .who{font-family:var(--type);font-size:clamp(11px,1.15vw,15px);color:var(--ink2);line-height:1.4}
+.footnote{font-size:clamp(12px,1.15vw,15px);color:var(--ink2);line-height:1.5}
+.footnote a,.page a{color:var(--blue)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.kpi{border:2px solid var(--ink);background:#fbf8ee;padding:clamp(14px,2vh,24px) clamp(16px,1.8vw,26px);position:relative}
+.kpi b{display:block;font-family:var(--type);font-weight:400;font-size:clamp(40px,5.5vw,84px);line-height:1}
+.kpi span{display:block;font-size:clamp(15px,1.5vw,20px);color:var(--ink2);margin-top:12px;line-height:1.5}
+.kpi span b{display:inline;font-family:var(--body);font-weight:700;font-size:inherit;color:var(--ink)}
+.kpi.ok b{color:var(--ok)}.kpi.red b{color:var(--stamp)}.kpi.blue b{color:var(--blue)}.kpi.warn b{color:var(--warn)}
+.bars{display:grid;gap:9px}
+.bar{display:grid;grid-template-columns:clamp(90px,10vw,150px) 1fr clamp(90px,10vw,150px);gap:10px;align-items:center;font-size:clamp(13px,1.25vw,17px)}
+.bar em{font-style:normal;text-align:right;font-family:var(--mono)}
+.bar i{display:block;height:clamp(14px,2.4vh,24px);border:1px solid var(--ink);position:relative}
+.bar i b{position:absolute;inset:0 auto 0 0;background:var(--blue)}
+.bar i.red b{background:var(--stamp)}
+.bar.ghost i b{background:#9a937a}
+.chart svg{width:100%;height:100%;min-height:120px;display:block}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:50;width:52px;height:52px;border-radius:50%;border:1px solid #8f8668;background:rgba(244,238,220,.92);color:var(--ink);font-size:30px;line-height:1;cursor:pointer;display:grid;place-items:center;user-select:none;box-shadow:0 4px 14px rgba(40,30,10,.35);transition:opacity .3s}
+.navbtn:hover{background:#fff}
+.navbtn.prev{left:14px}.navbtn.next{right:14px}
+.navbtn.hide{opacity:0;pointer-events:none}
+.progress{position:fixed;left:0;bottom:0;height:7px;width:100%;background:rgba(0,0,0,.14);z-index:40}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),#2e6da4);width:0;transition:width .45s}
+.counter{position:fixed;right:16px;bottom:12px;z-index:40;font-family:var(--type);font-size:14px;color:#3d382e;letter-spacing:.08em}
+.hint{position:fixed;left:50%;bottom:38px;transform:translateX(-50%);z-index:40;font-family:var(--type);font-size:14px;color:#6b6350;letter-spacing:.1em;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+@media (max-width:760px){.note{grid-template-columns:24px 1fr}.bar{grid-template-columns:80px 1fr 80px}}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<section class="slide">
+  <div class="page centered">
+    <div class="brand">
+      <img src="assets/esl-logo.png" alt="ESL logo">
+      <div class="who">Engineering Software Lab &middot; eswlab.com<br>case file 02 &middot; static analysis evidence series</div>
+      <img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
+      <div class="who">Daniel Liezrowice<br>Parasoft certified partner</div>
+    </div>
+    <h1>Fil-C vs MISRA C/C++ on 78&nbsp;real&nbsp;bugs</h1>
+    <p class="sub">Case file 01 asked whether Fil-C beats a MISRA&nbsp;C compliance process on a hand-built 5-bug suite. It did not: Parasoft caught 5/5 at build time, Fil-C caught 3/5 at runtime and silently missed both off-by-one overflows. The obvious objection: <b>synthetic bugs are too easy</b>. So we ran the same fight on real-world bugs: 78 accepted bugs from the SWE-sweep dataset, in five real open-source repositories, fixed by their maintainers in real commits.</p>
+    <div class="stamps">
+      <span class="stamp big">78 real bugs</span>
+      <span class="stamp big blue">5 real repos</span>
+      <span class="stamp big ok">full methodology, redo it yourself</span>
+    </div>
+    <p class="footnote">Dataset: SWE-sweep (swesweep.com), real fix commits from 14 widely used C/C++ projects. Toolchain under test: Fil-C 0.687 (pizlonated Clang 20, Filip Pizlo). Baseline toolchain: gcc 13. Analyzer: Parasoft C/C++test, Flow Analysis + MISRA C 2025 (C repos) / MISRA C++ 2023 + CERT C++ (C++ repos), whole-project scan. Companion deck: <a href="../fil-c-vs-misra/">case file 01, Fil-C vs MISRA C</a>.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>02</b> / the claim under test</span><span>case file 02</span></div>
+    <h2>The claim: swap the compiler, get memory safety</h2>
+    <div class="two">
+      <div class="list">
+        <div><span><b>Fil-C's promise.</b> Recompile existing C/C++ with Fil-C and every forbidden memory operation stops the program instead of silently corrupting it. No rewrite, no Rust migration, no opt-out. Buffer overflows, use-after-free, double free, invalid dereference: contained.</span></div>
+        <div><span><b>The implied conclusion.</b> Changing the compiler is cheaper than rewriting, so the memory-safety problem of C/C++ is solved, and the Rust migration argument (and implicitly, the compliance toolchain argument) loses its force.</span></div>
+        <div><span><b>What the claim does not say.</b> Fil-C does not find bugs. It lets a memory bug crash instead of exploit, <i>when the buggy path executes</i>. Logic bugs stay untouched. And for the people who actually write C today (automotive, avionics, medical, regulated industries), the process is MISRA compliance verified by static analysis. That process claims to <i>find and fix</i> the bug before release.</span></div>
+        <div><span><b>So we measured both jobs on the same real bugs.</b> Not opinions. Same 78 defects, same repositories, two strategies, one scoreboard.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>03</b> / method</span><span>case file 02</span></div>
+    <h2>The experiment</h2>
+    <div class="two">
+      <div class="list">
+        <div><span><b>The bugs are real.</b> 78 accepted bugs from the SWE-sweep dataset: each one is a defect that was actually introduced, shipped, and fixed by the maintainers of a widely used open-source project. We take the pre-fix commit as ground truth.</span></div>
+        <div><span><b>The repos are real.</b> The five smallest from the dataset: libexpat (9 bugs), jerryscript (15), micropython (22), z3 (11), proj (21). Three C, two C++. Over 392,000 lines of first-party code in total.</span></div>
+        <div><span><b>The QA loop is real.</b> Build each repo at the pre-fix commit with gcc, run its own test suite: everything passes, the bugs are silent. Rebuild the identical tree with Fil-C 0.687, run the same suite, count <code>filc panic</code> events. This is exactly how an adopter would experience Fil-C.</span></div>
+        <div><span><b>The analyzer runs as in practice.</b> Parasoft C/C++test scans the whole buildable project (compile-commands driven), Flow Analysis plus MISRA C 2025 for the C repos and MISRA C++ 2023 + CERT for the C++ repos. No hints, no bug list, one scan.</span></div>
+        <div><span><b>Honest note.</b> Fil-C's net only fires on executed paths, and the suites do not reach the 78 defect sites. That limitation is itself the finding: in normal operation Fil-C delivers zero detections, and logic bugs are outside its model even with perfect coverage.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page centered">
+    <div class="filehead"><span><b>04</b> / the scoreboard</span><span>case file 02</span></div>
+    <h2>Same 78 bugs. One scan, zero executions.</h2>
+    <div class="kpis">
+      <div class="kpi ok"><b>67%</b><span><b>Parasoft</b> found 52 of 78 real bugs, whole-project scan, nothing executed</span></div>
+      <div class="kpi blue"><b>41%</b><span><b>strictly</b> on the exact defect lines, 32 of 78 (SWE-sweep changed-line rule)</span></div>
+      <div class="kpi red"><b>0</b><span><b>Fil-C</b> detections in normal operation: build + the project's own QA, 0 of 78</span></div>
+      <div class="kpi warn"><b>26%</b><span><b>Fil-C's theoretical ceiling</b> here: only the 20 memory-class bugs, only if executed</span></div>
+    </div>
+    <p class="footnote">For scale: on the full 488-bug, 14-repo dataset Parasoft reaches 53.1% of all bugs and 55.6% of the 162 static-analysis-shaped bugs, while the best autonomous LLM agents resolve about 5.1%. The same pattern holds on every slice.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>05</b> / per-repo results</span><span>case file 02</span></div>
+    <h2>Five repositories, no exceptions</h2>
+    <div class="tw">
+      <table class="form">
+        <tr><th>repo</th><th>lang</th><th>real bugs</th><th>gcc QA</th><th>Fil-C QA</th><th>Fil-C detections</th><th>Parasoft (region)</th><th>Parasoft (strict)</th></tr>
+        <tr><td>libexpat 2.4.3</td><td>C</td><td class="v">9</td><td class="caught">335 checks pass</td><td class="caught">335 checks pass</td><td class="silent">0</td><td class="v">7 (78%)</td><td class="v">3 (33%)</td></tr>
+        <tr><td>jerryscript 2.2.0</td><td>C</td><td class="v">15</td><td class="caught">494 tests pass</td><td class="caught">494 tests pass</td><td class="silent">0</td><td class="v">13 (87%)</td><td class="v">12 (80%)</td></tr>
+        <tr><td>micropython 1.19.1</td><td>C</td><td class="v">22</td><td class="caught">827 tests pass</td><td class="silent">cannot build/run</td><td class="silent">n/a</td><td class="v">15 (68%)</td><td class="v">7 (32%)</td></tr>
+        <tr><td>z3 4.16.0</td><td>C++</td><td class="v">11</td><td class="caught">test-z3 passes</td><td class="caught">test-z3 passes</td><td class="silent">0</td><td class="v">4 (36%)</td><td class="v">3 (27%)</td></tr>
+        <tr><td>proj 6.3.0</td><td>C++</td><td class="v">21</td><td class="caught">40/40 pass</td><td class="caught">40/40 pass</td><td class="silent">0</td><td class="v">13 (62%)</td><td class="v">7 (33%)</td></tr>
+        <tr><td><b>total</b></td><td></td><td class="v"><b>78</b></td><td class="caught">all pass, bugs silent</td><td></td><td class="silent"><b>0</b></td><td class="v"><b>52 (67%)</b></td><td class="v"><b>32 (41%)</b></td></tr>
+      </table>
+    </div>
+    <p class="footnote">Region: a Parasoft finding whose location overlaps the defect's changed lines. Strict: the finding sits inside the exact removed lines. Micropython is a hard Fil-C incompatibility (slide 09). Parasoft numbers come from whole-project scans of the same trees, so the analyzer never knew where the bugs were.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>06</b> / per-repo detection</span><span>case file 02</span></div>
+    <h2>The gap, repo by repo</h2>
+    <div class="bars">
+      <div class="bar"><em>libexpat</em><i><b style="width:78%"></b></i><em>78% vs 0%</em></div>
+      <div class="bar"><em>jerryscript</em><i><b style="width:87%"></b></i><em>87% vs 0%</em></div>
+      <div class="bar"><em>micropython</em><i><b style="width:68%"></b></i><em>68% vs n/a</em></div>
+      <div class="bar"><em>z3</em><i><b style="width:36%"></b></i><em>36% vs 0%</em></div>
+      <div class="bar"><em>proj</em><i><b style="width:62%"></b></i><em>62% vs 0%</em></div>
+    </div>
+    <div class="chart">
+      <svg viewBox="0 0 900 130" preserveAspectRatio="xMidYMid meet">
+        <text x="450" y="26" text-anchor="middle" font-family="Special Elite" font-size="17" fill="#4a443a">detection rate on real bugs: blue = Parasoft whole-project scan, red = Fil-C in normal QA</text>
+        <rect x="140" y="44" width="620" height="26" fill="#12457a"/>
+        <text x="770" y="63" font-family="JetBrains Mono" font-size="15" fill="#2f6b3a">67%</text>
+        <rect x="140" y="80" width="2" height="26" fill="#b8322a"/>
+        <text x="770" y="99" font-family="JetBrains Mono" font-size="15" fill="#b8322a">0%</text>
+      </svg>
+    </div>
+    <p class="footnote">Parasoft bars: fraction of each repo's real bugs flagged by the scan (region rule). The red Fil-C bar has zero width in four of five repos; in the fifth, Fil-C could not even produce a binary.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>07</b> / who catches what</span><span>case file 02</span></div>
+    <h2>What Fil-C could never see, even in principle</h2>
+    <div class="tw">
+      <table class="form">
+        <tr><th>defect class</th><th>Parasoft found</th><th>Parasoft missed</th><th>Fil-C's reach</th></tr>
+        <tr><td>memory / UB (overflows, UAF, races, leaks)</td><td class="v">11</td><td class="v">9</td><td class="runtime">containable at runtime, if executed</td></tr>
+        <tr><td>logic (wrong computation, wrong branch)</td><td class="v">27</td><td class="v">11</td><td class="silent">invisible by design: memory-safe wrong answers</td></tr>
+        <tr><td>error handling / API contract</td><td class="v">4</td><td class="v">3</td><td class="silent">invisible by design</td></tr>
+        <tr><td>resource / other / unknown</td><td class="v">10</td><td class="v">3</td><td class="silent">mostly invisible</td></tr>
+        <tr><td><b>total</b></td><td class="v"><b>52</b></td><td class="v"><b>26</b></td><td></td></tr>
+      </table>
+    </div>
+    <p class="footnote">Every one of the 78 bugs was classified by defect mechanism in three independent passes (two blind, one adjudicated with full pre-image context). Roughly two thirds of real bugs are logic and contract bugs: they compute the wrong answer while staying perfectly memory-safe. A memory-safe runtime, any memory-safe runtime, simply has no opinion about them. That is the structural reason a compiler swap cannot replace a static analysis process.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>08</b> / strategy comparison</span><span>case file 02</span></div>
+    <h2>Three strategies, one budget conversation</h2>
+    <div class="two">
+      <div class="list">
+        <div><span><b>A. MISRA compliance, verified with Parasoft.</b> One scan finds 52 of 78 before release, no execution, no coverage needed. Fix them and the residual is 26 bugs, of which only 9 are memory-class. The process also produces the audit trail certification actually asks for.</span></div>
+        <div><span><b>B. Fil-C.</b> Found 0 in normal operation. Best case, with a fuzzer that reaches every defect site, it can contain the 20 memory-class bugs and none of the other 58. As a substitute for A, strictly weaker on every dimension we measured.</span></div>
+        <div><span><b>C. A, then B.</b> The honest best: fix the 52, then let Fil-C sit under the remaining code. If one of the 9 residual memory bugs is ever reached in the field, it becomes a controlled panic instead of an exploit. That layer is worth about 12% of the original bug population, on executed paths only.</span></div>
+        <div><span><b>The asymmetry that decides it.</b> Strategy A's value requires fixing findings (a management decision). Fil-C's value requires nothing but a build. But A's value is 52 bugs fixed now, evidence forever; B's value is a safety net for the residue. Different tools, different jobs, and the primary job is detection.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>09</b> / the migration tax</span><span>case file 02</span></div>
+    <h2>What "just recompile with Fil-C" costs in practice</h2>
+    <div class="two">
+      <div class="code">
+        <div class="bar"><i></i><i></i><i></i><span>micropython under Fil-C 0.687, ports/unix</span></div>
+        <pre><span class="out-dim">$ make CC=filc ... MICROPY_PY_FFI=0</span>
+<span class="out-dim">builds ok, then any test that lands on nlr_push:</span>
+<span class="out-panic">filc safety error: cannot handle inline asm</span>
+<span class="out-dim">$ ... retry with -DMICROPY_NLR_SETJMP=1 (setjmp fallback)</span>
+<span class="out-panic">Fatal error in LLVM pass: FilPizlonatorPass</span>
+<span class="out-panic">  while compiling py/nativeglue.c (-O0)</span>
+<span class="out-ok">verdict: Fil-C 0.687 cannot run micropython</span></pre>
+      </div>
+      <div class="list">
+        <div><span><b>Every dependency must be rebuilt.</b> proj links sqlite3, and Fil-C rewrites sqlite3 calls into <code>pizlonated_sqlite3_*</code> symbols that only a pizlonated sqlite provides. We compiled the sqlite3 3.45.1 amalgamation with Fil-C ourselves to make proj link. A static analyzer never asks this.</span></div>
+        <div><span><b>Inline asm is a wall.</b> Embedded and systems code leans on it; Fil-C refuses it at runtime, and its setjmp fallback crashed the Fil-C compiler itself.</span></div>
+        <div><span><b>Build times balloon.</b> z3 took about 50 minutes and produced a 268&nbsp;MB instrumented test binary; proj about 35 minutes plus the sqlite3 detour. Every CI run pays this again.</span></div>
+        <div><span><b>Meanwhile the MISRA route needs zero code changes to start.</b> Point the analyzer at the build, get findings the same day, fix what you accept, document deviations for the rest.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>10</b> / calibration: what about LLM agents?</span><span>case file 02</span></div>
+    <h2>And no, the agent route does not rescue the argument</h2>
+    <div class="tw">
+      <table class="form">
+        <tr><th>duckdb (109 real bugs), v0.10.0</th><th>found (region)</th><th>strict</th></tr>
+        <tr><td>SWE-sweep leaderboard best agent</td><td class="silent">3 (2.8%)</td><td class="silent">n/a</td></tr>
+        <tr><td>Claude Code + Claude-BugHunter, cold start, about 65 min</td><td class="v">7 (6.4%)</td><td class="v">6 (5.5%)</td></tr>
+        <tr><td><b>Parasoft C/C++test, whole-project scan</b></td><td class="caught"><b>75 (68.8%)</b></td><td class="caught"><b>35 (32.1%)</b></td></tr>
+      </table>
+    </div>
+    <p class="footnote">The strongest agentic setup we could assemble (83 bug-hunting skills, sanitizer builds, parallel code reviews, zero hints) beat the leaderboard best, but by a rounding error, and both sit an order of magnitude below the deterministic tool. The genuine strength of the agent mode is novel discovery beyond the known bug set, which is complementary, not a substitute for qualification-grade static analysis.</p>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>11</b> / verdict</span><span>case file 02</span></div>
+    <h2>So: MISRA compliance, or Fil-C?</h2>
+    <div class="two">
+      <div class="list">
+        <div><span><b>As the primary tool: MISRA compliance + Parasoft, decisively.</b> 67% of real bugs found before release versus zero, wider scope (logic and contract bugs included), lower adoption cost, and certification evidence that safety standards actually require.</span></div>
+        <div><span><b>As an optional second layer: Fil-C is legitimate.</b> After the code is clean, its runtime net covers the memory-class residue: here, 9 bugs out of 78, about 12%, converting silent corruption into controlled crashes on executed paths.</span></div>
+        <div><span><b>Fairness, stated plainly.</b> Fil-C is a containment compiler, not a bug finder, and it never claimed otherwise. Our zero is measured the way adopters would experience it (build + existing QA); a fuzzing campaign under Fil-C would fire some of the memory subset. That is the comparison the industry needs: containment is not detection.</span></div>
+        <div><span><b>The deeper point.</b> For the people who write C today, in regulated industries, the question was never "Rust or Fil-C". It is: does the release ship with named, fixed, documented defects? Static analysis answers that.</span></div>
+      </div>
+    </div>
+    <div class="stamps">
+      <span class="stamp ok big">detection beats containment</span>
+      <span class="stamp blue big">evidence over vibes</span>
+    </div>
+  </div>
+</section>
+
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span><b>12</b> / sources and redo</span><span>case file 02</span></div>
+    <h2>Redo it yourself</h2>
+    <div class="two">
+      <div class="list">
+        <div><span><b>Full write-up with all logs:</b> results table, per-repo build/test logs, the Fil-C failure transcripts, the sqlite3 pizlonation recipe, and the classification data: <a href="https://github.com/zuwasi/filc-real-bug-benchmark">github.com/zuwasi/filc-real-bug-benchmark</a>.</span></div>
+        <div><span><b>Ground truth:</b> SWE-sweep, 488 accepted bugs across 14 C/C++ repositories (<a href="https://swesweep.com/repositories/">swesweep.com/repositories</a>), real fix commits.</span></div>
+        <div><span><b>Broader study:</b> the full 14-repo Parasoft vs SWE-sweep benchmark, including the LLM-agent baselines and the cold-start Claude Code calibration: <a href="https://github.com/zuwasi/swe-sweep-parasoft-benchmark">github.com/zuwasi/swe-sweep-parasoft-benchmark</a>.</span></div>
+        <div><span><b>Case file 01:</b> the original synthetic 5-bug experiment this deck answers: <a href="../fil-c-vs-misra/">Fil-C vs MISRA C</a>.</span></div>
+        <div><span><b>Tools:</b> Fil-C 0.687 by Filip Pizlo (pizlonated Clang 20); Parasoft C/C++test with Flow Analysis, MISRA C 2025, MISRA C++ 2023, CERT C/C++; gcc 13 baseline; WSL2 Ubuntu build host. All numbers from the same machine, same trees, same QA loops.</span></div>
+      </div>
+    </div>
+    <div class="brand">
+      <img src="assets/esl-logo.png" alt="ESL logo">
+      <div class="who">ESL &middot; Engineering Software Lab &middot; eswlab.com<br>static analysis, safety-critical tooling, SBOM &amp; compliance</div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<button class="navbtn prev" id="prev" aria-label="previous slide">&#8249;</button>
+<button class="navbtn next" id="next" aria-label="next slide">&#8250;</button>
+<div class="progress"><i id="prog"></i></div>
+<div class="counter" id="count">1 / 12</div>
+<div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck'),n=deck.children.length,i=0;
+  var prev=document.getElementById('prev'),next=document.getElementById('next'),
+      prog=document.getElementById('prog'),count=document.getElementById('count'),hint=document.getElementById('hint');
+  function go(k){i=Math.max(0,Math.min(n-1,k));deck.style.transform='translateX('+(-i*100)+'vw)';
+    prog.style.width=((i+1)/n*100)+'%';count.textContent=(i+1)+' / '+n;
+    prev.classList.toggle('hide',i===0);next.classList.toggle('hide',i===n-1);
+    Array.prototype.forEach.call(deck.children,function(s,j){s.classList.toggle('active',j===i)});
+    if(i>0&&hint){hint.style.display='none';}}
+  prev.onclick=function(){go(i-1)};next.onclick=function(){go(i+1)};
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();go(i+1)}
+    if(e.key==='ArrowLeft'){e.preventDefault();go(i-1)}});
+  var sx=null;
+  document.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;},{passive:true});
+  document.addEventListener('touchend',function(e){if(sx===null)return;var dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){go(i+(dx<0?1:-1))}sx=null;},{passive:true});
+  var dx0=null;
+  document.addEventListener('mousedown',function(e){if(e.target.closest('a,button'))return;dx0=e.clientX});
+  document.addEventListener('mouseup',function(e){if(dx0===null)return;var dx=e.clientX-dx0;if(Math.abs(dx)>60){go(i+(dx<0?1:-1))}dx0=null;});
+  window.addEventListener('resize',function(){deck.style.transform='translateX('+(-i*100)+'vw)'});
+  go(0);
+})();
+</script>
+</body>
+</html>
