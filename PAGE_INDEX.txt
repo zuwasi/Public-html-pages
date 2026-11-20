@@ -326,6 +326,9 @@ Last updated: 2026-11-20
 • fil-c-vs-misra
   https://zuwasi.github.io/Public-html-pages/fil-c-vs-misra
 
+• fil-c-vs-misra-real-bugs
+  https://zuwasi.github.io/Public-html-pages/fil-c-vs-misra-real-bugs
+
 • floating-point-heat-method-verification
   https://zuwasi.github.io/Public-html-pages/floating-point-heat-method-verification
 
