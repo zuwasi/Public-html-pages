@@ -63,6 +63,18 @@
   .srclink { color:var(--accent2); text-decoration:none; border-bottom:1px dashed rgba(77,159,255,.45); }
   .srclink:hover { color:#8ec3ff; border-bottom-color:#8ec3ff; }
   .mono { font-family:ui-monospace, Consolas, monospace; font-size:clamp(11px,1.25vw,15px); }
+  .code-win { background:#0a0f19; border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .code-title { display:flex; gap:6px; align-items:center; padding:clamp(6px,1vh,9px) 12px; background:#131b2b; border-bottom:1px solid var(--line); font-size:clamp(10px,1.1vw,13px); color:var(--ink2); font-family:ui-monospace, Consolas, monospace; }
+  .code-title .dot { width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .code-title .fn { margin-left:8px; }
+  .code-body { font-family:ui-monospace, Consolas, monospace; font-size:clamp(10px,1.1vw,13.5px); line-height:1.6; padding:clamp(6px,1.2vh,12px) 0; overflow-x:auto; }
+  .code-line { display:grid; grid-template-columns:clamp(22px,2.6vw,34px) 1fr; padding:0 clamp(8px,1vw,14px); white-space:pre; color:#c8d6e8; }
+  .code-line .ln { color:#3d4f68; text-align:right; padding-right:clamp(6px,.9vw,12px); user-select:none; }
+  .code-line.hl { background:rgba(224,82,82,.16); }
+  .code-line.hl .cd { color:#ffb4b4; font-weight:600; }
+  .code-cmt { color:#5f7590; }
+  .code-out { border-top:1px solid var(--line); padding:clamp(6px,1vh,10px) clamp(8px,1vw,14px); font-family:ui-monospace, Consolas, monospace; font-size:clamp(10px,1.05vw,13px); line-height:1.7; }
+  .out-ok { color:var(--green); } .out-panic { color:var(--red); } .out-dim { color:var(--ink2); }
   @media (max-width:760px) {
     .grid2, .grid3 { grid-template-columns:1fr; }
     .slide { justify-content:flex-start; padding-top:8vh; overflow-y:auto; }
@@ -126,7 +138,7 @@
 <!-- 4 WHAT IS CPPTEST -->
 <section class="slide">
   <div class="kicker">Tool explainer &middot; 1 of 2</div>
-  <h2>What is Parasoft C/C++test?</h2>
+  <h2><a class="srclink" href="https://www.parasoft.com/products/parasoft-c-ctest/" target="_blank" rel="noopener noreferrer">What is Parasoft C/C++test?</a></h2>
   <div class="grid2" style="align-items:start">
     <div class="card"><ul class="clean">
       <li><span class="n">&bull;</span><span>Commercial static analysis and test suite for C and C++ by Parasoft, standard equipment in avionics, automotive, and medical device development</span></li>
@@ -144,7 +156,7 @@
 <!-- 5 WHAT IS MISRA -->
 <section class="slide">
   <div class="kicker">Tool explainer &middot; 2 of 2</div>
-  <h2>What is MISRA C 2025 / MISRA C++ 2023?</h2>
+  <h2><a class="srclink" href="https://misra.org.uk/" target="_blank" rel="noopener noreferrer">What is MISRA C 2025 / MISRA C++ 2023?</a></h2>
   <div class="grid2" style="align-items:start">
     <div class="card"><ul class="clean">
       <li><span class="n">&bull;</span><span>MISRA (Motor Industry Software Reliability Association) publishes coding guidelines for writing C and C++ that is safely analyzable: <b>MISRA C 1998 &rarr; 2004 &rarr; 2012 &rarr; 2023 &rarr; 2025</b>, and <b>MISRA C++ 2008 &rarr; 2023</b></span></li>
@@ -188,7 +200,7 @@
   <p class="note">Fil-C panics print <span class="mono" style="font-size:.9em">"filc panic: thwarted a futile attempt to violate memory safety"</span> with a stack trace: real protection, at runtime. MISRA flagged every bug before anything shipped, with the exact line and the correct valid index range.</p>
 </section>
 
-<!-- 6 GRANULE -->
+<!-- 8 GRANULE -->
 <section class="slide">
   <div class="kicker">The finding that challenges the post</div>
   <h2>The off-by-one overflow is not caught</h2>
@@ -201,10 +213,27 @@
         <tr><td class="mono">+9 to +992 (offsets 17, 100, 1000)</td><td class="caught">filc panic</td></tr>
       </table>
       <p class="note">Same result on the heap (<code>malloc(10)</code>) and the stack (<code>char a[8]</code>), at both <code>-O0</code> and <code>-O2</code>.</p>
+      <p class="note">InvisiCaps track the <b>allocator's 16-byte granule</b>, not the requested size. A one-past-the-end write, the most common overflow shape in real CVEs, lands in allocator padding and runs silently. Not a soundness hole in Fil-C's own model, since the write cannot corrupt <i>other</i> objects, but the accurate claim is "cannot touch other objects", not "covers buffer overflow".</p>
     </div>
-    <div class="card">
-      <p style="font-size:clamp(13px,1.5vw,17px); line-height:1.6">InvisiCaps track the <b>allocator's 16-byte granule</b>, not the requested size. A one-past-the-end write, the most common overflow shape in real CVEs, lands in padding and runs silently.</p>
-      <p class="note" style="margin-top:12px">This is not a soundness hole in Fil-C's own model: the write cannot corrupt <i>other</i> objects. But the post's categorical claim that Fil-C "covers buffer overflow" is not what a developer or an attacker experiences. The accurate claim is "cannot touch other objects".</p>
+    <div>
+      <div class="code-win">
+        <div class="code-title"><span class="dot" style="background:#e05252"></span><span class="dot" style="background:#e0a33c"></span><span class="dot" style="background:#3fae5c"></span><span class="fn">probe_heap.c &middot; filc-0.687 &middot; -O2</span></div>
+        <div class="code-body">
+          <div class="code-line"><span class="ln">1</span><span class="cd"><span class="code-cmt">#include &lt;stdio.h&gt;</span></span></div>
+          <div class="code-line"><span class="ln">2</span><span class="cd"><span class="code-cmt">#include &lt;stdlib.h&gt;</span></span></div>
+          <div class="code-line"><span class="ln">3</span><span class="cd">int main(int argc, char **argv) {</span></div>
+          <div class="code-line"><span class="ln">4</span><span class="cd">    int off = atoi(argv[1]);</span></div>
+          <div class="code-line"><span class="ln">5</span><span class="cd">    char *buf = malloc(10);  <span class="code-cmt">// Fil-C granule: 16 B</span></span></div>
+          <div class="code-line hl"><span class="ln">6</span><span class="cd">    buf[off] = 'X';  <span class="code-cmt">// &larr; the write under test</span></span></div>
+          <div class="code-line"><span class="ln">7</span><span class="cd">    printf("heap wrote buf[%d]: OK\n", off);</span></div>
+          <div class="code-line"><span class="ln">8</span><span class="cd">    return 0; }</span></div>
+        </div>
+        <div class="code-out">
+          <div><span class="out-dim">$ ./probe_heap 15</span> &nbsp;<span class="out-ok">heap wrote buf[15]: OK &nbsp;&middot;&nbsp; silent, exit 0</span></div>
+          <div><span class="out-dim">$ ./probe_heap 16</span> &nbsp;<span class="out-panic">filc panic: thwarted a futile attempt to violate memory safety</span></div>
+        </div>
+      </div>
+      <p class="note">Source: <a class="srclink" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark/blob/main/scripts/probe_oob.sh" target="_blank" rel="noopener noreferrer">scripts/probe_oob.sh</a> in the public repo.</p>
     </div>
   </div>
 </section>
@@ -279,7 +308,7 @@
     </ul></div>
     <div class="card">
       <div class="group">Reproduce</div>
-      <p class="mono" style="line-height:1.7">Everything is public, redo it yourself:<br>github.com/zuwasi/fil-c-vs-misra-benchmark<br><br>Includes: bug suite, benchmarks,<br>all scripts, raw MISRA report,<br>and full README instructions.<br><br>Local working tree:<br>C:\Users\danie\fil-c-challenge\</p>
+      <p class="mono" style="line-height:1.7">Everything is public, redo it yourself:<br><a class="srclink" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark" target="_blank" rel="noopener noreferrer">github.com/zuwasi/fil-c-vs-misra-benchmark</a><br><br>Includes: bug suite, benchmarks,<br>all scripts, raw MISRA report,<br>and full README instructions.</p>
     </div>
   </div>
   <p class="note">Measured, not argued: 5/5 build-time detections with exact lines, versus 3/5 runtime panics and 2 silent misses, at up to 5.4&times; runtime and 27&times; memory.</p>
