@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-11-19
+Last updated: 2026-11-20
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -322,6 +322,9 @@ Last updated: 2026-11-19
 
 • esl-sbomator-report-examples
   https://zuwasi.github.io/Public-html-pages/esl-sbomator-report-examples
+
+• fil-c-vs-misra
+  https://zuwasi.github.io/Public-html-pages/fil-c-vs-misra
 
 • floating-point-heat-method-verification
   https://zuwasi.github.io/Public-html-pages/floating-point-heat-method-verification
