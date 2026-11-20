@@ -60,6 +60,8 @@
   #swipe-hint { position:fixed; bottom:44px; left:0; right:0; text-align:center; font-size:13px; color:var(--ink2); z-index:10; animation:pulse 1.6s infinite; transition:opacity .5s; }
   @keyframes pulse { 0%,100% { opacity:.5; } 50% { opacity:1; } }
   code { font-family:ui-monospace, Consolas, monospace; font-size:.9em; background:#0a0f19; padding:2px 6px; border-radius:5px; border:1px solid var(--line); }
+  .srclink { color:var(--accent2); text-decoration:none; border-bottom:1px dashed rgba(77,159,255,.45); }
+  .srclink:hover { color:#8ec3ff; border-bottom-color:#8ec3ff; }
   .mono { font-family:ui-monospace, Consolas, monospace; font-size:clamp(11px,1.25vw,15px); }
   @media (max-width:760px) {
     .grid2, .grid3 { grid-template-columns:1fr; }
@@ -161,11 +163,11 @@
   <h2>Five bugs, the exact shapes the post names</h2>
   <table>
     <tr><th style="width:26%">Bug class</th><th>Code</th><th style="width:30%">MISRA C 2025 rule at stake</th></tr>
-    <tr><td>1 &middot; Heap overflow</td><td class="mono">malloc(10); for(i=0;i&lt;=10;i++) buf[i]=i;</td><td>Rule 18.1 &middot; pointer arithmetic out of bounds</td></tr>
-    <tr><td>2 &middot; Stack overflow</td><td class="mono">volatile char a[8]; a[8]='X';</td><td>Rule 18.1 &middot; array access out of bounds</td></tr>
-    <tr><td>3 &middot; Use after free</td><td class="mono">free(p); ... p[0]</td><td>Rule 1.3 &middot; no undefined behavior</td></tr>
-    <tr><td>4 &middot; Double free</td><td class="mono">free(p); free(p);</td><td>Rule 21.3 &middot; allocation/deallocation</td></tr>
-    <tr><td>5 &middot; Wild dereference</td><td class="mono">int *q=(int*)0xdeadbeefUL; *q=1;</td><td>Rule 11.4 &middot; integer-to-pointer conversion</td></tr>
+    <tr><td>1 &middot; <a class="srclink" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark/blob/main/bugs/bug1_heap_overflow.c" target="_blank" rel="noopener noreferrer">Heap overflow</a></td><td class="mono">malloc(10); for(i=0;i&lt;=10;i++) buf[i]=i;</td><td>Rule 18.1 &middot; pointer arithmetic out of bounds</td></tr>
+    <tr><td>2 &middot; <a class="srclink" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark/blob/main/bugs/bug2_stack_overflow.c" target="_blank" rel="noopener noreferrer">Stack overflow</a></td><td class="mono">volatile char a[8]; a[8]='X';</td><td>Rule 18.1 &middot; array access out of bounds</td></tr>
+    <tr><td>3 &middot; <a class="srclink" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark/blob/main/bugs/bug3_use_after_free.c" target="_blank" rel="noopener noreferrer">Use after free</a></td><td class="mono">free(p); ... p[0]</td><td>Rule 1.3 &middot; no undefined behavior</td></tr>
+    <tr><td>4 &middot; <a class="srclink" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark/blob/main/bugs/bug4_double_free.c" target="_blank" rel="noopener noreferrer">Double free</a></td><td class="mono">free(p); free(p);</td><td>Rule 21.3 &middot; allocation/deallocation</td></tr>
+    <tr><td>5 &middot; <a class="srclink" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark/blob/main/bugs/bug5_wild_deref.c" target="_blank" rel="noopener noreferrer">Wild dereference</a></td><td class="mono">int *q=(int*)0xdeadbeefUL; *q=1;</td><td>Rule 11.4 &middot; integer-to-pointer conversion</td></tr>
   </table>
   <p class="note">Every program prints a marker before the violation, so we know exactly where execution stopped.</p>
 </section>
