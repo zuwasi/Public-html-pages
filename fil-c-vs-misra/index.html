@@ -121,7 +121,41 @@
   <p class="note">Bug suite: 5 standalone programs, one violation each. Benchmarks: 3 clean programs with different pointer intensity (float-heavy, array-heavy, allocation-heavy). Same machine, same sources, same flags.</p>
 </section>
 
-<!-- 4 BUG SUITE -->
+<!-- 4 WHAT IS CPPTEST -->
+<section class="slide">
+  <div class="kicker">Tool explainer &middot; 1 of 2</div>
+  <h2>What is Parasoft C/C++test?</h2>
+  <div class="grid2" style="align-items:start">
+    <div class="card"><ul class="clean">
+      <li><span class="n">&bull;</span><span>Commercial static analysis and test suite for C and C++ by Parasoft, standard equipment in avionics, automotive, and medical device development</span></li>
+      <li><span class="n">&bull;</span><span><b>Flow analysis</b>: simulates execution paths at build time to find out-of-bounds access, use-after-free, double free, and uninitialized use without running the code</span></li>
+      <li><span class="n">&bull;</span><span>Coding-standard rule packs: MISRA C and C++, AUTOSAR, CERT, CWE, OWASP, plus compliance reporting</span></li>
+    </ul></div>
+    <div class="card"><ul class="clean">
+      <li><span class="n">&bull;</span><span>Also does unit testing, code coverage, and on-target test execution for embedded toolchains</span></li>
+      <li><span class="n">&bull;</span><span>Editions: Standard (command-line static analysis) and Professional (IDE, CI, unit tests). This benchmark used <b>Standard 2026.1.3</b> via <code>cpptestcli</code> in WSL</span></li>
+      <li><span class="n">&bull;</span><span>Why it is in this comparison: it is the build-time alternative to Fil-C's runtime checks, and the tool most regulated C shops already run</span></li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 5 WHAT IS MISRA -->
+<section class="slide">
+  <div class="kicker">Tool explainer &middot; 2 of 2</div>
+  <h2>What is MISRA C 2025 / MISRA C++ 2023?</h2>
+  <div class="grid2" style="align-items:start">
+    <div class="card"><ul class="clean">
+      <li><span class="n">&bull;</span><span>MISRA (Motor Industry Software Reliability Association) publishes coding guidelines for writing C and C++ that is safely analyzable: <b>MISRA C 1998 &rarr; 2004 &rarr; 2012 &rarr; 2023 &rarr; 2025</b>, and <b>MISRA C++ 2008 &rarr; 2023</b></span></li>
+      <li><span class="n">&bull;</span><span>Structure: guidelines classified <b>Mandatory / Required / Advisory</b>; deviations are possible but must be documented and justified, which is how compliance is audited</span></li>
+    </ul></div>
+    <div class="card"><ul class="clean">
+      <li><span class="n">&bull;</span><span>MISRA is a document, not a tool: enforcement happens with static analysis engines that ship the rules built in, like Parasoft's configurations used here</span></li>
+      <li><span class="n">&bull;</span><span>In this benchmark the MISRA C 2025 config caught all 5 bugs at build time, and Dir 4.12 / Rule 21.3 go further: they flag <b>dynamic heap allocation itself</b>, removing the whole bug class instead of catching it</span></li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 6 BUG SUITE -->
 <section class="slide">
   <div class="kicker">The bug suite</div>
   <h2>Five bugs, the exact shapes the post names</h2>
@@ -243,7 +277,7 @@
     </ul></div>
     <div class="card">
       <div class="group">Reproduce</div>
-      <p class="mono" style="line-height:1.7">Sources + scripts:<br>C:\Users\danie\fil-c-challenge\<br>run_gcc_bugs.sh &middot; run_filc_bugs.sh<br>run_parasoft.sh &middot; run_perf.sh<br>probe_oob.sh &middot; probe_stack2.sh<br><br>Raw MISRA report:<br>report.xml &middot; report.html</p>
+      <p class="mono" style="line-height:1.7">Everything is public, redo it yourself:<br>github.com/zuwasi/fil-c-vs-misra-benchmark<br><br>Includes: bug suite, benchmarks,<br>all scripts, raw MISRA report,<br>and full README instructions.<br><br>Local working tree:<br>C:\Users\danie\fil-c-challenge\</p>
     </div>
   </div>
   <p class="note">Measured, not argued: 5/5 build-time detections with exact lines, versus 3/5 runtime panics and 2 silent misses, at up to 5.4&times; runtime and 27&times; memory.</p>
