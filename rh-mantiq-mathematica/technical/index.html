@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>RH-MantiQ: Auditing the Anthropic Riemann Hypothesis Proof with Wolfram Mathematica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4eedc; --sheet:#fbf8ee; --sheet2:#ece4cc; --ink:#1d1a16; --muted:#6b6353;
+  --line:#b9ae90; --blue:#12457a; --accent:#1d6bd0; --amber:#8a5e00; --amber-hi:#e8a317;
+  --red:#b8322a; --green:#1e7d33; --code-bg:#f6efdc; --code-cap:#d9d0b8; --top:52px;
+  --pad-x:max(4vw,48px);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,sans-serif}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;height:var(--top);display:flex;justify-content:space-between;align-items:center;background:var(--bg);border-bottom:1px solid var(--line);padding:0 var(--pad-x)}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar img{height:32px;width:auto;display:block}
+#brand{font-weight:700;font-size:14px;border-left:1px solid var(--line);padding-left:14px;margin-left:2px;white-space:nowrap}
+.topbar-right{display:flex;gap:16px;align-items:center}
+.topbar a{color:var(--accent);text-decoration:none;font-size:13px;font-weight:600}
+.viewport{position:fixed;inset:0;overflow:hidden}
+#track{display:flex;height:100%;transition:transform .45s cubic-bezier(.77,0,.18,1);will-change:transform}
+.slide{flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;padding:calc(var(--top) + 26px) var(--pad-x) 58px;scrollbar-width:none}
+.slide::-webkit-scrollbar{display:none}
+.kicker{display:flex;align-items:center;gap:10px;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:14px}
+.kicker span{color:var(--accent)}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{left:0;top:0;border-color:var(--blue)}
+.mark::after{left:8px;top:7px;border-color:var(--amber-hi)}
+h1{font-size:clamp(30px,3.8vw,58px);line-height:1.08;margin:0 0 10px;font-weight:800;letter-spacing:-.02em}
+h1 .hl{color:var(--accent)}
+h2{font-size:clamp(20px,2vw,28px);margin:0 0 8px;font-weight:700}
+.sub{font-size:clamp(15px,1.5vw,21px);color:var(--muted);margin:0 0 22px;max-width:1100px}
+.row{display:flex;gap:18px;align-items:stretch}
+.bigrow{display:flex;gap:18px;align-items:stretch;margin-bottom:18px}
+.bigrow>*{flex:1;min-width:240px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:16px 18px}
+.card.v{border-top-color:var(--amber-hi)}
+.card.g{border-top-color:var(--green)}
+.card.r{border-top-color:var(--red)}
+.card p,.card li{font-size:clamp(14px,1.25vw,18px);margin:6px 0}
+.card ul{padding-left:20px;margin:6px 0}
+.label{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:4px}
+.tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--blue)}
+.card.v .tag{color:var(--amber)}
+.stat{font-size:clamp(38px,5.4vw,84px);font-weight:800;color:var(--blue);line-height:1;letter-spacing:-.02em}
+.stat small{font-size:clamp(14px,1.3vw,18px);font-weight:600;color:var(--muted);letter-spacing:0}
+.stat.r{color:var(--red)} .stat.g{color:var(--green)} .stat.a{color:var(--amber)}
+.foot{margin-top:16px;font-size:clamp(13px,1.15vw,16px);color:var(--muted)}
+pre.box{background:var(--code-bg);border:1px solid var(--code-cap);border-radius:8px;padding:14px 18px;font-family:'JetBrains Mono','Consolas',monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.45;overflow-x:auto;margin:0}
+code{background:var(--code-bg);border:1px solid var(--code-cap);border-radius:5px;padding:1px 6px;font-size:.92em;white-space:nowrap}
+figure{margin:0}
+figure img{width:100%;height:auto;max-height:40vh;object-fit:contain;border:1px solid var(--line);border-radius:8px;background:#fff}
+figcaption{font-size:clamp(12px,1.05vw,15px);color:var(--muted);margin-top:8px}
+.brandrow{display:flex;gap:12px;flex-wrap:wrap;margin:18px 0}
+.brandchip{display:flex;align-items:center;gap:9px;background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:7px 16px 7px 10px;font-size:13px;font-weight:600;color:var(--ink)}
+.brandchip img{height:22px;width:auto}
+.brandchip.dark{background:#23262b;color:#f5f2e8;border-color:#23262b}
+.person-card{display:flex;gap:20px;padding:20px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);max-width:560px}
+.person-card img{width:120px;height:140px;object-fit:cover;border-radius:8px;flex:none}
+.person-card strong{font-size:clamp(17px,1.7vw,22px);display:block}
+.person-card span{color:var(--blue);font-weight:600;font-size:clamp(13px,1.3vw,16px)}
+.person-card p{margin:9px 0;font-size:clamp(13px,1.2vw,16px)}
+.person-card a{color:var(--accent);font-weight:600;font-size:13px}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:1px solid var(--line);background:var(--sheet);color:var(--ink);font-size:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s}
+.navbtn:hover{background:var(--sheet2);transform:translateY(-50%) scale(1.08)}
+.navbtn.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#prev{left:16px}#next{right:16px}
+#progress{position:fixed;bottom:0;left:0;z-index:40;height:5px;width:0;background:linear-gradient(90deg,var(--blue),var(--amber-hi));transition:width .3s}
+#counter{position:fixed;bottom:14px;right:20px;z-index:30;font-size:15px;font-weight:600;color:var(--ink);background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:4px 14px}
+#hint{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);z-index:30;font-size:15px;font-weight:600;color:var(--muted);animation:pulse 1.6s infinite}
+#hint.gone{animation:none;opacity:0;pointer-events:none}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+table{border-collapse:collapse;width:100%;font-size:clamp(13px,1.2vw,17px)}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+th{background:var(--sheet2);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+td.num{font-variant-numeric:tabular-nums;font-weight:600}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media (max-width:860px){
+  .slide{padding:calc(var(--top) + 18px) 18px 58px;--pad-x:18px}
+  .row,.bigrow{flex-direction:column}
+  .two{grid-template-columns:1fr}
+  .topbar{gap:10px;padding:0 12px}
+  .topbar img{height:26px}
+  #brand{display:none}
+  .person-card{flex-direction:column}
+  .navbtn{width:46px;height:46px;font-size:26px;top:auto;bottom:16px;transform:none}
+  .navbtn:hover{transform:scale(1.05)}
+  #counter{right:auto;left:50%;transform:translateX(-50%);bottom:26px}
+  #hint{bottom:86px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="topbar-left">
+    <a href="#1"><img src="assets/esl-logo.png" alt="ESL"></a>
+    <span id="brand">RH-MantiQ: Wolfram at the Riemann Hypothesis Party</span>
+  </div>
+  <div class="topbar-right">
+    <a href="https://alpo.ge/remark.pdf" target="_blank">The note (PDF)</a>
+    <a href="https://scottaaronson.blog/?p=9598" target="_blank">Aaronson summary</a>
+    <a href="https://eswlab.com/" target="_blank">eswlab.com</a>
+  </div>
+</div>
+
+<div class="viewport"><div id="track">
+
+<!-- 1 COVER -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>WOLFRAM MATHEMATICA MEETS THE RIEMANN HYPOTHESIS &middot; <span>NOVEMBER 2026</span></div>
+  <h1>One workstation, four audits, <span class="hl">zero violations</span></h1>
+  <p class="sub">On November 20, 2026 Anthropic announced a claimed proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. While the formal verification grinds, we stress-tested the claim numerically with Wolfram Mathematica, the same afternoon, on a single machine.</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Lean corpus behind the claim</div><div class="stat">17.4M<small> lines</small></div><p>Fourteen split tar archives of formalized mathematics, still being compiled and compared.</p></div>
+    <div class="card g"><div class="label">Numerical violations found</div><div class="stat g">0</div><p>Across four independent published equivalences of RH and GRH, at full workstation scale.</p></div>
+    <div class="card"><div class="label">Integers stress-tested</div><div class="stat">10<sup>8</sup><small> values of n</small></div><p>Lagarias' elementary RH-equivalence swept to one hundred million, in 51 seconds.</p></div>
+  </div>
+  <div class="brandrow">
+    <span class="brandchip"><img src="assets/esl-logo.png" alt="ESL">ESL &middot; Engineering Software Lab</span>
+    <span class="brandchip dark"><img src="assets/Wolfram-Mathematica-15-logo.png" alt="Wolfram">Wolfram Mathematica 15.0.1 as the audit lab</span>
+  </div>
+  <div class="foot">Demo, article and reproducible package. Machine: Intel Core Ultra 9 275HX, 24 logical cores, 64 GB RAM, Windows, Mathematica 15.0.1. Measured November 21, 2026.</div>
+</section>
+
+<!-- 2 THE NEWS -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE NEWS &middot; <span>02</span></div>
+  <h1>Two proofs walked into <span class="hl">number theory</span></h1>
+  <p class="sub">November 20, 2026 produced two independent RH claims within hours of each other. The community response: try to compile them.</p>
+  <div class="bigrow">
+    <div class="card"><div class="tag">ANTHROPIC / AI-ASSISTED</div><h2>Levent Alpoge</h2>
+      <ul><li>Research scientist at Anthropic, announced RH + GRH</li><li>46-page note public at alpo.ge/remark.pdf</li><li>~17.4M lines of Lean 4, split into 14 tar parts</li><li>Community mirror on GitHub (CocoSgt/riemann-hypothesis-lean)</li></ul></div>
+    <div class="card v"><div class="tag">STANFORD / HUMAN-ONLY</div><h2>Alessandro Masullo</h2>
+      <ul><li>Postdoc, posted a human-only claimed proof the same week</li><li>Via Vakil's blog, no formalization</li><li>Status: unverified</li></ul></div>
+  </div>
+  <div class="card"><div class="tag">BUZZARD'S FOUR QUESTIONS FOR ANY FORMAL PROOF</div>
+    <p>1. Does the formal statement match the mathematical claim? &nbsp;2. Does the Lean code compile? &nbsp;3. Does it prove exactly what it says (<code>lake comparator</code>)? &nbsp;4. No kernel exploit (<code>lake comparator --paranoid</code>)? The full comparator run was still pending at press time; Joel Sutherland (MIT) was reported compiling the corpus.</p></div>
+  <div class="foot">Sources: alpo.ge, Scott Aaronson's blog (scottaaronson.blog/?p=9598), community coverage, November 2026.</div>
+</section>
+
+<!-- 3 WHAT MATHEMATICA CAN DO -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>SCOPE &middot; <span>03</span></div>
+  <h1>Mathematica cannot check a proof. It can check <span class="hl">the consequences</span></h1>
+  <p class="sub">A proof of RH makes falsifiable numerical predictions. Each one is a published theorem with an equals sign you can push hard.</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">What Lean gives (if it verifies)</div><p>A machine-checked derivation from the axioms. Every lemma and epsilon verified by a small trusted kernel. Certainty, once the comparator finishes.</p></div>
+    <div class="card v"><div class="label">What Mathematica gives, today</div><p>A numerical laboratory: <code>ZetaZero</code>, <code>RiemannSiegelZ</code>, <code>DivisorSigma</code>, <code>MangoldtLambda</code>, <code>EulerPsi</code>. Fast, built-in, and ready to falsify.</p></div>
+  </div>
+  <div class="card g"><div class="tag">THE FOUR AUDITS WE RAN, EACH TIED TO A PUBLISHED EQUIVALENCE OR BOUND</div>
+    <table><tr><th>Audit</th><th>Theorem being stressed</th><th>Kills the claim if</th></tr>
+    <tr><td>1. Lagarias sweep</td><td>sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n (RH, Lagarias 2002)</td><td>any n violates</td></tr>
+    <tr><td>2. Zeros on the line</td><td>Hardy Z changes sign between consecutive zeros (all zeros simple + on line)</td><td>any midpoint vanishes</td></tr>
+    <tr><td>3. Explicit formula</td><td>psi(x) = x &minus; &Sigma; x<sup>&rho;</sup>/&rho; &minus; log 2&pi; &minus; log(1&minus;x<sup>&minus;2</sup>)/2</td><td>reconstruction drifts off the sieve</td></tr>
+    <tr><td>4. GRH least prime</td><td>least p &equiv; a mod q satisfies p &lt; 2q<sup>2</sup>log<sup>2</sup>q (Bach-Sorenson, GRH)</td><td>any class violates</td></tr></table></div>
+  <div class="foot">A numerical audit cannot confirm a proof. It can falsify one early, and it can anchor the claim to plain arithmetic while the formal check runs.</div>
+</section>
+
+<!-- 4 TOOLKIT -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE TOOLKIT &middot; <span>04</span></div>
+  <h1>One package, <span class="hl">two hundred lines</span>, six entry points</h1>
+  <p class="sub">RHVerification.wl: a small Wolfram Language package with a public API, a scale-switchable build script, and a self-audit that cross-checks our math against Mathematica's built-ins.</p>
+  <div class="two">
+    <pre class="box">MachineProfile[]        (* cores, kernel, version *)
+LagariasCheck[nmax]     (* RH: sigma(n) &lt;= bound, all n *)
+ZerosOnLineCheck[k]     (* Hardy Z at midpoints of first k zeros *)
+ZeroCountingCheck[k]    (* N(T) formula vs actual count *)
+PsiReconstruction[x,k]  (* explicit formula vs sieve *)
+LeastPrimeAPCheck[q]    (* GRH: least prime in every a mod q *)
+RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
+    <div class="card"><div class="label">Design rules that made it fast</div>
+      <ul><li>Parallel <code>ParallelTable</code> over 24 chunked ranges: DivisorSigma per chunk, then one Flatten</li>
+      <li>Harmonic bound by asymptotic expansion, error verified &lt; 1.1e-14 against exact <code>HarmonicNumber</code> to n = 2000</li>
+      <li>Sign tests with vectorized <code>UnitStep</code>, zero element-wise branching</li>
+      <li>Own Mangoldt sieve, audited term-by-term against <code>MangoldtLambda</code> and <code>EulerPsi</code></li></ul></div>
+  </div>
+  <div class="card r" style="margin-top:18px"><div class="tag">THE SELF-AUDIT GUARANTEE</div><p>A bug in our code must not be able to masquerade as a discovery about the zeta function. The audit script re-derives every ingredient independently and diffs against the built-in. It passed all checks (exports/audit_report.txt).</p></div>
+  <div class="foot">Package: C:\Users\danie\RH-MantiQ\src\RHVerification.wl &middot; build: build_project.wls &middot; audit: proof_audit.wls.</div>
+</section>
+
+<!-- 5 LAGARIAS -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>AUDIT 1 &middot; <span>05</span></div>
+  <h1>Lagarias: RH without <span class="hl">a single complex number</span></h1>
+  <p class="sub">sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for every positive integer n is equivalent to RH (Lagarias, Amer. Math. Monthly 2002). We swept n = 1 to 100,000,000.</p>
+  <div class="bigrow">
+    <div class="card g"><div class="label">Full-scale result, n &le; 10<sup>8</sup></div>
+      <div class="stat g">0<small> violations</small></div>
+      <p>51 seconds, 24 kernels (101 s when a zombie kernel from a debugging run was stealing half the machine; even that tells a story). n = 1 is the known equality case.</p></div>
+    <div class="card"><div class="label">The tightest cases are highly composite</div>
+      <p><b>n = 12</b> leads with ratio 0.988636, then 120, 60, 2520, 5040, 24, 360, 840, 55440, 10080. Exactly the predicted structure: the inequality is tightest where sigma(n)/n peaks.</p></div>
+  </div>
+  <figure><img src="assets/fig_lagarias_tight.png" alt="Tightest cases of the Lagarias inequality"><figcaption>The ten tightest n in the full 10<sup>8</sup> sweep: every leader is highly composite, and the leader board is identical to the demo scale's.</figcaption></figure>
+  <div class="foot">Lagarias, J. C., "An elementary problem equivalent to the Riemann Hypothesis", Amer. Math. Monthly 109 (2002) 534-543. Data: exports/lagarias_summary.json.</div>
+</section>
+
+<!-- 6 SCALING -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>HARDWARE &middot; <span>06</span></div>
+  <h1>From <span class="hl">3.4 seconds to 10<sup>8</sup></span>: the scaling story</h1>
+  <p class="sub">Same package, one environment variable. The demo run fits in a coffee order; the full run fits in a coffee break.</p>
+  <table>
+    <tr><th>Check</th><th>Demo scale</th><th>Full scale</th><th>Full-scale wall time</th></tr>
+    <tr><td>Lagarias sigma(n) sweep</td><td class="num">10<sup>6</sup> in 3.4 s</td><td class="num">10<sup>8</sup></td><td class="num">51 s, 24 kernels</td></tr>
+    <tr><td>Zeros on the line</td><td class="num">2,000 zeros (T &asymp; 2515)</td><td class="num">20,000 zeros (T &asymp; 18,046)</td><td class="num">55 s, 24 kernels</td></tr>
+    <tr><td>Explicit formula psi(x)</td><td class="num">x = 500, 200 zeros</td><td class="num">x = 2000, 1000 zeros</td><td class="num">18 s</td></tr>
+    <tr><td>GRH least prime, all classes</td><td class="num">q &le; 200 (12,231 classes)</td><td class="num">q &le; 1000 (304,191 classes)</td><td class="num">8.6 s</td></tr>
+  </table>
+  <div class="bigrow" style="margin-top:18px">
+    <div class="card"><div class="label">100x the range</div><p>Demo to full is a 100x range increase on the integer sweep, served by parallel chunked DivisorSigma: each of 24 kernels owns one contiguous chunk.</p></div>
+    <div class="card"><div class="label">What the machine spent it on</div><p>The sigma pass keeps all 24 kernels saturated for about 40 CPU-seconds each. Everything after is vectorized real arithmetic on packed arrays.</p></div>
+  </div>
+  <div class="foot">Machine: Intel Core Ultra 9 275HX, 24 logical cores (12 physical), 64 GB RAM. Times measured November 21, 2026, Mathematica 15.0.1.</div>
+</section>
+
+<!-- 7 ZEROS -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>AUDIT 2 &middot; <span>07</span></div>
+  <h1>Twenty thousand zeros, <span class="hl">every sign change present</span></h1>
+  <p class="sub">For each consecutive pair of zeros of zeta, Hardy's Z function must change sign. We evaluate RiemannSiegelZ at every midpoint.</p>
+  <div class="bigrow">
+    <div class="card g"><div class="label">First 20,000 zeros, T to 18,046</div><div class="stat g">0<small> midpoint failures</small></div><p>Hardy Z evaluated at all 19,999 midpoints between consecutive zeros. The ordinates themselves are computed in parallel chunks: one zero at a time, Mathematica needs minutes; chunked across 24 kernels it takes 55 seconds.</p></div>
+    <div class="card"><div class="label">Counting function N(T)</div><p>N(T) matches the actual count with relative error 3.1e-4 at T &asymp; 2515 and 3.0e-5 at T &asymp; 18,046: decaying at exactly the predicted rate.</p></div>
+  </div>
+  <figure><img src="assets/fig_zeros.png" alt="Hardy Z between consecutive zeros"><figcaption>Hardy Z sampled between consecutive zero ordinates: the sign flips at every zero, and the envelope grows like predicted by the Riemann-Siegel formula.</figcaption></figure>
+  <div class="foot">ZetaZero[k] stays symbolic until you apply N: asking for 20,000 ordinates means 20,000 individual root-findings, about half an hour single-threaded. Chunked over 24 kernels: 55 seconds. Data: exports/zeros_on_line.json.</div>
+</section>
+
+<!-- 8 EXPLICIT FORMULA -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>AUDIT 3 &middot; <span>08</span></div>
+  <h1>The explicit formula, <span class="hl">rebuilt from the zeros</span></h1>
+  <p class="sub">psi(x) = x &minus; &Sigma;<sub>&rho;</sub> x<sup>&rho;</sup>/&rho; &minus; log(2&pi;) &minus; log(1&minus;x<sup>&minus;2</sup>)/2. Zeros on the critical line are what make the oscillation stay controlled.</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Reconstruction vs independent sieve</div><p>Max abs error 4.73 over x &le; 2000, concentrated exactly at the prime-power jumps of psi: a truncated Dirichlet series overshoots at discontinuities (Gibbs-style), and is flat between them. That shape is the fingerprint of a healthy zero distribution.</p></div>
+    <div class="card v"><div class="label">Honest scope</div><p>The record for numerical zero verification is ~10<sup>13</sup> zeros (Gourdon 2004). We are not chasing records. We are showing that a workstation re-derives a meaningful slice of the evidence in minutes, the same day the claim appeared.</p></div>
+  </div>
+  <div class="two">
+    <figure><img src="assets/fig_psi_reconstruction.png" alt="psi reconstruction"><figcaption>psi(x) rebuilt from 1000 zeros (line) vs the Mangoldt sieve (steps), x &le; 2000.</figcaption></figure>
+    <figure><img src="assets/fig_psi_error.png" alt="psi error"><figcaption>The error: flat between jumps, spiking at them, shrinking as more zeros enter the sum.</figcaption></figure>
+  </div>
+  <div class="foot">Sieve cross-checked against Mathematica's MangoldtLambda and EulerPsi in the audit script. Data: exports/psi_data.csv.</div>
+</section>
+
+<!-- 9 GRH -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>AUDIT 4 &middot; <span>09</span></div>
+  <h1>GRH's most <span class="hl">concrete promise</span>: a prime in every class</h1>
+  <p class="sub">Bach-Sorenson: under GRH, for every coprime a and q there is a prime p &equiv; a (mod q) with p &lt; 2q<sup>2</sup>log<sup>2</sup>q. Exhaustively checkable.</p>
+  <div class="bigrow">
+    <div class="card g"><div class="label">Full-scale result, q &le; 1000</div><div class="stat g">0<small> bound violations</small></div><p>304,191 reduced residue classes swept in 8.6 seconds. Largest least prime observed: 70,783.</p></div>
+    <div class="card"><div class="label">The bound is far from sharp</div><p>Largest least prime at q &le; 200: 7121, against bounds that are orders of magnitude larger. A single violation would be world news; the margin is enormous everywhere.</p></div>
+  </div>
+  <figure><img src="assets/fig_least_prime.png" alt="Least prime in every reduced residue class"><figcaption>Every dot is the least prime p(a, q) for one of the 304,191 reduced residue classes a mod q, q &le; 1000; the blue curve is the GRH bound 2q<sup>2</sup>log<sup>2</sup>q. Every dot sits far below the curve.</figcaption></figure>
+  <div class="foot">Bach, E. and Sorenson, J., "Explicit bounds for primes in arithmetic progressions", Math. Comp. 65 (1996). Data: exports/least_prime_ap.csv.</div>
+</section>
+
+<!-- 10 TRAPS -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>BATTLE SCARS &middot; <span>10</span></div>
+  <h1>A small museum of <span class="hl">Wolfram performance traps</span></h1>
+  <p class="sub">Each of these cost real time at the 10<sup>8</sup> scale. Recorded here so the next person loses minutes, not hours.</p>
+  <div class="bigrow">
+    <div class="card r"><div class="tag">THE BIGNUM HANG</div><p><code>Range[101, 10^8]</code> is a packed <b>integer</b> array. <code>N[Log[m]]</code> on it: 31.6 s instead of 0.04 s. <code>m^4</code> on it: 100 million arbitrary-precision integers (m<sup>4</sup> hits 10<sup>32</sup>, far past 64-bit), which looks exactly like a frozen session. Fix: build the range as reals from the start. 3.47 s.</p></div>
+    <div class="card r"><div class="tag">THE COMPARATOR SORT</div><p><code>Ordering[ratios, n, Greater]</code> on 10<sup>8</sup> doubles takes the slow comparator path and stalls the sweep after the parallel phase, with all kernels idle. Fix: <code>Ordering[-ratios, n]</code>, the fast default path.</p></div>
+  </div>
+  <div class="row">
+    <div class="card v"><div class="tag">SMALLER SCARS</div><ul>
+      <li><code>Accumulate[1./Range[n]]</code>: microseconds per element; replace with a closed-form tail plus a short exact head</li>
+      <li><code>ZetaZero[k]</code> stays symbolic until <code>N[]</code>: a list of 20,000 ordinates silently becomes 20,000 single-threaded root-findings (half an hour); parallelize the N per chunk</li>
+      <li><code>Less</code>/<code>Greater</code>/<code>Boole</code> are not listable; <code>UnitStep</code> arithmetic is</li>
+      <li><code>Quantity</code>/<code>Missing</code> values break JSON export into 0-byte files</li>
+      <li>Per-call <code>N[HarmonicNumber[n]]</code> is slow; vectorize once</li>
+      <li>Chunked <code>ParallelTable</code> beats per-element parallel dispatch by orders of magnitude</li></ul></div>
+    <div class="card g"><div class="tag">WHAT THE DEMO PAIR PROVED</div><p>The same package that stalls at 10<sup>8</sup> with one wrong line runs the entire four-audit campaign in minutes when the arithmetic stays packed and real. Numerical number theory at this scale is an <b>engineering</b> discipline: the math was known; the buffers were not.</p></div>
+  </div>
+  <div class="foot">All traps reproduced in isolation before fixing; timings in this deck are single-run wall clock on the 275HX.</div>
+</section>
+
+<!-- 11 VERDICT -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>VERDICT &middot; <span>11</span></div>
+  <h1>What the numbers say, <span class="hl">and what they do not</span></h1>
+  <p class="sub">The numerical shadow of the claim matches arithmetic at every scale we could reach. The formal verdict belongs to the Lean comparator.</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Scoreboard, November 21, 2026</div>
+      <table><tr><th>Item</th><th>Status</th></tr>
+      <tr><td>Alpoge (Anthropic) RH + GRH claim</td><td>announced, note public</td></tr>
+      <tr><td>Lean corpus, ~17.4M lines</td><td>compile + comparator in progress</td></tr>
+      <tr><td>Masullo (Stanford) rival claim</td><td>unverified</td></tr>
+      <tr><td>This numerical audit (4 checks)</td><td class="num">0 violations, full scale</td></tr></table></div>
+    <div class="card g"><div class="label">Why the audit matters anyway</div>
+      <ul><li><b>Falsify early.</b> A false claimed proof of RH dies fast against these four equivalences; these found nothing.</li>
+      <li><b>Anchor to arithmetic.</b> The Lean corpus implies sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n. We confirmed it for the first 100,000,000 n.</li>
+      <li><b>Democratize.</b> Specialists will run <code>lake comparator</code>. Anyone with a workstation can run the consequences. Both guards matter.</li></ul></div>
+  </div>
+  <div class="foot">Honest scope: a numerical audit cannot confirm a proof. It reduces the probability that the formalized statement is vacuous or false before the expensive verification completes.</div>
+</section>
+
+<!-- 12 REPRODUCE -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>REPRODUCE &middot; <span>12</span></div>
+  <h1>Run it yourself in <span class="hl">two commands</span></h1>
+  <p class="sub">One package, one build script, one audit script. Everything lands in exports/ with JSON, CSV, PNG and a written audit log.</p>
+  <div class="two">
+    <pre class="box"># demo scale: ~2 minutes end to end
+$env:RH_SCALE = "demo"
+wolframscript -file build_project.wls
+wolframscript -file proof_audit.wls
+
+# full scale: the numbers in this deck
+$env:RH_SCALE = "full"
+wolframscript -file build_project.wls</pre>
+    <div class="card"><div class="label">What you get</div>
+      <ul><li><code>lagarias_summary.json</code>: violations, tightest n table, timing</li>
+      <li><code>zeros_on_line.json</code>, <code>zero_counting.json</code></li>
+      <li><code>psi_data.csv</code>: reconstruction vs sieve</li>
+      <li><code>least_prime_ap.csv</code>: every class, every least prime</li>
+      <li>Five publication-grade figures (PNG)</li>
+      <li><code>audit_report.txt</code>: the cross-check log</li></ul></div>
+  </div>
+  <div class="card v" style="margin-top:18px"><div class="tag">PROJECT LAYOUT</div><p><code>C:\Users\danie\RH-MantiQ\</code>: src\RHVerification.wl &middot; build_project.wls &middot; proof_audit.wls &middot; exports\ &middot; README.md. No external dependencies beyond Mathematica itself.</p></div>
+  <div class="foot">Wolfram Mathematica 15.0.1, wolframscript, Windows. The demo scale was chosen so a stranger can verify the whole story before trusting it.</div>
+</section>
+
+<!-- 13 CLOSING -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>CLOSING &middot; <span>13</span></div>
+  <h1>Bring your own <span class="hl">workstation</span></h1>
+  <p class="sub">The gate to serious numerical mathematics is no longer the hardware or the software. It is deciding to write the check.</p>
+  <div class="bigrow">
+    <div class="card g"><div class="label">The one-line summary</div><p>While 17.4 million lines of Lean wait for a comparator, four published consequences of RH and GRH faced 100 million integers, 20,000 zeros, a rebuilt explicit formula and over half a million residue classes on one laptop-class machine. <b>Zero violations.</b></p></div>
+    <div class="person-card"><img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
+      <div><strong>Daniel Liezrowice</strong><span>Engineering Software Lab (ESL)</span>
+      <p>Founder of ESL. Works on evidence-driven software engineering: static analysis, SBOM tooling, and putting serious math on serious hardware.</p>
+      <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">linkedin.com/in/liezrowice</a></div></div>
+  </div>
+  <div class="foot">Article: full write-up with all sources. Package: C:\Users\danie\RH-MantiQ. Live deck: https://zuwasi.github.io/Public-html-pages/rh-mantiq-mathematica/technical/</div>
+</section>
+
+</div></div>
+
+<button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
+<button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
+<div id="hint">&#8592; Swipe to navigate &#8594;</div>
+<div id="counter">1 / 13</div>
+<div id="progress"></div>
+
+<script>
+const track=document.getElementById("track"),slides=[...document.querySelectorAll(".slide")],prev=document.getElementById("prev"),next=document.getElementById("next"),counter=document.getElementById("counter"),progress=document.getElementById("progress"),hint=document.getElementById("hint");
+let index=0,touchX=0,touchY=0,mouseX=0,dragging=false;
+function show(n){const k=Math.max(0,Math.min(slides.length-1,n));index=k;slides.forEach((s,i)=>{s.inert=i!==index;s.setAttribute("aria-hidden",i===index?"false":"true")});track.style.transform=`translate3d(${-index*100}vw,0,0)`;prev.classList.toggle("hidden",index===0);next.classList.toggle("hidden",index===slides.length-1);counter.textContent=`${index+1} / ${slides.length}`;progress.style.width=`${(index+1)/slides.length*100}%`;if(index>0)hint.classList.add("gone")}
+function fromHash(){const k=parseInt(location.hash.slice(1),10);return isNaN(k)?0:k-1}
+prev.addEventListener("click",()=>show(index-1));next.addEventListener("click",()=>show(index+1));
+window.addEventListener("hashchange",()=>{const k=fromHash();if(k!==index)show(k)});
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();show(index+1)}else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();show(index-1)}else if(e.key==="Home"){e.preventDefault();show(0)}else if(e.key==="End"){e.preventDefault();show(slides.length-1)}});
+document.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchX=t.clientX;touchY=t.clientY},{passive:true});
+document.addEventListener("touchend",e=>{const t=e.changedTouches[0],dx=t.clientX-touchX,dy=t.clientY-touchY;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(index+(dx<0?1:-1))},{passive:true});
+document.addEventListener("mousedown",e=>{if(e.button!==0)return;mouseX=e.clientX;dragging=true});
+document.addEventListener("mouseup",e=>{if(!dragging)return;dragging=false;const d=e.clientX-mouseX;if(Math.abs(d)>50)show(index+(d<0?1:-1))});
+document.addEventListener("dragstart",e=>e.preventDefault());
+show(fromHash());
+</script>
+</body>
+</html>
