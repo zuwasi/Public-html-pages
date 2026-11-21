@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ESL: Fil-C vs MISRA C, a measured challenge to the memory-safety claims</title>
-<meta name="description" content="ESL case file: the same bug suite and benchmarks run three ways, gcc -O2, Fil-C 0.687 and Parasoft C/C++test with MISRA C 2025. 5/5 bugs caught at build time, Fil-C misses off-by-one overflows, up to 5.4x slower and 27x peak memory. Public repo, redo it yourself.">
+<meta name="description" content="ESL case file: the same bug suite and benchmarks run seven ways, gcc -O2, Fil-C 0.687, Parasoft C/C++test with MISRA C 2025, safe Rust, unsafe Rust, Zig and ESL Assemblomator on the compiler's own assembly. 5/5 bugs caught at build time, Fil-C misses off-by-one overflows, up to 5.4x slower and 27x peak memory. Public repo, redo it yourself.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
@@ -81,6 +81,9 @@ table.form th{font-family:var(--type);font-weight:400;letter-spacing:.05em;text-
 table.form td.v,table.form td code{font-family:var(--mono)}
 table.form td.hl{background:#f3e3b8;font-weight:600}
 td.silent{color:var(--stamp);font-weight:600}td.caught{color:var(--ok);font-weight:600}td.runtime{color:var(--warn);font-weight:600}
+table.form.compact{font-size:clamp(11px,1vw,14px)}
+table.form.compact th,table.form.compact td{padding:clamp(5px,0.9vh,10px) 8px;line-height:1.3}
+table.form.compact th{font-size:.8em}
 .list{display:grid;gap:12px;font-size:clamp(14px,1.5vw,19px);line-height:1.55}
 .list div{display:grid;grid-template-columns:22px 1fr;gap:8px}
 .list div::before{content:"\00a7";font-family:var(--type);color:var(--stamp)}
@@ -102,6 +105,17 @@ td.silent{color:var(--stamp);font-weight:600}td.caught{color:var(--ok);font-weig
 .bars i{display:block;height:18px;background:var(--stamp);transform-origin:left;transform:scaleX(0);transition:transform 1.1s cubic-bezier(.2,.7,.3,1)}
 .active .bars i{transform:scaleX(1)}
 .bars i.ok{background:var(--ok)}.bars i.blue{background:var(--blue)}.bars i.grey{background:#9b917a}
+.bars i.green{background:var(--ok)}.bars i.orange{background:#b06a10}.bars i.purple{background:#5b4a8a}
+/* treatment card grid (7-up, 4 + 3) */
+.treat{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(8px,1.2vw,18px);align-items:stretch}
+.page>.treat{flex:1 1 auto;min-height:0}
+.treat>.kpi{height:100%;padding:clamp(10px,1.6vh,18px) clamp(12px,1.3vw,20px)}
+.treat>.kpi b{font-size:clamp(24px,3vw,48px)}
+.treat>.kpi span{font-size:clamp(12px,1.1vw,15px);margin-top:8px;line-height:1.4}
+@media (max-width:1100px){.treat{grid-template-columns:repeat(2,1fr)}}
+/* chart panel */
+.chartbox{border:1px solid var(--rule);background:#fbf8ee;padding:clamp(8px,1.2vh,16px)}
+.chartbox svg{display:block;width:100%;height:auto}
 .bars .grp{grid-column:1 / -1;display:block;font-family:var(--type);text-transform:uppercase;letter-spacing:.05em;font-size:clamp(13px,1.2vw,16px);color:var(--ink2);margin-top:10px}
 .bars .val{text-align:right;white-space:nowrap;font-family:var(--mono)}
 .person{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;border:1px solid var(--rule);background:#fbf8ee;padding:12px}
@@ -147,10 +161,10 @@ td.silent{color:var(--stamp);font-weight:600}td.caught{color:var(--ok);font-weig
 <!-- 1 COVER -->
 <section class="slide">
   <div class="page" style="justify-content:center">
-    <div class="brand"><img src="assets/esl-logo.png" alt="ESL logo"><div class="who">Engineering Software Lab (ESL) &middot; case file FLC-2026-11<br>Fil-C 0.687 &middot; gcc 13.3 &middot; Parasoft C/C++test 2026.1.3 &middot; MISRA C 2025</div></div>
+    <div class="brand"><img src="assets/esl-logo.png" alt="ESL logo"><div class="who">Engineering Software Lab (ESL) &middot; case file FLC-2026-11<br>Fil-C 0.687 &middot; gcc 13.3 &middot; Parasoft C/C++test 2026.1.3 &middot; MISRA C 2025 &middot; rustc 1.97.1 &middot; Zig 0.17.1 &middot; ESL Assemblomator</div></div>
     <h1 style="margin-top:14px">Fil-C vs MISRA C:<br>a measured challenge to the<br>memory-safety claims</h1>
-    <p class="sub">A LinkedIn post presents Fil-C as a compiler swap that makes existing C/C++ memory safe. We did not argue with it. We measured it: the same bug suite and benchmarks run three ways, on the same machine.</p>
-    <div class="stamps"><span class="stamp">Measured, not argued</span><span class="stamp ok">5/5 caught at build time</span><span class="stamp warn">Fil-C: 3/5 at runtime</span></div>
+    <p class="sub">A LinkedIn post presents Fil-C as a compiler swap that makes existing C/C++ memory safe. We did not argue with it. We measured it: the same bug suite and benchmarks run seven ways on the same machine, including safe Rust, unsafe Rust, Zig, and the compiler's own assembly.</p>
+    <div class="stamps"><span class="stamp">Measured, not argued</span><span class="stamp ok">5/5 caught at build time</span><span class="stamp warn">Fil-C: 3/5 at runtime</span><span class="stamp ok">Safe Rust &amp; Zig: 5/5</span><span class="stamp warn">Unsafe Rust &amp; assembly: 0&ndash;1 / 5</span></div>
     <p class="footnote">WSL2 Ubuntu 24.04 &middot; 24 cores &middot; all sources unchanged &middot; November 2026 &middot; Source and evidence: <a href="https://github.com/zuwasi/fil-c-vs-misra-benchmark" target="_blank" rel="noopener">github.com/zuwasi/fil-c-vs-misra-benchmark</a></p>
   </div>
   <div class="hint">&larr; swipe or use the arrow keys &rarr;</div>
@@ -179,12 +193,16 @@ td.silent{color:var(--stamp);font-weight:600}td.caught{color:var(--ok);font-weig
 <!-- 3 METHOD -->
 <section class="slide">
   <div class="page">
-    <div class="filehead"><span>Method <b>| three treatments</b></span><div class="tabs"></div></div>
+    <div class="filehead"><span>Method <b>| seven treatments</b></span><div class="tabs"></div></div>
     <h2>What we did</h2>
-    <div class="three">
+    <div class="treat">
       <div class="kpi"><b>A</b><span><b>gcc -O2</b>, the status quo. What happens to each bug on a normal production toolchain today.</span></div>
       <div class="kpi red"><b>B</b><span><b>Fil-C 0.687</b>, Pizlo's clang 20.1.8 fork with InvisiCaps and a concurrent GC. Compiled with <code>-O2</code>, zero source changes.</span></div>
       <div class="kpi blue"><b>C</b><span><b>Parasoft MISRA C 2025</b>, static analysis with the built-in MISRA C 2025 configuration, including flow analysis. Zero runtime cost by design.</span></div>
+      <div class="kpi ok"><b>D</b><span><b>Safe Rust</b>, rustc 1.97.1 <code>-O</code>. Ownership plus bounds checks: the same bugs, direct ports, byte-identical benchmark output.</span></div>
+      <div class="kpi"><b>E</b><span><b>Unsafe Rust</b>, raw pointers, the way you touch hardware from Rust. The language's escape hatch, measured honestly.</span></div>
+      <div class="kpi warn"><b>F</b><span><b>Zig 0.17.1 ReleaseSafe</b>. Bounds checks plus a safety allocator: language-level safety with explicit allocators.</span></div>
+      <div class="kpi"><b>G</b><span><b>ESL Assemblomator</b> on the compiler's own x86-64 assembly: what a static analyzer can still see after the C is lowered away.</span></div>
     </div>
     <p class="footnote">Bug suite: 5 standalone programs, one violation each. Benchmarks: 3 clean programs with different pointer intensity (float-heavy, array-heavy, allocation-heavy). Same machine, same sources, same flags.</p>
   </div>
@@ -256,16 +274,16 @@ td.silent{color:var(--stamp);font-weight:600}td.caught{color:var(--ok);font-weig
   <div class="page">
     <div class="filehead"><span>Exhibit R-1 <b>| who caught what, and when</b></span><div class="tabs"></div></div>
     <h2>Detection matrix</h2>
-    <div class="tw"><table class="form">
-      <tr><th>Bug</th><th>gcc -O2</th><th>Fil-C (runtime)</th><th>Parasoft MISRA C 2025 (build time)</th></tr>
-      <tr><td>Heap overflow</td><td class="silent">silent corruption, exit 0</td><td class="silent">silent, exit 0</td><td class="caught">caught, line 11: index [1..10], valid [0..9]</td></tr>
-      <tr><td>Stack overflow</td><td class="runtime">stack canary abort</td><td class="silent">silent, exit 0</td><td class="caught">caught, line 8: index 8, valid [0..7]</td></tr>
-      <tr><td>Use after free</td><td class="silent">silent garbage read, exit 0</td><td class="runtime">panic at the read</td><td class="caught">caught, line 14: "Usage of freed resource p"</td></tr>
-      <tr><td>Double free</td><td class="runtime">glibc abort</td><td class="runtime">panic at 2nd free</td><td class="caught">caught, line 12: "Usage of freed resource p"</td></tr>
-      <tr><td>Wild dereference</td><td class="runtime">SIGSEGV</td><td class="runtime">panic at the write</td><td class="caught">caught, line 6: int-to-pointer cast</td></tr>
-      <tr><td class="hl">Score</td><td class="hl">1.5 / 5</td><td class="hl">3 / 5</td><td class="hl caught">5 / 5</td></tr>
+    <div class="tw"><table class="form compact">
+      <tr><th>Bug</th><th>gcc -O2</th><th>Fil-C (runtime)</th><th>Parasoft MISRA C 2025 (build time)</th><th>Safe Rust -O</th><th>Unsafe Rust -O</th><th>Zig ReleaseSafe</th><th>Assembly + Assemblomator</th></tr>
+      <tr><td>Heap overflow</td><td class="silent">silent corruption, exit 0</td><td class="silent">silent, exit 0</td><td class="caught">caught, line 11: index [1..10], valid [0..9]</td><td class="caught">panic, exit 101</td><td class="silent">silent, exit 0</td><td class="caught">panic, exit 134</td><td class="silent">not visible after lowering</td></tr>
+      <tr><td>Stack overflow</td><td class="runtime">stack canary abort</td><td class="silent">silent, exit 0</td><td class="caught">caught, line 8: index 8, valid [0..7]</td><td class="caught">compile error (lint)</td><td class="silent">silent, exit 0</td><td class="caught">compile error</td><td class="silent">not visible (bounds gone)</td></tr>
+      <tr><td>Use after free</td><td class="silent">silent garbage read, exit 0</td><td class="runtime">panic at the read</td><td class="caught">caught, line 14: "Usage of freed resource p"</td><td class="caught">compile error (E0382)</td><td class="silent">silent garbage read</td><td class="caught">segfault (allocator unmaps)</td><td class="silent">not visible (lifetime gone)</td></tr>
+      <tr><td>Double free</td><td class="runtime">glibc abort</td><td class="runtime">panic at 2nd free</td><td class="caught">caught, line 12: "Usage of freed resource p"</td><td class="caught">compile error (E0382)</td><td class="silent">silent (optimizer deletes the 2nd free)</td><td class="caught">segfault inside free</td><td class="silent">not patterned</td></tr>
+      <tr><td>Wild dereference</td><td class="runtime">SIGSEGV</td><td class="runtime">panic at the write</td><td class="caught">caught, line 6: int-to-pointer cast</td><td class="caught">compile error (E0133)</td><td class="runtime">SIGSEGV</td><td class="caught">compile error (misaligned)</td><td class="caught">caught: store via register holding 0xdeadbeef (ASM-X86-015)</td></tr>
+      <tr><td class="hl">Score</td><td class="hl">1.5 / 5</td><td class="hl">3 / 5</td><td class="hl caught">5 / 5</td><td class="hl caught">5 / 5</td><td class="hl">0 / 5</td><td class="hl caught">5 / 5</td><td class="hl">1 / 5</td></tr>
     </table></div>
-    <p class="footnote">Fil-C panics print <code>"filc panic: thwarted a futile attempt to violate memory safety"</code> with a stack trace: real protection, at runtime. MISRA flagged every bug before anything shipped, with the exact line and the correct valid index range.</p>
+    <p class="footnote">Fil-C panics print <code>"filc panic: thwarted a futile attempt to violate memory safety"</code> with a stack trace: real protection, at runtime. MISRA flagged every bug before anything shipped, with the exact line and the correct valid index range. Safe Rust rejects 4 of 5 outright at compile time and panics on the fifth; Zig catches the two constant-index bugs at compile time and its safety allocator turns the lifetime bugs into crashes. Assembly keeps only what lowering left behind: 1/5.</p>
   </div>
 </section>
 
@@ -313,19 +331,28 @@ int main(int argc, char **argv) {
 <section class="slide">
   <div class="page">
     <div class="filehead"><span>Exhibit R-3 <b>| runtime of clean code</b></span><div class="tabs"></div></div>
-    <h2>Runtime of clean code: gcc vs Fil-C</h2>
-    <div class="bars" style="max-width:900px">
+    <h2>Runtime of clean code: five compilers, three shapes</h2>
+    <div class="bars">
       <div class="grp">sieve &middot; array-heavy &middot; 10M elements x 20 passes</div>
-      <div><span>gcc -O2</span><i class="blue" style="width:53%"></i><span class="val">0.46 s</span></div>
+      <div><span>gcc -O2</span><i class="blue" style="width:53%"></i><span class="val">0.46 s &middot; 1.0&times;</span></div>
       <div><span>Fil-C -O2</span><i style="width:100%"></i><span class="val">0.87 s &middot; 1.9&times;</span></div>
+      <div><span>Safe Rust -O</span><i class="green" style="width:55%"></i><span class="val">0.48 s &middot; 1.0&times;</span></div>
+      <div><span>Zig ReleaseSafe</span><i class="orange" style="width:71%"></i><span class="val">0.62 s &middot; 1.3&times;</span></div>
+      <div><span>Zig ReleaseFast</span><i class="purple" style="width:64%"></i><span class="val">0.56 s &middot; 1.2&times;</span></div>
       <div class="grp">btree &middot; pointer/alloc-heavy &middot; 131k nodes x 100 builds</div>
-      <div><span>gcc -O2</span><i class="blue" style="width:19%"></i><span class="val">0.18 s</span></div>
+      <div><span>gcc -O2</span><i class="blue" style="width:19%"></i><span class="val">0.18 s &middot; 1.0&times;</span></div>
       <div><span>Fil-C -O2</span><i style="width:100%"></i><span class="val">0.97 s &middot; 5.4&times;</span></div>
+      <div><span>Safe Rust -O</span><i class="green" style="width:34%"></i><span class="val">0.33 s &middot; 1.8&times;</span></div>
+      <div><span>Zig ReleaseSafe</span><i class="orange" style="width:52%"></i><span class="val">0.50 s &middot; 2.8&times;</span></div>
+      <div><span>Zig ReleaseFast</span><i class="purple" style="width:28%"></i><span class="val">0.27 s &middot; 1.5&times;</span></div>
       <div class="grp">mandel &middot; float-heavy &middot; 1600x1600</div>
-      <div><span>gcc -O2</span><i class="blue" style="width:5%"></i><span class="val">0.05 s</span></div>
-      <div><span>Fil-C -O2</span><i style="width:5%"></i><span class="val">0.05 s &middot; 1.0&times;</span></div>
+      <div><span>gcc -O2</span><i class="blue" style="width:100%"></i><span class="val">0.05 s &middot; 1.0&times;</span></div>
+      <div><span>Fil-C -O2</span><i style="width:100%"></i><span class="val">0.05 s &middot; 1.0&times;</span></div>
+      <div><span>Safe Rust -O</span><i class="green" style="width:80%"></i><span class="val">0.04 s &middot; 0.8&times;</span></div>
+      <div><span>Zig ReleaseSafe</span><i class="orange" style="width:100%"></i><span class="val">0.05 s &middot; 1.0&times;</span></div>
+      <div><span>Zig ReleaseFast</span><i class="purple" style="width:100%"></i><span class="val">0.05 s &middot; 1.0&times;</span></div>
     </div>
-    <p class="footnote">Fil-C's own documentation claims 1.5&times;&ndash;4&times;. The pointer-heavy case measured <b>5.4&times;</b>, worse than their stated worst case. Medians of 3 runs.</p>
+    <p class="footnote">Fil-C's own documentation claims 1.5&times;&ndash;4&times;. The pointer-heavy case measured <b>5.4&times;</b>, worse than their stated worst case. Safe Rust pays 1.8&times; on the same benchmark; Zig ReleaseFast 1.5&times;. Medians of 3 runs; all three language ports print byte-identical results to the C versions.</p>
   </div>
 </section>
 
@@ -334,14 +361,17 @@ int main(int argc, char **argv) {
   <div class="page">
     <div class="filehead"><span>Exhibit R-4 <b>| peak memory</b></span><div class="tabs"></div></div>
     <h2>Peak memory on allocation-heavy code</h2>
-    <div class="bars" style="max-width:900px">
+    <div class="bars">
       <div class="grp">btree &middot; peak RSS &middot; 131k nodes</div>
-      <div><span>gcc -O2</span><i class="blue" style="width:4%"></i><span class="val">5.6 MB</span></div>
+      <div><span>gcc -O2</span><i class="blue" style="width:4%"></i><span class="val">5.6 MB &middot; 1.0&times;</span></div>
       <div><span>Fil-C -O2</span><i style="width:100%"></i><span class="val">155.5 MB &middot; 27&times;</span></div>
+      <div><span>Safe Rust -O</span><i class="green" style="width:4%"></i><span class="val">6.0 MB &middot; 1.1&times;</span></div>
+      <div><span>Zig ReleaseSafe</span><i class="orange" style="width:3%"></i><span class="val">4.6 MB &middot; 0.8&times;</span></div>
+      <div><span>Zig ReleaseFast</span><i class="purple" style="width:3%"></i><span class="val">4.4 MB &middot; 0.8&times;</span></div>
     </div>
     <div class="two" style="margin-top:8px">
-      <div class="kpi red"><b>27&times;</b><span>peak RSS growth on the allocation-heavy benchmark. "Higher memory" in the post undersells this by more than an order of magnitude.</span></div>
-      <div class="note warn" style="opacity:1;transform:none"><i class="k">!</i><div><b>Why</b><span>In Fil-C, <code>free()</code> does not return memory to the OS. It invalidates the capability; collection happens later, in concurrent GC cycles. Every production process now runs a garbage collector.</span></div></div>
+      <div class="kpi red"><b>27&times;</b><span>peak RSS growth on the allocation-heavy benchmark, versus 1.1&times; for safe Rust and 0.8&times; for Zig. "Higher memory" in the post undersells this by more than an order of magnitude.</span></div>
+      <div class="note warn" style="opacity:1;transform:none"><i class="k">!</i><div><b>Why</b><span>In Fil-C, <code>free()</code> does not return memory to the OS. It invalidates the capability; collection happens later, in concurrent GC cycles. Every production process now runs a garbage collector. Rust and Zig stay at C-level memory on the same benchmark.</span></div></div>
     </div>
   </div>
 </section>
@@ -363,7 +393,103 @@ int main(int argc, char **argv) {
   </div>
 </section>
 
-<!-- 12 VERDICTS -->
+<!-- 12 TRADEOFF MAP -->
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span>Exhibit X-1 <b>| the trade-off map</b></span><div class="tabs"></div></div>
+    <h2>Safety vs speed vs footprint, all seven on one chart</h2>
+    <div class="chartbox" style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;justify-content:center">
+      <svg viewBox="0 0 1040 560" role="img" aria-label="Trade-off map: detection score versus runtime cost, bubble size is peak memory">
+        <!-- grid -->
+        <g stroke="#d8cfae" stroke-width="1">
+          <line x1="110" y1="50" x2="110" y2="480"/><line x1="290" y1="50" x2="290" y2="480"/><line x1="470" y1="50" x2="470" y2="480"/><line x1="650" y1="50" x2="650" y2="480"/><line x1="830" y1="50" x2="830" y2="480"/><line x1="1010" y1="50" x2="1010" y2="480"/>
+          <line x1="110" y1="480" x2="1010" y2="480"/><line x1="110" y1="394" x2="1010" y2="394"/><line x1="110" y1="308" x2="1010" y2="308"/><line x1="110" y1="222" x2="1010" y2="222"/><line x1="110" y1="136" x2="1010" y2="136"/><line x1="110" y1="50" x2="1010" y2="50"/>
+        </g>
+        <!-- ideal corner -->
+        <rect x="110" y="50" width="380" height="86" fill="rgba(47,107,58,.07)"/>
+        <text x="120" y="70" font-family="Special Elite, monospace" font-size="15" fill="#2f6b3a">the ideal corner: 5/5 caught, zero runtime cost</text>
+        <!-- axes -->
+        <g font-family="JetBrains Mono, monospace" font-size="14" fill="#4a443a">
+          <text x="110" y="505" text-anchor="middle">1&times;</text><text x="290" y="505" text-anchor="middle">2&times;</text><text x="470" y="505" text-anchor="middle">3&times;</text><text x="650" y="505" text-anchor="middle">4&times;</text><text x="830" y="505" text-anchor="middle">5&times;</text><text x="1010" y="505" text-anchor="middle">6&times;</text>
+          <text x="88" y="485" text-anchor="end">0</text><text x="88" y="399" text-anchor="end">1</text><text x="88" y="313" text-anchor="end">2</text><text x="88" y="227" text-anchor="end">3</text><text x="88" y="141" text-anchor="end">4</text><text x="88" y="55" text-anchor="end">5</text>
+        </g>
+        <text x="560" y="535" text-anchor="middle" font-family="Special Elite, monospace" font-size="16" fill="#1d1a16">runtime cost vs gcc (lower is better) &middot; bubble area = peak RSS, pointer-heavy benchmark</text>
+        <text x="30" y="270" text-anchor="middle" font-family="Special Elite, monospace" font-size="16" fill="#1d1a16" transform="rotate(-90 30 270)">bugs caught (of 5)</text>
+        <!-- bubbles -->
+        <circle cx="110" cy="480" r="12" fill="#b8322a" opacity=".85"/><text x="132" y="474" font-family="Inter, sans-serif" font-size="15" fill="#1d1a16"><tspan font-weight="700">Unsafe Rust</tspan> 0/5 &middot; escape hatch</text>
+        <circle cx="110" cy="394" r="9" fill="#9b917a" opacity=".9"/><text x="132" y="398" font-family="Inter, sans-serif" font-size="15" fill="#1d1a16"><tspan font-weight="700">Assembly + Assemblomator</tspan> 1/5 &middot; post-compile</text>
+        <circle cx="110" cy="340" r="13" fill="#12457a" opacity=".85"/><text x="132" y="344" font-family="Inter, sans-serif" font-size="15" fill="#1d1a16"><tspan font-weight="700">gcc -O2</tspan> 1.5/5 &middot; status quo</text>
+        <circle cx="110" cy="50" r="13" fill="#2f6b3a" opacity=".9"/><text x="128" y="96" font-family="Inter, sans-serif" font-size="15" fill="#1d1a16"><tspan font-weight="700">Parasoft MISRA C 2025</tspan> 5/5 &middot; build time</text>
+        <text x="128" y="114" font-family="Inter, sans-serif" font-size="13" fill="#2f6b3a">binary unchanged, zero runtime cost</text>
+        <circle cx="254" cy="50" r="13" fill="#2f6b3a" opacity=".9"/><text x="150" y="28" font-family="Inter, sans-serif" font-size="15" fill="#1d1a16"><tspan font-weight="700">Safe Rust</tspan> 5/5 &middot; 1.8&times; on pointer-heavy</text>
+        <circle cx="434" cy="50" r="12" fill="#b06a10" opacity=".9"/><text x="470" y="28" font-family="Inter, sans-serif" font-size="15" fill="#1d1a16"><tspan font-weight="700">Zig ReleaseSafe</tspan> 5/5 &middot; 2.8&times;</text>
+        <circle cx="902" cy="222" r="60" fill="#b8322a" opacity=".55"/><circle cx="902" cy="222" r="60" fill="none" stroke="#b8322a"/><text x="902" y="216" text-anchor="middle" font-family="Inter, sans-serif" font-size="16" font-weight="700" fill="#fff">Fil-C</text><text x="902" y="238" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" fill="#fff">3/5</text>
+        <text x="826" y="226" text-anchor="end" font-family="Inter, sans-serif" font-size="14" fill="#1d1a16">5.4&times; runtime &middot; 27&times; RSS</text>
+      </svg>
+    </div>
+    <p class="footnote">Everything plotted is measured in this benchmark, nothing estimated. Static analysis and the safe languages occupy the top of the chart; Fil-C pays the highest price in both time and memory for a partial score; unsafe Rust and lowered assembly prove the score depends on what the tool can still see, not on the programmer's intent.</p>
+  </div>
+</section>
+
+<!-- 13 ECOSYSTEM -->
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span>Exhibit X-2 <b>| does it fit a safety-critical program?</b></span><div class="tabs"></div></div>
+    <h2>The ecosystem check</h2>
+    <div class="tw"><table class="form">
+      <tr><th style="width:17%">Dimension</th><th>C + MISRA C 2025</th><th>Safe Rust</th><th>Zig</th><th>Assembly</th></tr>
+      <tr><td>Coding standards</td><td class="caught">MISRA C 2025, MISRA C++ 2023, AUTOSAR C++, CERT C: enforceable rule packs in CI</td><td>Ownership rules are the language; no MISRA-equivalent standard published</td><td class="silent">None published</td><td class="silent">None; per-project conventions</td></tr>
+      <tr><td>Qualified toolchains</td><td class="caught">IAR, Green Hills, Tasking, CompCert (formally verified); Parasoft T&Uuml;V-certified</td><td class="caught">Ferrocene: rustc fork qualified for ISO 26262 ASIL D and DO-178C</td><td class="silent">None qualified</td><td>Every vendor assembler; review is manual</td></tr>
+      <tr><td>RTOS &amp; stacks</td><td class="caught">Zephyr, FreeRTOS/SafeRTOS, QNX, VxWorks, AUTOSAR Classic/Adaptive</td><td>Zephyr (partial), RTIC, Embassy; Rust drivers accepted into Linux 2022+</td><td class="silent">Community ports only</td><td class="caught">Everything ultimately runs on it</td></tr>
+      <tr><td>Silicon vendors</td><td class="caught">Universal</td><td class="caught">NXP, ST, Infineon, Nordic, Espressif ship official Rust support</td><td class="silent">Community ports</td><td class="caught">Universal</td></tr>
+      <tr><td>Runtime cost</td><td class="caught">Zero: analysis happens at build time</td><td class="caught">Bounds checks only, measured 1.0&ndash;1.8&times;</td><td>ReleaseSafe checks; ReleaseFast turns them off</td><td class="caught">Zero</td></tr>
+    </table></div>
+    <p class="footnote">And Fil-C itself in this table: Linux x86_64/ARM64 userland only, no qualified toolchain, no published coding standard, cannot link with non-Fil-C objects (including Rust), and its runtime is written in unsafe code. In DO-178C / ISO 26262 programs an unqualified runtime plus a GC in every process is usually disqualifying, which is why MISRA-style static analysis remains the default gate.</p>
+  </div>
+</section>
+
+<!-- 14 ASSEMBLY -->
+<section class="slide">
+  <div class="page">
+    <div class="filehead"><span>Exhibit A-1 <b>| the control group</b></span><div class="tabs"></div></div>
+    <h2>What about assembly?</h2>
+    <div class="two">
+      <div class="notes">
+        <div class="note"><i class="k">1</i><div><b>Lowering destroys the facts a source analyzer needs</b><span>After <code>gcc -S</code>, every type, bound, and lifetime fact is gone: bug1 is address arithmetic and a call to <code>malloc</code>, bug3 and bug4 are two calls to <code>free</code> with nothing between them. Stock rules score <b>0/5</b></span></div></div>
+        <div class="note ok"><i class="k">2</i><div><b>One bug class survives lowering, and one new rule catches it</b><span>We added <a href="https://github.com/zuwasi/ESL-Assemblomator" target="_blank" rel="noopener noreferrer">ASM-X86-015 upstream</a>: dereference of a register holding a hardcoded immediate address. It flags bug5's wild store at <code>-O0</code> and <code>-O2</code>, quiet on the other nine files: <b>1/5 total</b></span></div></div>
+        <div class="note warn"><i class="k">3</i><div><b>Not a comparison candidate</b><span>Compiled assembly is the <i>output</i> of one of the languages, not a competing language choice. Its 1/5 measures how much information lowering destroys, not how safe assembly programmers are.</span></div></div>
+        <div class="note"><i class="k">4</i><div><b>Where assembly analysis does belong</b><span>Code <i>authored</i> in assembly: boot code, ISRs, crypto primitives, certified under DO-178C/ED-12C where the shipped artifact is the assembly. That is Assemblomator's day job; here it served as the control group.</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;justify-content:center;min-width:0">
+        <div class="code">
+          <div class="bar"><i></i><i></i><i></i><span>asm/bug5_wild_deref_O2.s &middot; gcc 13.3 -S -O2</span></div>
+<pre><span class="tk-c">main:</span>
+        pushq   %rbx
+<span class="hl">        movl    $3735928559, %ebx   <span class="tk-c">; 0xdeadbeef &rarr; %rbx</span></span>
+        leaq    .LC0(%rip), %rsi
+        xorl    %eax, %eax
+        movq    %rbx, %rdx
+        movl    $2, %edi
+        call    __printf_chk@PLT
+        movq    stdout(%rip), %rdi
+        call    fflush@PLT
+<span class="hl">        movl    $1, (%rbx)          <span class="tk-c">; wild store &larr; flagged</span></span>
+        movl    $0, %eax
+        popq    %rbx
+        ret</pre>
+          <div class="out">
+            <div><span class="out-dim">$ python3 scripts/run_assemblomator.py</span></div>
+            <div><span class="out-panic">bug5_wild_deref_O2.s :: ASM-X86-015 line 29 [HIGH] memory access through a register holding a hardcoded immediate address</span></div>
+            <div><span class="out-ok">bug5_wild_deref_O0.s :: ASM-X86-015 line 36 [HIGH] &nbsp;&middot;&nbsp; the other 8 files: no findings</span></div>
+          </div>
+        </div>
+        <p class="footnote"><a href="https://github.com/zuwasi/fil-c-vs-misra-benchmark/blob/main/asm/bug5_wild_deref_O2.s" target="_blank" rel="noopener noreferrer">asm source</a> &middot; <a href="https://github.com/zuwasi/ESL-Assemblomator" target="_blank" rel="noopener noreferrer">ESL-Assemblomator</a>, 312-rule offline catalog</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 15 VERDICTS -->
 <section class="slide">
   <div class="page">
     <div class="filehead"><span>Verdicts <b>| claim by claim</b></span><div class="tabs"></div></div>
@@ -373,12 +499,12 @@ int main(int argc, char **argv) {
       <div class="note"><i class="k">2</i><div><b>"Covers buffer overflow": overstated</b><span>Off-by-one writes inside the 16-byte granule run silently</span></div></div>
       <div class="note ok"><i class="k">3</i><div><b>"No way to turn checks off": true</b><span>But the ABI cannot link with non-Fil-C objects, including Rust, and the runtime is itself unsafe</span></div></div>
       <div class="note"><i class="k">4</i><div><b>"Higher memory, lower performance": undersold</b><span>Measured up to 5.4&times; slower and 27&times; peak memory, plus a GC in every process, Linux x86_64/ARM64 only</span></div></div>
-      <div class="note warn"><i class="k">5</i><div><b>"Cheaper than rewriting": incomplete</b><span>It ignores that static analysis finds the same bugs at build time at zero runtime cost</span></div></div>
+      <div class="note warn"><i class="k">5</i><div><b>"Cheaper than rewriting": incomplete</b><span>It ignores that static analysis finds the same bugs at build time at zero runtime cost, and that safe Rust and Zig reject the entire suite outright (5/5 each) at a fraction of Fil-C's runtime price</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- 13 TAKEAWAYS -->
+<!-- 16 TAKEAWAYS -->
 <section class="slide">
   <div class="page">
     <div class="filehead"><span>Takeaways <b>| what to do with this</b></span><div class="tabs"></div></div>
@@ -388,22 +514,23 @@ int main(int argc, char **argv) {
         <div><span>Fil-C contains bugs that slip through: genuine value for legacy deployments</span></div>
         <div><span>Static analysis prevents them from shipping at all, with zero runtime cost</span></div>
         <div><span>The two are complements: Parasoft finds it before release, Fil-C contains it if it slips through</span></div>
+        <div><span>Escape hatches measured: unsafe Rust behaves like C (0/5), lowered assembly like assembly (1/5). Safety comes from what the tool can still see</span></div>
       </div>
       <div class="kpi blue"><b>Reproduce</b><span>Everything is public, redo it yourself: <a href="https://github.com/zuwasi/fil-c-vs-misra-benchmark" target="_blank" rel="noopener">github.com/zuwasi/fil-c-vs-misra-benchmark</a><br><br>Bug suite, benchmarks, all scripts, the raw MISRA report and full README instructions.</span></div>
     </div>
-    <div class="stamps"><span class="stamp ok">5/5 build-time, exact lines</span><span class="stamp warn">3/5 runtime, 2 silent</span><span class="stamp">5.4&times; runtime &middot; 27&times; memory</span></div>
+    <div class="stamps"><span class="stamp ok">5/5 build-time, exact lines</span><span class="stamp warn">3/5 runtime, 2 silent</span><span class="stamp">5.4&times; runtime &middot; 27&times; memory</span><span class="stamp ok">Safe Rust &amp; Zig 5/5</span><span class="stamp warn">Unsafe Rust 0/5 &middot; Assembly 1/5</span></div>
     <p class="footnote">Measured, not argued.</p>
   </div>
 </section>
 
-<!-- 14 CLOSING -->
+<!-- 17 CLOSING -->
 <section class="slide">
   <div class="page" style="justify-content:center">
     <div class="brand"><a href="https://eswlab.com/" target="_blank" rel="noopener"><img src="assets/esl-logo.png" alt="ESL logo"></a><div class="who">Engineering Software Lab (ESL)<br>Parasoft and Perforce partner in Israel</div></div>
     <h1 style="margin-top:10px">Measured, not argued:<br>a safety net is not a substitute<br>for static analysis.</h1>
     <p class="sub">Challenging compiler claims, moving to MISRA C 2025, or qualifying Parasoft C/C++test for your toolchain? Talk to ESL.</p>
     <div class="person" style="max-width:640px"><a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener"><img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice"></a><div><b>Daniel Liezrowice</b><span class="footnote">CTO, ESL</span><br><a class="footnote" href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> &nbsp;|&nbsp; <a class="footnote" href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">LinkedIn</a> &nbsp;|&nbsp; <a class="footnote" href="https://github.com/zuwasi/fil-c-vs-misra-benchmark" target="_blank" rel="noopener">Source and evidence</a></div></div>
-    <p class="footnote">Fil-C 0.687 &middot; gcc 13.3 &middot; Parasoft C/C++test Standard 2026.1.3, MISRA C 2025 &middot; Case file FLC-2026-11</p>
+    <p class="footnote">Fil-C 0.687 &middot; gcc 13.3 &middot; Parasoft C/C++test Standard 2026.1.3, MISRA C 2025 &middot; rustc 1.97.1 &middot; Zig 0.17.1 &middot; ESL Assemblomator &middot; Case file FLC-2026-11</p>
   </div>
 </section>
 
