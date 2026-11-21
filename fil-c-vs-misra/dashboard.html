@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESL benchmark console: Fil-C vs MISRA C, seven treatments</title>
+<meta name="description" content="ESL case file FLC-2026-11: the benchmark console replaying the measured seven-treatment results: gcc, Fil-C, Parasoft MISRA C 2025, safe Rust, unsafe Rust, Zig, and ESL Assemblomator on the compiler's own assembly.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Special+Elite&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f4eedc;--paper2:#ece4cc;--ink:#1d1a16;--ink2:#4a443a;--rule:#b9ae90;
+  --stamp:#b8322a;--blue:#12457a;--ok:#2f6b3a;--warn:#9a5b10;--orange:#b06a10;--purple:#5b4a8a;
+  --type:"Special Elite","Courier New",Courier,monospace;
+  --body:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",Consolas,"Courier New",monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#d9d0b8;color:var(--ink);font-family:var(--body)}
+body{background:repeating-linear-gradient(0deg,rgba(0,0,0,.035) 0 1px,transparent 1px 34px),radial-gradient(ellipse at 50% 40%,#e3dabf,#c9bf9f 90%);min-height:100vh;padding:26px 34px 34px}
+.console{max-width:1720px;margin:0 auto;background:var(--paper);border:1px solid #c8bc9c;box-shadow:0 2px 0 #cfc4a4,0 18px 40px rgba(60,45,20,.35);padding:24px 30px 26px;position:relative}
+.console::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 12px 50%,rgba(0,0,0,.08) 0 5px,transparent 6px),linear-gradient(90deg,rgba(0,0,0,.06),transparent 40px);background-size:100% 120px,100% 100%;opacity:.7}
+.console>*{position:relative;z-index:1}
+.top{display:flex;justify-content:space-between;align-items:center;gap:18px;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.brand{display:flex;align-items:center;gap:14px}
+.brand img{height:56px;width:auto;border:1px solid var(--rule);padding:3px;background:#fff}
+.who{font-family:var(--type);font-size:13px;color:var(--ink2);line-height:1.45}
+.who b{color:var(--ink)}
+.badges{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.chip{font-family:var(--type);font-size:13px;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--rule);background:var(--paper2);padding:5px 12px;color:var(--ink2)}
+.chip.live{color:#fff;background:var(--warn);border-color:var(--warn);animation:pulse 1.4s ease-in-out infinite}
+.chip.live.done{background:var(--ok);border-color:var(--ok);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.replay{font-family:var(--type);font-size:13px;letter-spacing:.06em;text-transform:uppercase;border:2px solid var(--ink);background:var(--paper);color:var(--ink);padding:6px 16px;cursor:pointer}
+.replay:hover{background:var(--ink);color:var(--paper)}
+h2.sec{font-family:var(--type);font-weight:400;font-size:clamp(19px,1.7vw,27px);margin:24px 0 10px}
+h2.sec i{font-style:normal;font-size:.72em;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase;margin-right:10px}
+/* matrix */
+.mx{display:grid;grid-template-columns:minmax(150px,.9fr) repeat(7,1fr);gap:4px}
+.mx .h{font-family:var(--type);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink2);background:var(--paper2);border:1px solid var(--rule);padding:8px 8px;text-align:center}
+.mx .h.bug{text-align:left}
+.mx .rl{font-size:15px;font-weight:600;background:#fbf8ee;border:1px solid var(--rule);padding:8px 10px;display:flex;align-items:center}
+.mx .c{border:1px solid var(--rule);background:#fbf8ee;padding:8px 8px;font-size:13.5px;line-height:1.35;display:flex;align-items:center;justify-content:center;text-align:center;opacity:0;transform:scale(.92);transition:opacity .35s,transform .35s}
+.mx .c.on{opacity:1;transform:none}
+.mx .c.caught{background:#e2ecdd;color:var(--ok);font-weight:600}
+.mx .c.silent{background:#f3ddd8;color:var(--stamp);font-weight:600}
+.mx .c.runtime{background:#f1e4c8;color:var(--warn);font-weight:600}
+.mx .c.score{font-family:var(--mono);font-weight:600;font-size:16px;background:#f3e3b8}
+/* bars */
+.bars{display:grid;gap:7px}
+.bars>div{display:grid;grid-template-columns:200px 1fr 130px;gap:10px;align-items:center;font-size:15px}
+.bars i{display:block;height:16px;background:var(--stamp);transform:scaleX(0);transform-origin:left;transition:transform 1s cubic-bezier(.2,.7,.3,1)}
+.bars i.on{transform:scaleX(1)}
+.bars i.blue{background:var(--blue)}.bars i.green{background:var(--ok)}.bars i.orange{background:var(--orange)}.bars i.purple{background:var(--purple)}
+.bars .grp{grid-column:1/-1;display:block;font-family:var(--type);text-transform:uppercase;letter-spacing:.05em;font-size:13.5px;color:var(--ink2);margin-top:8px}
+.bars .val{text-align:right;white-space:nowrap;font-family:var(--mono);font-size:13.5px}
+/* chart */
+.chartbox{border:1px solid var(--rule);background:#fbf8ee;padding:10px}
+.chartbox svg{display:block;width:100%;height:auto}
+.bubble{transform:scale(0);transform-origin:center;transform-box:fill-box;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+.bubble.on{transform:scale(1)}
+.blabel{opacity:0;transition:opacity .4s}
+.blabel.on{opacity:1}
+/* stamps */
+.stamps{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px;align-items:center;opacity:0;transition:opacity .6s}
+.stamps.on{opacity:1}
+.stamp{display:inline-block;font-family:var(--type);text-transform:uppercase;color:var(--stamp);border:3px double var(--stamp);border-radius:6px;padding:4px 12px;letter-spacing:.12em;font-size:13px;transform:rotate(-2deg);mix-blend-mode:multiply;opacity:.9}
+.stamp.ok{color:var(--ok);border-color:var(--ok)}.stamp.warn{color:var(--warn);border-color:var(--warn)}.stamp.blue{color:var(--blue);border-color:var(--blue)}
+.foot{margin-top:20px;padding-top:12px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink2);line-height:1.6}
+.foot a{color:var(--blue)}
+</style>
+</head>
+<body>
+<div class="console">
+  <div class="top">
+    <div class="brand"><img src="assets/esl-logo.png" alt="ESL logo"><div class="who"><b>Engineering Software Lab (ESL)</b> &middot; case file FLC-2026-11 &middot; benchmark console<br>Fil-C 0.687 &middot; gcc 13.3 &middot; Parasoft C/C++test 2026.1.3, MISRA C 2025 &middot; rustc 1.97.1 &middot; Zig 0.17.1 &middot; ESL Assemblomator</div></div>
+    <div class="badges">
+      <span class="chip">7 treatments &middot; 5 bugs &middot; 3 benchmarks</span>
+      <span class="chip live" id="status">replaying measured results</span>
+      <button class="replay" id="replay">Replay</button>
+    </div>
+  </div>
+
+  <h2 class="sec"><i>Exhibit R-1</i>Who caught what, and when</h2>
+  <div class="mx" id="mx"></div>
+
+  <h2 class="sec"><i>Exhibit R-3</i>Runtime of clean code &middot; medians of 3 runs</h2>
+  <div class="bars" id="perf"></div>
+
+  <h2 class="sec"><i>Exhibit R-4</i>Peak memory &middot; btree, pointer-heavy</h2>
+  <div class="bars" id="mem"></div>
+
+  <h2 class="sec"><i>Exhibit X-1</i>The trade-off map</h2>
+  <div class="chartbox">
+    <svg viewBox="0 0 1040 520" role="img" aria-label="Trade-off map: detection score versus runtime cost, bubble size is peak memory">
+      <g stroke="#d8cfae" stroke-width="1">
+        <line x1="110" y1="40" x2="110" y2="440"/><line x1="290" y1="40" x2="290" y2="440"/><line x1="470" y1="40" x2="470" y2="440"/><line x1="650" y1="40" x2="650" y2="440"/><line x1="830" y1="40" x2="830" y2="440"/><line x1="1010" y1="40" x2="1010" y2="440"/>
+        <line x1="110" y1="440" x2="1010" y2="440"/><line x1="110" y1="364" x2="1010" y2="364"/><line x1="110" y1="288" x2="1010" y2="288"/><line x1="110" y1="212" x2="1010" y2="212"/><line x1="110" y1="126" x2="1010" y2="126"/><line x1="110" y1="40" x2="1010" y2="40"/>
+      </g>
+      <rect x="110" y="40" width="380" height="86" fill="rgba(47,107,58,.07)"/>
+      <text x="120" y="62" font-family="Special Elite, monospace" font-size="14" fill="#2f6b3a">the ideal corner: 5/5 caught, zero runtime cost</text>
+      <g font-family="JetBrains Mono, monospace" font-size="13" fill="#4a443a">
+        <text x="110" y="462" text-anchor="middle">1&times;</text><text x="290" y="462" text-anchor="middle">2&times;</text><text x="470" y="462" text-anchor="middle">3&times;</text><text x="650" y="462" text-anchor="middle">4&times;</text><text x="830" y="462" text-anchor="middle">5&times;</text><text x="1010" y="462" text-anchor="middle">6&times;</text>
+        <text x="88" y="445" text-anchor="end">0</text><text x="88" y="369" text-anchor="end">1</text><text x="88" y="293" text-anchor="end">2</text><text x="88" y="217" text-anchor="end">3</text><text x="88" y="131" text-anchor="end">4</text><text x="88" y="45" text-anchor="end">5</text>
+      </g>
+      <text x="560" y="492" text-anchor="middle" font-family="Special Elite, monospace" font-size="14" fill="#1d1a16">runtime cost vs gcc (lower is better) &middot; bubble area = peak RSS, pointer-heavy benchmark</text>
+      <text x="30" y="240" text-anchor="middle" font-family="Special Elite, monospace" font-size="14" fill="#1d1a16" transform="rotate(-90 30 240)">bugs caught (of 5)</text>
+      <circle class="bubble" id="b-rustu" cx="110" cy="440" r="12" fill="#b8322a" opacity=".85"/><text class="blabel" id="t-rustu" x="132" y="434" font-family="Inter, sans-serif" font-size="14" fill="#1d1a16"><tspan font-weight="700">Unsafe Rust</tspan> 0/5 &middot; escape hatch</text>
+      <circle class="bubble" id="b-asm" cx="110" cy="364" r="9" fill="#9b917a" opacity=".9"/><text class="blabel" id="t-asm" x="132" y="368" font-family="Inter, sans-serif" font-size="14" fill="#1d1a16"><tspan font-weight="700">Assembly + Assemblomator</tspan> 1/5 &middot; post-compile</text>
+      <circle class="bubble" id="b-gcc" cx="110" cy="316" r="13" fill="#12457a" opacity=".85"/><text class="blabel" id="t-gcc" x="132" y="320" font-family="Inter, sans-serif" font-size="14" fill="#1d1a16"><tspan font-weight="700">gcc -O2</tspan> 1.5/5 &middot; status quo</text>
+      <circle class="bubble" id="b-misra" cx="110" cy="40" r="13" fill="#2f6b3a" opacity=".9"/><text class="blabel" id="t-misra" x="128" y="86" font-family="Inter, sans-serif" font-size="14" fill="#1d1a16"><tspan font-weight="700">Parasoft MISRA C 2025</tspan> 5/5 &middot; build time</text>
+      <text class="blabel" id="t-misra2" x="128" y="104" font-family="Inter, sans-serif" font-size="12" fill="#2f6b3a">binary unchanged, zero runtime cost</text>
+      <circle class="bubble" id="b-rusts" cx="254" cy="40" r="13" fill="#2f6b3a" opacity=".9"/><text class="blabel" id="t-rusts" x="150" y="20" font-family="Inter, sans-serif" font-size="14" fill="#1d1a16"><tspan font-weight="700">Safe Rust</tspan> 5/5 &middot; 1.8&times; on pointer-heavy</text>
+      <circle class="bubble" id="b-zig" cx="434" cy="40" r="12" fill="#b06a10" opacity=".9"/><text class="blabel" id="t-zig" x="470" y="20" font-family="Inter, sans-serif" font-size="14" fill="#1d1a16"><tspan font-weight="700">Zig ReleaseSafe</tspan> 5/5 &middot; 2.8&times;</text>
+      <circle class="bubble" id="b-filc" cx="902" cy="212" r="60" fill="#b8322a" opacity=".55"/><circle class="bubble" id="b-filc2" cx="902" cy="212" r="60" fill="none" stroke="#b8322a"/><text class="blabel" id="t-filc" x="902" y="206" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700" fill="#fff">Fil-C</text><text class="blabel" id="t-filc2" x="902" y="228" text-anchor="middle" font-family="Inter, sans-serif" font-size="14" fill="#fff">3/5</text>
+      <text class="blabel" id="t-filc3" x="826" y="216" text-anchor="end" font-family="Inter, sans-serif" font-size="13" fill="#1d1a16">5.4&times; runtime &middot; 27&times; RSS</text>
+    </svg>
+  </div>
+
+  <div class="stamps" id="stamps">
+    <span class="stamp ok">MISRA C 2025: 5/5, exact lines</span>
+    <span class="stamp ok">Safe Rust &amp; Zig: 5/5</span>
+    <span class="stamp warn">Fil-C: 3/5 &middot; 5.4&times; runtime &middot; 27&times; memory</span>
+    <span class="stamp">Unsafe Rust: 0/5</span>
+    <span class="stamp blue">Assembly: 1/5</span>
+  </div>
+
+  <div class="foot">
+    Every number on this console is measured, not estimated: <a href="https://github.com/zuwasi/fil-c-vs-misra-benchmark" target="_blank" rel="noopener">github.com/zuwasi/fil-c-vs-misra-benchmark</a> &middot;
+    full case file: <a href="index.html">the 17-slide deck</a> &middot; assembly analyzer: <a href="https://github.com/zuwasi/ESL-Assemblomator" target="_blank" rel="noopener">ESL-Assemblomator</a> &middot;
+    www.eswlab.com
+  </div>
+</div>
+
+<script>
+(function(){
+  var TREAT = ["gcc -O2","Fil-C 0.687","Parasoft MISRA C 2025","Safe Rust -O","Unsafe Rust -O","Zig ReleaseSafe","Assembly + Assemblomator"];
+  var BUGS = [
+    {name:"Heap overflow", cells:[
+      ["silent","silent corruption, exit 0"],["silent","silent, exit 0"],["caught","Rule 18.1, line 11"],
+      ["caught","panic, exit 101"],["silent","silent, exit 0"],["caught","panic, exit 134"],["silent","not visible"]]},
+    {name:"Stack overflow", cells:[
+      ["runtime","canary abort, exit 134"],["silent","silent, exit 0"],["caught","Rule 18.1, line 8"],
+      ["caught","compile error (lint)"],["silent","silent, exit 0"],["caught","compile error"],["silent","not visible"]]},
+    {name:"Use after free", cells:[
+      ["silent","silent garbage read"],["runtime","filc panic at the read"],["caught","Rule 1.3, line 14"],
+      ["caught","compile error E0382"],["silent","silent garbage read"],["runtime","segfault (allocator)"],["silent","not visible"]]},
+    {name:"Double free", cells:[
+      ["runtime","glibc abort"],["runtime","filc panic"],["caught","Rule 1.3, line 12"],
+      ["caught","compile error E0382"],["silent","silent (UB deleted)"],["runtime","segfault in free"],["silent","not patterned"]]},
+    {name:"Wild dereference", cells:[
+      ["runtime","SIGSEGV"],["runtime","filc panic"],["caught","Rule 11.4, line 6"],
+      ["caught","compile error E0133"],["runtime","SIGSEGV"],["caught","compile error (misaligned)"],["caught","ASM-X86-015"]]}
+  ];
+  var SCORE = [1.5, 3, 5, 5, 0, 5, 1];
+  var PERF = [
+    {grp:"sieve \u00b7 array-heavy \u00b7 10M elements x 20 passes", rows:[
+      ["gcc -O2","blue",0.46,"0.46 s \u00b7 1.0\u00d7"],["Fil-C -O2","",0.87,"0.87 s \u00b7 1.9\u00d7"],
+      ["Safe Rust -O","green",0.48,"0.48 s \u00b7 1.0\u00d7"],["Zig ReleaseSafe","orange",0.62,"0.62 s \u00b7 1.3\u00d7"],
+      ["Zig ReleaseFast","purple",0.56,"0.56 s \u00b7 1.2\u00d7"]]},
+    {grp:"btree \u00b7 pointer/alloc-heavy \u00b7 131k nodes x 100 builds", rows:[
+      ["gcc -O2","blue",0.18,"0.18 s \u00b7 1.0\u00d7"],["Fil-C -O2","",0.97,"0.97 s \u00b7 5.4\u00d7"],
+      ["Safe Rust -O","green",0.33,"0.33 s \u00b7 1.8\u00d7"],["Zig ReleaseSafe","orange",0.50,"0.50 s \u00b7 2.8\u00d7"],
+      ["Zig ReleaseFast","purple",0.27,"0.27 s \u00b7 1.5\u00d7"]]},
+    {grp:"mandel \u00b7 float-heavy \u00b7 1600x1600", rows:[
+      ["gcc -O2","blue",0.05,"0.05 s \u00b7 1.0\u00d7"],["Fil-C -O2","",0.05,"0.05 s \u00b7 1.0\u00d7"],
+      ["Safe Rust -O","green",0.04,"0.04 s \u00b7 0.8\u00d7"],["Zig ReleaseSafe","orange",0.05,"0.05 s \u00b7 1.0\u00d7"],
+      ["Zig ReleaseFast","purple",0.05,"0.05 s \u00b7 1.0\u00d7"]]}
+  ];
+  var MEM = [
+    ["gcc -O2","blue",5.6,"5.6 MB \u00b7 1.0\u00d7"],["Fil-C -O2","",155.5,"155.5 MB \u00b7 27\u00d7"],
+    ["Safe Rust -O","green",6.0,"6.0 MB \u00b7 1.1\u00d7"],["Zig ReleaseSafe","orange",4.6,"4.6 MB \u00b7 0.8\u00d7"],
+    ["Zig ReleaseFast","purple",4.4,"4.4 MB \u00b7 0.8\u00d7"]
+  ];
+
+  // build matrix DOM once
+  var mx = document.getElementById('mx');
+  var frag = document.createDocumentFragment();
+  var hcell = document.createElement('div'); hcell.className = 'h bug'; hcell.textContent = 'Bug'; frag.appendChild(hcell);
+  TREAT.forEach(function(t){ var h = document.createElement('div'); h.className='h'; h.textContent=t; frag.appendChild(h); });
+  BUGS.forEach(function(b){
+    var rl = document.createElement('div'); rl.className='rl'; rl.textContent=b.name; rl.dataset.wait='1'; frag.appendChild(rl);
+    b.cells.forEach(function(c){
+      var d = document.createElement('div'); d.className='c '+c[0]; d.textContent=c[1]; d.dataset.wait='1'; frag.appendChild(d);
+    });
+  });
+  var srl = document.createElement('div'); srl.className='rl'; srl.textContent='Score'; srl.dataset.score='1'; frag.appendChild(srl);
+  SCORE.forEach(function(s){
+    var d = document.createElement('div'); d.className='c score'; d.dataset.score=String(s); d.textContent='0'; frag.appendChild(d);
+  });
+  mx.appendChild(frag);
+
+  // build perf + memory DOM once
+  var perf = document.getElementById('perf');
+  PERF.forEach(function(g){
+    var gh = document.createElement('div'); gh.className='grp'; gh.textContent=g.grp; gh.dataset.wait='1'; perf.appendChild(gh);
+    g.rows.forEach(function(r){
+      var row = document.createElement('div');
+      var lab = document.createElement('span'); lab.textContent=r[0];
+      var bar = document.createElement('i'); if (r[1]) bar.className=r[1];
+      var w = Math.max(2, Math.round(r[2]/0.97*100)); if (w>100) w=100;
+      bar.style.width=w+'%'; bar.dataset.wait='1';
+      var val = document.createElement('span'); val.className='val'; val.textContent=r[3]; val.dataset.wait='1';
+      row.appendChild(lab); row.appendChild(bar); row.appendChild(val); perf.appendChild(row);
+    });
+  });
+  var mem = document.getElementById('mem');
+  MEM.forEach(function(r){
+    var row = document.createElement('div');
+    var lab = document.createElement('span'); lab.textContent=r[0];
+    var bar = document.createElement('i'); if (r[1]) bar.className=r[1];
+    bar.style.width=Math.round(r[2]/155.5*100)+'%'; bar.dataset.wait='1';
+    var val = document.createElement('span'); val.className='val'; val.textContent=r[3]; val.dataset.wait='1';
+    row.appendChild(lab); row.appendChild(bar); row.appendChild(val); mem.appendChild(row);
+  });
+
+  var BUBBLES = ["b-misra","t-misra","t-misra2","b-rusts","t-rusts","b-zig","t-zig","b-filc","b-filc2","t-filc","t-filc2","t-filc3","b-rustu","t-rustu","b-asm","t-asm","b-gcc","t-gcc"];
+
+  function countUp(el, target, ms){
+    var t0 = null;
+    ms = ms * SPD;
+    function step(ts){
+      if (t0 === null) t0 = ts;
+      var p = Math.min(1, (ts - t0)/ms);
+      var v = target * (1 - Math.pow(1-p, 2));
+      el.textContent = (target % 1 ? v.toFixed(1) : Math.round(v)) + ' / 5';
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  var timers = [];
+  function clearAll(){
+    timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll('.c.on').forEach(function(e){ e.classList.remove('on'); });
+    document.querySelectorAll('.c.score').forEach(function(e){ e.textContent='0'; });
+    document.querySelectorAll('.bars i.on').forEach(function(e){ e.classList.remove('on'); });
+    BUBBLES.forEach(function(id){ var e=document.getElementById(id); if(e) e.classList.remove('on'); });
+    document.getElementById('stamps').classList.remove('on');
+    var st = document.getElementById('status');
+    st.classList.remove('done'); st.textContent = 'replaying measured results';
+  }
+  function at(ms, fn){ timers.push(setTimeout(fn, ms * SPD)); }
+  function reveal(sel, i, gap, base){
+    document.querySelectorAll(sel).forEach(function(el, k){
+      at(base + i*gap + k*gap/3, function(){ el.classList.add('on'); });
+    });
+  }
+
+  function runMatrix(base){
+    // bug rows: label then cells
+    var t = base, step = 300;
+    BUGS.forEach(function(b, bi){
+      at(t, function(){
+        var k = bi*(1+7) + 1; // row label index in .rl list: rl elements are children 0..? use all children order
+      });
+      t += step;
+      for (var ci = 0; ci < 7; ci++){
+        (function(bi, ci){
+          at(t, function(){
+            var idx = 8 + bi*8 + 1 + ci; // children: 8 header cells, then per bug: 1 label + 7 cells
+            mx.children[idx].classList.add('on');
+          });
+        })(bi, ci);
+        t += step;
+      }
+      t += 150;
+    });
+    // score row: children index 8 + 5*8 = 48 label, 49..55 scores
+    at(t + 200, function(){
+      mx.children[48].classList.add('on');
+      for (var i = 0; i < 7; i++){
+        (function(i){
+          at(i*130, function(){
+            mx.children[49+i].classList.add('on');
+            countUp(mx.children[49+i], SCORE[i], 900);
+          });
+        })(i);
+      }
+    });
+    return t + 200 + 7*130 + 1000;
+  }
+
+  function runPerf(base){
+    var t = base, step = 330;
+    document.querySelectorAll('#perf .grp').forEach(function(el){
+      at(t, function(){ el.classList.add('on'); }); t += step*2;
+    });
+    document.querySelectorAll('#perf i, #perf .val').forEach(function(el){
+      at(t, function(){ el.classList.add('on'); }); t += step;
+    });
+    document.querySelectorAll('#mem i, #mem .val, #mem span').forEach(function(el){
+      at(t, function(){ el.classList.add('on'); }); t += step;
+    });
+    // fix: labels of mem rows (span) also need .on; the selector above catches them
+    return t;
+  }
+
+  function runChart(base){
+    var t = base, step = 850;
+    BUBBLES.forEach(function(id){
+      at(t, function(){ var e = document.getElementById(id); if (e) e.classList.add('on'); });
+      t += (id.indexOf('b-') === 0 ? step : 180);
+    });
+    return t;
+  }
+
+  var params = new URLSearchParams(location.search);
+  var stage = params.get('stage') || 'full';
+  var SPD = Math.max(0.2, parseFloat(params.get('speed') || '1') || 1);
+  function start(){
+    clearAll();
+    if (stage === 'matrix'){
+      var t = runMatrix(600);
+      at(t, function(){ finish(); });
+    } else if (stage === 'perf'){
+      // matrix instantly complete
+      mx.querySelectorAll('.c, .rl').forEach(function(el){ el.classList.add('on'); });
+      mx.querySelectorAll('.c.score').forEach(function(el, i){ el.textContent = SCORE[i] + ' / 5'; });
+      var t2 = runPerf(800);
+      var t3 = runChart(t2 + 400);
+      at(t3, function(){ finish(); });
+    } else {
+      var m = runMatrix(600);
+      var p = runPerf(m + 600);
+      var c = runChart(p + 400);
+      at(c, function(){ finish(); });
+    }
+  }
+  function finish(){
+    var st = document.getElementById('status');
+    st.classList.add('done'); st.textContent = 'all results in \u00b7 measured, not argued';
+    document.getElementById('stamps').classList.add('on');
+  }
+
+  document.getElementById('replay').addEventListener('click', start);
+  start();
+})();
+</script>
+</body>
+</html>
