@@ -115,15 +115,16 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
 <section class="slide">
   <div class="kicker"><span class="mark"></span>WOLFRAM MATHEMATICA MEETS THE RIEMANN HYPOTHESIS &middot; <span>NOVEMBER 2026</span></div>
   <h1>One workstation, four audits, <span class="hl">zero violations</span></h1>
-  <p class="sub">On November 20, 2026 Anthropic announced a claimed proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. While the formal verification grinds, we stress-tested the claim numerically with Wolfram Mathematica, the same afternoon, on a single machine.</p>
+  <p class="sub">On November 20, 2026 Anthropic announced a claimed proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. While the formal verification grinds, we stress-tested the claim numerically with Wolfram Mathematica, the same afternoon, on a single machine. That is the invitation of this project: serious mathematics belongs on your desk, and Wolfram Mathematica is how you put it there.</p>
   <div class="bigrow">
     <div class="card"><div class="label">Lean corpus behind the claim</div><div class="stat">17.4M<small> lines</small></div><p>Fourteen split tar archives of formalized mathematics, still being compiled and compared.</p></div>
-    <div class="card g"><div class="label">Numerical violations found</div><div class="stat g">0</div><p>Across four independent published equivalences of RH and GRH, at full workstation scale.</p></div>
-    <div class="card"><div class="label">Integers stress-tested</div><div class="stat">10<sup>8</sup><small> values of n</small></div><p>Lagarias' elementary RH-equivalence swept to one hundred million, in 51 seconds.</p></div>
+    <div class="card g"><div class="label">Numerical violations found</div><div class="stat g">0</div><p>Across four independent published equivalences of the Riemann Hypothesis and GRH, at full workstation scale.</p></div>
+    <div class="card"><div class="label">Integers stress-tested</div><div class="stat">10<sup>8</sup><small> values of n</small></div><p>Lagarias' elementary Riemann-Hypothesis equivalence swept to one hundred million, in 51 seconds.</p></div>
   </div>
   <div class="brandrow">
     <span class="brandchip"><img src="assets/esl-logo.png" alt="ESL">ESL &middot; Engineering Software Lab</span>
     <span class="brandchip dark"><img src="assets/Wolfram-Mathematica-15-logo.png" alt="Wolfram">Wolfram Mathematica 15.0.1 as the audit lab</span>
+    <span class="brandchip"><img src="assets/spikey-wolfram-logo.png" alt="Spikey">The Spikey: 35+ years of Wolfram mathematics</span>
   </div>
   <div class="foot">Demo, article and reproducible package. Machine: Intel Core Ultra 9 275HX, 24 logical cores, 64 GB RAM, Windows, Mathematica 15.0.1. Measured November 21, 2026.</div>
 </section>
@@ -132,12 +133,15 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
 <section class="slide">
   <div class="kicker"><span class="mark"></span>THE NEWS &middot; <span>02</span></div>
   <h1>Two proofs walked into <span class="hl">number theory</span></h1>
-  <p class="sub">November 20, 2026 produced two independent RH claims within hours of each other. The community response: try to compile them.</p>
+  <p class="sub">November 20, 2026 produced two independent claimed proofs of the Riemann Hypothesis within hours of each other. The community response: try to compile them.</p>
   <div class="bigrow">
     <div class="card"><div class="tag">ANTHROPIC / AI-ASSISTED</div><h2>Levent Alpoge</h2>
-      <ul><li>Research scientist at Anthropic, announced RH + GRH</li><li>46-page note public at alpo.ge/remark.pdf</li><li>~17.4M lines of Lean 4, split into 14 tar parts</li><li>Community mirror on GitHub (CocoSgt/riemann-hypothesis-lean)</li></ul></div>
+      <ul><li>Research scientist at Anthropic, announced a claimed proof of the Riemann Hypothesis and of GRH, its generalized form</li><li>46-page note public at alpo.ge/remark.pdf</li><li>~17.4M lines of Lean 4, split into 14 tar parts</li><li>Community mirror on GitHub (CocoSgt/riemann-hypothesis-lean)</li></ul></div>
     <div class="card v"><div class="tag">STANFORD / HUMAN-ONLY</div><h2>Alessandro Masullo</h2>
       <ul><li>Postdoc, posted a human-only claimed proof the same week</li><li>Via Vakil's blog, no formalization</li><li>Status: unverified</li></ul></div>
+    <div class="card"><div class="tag">THE MAN WHO STARTED IT IN 1859</div><h2>Bernhard Riemann</h2>
+      <img src="assets/riemann-portrait.jpg" alt="Portrait of Bernhard Riemann" style="display:block;margin:8px auto 4px;max-height:200px;width:auto;border:1px solid var(--line);border-radius:8px;background:#fff">
+      <p style="font-size:13px">1826&ndash;1866. His 1859 paper <i>On the Number of Primes Less Than a Given Magnitude</i> asked the question the whole field still chases.</p></div>
   </div>
   <div class="card"><div class="tag">BUZZARD'S FOUR QUESTIONS FOR ANY FORMAL PROOF</div>
     <p>1. Does the formal statement match the mathematical claim? &nbsp;2. Does the Lean code compile? &nbsp;3. Does it prove exactly what it says (<code>lake comparator</code>)? &nbsp;4. No kernel exploit (<code>lake comparator --paranoid</code>)? The full comparator run was still pending at press time; Joel Sutherland (MIT) was reported compiling the corpus.</p></div>
@@ -148,17 +152,17 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
 <section class="slide">
   <div class="kicker"><span class="mark"></span>SCOPE &middot; <span>03</span></div>
   <h1>Mathematica cannot check a proof. It can check <span class="hl">the consequences</span></h1>
-  <p class="sub">A proof of RH makes falsifiable numerical predictions. Each one is a published theorem with an equals sign you can push hard.</p>
+  <p class="sub">A proof of the Riemann Hypothesis makes falsifiable numerical predictions. Each one is a published theorem with an equals sign you can push hard.</p>
   <div class="bigrow">
     <div class="card"><div class="label">What Lean gives (if it verifies)</div><p>A machine-checked derivation from the axioms. Every lemma and epsilon verified by a small trusted kernel. Certainty, once the comparator finishes.</p></div>
     <div class="card v"><div class="label">What Mathematica gives, today</div><p>A numerical laboratory: <code>ZetaZero</code>, <code>RiemannSiegelZ</code>, <code>DivisorSigma</code>, <code>MangoldtLambda</code>, <code>EulerPsi</code>. Fast, built-in, and ready to falsify.</p></div>
   </div>
   <div class="card g"><div class="tag">THE FOUR AUDITS WE RAN, EACH TIED TO A PUBLISHED EQUIVALENCE OR BOUND</div>
     <table><tr><th>Audit</th><th>Theorem being stressed</th><th>Kills the claim if</th></tr>
-    <tr><td>1. Lagarias sweep</td><td>sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n (RH, Lagarias 2002)</td><td>any n violates</td></tr>
+    <tr><td>1. Lagarias sweep</td><td>sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n (the Riemann Hypothesis; Lagarias 2002)</td><td>any n violates</td></tr>
     <tr><td>2. Zeros on the line</td><td>Hardy Z changes sign between consecutive zeros (all zeros simple + on line)</td><td>any midpoint vanishes</td></tr>
     <tr><td>3. Explicit formula</td><td>psi(x) = x &minus; &Sigma; x<sup>&rho;</sup>/&rho; &minus; log 2&pi; &minus; log(1&minus;x<sup>&minus;2</sup>)/2</td><td>reconstruction drifts off the sieve</td></tr>
-    <tr><td>4. GRH least prime</td><td>least p &equiv; a mod q satisfies p &lt; 2q<sup>2</sup>log<sup>2</sup>q (Bach-Sorenson, GRH)</td><td>any class violates</td></tr></table></div>
+    <tr><td>4. Least prime, all classes</td><td>least p &equiv; a mod q satisfies p &lt; 2q<sup>2</sup>log<sup>2</sup>q (Bach-Sorenson, under the Generalized Riemann Hypothesis)</td><td>any class violates</td></tr></table></div>
   <div class="foot">A numerical audit cannot confirm a proof. It can falsify one early, and it can anchor the claim to plain arithmetic while the formal check runs.</div>
 </section>
 
@@ -188,8 +192,8 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
 <!-- 5 LAGARIAS -->
 <section class="slide">
   <div class="kicker"><span class="mark"></span>AUDIT 1 &middot; <span>05</span></div>
-  <h1>Lagarias: RH without <span class="hl">a single complex number</span></h1>
-  <p class="sub">sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for every positive integer n is equivalent to RH (Lagarias, Amer. Math. Monthly 2002). We swept n = 1 to 100,000,000.</p>
+  <h1>Lagarias: the Riemann Hypothesis without <span class="hl">a single complex number</span></h1>
+  <p class="sub">sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for every positive integer n is equivalent to the Riemann Hypothesis (Lagarias, Amer. Math. Monthly 2002). We swept n = 1 to 100,000,000.</p>
   <div class="bigrow">
     <div class="card g"><div class="label">Full-scale result, n &le; 10<sup>8</sup></div>
       <div class="stat g">0<small> violations</small></div>
@@ -253,7 +257,7 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
 <section class="slide">
   <div class="kicker"><span class="mark"></span>AUDIT 4 &middot; <span>09</span></div>
   <h1>GRH's most <span class="hl">concrete promise</span>: a prime in every class</h1>
-  <p class="sub">Bach-Sorenson: under GRH, for every coprime a and q there is a prime p &equiv; a (mod q) with p &lt; 2q<sup>2</sup>log<sup>2</sup>q. Exhaustively checkable.</p>
+  <p class="sub">Bach-Sorenson: under GRH, the Generalized Riemann Hypothesis, for every coprime a and q there is a prime p &equiv; a (mod q) with p &lt; 2q<sup>2</sup>log<sup>2</sup>q. Exhaustively checkable.</p>
   <div class="bigrow">
     <div class="card g"><div class="label">Full-scale result, q &le; 1000</div><div class="stat g">0<small> bound violations</small></div><p>304,191 reduced residue classes swept in 8.6 seconds. Largest least prime observed: 70,783.</p></div>
     <div class="card"><div class="label">The bound is far from sharp</div><p>Largest least prime at q &le; 200: 7121, against bounds that are orders of magnitude larger. A single violation would be world news; the margin is enormous everywhere.</p></div>
@@ -292,12 +296,12 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
   <div class="bigrow">
     <div class="card"><div class="label">Scoreboard, November 21, 2026</div>
       <table><tr><th>Item</th><th>Status</th></tr>
-      <tr><td>Alpoge (Anthropic) RH + GRH claim</td><td>announced, note public</td></tr>
+      <tr><td>Alpoge (Anthropic) Riemann Hypothesis + GRH claim</td><td>announced, note public</td></tr>
       <tr><td>Lean corpus, ~17.4M lines</td><td>compile + comparator in progress</td></tr>
       <tr><td>Masullo (Stanford) rival claim</td><td>unverified</td></tr>
       <tr><td>This numerical audit (4 checks)</td><td class="num">0 violations, full scale</td></tr></table></div>
     <div class="card g"><div class="label">Why the audit matters anyway</div>
-      <ul><li><b>Falsify early.</b> A false claimed proof of RH dies fast against these four equivalences; these found nothing.</li>
+      <ul><li><b>Falsify early.</b> A false claimed proof of the Riemann Hypothesis dies fast against these four equivalences; these found nothing.</li>
       <li><b>Anchor to arithmetic.</b> The Lean corpus implies sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n. We confirmed it for the first 100,000,000 n.</li>
       <li><b>Democratize.</b> Specialists will run <code>lake comparator</code>. Anyone with a workstation can run the consequences. Both guards matter.</li></ul></div>
   </div>
@@ -336,11 +340,15 @@ wolframscript -file build_project.wls</pre>
   <h1>Bring your own <span class="hl">workstation</span></h1>
   <p class="sub">The gate to serious numerical mathematics is no longer the hardware or the software. It is deciding to write the check.</p>
   <div class="bigrow">
-    <div class="card g"><div class="label">The one-line summary</div><p>While 17.4 million lines of Lean wait for a comparator, four published consequences of RH and GRH faced 100 million integers, 20,000 zeros, a rebuilt explicit formula and over half a million residue classes on one laptop-class machine. <b>Zero violations.</b></p></div>
+    <div class="card g"><div class="label">The one-line summary</div><p>While 17.4 million lines of Lean wait for a comparator, four published consequences of the Riemann Hypothesis and GRH faced 100 million integers, 20,000 zeros, a rebuilt explicit formula and over half a million residue classes on one laptop-class machine. <b>Zero violations.</b></p></div>
     <div class="person-card"><img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
       <div><strong>Daniel Liezrowice</strong><span>Engineering Software Lab (ESL)</span>
       <p>Founder of ESL. Works on evidence-driven software engineering: static analysis, SBOM tooling, and putting serious math on serious hardware.</p>
       <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">linkedin.com/in/liezrowice</a></div></div>
+  </div>
+  <div class="brandrow">
+    <span class="brandchip dark"><img src="assets/spikey-wolfram-logo.png" alt="Spikey">Your problem is next: get Wolfram Mathematica at wolfram.com/mathematica</span>
+    <span class="brandchip"><img src="assets/esl-logo.png" alt="ESL">Run the audit yourself: two commands, an afternoon</span>
   </div>
   <div class="foot">Article: full write-up with all sources. Package: C:\Users\danie\RH-MantiQ. Live deck: https://zuwasi.github.io/Public-html-pages/rh-mantiq-mathematica/technical/</div>
 </section>
