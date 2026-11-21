@@ -434,6 +434,9 @@ Last updated: 2026-11-21
 • prediction-is-not-permission
   https://zuwasi.github.io/Public-html-pages/prediction-is-not-permission
 
+• rh-mantiq-mathematica
+  https://zuwasi.github.io/Public-html-pages/rh-mantiq-mathematica
+
 • savepathcopier
   https://zuwasi.github.io/Public-html-pages/savepathcopier
 
