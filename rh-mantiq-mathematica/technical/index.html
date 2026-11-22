@@ -115,7 +115,7 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
 <section class="slide">
   <div class="kicker"><span class="mark"></span>WOLFRAM MATHEMATICA MEETS THE RIEMANN HYPOTHESIS &middot; <span>NOVEMBER 2026</span></div>
   <h1>One workstation, four audits, <span class="hl">zero violations</span></h1>
-  <p class="sub">On November 20, 2026 Anthropic announced a claimed proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. While the formal verification grinds, we stress-tested the claim numerically with Wolfram Mathematica, the same afternoon, on a single machine. That is the invitation of this project: serious mathematics belongs on your desk, and Wolfram Mathematica is how you put it there.</p>
+  <p class="sub">On November 20, 2026 Anthropic announced a claimed proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. While the formal verification grinds, we stress-tested the claim numerically with Wolfram Mathematica on November 21, 2026, on a single machine. That is the invitation of this project: serious mathematics belongs on your desk, and Wolfram Mathematica is how you put it there.</p>
   <div class="bigrow">
     <div class="card"><div class="label">Lean corpus behind the claim</div><div class="stat">17.4M<small> lines</small></div><p>Fourteen split tar archives of formalized mathematics, still being compiled and compared.</p></div>
     <div class="card g"><div class="label">Numerical violations found</div><div class="stat g">0</div><p>Across four independent published equivalences of the Riemann Hypothesis and GRH, at full workstation scale.</p></div>
@@ -244,7 +244,7 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
   <p class="sub">psi(x) = x &minus; &Sigma;<sub>&rho;</sub> x<sup>&rho;</sup>/&rho; &minus; log(2&pi;) &minus; log(1&minus;x<sup>&minus;2</sup>)/2. Zeros on the critical line are what make the oscillation stay controlled.</p>
   <div class="bigrow">
     <div class="card"><div class="label">Reconstruction vs independent sieve</div><p>Max abs error 4.73 over x &le; 2000, concentrated exactly at the prime-power jumps of psi: a truncated Dirichlet series overshoots at discontinuities (Gibbs-style), and is flat between them. That shape is the fingerprint of a healthy zero distribution.</p></div>
-    <div class="card v"><div class="label">Honest scope</div><p>The record for numerical zero verification is ~10<sup>13</sup> zeros (Gourdon 2004). We are not chasing records. We are showing that a workstation re-derives a meaningful slice of the evidence in minutes, the same day the claim appeared.</p></div>
+    <div class="card v"><div class="label">Honest scope</div><p>The record for numerical zero verification is ~10<sup>13</sup> zeros (Gourdon 2004). We are not chasing records. We are showing that a workstation re-derives a meaningful slice of the evidence in minutes, one day after the claim appeared, on November 21, 2026.</p></div>
   </div>
   <div class="two">
     <figure><img src="assets/fig_psi_reconstruction.png" alt="psi reconstruction"><figcaption>psi(x) rebuilt from 1000 zeros (line) vs the Mangoldt sieve (steps), x &le; 2000.</figcaption></figure>
