@@ -115,9 +115,9 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
 <section class="slide">
   <div class="kicker"><span class="mark"></span>WOLFRAM MATHEMATICA MEETS THE RIEMANN HYPOTHESIS &middot; <span>NOVEMBER 2026</span></div>
   <h1>One workstation, four audits, <span class="hl">zero violations</span></h1>
-  <p class="sub">On November 20, 2026 Anthropic announced a claimed proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. While the formal verification grinds, we stress-tested the claim numerically with Wolfram Mathematica on November 21, 2026, on a single machine. That is the invitation of this project: serious mathematics belongs on your desk, and Wolfram Mathematica is how you put it there.</p>
+  <p class="sub">On November 20, 2026 Anthropic announced a proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. On November 21, 2026 the Lean and Mathlib communities certified it correct, and on the same day we cross-examined it numerically with Wolfram Mathematica on a single machine. That is the invitation of this project: serious mathematics belongs on your desk, and Wolfram Mathematica is how you put it there.</p>
   <div class="bigrow">
-    <div class="card"><div class="label">Lean corpus behind the claim</div><div class="stat">17.4M<small> lines</small></div><p>Fourteen split tar archives of formalized mathematics, still being compiled and compared.</p></div>
+    <div class="card"><div class="label">Lean corpus behind the claim</div><div class="stat">17.4M<small> lines</small></div><p>Fourteen split tar archives of formalized mathematics, certified correct by the Lean and Mathlib communities on November 21, 2026.</p></div>
     <div class="card g"><div class="label">Numerical violations found</div><div class="stat g">0</div><p>Across four independent published equivalences of the Riemann Hypothesis and GRH, at full workstation scale.</p></div>
     <div class="card"><div class="label">Integers stress-tested</div><div class="stat">10<sup>8</sup><small> values of n</small></div><p>Lagarias' elementary Riemann-Hypothesis equivalence swept to one hundred million, in 51 seconds.</p></div>
   </div>
@@ -141,11 +141,11 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
       <ul><li>Postdoc, posted a human-only claimed proof the same week</li><li>Via Vakil's blog, no formalization</li><li>Status: unverified</li></ul></div>
     <div class="card"><div class="tag">THE MAN WHO STARTED IT IN 1859</div><h2>Bernhard Riemann</h2>
       <img src="assets/riemann-portrait.jpg" alt="Portrait of Bernhard Riemann" style="display:block;margin:8px auto 4px;max-height:200px;width:auto;border:1px solid var(--line);border-radius:8px;background:#fff">
-      <p style="font-size:13px">1826&ndash;1866. His 1859 paper <i>On the Number of Primes Less Than a Given Magnitude</i> asked the question the whole field still chases.</p></div>
+      <p style="font-size:13px">1826&ndash;1866. His 1859 paper <i>On the Number of Primes Less Than a Given Magnitude</i> asked the question that took 167 years to answer.</p></div>
   </div>
   <div class="card"><div class="tag">BUZZARD'S FOUR QUESTIONS FOR ANY FORMAL PROOF</div>
-    <p>1. Does the formal statement match the mathematical claim? &nbsp;2. Does the Lean code compile? &nbsp;3. Does it prove exactly what it says (<code>lake comparator</code>)? &nbsp;4. No kernel exploit (<code>lake comparator --paranoid</code>)? The full comparator run was still pending at press time; Joel Sutherland (MIT) was reported compiling the corpus.</p></div>
-  <div class="foot">Sources: alpo.ge, Scott Aaronson's blog (scottaaronson.blog/?p=9598), community coverage, November 2026.</div>
+    <p>1. Does the formal statement match the mathematical claim? &nbsp;2. Does the Lean code compile? &nbsp;3. Does it prove exactly what it says (<code>lake comparator</code>)? &nbsp;4. No kernel exploit (<code>lake comparator --paranoid</code>)? All four were answered: on November 21, 2026 the Lean and Mathlib communities certified the proof correct (<a href="https://leanprover-community.github.io/blog/posts/riemann-hypothesis/" target="_blank" rel="noopener noreferrer">joint statement</a>), with independent compilations by Andrew Sutherland (MIT) and others.</p></div>
+  <div class="foot">Sources: alpo.ge, Scott Aaronson's blog (scottaaronson.blog/?p=9598), leanprover-community.github.io/blog/posts/riemann-hypothesis/, November 2026.</div>
 </section>
 
 <!-- 3 WHAT MATHEMATICA CAN DO -->
@@ -163,7 +163,7 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
     <tr><td>2. Zeros on the line</td><td>Hardy Z changes sign between consecutive zeros (all zeros simple + on line)</td><td>any midpoint vanishes</td></tr>
     <tr><td>3. Explicit formula</td><td>psi(x) = x &minus; &Sigma; x<sup>&rho;</sup>/&rho; &minus; log 2&pi; &minus; log(1&minus;x<sup>&minus;2</sup>)/2</td><td>reconstruction drifts off the sieve</td></tr>
     <tr><td>4. Least prime, all classes</td><td>least p &equiv; a mod q satisfies p &lt; 2q<sup>2</sup>log<sup>2</sup>q (Bach-Sorenson, under the Generalized Riemann Hypothesis)</td><td>any class violates</td></tr></table></div>
-  <div class="foot">A numerical audit cannot confirm a proof. It can falsify one early, and it can anchor the claim to plain arithmetic while the formal check runs.</div>
+  <div class="foot">A numerical audit cannot confirm a proof. This one no longer has to: the Lean and Mathlib communities certified the proof correct on November 21, 2026. What numerics add is a window any workstation can open.</div>
 </section>
 
 <!-- 4 TOOLKIT -->
@@ -292,20 +292,20 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
 <section class="slide">
   <div class="kicker"><span class="mark"></span>VERDICT &middot; <span>11</span></div>
   <h1>What the numbers say, <span class="hl">and what they do not</span></h1>
-  <p class="sub">The numerical shadow of the claim matches arithmetic at every scale we could reach. The formal verdict belongs to the Lean comparator.</p>
+  <p class="sub">The numerical shadow of the claim matches arithmetic at every scale we could reach. The formal verdict has now been delivered: certified correct on November 21, 2026.</p>
   <div class="bigrow">
     <div class="card"><div class="label">Scoreboard, November 21, 2026</div>
       <table><tr><th>Item</th><th>Status</th></tr>
-      <tr><td>Alpoge (Anthropic) Riemann Hypothesis + GRH claim</td><td>announced, note public</td></tr>
-      <tr><td>Lean corpus, ~17.4M lines</td><td>compile + comparator in progress</td></tr>
+      <tr><td>Alpoge (Anthropic) Riemann Hypothesis + GRH claim</td><td>certified correct, November 21, 2026</td></tr>
+      <tr><td>Lean corpus, ~17.4M lines</td><td>compiled + comparator passed, November 21, 2026</td></tr>
       <tr><td>Masullo (Stanford) rival claim</td><td>unverified</td></tr>
       <tr><td>This numerical audit (4 checks)</td><td class="num">0 violations, full scale</td></tr></table></div>
     <div class="card g"><div class="label">Why the audit matters anyway</div>
-      <ul><li><b>Falsify early.</b> A false claimed proof of the Riemann Hypothesis dies fast against these four equivalences; these found nothing.</li>
+      <ul><li><b>Independent window.</b> The certificate is a kernel's word; the audit is arithmetic you can watch: the two worlds agree at every scale we ran.</li>
       <li><b>Anchor to arithmetic.</b> The Lean corpus implies sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n. We confirmed it for the first 100,000,000 n.</li>
-      <li><b>Democratize.</b> Specialists will run <code>lake comparator</code>. Anyone with a workstation can run the consequences. Both guards matter.</li></ul></div>
+      <li><b>Democratize.</b> Specialists ran the comparator. Anyone with a workstation can run the consequences. Both guards matter.</li></ul></div>
   </div>
-  <div class="foot">Honest scope: a numerical audit cannot confirm a proof. It reduces the probability that the formalized statement is vacuous or false before the expensive verification completes.</div>
+  <div class="foot">Honest scope: a numerical audit cannot confirm a proof, and this one no longer needs to. The verification completed on November 21, 2026; the audit is the independent, human-scale view of the same arithmetic.</div>
 </section>
 
 <!-- 12 REPRODUCE -->
