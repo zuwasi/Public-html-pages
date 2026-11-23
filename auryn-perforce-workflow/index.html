@@ -317,7 +317,39 @@
       </ol>
     </section>
 
-    <!-- 11 · LIMITS & OFFLINE -->
+    <!-- 11 · AIR-GAPPED -->
+    <section class="slide">
+      <div class="kicker">Deployment topology</div>
+      <h2>Air-gapped: everything inside the perimeter</h2>
+      <p class="sub">The pipeline never leaves your network. The P4 source shells out to the <code>p4</code> CLI against your internal Helix Core server; parsing, the graph, and the embeddings are all local compute.</p>
+      <div class="flow">
+        <div class="node"><span class="t">Helix Core (p4d)</span><span class="d">your internal server; trigger or poller fires on submit</span></div>
+        <div class="arrow">→</div>
+        <div class="node hi"><span class="t">Auryn (this host)</span><span class="d">p4 CLI + tree-sitter / Jedi / Roslyn parsers — all local</span></div>
+        <div class="arrow">→</div>
+        <div class="node bl"><span class="t">FalkorDB</span><span class="d">local container on the same segment; MCP queries stay inside</span></div>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3><span class="dot" style="background:var(--amber)"></span>Stage once, on a connected machine</h3>
+          <ul>
+            <li><strong>Python wheelhouse</strong> (<code>pip download</code>) for the venv install.</li>
+            <li><strong>FalkorDB image</strong>: <code>docker save</code> in, <code>docker load</code> inside.</li>
+            <li><strong>Embedding model cache</strong> (~160M-param ONNX model) — or run structural-only ingest and skip vectors.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3><span class="dot" style="background:var(--green)"></span>Best topology for a closed site</h3>
+          <ul>
+            <li>Put Auryn <strong>on or beside p4d</strong> and use the real <code>change-commit</code> trigger: true event-driven freshness, no polling.</li>
+            <li>Workstation mode: <code>auryn p4-watch</code> polls the internal server — same flow, no server admin needed.</li>
+            <li>Graph queries work with the server dark: the graph is local.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 · LIMITS & OFFLINE -->
     <section class="slide">
       <div class="kicker">Honest edges</div>
       <h2>Offline behavior and prototype limits</h2>
@@ -359,7 +391,7 @@
   <button class="nav prev hidden" id="prev" aria-label="Previous slide">&#8249;</button>
   <button class="nav next" id="next" aria-label="Next slide">&#8250;</button>
   <div class="progress"><div class="fill" id="fill"></div></div>
-  <div class="counter" id="counter">1 / 11</div>
+  <div class="counter" id="counter">1 / 12</div>
   <div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
 </div>
 
