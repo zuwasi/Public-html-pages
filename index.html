@@ -282,8 +282,14 @@
 </section>
 
 <section class="catalog-section" data-section="sec-new" id="sec-new">
-  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">19</span></h2>
+  <h2><span class="sec-dot"></span>New on the Site<span class="sec-count">20</span></h2>
   <div class="grid">
+    <article class="card card-new" dir="ltr">
+      <div class="card-top"><span class="card-tag badge-new">NEW &middot; PERFORCE &middot; HELIX CORE &middot; CODE GRAPH &middot; WORKFLOW DECK</span></div>
+      <a class="card-title" href="auryn-perforce-workflow/">Auryn &times; Perforce: a Code-Graph Workflow for Helix Core Depots</a>
+      <div class="card-dates">Published: 2026-11-23 &middot; Prototype: <a href="https://github.com/zuwasi/auryn-p4" style="color:var(--accent,#1d6bd0)">github.com/zuwasi/auryn-p4 (private)</a></div>
+      <p class="card-desc">11-slide workflow deck for the P4-source prototype built on FalkorDB/Auryn: ingest a Perforce depot path straight from the server with no client workspace (p4 fstat digest tree + p4 print, pinned to one submitted changelist), incremental sync that re-parses only files whose digest changed between changelists, three freshness triggers (manual, a local 30-second submit poller that stands in for p4d's server-side change-commit trigger, and the server trigger itself), the submit &rarr; graph &rarr; MCP-answer flow verified end to end on a live p4d, the benefits for a P4 shop (depot-direct, CL-pinned reproducibility, cheap freshness, agent-ready structure), how to test it on your own depot, and the honest offline answer: queries run offline against the local graph, sync still needs the server.</p>
+    </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW &middot; GEMINI 4 NEON &middot; HARNESS BENCHMARK &middot; SUPPLEMENT DECK</span><button class="stamp" type="button" data-note="neon-vs-parasoft/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
       <a class="card-title" href="neon-vs-parasoft/technical/">Same Model, Different Harness: Gemini 4 Neon under Amp vs Google's SWE-sweep Claim</a>
