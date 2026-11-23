@@ -422,6 +422,9 @@ Last updated: 2026-11-23
 • origami-continuum-inverse-design
   https://zuwasi.github.io/Public-html-pages/origami-continuum-inverse-design
 
+• parasoft-3-day-bug
+  https://zuwasi.github.io/Public-html-pages/parasoft-3-day-bug
+
 • parasoft-cpptest-obfuscation
   https://zuwasi.github.io/Public-html-pages/parasoft-cpptest-obfuscation
 
