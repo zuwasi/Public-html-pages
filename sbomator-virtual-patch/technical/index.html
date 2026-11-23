@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>The Virtual Patch That Forgot: SBOMator vs the Stale WAF Rule | ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4eedc;
+  --sheet: #fbf8ee;
+  --sheet2: #ece4cc;
+  --ink: #1d1a16;
+  --muted: #6b6353;
+  --line: #b9ae90;
+  --blue: #12457a;
+  --accent: #1d6bd0;
+  --amber: #8a5e00;
+  --amber-hi: #e8a317;
+  --red: #b8322a;
+  --green: #1e7d33;
+  --code-bg: #f6efdc;
+  --code-cap: #d9d0b8;
+  --top: 52px;
+  --pad-x: max(4vw, 48px);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; overflow: hidden; background: var(--bg); color: var(--ink);
+  font-family: 'Inter', system-ui, sans-serif; }
+.track { display: flex; height: 100vh; width: 100vw; transition: transform .45s cubic-bezier(.4,0,.2,1); }
+.slide { min-width: 100vw; height: 100vh; padding: calc(var(--top) + 3vh) var(--pad-x) 9vh; overflow: hidden; display: flex; flex-direction: column; }
+
+/* top bar */
+.topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--top); background: var(--sheet);
+  border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 14px;
+  padding: 0 var(--pad-x); z-index: 50; font-size: 13px; }
+.topbar .home { text-decoration: none; color: var(--ink); font-size: 17px; }
+.topbar img.logo { height: 32px; cursor: pointer; }
+.topbar .brand { border-left: 1px solid var(--line); padding-left: 14px; color: var(--muted); }
+.topbar .brand b { color: var(--blue); }
+.topbar .right { margin-left: auto; display: flex; gap: 18px; }
+.topbar .right a { color: var(--muted); text-decoration: none; }
+.topbar .right a:hover { color: var(--accent); }
+
+/* kicker + headings */
+.kicker { font-size: clamp(11px, 1vw, 13px); letter-spacing: .22em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 1.6vh; }
+.kicker span { color: var(--accent); font-weight: 700; }
+.kicker .mark { position: relative; display: inline-block; width: 15px; height: 15px; margin-right: 9px; vertical-align: -2px; }
+.kicker .mark::before { content: ""; position: absolute; left: 0; top: 2px; width: 10px; height: 10px; background: var(--blue); }
+.kicker .mark::after { content: ""; position: absolute; left: 5px; top: 6px; width: 10px; height: 10px; background: var(--amber-hi); opacity: .92; }
+h1 { font-size: clamp(30px, 3.8vw, 58px); font-weight: 800; line-height: 1.12; letter-spacing: -.015em; }
+h1 .hl { color: var(--blue); }
+.sub { font-size: clamp(15px, 1.5vw, 21px); color: var(--muted); margin-top: 1.2vh; max-width: 1250px; }
+
+/* cards */
+.row, .bigrow { display: flex; gap: 18px; margin-top: 3.2vh; flex-wrap: wrap; }
+.card { background: var(--sheet); border: 1px solid var(--line); border-top: 3px solid var(--blue);
+  padding: clamp(14px, 1.6vw, 24px); flex: 1; min-width: 240px; }
+.card.green { border-top-color: var(--green); }
+.card.red { border-top-color: var(--red); }
+.card.amber { border-top-color: var(--amber-hi); }
+.card .label { font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.card p, .card li { font-size: clamp(14px, 1.25vw, 18px); line-height: 1.5; }
+.card ul { padding-left: 20px; }
+.card li { margin-bottom: 8px; }
+.cardlogo { float: right; width: 26px; margin-left: 10px; }
+
+/* stats */
+.stat { font-size: clamp(38px, 5.4vw, 84px); font-weight: 800; color: var(--blue); line-height: 1; }
+.stat.red { color: var(--red); } .stat.green { color: var(--green); } .stat.amber { color: var(--amber); }
+.statword { font-size: clamp(12px, 1.1vw, 15px); color: var(--muted); margin-top: 6px; }
+
+/* code */
+pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: clamp(14px, 1.5vw, 22px);
+  font-family: Consolas, 'Courier New', monospace; font-size: clamp(12px, 1.15vw, 16px);
+  line-height: 1.45; overflow: hidden; white-space: pre; }
+.caption { font-size: 11px; color: var(--code-cap); background: var(--code-cap); color: var(--ink);
+  display: inline-block; padding: 3px 10px; border: 1px solid var(--line); border-bottom: none;
+  font-size: 11px; letter-spacing: .08em; }
+
+/* screenshots */
+.shot { max-width: 100%; max-height: 56vh; border: 1px solid var(--line); box-shadow: 0 2px 10px rgba(29,26,22,.12); }
+.shotrow { display: flex; gap: 18px; margin-top: 2.6vh; align-items: flex-start; }
+
+/* cover */
+.brandrow { display: flex; gap: 12px; margin-top: 3vh; flex-wrap: wrap; }
+.brandchip { display: flex; align-items: center; gap: 9px; background: var(--sheet); border: 1px solid var(--line);
+  padding: 8px 14px; font-size: 13px; color: var(--muted); }
+.brandchip img { height: 22px; }
+.brandchip.dark { background: #17222e; color: #cfd8e2; border-color: #17222e; }
+.person-card { display: flex; gap: 16px; background: var(--sheet); border: 1px solid var(--line);
+  padding: 14px; max-width: 460px; margin-top: 3vh; }
+.person-card img { width: 120px; height: 140px; object-fit: cover; }
+.person-card .who b { font-size: 16px; }
+.person-card .role { color: var(--blue); font-size: 13px; font-weight: 600; margin: 3px 0 7px; }
+.person-card .bio { font-size: 12.5px; color: var(--muted); line-height: 1.45; }
+.person-card a { color: var(--accent); font-size: 12.5px; }
+
+/* footer of slide */
+.foot { margin-top: auto; padding-top: 1.6vh; font-size: 12px; color: var(--muted); }
+
+/* nav arrows */
+.navbtn { position: fixed; top: 50%; transform: translateY(-50%); width: 46px; height: 46px;
+  border-radius: 50%; border: 1px solid var(--line); background: var(--sheet); color: var(--ink);
+  font-size: 24px; cursor: pointer; z-index: 60; display: flex; align-items: center; justify-content: center;
+  user-select: none; }
+.navbtn:hover { background: var(--sheet2); }
+#prev { left: 18px; } #next { right: 18px; }
+.navbtn.hidden { display: none; }
+
+/* progress + counter + hint */
+.progress { position: fixed; bottom: 0; left: 0; height: 4px; background: linear-gradient(90deg, var(--blue), var(--amber-hi));
+  width: 0; z-index: 60; transition: width .3s; }
+.counter { position: fixed; bottom: 14px; right: 20px; font-size: 13px; color: var(--muted); z-index: 60; background: var(--bg); padding: 2px 8px; }
+.hint { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); font-size: 14px; color: var(--muted);
+  z-index: 60; animation: pulse 1.6s infinite; }
+.hint.gone { animation: none; opacity: 0; pointer-events: none; }
+@keyframes pulse { 0%,100% { opacity: .35; } 50% { opacity: .9; } }
+
+@media (max-width: 760px) {
+  .slide { padding-bottom: 12vh; overflow-y: auto; }
+  .row, .bigrow, .shotrow { flex-direction: column; }
+  .card { min-width: 100%; }
+  .topbar .right { display: none; }
+  .person-card { max-width: 100%; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="home" href="#" onclick="go(0); return false;">&#127968;</a>
+  <img class="logo" src="assets/esl-logo.png" alt="ESL" onclick="go(0)">
+  <span class="brand"><b>ESL</b> - Engineering Software Lab &nbsp;|&nbsp; The Virtual Patch That Forgot</span>
+  <div class="right">
+    <a href="https://github.com/zuwasi/SBOMator" target="_blank">SBOMator on GitHub</a>
+    <a href="https://www.eswlab.com/" target="_blank">eswlab.com</a>
+    <a href="mailto:sales@eswlab.com">Contact ESL</a>
+  </div>
+</div>
+
+<div class="track" id="track">
+
+<!-- 01 cover -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>ESL SBOMATOR FIELD NOTE &middot; <span>01</span></div>
+  <h1>The Virtual Patch <span class="hl">That Forgot</span></h1>
+  <p class="sub">A WAF rule can make a vulnerability disappear from every scanner you trust. An SBOM is the one instrument that still sees it. Here is a small demo project where exactly that happened, and the scan that resurfaced it.</p>
+  <div class="bigrow">
+    <div class="card red"><div class="stat red">10.0</div><div class="statword">CVSSv3.1 of CVE-2021-44228, still present in the build</div></div>
+    <div class="card amber"><div class="stat amber">22 mo</div><div class="statword">age of the "temporary" virtual patch when the scan ran</div></div>
+    <div class="card"><div class="stat">23</div><div class="statword">components in the generated SBOM, all VEX-assessed</div></div>
+    <div class="card green"><div class="stat green">0</div><div class="statword">real patches shipped since the ticket was closed</div></div>
+  </div>
+  <div class="brandrow">
+    <div class="brandchip"><img src="assets/esl-logo.png" alt="ESL">ESL SBOMator: SBOM, CVE and VEX analysis</div>
+    <div class="brandchip dark">Demo project: order-service (Maven, log4j-core 2.14.1)</div>
+  </div>
+  <div class="person-card">
+    <img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
+    <div class="who">
+      <b>Daniel Liezrowice</b>
+      <div class="role">CTO, Engineering Software Lab</div>
+      <div class="bio">Builds SBOM and supply chain tooling for medical, automotive and embedded teams. Author of ESL SBOMator, a SBOM generation and vulnerability analysis platform.</div>
+      <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">linkedin.com/in/liezrowice</a>
+    </div>
+  </div>
+  <div class="foot">Measured run: SBOMator CLI 1.4.13, Windows 11, 23 Nov 2026. Demo project: C:\1.4.14.04\demos\virtual_patch_demo\order-service</div>
+</section>
+
+<!-- 02 the pattern -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE PATTERN &middot; <span>02</span></div>
+  <h1>How a virtual patch becomes <span class="hl">permanent</span></h1>
+  <p class="sub">The sequence is always the same. Only the dates change.</p>
+  <pre class="box">
+ January 2025            two days later              every month since
+ ┌──────────────┐       ┌──────────────────┐       ┌─────────────────────────┐
+ │ CVE-2021-44228│       │ ticket SEC-482   │       │ external scans: clean   │
+ │ hits the news │  -->  │ closed: HANDLED  │  -->  │ pen tests: pass         │
+ │ no patch yet  │       │ "VP in place,    │       │ dashboard: green        │
+ │ WAF rule goes │       │  upgrade next    │       │                         │
+ │ in at the edge│       │  sprint"         │       │ real patch: never ships │
+ └──────────────┘       └──────────────────┘       └─────────────────────────┘</pre>
+  <div class="row">
+    <div class="card amber"><div class="label">What the rule does</div><p>It blocks the known exploit strings, jndi lookups and their obfuscations, at the edge. It changes no code and no version anywhere.</p></div>
+    <div class="card red"><div class="label">What it does not do</div><p>It does not remove log4j-core 2.14.1 from the build. The vulnerability is still there; only one path to it is closed.</p></div>
+    <div class="card"><div class="label">Why it stays</div><p>No expiry date, no owner after the author leaves, and a green dashboard that never asks the question again.</p></div>
+  </div>
+  <div class="foot">Demo incident record: INCIDENT.md in the demo project; git history dated 2025-01-12 to 2025-01-14.</div>
+</section>
+
+<!-- 03 the evidence -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE EVIDENCE &middot; <span>03</span></div>
+  <h1>The project still carries <span class="hl">both</span> the vulnerability and the promise</h1>
+  <div class="shotrow">
+    <img class="shot" src="assets/demo-terminal-vp-evidence.png" alt="Terminal: git history and the virtual patch header">
+    <div style="flex:1; min-width:260px;">
+      <div class="card red" style="margin-top:0;">
+        <div class="label">git log</div>
+        <p>Three commits tell the whole story: log4j-core added for "structured logging", the temporary WAF rule the same morning, and SEC-482 closed two days later.</p>
+      </div>
+      <div class="card amber">
+        <div class="label">waf\virtual-patch.conf</div>
+        <p>"STATUS: TEMPORARY. Remove after log4j-core upgrade to 2.17+. ETA: 2 weeks." The file is still in the tree, 22 months later.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Captured from the recorded demo session, 23 Nov 2026.</div>
+</section>
+
+<!-- 04 why scans stay clean -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>WHY SCANS STAY CLEAN &middot; <span>04</span></div>
+  <h1>The front door looks patched. <span class="hl">The build never changed.</span></h1>
+  <pre class="box">
+                            what the edge sees
+ attacker ──> [ WAF: virtual patch SEC-482 ] ──X  ${jndi:...} blocked, ${lower:j}ndi blocked
+                        ^
+                        |
+        external scanners, pen tests: 0 findings, year after year
+
+                            what the edge never sees
+ internal service ─────────────────> order-service      (no WAF in this path)
+                                        |
+                                        +-- log4j-core 2.14.1   CVE-2021-44228, CVSS 10.0</pre>
+  <div class="row">
+    <div class="card"><div class="label">Edge blindness</div><p>Scanners that test through the front door measure the WAF, not the software. The rule answers their probes; the library keeps its CVE.</p></div>
+    <div class="card"><div class="label">Internal traffic</div><p>Service-to-service calls, direct APIs and forgotten legacy endpoints bypass the WAF entirely. The virtual patch has no opinion about them.</p></div>
+    <div class="card"><div class="label">One variant away</div><p>A new obfuscation the rule does not match, and the "patched" vulnerability is exploitable again through the front door too.</p></div>
+  </div>
+  <div class="foot">Diagram: the demo topology. The WAF rule is real (ModSecurity syntax, in the project tree); the traffic paths are the standard ones the rule cannot cover.</div>
+</section>
+
+<!-- 05 the scan -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE SCAN &middot; <span>05</span></div>
+  <h1>SBOMator reads the software, <span class="hl">not the traffic</span></h1>
+  <div class="shotrow">
+    <img class="shot" src="assets/demo-scan-command.png" alt="Terminal: SBOMator CLI scan starting on order-service">
+    <div style="flex:1; min-width:260px;">
+      <div class="caption">one command, no agents, no traffic</div>
+      <pre class="box" style="margin-top:10px;">python esl_sbomator_cli.py . ^
+     -o ..\sbom.json --skip-db-update</pre>
+      <div class="card green" style="margin-top:16px;">
+        <div class="label">What the workflow produced</div>
+        <ul>
+          <li>CycloneDX SBOM: 23 components, Maven auto-detected</li>
+          <li>CVE enrichment against local and OSV sources</li>
+          <li>VEX document: 27 exploitability statements</li>
+          <li>Rich HTML report (sbom.html, 812 KB)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Run: SBOMator CLI 1.4.13, --skip-db-update (offline mode), Windows 11, 23 Nov 2026.</div>
+</section>
+
+<!-- 06 the payoff -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE PAYOFF &middot; <span>06</span></div>
+  <h1>The scan says what the dashboard <span class="hl">refused to say</span></h1>
+  <div class="shotrow">
+    <img class="shot" src="assets/demo-report-vex-44228.png" alt="SBOMator report: CVE-2021-44228 AFFECTED, CVSS 10.0">
+    <div style="flex:1; min-width:260px;">
+      <div class="card red" style="margin-top:0;">
+        <div class="label">VEX assessment, verbatim from the report</div>
+        <p>"CRITICAL: log4j-core has known ransomware exploitation (CISA KEV). Severity: CRITICAL (CVSS 10.0). Immediate remediation required."</p>
+      </div>
+      <div class="row">
+        <div class="card red" style="min-width:210px;"><div class="stat red" style="font-size:clamp(24px,2.8vw,46px);">AFFECTED</div><div class="statword">VEX status for CVE-2021-44228 on log4j-core 2.14.1</div></div>
+        <div class="card amber" style="min-width:150px;"><div class="stat amber" style="font-size:clamp(28px,3.6vw,58px);">27</div><div class="statword">VEX statements: 2 affected, 25 under investigation</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Screenshot: sbom.html, VEX Assessments section, generated 23 Nov 2026. The word "handled" appears nowhere in the report.</div>
+</section>
+
+<!-- 07 three gaps -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE GAPS &middot; <span>07</span></div>
+  <h1>Three gaps <span class="hl">no WAF rule</span> can close</h1>
+  <div class="bigrow">
+    <div class="card red"><div class="label">1. Reachability</div><p>An SBOM tells you the vulnerable component exists; VEX and reachability analysis tell you whether the vulnerable code is actually reachable from input. The virtual patch answers neither question, it just blocks one route.</p></div>
+    <div class="card amber"><div class="label">2. Coverage</div><p>The rule sees only the traffic that crosses it. Internal service-to-service calls, direct API endpoints and legacy interfaces bypass the edge. Nobody audits the rule against the real topology.</p></div>
+    <div class="card"><div class="label">3. Expiry</div><p>Nothing forces the rule to die. The SBOM says what needs a real patch; the expiry date, the owner and the decommissioning step live in vulnerability management, and they are the first things a forgotten ticket loses.</p></div>
+  </div>
+  <div class="foot">The Log4Shell pattern from the original discussion: early WAF rules based on suspicious strings were bypassed with obfuscation; the vulnerability itself never changed.</div>
+</section>
+
+<!-- 08 division of labor -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>THE VERDICT &middot; <span>08</span></div>
+  <h1>Different questions, <span class="hl">different answers</span></h1>
+  <div class="bigrow">
+    <div class="card green"><div class="label">SBOM</div><p>Says <b>what is broken</b>: the exact component, version and location, regardless of what blocks the traffic in front of it.</p></div>
+    <div class="card"><div class="label">VEX + reachability</div><p>Says <b>whether it matters</b>: affected or not, exploitable or not, with a triage record that survives the engineer who wrote the rule.</p></div>
+    <div class="card amber"><div class="label">Virtual patch</div><p>Is <b>the bridge between knowing and fixing</b>. Legitimate, useful, and temporary by definition. With an expiry date it buys time; without one it rents it.</p></div>
+  </div>
+  <div class="card amber" style="margin-top:2.4vh;">
+    <div class="label">The line to remember</div>
+    <p style="font-size:clamp(17px,1.9vw,28px); font-weight:600;">A virtual patch without an SBOM-backed patch plan is not temporary insurance. It is the permanent state in a temporary costume.</p>
+  </div>
+  <div class="foot">Follow-up to the virtual patching discussion, November 2026. Demo video: sbomator-virtual-patch-demo.mp4 (2:24).</div>
+</section>
+
+<!-- 09 reproduce -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>REPRODUCE &middot; <span>09</span></div>
+  <h1>Run it yourself in <span class="hl">two minutes</span></h1>
+  <div class="caption">the full demo tree</div>
+  <pre class="box" style="margin-top:10px;">C:\1.4.14.04\demos\virtual_patch_demo\
+  order-service\
+    pom.xml                  # log4j-core 2.14.1, added 2025-01-12, never upgraded
+    waf\virtual-patch.conf   # ModSecurity virtual patch, SEC-482, "remove in 2 weeks"
+    INCIDENT.md              # the ticket: closed as HANDLED, remediation: none
+  sbom.json                  # CycloneDX SBOM, 23 components      (scan output)
+  sbom_VEX.json              # 27 VEX exploitability statements    (scan output)
+  sbom.html                  # the rich report the screenshots come from</pre>
+  <div class="caption" style="margin-top:14px;">the command</div>
+  <pre class="box" style="margin-top:10px;">python C:\1.4.14.04\cli-only\esl_sbomator_cli.py ^
+       C:\1.4.14.04\demos\virtual_patch_demo\order-service ^
+       -o C:\1.4.14.04\demos\virtual_patch_demo\sbom.json --skip-db-update</pre>
+  <div class="row">
+    <div class="card green"><div class="label">What to look for</div><p>In sbom.html: CVE-2021-44228 on log4j-core 2.14.1, severity Critical (10.0), VEX state AFFECTED, plus CVE-2021-45046 and CVE-2021-45105 from the same library.</p></div>
+    <div class="card"><div class="label">Honest limits</div><p>Offline scan mode (--skip-db-update): results depend on the local CVE database vintage. Reachability for the Maven ecosystem is reported as "not assessed" in this build; VEX triage is manual where the analyzer has no coverage.</p></div>
+  </div>
+  <div class="foot">Environment: Windows 11, Python 3.14, SBOMator CLI 1.4.13, run 23 Nov 2026 by ESL.</div>
+</section>
+
+<!-- 10 closing -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>CLOSING &middot; <span>10</span></div>
+  <h1>Scan the software, <span class="hl">not the traffic</span></h1>
+  <p class="sub">The edge forgets. The inventory does not. Give every virtual patch an expiry date, and give every expiry date an SBOM that can call the bluff.</p>
+  <div class="shotrow">
+    <img class="shot" src="assets/demo-report-vex-cards.png" alt="SBOMator report: VEX assessment cards with reconciliation" style="max-height:34vh;">
+  </div>
+  <div class="person-card">
+    <img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
+    <div class="who">
+      <b>Daniel Liezrowice</b>
+      <div class="role">CTO, Engineering Software Lab</div>
+      <div class="bio">ESL SBOMator generates SBOMs, enriches them with CVE data and produces VEX exploitability statements for real-world triage.</div>
+      <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">linkedin.com/in/liezrowice</a> &nbsp;&middot;&nbsp;
+      <a href="https://www.eswlab.com/" target="_blank">eswlab.com</a>
+    </div>
+  </div>
+  <div class="foot">ESL SBOMator field note, 23 Nov 2026. Contact: sales@eswlab.com</div>
+</section>
+
+</div>
+
+<button class="navbtn" id="prev" onclick="step(-1)">&#8249;</button>
+<button class="navbtn" id="next" onclick="step(1)">&#8250;</button>
+<div class="progress" id="progress"></div>
+<div class="counter" id="counter">1 / 10</div>
+<div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
+
+<script>
+const total = 10;
+let cur = 0, moved = false;
+const track = document.getElementById('track');
+const progress = document.getElementById('progress');
+const counter = document.getElementById('counter');
+const prev = document.getElementById('prev');
+const next = document.getElementById('next');
+const hint = document.getElementById('hint');
+
+function go(n) {
+  cur = Math.max(0, Math.min(total - 1, n));
+  track.style.transform = 'translateX(' + (-cur * 100) + 'vw)';
+  counter.textContent = (cur + 1) + ' / ' + total;
+  progress.style.width = ((cur + 1) / total * 100) + '%';
+  prev.classList.toggle('hidden', cur === 0);
+  next.classList.toggle('hidden', cur === total - 1);
+  if (!moved) { moved = true; hint.classList.add('gone'); }
+}
+function step(d) { go(cur + d); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); step(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+});
+let tx = null;
+document.addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, {passive: true});
+document.addEventListener('touchend', e => {
+  if (tx === null) return;
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+  tx = null;
+}, {passive: true});
+let downx = null;
+document.addEventListener('mousedown', e => { downx = e.clientX; });
+document.addEventListener('mouseup', e => {
+  if (downx === null) return;
+  const dx = e.clientX - downx;
+  if (Math.abs(dx) > 60) step(dx < 0 ? 1 : -1);
+  downx = null;
+});
+go(0);
+</script>
+</body>
+</html>
