@@ -67,6 +67,16 @@ h1 .hl { color: var(--blue); }
 .card li { margin-bottom: 8px; }
 .cardlogo { float: right; width: 26px; margin-left: 10px; }
 
+/* fill: stretch the main content block to use the full slide area */
+.fill { flex: 1 1 auto; }
+.fill > .card { display: flex; flex-direction: column; justify-content: center; }
+.shotrow.fill { flex: 1 1 0; min-height: 0; align-items: stretch; }
+.shotrow.fill .shot { height: 100%; max-height: none; object-fit: contain; }
+.shotrow.fill > div { display: flex; flex-direction: column; }
+.shotrow.fill > div > .card { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.fill .card p, .fill .card li { font-size: clamp(15px, 1.35vw, 22px); line-height: 1.5; }
+pre.box.wide { font-size: clamp(13px, 1.3vw, 24px); line-height: 1.5; padding: clamp(14px, 1.8vw, 28px); }
+
 /* stats */
 .stat { font-size: clamp(38px, 5.4vw, 84px); font-weight: 800; color: var(--blue); line-height: 1; }
 .stat.red { color: var(--red); } .stat.green { color: var(--green); } .stat.amber { color: var(--amber); }
@@ -147,7 +157,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
   <div class="kicker"><span class="mark"></span>ESL SBOMATOR FIELD NOTE &middot; <span>01</span></div>
   <h1>The Virtual Patch <span class="hl">That Forgot</span></h1>
   <p class="sub">A WAF rule can make a vulnerability disappear from every scanner you trust. An SBOM is the one instrument that still sees it. Here is a small demo project where exactly that happened, and the scan that resurfaced it.</p>
-  <div class="bigrow">
+  <div class="bigrow fill">
     <div class="card red"><div class="stat red">10.0</div><div class="statword">CVSSv3.1 of CVE-2021-44228, still present in the build</div></div>
     <div class="card amber"><div class="stat amber">22 mo</div><div class="statword">age of the "temporary" virtual patch when the scan ran</div></div>
     <div class="card"><div class="stat">23</div><div class="statword">components in the generated SBOM, all VEX-assessed</div></div>
@@ -175,7 +185,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
   <div class="kicker"><span class="mark"></span>THE PATTERN &middot; <span>02</span></div>
   <h1>How a virtual patch becomes <span class="hl">permanent</span></h1>
   <p class="sub">The sequence is always the same. Only the dates change.</p>
-  <pre class="box">
+  <pre class="box wide">
  January 2025            two days later              every month since
  ┌──────────────┐       ┌──────────────────┐       ┌─────────────────────────┐
  │ CVE-2021-44228│       │ ticket SEC-482   │       │ external scans: clean   │
@@ -184,7 +194,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
  │ WAF rule goes │       │  upgrade next    │       │                         │
  │ in at the edge│       │  sprint"         │       │ real patch: never ships │
  └──────────────┘       └──────────────────┘       └─────────────────────────┘</pre>
-  <div class="row">
+  <div class="row fill">
     <div class="card amber"><div class="label">What the rule does</div><p>It blocks the known exploit strings, jndi lookups and their obfuscations, at the edge. It changes no code and no version anywhere.</p></div>
     <div class="card red"><div class="label">What it does not do</div><p>It does not remove log4j-core 2.14.1 from the build. The vulnerability is still there; only one path to it is closed.</p></div>
     <div class="card"><div class="label">Why it stays</div><p>No expiry date, no owner after the author leaves, and a green dashboard that never asks the question again.</p></div>
@@ -196,7 +206,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
 <section class="slide">
   <div class="kicker"><span class="mark"></span>THE EVIDENCE &middot; <span>03</span></div>
   <h1>The project still carries <span class="hl">both</span> the vulnerability and the promise</h1>
-  <div class="shotrow">
+  <div class="shotrow fill">
     <img class="shot" src="assets/demo-terminal-vp-evidence.png" alt="Terminal: git history and the virtual patch header">
     <div style="flex:1; min-width:260px;">
       <div class="card red" style="margin-top:0;">
@@ -216,7 +226,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
 <section class="slide">
   <div class="kicker"><span class="mark"></span>WHY SCANS STAY CLEAN &middot; <span>04</span></div>
   <h1>The front door looks patched. <span class="hl">The build never changed.</span></h1>
-  <pre class="box">
+  <pre class="box wide">
                             what the edge sees
  attacker ──> [ WAF: virtual patch SEC-482 ] ──X  ${jndi:...} blocked, ${lower:j}ndi blocked
                         ^
@@ -227,7 +237,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
  internal service ─────────────────> order-service      (no WAF in this path)
                                         |
                                         +-- log4j-core 2.14.1   CVE-2021-44228, CVSS 10.0</pre>
-  <div class="row">
+  <div class="row fill">
     <div class="card"><div class="label">Edge blindness</div><p>Scanners that test through the front door measure the WAF, not the software. The rule answers their probes; the library keeps its CVE.</p></div>
     <div class="card"><div class="label">Internal traffic</div><p>Service-to-service calls, direct APIs and forgotten legacy endpoints bypass the WAF entirely. The virtual patch has no opinion about them.</p></div>
     <div class="card"><div class="label">One variant away</div><p>A new obfuscation the rule does not match, and the "patched" vulnerability is exploitable again through the front door too.</p></div>
@@ -239,7 +249,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
 <section class="slide">
   <div class="kicker"><span class="mark"></span>THE SCAN &middot; <span>05</span></div>
   <h1><img src="assets/sbomator-logo.png" alt="SBOMator logo" style="height:52px; vertical-align:middle; margin-right:14px;">SBOMator reads the software, <span class="hl">not the traffic</span></h1>
-  <div class="shotrow">
+  <div class="shotrow fill">
     <img class="shot" src="assets/demo-scan-command.png" alt="Terminal: SBOMator CLI scan starting on order-service">
     <div style="flex:1; min-width:260px;">
       <div class="caption">one command, no agents, no traffic</div>
@@ -263,7 +273,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
 <section class="slide">
   <div class="kicker"><span class="mark"></span>THE PAYOFF &middot; <span>06</span></div>
   <h1>The scan says what the dashboard <span class="hl">refused to say</span></h1>
-  <div class="shotrow">
+  <div class="shotrow fill">
     <img class="shot" src="assets/demo-report-vex-44228.png" alt="SBOMator report: CVE-2021-44228 AFFECTED, CVSS 10.0">
     <div style="flex:1; min-width:260px;">
       <div class="card red" style="margin-top:0;">
@@ -283,7 +293,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
 <section class="slide">
   <div class="kicker"><span class="mark"></span>THE GAPS &middot; <span>07</span></div>
   <h1>Three gaps <span class="hl">no WAF rule</span> can close</h1>
-  <div class="bigrow">
+  <div class="bigrow fill">
     <div class="card red"><div class="label">1. Reachability</div><p>An SBOM tells you the vulnerable component exists; VEX and reachability analysis tell you whether the vulnerable code is actually reachable from input. The virtual patch answers neither question, it just blocks one route.</p></div>
     <div class="card amber"><div class="label">2. Coverage</div><p>The rule sees only the traffic that crosses it. Internal service-to-service calls, direct API endpoints and legacy interfaces bypass the edge. Nobody audits the rule against the real topology.</p></div>
     <div class="card"><div class="label">3. Expiry</div><p>Nothing forces the rule to die. The SBOM says what needs a real patch; the expiry date, the owner and the decommissioning step live in vulnerability management, and they are the first things a forgotten ticket loses.</p></div>
@@ -336,10 +346,9 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
   <div class="kicker"><span class="mark"></span>CLOSING &middot; <span>10</span></div>
   <h1>Scan the software, <span class="hl">not the traffic</span></h1>
   <p class="sub">The edge forgets. The inventory does not. Give every virtual patch an expiry date, and give every expiry date an SBOM that can call the bluff.</p>
-  <div class="shotrow">
-    <img class="shot" src="assets/demo-report-vex-cards.png" alt="SBOMator report: VEX assessment cards with reconciliation" style="max-height:34vh;">
-  </div>
-  <div class="person-card">
+  <div class="shotrow fill">
+    <img class="shot" src="assets/demo-report-vex-cards.png" alt="SBOMator report: VEX assessment cards with reconciliation">
+    <div class="person-card" style="margin-top:0; align-self:center;">
     <img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
     <div class="who">
       <b>Daniel Liezrowice</b>
@@ -347,6 +356,7 @@ pre.box { background: var(--code-bg); border: 1px solid var(--line); padding: cl
       <div class="bio">ESL SBOMator generates SBOMs, enriches them with CVE data and produces VEX exploitability statements for real-world triage.</div>
       <a href="https://www.linkedin.com/in/liezrowice/" target="_blank">linkedin.com/in/liezrowice</a> &nbsp;&middot;&nbsp;
       <a href="https://www.eswlab.com/" target="_blank">eswlab.com</a>
+    </div>
     </div>
   </div>
   <div class="foot">ESL SBOMator field note, 23 Nov 2026. Contact: sales@eswlab.com</div>
