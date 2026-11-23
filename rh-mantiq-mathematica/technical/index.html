@@ -114,11 +114,11 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
 <!-- 1 COVER -->
 <section class="slide">
   <div class="kicker"><span class="mark"></span>WOLFRAM MATHEMATICA MEETS THE RIEMANN HYPOTHESIS &middot; <span>NOVEMBER 2026</span></div>
-  <h1>One workstation, four audits, <span class="hl">zero violations</span></h1>
+  <h1>One workstation, five audits, <span class="hl">zero violations</span></h1>
   <p class="sub">On November 20, 2026 Anthropic announced a proof of the Riemann Hypothesis with 17.4 million lines of Lean behind it. On November 21, 2026 the Lean and Mathlib communities certified it correct, and on the same day we cross-examined it numerically with Wolfram Mathematica on a single machine. That is the invitation of this project: serious mathematics belongs on your desk, and Wolfram Mathematica is how you put it there.</p>
   <div class="bigrow">
     <div class="card"><div class="label">Lean corpus behind the claim</div><div class="stat">17.4M<small> lines</small></div><p>Fourteen split tar archives of formalized mathematics, certified correct by the Lean and Mathlib communities on November 21, 2026.</p></div>
-    <div class="card g"><div class="label">Numerical violations found</div><div class="stat g">0</div><p>Across four independent published equivalences of the Riemann Hypothesis and GRH, at full workstation scale.</p></div>
+    <div class="card g"><div class="label">Numerical violations found</div><div class="stat g">0</div><p>Across five independent published checks on the Riemann Hypothesis and GRH, at full workstation scale.</p></div>
     <div class="card"><div class="label">Integers stress-tested</div><div class="stat">10<sup>8</sup><small> values of n</small></div><p>Lagarias' elementary Riemann-Hypothesis equivalence swept to one hundred million, in 51 seconds.</p></div>
   </div>
   <div class="brandrow">
@@ -157,19 +157,20 @@ td.num{font-variant-numeric:tabular-nums;font-weight:600}
     <div class="card"><div class="label">What Lean gives (if it verifies)</div><p>A machine-checked derivation from the axioms. Every lemma and epsilon verified by a small trusted kernel. Certainty, once the comparator finishes.</p></div>
     <div class="card v"><div class="label">What Mathematica gives, today</div><p>A numerical laboratory: <code>ZetaZero</code>, <code>RiemannSiegelZ</code>, <code>DivisorSigma</code>, <code>MangoldtLambda</code>, <code>EulerPsi</code>. Fast, built-in, and ready to falsify.</p></div>
   </div>
-  <div class="card g"><div class="tag">THE FOUR AUDITS WE RAN, EACH TIED TO A PUBLISHED EQUIVALENCE OR BOUND</div>
+  <div class="card g"><div class="tag">THE FIVE AUDITS WE RAN, EACH TIED TO A PUBLISHED EQUIVALENCE OR BOUND</div>
     <table><tr><th>Audit</th><th>Theorem being stressed</th><th>Kills the claim if</th></tr>
     <tr><td>1. Lagarias sweep</td><td>sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n (the Riemann Hypothesis; Lagarias 2002)</td><td>any n violates</td></tr>
     <tr><td>2. Zeros on the line</td><td>Hardy Z changes sign between consecutive zeros (all zeros simple + on line)</td><td>any midpoint vanishes</td></tr>
     <tr><td>3. Explicit formula</td><td>psi(x) = x &minus; &Sigma; x<sup>&rho;</sup>/&rho; &minus; log 2&pi; &minus; log(1&minus;x<sup>&minus;2</sup>)/2</td><td>reconstruction drifts off the sieve</td></tr>
-    <tr><td>4. Least prime, all classes</td><td>least p &equiv; a mod q satisfies p &lt; 2q<sup>2</sup>log<sup>2</sup>q (Bach-Sorenson, under the Generalized Riemann Hypothesis)</td><td>any class violates</td></tr></table></div>
+    <tr><td>4. Least prime, all classes</td><td>least p &equiv; a mod q satisfies p &lt; 2q<sup>2</sup>log<sup>2</sup>q (Bach-Sorenson, under the Generalized Riemann Hypothesis)</td><td>any class violates</td></tr>
+    <tr><td>5. Li's criterion</td><td>&lambda;<sub>n</sub> = &Sigma;<sub>&rho;</sub> (1 &minus; (1 &minus; 1/&rho;)<sup>n</sup>) &gt; 0 for all n (the Riemann Hypothesis; Li 1997)</td><td>any &lambda;<sub>n</sub> &le; 0</td></tr></table></div>
   <div class="foot">A numerical audit cannot confirm a proof. This one no longer has to: the Lean and Mathlib communities certified the proof correct on November 21, 2026. What numerics add is a window any workstation can open.</div>
 </section>
 
 <!-- 4 TOOLKIT -->
 <section class="slide">
   <div class="kicker"><span class="mark"></span>THE TOOLKIT &middot; <span>04</span></div>
-  <h1>One package, <span class="hl">two hundred lines</span>, six entry points</h1>
+  <h1>One package, <span class="hl">two hundred lines</span>, nine entry points</h1>
   <p class="sub">RHVerification.wl: a small Wolfram Language package with a public API, a scale-switchable build script, and a self-audit that cross-checks our math against Mathematica's built-ins.</p>
   <div class="two">
     <pre class="box">MachineProfile[]        (* cores, kernel, version *)
@@ -178,6 +179,8 @@ ZerosOnLineCheck[k]     (* Hardy Z at midpoints of first k zeros *)
 ZeroCountingCheck[k]    (* N(T) formula vs actual count *)
 PsiReconstruction[x,k]  (* explicit formula vs sieve *)
 LeastPrimeAPCheck[q]    (* GRH: least prime in every a mod q *)
+LiConstantsCheck[k,z]   (* Li's criterion: all lambda_n &gt; 0 *)
+XiLogCoefficients[k]    (* log-xi coefficients via Cauchy *)
 RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
     <div class="card"><div class="label">Design rules that made it fast</div>
       <ul><li>Parallel <code>ParallelTable</code> over 24 chunked ranges: DivisorSigma per chunk, then one Flatten</li>
@@ -266,9 +269,22 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
   <div class="foot">Bach, E. and Sorenson, J., "Explicit bounds for primes in arithmetic progressions", Math. Comp. 65 (1996). Data: exports/least_prime_ap.csv.</div>
 </section>
 
-<!-- 10 TRAPS -->
+<!-- 10 AUDIT 5 LI -->
 <section class="slide">
-  <div class="kicker"><span class="mark"></span>BATTLE SCARS &middot; <span>10</span></div>
+  <div class="kicker"><span class="mark"></span>AUDIT 5 &middot; <span>10</span></div>
+  <h1>Li's criterion: <span class="hl">200 constants</span>, every one positive</h1>
+  <p class="sub">Li (1997): the sequence &lambda;<sub>n</sub> = &Sigma;<sub>&rho;</sub> (1 &minus; (1 &minus; 1/&rho;)<sup>n</sup>) is positive for every n if and only if the Riemann Hypothesis holds. One bad &lambda;<sub>n</sub> would kill it.</p>
+  <div class="bigrow">
+    <div class="card g"><div class="label">Full-scale result, n = 1..200</div><div class="stat g">0<small> non-positive constants</small></div><p>Every &lambda;<sub>n</sub> strictly positive in 37.4 seconds. The openers match the closed form: &lambda;<sub>1</sub> = 1 + &gamma;/2 &minus; log(2&radic;&pi;) = 0.023095708966121, confirmed to all digits computed.</p></div>
+    <div class="card"><div class="label">Two independent routes agree</div><p><b>Coef&shy;ficient route.</b> Extract the coefficients c<sub>j</sub> of log &xi;(1+u) by a spectrally exact Cauchy integral on |u| = 1 at 140 digits; then &lambda;<sub>n</sub> = n &Sigma; C(n&minus;1, j&minus;1) c<sub>j</sub>. <b>Zeros route.</b> Sum 1 &minus; (1 &minus; &zeta;<sub>n</sub>)<sup>n</sup> + (1 &minus; &zeta;<sub>n</sub><sup>*</sup>)<sup>n</sup> over the first 20,000 zero pairs. Worst disagreement over all 200 constants: 0.67%, at n = 100.</p></div>
+  </div>
+  <figure><img src="assets/fig_li_constants.png" alt="Li's criterion constants lambda_n"><figcaption>All 200 constants &lambda;<sub>n</sub> from the full-scale run, n = 1..200. The bars grow from &lambda;<sub>1</sub> = 0.023 to &lambda;<sub>200</sub> = 306.66; positivity for every n is exactly the Riemann Hypothesis in Li's form.</figcaption></figure>
+  <div class="foot">Li, X.-J., "The positivity of a sequence of Redheffer type matrices is equivalent to the Riemann hypothesis", Proc. Amer. Math. Soc. 125 (1997). Data: exports/li_constants.csv.</div>
+</section>
+
+<!-- 11 TRAPS -->
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>BATTLE SCARS &middot; <span>11</span></div>
   <h1>A small museum of <span class="hl">Wolfram performance traps</span></h1>
   <p class="sub">Each of these cost real time at the 10<sup>8</sup> scale. Recorded here so the next person loses minutes, not hours.</p>
   <div class="bigrow">
@@ -283,23 +299,23 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
       <li><code>Quantity</code>/<code>Missing</code> values break JSON export into 0-byte files</li>
       <li>Per-call <code>N[HarmonicNumber[n]]</code> is slow; vectorize once</li>
       <li>Chunked <code>ParallelTable</code> beats per-element parallel dispatch by orders of magnitude</li></ul></div>
-    <div class="card g"><div class="tag">WHAT THE DEMO PAIR PROVED</div><p>The same package that stalls at 10<sup>8</sup> with one wrong line runs the entire four-audit campaign in minutes when the arithmetic stays packed and real. Numerical number theory at this scale is an <b>engineering</b> discipline: the math was known; the buffers were not.</p></div>
+    <div class="card g"><div class="tag">WHAT THE DEMO PAIR PROVED</div><p>The same package that stalls at 10<sup>8</sup> with one wrong line runs the entire five-audit campaign in minutes when the arithmetic stays packed and real. Numerical number theory at this scale is an <b>engineering</b> discipline: the math was known; the buffers were not.</p></div>
   </div>
   <div class="foot">All traps reproduced in isolation before fixing; timings in this deck are single-run wall clock on the 275HX.</div>
 </section>
 
-<!-- 11 VERDICT -->
+<!-- 12 VERDICT -->
 <section class="slide">
-  <div class="kicker"><span class="mark"></span>VERDICT &middot; <span>11</span></div>
+  <div class="kicker"><span class="mark"></span>VERDICT &middot; <span>12</span></div>
   <h1>What the numbers say, <span class="hl">and what they do not</span></h1>
   <p class="sub">The numerical shadow of the claim matches arithmetic at every scale we could reach. The formal verdict has now been delivered: certified correct on November 21, 2026.</p>
   <div class="bigrow">
-    <div class="card"><div class="label">Scoreboard, November 21, 2026</div>
+    <div class="card"><div class="label">Scoreboard, November 23, 2026</div>
       <table><tr><th>Item</th><th>Status</th></tr>
       <tr><td>Alpoge (Anthropic) Riemann Hypothesis + GRH claim</td><td>certified correct, November 21, 2026</td></tr>
       <tr><td>Lean corpus, ~17.4M lines</td><td>compiled + comparator passed, November 21, 2026</td></tr>
       <tr><td>Masullo (Stanford) rival claim</td><td>unverified</td></tr>
-      <tr><td>This numerical audit (4 checks)</td><td class="num">0 violations, full scale</td></tr></table></div>
+      <tr><td>This numerical audit (5 checks)</td><td class="num">0 violations, full scale</td></tr></table></div>
     <div class="card g"><div class="label">Why the audit matters anyway</div>
       <ul><li><b>Independent window.</b> The certificate is a kernel's word; the audit is arithmetic you can watch: the two worlds agree at every scale we ran.</li>
       <li><b>Anchor to arithmetic.</b> The Lean corpus implies sigma(n) &le; H_n + e<sup>H_n</sup> log H_n for all n. We confirmed it for the first 100,000,000 n.</li>
@@ -308,9 +324,9 @@ RunValidationSuite[]    (* all of the above, JSON + figures *)</pre>
   <div class="foot">Honest scope: a numerical audit cannot confirm a proof, and this one no longer needs to. The verification completed on November 21, 2026; the audit is the independent, human-scale view of the same arithmetic.</div>
 </section>
 
-<!-- 12 REPRODUCE -->
+<!-- 13 REPRODUCE -->
 <section class="slide">
-  <div class="kicker"><span class="mark"></span>REPRODUCE &middot; <span>12</span></div>
+  <div class="kicker"><span class="mark"></span>REPRODUCE &middot; <span>13</span></div>
   <h1>Run it yourself in <span class="hl">two commands</span></h1>
   <p class="sub">One package, one build script, one audit script. Everything lands in exports/ with JSON, CSV, PNG and a written audit log.</p>
   <div class="two">
@@ -327,20 +343,21 @@ wolframscript -file build_project.wls</pre>
       <li><code>zeros_on_line.json</code>, <code>zero_counting.json</code></li>
       <li><code>psi_data.csv</code>: reconstruction vs sieve</li>
       <li><code>least_prime_ap.csv</code>: every class, every least prime</li>
-      <li>Five publication-grade figures (PNG)</li>
+      <li><code>li_summary.json</code>, <code>li_constants.csv</code>: Li's criterion, both routes</li>
+      <li>Six publication-grade figures (PNG)</li>
       <li><code>audit_report.txt</code>: the cross-check log</li></ul></div>
   </div>
   <div class="card v" style="margin-top:18px"><div class="tag">PROJECT LAYOUT</div><p><a href="https://github.com/zuwasi/RH-MantiQ" target="_blank" rel="noopener noreferrer">github.com/zuwasi/RH-MantiQ</a> (MIT): src/RHVerification.wl &middot; build_project.wls &middot; proof_audit.wls &middot; exports/ &middot; README.md. No external dependencies beyond Mathematica itself.</p></div>
   <div class="foot">Wolfram Mathematica 15.0.1, wolframscript, Windows. Demo video: <a href="https://www.youtube.com/watch?v=WwcqxcO8xRU" target="_blank" rel="noopener noreferrer">youtube.com/watch?v=WwcqxcO8xRU</a>. ESL is Wolfram's reseller in Israel since 2006; contact sales@eswlab.com for licenses. The demo scale was chosen so a stranger can verify the whole story before trusting it.</div>
 </section>
 
-<!-- 13 CLOSING -->
+<!-- 14 CLOSING -->
 <section class="slide">
-  <div class="kicker"><span class="mark"></span>CLOSING &middot; <span>13</span></div>
+  <div class="kicker"><span class="mark"></span>CLOSING &middot; <span>14</span></div>
   <h1>Bring your own <span class="hl">workstation</span></h1>
   <p class="sub">The gate to serious numerical mathematics is no longer the hardware or the software. It is deciding to write the check.</p>
   <div class="bigrow">
-    <div class="card g"><div class="label">The one-line summary</div><p>While 17.4 million lines of Lean wait for a comparator, four published consequences of the Riemann Hypothesis and GRH faced 100 million integers, 20,000 zeros, a rebuilt explicit formula and over half a million residue classes on one laptop-class machine. <b>Zero violations.</b></p></div>
+    <div class="card g"><div class="label">The one-line summary</div><p>While 17.4 million lines of Lean wait for a comparator, five published consequences of the Riemann Hypothesis and GRH faced 100 million integers, 20,000 zeros, a rebuilt explicit formula, over half a million residue classes and 200 Li's-criterion constants on one laptop-class machine. <b>Zero violations.</b></p></div>
     <div class="person-card"><img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
       <div><strong>Daniel Liezrowice</strong><span>Engineering Software Lab (ESL)</span>
       <p>Founder of ESL. Works on evidence-driven software engineering: static analysis, SBOM tooling, and putting serious math on serious hardware.</p>
@@ -358,7 +375,7 @@ wolframscript -file build_project.wls</pre>
 <button class="navbtn" id="prev" aria-label="Previous slide">&#8249;</button>
 <button class="navbtn" id="next" aria-label="Next slide">&#8250;</button>
 <div id="hint">&#8592; Swipe to navigate &#8594;</div>
-<div id="counter">1 / 13</div>
+<div id="counter">1 / 14</div>
 <div id="progress"></div>
 
 <script>
