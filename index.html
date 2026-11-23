@@ -182,6 +182,14 @@
   .card-dates { width:100%; color:var(--ink2); font-size:.73rem; text-align:start; opacity:.85; }
   .card-desc { width:100%; color:var(--ink2); font-size:.83rem; text-align:start;
                display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden; }
+  .video-banner { width:100%; margin:-15px -17px 6px; padding:6px 17px 5px;
+    background:rgba(184,50,42,.06); border-bottom:1px dashed rgba(184,50,42,.35);
+    border-radius:9px 9px 0 0; font-size:.75rem; line-height:1.5; text-align:start; color:var(--ink); }
+  .video-banner .vb-label { font-weight:800; font-size:.63rem; letter-spacing:.5px;
+    text-transform:uppercase; color:var(--stamp); margin-inline-end:4px; white-space:nowrap; }
+  .video-banner a { color:var(--stamp); font-weight:700; text-decoration:none; }
+  .video-banner a:hover { text-decoration:underline; }
+  .video-banner .vb-extra { display:block; }
 
   .card-new { background:var(--paper); border-color:rgba(184,50,42,.4); }
   .card-new:hover { border-color:var(--stamp); }
@@ -292,7 +300,8 @@
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW &middot; PARASOFT &middot; STATIC ANALYSIS &middot; DEBUGGING STORY DECK</span><button class="stamp" type="button" data-note="parasoft-3-day-bug/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
-      <a class="card-title" href="parasoft-3-day-bug/technical/">The 3-Day Bug: One Line, Found in 15 Seconds</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=ZtYm19ycHoQ" target="_blank" rel="noopener">The 3-Day Bug: One Line of C++, Found in 15 Seconds by Static Analysis</a></div>
+<a class="card-title" href="parasoft-3-day-bug/technical/">The 3-Day Bug: One Line, Found in 15 Seconds</a>
       <div class="card-dates">Published: 2026-11-23 &middot; Source: <a href="https://www.linkedin.com/feed/update/urn:li:activity:7530490613910401024/" style="color:var(--accent,#1d6bd0)">the LinkedIn post we tested</a></div>
       <p class="card-desc">9-slide brief answering a viral debugging post with measurements: we rebuilt the "crashes only in Release" bug exactly as told (one forgotten <code>bool m_ready = false;</code> in a second constructor), watched the Release build crash 2 of 20 runs with 0xC0000005 while the correct path never crashed, then pointed Parasoft C/C++test Professional 2026.1.3 at it: 2 findings in 15 seconds, INT-06 naming the guilty constructor and flow analysis (BD-PB-NOTINIT) reconstructing the exact crash path the author took 3 days of WinDbg work to find. Includes the honest compiler table: /W4 catches nothing here, plain /analyze catches nothing, the Core Guidelines checker (C26495) catches it only when explicitly enabled, and a note on why sanitizers and static analysis are complements rather than competitors.</p>
     </article>
@@ -310,7 +319,8 @@
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · RIEMANN HYPOTHESIS · WOLFRAM MATHEMATICA · NUMERICAL AUDIT · MANTIQ FACTOR · TECHNICAL BRIEF</span><button class="stamp" type="button" data-note="rh-mantiq-mathematica/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
-      <a class="card-title" href="rh-mantiq-mathematica/technical/">RH-MantiQ: Auditing the Anthropic Riemann Hypothesis Proof with Wolfram Mathematica</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=WwcqxcO8xRU" target="_blank" rel="noopener">The Riemann Hypothesis Is Proven. We Audited the Certified Proof in Wolfram Mathematica</a></div>
+<a class="card-title" href="rh-mantiq-mathematica/technical/">RH-MantiQ: Auditing the Anthropic Riemann Hypothesis Proof with Wolfram Mathematica</a>
       <div class="card-dates">Published: 2026-11-21 &middot; Repo: <a href="https://ampcode.com/artifacts/rh-mantiq-article-bringing-wolfram-mathematica-to-the-rieman-dde11bd9-a6f9-4e99-b884-94ad06426fc1" style="color:var(--accent,#1d6bd0)">full written article</a></div>
       <p class="card-desc">13-slide technical brief, on the desk the day after Anthropic announced the Levent Alpöge Riemann Hypothesis proof (Nov 20, 2026, ~17.4M lines of Lean 4): a full numerical audit of the RH and GRH consequences with Wolfram Mathematica 15 on a workstation (Core Ultra 9 275HX, 24 kernels, 64 GB). Four checks, all at full scale, zero violations: the Lagarias equivalence σ(n) ≤ H_n + e^{H_n} log H_n swept to n = 10⁸ in 51 s (0 violations, tightest n = 12 with ratio 0.9886); the first 20,000 zeta zeros (to T ≈ 18,046) all on the critical line with Riemann-Siegel Z nonzero at all 19,999 midpoints in 55 s; the explicit-formula reconstruction of ψ(x) from 1000 zeros against an independent Mangoldt sieve (max error 4.73, 18 s); and the Bach-Sorenson GRH least-prime bound over all 304,191 reduced residue classes mod q ≤ 1000 (0 violations, largest least prime 70,783, 8.6 s). Self-audit 14/14 passed. The honest framing is in the deck: a numerical audit cannot confirm a proof, but it can falsify a false one early, and it anchors the claim to arithmetic the same afternoon it appears.</p>
     </article>
@@ -322,19 +332,22 @@
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW &middot; MEMORY SAFETY BENCHMARK &middot; FIL-C &middot; MISRA C 2025 &middot; PARASOFT</span></div>
-      <a class="card-title" href="fil-c-vs-misra/">Fil-C vs MISRA C: Challenging the Memory-Safety Claims, Measured</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=HQ9FtMu-QdU" target="_blank" rel="noopener">Fil-C vs MISRA C 2025 5/5 Caught at Build Time, Measured (gcc, Fil-C, Parasoft, Rust, Zig, Assembly)</a></div>
+<a class="card-title" href="fil-c-vs-misra/">Fil-C vs MISRA C: Challenging the Memory-Safety Claims, Measured</a>
       <div class="card-dates">Published: 2026-11-20 &middot; Repo: <a href="https://github.com/zuwasi/fil-c-vs-misra-benchmark" style="color:var(--accent,#1d6bd0)">github.com/zuwasi/fil-c-vs-misra-benchmark</a> &middot; Report: <a href="https://ampcode.com/artifacts/fil-c-vs-misra-c-measured-challenge-to-the-linkedin-post-4aa3359d-2794-476e-ba58-104f73cb1e89" style="color:var(--accent,#1d6bd0)">full benchmark report</a> &middot; Console: <a href="fil-c-vs-misra/dashboard.html" style="color:var(--accent,#1d6bd0)">benchmark console</a></div>
       <p class="card-desc">A LinkedIn post presents Fil-C as a compiler swap that makes existing C/C++ memory safe. We measured it instead of arguing: the same five-bug suite (heap overflow, stack overflow, use-after-free, double free, wild dereference) and three clean benchmarks run under gcc -O2, Fil-C 0.687, and Parasoft C/C++test Standard 2026.1.3 with the built-in MISRA C 2025 configuration on the same WSL2 Ubuntu 24.04 machine. Result: Fil-C caught 3 of 5 bugs at runtime and silently missed both off-by-one overflows (InvisiCaps track the 16-byte allocator granule, not the requested size), while MISRA C 2025 caught 5 of 5 at build time with exact lines and valid index ranges. Performance: up to 5.4x slower and 27x peak memory on allocation-heavy code. Explainer slides on Parasoft C/C++test and MISRA C 2025 / MISRA C++ 2023. 13 slides with charts. Everything reproducible from the public repository, so anyone with Parasoft C/C++test can redo the test.</p>
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · PARASOFT · EMBEDDED CRITICAL SOFTWARE · DO-178C · MISRA · MARKETING INTRO</span></div>
-      <a class="card-title" href="parasoft-esl-intro/">Parasoft for Embedded Critical Software, with ESL: a Marketing Introduction</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=HmWGJuRiaco" target="_blank" rel="noopener">Parasoft + ESL: Quality You Can Certify for Embedded Critical Software</a></div>
+<a class="card-title" href="parasoft-esl-intro/">Parasoft for Embedded Critical Software, with ESL: a Marketing Introduction</a>
       <div class="card-dates">Published: 2026-11-19</div>
       <p class="card-desc">A 13-slide introduction for partners in defence and other regulated industries: what Parasoft C/C++test delivers for embedded critical software (DO-178C and ISO 26262 compliance, MISRA C and C++ enforcement, static analysis, on-target unit testing and code coverage), why ESL has been the Parasoft reseller and system integrator in Israel since 2008, published evidence from real projects (the Inovytec Ventway Sparrow FDA 510(k) case study, the Apollo MISRA Rule 7.5 zero-violation programme, MISRA C:2025 defect-hunt demos), and the ESL add-ons that extend Parasoft for specific clients: air-gapped FixCreator for defence contractors and the CUDA Bridge for GPU code. A narrated video version accompanies this deck.</p>
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW &middot; COMBINATORICS AUDIT &middot; MATHEMATICA + LEAN 4 &middot; MANTIQ FACTOR &middot; TECHNICAL BRIEF</span><button class="stamp" type="button" data-note="mantiq-touchard-riordan/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
-      <a class="card-title" href="mantiq-touchard-riordan/technical/">The Theorem That Failed at (4, 2): a MantiQ Factor Audit of Bagno-Garber (arXiv:2606.13149)</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=x9OqISA1204" target="_blank" rel="noopener">The theorem that failed at (4, 2): auditing a math paper with Mathematica, Python and Lean 4</a></div>
+<a class="card-title" href="mantiq-touchard-riordan/technical/">The Theorem That Failed at (4, 2): a MantiQ Factor Audit of Bagno-Garber (arXiv:2606.13149)</a>
       <div class="card-dates">Published: 2026-11-18 &middot; <a href="https://github.com/zuwasi/mantiq-touchard-riordan" style="color:var(--accent,#1d6bd0);font-weight:700">Full reproducible repo</a></div>
       <p class="card-desc">18-slide technical brief on a computer-aided audit of the Bagno-Garber paper on Touchard-Riordan polynomials and Schur-positivity of set partitions. Wolfram Mathematica 15 transcription of the definitions found Theorem 3.1 false at the smallest testable case: at (n, ell) = (4, 2) the true coefficient of s_(4) is q while the paper T_(3,2)(q) = 0, and a census in three independent systems (Wolfram n <= 6, Python n <= 7, Lean 4 n <= 5) shows the identity fails exactly when ell >= 2 and n - ell >= 2. The deck presents the root cause (the chord-diagram map is injective, not surjective), the new collapse lemma c_D(n, ell) = A(n-|D|, ell, q), the corrected theorem with manifestly Schur-positive adjacency-free coefficients A(m, ell, q), two new identities (inclusion-exclusion against Stirling numbers, row sums equal to Bell numbers), and confirmation that the noncrossing Corollary 3.3 (3), (4) is true with coefficients identified as Motzkin triangle numbers and Narayana hook totals. Everything reruns in minutes from the public repository: a Wolfram package and build script, an independent Python verifier, a 12-theorem Lean 4 project, and a teaching notebook with three interactive Manipulates.</p>
     </article>
@@ -352,7 +365,8 @@
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · STATIC ANALYSIS VS LLM AGENTS · PARASOFT · SWE-SWEEP · TECHNICAL BRIEF</span><button class="stamp" type="button" data-note="parasoft-vs-swe-sweep/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
-      <a class="card-title" href="parasoft-vs-swe-sweep/technical/">Parasoft C/C++test vs SWE-sweep: Static Analysis Measured on 488 Real-World C/C++ Bugs</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=KNHBWIDbSHc" target="_blank" rel="noopener">Are LLM Coding Agents Ready for Safety-Critical Software? We Measured. 488 Real Bugs.</a></div>
+<a class="card-title" href="parasoft-vs-swe-sweep/technical/">Parasoft C/C++test vs SWE-sweep: Static Analysis Measured on 488 Real-World C/C++ Bugs</a>
       <div class="card-dates">Published: 2026-11-12 · <a href="https://github.com/zuwasi/swe-sweep-parasoft-benchmark" style="color:var(--accent,#1d6bd0);font-weight:700">Full benchmark repo with raw evidence</a></div>
       <p class="card-desc">15-slide technical brief born from the MISRA Conference 2026 debate on whether traditional methods stay relevant. We ran Parasoft C/C++test the way it runs in industry: over the complete buildable codebases of the 14 C/C++ repositories of SWE-sweep (duckdb, opencv, arrow, gdal and more), real compile flags from each project's own build system, Flow Analysis Standard + MISRA C 2025 + CERT C (C repos) and MISRA C++ 2023 + CERT C++ (C++ repos), 2,193,448 findings, no hints about bug locations. Result: 53.1% of all 488 bugs flagged on the changed lines (28.9% on the exact fixed line) and 55.6% of the 162 mechanism bugs, versus about 5.1% resolved by SWE-sweep's best published autonomous agent; Flow Analysis alone independently caught 20 real defects. The honest reading, the qualification argument for DO-178C / ISO 26262 / IEC 62304, and the full reproducible pipeline are all in the deck and the public repository.</p>
     </article>
@@ -370,13 +384,15 @@
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · KERNELBENCH · AGENT A/B BENCHMARK · TECHNICAL BRIEF</span><button class="stamp" type="button" data-note="kernelbench-cuda-skill-ab/technical/index.html" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
-      <a class="card-title" href="kernelbench-cuda-skill-ab/technical/">Does a CUDA Super Skill Make the Coding Agent Measurably Better at GPU Kernels?</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=4GWFgXmYGgo" target="_blank" rel="noopener">Can a CUDA skill make an AI coding agent 2.81x faster at GPU kernels? Measured A/B on KernelBench</a></div>
+<a class="card-title" href="kernelbench-cuda-skill-ab/technical/">Does a CUDA Super Skill Make the Coding Agent Measurably Better at GPU Kernels?</a>
       <div class="card-dates">Published: 2026-11-10 · <a href="kernelbench-cuda-skill-ab/article/" style="color:var(--accent,#1d6bd0);font-weight:700">New: full article with embedded video</a></div>
       <p class="card-desc">15-slide technical program brief on a controlled KernelBench A/B: the same agent model wrote optimized CUDA/Triton kernels for 4 problems with and without a custom cuda-kernel-super skill, and every solution was scored by one serial evaluator on an RTX 5080 Laptop GPU under a 55 W power cap. Documents the skill's provenance (KernelFlow methodology plus KernelBench eval rules, fused with machine-specific truths), the interleaved L2-flushed timing protocol, and the measured verdict: peak 2.81x on compute-bound matmul, 3.69x on the fusion kernel, parity on memory-bound problems at the measured 540 GB/s bandwidth wall. A narrated 4:32 video walkthrough and the full written report live at kernelbench-cuda-skill-ab/article/.</p>
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · MISRA C:2025 · SOURCEGRAPH + PARASOFT · TECHNICAL BRIEF</span></div>
-      <a class="card-title" href="misra-rule-7-5-zero-program/technical/">The Rule 7.5 Zero Program: Sourcegraph Finds, Parasoft Decides</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=ZNPqVLcTY6A" target="_blank" rel="noopener">From 1,095 MISRA C 2025 findings to five rule classes at zero: Sourcegraph + Parasoft</a><span class="vb-extra"></span> <a href="https://www.youtube.com/watch?v=StzLdcFgW-E" target="_blank" rel="noopener">C++TEST MISRA C 2025 Rule 7.5: from 1,095 findings to verified zero</a></div>
+<a class="card-title" href="misra-rule-7-5-zero-program/technical/">The Rule 7.5 Zero Program: Sourcegraph Finds, Parasoft Decides</a>
       <div class="card-dates">Published: 2026-11-07</div>
       <p class="card-desc">25-slide technical program brief with every number measured and every screenshot a genuine capture: the Rule 7.5 pilot taken from an 8-violation seed to verified zero on the iso14229 code base, then the same closed loop scaled to the whole repository (1,095 to 766 findings across three stacked, independently revertable batch-fix branches). Documents the exact Sourcegraph Cloud tenant queries and their design lessons (fork:yes, patternType:regexp, Zoekt negation limits), the value-preserving transform scripts, Parasoft C/C++test 2026.1.3 verification reports as evidence of record, the PR-gate enforcement model (Sourcegraph detects, the code host enforces, Code Monitor as safety net), and the Agentic Batch Change status. Doubles as a template for future ESL technical briefs.</p>
     </article>
@@ -388,13 +404,15 @@
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · TECHNICAL REVIEW</span></div>
-      <a class="card-title" href="parasoft-cuda-bridge/technical/">Parasoft CUDA Bridge: Technical Evaluation Brief</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=SGokPDa9dng" target="_blank" rel="noopener">Parasoft CUDA Bridge by ESL, CMake CUDA projects in Visual Studio. Parasoft cuda bridge demo</a></div>
+<a class="card-title" href="parasoft-cuda-bridge/technical/">Parasoft CUDA Bridge: Technical Evaluation Brief</a>
       <div class="card-dates">Published: 2026-10-26</div>
       <p class="card-desc">Technical review for the C++test product team: implementation, CMake companion workflow, heuristic CUDA rules, CUDA GoogleTest host-coverage evidence, limitations, per-project stress results, and feedback questions.</p>
     </article>
     <article class="card card-new" dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW · PARASOFT CUDA BRIDGE · CUSTOMER EVALUATION</span></div>
-      <a class="card-title" href="parasoft-cuda-bridge/customer/">Analyze CUDA in Visual Studio 2026</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=SGokPDa9dng" target="_blank" rel="noopener">Parasoft CUDA Bridge by ESL, CMake CUDA projects in Visual Studio. Parasoft cuda bridge demo</a></div>
+<a class="card-title" href="parasoft-cuda-bridge/customer/">Analyze CUDA in Visual Studio 2026</a>
       <div class="card-dates">Published: 2026-10-26</div>
       <p class="card-desc">Customer evaluation deck showing CMake preparation, generated Visual Studio companion analysis, genuine Error List screenshots, CUDA guideline rule scope, result handling, prerequisites, and limitations.</p>
     </article>
@@ -466,7 +484,8 @@
     </article>
     <article class="card " dir="ltr">
       <div class="card-top"><span class="card-tag">AI AGENTS / SKILL EVALS</span><button class="stamp" type="button" data-note="wazatator/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
-      <a class="card-title" href="wazatator/">Wazatator: Evaluate Agent Skills with Claude Code</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=r_cCbOpi4ok" target="_blank" rel="noopener">Agent Skills Are Prompts. Nobody Tests Them. Wazatator Does</a></div>
+<a class="card-title" href="wazatator/">Wazatator: Evaluate Agent Skills with Claude Code</a>
       <div class="card-dates">Published: 2026-10-02</div>
       <p class="card-desc">By ESL (Engineering Software Lab), a member of Anthropic's Claude Partner Network. What Wazatator is and how it works: an open-source fork of Microsoft Waza that runs your SKILL.md through real Claude Code sessions and scores the result. Code samples for eval suites, tasks, graders and trigger tests, real findings (skills that ask instead of act, skills never invoked, tool-policy violations, MCP usage, cost), a before/after fix, and a replayed live demo.</p>
     </article>
@@ -503,7 +522,8 @@
     </article>
     <article class="card " dir="ltr">
       <div class="card-top"><span class="card-tag">MANTIQ / QUANTUM PHASE ESTIMATION</span><button class="stamp" type="button" data-note="mantiq-qpe/" aria-haspopup="dialog" title="How AI was used inside">AGENTIC<br>AI<br>INSIDE</button></div>
-      <a class="card-title" href="mantiq-qpe/">From a Quantum Claim to a Checked Result</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=1HW1PCXqAe4" target="_blank" rel="noopener">MantiQ Factor: from a PDF brief to a verified quantum program on Classiq in 7 stages</a></div>
+<a class="card-title" href="mantiq-qpe/">From a Quantum Claim to a Checked Result</a>
       <div class="card-dates">Published: 2026-09-24</div>
       <p class="card-desc">Eight slides with a live gate-level QPE simulator: exact and approximate phases, eigenstate superpositions, deliberate circuit faults, independent Wolfram vectors, and a scoped Lean resource-count proof. Download reproducible evidence; no hardware or quantum-speedup claim.</p>
     </article>
@@ -533,7 +553,8 @@
     </article>
     <article class="card " dir="ltr">
       <div class="card-top"><span class="card-tag">AI SDLC / JEV</span><button class="stamp" type="button" data-note="jev-decision-safeguards/" aria-haspopup="dialog" title="How AI was used inside">AI<br>INSIDE</button></div>
-      <a class="card-title" href="jev-decision-safeguards/">A Fast Decision Is Not a Verified Result: Jev Decision Safeguards</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=nHswSt0_fxo" target="_blank" rel="noopener">Jev Decision Safeguards: When AI Should Ask for Review </a></div>
+<a class="card-title" href="jev-decision-safeguards/">A Fast Decision Is Not a Verified Result: Jev Decision Safeguards</a>
       <div class="card-dates">Published: 2026-09-20</div>
       <p class="card-desc">Daniel Liezrowice, ESL: an interactive walkthrough of context filtering, missing-evidence review gates, and confidently wrong routing. Adjust the threshold to compare errors with deferred work. Synthetic illustration, not measured Jev performance.</p>
     </article>
@@ -639,7 +660,8 @@
     </article>
     <article class="card " dir="ltr">
       <div class="card-top"><span class="card-tag badge-new">NEW</span></div>
-      <a class="card-title" href="ardupilot-sbom-overview/">ArduPilot Repository Overview for SBOM Scan Configuration</a>
+            <div class="video-banner" dir="ltr"><span class="vb-label">&#9654; Video available:</span> <a href="https://www.youtube.com/watch?v=aSJF_3Eu50Y" target="_blank" rel="noopener">Generating SBOM Using Amp Agentic AI tool for an FDA Audit</a></div>
+<a class="card-title" href="ardupilot-sbom-overview/">ArduPilot Repository Overview for SBOM Scan Configuration</a>
       <div class="card-dates">Published: 2026-10-20</div>
       <p class="card-desc">Pre-scan briefing for an FDA cyber-device submission: directory map, firmware families, HAL and RTOS mapping, 15 Git submodules plus vendored-source inventory, licensing notes, a 10-point scan-module checklist, and safety-critical component flags for the SBOM tooling provider</p>
     </article>
