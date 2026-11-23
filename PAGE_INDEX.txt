@@ -467,6 +467,9 @@ Last updated: 2026-11-23
 • sbomator-supply-chain-detection
   https://zuwasi.github.io/Public-html-pages/sbomator-supply-chain-detection
 
+• sbomator-virtual-patch
+  https://zuwasi.github.io/Public-html-pages/sbomator-virtual-patch
+
 • services
   https://zuwasi.github.io/Public-html-pages/services
 
