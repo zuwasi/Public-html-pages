@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-11-23
+Last updated: 2026-11-24
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -430,6 +430,9 @@ Last updated: 2026-11-23
 
 • parasoft-esl-intro
   https://zuwasi.github.io/Public-html-pages/parasoft-esl-intro
+
+• parasoft-nios2-ide-cli
+  https://zuwasi.github.io/Public-html-pages/parasoft-nios2-ide-cli
 
 • parasoft-ti-armclang-misra-setup
   https://zuwasi.github.io/Public-html-pages/parasoft-ti-armclang-misra-setup
