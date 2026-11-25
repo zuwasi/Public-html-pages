@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-11-24
+Last updated: 2026-11-25
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -400,6 +400,9 @@ Last updated: 2026-11-24
 
 • mysticeti-consensus-digital-twin
   https://zuwasi.github.io/Public-html-pages/mysticeti-consensus-digital-twin
+
+• neon-4-is-stepping-in
+  https://zuwasi.github.io/Public-html-pages/neon-4-is-stepping-in
 
 • neon-vs-parasoft
   https://zuwasi.github.io/Public-html-pages/neon-vs-parasoft
