@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Neon 4 is stepping in &middot; ESL - Engineering Software Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4eedc;--sheet:#fbf8ee;--sheet2:#ece4cc;--ink:#1d1a16;--muted:#6b6353;--line:#b9ae90;--blue:#12457a;--accent:#1d6bd0;--amber:#8a5e00;--amber-hi:#e8a317;--red:#b8322a;--green:#1e7d33;--code-bg:#f6efdc;--code-cap:#d9d0b8;--top:52px}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.deck{display:flex;flex-direction:row;width:100vw;transition:transform .45s cubic-bezier(.4,.1,.2,1);will-change:transform}
+.slide{--pad-x:max(4vw,48px);flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding:calc(var(--top) + 22px) var(--pad-x) 64px}
+.kicker{font-size:clamp(11px,1vw,13px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kicker b{color:var(--blue)}
+h1{font-size:clamp(32px,4.4vw,68px);line-height:1.1;letter-spacing:-.02em;margin:10px 0 8px;font-weight:800}
+h1 .hl{color:var(--blue)}
+.sub{font-size:clamp(17px,1.9vw,27px);color:var(--muted);max-width:none;line-height:1.45}
+.row{display:flex;gap:18px;margin-top:20px;flex-wrap:wrap}
+.row>*{flex:1;min-width:220px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(16px,1.7vw,26px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card.amber{border-top-color:var(--amber-hi)}
+.card.red{border-top-color:var(--red)}
+.card.green{border-top-color:var(--green)}
+.card.blue{border-top-color:var(--blue)}
+.card h3{font-size:clamp(18px,1.7vw,25px);font-weight:800;margin-bottom:8px}
+.card p,.card li{font-size:clamp(16px,1.55vw,23px);color:var(--muted);line-height:1.5}
+.card ul{padding-left:20px}
+.label{font-size:clamp(12px,1.2vw,17px);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:6px}
+.stat{font-size:clamp(44px,6vw,96px);font-weight:800;letter-spacing:-.03em;line-height:1}
+.stat small{font-size:.42em;font-weight:700;color:var(--muted);letter-spacing:0}
+.stat.blue{color:var(--blue)}.stat.amber{color:var(--amber)}.stat.red{color:var(--red)}.stat.green{color:var(--green)}
+table{border-collapse:collapse;width:100%;background:var(--sheet);border:1px solid var(--line);border-radius:8px;overflow:hidden;font-size:clamp(15px,1.45vw,21px)}
+th{background:var(--sheet2);text-align:left;padding:9px 14px;font-size:clamp(13px,1.25vw,18px);letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+td{padding:7px 12px;border-top:1px solid var(--line);color:var(--muted);line-height:1.4;vertical-align:top}
+td b,td strong{color:var(--ink)}
+code,.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:1em;background:var(--code-bg);border:1px solid var(--code-cap);border-radius:4px;padding:1px 5px;color:var(--ink)}
+pre.box{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(14px,1.45vw,21px);line-height:1.55;background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:18px 22px;overflow-x:auto;color:var(--ink);white-space:pre}
+pre.box .r{color:var(--red)}pre.box .g{color:var(--green)}pre.box .b{color:var(--blue)}pre.box .a{color:var(--amber)}
+.chart{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 18px 8px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:1240px;margin-left:auto;margin-right:auto}
+.chart .cap{font-size:clamp(13px,1.3vw,19px);color:var(--muted);margin:6px 2px 8px;line-height:1.4}
+svg{display:block;width:100%;height:auto}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:clamp(14px,1.4vw,20px);color:var(--muted);margin:2px 2px 6px}
+.legend span::before{content:"";display:inline-block;width:11px;height:11px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--accent)}
+.legend span.ns::before{background:#5a6266}
+.legend span.par::before{background:#12457a}
+.legend span.ag::before{background:#8a5e00}
+.top{position:fixed;top:0;left:0;right:0;height:var(--top);background:var(--sheet2);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(3vw,32px);z-index:50;gap:16px}
+.top .brand{display:flex;align-items:center;gap:14px;min-width:0;text-decoration:none}
+.top .brand img{height:32px;width:auto;display:block}
+.top .homebtn{font-size:20px;line-height:1;text-decoration:none;filter:grayscale(.2)}
+.top .homebtn:hover{transform:scale(1.15)}
+.top #brand{font-weight:600;font-size:clamp(12px,1.1vw,14px);color:var(--ink);border-left:2px solid var(--line);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.kicker{display:flex;align-items:center;gap:12px;font-size:clamp(14px,1.35vw,19px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.kicker b{color:var(--blue)}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{left:0;top:0;border-color:var(--blue)}
+.mark::after{left:8px;top:7px;border-color:var(--amber-hi)}
+.brandrow{display:flex;gap:14px;margin:16px 0 0;flex-wrap:wrap;align-items:center}
+.brandchip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 14px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.brandchip img{height:27px;width:auto;display:block}
+.brandchip span{font-size:clamp(15px,1.4vw,20px);font-weight:600;color:var(--ink)}
+.brandchip.dark{background:#1a1a1a;border-color:#1a1a1a}
+.brandchip.dark span{color:#fff}
+.brandchip.dark img{height:24px;background:#fff;border-radius:6px;padding:3px}
+.person-card{display:flex;gap:22px;padding:20px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);box-shadow:0 1px 4px rgba(20,30,50,.06);min-width:280px}
+.person-card img{width:120px;height:120px;object-fit:cover;border-radius:8px;flex:none}
+.person-card strong{font-size:clamp(18px,1.8vw,25px);display:block}
+.person-card span{color:var(--blue);font-weight:600;font-size:clamp(15px,1.5vw,21px);display:block}
+.person-card p{margin:8px 0;font-size:clamp(14px,1.3vw,19px);color:var(--muted);line-height:1.5}
+.person-card a{color:var(--accent);font-size:clamp(13px,1.2vw,17px);text-decoration:none;font-weight:600}
+.cardlogo{float:right;height:26px;width:auto;margin:0 0 6px 10px}
+.top nav a{color:var(--muted);text-decoration:none;font-size:clamp(12px,1.05vw,15px);margin-left:18px;font-weight:600}
+.top nav a:hover{color:var(--blue)}
+.nav-arrows{position:fixed;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--sheet);color:var(--ink);font-size:22px;cursor:pointer;z-index:60;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(20,30,50,.12);user-select:none}
+.nav-arrows:hover{background:var(--sheet2)}
+#prevBtn{left:14px}#nextBtn{right:14px}
+.nav-arrows.hidden{display:none}
+.progress-wrap{position:fixed;bottom:0;left:0;right:0;height:8px;background:var(--sheet2);z-index:60}
+.progress{height:100%;width:0;background:linear-gradient(90deg,#12457a,#1d6bd0,#e8a317);transition:width .35s ease}
+.counter{position:fixed;bottom:16px;right:22px;z-index:60;font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(11px,.9vw,14px);color:var(--muted);background:var(--sheet);border:1px solid var(--line);border-radius:6px;padding:3px 10px}
+.hint{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);z-index:60;color:var(--muted);font-size:clamp(12px,1vw,15px);background:var(--sheet);border:1px solid var(--line);border-radius:999px;padding:6px 18px;animation:pulse 1.6s ease-in-out infinite;transition:opacity .4s}
+@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}
+.hint.gone{animation:none;opacity:0;pointer-events:none}
+.foot{margin-top:auto;padding-top:14px;font-size:clamp(13px,1.2vw,18px);color:var(--muted);border-top:1px solid var(--line)}
+.bigrow{display:flex;gap:22px;margin-top:20px;flex-wrap:wrap}
+.bigrow .card{flex:1;min-width:250px}
+@media (max-width:900px){.slide{--pad-x:20px}.row,.bigrow{gap:10px;flex-direction:column}.row>*,.bigrow>*{min-width:0;width:100%}.stat{font-size:34px}.brandrow{gap:10px}}
+.compact h1{font-size:clamp(28px,3.2vw,50px)}
+.compact .sub{font-size:clamp(15px,1.6vw,23px)}
+.compact pre.box{font-size:clamp(13px,1.3vw,19px);line-height:1.5}
+.compact .chart svg{max-height:462px;margin:0 auto}
+.compact table td{padding:6px 12px}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="brand">
+    <a class="homebtn" href="#1" title="Back to slide 1" aria-label="Back to slide 1">&#127968;</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener"><img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+    <span id="brand">Neon 4 is stepping in &middot; Gemini 4 Neon on the Parasoft vs SWE-sweep scoreboard</span>
+  </div>
+  <nav>
+    <a href="https://deepmind.google/models/model-cards/gemini-4-neon">Neon model card</a>
+    <a href="https://zuwasi.github.io/Public-html-pages/parasoft-vs-swe-sweep/technical/" target="_blank" rel="noopener">Parent deck</a>
+    <a href="https://zuwasi.github.io/Public-html-pages/neon-vs-parasoft/technical/" target="_blank" rel="noopener">Harness supplement</a>
+    <a href="https://github.com/zuwasi/swe-sweep-parasoft-benchmark">Benchmark repo</a>
+    <a href="https://eswlab.com/">eswlab.com</a>
+    <a href="https://eswlab.com/contact-us/">Contact ESL</a>
+  </nav>
+</div>
+
+<div class="deck" id="deck">
+
+<section class="slide">
+  <div class="kicker"><span class="mark"></span>Technical benchmark brief &middot; update &middot; <b>01</b></div>
+  <h1>Neon 4 is <span class="hl">stepping in</span></h1>
+  <p class="sub">Google ranks Gemini 4 Neon #1 on the Coding Agent Index and claims 39.0% on SWE-sweep inside its own Antigravity harness. We measured the same model on the same 488 C/C++ bugs, first under Amp, now also under Antigravity. Here is what Neon 4 does to the scoreboard, and how much of every number is the harness.</p>
+  <div class="brandrow">
+    <div class="brandchip"><span style="color:#1d6bd0;font-weight:800">Gemini 4 Neon</span><span>Google DeepMind &middot; the model under test</span></div>
+    <div class="brandchip dark"><img src="../assets/amp-logo.png" alt="Amp"><span>Amp &middot; first harness we ran it in</span></div>
+    <div class="brandchip"><img src="../assets/parasoft-logo.png" alt="Parasoft"><span>Parasoft C/C++test &middot; the static analysis yardstick</span></div>
+    <div class="brandchip"><img src="../assets/esl-logo.png" alt="ESL"><span>ESL &middot; measurement and verification</span></div>
+  </div>
+  <div class="bigrow">
+    <div class="card"><div class="label">Bugs on the table</div><div class="stat blue">488 <small>real defects</small></div><p>The same 14 C/C++ SWE-sweep repositories and oracle bugs as the Parasoft benchmark</p></div>
+    <div class="card red"><div class="label">Neon under Amp (measured)</div><div class="stat red">18.2%</div><p>89 of 488 bugs matched on the changed lines, 15.0% on the exact fixed line, from 2,288 findings scored against the maintainer fix commits</p></div>
+    <div class="card amber"><div class="label">Neon under Antigravity (new pilot)</div><div class="stat amber">26.1%</div><p>Same model, same prompt, same commits, Google's own harness, on the first 3 repositories: 12 of 46 bugs, versus 22 of 46 under Amp</p></div>
+  </div>
+  <div class="foot">Builds on <a href="https://zuwasi.github.io/Public-html-pages/parasoft-vs-swe-sweep/technical/" target="_blank" rel="noopener">Parasoft vs SWE-sweep</a> (12 Nov 2026) and the supplement <a href="https://zuwasi.github.io/Public-html-pages/neon-vs-parasoft/technical/" target="_blank" rel="noopener">Gemini 4 Neon: the harness question</a> (22 Nov 2026) &middot; Antigravity pilot added 25 November 2026</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Context &middot; <b>02</b></div>
+  <h1>The scoreboard Neon 4 <span class="hl">walks onto</span></h1>
+  <p class="sub">Where bug hunting on the same 14 C/C++ repositories stood before the model entered</p>
+  <div class="bigrow">
+    <div class="card blue"><div class="label">Static analysis: Parasoft C/C++test</div><div class="stat blue">53.1%</div><p>Whole-codebase scan of each complete buildable project, real compile flags, Flow Analysis Standard + MISRA C 2025 / MISRA C++ 2023 + CERT. 2,193,448 findings mapped to the 488 oracle bugs: 53.1% region, 28.9% strict</p></div>
+    <div class="card"><div class="label">Agents before Neon: SWE-sweep bests</div><div class="stat">~5.1%</div><p>The best published agent results on these same 14 repositories add up to about 25 of 488 bugs resolved. Live leader across all 4,068 SWE-sweep bugs: Astra 6 at 9.5%</p></div>
+    <div class="card amber"><div class="label">What changes in this deck</div><p style="color:var(--ink)">Two Neon 4 measurements land on this scoreboard: 14 full autonomous hunts under Amp (all 488 bugs), and a pilot of the same hunts under Google's Antigravity CLI (3 repositories, 46 bugs), the harness Google itself used for its claim</p></div>
+  </div>
+  <div class="foot">Parasoft numbers and oracle definition: parasoft-vs-swe-sweep deck &middot; SWE-sweep: Lieret et al., swesweep.com/paper &middot; 25 November 2026</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">The model &middot; <b>03</b></div>
+  <h1>What Google claims for <span class="hl">Gemini 4 Neon</span>, November 2026</h1>
+  <p class="sub">The numbers Neon 4 brings with it, all self-computed by Google inside its own harness</p>
+  <table style="margin-top:16px">
+    <tr><th style="width:30%">Claim</th><th style="width:14%">Value</th><th>Fine print</th></tr>
+    <tr><td><b>SWE-sweep, provider harness</b></td><td><b>39.0%</b></td><td>Subtask-weighted reward on hidden tests, computed in Antigravity-CLI 1.5.9; Opus 5.5 in Claude Code: 10.1%, GPT-6.2 Sol in Codex: 8.3%</td></tr>
+    <tr><td>SWE-sweep, mini-SWE harness</td><td>12.8%</td><td>Shared minimal harness; Opus 3.6%, Sol 11.6%</td></tr>
+    <tr><td>Terminal-Bench 4.1</td><td>65.2%</td><td>Cheating-adjusted, Artificial Analysis, public Antigravity-CLI 1.5.9</td></tr>
+    <tr><td>FrontierCode 2.0</td><td>46.2%</td><td>Public leaderboard, high thinking</td></tr>
+    <tr><td><b>AA Coding Agent Index</b></td><td><b>58.64, #1</b></td><td>Composite measured inside Antigravity CLI; Fable 5.2 in Claude Code 58.47, Astra in Codex 53.47</td></tr>
+    <tr><td>Cost per task</td><td>$6.44 to $6.86</td><td>Artificial Analysis: about 17% under Carbon, about half of Opus 5.5's $12.61</td></tr>
+  </table>
+  <div class="foot">Source: Gemini 4 Neon model card and launch blogs, November 2026; Artificial Analysis. Every agentic number above was measured with Neon inside Antigravity-CLI</div>
+</section>
+
+<section class="slide compact">
+  <div class="kicker">Method &middot; <b>04</b></div>
+  <h1>The campaign: <span class="hl">14 autonomous hunts</span>, scored against the oracle</h1>
+  <p class="sub">One Amp thread per repository, the same scoring rule as the Parasoft arm: a finding counts only if it identifies the defect the maintainers actually fixed</p>
+  <pre class="box" style="margin-top:18px">
+<span class="b">SWE-sweep oracle</span> per bug: pre-fix file blob + changed lines + the maintainer's fix commit
+   |
+   v
+<span class="b">14 autonomous Amp threads</span>, Gemini 4 Neon, one per repository
+   |  open-ended multi-hour bug hunts: no bug hints, no hidden tests, no reward signal
+   |  each thread delivers one consolidated report plus a findings JSON (2,288 findings total)
+   v
+<span class="b">per-bug verification</span>: every candidate match judged against the fix diff
+   |  accepted only when the finding names the same defect the maintainer's commit changed
+   |  line overlap with a different mechanism counts as a miss
+   v
+<span class="b">result</span>: 89 of 488 bugs matched on changed lines (18.2%), 73 on the exact line (15.0%)
+      2,199 of 2,288 findings (96.1%) describe defects outside the benchmark's bug list</pre>
+  <div class="foot">Scoring identical to the Parasoft arm: region = any changed line of the bug, strict = the exact line the fix removed or rewrote. Per-bug verdicts with fix commits: reports/&lt;repo&gt;_scored.md in the benchmark repository</div>
+</section>
+
+<section class="slide compact">
+  <div class="kicker">Results &middot; <b>05</b></div>
+  <h1>The scoreboard with Neon 4 on it: <span class="hl">Parasoft still leads 12 of 14</span></h1>
+  <p class="sub">All 488 bugs. Neon under Amp vs the Parasoft static scan vs the best SWE-sweep agents</p>
+  <table style="margin-top:14px">
+    <tr><th>Repository</th><th>Lang</th><th>Bugs</th><th>Neon region</th><th>Neon strict</th><th>Parasoft region</th><th>Parasoft strict</th><th>SWE-sweep best</th></tr>
+    <tr><td><b>jerryscript</b></td><td>C</td><td>15</td><td>7 (46.7%)</td><td>6 (40.0%)</td><td>86.7%</td><td>80.0%</td><td>20.0%</td></tr>
+<tr><td><b>godot</b></td><td>C++</td><td>17</td><td>1 (5.9%)</td><td>0 (0.0%)</td><td>76.5%</td><td>41.2%</td><td>0.0%</td></tr>
+<tr><td><b>opencv</b></td><td>C++</td><td>47</td><td>13 (27.7%)</td><td>9 (19.1%)</td><td>74.5%</td><td>40.4%</td><td>2.1%</td></tr>
+<tr><td><b>cvc5</b></td><td>C++</td><td>38</td><td>1 (2.6%)</td><td>1 (2.6%)</td><td>71.1%</td><td>31.6%</td><td>2.6%</td></tr>
+<tr><td><b>duckdb</b></td><td>C++</td><td>109</td><td>18 (16.5%)</td><td>14 (12.8%)</td><td>68.8%</td><td>32.1%</td><td>2.8%</td></tr>
+<tr><td><b>micropython</b></td><td>C</td><td>22</td><td>9 (40.9%)</td><td>8 (36.4%)</td><td>68.2%</td><td>31.8%</td><td>9.1%</td></tr>
+<tr><td><b>proj</b></td><td>C++</td><td>21</td><td>3 (14.3%)</td><td>3 (14.3%)</td><td>61.9%</td><td>33.3%</td><td>9.5%</td></tr>
+<tr><td><b>tarantool</b></td><td>C</td><td>40</td><td>15 (37.5%)</td><td>14 (35.0%)</td><td>57.5%</td><td>45.0%</td><td>7.5%</td></tr>
+<tr><td><b>php-src</b></td><td>C</td><td>26</td><td>0 (0.0%)</td><td>0 (0.0%)</td><td>50.0%</td><td>26.9%</td><td>3.8%</td></tr>
+<tr><td><b>hdf5</b></td><td>C</td><td>14</td><td>2 (14.3%)</td><td>2 (14.3%)</td><td>50.0%</td><td>42.9%</td><td>28.6%</td></tr>
+<tr><td><b>libexpat</b></td><td>C</td><td>9</td><td>6 (66.7%)</td><td>4 (44.4%)</td><td>77.8%</td><td>33.3%</td><td>44.4%</td></tr>
+<tr><td><b>z3</b></td><td>C++</td><td>11</td><td>2 (18.2%)</td><td>1 (9.1%)</td><td>36.4%</td><td>27.3%</td><td>0.0%</td></tr>
+<tr><td><b>arrow</b></td><td>C++</td><td>47</td><td>11 (23.4%)</td><td>10 (21.3%)</td><td>23.4%</td><td>8.5%</td><td>2.1%</td></tr>
+<tr><td><b>gdal</b></td><td>C++</td><td>72</td><td>1 (1.4%)</td><td>1 (1.4%)</td><td>4.2%</td><td>1.4%</td><td>0.0%</td></tr>
+<tr><td><b>Total</b></td><td></td><td><b>488</b></td><td><b>89 (18.2%)</b></td><td><b>73 (15.0%)</b></td><td><b>53.1% (259)</b></td><td><b>28.9% (141)</b></td><td><b>~5.1% (25)</b></td></tr>
+  </table>
+  <div class="foot">Neon measured under Amp, 14 autonomous hunts, verified per bug against fix commits; Parasoft from the parent benchmark; SWE-sweep bests from the parent deck. 25 November 2026</div>
+</section>
+
+<section class="slide compact">
+  <div class="kicker">Results &middot; <b>06</b></div>
+  <h1>Same picture, drawn: <span class="hl">Parasoft leads in 12 of 14</span>, Neon ties arrow and wins libexpat</h1>
+  <p class="sub">Percentage of the 488 bugs matched on the changed lines, per repository</p>
+  <div class="chart" style="margin-top:14px">
+    <div class="legend"><span>Neon under Amp (region) %</span><span class="par">Parasoft C/C++test (region) %</span></div>
+    <svg viewBox="0 0 1160 542" role="img" aria-label="Per-repository Neon vs Parasoft detection rates">
+      <g font-family="Inter,system-ui,sans-serif" fill="#6b6353">
+<text x="118" y="20" text-anchor="end" font-size="17" font-weight="600">jerryscript</text>
+<rect x="130" y="8" width="513.7" height="15" fill="#1d6bd0"/>
+<text x="651.7" y="20" font-size="15">46.7</text>
+<rect x="130" y="27" width="953.7" height="15" fill="#12457a"/>
+<text x="1091.7" y="39" font-size="15">86.7</text>
+<text x="118" y="58" text-anchor="end" font-size="17" font-weight="600">libexpat</text>
+<rect x="130" y="46" width="733.7" height="15" fill="#1d6bd0"/>
+<text x="871.7" y="58" font-size="15">66.7</text>
+<rect x="130" y="65" width="855.8" height="15" fill="#12457a"/>
+<text x="993.8" y="77" font-size="15">77.8</text>
+<text x="118" y="96" text-anchor="end" font-size="17" font-weight="600">godot</text>
+<rect x="130" y="84" width="64.9" height="15" fill="#1d6bd0"/>
+<text x="202.9" y="96" font-size="15">5.9</text>
+<rect x="130" y="103" width="841.5" height="15" fill="#12457a"/>
+<text x="979.5" y="115" font-size="15">76.5</text>
+<text x="118" y="134" text-anchor="end" font-size="17" font-weight="600">opencv</text>
+<rect x="130" y="122" width="304.7" height="15" fill="#1d6bd0"/>
+<text x="442.7" y="134" font-size="15">27.7</text>
+<rect x="130" y="141" width="819.5" height="15" fill="#12457a"/>
+<text x="957.5" y="153" font-size="15">74.5</text>
+<text x="118" y="172" text-anchor="end" font-size="17" font-weight="600">cvc5</text>
+<rect x="130" y="160" width="28.6" height="15" fill="#1d6bd0"/>
+<text x="166.6" y="172" font-size="15">2.6</text>
+<rect x="130" y="179" width="782.1" height="15" fill="#12457a"/>
+<text x="920.1" y="191" font-size="15">71.1</text>
+<text x="118" y="210" text-anchor="end" font-size="17" font-weight="600">duckdb</text>
+<rect x="130" y="198" width="181.5" height="15" fill="#1d6bd0"/>
+<text x="319.5" y="210" font-size="15">16.5</text>
+<rect x="130" y="217" width="756.8" height="15" fill="#12457a"/>
+<text x="894.8" y="229" font-size="15">68.8</text>
+<text x="118" y="248" text-anchor="end" font-size="17" font-weight="600">micropython</text>
+<rect x="130" y="236" width="449.9" height="15" fill="#1d6bd0"/>
+<text x="587.9" y="248" font-size="15">40.9</text>
+<rect x="130" y="255" width="750.2" height="15" fill="#12457a"/>
+<text x="888.2" y="267" font-size="15">68.2</text>
+<text x="118" y="286" text-anchor="end" font-size="17" font-weight="600">proj</text>
+<rect x="130" y="274" width="157.3" height="15" fill="#1d6bd0"/>
+<text x="295.3" y="286" font-size="15">14.3</text>
+<rect x="130" y="293" width="680.9" height="15" fill="#12457a"/>
+<text x="818.9" y="305" font-size="15">61.9</text>
+<text x="118" y="324" text-anchor="end" font-size="17" font-weight="600">tarantool</text>
+<rect x="130" y="312" width="412.5" height="15" fill="#1d6bd0"/>
+<text x="550.5" y="324" font-size="15">37.5</text>
+<rect x="130" y="331" width="632.5" height="15" fill="#12457a"/>
+<text x="770.5" y="343" font-size="15">57.5</text>
+<text x="118" y="362" text-anchor="end" font-size="17" font-weight="600">php-src</text>
+<rect x="130" y="350" width="0.0" height="15" fill="#1d6bd0"/>
+<text x="138.0" y="362" font-size="15">0.0</text>
+<rect x="130" y="369" width="550.0" height="15" fill="#12457a"/>
+<text x="688.0" y="381" font-size="15">50.0</text>
+<text x="118" y="400" text-anchor="end" font-size="17" font-weight="600">hdf5</text>
+<rect x="130" y="388" width="157.3" height="15" fill="#1d6bd0"/>
+<text x="295.3" y="400" font-size="15">14.3</text>
+<rect x="130" y="407" width="550.0" height="15" fill="#12457a"/>
+<text x="688.0" y="419" font-size="15">50.0</text>
+<text x="118" y="438" text-anchor="end" font-size="17" font-weight="600">z3</text>
+<rect x="130" y="426" width="200.2" height="15" fill="#1d6bd0"/>
+<text x="338.2" y="438" font-size="15">18.2</text>
+<rect x="130" y="445" width="400.4" height="15" fill="#12457a"/>
+<text x="538.4" y="457" font-size="15">36.4</text>
+<text x="118" y="476" text-anchor="end" font-size="17" font-weight="600">arrow</text>
+<rect x="130" y="464" width="257.4" height="15" fill="#1d6bd0"/>
+<text x="395.4" y="476" font-size="15">23.4</text>
+<rect x="130" y="483" width="257.4" height="15" fill="#12457a"/>
+<text x="395.4" y="495" font-size="15">23.4</text>
+<text x="118" y="514" text-anchor="end" font-size="17" font-weight="600">gdal</text>
+<rect x="130" y="502" width="15.4" height="15" fill="#1d6bd0"/>
+<text x="153.4" y="514" font-size="15">1.4</text>
+<rect x="130" y="521" width="46.2" height="15" fill="#12457a"/>
+<text x="184.2" y="533" font-size="15">4.2</text>
+      </g>
+    </svg>
+  <div class="cap">Neon: autonomous open-ended hunt per repo in Amp. Parasoft: whole-codebase scan. Same per-bug changed-line regions.</div>
+  <div class="foot">Per-bug verdicts with fix commits: reports/&lt;repo&gt;_scored.md in the benchmark repo; Parasoft numbers from the parent deck. 25 November 2026</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Results &middot; <b>07</b></div>
+  <h1>Where the model <span class="hl">beats the tool</span>: small search spaces</h1>
+  <p class="sub">Neon's wins are real but concentrated: repositories small enough for one context to hold</p>
+  <div class="bigrow">
+    <div class="card green"><div class="label">libexpat: Neon wins strict</div><div class="stat green">44.4%</div><p>Neon strict beats Parasoft strict here (33.3%) while Parasoft keeps the region lead (77.8% vs 66.7%). Nine bugs, one file: the whole parser fits in one agent context</p></div>
+    <div class="card green"><div class="label">micropython: Neon wins strict</div><div class="stat green">36.4%</div><p>Neon 40.9% region / 36.4% strict against Parasoft 68.2% / 31.8%. The 296-finding deep hunt paid off on the interpreter core</p></div>
+    <div class="card"><div class="label">arrow: dead heat</div><div class="stat">23.4%</div><p>Identical region hit rate, and Neon's strict (21.3%) beats Parasoft's 8.5%: the model lands on the exact fixed line more often where it lands at all</p></div>
+  </div>
+  <div class="foot">Pattern from the supplement: every Neon win sits in a repository whose bug-bearing surface fits one multi-hour thread; nothing similar appears in duckdb (109 bugs) or gdal (72). 25 November 2026</div>
+</section>
+
+<section class="slide compact">
+  <div class="kicker">New measurement &middot; <b>08</b></div>
+  <h1>The Antigravity pilot: <span class="hl">same model, Google's own harness</span></h1>
+  <p class="sub">We re-ran the identical hunter prompt with Gemini 4 Neon inside Antigravity CLI 1.5.15, at the exact commits the Amp arms used, on the first 3 repositories</p>
+  <table style="margin-top:14px">
+    <tr><th>Arm</th><th>libexpat (9 bugs)</th><th>jerryscript (15)</th><th>micropython (22)</th><th>Total region</th><th>Total strict</th></tr>
+    <tr><td><b>Parasoft C/C++test (published)</b></td><td>77.8% / 33.3%</td><td>86.7% / 80.0%</td><td>68.2% / 31.8%</td><td><b>35/46 = 76.1%</b></td><td><b>22/46 = 47.8%</b></td></tr>
+    <tr><td><b>Gemini 4 Neon in Amp</b></td><td>66.7% / 44.4%</td><td>46.7% / 40.0%</td><td>40.9% / 36.4%</td><td><b>22/46 = 47.8%</b></td><td><b>18/46 = 39.1%</b></td></tr>
+    <tr><td><b>Gemini 4 Neon in Antigravity (pilot)</b></td><td>66.7% / 55.6%</td><td>26.7% / 20.0%</td><td>9.1% / 9.1%</td><td><b>12/46 = 26.1%</b></td><td><b>10/46 = 21.7%</b></td></tr>
+  </table>
+  <div class="bigrow" style="margin-top:16px">
+    <div class="card red"><div class="label">The surprise</div><div class="stat red">~0.55x</div><p>Neon scored roughly half as many oracle bugs under Google's own harness as under Amp, on identical prompts, commits and scoring. The harness moved the result more than any model difference could</p></div>
+    <div class="card green"><div class="label">Where Antigravity is better</div><div class="stat green">55.6%</div><p>libexpat strict: Antigravity Neon 5 of 9 beats both Amp Neon (4) and Parasoft (3). Fewer, deeper findings: 187 total pilot findings vs 2,288 across the full Amp campaign</p></div>
+  </div>
+  <div class="foot">Pilot scoring: reports/agy_scored.md in the benchmark repo, every one of the 16 matched pairs verdicted against the maintainer fix commit, no unresolved pairs. Runs 22-25 November 2026</div>
+</section>
+
+<section class="slide compact">
+  <div class="kicker">New measurement &middot; <b>09</b></div>
+  <h1>Three arms, drawn: <span class="hl">the gap is in micropython</span></h1>
+  <p class="sub">Region hit rate per repository: Parasoft vs Neon in Amp vs Neon in Antigravity</p>
+  <div class="chart" style="margin-top:14px">
+    <div class="legend"><span class="par">Parasoft C/C++test %</span><span>Neon in Amp %</span><span class="ag">Neon in Antigravity %</span></div>
+    <svg viewBox="0 0 1160 400" role="img" aria-label="Antigravity pilot: three arms per repository">
+<g font-family="Inter,system-ui,sans-serif" fill="#6b6353">
+<text x="118" y="32" text-anchor="end" font-size="20" font-weight="600">libexpat</text>
+<rect x="130" y="44" width="778.0" height="24" fill="#12457a"/>
+<text x="916.0" y="61" font-size="17">77.8</text>
+<rect x="130" y="72" width="667.0" height="24" fill="#1d6bd0"/>
+<text x="805.0" y="89" font-size="17">66.7</text>
+<rect x="130" y="100" width="667.0" height="24" fill="#8a5e00"/>
+<text x="805.0" y="117" font-size="17">66.7</text>
+<text x="118" y="160" text-anchor="end" font-size="20" font-weight="600">jerryscript</text>
+<rect x="130" y="172" width="867.0" height="24" fill="#12457a"/>
+<text x="1005.0" y="189" font-size="17">86.7</text>
+<rect x="130" y="200" width="467.0" height="24" fill="#1d6bd0"/>
+<text x="605.0" y="217" font-size="17">46.7</text>
+<rect x="130" y="228" width="267.0" height="24" fill="#8a5e00"/>
+<text x="405.0" y="245" font-size="17">26.7</text>
+<text x="118" y="288" text-anchor="end" font-size="20" font-weight="600">micropython</text>
+<rect x="130" y="300" width="682.0" height="24" fill="#12457a"/>
+<text x="820.0" y="317" font-size="17">68.2</text>
+<rect x="130" y="328" width="409.0" height="24" fill="#1d6bd0"/>
+<text x="547.0" y="345" font-size="17">40.9</text>
+<rect x="130" y="356" width="91.0" height="24" fill="#8a5e00"/>
+<text x="229.0" y="373" font-size="17">9.1</text>
+</g>
+</svg>
+    <div class="cap">Same model in two harnesses. libexpat is a tie; the collapse concentrates in micropython, the largest and deepest hunt.</div>
+  </div>
+  <div class="row" style="margin-top:14px">
+    <div class="card blue"><div class="label">Parasoft, 3 repos</div><div class="stat blue">35<span style="font-size:.5em">/46</span></div><p>76.1% region, 47.8% strict: the static scan keeps its lead on every one of the three</p></div>
+    <div class="card"><div class="label">Neon in Amp, 3 repos</div><div class="stat">22<span style="font-size:.5em">/46</span></div><p>47.8% region, 39.1% strict: the full-campaign arm, for scale</p></div>
+    <div class="card amber"><div class="label">Neon in Antigravity, 3 repos</div><div class="stat amber">12<span style="font-size:.5em">/46</span></div><p>26.1% region, 21.7% strict: the same model under Google's own CLI</p></div>
+  </div>
+  <div class="foot">Per-bug verdicts: reports/agy_scored.md and reports/&lt;repo&gt;_scored.md in the benchmark repo. 25 November 2026</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Analysis &middot; <b>10</b></div>
+  <h1>Reading the pilot: <span class="hl">fewer true hits, not a stricter judge</span></h1>
+  <p class="sub">Why the Antigravity numbers are a harness effect, not a scoring artefact</p>
+  <div class="bigrow">
+    <div class="card"><div class="label">Output volume collapsed</div><p style="color:var(--ink)">micropython: 68 findings under Antigravity vs 296 under Amp; jerryscript 78 vs 97; libexpat 41. Fewer findings means fewer chances to land on an oracle bug, and the misses follow</p></div>
+    <div class="card"><div class="label">The rejects mirror Amp's</div><p style="color:var(--ink)">All 4 rejected pairs are line-overlap-only mechanism mismatches, on the same oracle bugs the Amp arm also rejected or missed (042a8ceedc15, ef93b8337084, f67d952cb3de). Judging did not get harder; the hits got rarer</p></div>
+    <div class="card amber"><div class="label">What we cannot rule out</div><p>Three repositories, 46 bugs, two days of runs interrupted by quota windows. The direction (Amp ahead) is consistent across all three repos and both metrics, but the exact ratio is pilot-grade, not campaign-grade</p></div>
+  </div>
+  <div class="foot">Verdict detail per pair: reports/agy_scored.md in the benchmark repo. 25 November 2026</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Harness &middot; <b>11</b></div>
+  <h1>What the harness <span class="hl">actually did</span>: four measured frictions</h1>
+  <p class="sub">Documented during the pilot, each one a difference between the Amp loop and the Antigravity loop</p>
+  <div class="bigrow">
+    <div class="card red"><div class="label">Safety filters</div><p>Gemini's filters deterministically blocked the original hunter wording for two of three repos; agy exits fatally on a block. Only neutral rewording (quality review, published advisories) got through. The prompt was not the same prompt in the strict sense</p></div>
+    <div class="card red"><div class="label">No sub-agent fan-out</div><p>Headless subagents hang forever in agy --print mode. The Amp campaign's parallel hunts became a single-threaded sequential hunt. On micropython that is the difference between 296 findings and 68</p></div>
+    <div class="card amber"><div class="label">Quota windows</div><p>The Google AI Pro account's roughly 5-hour window was exhausted mid-hunt; micropython completed only across pauses and resumes on two days. The full 14-repo campaign would need days of quota</p></div>
+    <div class="card green"><div class="label">What stayed identical</div><p>Model, base commits, hunter intent, extraction schema, matcher, and the per-pair verdict methodology against fix commits. Any residual effect is the harness, by construction</p></div>
+  </div>
+  <div class="foot">Run logs with the 429 RESOURCE_EXHAUSTED windows and resume driver: agy-runs/ in the benchmark repo. 25 November 2026</div>
+</section>
+
+<section class="slide compact">
+  <div class="kicker">Analysis &middot; <b>12</b></div>
+  <h1>The harness is worth <span class="hl">a multiple</span>, and now we have measured it</h1>
+  <p class="sub">Google's own numbers said so; our pilot confirms it on independent ground</p>
+  <div class="row">
+    <div class="card blue" style="flex:1.2"><div class="label">Harness spread, Google's numbers (SWE-sweep)</div><pre class="box" style="border-left-color:var(--blue)">
+Neon in Antigravity-CLI (provider):  <span class="b">39.0%</span>
+Neon in mini-SWE (shared minimal):   <span class="b">12.8%</span>   ~3x spread
+Opus 5.5:   10.1 (Claude Code)  /  3.6 (mini-SWE)
+GPT-6.2 Sol:  8.3 (Codex)  /  11.6 (mini-SWE)
+<span class="a">&lt;- counterexample: the vendor harness scored lower</span></pre></div>
+    <div class="card amber" style="flex:1.2"><div class="label">Harness spread, our pilot (bug-hunt region)</div><pre class="box" style="border-left-color:var(--amber-hi)">
+Neon in Amp:            <span class="b">22/46 = 47.8%</span>
+Neon in Antigravity:    <span class="a">12/46 = 26.1%</span>   ~1.8x spread
+strict:                 39.1% vs 21.7%
+
+same model, same prompt, same commits,
+same oracle, same human verification</pre></div>
+  </div>
+  <div class="row" style="margin-top:16px">
+    <div class="card amber" style="flex:1"><div class="label">The counterexample, in numbers</div><p>Sol in Codex (8.3%) scores below the same model in mini-SWE (11.6%): a badly matched agent loop can subtract. Harness effects are not automatically wins, which is exactly why a claim must name its harness</p></div>
+    <div class="card blue" style="flex:1"><div class="label">Why our pilot matters</div><p>It is an independent reproduction of the spread with a different task shape: open-ended multi-hour bug hunting with human verification, not fix-the-known-bug episodes with hidden-test rewards</p></div>
+  </div>
+  <p class="sub" style="margin-top:14px">The direction matches Google's own mini-SWE drop (39.0 to 12.8): take the model out of its tuned home harness and the score falls hard. Our pilot adds an independent data point with a different task shape: open-ended bug hunting instead of fix-the-known-bug episodes</p>
+  <div class="foot">Google numbers: Gemini 4 Neon model card, November 2026, self-computed. Pilot: reports/agy_scored.md. 25 November 2026</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Verdict &middot; <b>13</b></div>
+  <h1>Read every agentic number as <span class="hl">model plus harness</span></h1>
+  <p class="sub">What Neon 4's entrance does to the scoreboard</p>
+  <div class="bigrow">
+    <div class="card green"><div class="label">On the model</div><div class="stat green">18.2%</div><p>Neon 4 is the strongest bug hunter we have put on this benchmark: 3.5x the best SWE-sweep agents (5.1%), it ties or beats Parasoft on strict in three repos, and 96% of its findings are defects nobody catalogued</p></div>
+    <div class="card amber"><div class="label">On the harness</div><div class="stat amber">2x</div><p>The same model halves between harnesses on our pilot subset, consistent with the 3x spread inside Google's own published numbers. A harness claim without naming the harness is not a model claim</p></div>
+    <div class="card blue"><div class="label">On the scoreboard</div><div class="stat blue">53.1%</div><p>Static analysis still leads C/C++ bug hunting overall: Parasoft 53.1% region / 28.9% strict over 488 bugs beats every agentic configuration measured. The rational stack is both: Parasoft for coverage, Neon-class agents for depth on small cores</p></div>
+  </div>
+  <div class="foot">Every number on this slide is measured in this project or quoted from its named source. 25 November 2026</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Thank you &middot; <b>14</b></div>
+  <h1>Every number here is <span class="hl">reproducible or quotable</span></h1>
+  <p class="sub">The measured side lives in the benchmark repository; the claimed side links to Google's own pages</p>
+  <div class="row" style="align-items:stretch">
+    <div class="card"><div class="label">Measured sources</div><ul>
+      <li>Neon under Amp, 14 hunts, per-bug verdicts: reports/&lt;repo&gt;_scored.md, github.com/zuwasi/swe-sweep-parasoft-benchmark</li>
+      <li>Antigravity pilot, 3 hunts, 16 verdicted pairs: reports/agy_scored.md and agy-runs/ in the same repo</li>
+      <li>Parasoft numbers and the oracle definition: the parasoft-vs-swe-sweep deck</li>
+    </ul></div>
+    <div class="card"><div class="label">Claimed sources (Google)</div><ul>
+      <li>Model card and evaluation methodology: deepmind.google/models/model-cards/gemini-4-neon</li>
+      <li>Launch blogs: blog.google, Introducing Gemini 4 Neon; Antigravity blog, 18 Nov 2026</li>
+      <li>SWE-sweep: swesweep.com/paper (Lieret et al., Meta FAIR, 2026)</li>
+    </ul></div>
+  </div>
+  <div class="row" style="align-items:stretch">
+    <div class="person-card" style="flex:1">
+      <img src="../assets/daniel-liezrowice.jpg" width="120" height="120" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy, Parasoft and Perforce partner in Israel for over 20 years.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+    <div class="card" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+      <img class="cardlogo" src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab" style="align-self:flex-end;float:none">
+      <div class="label">Contact ESL</div>
+      <p style="font-size:clamp(13px,1.2vw,16px);color:var(--ink);line-height:1.7">Embedded software consultancy. Parasoft and Perforce partner in Israel for over 20 years.<br><a href="https://eswlab.com/" target="_blank" rel="noopener" style="color:var(--accent);font-weight:600;text-decoration:none">eswlab.com</a></p>
+    </div>
+  </div>
+  <div class="foot">ESL - Engineering Software Lab &middot; 25 November 2026</div>
+</section>
+
+</div>
+
+<button class="nav-arrows" id="prevBtn" aria-label="Previous slide">&#8249;</button>
+<button class="nav-arrows" id="nextBtn" aria-label="Next slide">&#8250;</button>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="counter" id="counter"></div>
+<div class="hint" id="hint">&#8592; Swipe to navigate &#8594;</div>
+
+<script>
+(function(){
+  var deck=document.getElementById('deck');
+  var total=deck.children.length;
+  var cur=0;
+  var progress=document.getElementById('progress');
+  var counter=document.getElementById('counter');
+  var hint=document.getElementById('hint');
+  var prev=document.getElementById('prevBtn');
+  var next=document.getElementById('nextBtn');
+  var navigated=false;
+  function go(n){
+    cur=Math.max(0,Math.min(total-1,n));
+    deck.style.transform='translateX('+(-cur*100)+'vw)';
+    progress.style.width=((cur+1)/total*100)+'%';
+    counter.textContent=(cur+1)+' / '+total;
+    prev.classList.toggle('hidden',cur===0);
+    next.classList.toggle('hidden',cur===total-1);
+    if(navigated||cur!==0){hint.classList.add('gone');}
+  }
+  prev.addEventListener('click',function(){navigated=true;go(cur-1)});
+  next.addEventListener('click',function(){navigated=true;go(cur+1)});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){e.preventDefault();navigated=true;go(cur+1);}
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){e.preventDefault();navigated=true;go(cur-1);}
+    else if(e.key==='Home'){go(0);}else if(e.key==='End'){go(total-1);}
+  });
+  var tx=null,ty=null;
+  document.addEventListener('touchstart',function(e){tx=e.changedTouches[0].clientX;ty=e.changedTouches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',function(e){
+    if(tx===null)return;
+    var dx=e.changedTouches[0].clientX-tx, dy=e.changedTouches[0].clientY-ty;
+    if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)){dx<0?go(cur+1):go(cur-1);}
+    tx=null;
+  },{passive:true});
+  var dragging=false,dragX=0;
+  document.addEventListener('mousedown',function(e){dragging=true;dragX=e.clientX;});
+  document.addEventListener('mouseup',function(e){
+    if(!dragging)return;dragging=false;
+    var dx=e.clientX-dragX;
+    if(Math.abs(dx)>60){dx<0?go(cur+1):go(cur-1);}
+  });
+  window.addEventListener('resize',function(){go(cur);});
+  go(0);
+})();
+</script>
+</body>
+</html>
