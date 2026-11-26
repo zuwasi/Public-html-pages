@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="theme-color" content="#e2e5ea">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'; object-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; script-src 'unsafe-inline'">
+<meta name="description" content="ESL MantiQ workflow demo: Q-Wave Planner, provably optimal PQC migration waves for a six-project bank instance, Wolfram Quantum Framework simulation, a Lean 4 certificate with 0 sorry, and an executable wave planner.">
+<title>Q-Wave Planner | Provably Optimal PQC Migration Waves | ESL</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4eedc;--sheet:#fbf8ee;--sheet2:#ece4cc;--ink:#1d1a16;--muted:#6b6353;--line:#b9ae90;--blue:#12457a;--blue-text:#12457a;--amber:#9a5b10;--amber-text:#8a5e00;--red:#b8322a;--code-bg:#f6efdc;--code-cap:#d9d0b8;--on-dark:#1d1a16;--top:56px}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{width:100%;height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+a{color:var(--blue-text);text-decoration:none}a:hover{text-decoration:underline}
+code{font-family:"Cascadia Mono",Consolas,monospace;font-size:.88em;background:#e7eaef;border:1px solid var(--line);border-radius:5px;padding:0 .3em;color:#1b3f73}
+.topbar{position:fixed;top:0;left:0;right:0;z-index:40;height:var(--top);display:flex;justify-content:space-between;align-items:center;gap:16px;padding:0 3vw;background:#f7f8faf5;border-bottom:1px solid var(--line);backdrop-filter:blur(6px)}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.homebtn{font-size:22px;line-height:1;filter:grayscale(.2)}
+.homebtn:hover{text-decoration:none;transform:scale(1.15)}
+.topbar img{height:32px;width:auto;display:block}
+#brand{font-weight:600;font-size:14px;color:var(--ink);border-left:2px solid var(--line);padding-left:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.links{display:flex;gap:18px;flex:none}
+.links a{font-size:14px;color:var(--ink);border-bottom:2px solid transparent}
+.links a:hover{border-bottom-color:var(--amber);text-decoration:none}
+.viewport{position:fixed;inset:0;overflow:hidden}
+#track{display:flex;height:100%;transition:transform .45s cubic-bezier(.2,.7,.25,1);will-change:transform}
+.slide{--shot-h:calc(100vh - 300px);flex:0 0 100vw;width:100vw;height:100vh;height:100dvh;overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;padding:calc(var(--top) + 26px) max(5.5vw,96px) 70px}
+.slide.tall{--shot-h:calc(100vh - 330px)}
+.slide.wide{--shot-h:calc(100vh - 425px)}
+.slide.prompt{--shot-h:calc(100vh - 560px)}
+.slide.layers{--shot-h:calc(100vh - 640px)}
+.inner{width:100%;max-width:1360px;margin:auto}
+.eyebrow{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:clamp(12px,1vw,14px);letter-spacing:.18em;font-weight:700;text-transform:uppercase}
+.mark{position:relative;width:24px;height:22px;flex:none}
+.mark::before,.mark::after{content:"";position:absolute;width:14px;height:14px;border:3.5px solid}
+.mark::before{left:0;top:0;border-color:var(--blue)}
+.mark::after{left:8px;top:7px;border-color:var(--amber)}
+h1{font-size:clamp(30px,3.6vw,52px);line-height:1.1;letter-spacing:-.02em;margin:12px 0 8px;font-weight:800}
+.title h1{font-size:clamp(34px,4.6vw,64px)}
+h3{font-size:clamp(18px,1.6vw,23px);line-height:1.25;margin-bottom:8px;font-weight:700}
+p.subtitle{font-size:clamp(18px,1.85vw,25px);color:var(--blue-text);margin:0 0 20px;line-height:1.4}
+p,li{font-size:clamp(16px,1.55vw,21px)}
+p+p{margin-top:10px}
+ul{padding-left:26px}
+li{margin:9px 0;padding-left:4px}
+li::marker{color:var(--amber)}
+.grid2,.grid3,.grid4{display:grid;gap:22px;margin:14px 0}
+.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.mid{align-items:center}
+.stack{display:grid;gap:18px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;padding:clamp(16px,1.7vw,24px);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.card.v{border-top-color:var(--amber)}
+.card p,.card li{font-size:clamp(15px,1.35vw,19px)}
+.card ul{padding-left:22px}
+.tag{display:inline-block;color:var(--blue-text);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.card.v .tag{color:var(--amber-text)}
+.n{font-size:clamp(30px,3.4vw,50px);font-weight:800;line-height:1.05;font-variant-numeric:tabular-nums}
+.l{font-size:clamp(14px,1.3vw,18px);color:var(--muted);margin-top:8px;line-height:1.45}
+.note{padding:14px 20px;border-left:5px solid var(--amber);background:#fdf6e3;color:#5c470e;font-size:clamp(15px,1.4vw,19px);margin:16px 0 0;border-radius:0 8px 8px 0;line-height:1.5}
+.note.red{border-left-color:var(--red);background:#fbeaea;color:#6e1c1c}
+.foot{margin-top:16px;font-size:clamp(13px,1.15vw,16px);color:var(--muted)}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.pill{display:inline-flex;border-radius:999px;padding:5px 12px;border:1px solid var(--line);background:#fff;color:var(--ink);font-size:13px;font-weight:700}
+.pill.a{background:#fdf3dc;border-color:rgba(29,26,22,0.55);color:var(--amber-text)}
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:12px 0 4px}
+.step{position:relative;background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:18px 20px 18px 76px;min-height:118px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.step b{position:absolute;left:18px;top:18px;width:40px;height:40px;border-radius:50%;background:var(--blue);color:#f4eedc;display:grid;place-items:center;font-size:19px}
+.step:nth-child(even) b{background:var(--amber);color:#f4eedc}
+.step strong{display:block;font-size:clamp(17px,1.5vw,21px);margin-bottom:4px}
+.step span{display:block;font-size:clamp(14px,1.25vw,17px);color:#f4eedc;line-height:1.45}
+.flow.five{grid-template-columns:repeat(5,minmax(0,1fr))}
+.flow.five .step{padding:18px}
+.flow.five .step b{position:static;margin-bottom:12px}
+.diagram{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(12px,1.25vw,17px);line-height:1.6;background:var(--code-bg);color:var(--on-dark);border-radius:10px;padding:18px 22px;overflow-x:auto;white-space:pre;margin:16px 0 0;box-shadow:0 2px 10px rgba(15,20,30,.25)}
+.diagram .k{color:#1d1a16}.diagram .b{color:#12457a}
+.tablewrap{overflow-x:auto;margin:14px 0;border:1px solid var(--line);border-radius:10px;background:var(--sheet)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:clamp(14px,1.4vw,19px)}
+th,td{padding:12px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#fbf8ee;color:#1d1a16;font-weight:650}
+tbody tr:nth-child(even){background:#f0f2f6}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+figure.shot{width:min(100%,calc(var(--w) + 16px),calc(var(--shot-h) * var(--r) + 16px));margin:0 auto;background:var(--code-bg);border-radius:12px;overflow:hidden;box-shadow:0 4px 18px rgba(15,20,30,.28)}
+figure.shot figcaption{padding:9px 16px;background:var(--code-cap);color:#6b6353;font-size:clamp(13px,1.1vw,15px);line-height:1.4;border-top:3px solid var(--amber);border-bottom:1px solid #2a2e34}
+figure.shot figcaption code{background:#fbf8ee;border-color:#b9ae90;color:#1d1a16}
+a.zoom{display:block;position:relative;padding:8px;line-height:0;cursor:zoom-in}
+a.zoom img{display:block;width:100%;height:auto;border-radius:6px;background:#fff;-webkit-user-drag:none;user-select:none}
+a.zoom::after{content:"Click to enlarge";position:absolute;right:16px;bottom:16px;background:rgba(251,248,238,.82);color:#1d1a16;font-size:13px;font-weight:600;line-height:1;padding:7px 11px;border-radius:20px;opacity:.85}
+a.zoom:hover::after,a.zoom:focus-visible::after{opacity:1;background:var(--blue-text)}
+.wideshot{margin-top:14px}
+.shotrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.42fr);gap:28px;align-items:center;margin-top:14px}
+.shotrow.tall{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.side p.subtitle{font-size:clamp(17px,1.6vw,22px);margin-bottom:12px}
+.side p,.side li{font-size:clamp(15px,1.35vw,19px)}
+.side .note{font-size:clamp(14px,1.25vw,17px)}
+.chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
+.chip{background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:10px 14px;font-size:clamp(14px,1.2vw,17px);line-height:1.4}
+.chip:nth-child(even){border-left-color:var(--amber)}
+.rule-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:14px}
+.rule{background:var(--sheet);border:1px solid var(--line);border-top:4px solid var(--blue);border-radius:10px;padding:16px 18px;min-height:112px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.rule:nth-child(even){border-top-color:var(--amber)}
+.rule code{display:block;background:none;border:0;padding:0;color:var(--blue-text);font-size:clamp(14px,1.2vw,17px);font-weight:700;margin-bottom:6px}
+.rule span{display:block;font-size:clamp(16px,1.45vw,20px);line-height:1.35}
+.person-card{display:flex;gap:22px;padding:22px;border:1px solid var(--line);border-top:5px solid var(--blue);border-radius:10px;background:var(--sheet);box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.person-card img{width:140px;height:140px;object-fit:cover;border-radius:8px;flex:none}
+.person-card strong{font-size:clamp(18px,1.8vw,23px);display:block}
+.person-card span{color:var(--blue-text);font-weight:600;font-size:clamp(14px,1.4vw,17px)}
+.person-card p{margin:10px 0;font-size:clamp(15px,1.35vw,18px)}
+.contact{display:flex;align-items:center;gap:22px;flex-wrap:wrap;margin-top:20px;padding:16px 22px;background:var(--sheet);border:1px solid var(--line);border-top:5px solid var(--amber);border-radius:10px}
+.contact img{height:52px;width:auto;display:block}
+.contact p{font-size:clamp(15px,1.35vw,18px)}
+.navbtn{position:fixed;top:50%;transform:translateY(-50%);z-index:30;width:62px;height:62px;border-radius:50%;border:none;background:var(--blue);color:#f4eedc;font-size:34px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(29,107,208,.45);transition:background .15s,transform .15s,opacity .2s}
+.navbtn:hover{background:var(--blue-text);transform:translateY(-50%) scale(1.08)}
+.navbtn.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#prev{left:16px}#next{right:16px}
+#progress{position:fixed;bottom:0;left:0;height:6px;width:0;background:linear-gradient(90deg,var(--blue),var(--amber));z-index:30;transition:width .3s}
+#counter{position:fixed;bottom:14px;right:20px;z-index:30;font-size:15px;font-weight:600;color:var(--ink);background:#f7f8fad9;border:1px solid var(--line);border-radius:14px;padding:3px 13px;font-variant-numeric:tabular-nums}
+#hint{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:30;font-size:15px;font-weight:600;color:var(--amber-text);white-space:nowrap;animation:pulse 1.6s infinite}
+#hint.gone{opacity:0;visibility:hidden}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+dialog#lightbox{width:100vw;height:100vh;height:100dvh;max-width:100vw;max-height:none;margin:0;border:0;padding:0;background:#fbf8ee;color:var(--on-dark);overflow:auto}
+#lightbox::backdrop{background:rgba(251,248,238,.7)}
+#lbbar{position:fixed;top:0;left:0;right:0;z-index:2;display:flex;gap:12px;justify-content:space-between;align-items:center;padding:10px 16px;background:rgba(251,248,238,.92);font-size:14px}
+#lbcap{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.lbbtns{display:flex;gap:8px;flex:none}
+#lightbox button{font:inherit;font-weight:600;color:#f4eedc;background:var(--blue-text);border:0;border-radius:18px;padding:7px 14px;cursor:pointer}
+#lightbox #lbclose{background:#fbf8ee}
+#lbwrap{display:flex;width:max-content;min-width:100%;min-height:100%;padding:60px 16px 20px}
+#lbwrap img{display:block;margin:auto;height:auto;max-width:none;border-radius:6px;background:#fff;box-shadow:0 6px 30px rgba(0,0,0,.5)}
+#lightbox.canzoom img{cursor:zoom-in}
+#lightbox.canzoom.full img{cursor:zoom-out}
+@media(max-width:1100px){
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .shotrow,.shotrow.tall{grid-template-columns:1fr}
+  .flow.five{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:761px) and (max-height:820px){
+  .slide{padding-top:calc(var(--top) + 16px);padding-bottom:58px}
+  h1{font-size:clamp(28px,3.1vw,44px);margin:8px 0 6px}
+  p.subtitle{font-size:clamp(16px,1.6vw,21px);margin-bottom:14px}
+  p,li{font-size:clamp(15px,1.35vw,18px)}
+  .card p,.card li,.side p,.side li{font-size:clamp(14px,1.2vw,17px)}
+  .n{font-size:clamp(26px,2.8vw,40px)}
+  .step{min-height:0;padding-top:14px;padding-bottom:14px}
+  .rule{min-height:0}
+}
+@media(max-width:760px){
+  :root{--top:52px}
+  .slide,.slide.tall,.slide.wide,.slide.prompt,.slide.layers{--shot-h:9999px;padding:calc(var(--top) + 18px) 18px 96px}
+  .inner{margin:0 auto}
+  .topbar{gap:10px;padding:0 12px}
+  .topbar img{height:26px}
+  #brand{font-size:12.5px;padding-left:10px}
+  .links{display:none}
+  .grid2,.grid3,.flow,.flow.five,.chips,.rule-grid{grid-template-columns:1fr}
+  .grid4{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .step,.rule{min-height:0}
+  .person-card{flex-direction:column}
+  .contact{gap:14px}
+  a.zoom::after{content:"Tap to enlarge"}
+  .navbtn{width:46px;height:46px;font-size:26px;top:auto;bottom:16px;transform:none}
+  .navbtn:hover{transform:scale(1.05)}
+  #prev{left:12px}#next{right:12px}
+  #counter{right:auto;left:50%;transform:translateX(-50%);bottom:26px}
+  #hint{bottom:74px;font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}</style>
+<style>
+.step span{color:#4a443a}
+.slide{padding-top:calc(var(--top) + 12px);padding-bottom:50px}
+h1{margin:8px 0 6px}
+p.subtitle{margin-bottom:12px}
+.brandrow{display:flex;gap:14px;margin:0 0 14px;flex-wrap:wrap;align-items:center}
+.brandchip{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:7px 14px;box-shadow:0 1px 4px rgba(20,30,50,.06)}
+.brandchip img{height:27px;width:auto;display:block}
+.brandchip.sg{background:#0a0a0a;border-color:#0a0a0a}
+.brandchip.sg img{height:22px}
+.brandchip span{font-size:clamp(13px,1.2vw,16px);font-weight:600;color:var(--ink)}
+.brandchip.sg span{color:#fff}
+.cardlogo{float:right;height:26px;width:auto;margin:0 0 6px 10px}
+.fchart{margin:8px 0 0}
+.fchart svg{width:auto;max-width:100%;height:auto;max-height:518px;margin:0 auto;display:block}
+p,li{line-height:1.42}
+.diagram{line-height:1.42;font-size:clamp(11px,1.08vw,14.5px);padding:12px 18px;margin:10px 0 0}
+table{font-size:clamp(13px,1.22vw,16px)}
+th,td{padding:8px 12px}
+.card{padding:12px 16px}
+.card p,.card li{font-size:clamp(13px,1.18vw,16px);line-height:1.4}
+.grid2,.grid3,.grid4{gap:16px;margin:10px 0}
+.note{padding:10px 16px;margin:10px 0 0;font-size:clamp(13px,1.2vw,16px);line-height:1.42}
+.n{font-size:clamp(24px,2.6vw,38px)}
+.shotrow{margin-top:10px;gap:22px}
+.foot{margin-top:12px;font-size:clamp(12px,1.05vw,14px)}
+</style>
+<style>
+.hl{color:var(--blue-text)}
+.fchart svg{max-height:470px}
+.shotrow img{border-radius:6px;background:#fff}
+.t5 table{font-size:14px}
+.t5 th,.t5 td{padding:7px 8px}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <a class="homebtn" href="#1" title="Back to slide 1" aria-label="Back to slide 1">&#127968;</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener"><img src="../assets/esl-logo.png" alt="ESL - Engineering Software Lab"></a>
+    <span id="brand">Q-Wave Planner · Provably Optimal PQC Migration Waves · MantiQ demo</span>
+  </div>
+  <nav class="links" aria-label="Related links">
+    <a href="https://www.q.security/" target="_blank" rel="noopener">q.security</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a>
+    <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a>
+  </nav>
+</header>
+<main class="viewport" aria-label="Q-Wave Planner presentation">
+<div id="track">
+
+<!-- 01 · cover -->
+<section class="slide title"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>MantiQ workflow demo · 01</div>
+  <h1>Q-Wave Planner: provably optimal PQC migration waves</h1>
+  <p class="subtitle">Which systems should a bank migrate to post-quantum cryptography this quarter? A demonstration in the style of Q.security's readiness problem: Wolfram Quantum Framework simulation, a Lean 4 certificate, and an executable wave planner, all cross-checked on one six-project instance</p>
+  <div class="brandrow">
+    <div class="brandchip"><span>Wolfram Quantum Framework 1.6.5 · simulates, samples, cross-checks</span></div>
+    <div class="brandchip"><span>Lean 4 + Mathlib v4.33.0 · certifies the optimum, 0 sorry</span></div>
+    <div class="brandchip"><span>Classiq QMOD · hardware-ready artifact, 57 Pauli-Z terms</span></div>
+  </div>
+  <div class="grid2 mid">
+    <div class="stack">
+      <div class="card"><div class="n">64 plans &middot; 3 proofs</div><div class="l">every possible first-wave selection over six candidate migrations, enumerated exhaustively and certified by Python enumeration, Wolfram exact statevector and Lean 4 decide: no heuristic decides what gets fixed</div></div>
+      <div class="card v"><div class="n">70 &rarr; 92</div><div class="l">the budget flip: at 12 engineer-weeks the best wave is Payments + VPN; at 16 weeks four extra weeks flip the whole wave to Payments + Gateway + Portal</div></div>
+    </div>
+    <div class="person-card">
+      <img src="../assets/daniel-liezrowice.jpg" width="140" height="140" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>Embedded software consultancy in Israel for over 20 years. This brief documents the ESL Q-Wave Planner demonstration: a MantiQ workflow (Wolfram simulation, Lean proof, executable system) aimed at the post-quantum migration planning problem.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+  </div>
+  <div class="foot">Engineering Software Lab Ltd. · 26 November 2026 · Every number in this deck is generated by the demo repository (data/, wolfram/, lean/) and cross-checked between the three pipelines. Not affiliated with Q.security; Meridian Bank is fictional</div>
+</div></section>
+
+<!-- 02 · the gap -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The problem · 02</div>
+  <h1>A crypto inventory tells you what you have. It does not tell you <span class="hl">what to fix first</span></h1>
+  <p class="subtitle">Q.security's platform answers discovery: what cryptographic assets exist, where they are, how quantum-vulnerable they are. The quarter's engineering plan is the next question, and it is combinatorial</p>
+  <div class="grid2">
+    <div class="card"><span class="tag">What a ranked list gives you</span><h3>Sort by score, work down the list</h3>
+      <p>Rank systems by exposure, take the top ones that fit the budget. This ignores two things a real migration always has:</p>
+      <ul>
+        <li><b>Dependencies:</b> the customer portal cannot move until the shared edge gateway terminates hybrid key exchange. The top-ranked item drags its prerequisite in.</li>
+        <li><b>Budget interactions:</b> with more (or less) budget, the best <i>set</i> changes, not just its size.</li>
+      </ul>
+    </div>
+    <div class="card v"><span class="tag">What a wave planner must answer</span><h3>Which wave is provably best, and why</h3>
+      <p>A migration wave is a subset of systems that fits the engineering budget and respects prerequisites. The planner must return the subset that minimizes exposure under the clock, and be able to <b>prove</b> no other feasible subset does better.</p>
+      <p>That is an optimization problem with a certificate, not a dashboard view.</p>
+    </div>
+  </div>
+  <div class="note">Q.security launched from stealth on 23 November 2026 with an $11.5M seed round, three days before this demo. The wave-planning layer shown here is the natural next step on top of crypto discovery and inventory.</div>
+  <div class="foot">Sources: q.security (company site), TechCrunch announcement of the 23 November 2026 stealth launch and seed round</div>
+</div></section>
+
+<!-- 03 · the asset chain -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The asset · 03</div>
+  <h1>One asset, walked down from the business: a payment flow behind an <span class="hl">RSA-2048 certificate</span></h1>
+  <p class="subtitle">The chain Q.security's platform inventories, and the clock that makes it urgent: harvest now, decrypt later</p>
+  <div class="diagram">Retail Banking  &#8594;  Payments  &#8594;  PKI  &#8594;  TLS certificate, RSA-2048
+      (business     (application   (platform   (component: harvest-now-
+       unit)         )              )            decrypt-later exposed)</div>
+  <div class="grid2">
+    <div class="card"><span class="tag">The clock</span><h3>Harvest now, decrypt later</h3>
+      <p>Recorded TLS traffic encrypted with RSA-2048 today can be decrypted by a cryptographically relevant quantum computer whenever one arrives. Every asset with data that must stay secret that long is already losing its protection, year by year, while the migration runs.</p>
+    </div>
+    <div class="card v"><span class="tag">The paper behind the demo</span><h3>Gupta &amp; Mittal 2026</h3>
+      <p>"Post-quantum readiness and cryptographic transition planning for enterprise cloud" (Cybersecurity 9:147) turns the clock into arithmetic: an expected exposed fraction E[f] of each asset's hackable lifetime, driven by a Q-day distribution and the migration schedule. This demo uses the paper's midline model end to end (PDF in the repository root).</p>
+    </div>
+  </div>
+  <div class="foot">The six candidate migrations in this demo are modeled on the enterprise target profile Q.security addresses: retail bank, payment flows, PKI, network crypto, identity</div>
+</div></section>
+
+<!-- 04 · exposure model -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The model · 04</div>
+  <h1>The Mosca arithmetic: every year of delay is <span class="hl">exposure you cannot recover</span></h1>
+  <p class="subtitle">Expected exposed fraction E[f] against the migration start year: the paper's model, integrated exactly and cross-checked by Monte Carlo</p>
+  <div class="shotrow">
+    <a class="zoom" href="../assets/mosca_curve.png"><img src="../assets/mosca_curve.png" alt="E[f] vs migration start year, 2025 to 2034, rising from 0.324 to 0.677, with 2026 at 0.366 and 2030 at 0.539 marked" style="--w:1200px" width="1200"></a>
+    <div class="side">
+      <p class="subtitle">Two readings off the curve</p>
+      <p>Starting the migration in <b>2026</b> leaves <b>E[f] = 0.366</b> of the exposure window open. Waiting until <b>2030</b> raises it to <b>0.539</b>: nearly half of every asset's hackable lifetime spent readable to a future CRQC.</p>
+      <p>The Python module integrates the piecewise-linear CDF exactly. An independent 200,000-sample Monte Carlo in Wolfram agrees within 1.5&middot;10&#8315;&#179;, inside 3 standard errors (0.0034).</p>
+    </div>
+  </div>
+  <div class="foot">Model: Gupta &amp; Mittal 2026, Cybersecurity 9:147 (s42400-026-00579-2), midline GRI-2024 expert-elicitation Q-day distribution, X = 10-year data lifetime, Y = 6-year migration. Chart generated by wolfram/qwave_planner.wl, 26 November 2026</div>
+</div></section>
+
+<!-- 05 · the instance -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The instance · 05</div>
+  <h1>Six candidate migrations, one budget, <span class="hl">one hidden dependency</span></h1>
+  <p class="subtitle">Meridian Bank (fictional): the first wave can only contain what the team can actually finish this quarter</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>bit</th><th>id</th><th>system</th><th>business chain</th><th class="num">weeks</th><th class="num">points</th><th>requires</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td><b>PAY</b></td><td>Payments TLS termination</td><td>Retail Banking &rsaquo; Payments &rsaquo; PKI</td><td class="num">5</td><td class="num">35</td><td>&ndash;</td></tr>
+      <tr><td>1</td><td><b>VPN</b></td><td>Core banking VPN (IPsec)</td><td>Core Banking &rsaquo; Settlement &rsaquo; Network</td><td class="num">7</td><td class="num">35</td><td>&ndash;</td></tr>
+      <tr><td>2</td><td><b>SIGN</b></td><td>Code signing (updates)</td><td>Corporate &rsaquo; Release pipeline &rsaquo; HSM</td><td class="num">3</td><td class="num">19</td><td>&ndash;</td></tr>
+      <tr><td>3</td><td><b>PRT</b></td><td>Customer portal TLS</td><td>Retail Banking &rsaquo; Portal &rsaquo; Web tier</td><td class="num">6</td><td class="num">44</td><td><b>GWY</b></td></tr>
+      <tr><td>4</td><td><b>GWY</b></td><td>Shared edge gateway (mTLS)</td><td>Retail Banking &rsaquo; Portal &rsaquo; Edge</td><td class="num">4</td><td class="num">13</td><td>&ndash;</td></tr>
+      <tr><td>5</td><td><b>SSO</b></td><td>HR SaaS SSO certificates</td><td>Internal Tools &rsaquo; HR SaaS &rsaquo; SSO</td><td class="num">2</td><td class="num">8</td><td>&ndash;</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">Points = round(40 &middot; E[f]) + business bonus. E[f] comes from the paper's model (for SIGN, a non-HNDL integrity asset, it is P(T<span style="font-size:10px">q</span> &lt; T<span style="font-size:10px">c</span>)). The business bonus is an explicit demo assumption, not from the paper. The portal PRT, the highest-value project, requires the gateway GWY first: that single edge is what breaks every naive ranked list.</div>
+  <div class="foot">Instance: data/instance.json in the demo repository, 26 November 2026</div>
+</div></section>
+
+<!-- 06 · method -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>The method · 06</div>
+  <h1>Six projects is 64 possible waves. <span class="hl">Enumerate all of them</span></h1>
+  <p class="subtitle">Small instances must be solved exactly, so the quantum layer and the proof layer have a ground truth to be checked against</p>
+  <div class="diagram">for mask in 0..63:                       # one bit per project
+  cost   = sum of weeks of selected projects
+  value  = sum of exposure points
+  feasible = (cost &le; budget) and (PRT selected &#8594; GWY selected)
+exact optimum = argmax value over feasible masks
+ranked list   = greedy by points-per-week, pulling prerequisites in</div>
+  <div class="grid3">
+    <div class="card"><span class="tag">Exact</span><h3>Exhaustive enumeration</h3><p>64 plans is small enough to check completely, in Python and again in Wolfram. The optimum is a fact, not an estimate.</p></div>
+    <div class="card"><span class="tag">Realistic baseline</span><h3>The ranked-list prioritizer</h3><p>The prioritizer a crypto inventory alone gives you: walk the systems ranked by exposure-per-week, take each one whose prerequisite chain fits the remaining budget.</p></div>
+    <div class="card v"><span class="tag">Quantum layer</span><h3>Same instance, 6 qubits</h3><p>The penalized cost becomes a diagonal Hamiltonian on 6 qubits; QAOA samples the wave space. The classical enumeration is the oracle the quantum result is judged against.</p></div>
+  </div>
+  <div class="foot">Implementation: data/plan_search.py asserts the story properties and writes data/results/plans.json; the Wolfram and Lean stages verify against that file</div>
+</div></section>
+
+<!-- 07 · results at 12 -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Results · 07</div>
+  <h1>At the default budget, the ranked list is <span class="hl">already wrong</span></h1>
+  <p class="subtitle">Budget 12 engineer-weeks: the exact optimum avoids the gateway+portal wave; the ranked list walks straight into it</p>
+  <div class="fchart"><svg viewBox="0 0 760 330" width="100%" role="img" aria-label="Bar chart: exact optimum at budget 12 is 70 points, ranked list is 65 points, a gap of 5">
+    <g font-family="Inter,Arial,sans-serif">
+      <line x1="90" y1="280" x2="700" y2="280" stroke="#b9ae90" stroke-width="1.5"/>
+      <line x1="90" y1="280" x2="90" y2="40" stroke="#b9ae90" stroke-width="1.5"/>
+      <text x="82" y="284" font-size="12" fill="#6b6353" text-anchor="end">0</text>
+      <text x="82" y="188" font-size="12" fill="#6b6353" text-anchor="end">40</text>
+      <text x="82" y="92" font-size="12" fill="#6b6353" text-anchor="end">80</text>
+      <line x1="88" y1="184" x2="700" y2="184" stroke="#b9ae90" stroke-width="0.6" stroke-dasharray="4 4"/>
+      <line x1="88" y1="88" x2="700" y2="88" stroke="#b9ae90" stroke-width="0.6" stroke-dasharray="4 4"/>
+      <rect x="200" y="112" width="130" height="168" fill="#12457a"/>
+      <rect x="430" y="124" width="130" height="156" fill="#b8322a"/>
+      <text x="265" y="102" font-size="30" font-weight="800" fill="#12457a" text-anchor="middle">70</text>
+      <text x="495" y="114" font-size="30" font-weight="800" fill="#b8322a" text-anchor="middle">65</text>
+      <text x="265" y="305" font-size="15" font-weight="700" fill="#1d1a16" text-anchor="middle">Exact optimum</text>
+      <text x="265" y="323" font-size="12.5" fill="#6b6353" text-anchor="middle">PAY + VPN &#183; 12 of 12 weeks &#183; unique</text>
+      <text x="495" y="305" font-size="15" font-weight="700" fill="#1d1a16" text-anchor="middle">Ranked list</text>
+      <text x="495" y="323" font-size="12.5" fill="#6b6353" text-anchor="middle">PRT + GWY + SSO &#183; 12 of 12 weeks</text>
+      <text x="365" y="55" font-size="14" font-weight="700" fill="#8a5e00" text-anchor="middle">5 points left on the table</text>
+    </g>
+  </svg></div>
+  <div class="foot">Both plans cost exactly 12 weeks. The ranked list is feasible; it is just not the best feasible plan. Source: data/results/plans.json, verified by wolfram/qwave_planner.wl and lean/QWavePlanner.lean, 26 November 2026</div>
+</div></section>
+
+<!-- 08 · the flip -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Results · 08</div>
+  <h1>Four extra weeks do not grow the wave. <span class="hl">They change which systems get fixed</span></h1>
+  <p class="subtitle">Budget 16 (the live event): the optimum flips to the gateway+portal wave, and strictly dominates everything the old budget allowed</p>
+  <div class="fchart"><svg viewBox="0 0 900 330" width="100%" style="max-height:400px" role="img" aria-label="Bar chart: budget 12 exact optimum 70, budget 12 ranked list 65, budget 16 exact optimum 92; the 92 strictly dominates every 12-week-feasible plan">
+    <g font-family="Inter,Arial,sans-serif">
+      <line x1="90" y1="280" x2="840" y2="280" stroke="#b9ae90" stroke-width="1.5"/>
+      <line x1="90" y1="280" x2="90" y2="40" stroke="#b9ae90" stroke-width="1.5"/>
+      <text x="82" y="284" font-size="12" fill="#6b6353" text-anchor="end">0</text>
+      <text x="82" y="188" font-size="12" fill="#6b6353" text-anchor="end">40</text>
+      <text x="82" y="92" font-size="12" fill="#6b6353" text-anchor="end">80</text>
+      <line x1="88" y1="184" x2="840" y2="184" stroke="#b9ae90" stroke-width="0.6" stroke-dasharray="4 4"/>
+      <line x1="88" y1="88" x2="840" y2="88" stroke="#b9ae90" stroke-width="0.6" stroke-dasharray="4 4"/>
+      <line x1="88" y1="59.2" x2="840" y2="59.2" stroke="#1e7d33" stroke-width="1.4" stroke-dasharray="7 5"/>
+      <text x="95" y="50" font-size="12" font-weight="700" fill="#1e7d33">92: no 12-week-feasible plan reaches here</text>
+      <rect x="150" y="112" width="130" height="168" fill="#1e7d33"/>
+      <rect x="390" y="124" width="130" height="156" fill="#b8322a"/>
+      <rect x="630" y="59.2" width="130" height="220.8" fill="#8a5e00"/>
+      <text x="215" y="102" font-size="30" font-weight="800" fill="#1e7d33" text-anchor="middle">70</text>
+      <text x="455" y="114" font-size="30" font-weight="800" fill="#b8322a" text-anchor="middle">65</text>
+      <text x="695" y="49" font-size="30" font-weight="800" fill="#8a5e00" text-anchor="middle">92</text>
+      <text x="215" y="305" font-size="15" font-weight="700" fill="#1d1a16" text-anchor="middle">Exact optimum, 12 wk</text>
+      <text x="215" y="323" font-size="12.5" fill="#6b6353" text-anchor="middle">PAY + VPN</text>
+      <text x="455" y="305" font-size="15" font-weight="700" fill="#1d1a16" text-anchor="middle">Ranked list, 12 wk</text>
+      <text x="455" y="323" font-size="12.5" fill="#6b6353" text-anchor="middle">PRT + GWY + SSO</text>
+      <text x="695" y="305" font-size="15" font-weight="700" fill="#1d1a16" text-anchor="middle">Exact optimum, 16 wk</text>
+      <text x="695" y="323" font-size="12.5" fill="#6b6353" text-anchor="middle">PAY + GWY + PRT &#183; cost 15, unique</text>
+    </g>
+  </svg></div>
+  <div class="note">The flip is a theorem, not an observation: Lean proves every 12-week-feasible plan is worth at most 70, and the 16-week optimum is worth 92. The ranked list cannot even see the flip: at 16 weeks it happens to reach 92, but at other budgets it loses points silently.</div>
+  <div class="foot">Source: data/results/plans.json (64 plans per budget), cross-checked by all three pipelines, 26 November 2026</div>
+</div></section>
+
+<!-- 09 · wolfram encoding -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>MantiQ 1a · Wolfram · 09</div>
+  <h1>The wave plan as a 6-qubit <span class="hl">cost Hamiltonian</span></h1>
+  <p class="subtitle">One qubit per candidate: the penalized cost is diagonal, so QAOA's phase layer encodes the whole planning problem</p>
+  <div class="shotrow">
+    <a class="zoom" href="../assets/landscape_p1_b12.png"><img src="../assets/landscape_p1_b12.png" alt="QAOA p=1 expectation landscape over gamma and beta for budget 12, with the optimized angles marked" style="--w:1150px" width="1150"></a>
+    <div class="side">
+      <p class="subtitle">What Wolfram certifies</p>
+      <ul>
+        <li><b>Encoding:</b> C(z) = &minus;(points) + 12&middot;max(0, weeks &minus; budget) + 20&middot;[PRT without GWY], computed for all 64 states.</li>
+        <li><b>Penalties preserve the optimum:</b> the penalized argmin equals the constrained argmin at both budgets (checked, not assumed).</li>
+        <li><b>Z decomposition:</b> 57 nonzero Pauli-Z terms of 64, max weight 6, verified to reconstruct the cost table exactly.</li>
+        <li><b>Landscape:</b> the p=1 expectation over (gamma, beta), optimized to the marked point.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">wolfram/qwave_planner.wl with Quantum Framework paclet 1.6.5, run 26 November 2026; ends with ALL WOLFRAM ASSERTIONS PASSED</div>
+</div></section>
+
+<!-- 10 · wolfram results -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>MantiQ 1b · Wolfram · 10</div>
+  <h1>QAOA finds the optimum <span class="hl">19&times; more often</span> than chance, and the framework agrees with the math</h1>
+  <p class="subtitle">Exact statevector at the optimized angles, then the same circuit rebuilt with Quantum Framework objects and sampled</p>
+  <div class="grid3">
+    <div class="card"><span class="tag">p=1, budget 12</span><div class="n">29.9%</div><div class="l">P(exact optimum) at the optimized angles (gamma, beta) = (1.0196, 0.5854); uniform baseline is 1/64 = 1.6%: 19&times; amplification. p=2 raises it to 52.5%</div></div>
+    <div class="card"><span class="tag">Framework check</span><div class="n">TVD 2&middot;10&#8315;&#185;&#8310;</div><div class="l">Quantum Framework circuit rebuild vs the analytic statevector: total variation distance at machine precision, so the two implementations are the same circuit</div></div>
+    <div class="card v"><span class="tag">Seeded 4096-shot sample</span><div class="n">30.2%</div><div class="l">P(beats the ranked list) in the QF-simulated sample (seed 20261123): three measurements of the same conclusion, the quantum sampler beats the greedy heuristic</div></div>
+  </div>
+  <div class="shotrow"><a class="zoom" href="../assets/distribution_b12.png"><img src="../assets/distribution_b12.png" alt="QAOA p=1 distribution over the 64 plans at budget 12: gold bar at the exact optimum mask 3 (0.299), green bars feasible, red bars infeasible" style="--w:1250px;max-height:290px;width:auto;max-width:100%;margin:0 auto" width="1250"></a></div>
+  <div class="foot">Same run as the previous slide; the sample's P(feasible) = 0.5796 and P(optimal) = 0.2976 match the statevector within binomial noise</div>
+</div></section>
+
+<!-- 11 · lean -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>MantiQ 2 · Lean 4 · 11</div>
+  <h1>The headline numbers are <span class="hl">theorems</span>, not slides</h1>
+  <p class="subtitle">Hackton.QWavePlanner proves the optimum, its uniqueness, and the flip by decide over the full 64-plan enumeration</p>
+  <div class="diagram">theorem qwave_opt12_attained :
+    qwaveFeasible 3 12 = true &#8743; qwaveValueOf 3 = 70 := by decide
+theorem qwave_opt12_bound :
+    &#8704; m : Fin 64, qwaveFeasible m 12 = true &#8594; qwaveValueOf m &#8804; 70 := by decide
+theorem qwave_opt12_unique :
+    &#8704; m : Fin 64, qwaveFeasible m 12 = true &#8594; qwaveValueOf m = 70 &#8594; m = 3 := by decide
+theorem qwave_ranked12_loses :
+    qwaveFeasible 56 12 = true &#8743; qwaveValueOf 56 = 65 &#8743; qwaveValueOf 56 &lt; 70 := by decide
+theorem qwave_budget_flip :
+    &#8704; m : Fin 64, qwaveFeasible m 12 = true &#8594;
+      qwaveValueOf m &#8804; 70 &#8743; qwaveValueOf 25 = 92 := by decide</div>
+  <div class="grid2">
+    <div class="card"><span class="tag">What this buys</span><h3>The certificate travels with the instance</h3><p>Change the scoring, the budget or the dependency, and the build fails until someone re-proves the new optimum. The demo cannot silently drift from its own claims.</p></div>
+    <div class="card v"><span class="tag">Build result</span><h3>3006 jobs, 0 sorry</h3><p>Lean/Mathlib v4.33.0, lake build Hackton.QWavePlanner: zero errors, zero warnings, zero sorries. Source and build log ship in the repository (lean/QWavePlanner.lean, lean/qwave_planner_build.log).</p></div>
+  </div>
+  <div class="foot">The Lean value function (additive points, weekly costs, the PRT&#8594;GWY dependency) is the same object the Python and Wolfram pipelines enumerate, so the three cannot disagree unnoticed</div>
+</div></section>
+
+<!-- 12 · executable system -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>MantiQ 3 · Executable system · 12</div>
+  <h1>The planner ships as a <span class="hl">working product</span>, not a notebook</h1>
+  <p class="subtitle">A self-contained web app the planning team would actually use: business-first, live, and honest about what is proven</p>
+  <div class="shotrow tall">
+    <a class="zoom" href="../assets/app-top-b12.png"><img src="../assets/app-top-b12.png" alt="Q-Wave Planner app at budget 12: business chain, budget slider, exact optimum card with PAY and VPN, ranked-list card with PRT GWY SSO" style="--w:860px" width="860"></a>
+    <a class="zoom" href="../assets/app-quantum-b12.png"><img src="../assets/app-quantum-b12.png" alt="Q-Wave Planner app quantum panel: QAOA stats, distribution bar chart, seeded sampler, Wolfram TVD badge" style="--w:860px" width="860"></a>
+  </div>
+  <div class="grid3">
+    <div class="card"><span class="tag">Live</span><h3>Budget slider, 8 to 20 weeks</h3><p>Re-enumerates all 64 plans on every move, re-runs the ranked-list greedy, and recomputes the QAOA p=1 statevector in the browser.</p></div>
+    <div class="card"><span class="tag">Business-first</span><h3>Chain, tickets, runbooks</h3><p>Every asset is reached from its business unit; the optimum becomes Jira-style remediation tickets with owner teams and runbooks, in dependency order.</p></div>
+    <div class="card v"><span class="tag">Honest</span><h3>The proof is on the page</h3><p>The Lean certificate, the Wolfram TVD badge and the seeded sampler sit next to the numbers they certify. Nothing is claimed that the pipelines do not generate.</p></div>
+  </div>
+  <div class="foot">app/index.html: self-contained, no external dependencies, all data embedded from the verified pipeline outputs. Screenshots captured 26 November 2026</div>
+</div></section>
+
+<!-- 13 · live flip + cross-check -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Cross-check · 13</div>
+  <h1>Move the slider to 16 and the app shows the <span class="hl">certified flip</span>, live</h1>
+  <p class="subtitle">The same event the Lean theorem proves, recomputed in the browser: 70 to 92 points, new optimum, new tickets</p>
+  <div class="shotrow">
+    <a class="zoom" href="../assets/app-top-b16.png"><img src="../assets/app-top-b16.png" alt="Q-Wave Planner app at budget 16: flip banner, exact optimum card with PAY PRT GWY at 92 points" style="--w:900px" width="900"></a>
+    <div class="side">
+      <p class="subtitle">Four pipelines, one set of numbers</p>
+      <div class="tablewrap t5"><table style="min-width:0;width:100%">
+        <thead><tr><th>Fact</th><th class="num">Python</th><th class="num">Wolfram</th><th class="num">Lean</th><th class="num">Browser</th></tr></thead>
+        <tbody>
+          <tr><td>optimum, 12 wk</td><td class="num">70</td><td class="num">70</td><td class="num">70</td><td class="num">70</td></tr>
+          <tr><td>optimum, 16 wk</td><td class="num">92</td><td class="num">92</td><td class="num">92</td><td class="num">92</td></tr>
+          <tr><td>ranked list, 12 wk</td><td class="num">65</td><td class="num">65</td><td class="num">65</td><td class="num">65</td></tr>
+          <tr><td>uniqueness</td><td class="num">yes</td><td class="num">yes</td><td class="num">yes</td><td class="num">yes</td></tr>
+          <tr><td>P(opt) p=1</td><td class="num">&ndash;</td><td class="num">.2985</td><td class="num">&ndash;</td><td class="num">.2985</td></tr>
+          <tr><td>E[f](2026)</td><td class="num">.3662</td><td class="num">.3677&plusmn;.0034</td><td class="num">&ndash;</td><td class="num">.3662</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <div class="foot">The browser statevector matches Wolfram's Quantum Framework distribution with TVD 2&middot;10&#8315;&#185;&#8310; at both anchor budgets; at other budgets the app re-optimizes angles in-browser and says so</div>
+</div></section>
+
+<!-- 14 · classiq + scale -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Platform artifact · 14</div>
+  <h1>From local simulation to <span class="hl">hardware-ready</span>: the Classiq artifact</h1>
+  <p class="subtitle">The demo runs quantum simulation locally by design; the same cost layer is already written as a QMOD model a real QPU platform can synthesize</p>
+  <div class="grid2">
+    <div class="card"><span class="tag">What was generated</span><h3>qwave_planner.qmod</h3>
+      <p>The verified Walsh-Hadamard Z decomposition (57 Pauli-Z phase terms, max weight 6) as a Classiq QMOD phase layer, with the Wolfram-optimized p=1 angles (gamma = 1.0196, beta = 0.5854) and the same 6-qubit encoding.</p>
+      <p>A Python SDK driver (synthesize, execute 4096 shots, compare against the Wolfram prediction) ships next to it, marked as requiring a Classiq account. It was not run in the demo: the quantum evidence here is local and reproducible.</p>
+    </div>
+    <div class="card v"><span class="tag">Scaling the approach</span><h3>What changes past 6 projects</h3>
+      <ul>
+        <li><b>Enumeration</b> hands over to the quantum layer as the instance grows: 20 projects is already a million waves.</li>
+        <li><b>Lean</b> moves from decide to real proofs of the encoding and of QAOA's guarantees.</li>
+        <li><b>Real deployments</b> feed CBOMs from the discovery platform instead of a hand-built instance, and re-plan every quarter as the clock moves.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">classiq/generate_qmod.py regenerates the QMOD from wolfram/qwave_planner.json, so the artifact traces to the certified decomposition</div>
+</div></section>
+
+<!-- 15 · closing -->
+<section class="slide"><div class="inner">
+  <div class="eyebrow"><span class="mark"></span>Verdict · 15</div>
+  <h1>One instance, three proofs, <span class="hl">one executable answer</span></h1>
+  <p class="subtitle">The MantiQ workflow, end to end on a real-shaped problem: simulate it, prove it, ship it</p>
+  <div class="diagram">REPRODUCE (every step is in the repository)
+  py -3 data/scoring.py            exact E[f] + 200k Monte Carlo
+  py -3 data/plan_search.py        64-plan enumeration, story assertions
+  wolframscript -file wolfram/qwave_planner.wl
+                                   QAOA p=1/p=2, QF rebuild, charts (~4 min)
+  lake build Hackton.QWavePlanner  the certificate, 0 sorry
+  py -3 classiq/generate_qmod.py   the QMOD artifact
+  py -3 app/build_app.py           the executable system</div>
+  <div class="grid2 mid">
+    <div class="stack">
+      <div class="card"><div class="n">70 &rarr; 92</div><div class="l">the flip a ranked list cannot plan for, certified by theorem and recomputed live in the app</div></div>
+      <div class="card v"><div class="n">29.9%</div><div class="l">QAOA p=1 P(exact optimum) at budget 12: 19&times; uniform, and the framework agrees with the analytic statevector to 2&middot;10&#8315;&#185;&#8310;</div></div>
+    </div>
+    <div class="person-card">
+      <img src="../assets/daniel-liezrowice.jpg" width="140" height="140" alt="Daniel Liezrowice">
+      <div>
+        <strong>Daniel Liezrowice</strong>
+        <span>CTO, ESL - Engineering Software Lab</span>
+        <p>ESL builds verified engineering workflows for embedded and security-critical software. This demo is the MantiQ pattern (Wolfram, Lean, executable system) applied to post-quantum migration planning.</p>
+        <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+      </div>
+    </div>
+  </div>
+  <div class="contact">
+    <img src="../assets/esl-logo.png" alt="ESL">
+    <p><a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> · Problem context: <a href="https://www.q.security/" target="_blank" rel="noopener">q.security</a></p>
+  </div>
+  <div class="foot">26 November 2026 · Paper: Gupta &amp; Mittal, Cybersecurity 9:147 (2026) · Q.security launch: TechCrunch, 23 November 2026</div>
+</div></section>
+
+</div>
+</main>
+<button class="navbtn hidden" id="prev" type="button" aria-label="Previous slide">&#8249;</button>
+<button class="navbtn" id="next" type="button" aria-label="Next slide">&#8250;</button>
+<div id="progress"></div>
+<div id="counter" aria-live="polite"></div>
+<div id="hint">&#8592; Swipe or use arrow keys &#8594;</div>
+<dialog id="lightbox" aria-label="Enlarged screenshot"><div id="lbbar"><span id="lbcap"></span><span class="lbbtns"><button type="button" id="lbsize" hidden>Actual size</button><button type="button" id="lbclose" autofocus>Close &#10005;</button></span></div><div id="lbwrap"></div></dialog>
+
+
+<script>
+const track=document.getElementById("track"),slides=[...document.querySelectorAll(".slide")],viewport=document.querySelector(".viewport"),prev=document.getElementById("prev"),next=document.getElementById("next"),counter=document.getElementById("counter"),progress=document.getElementById("progress"),hint=document.getElementById("hint"),lb=document.getElementById("lightbox"),lbwrap=document.getElementById("lbwrap"),lbcap=document.getElementById("lbcap"),lbsize=document.getElementById("lbsize");
+let index=0,touchX=0,touchY=0,touchSkip=false,mouseX=0,dragging=false,mouseSkip=false,suppressClick=false,lbImg=null,lbFull=false,lbFrom=null;
+function show(n){const k=Math.max(0,Math.min(slides.length-1,n));if(k!==index){if(slides[index].contains(document.activeElement))document.activeElement.blur();index=k;slides[index].scrollTop=0;viewport.scrollLeft=0}slides.forEach((s,i)=>{s.inert=i!==index;s.setAttribute("aria-hidden",i===index?"false":"true")});track.style.transform=`translate3d(${-index*100}vw,0,0)`;prev.classList.toggle("hidden",index===0);next.classList.toggle("hidden",index===slides.length-1);counter.textContent=`${index+1} / ${slides.length}`;progress.style.width=`${(index+1)/slides.length*100}%`;if(index>0)hint.classList.add("gone");if(location.hash!=="#"+(index+1)){try{history.replaceState(null,"","#"+(index+1))}catch(e){}}}
+function fromHash(){const k=parseInt(location.hash.slice(1),10);return isNaN(k)?0:k-1}
+const skip=t=>lb.open||Boolean(t.closest&&t.closest(".tablewrap"));
+prev.addEventListener("click",()=>show(index-1));next.addEventListener("click",()=>show(index+1));
+window.addEventListener("hashchange",()=>{const k=fromHash();if(k!==index)show(k)});
+document.addEventListener("keydown",e=>{if(lb.open)return;if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();show(index+1)}else if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();show(index-1)}else if(e.key==="Home"){e.preventDefault();show(0)}else if(e.key==="End"){e.preventDefault();show(slides.length-1)}});
+document.addEventListener("touchstart",e=>{const t=e.changedTouches[0];touchX=t.clientX;touchY=t.clientY;touchSkip=skip(e.target)},{passive:true});
+document.addEventListener("touchend",e=>{if(touchSkip)return;const t=e.changedTouches[0],dx=t.clientX-touchX,dy=t.clientY-touchY;if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy))show(index+(dx<0?1:-1))},{passive:true});
+document.addEventListener("mousedown",e=>{if(e.button!==0)return;mouseX=e.clientX;mouseSkip=skip(e.target);dragging=true});
+document.addEventListener("mouseup",e=>{if(!dragging)return;dragging=false;const d=e.clientX-mouseX;if(!mouseSkip&&Math.abs(d)>50){suppressClick=true;setTimeout(()=>{suppressClick=false},0);show(index+(d<0?1:-1))}});
+document.addEventListener("dragstart",e=>e.preventDefault());
+function lbScale(){return Math.min(2,(innerWidth-32)/lbImg.naturalWidth,(innerHeight-88)/lbImg.naturalHeight)}
+function lbLayout(){if(!lbImg||!lbImg.naturalWidth)return;const fit=lbScale();lbImg.style.width=Math.round(lbImg.naturalWidth*(lbFull?1:fit))+"px";lb.classList.toggle("full",lbFull);lb.classList.toggle("canzoom",fit<1);lbsize.hidden=fit>=1;lbsize.textContent=lbFull?"Fit to screen":"Actual size"}
+function lbOpen(a){lbFrom=a;const thumb=a.querySelector("img"),cap=a.closest("figure")?.querySelector("figcaption");lbImg=new Image();lbImg.alt=thumb.alt;lbImg.draggable=false;lbImg.addEventListener("load",()=>{lbFull=innerWidth<=760&&lbScale()<1;lbLayout()},{once:true});lbImg.src=a.getAttribute("href");lbwrap.replaceChildren(lbImg);lbcap.textContent=cap?cap.textContent:thumb.alt;lbsize.hidden=true;lb.showModal();lb.scrollTop=0;lb.scrollLeft=0}
+document.querySelectorAll("a.zoom").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();if(!suppressClick)lbOpen(a)}));
+lbsize.addEventListener("click",()=>{lbFull=!lbFull;lbLayout()});
+document.getElementById("lbclose").addEventListener("click",()=>lb.close());
+lbwrap.addEventListener("click",e=>{if(e.target===lbwrap)lb.close();else if(e.target===lbImg&&lbScale()<1){lbFull=!lbFull;lbLayout()}});
+lb.addEventListener("close",()=>{lbwrap.replaceChildren();lbImg=null;lb.classList.remove("full","canzoom");if(lbFrom)lbFrom.focus({preventScroll:true})});
+window.addEventListener("resize",lbLayout);
+show(fromHash());</script>
+</body>
+</html>
