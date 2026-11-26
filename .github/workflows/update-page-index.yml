@@ -36,7 +36,7 @@ jobs:
               .*) continue ;;
               *) OTHER_FILES+=("$f") ;;
             esac
-          done < <(find . -maxdepth 1 -maxdepth 1 -not -name '.' -not -path './.git' -not -path './.github' -printf '%f\n' | sort)
+          done < <(find . -maxdepth 1 -maxdepth 1 -not -name '.' -not -path './.git' -not -path './.github' -not -name 'laminary-vs-amp' -printf '%f\n' | sort)
 
           # Write the file
           cat > PAGE_INDEX.txt << HEADER

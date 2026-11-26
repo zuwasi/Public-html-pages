@@ -371,8 +371,6 @@ Last updated: 2026-11-26
 • kernelbench-cuda-skill-ab
   https://zuwasi.github.io/Public-html-pages/kernelbench-cuda-skill-ab
 
-• laminary-vs-amp
-  https://zuwasi.github.io/Public-html-pages/laminary-vs-amp
 
 • level5-safety-pipeline
   https://zuwasi.github.io/Public-html-pages/level5-safety-pipeline
