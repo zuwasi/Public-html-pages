@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Laminary vs Amp — Does Your Team's AI Need a Coordination Layer?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0d1117; --bg2:#131a24; --panel:#1a2332; --line:#2a3648;
+    --ink:#e8eef6; --ink2:#9fb0c4; --ink3:#6b7d94;
+    --lam:#f59e0b; --lam2:#fbbf24; --amp:#4ade80; --amp2:#22d3ee;
+    --bad:#f87171; --good:#34d399;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { height:100%; overflow:hidden; }
+  body {
+    font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.55;
+    -webkit-user-select:none; user-select:none;
+  }
+  a { color:var(--amp2); text-decoration:none; word-break:break-all; }
+  a:hover { text-decoration:underline; }
+
+  /* ---------- deck ---------- */
+  .deck { display:flex; height:100vh; width:500vw; transition:transform .45s cubic-bezier(.4,0,.2,1); }
+  .slide {
+    width:100vw; height:100vh; flex:none;
+    display:flex; flex-direction:column; justify-content:center;
+    padding:clamp(24px,5vh,64px) clamp(24px,7vw,110px);
+    overflow:hidden; position:relative;
+  }
+  .slide::before {
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:radial-gradient(ellipse at 80% -10%, rgba(34,211,238,.07), transparent 55%),
+               radial-gradient(ellipse at 10% 110%, rgba(245,158,11,.06), transparent 55%);
+  }
+  .kicker {
+    font-size:clamp(.65rem,1.4vw,.82rem); font-weight:700; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink3); margin-bottom:clamp(8px,1.6vh,16px);
+  }
+  .kicker.lam { color:var(--lam); }
+  .kicker.amp { color:var(--amp); }
+  h1 { font-size:clamp(1.9rem,5.2vw,3.6rem); font-weight:800; letter-spacing:-.02em; line-height:1.12; }
+  h2 { font-size:clamp(1.5rem,3.8vw,2.6rem); font-weight:800; letter-spacing:-.02em; line-height:1.15; margin-bottom:clamp(12px,2.4vh,24px); }
+  .sub { font-size:clamp(.95rem,1.9vw,1.2rem); color:var(--ink2); max-width:60ch; }
+  .accent-lam { color:var(--lam2); }
+  .accent-amp { color:var(--amp); }
+
+  .cols { display:grid; gap:clamp(14px,2.4vw,28px); margin-top:clamp(14px,3vh,30px); }
+  .cols.c2 { grid-template-columns:1fr 1fr; }
+  .cols.c3 { grid-template-columns:repeat(3,1fr); }
+  .cols.c4 { grid-template-columns:repeat(4,1fr); }
+  .card {
+    background:var(--panel); border:1px solid var(--line); border-radius:14px;
+    padding:clamp(14px,2.2vh,24px);
+  }
+  .card h3 { font-size:clamp(.95rem,1.9vw,1.15rem); font-weight:700; margin-bottom:8px; }
+  .card p { font-size:clamp(.8rem,1.55vw,.95rem); color:var(--ink2); }
+  .card .doclink { display:inline-block; margin-top:10px; font-size:clamp(.68rem,1.3vw,.8rem); font-weight:600; }
+  .card.lam { border-top:3px solid var(--lam); }
+  .card.amp { border-top:3px solid var(--amp); }
+  .card.neutral { border-top:3px solid var(--line); }
+
+  ul.list { list-style:none; margin-top:clamp(10px,2vh,18px); }
+  ul.list li {
+    font-size:clamp(.85rem,1.7vw,1.05rem); color:var(--ink2);
+    padding:clamp(6px,1.2vh,10px) 0 clamp(6px,1.2vh,10px) clamp(22px,3vw,34px);
+    position:relative;
+  }
+  ul.list li::before { content:"×"; position:absolute; left:0; color:var(--bad); font-weight:800; }
+  ul.list.checks li::before { content:"✓"; color:var(--good); }
+  ul.list.dot li::before { content:"•"; color:var(--amp2); }
+  ul.list.star li::before { content:"▸"; color:var(--lam); }
+  ul.list li strong { color:var(--ink); }
+
+  /* ---------- comparison table ---------- */
+  .vs-table { width:100%; border-collapse:collapse; margin-top:clamp(10px,2vh,22px); font-size:clamp(.72rem,1.5vw,.95rem); }
+  .vs-table th, .vs-table td { border:1px solid var(--line); padding:clamp(6px,1.1vh,11px) clamp(8px,1.4vw,14px); text-align:left; vertical-align:top; }
+  .vs-table th { background:var(--bg2); font-size:clamp(.75rem,1.5vw,.95rem); }
+  .vs-table th.lamh { color:var(--lam2); }
+  .vs-table th.amph { color:var(--amp); }
+  .vs-table td:first-child { color:var(--ink); font-weight:600; width:22%; }
+  .vs-table td { color:var(--ink2); }
+  .vs-table a { font-weight:600; }
+
+  .verdict {
+    margin-top:clamp(14px,3vh,28px); background:var(--panel);
+    border:1px solid var(--line); border-left:4px solid var(--amp);
+    border-radius:12px; padding:clamp(14px,2.4vh,26px);
+    font-size:clamp(.9rem,1.9vw,1.15rem); max-width:80ch;
+  }
+  .verdict strong { color:var(--ink); }
+
+  /* ---------- nav ---------- */
+  .nav-btn {
+    position:fixed; top:50%; transform:translateY(-50%); z-index:30;
+    width:52px; height:52px; border-radius:50%;
+    background:rgba(26,35,50,.85); border:1px solid var(--line);
+    color:var(--ink); font-size:26px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .3s, background .2s;
+    backdrop-filter:blur(6px);
+  }
+  .nav-btn.show { opacity:1; pointer-events:auto; }
+  .nav-btn:hover { background:var(--amp); color:#0d1117; }
+  #prev { left:18px; } #next { right:18px; }
+
+  .progress { position:fixed; bottom:0; left:0; height:4px; width:100%; background:rgba(42,54,72,.4); z-index:30; }
+  .progress-fill { height:100%; width:0; background:linear-gradient(90deg, var(--lam), var(--amp2)); transition:width .4s ease; }
+
+  .counter {
+    position:fixed; bottom:14px; right:18px; z-index:30;
+    font-size:.8rem; font-weight:600; color:var(--ink3);
+    background:rgba(13,17,23,.7); padding:4px 12px; border-radius:20px;
+    border:1px solid var(--line);
+  }
+  .swipe-hint {
+    position:absolute; bottom:clamp(40px,8vh,70px); left:50%; transform:translateX(-50%);
+    font-size:clamp(.75rem,1.5vw,.9rem); color:var(--ink3); font-weight:600;
+    animation:pulse 1.6s ease-in-out infinite; white-space:nowrap; z-index:5;
+  }
+  @keyframes pulse { 0%,100% { opacity:.4; } 50% { opacity:1; } }
+  .swipe-hint.hide { display:none; }
+
+  .footer-link {
+    position:absolute; bottom:clamp(16px,3vh,28px); left:clamp(24px,7vw,110px);
+    font-size:clamp(.62rem,1.2vw,.75rem); color:var(--ink3); z-index:5;
+  }
+  .footer-link a { color:var(--ink3); font-weight:500; }
+  .footer-link a:hover { color:var(--amp2); }
+
+  .pill { display:inline-block; padding:4px 14px; border-radius:20px; font-size:clamp(.68rem,1.3vw,.82rem); font-weight:700; letter-spacing:.06em; text-transform:uppercase; margin-bottom:14px; }
+  .pill.lam { background:rgba(245,158,11,.14); color:var(--lam2); border:1px solid rgba(245,158,11,.4); }
+  .pill.amp { background:rgba(74,222,128,.12); color:var(--amp); border:1px solid rgba(74,222,128,.4); }
+
+  .big-num { font-size:clamp(1.8rem,4.5vw,3rem); font-weight:800; letter-spacing:-.02em; }
+
+  @media (max-width:720px) {
+    .cols.c2, .cols.c3, .cols.c4 { grid-template-columns:1fr; gap:10px; }
+    .slide { overflow-y:auto; justify-content:flex-start; padding-top:8vh; }
+    .nav-btn { width:42px; height:42px; font-size:20px; }
+    .vs-table { font-size:.68rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- 1 · Title -->
+  <section class="slide">
+    <div class="kicker">Comparison · November 2026</div>
+    <h1>Laminary <span class="accent-lam">vs</span> Amp</h1>
+    <p class="sub" style="margin-top:18px;">Does your team's AI need a third-party coordination layer, or does an agentic workspace already cover it? A slide-by-slide feature mapping, with a link to the Amp documentation for every claim.</p>
+    <div class="cols c2" style="margin-top:clamp(20px,4vh,40px);">
+      <div class="card lam">
+        <h3><span class="accent-lam">Laminary</span> · https://laminary.dev</h3>
+        <p>A connector and coordination layer between Claude Code, Cursor, ChatGPT and Codex, so teammates' AIs share goal, status and handoffs.</p>
+        <a class="doclink" href="https://laminary.dev/" target="_blank" rel="noopener">https://laminary.dev/</a>
+      </div>
+      <div class="card amp">
+        <h3><span class="accent-amp">Amp</span> · https://ampcode.com</h3>
+        <p>An agentic coding workspace whose threads, Spaces, artifacts and multiplayer sessions are shared state by design.</p>
+        <a class="doclink" href="https://ampcode.com/docs" target="_blank" rel="noopener">https://ampcode.com/docs</a>
+      </div>
+    </div>
+    <div class="swipe-hint">← Swipe to navigate →</div>
+  </section>
+
+  <!-- 2 · The problem -->
+  <section class="slide">
+    <div class="kicker lam">The problem Laminary names</div>
+    <h2>Five people. Five AIs. No shared memory.</h2>
+    <p class="sub">When every developer picks their own AI tool, each chat becomes an isolated silo. Laminary's homepage lists the symptoms:</p>
+    <ul class="list">
+      <li>Two AIs build the <strong>same thing twice</strong> because neither knows about the other's work.</li>
+      <li>A chat hits its <strong>context limit</strong> and the work is stuck with nobody able to pick it up.</li>
+      <li>Nobody knows <strong>who is working on what</strong> across the team.</li>
+    </ul>
+    <p class="sub" style="margin-top:18px;">The problem is real. The question is what the fix should look like: a bridge between silos, or one workspace with no silos.</p>
+    <div class="footer-link">Source: <a href="https://laminary.dev/" target="_blank" rel="noopener">https://laminary.dev/</a></div>
+  </section>
+
+  <!-- 3 · What Laminary is -->
+  <section class="slide">
+    <div class="kicker lam">The competitor</div>
+    <h2>What Laminary actually is</h2>
+    <div class="cols c2">
+      <ul class="list star">
+        <li><strong>An MCP connector:</strong> paste one address (app.laminary.dev/mcp) into each AI tool. Nothing to install.</li>
+        <li><strong>A control room:</strong> a browser tab showing every teammate's AI session on a shared timeline.</li>
+        <li><strong>Note-based handoffs:</strong> one AI leaves notes another AI's session can pick up.</li>
+        <li><strong>A weekly receipt:</strong> tokens the team did not spend twice.</li>
+      </ul>
+      <ul class="list star">
+        <li><strong>Privacy levels per session:</strong> goal only, summaries, or full chat. Keys filtered on your machine.</li>
+        <li><strong>Three checks on notes:</strong> cleaned, labeled as a teammate's note, and held if it looks like an attack.</li>
+        <li><strong>EU storage,</strong> no code, no chats unless shared.</li>
+        <li><strong>Free beta</strong> now, team pricing after.</li>
+      </ul>
+    </div>
+    <div class="footer-link">Source: <a href="https://laminary.dev/" target="_blank" rel="noopener">https://laminary.dev/</a> · <a href="https://laminary.dev/guide/" target="_blank" rel="noopener">https://laminary.dev/guide/</a></div>
+  </section>
+
+  <!-- 4 · Amp answer 1: Threads -->
+  <section class="slide">
+    <div class="kicker amp">Amp's answer · 1 of 6</div>
+    <h2>Shared memory: <span class="accent-amp">Threads</span></h2>
+    <p class="sub">Amp's core primitive already is shared team memory. Threads are saved, shareable records of every agent session.</p>
+    <ul class="list checks">
+      <li><strong>Share with the workspace or groups:</strong> teammates open any thread and see the full history, not a summary.</li>
+      <li><strong>Continue from another thread:</strong> point a new thread at an existing one's context and pick up exactly where it stopped.</li>
+      <li><strong>Searchable:</strong> every past session is findable, so done work is visible before anyone starts it again.</li>
+    </ul>
+    <div class="verdict">This replaces Laminary's "goal, status, files touched, outputs, handoff" wall with the full primary record, not a digest of it.</div>
+    <div class="footer-link">Docs: <a href="https://ampcode.com/docs/threads" target="_blank" rel="noopener">https://ampcode.com/docs/threads</a> · markdown: <a href="https://ampcode.com/docs/markdown/threads" target="_blank" rel="noopener">https://ampcode.com/docs/markdown/threads</a></div>
+  </section>
+
+  <!-- 5 · Amp answer 2: Multiplayer -->
+  <section class="slide">
+    <div class="kicker amp">Amp's answer · 2 of 6</div>
+    <h2>No clashes: <span class="accent-amp">Multiplayer</span></h2>
+    <p class="sub">Laminary "catches" a clash after two AIs already started the same work. Amp prevents the clash by making the work happen in one place.</p>
+    <ul class="list checks">
+      <li><strong>Multiple people prompt the same thread at once,</strong> on orbs and shared runners.</li>
+      <li><strong>Mention a teammate's agent</strong> into an existing thread and it joins with full history.</li>
+      <li><strong>Notifications</strong> keep everyone current without a separate control room.</li>
+    </ul>
+    <div class="footer-link">Docs: <a href="https://ampcode.com/docs/collaborate/multiplayer" target="_blank" rel="noopener">https://ampcode.com/docs/collaborate/multiplayer</a></div>
+  </section>
+
+  <!-- 6 · Amp answer 3: Spaces -->
+  <section class="slide">
+    <div class="kicker amp">Amp's answer · 3 of 6</div>
+    <h2>The control room: <span class="accent-amp">Spaces</span></h2>
+    <p class="sub">Laminary's browser-tab timeline shows what every teammate's AI is doing. A Space is that view, except it also runs the agents.</p>
+    <ul class="list checks">
+      <li><strong>One Space groups all of a project's threads,</strong> so what's done, in progress and stopped is visible at a glance.</li>
+      <li><strong>Shared with the workspace, groups, or specific people</strong> — never with link-holders.</li>
+      <li><strong>@Amp from Slack</strong> routes requests into the Space, which starts the threads.</li>
+    </ul>
+    <div class="footer-link">Docs: <a href="https://ampcode.com/docs/spaces" target="_blank" rel="noopener">https://ampcode.com/docs/spaces</a></div>
+  </section>
+
+  <!-- 7 · Amp answer 4: Workspaces -->
+  <section class="slide">
+    <div class="kicker amp">Amp's answer · 4 of 6</div>
+    <h2>"Who's on what": <span class="accent-amp">Workspaces</span></h2>
+    <p class="sub">Laminary answers "nobody knows who's on what" with a project wall. Amp answers it with org-level structure.</p>
+    <ul class="list checks">
+      <li><strong>Workspace-wide thread sharing</strong> with directory-synced identity in enterprise plans.</li>
+      <li><strong>Groups</strong> scope visibility to a team, project or function.</li>
+      <li><strong>Audited access:</strong> opening a shared thread from outside the workspace re-confirms identity and shows an audit notice.</li>
+    </ul>
+    <div class="footer-link">Docs: <a href="https://ampcode.com/docs/collaborate/workspaces" target="_blank" rel="noopener">https://ampcode.com/docs/collaborate/workspaces</a></div>
+  </section>
+
+  <!-- 8 · Amp answer 5: Artifacts -->
+  <section class="slide">
+    <div class="kicker amp">Amp's answer · 5 of 6</div>
+    <h2>Teammate notes: <span class="accent-amp">Artifacts</span></h2>
+    <p class="sub">Laminary passes cleaned, labeled, attack-screened notes between AIs. Amp's artifacts are richer shared documents that live with the threads that produced them.</p>
+    <ul class="list checks">
+      <li><strong>Editable and commentable</strong> by everyone who can open the thread, including viewers.</li>
+      <li><strong>Combine findings from several threads</strong> into one reviewable report, plan or dashboard.</li>
+      <li><strong>Documents, visuals and files</strong> with revision tracking and access control per artifact.</li>
+    </ul>
+    <div class="footer-link">Docs: <a href="https://ampcode.com/docs/threads#artifacts" target="_blank" rel="noopener">https://ampcode.com/docs/threads#artifacts</a> · <a href="https://ampcode.com/docs/threads#share-an-artifact" target="_blank" rel="noopener">https://ampcode.com/docs/threads#share-an-artifact</a></div>
+  </section>
+
+  <!-- 9 · Amp answer 6: Puck -->
+  <section class="slide">
+    <div class="kicker amp">Amp's answer · 6 of 6</div>
+    <h2>Cross-agent coordination: <span class="accent-amp">Puck</span></h2>
+    <p class="sub">Laminary's pitch is that one AI benefits from another AI's notes. Puck coordinates agents directly, inside the workspace.</p>
+    <ul class="list checks">
+      <li><strong>Puck launches and coordinates agents for you</strong> across threads and environments.</li>
+      <li><strong>Agents hand work to other agents</strong> with full context, not summaries that passed through a third party.</li>
+      <li><strong>The trust boundary stays yours:</strong> coordination happens inside your workspace, with no external processor reading session digests.</li>
+    </ul>
+    <div class="footer-link">Docs: <a href="https://ampcode.com/docs/puck" target="_blank" rel="noopener">https://ampcode.com/docs/puck</a></div>
+  </section>
+
+  <!-- 10 · Comparison table -->
+  <section class="slide">
+    <div class="kicker">Side by side</div>
+    <h2>Every Laminary feature, and the Amp doc for it</h2>
+    <table class="vs-table">
+      <tr><th>Need</th><th class="lamh">Laminary (https://laminary.dev)</th><th class="amph">Amp native (doc link)</th></tr>
+      <tr><td>See what's done</td><td>Control-room timeline of teammate sessions</td><td><a href="https://ampcode.com/docs/threads" target="_blank" rel="noopener">Threads</a> shared with the workspace</td></tr>
+      <tr><td>Stop duplicate work</td><td>AI asks before doubling up; weekly receipt</td><td><a href="https://ampcode.com/docs/spaces" target="_blank" rel="noopener">Spaces</a> + searchable shared threads</td></tr>
+      <tr><td>Pick up stopped work</td><td>Handoff notes between AIs</td><td><a href="https://ampcode.com/docs/threads" target="_blank" rel="noopener">Thread context reuse</a> across sessions</td></tr>
+      <tr><td>No clashes</td><td>Clash caught after the fact</td><td><a href="https://ampcode.com/docs/collaborate/multiplayer" target="_blank" rel="noopener">Multiplayer</a>: one shared session</td></tr>
+      <tr><td>Who's on what</td><td>Project wall with avatars</td><td><a href="https://ampcode.com/docs/collaborate/workspaces" target="_blank" rel="noopener">Workspaces</a> and groups</td></tr>
+      <tr><td>Notes between AIs</td><td>Cleaned, labeled, attack-screened notes</td><td><a href="https://ampcode.com/docs/threads#artifacts" target="_blank" rel="noopener">Artifacts</a>: editable shared documents</td></tr>
+      <tr><td>Agent coordination</td><td>Connector layer between tools</td><td><a href="https://ampcode.com/docs/puck" target="_blank" rel="noopener">Puck</a> inside the workspace</td></tr>
+      <tr><td>Works across tools</td><td class="accent-lam" style="color:var(--lam2);"><strong>Yes — Claude Code, Cursor, ChatGPT, Codex</strong></td><td>Amp only (this is the real gap)</td></tr>
+    </table>
+    <div class="footer-link">Laminary features from <a href="https://laminary.dev/" target="_blank" rel="noopener">https://laminary.dev/</a>; Amp features from the linked doc pages.</div>
+  </section>
+
+  <!-- 11 · Trust -->
+  <section class="slide">
+    <div class="kicker">The trade nobody prices</div>
+    <h2>A third party now reads your session digests</h2>
+    <div class="cols c2">
+      <div class="card lam">
+        <h3>Laminary's model</h3>
+        <p>Session summaries flow through Laminary's EU-hosted service. Their FAQ says no code and no chats unless shared, and notes are screened for injection. It is still a new trust boundary and a new MCP endpoint in every tool.</p>
+        <a class="doclink" href="https://laminary.dev/privacy/" target="_blank" rel="noopener">https://laminary.dev/privacy/</a>
+      </div>
+      <div class="card amp">
+        <h3>Amp's model</h3>
+        <p>The shared record lives in your workspace. Access is workspace-scoped, group-scoped or audited. No external processor receives digests of your sessions, so the injection and leakage surface does not grow.</p>
+        <a class="doclink" href="https://ampcode.com/docs/collaborate/workspaces" target="_blank" rel="noopener">https://ampcode.com/docs/collaborate/workspaces</a>
+      </div>
+    </div>
+    <p class="sub" style="margin-top:16px;">Neither is wrong. But if a team is already inside one workspace, adding a connector is added risk for coordination it already has.</p>
+  </section>
+
+  <!-- 12 · Who needs it -->
+  <section class="slide">
+    <div class="kicker">Segmenting the market</div>
+    <h2>Who actually needs Laminary?</h2>
+    <div class="cols c2">
+      <div>
+        <span class="pill lam">Needs it</span>
+        <ul class="list star">
+          <li><strong>Mixed-tool startups (2 to 6 devs)</strong> where Cursor, Claude Code, ChatGPT and Codex all run at once.</li>
+          <li><strong>Agencies and contractors</strong> handing work across different tools through copy-paste.</li>
+          <li><strong>ChatGPT-only teams</strong> with no agentic tool and no shared project memory at all.</li>
+        </ul>
+      </div>
+      <div>
+        <span class="pill amp">Doesn't need it</span>
+        <ul class="list checks">
+          <li><strong>Amp teams:</strong> threads, Spaces, artifacts, multiplayer and Puck already provide shared memory, handoffs and clash avoidance.</li>
+          <li><strong>Single-tool enterprise teams</strong> whose vendor ships shared context natively.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="verdict"><strong>The market is fragmentation, not coordination.</strong> Coordination only becomes a product when the tools themselves are silos. Laminary bets multi-tool fragmentation stays the norm; Amp bets teams converge on one agentic workspace.</div>
+  </section>
+
+  <!-- 13 · Verdict -->
+  <section class="slide">
+    <div class="kicker">Bottom line</div>
+    <h2>Verdict</h2>
+    <ul class="list dot">
+      <li><strong>Necessary with Amp?</strong> No. Every capability Laminary sells maps to an Amp-native feature, listed slide by slide above with doc links.</li>
+      <li><strong>Useful as a bridge?</strong> Possibly, if your team really splits across Amp, Cursor, ChatGPT and Claude Code. That mixed-tool gap is the one thing Amp does not cover.</li>
+      <li><strong>Cost of testing:</strong> the beta is free, so the bridge case is cheap to try. For an Amp-only workflow, skip it: same features, no extra trust boundary.</li>
+    </ul>
+    <div class="cols c2" style="margin-top:clamp(16px,3vh,30px);">
+      <div class="card neutral">
+        <h3>Try Laminary (bridge case)</h3>
+        <p><a href="https://laminary.dev/" target="_blank" rel="noopener">https://laminary.dev/</a></p>
+      </div>
+      <div class="card amp">
+        <h3>Read the Amp docs instead</h3>
+        <p><a href="https://ampcode.com/docs" target="_blank" rel="noopener">https://ampcode.com/docs</a></p>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<button class="nav-btn" id="prev" aria-label="Previous slide">‹</button>
+<button class="nav-btn" id="next" aria-label="Next slide">›</button>
+<div class="progress"><div class="progress-fill" id="bar"></div></div>
+<div class="counter" id="counter">1 / 13</div>
+
+<script>
+  var deck = document.getElementById('deck');
+  var total = deck.children.length;
+  var idx = 0;
+  var prevBtn = document.getElementById('prev');
+  var nextBtn = document.getElementById('next');
+  var bar = document.getElementById('bar');
+  var counter = document.getElementById('counter');
+  var hint = document.querySelector('.swipe-hint');
+
+  function go(i) {
+    idx = Math.max(0, Math.min(total - 1, i));
+    deck.style.transform = 'translateX(-' + (idx * 100) + 'vw)';
+    bar.style.width = ((idx + 1) / total * 100) + '%';
+    counter.textContent = (idx + 1) + ' / ' + total;
+    prevBtn.classList.toggle('show', idx > 0);
+    nextBtn.classList.toggle('show', idx < total - 1);
+    if (hint && idx > 0) hint.classList.add('hide');
+  }
+
+  prevBtn.addEventListener('click', function () { go(idx - 1); });
+  nextBtn.addEventListener('click', function () { go(idx + 1); });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); go(idx + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); go(idx - 1); }
+  });
+
+  var tx = 0, ty = 0, dragging = false, moved = false;
+  document.addEventListener('touchstart', function (e) {
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY; dragging = true; moved = false;
+  }, { passive: true });
+  document.addEventListener('touchend', function (e) {
+    if (!dragging) return;
+    var dx = e.changedTouches[0].clientX - tx;
+    var dy = e.changedTouches[0].clientY - ty;
+    dragging = false;
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) { go(idx + (dx < 0 ? 1 : -1)); }
+  }, { passive: true });
+
+  document.addEventListener('mousedown', function (e) {
+    if (e.target.closest('a') || e.target.closest('button')) return;
+    tx = e.clientX; dragging = true; moved = false;
+  });
+  document.addEventListener('mouseup', function (e) {
+    if (!dragging) return;
+    dragging = false;
+    var dx = e.clientX - tx;
+    if (Math.abs(dx) > 80) { go(idx + (dx < 0 ? 1 : -1)); }
+  });
+
+  go(0);
+</script>
+</body>
+</html>
