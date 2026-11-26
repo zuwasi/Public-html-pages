@@ -166,40 +166,43 @@ Last updated: 2026-11-26
 52. hiring-agent-presentation.html
    https://zuwasi.github.io/Public-html-pages/hiring-agent-presentation.html
 
-53. nesher2gm-pentest-operator-guide.html
+53. laminary-vs-amp.html
+   https://zuwasi.github.io/Public-html-pages/laminary-vs-amp.html
+
+54. nesher2gm-pentest-operator-guide.html
    https://zuwasi.github.io/Public-html-pages/nesher2gm-pentest-operator-guide.html
 
-54. nono-ampcode-presentation.html
+55. nono-ampcode-presentation.html
    https://zuwasi.github.io/Public-html-pages/nono-ampcode-presentation.html
 
-55. optical-ai-network-comparison-presentation.html
+56. optical-ai-network-comparison-presentation.html
    https://zuwasi.github.io/Public-html-pages/optical-ai-network-comparison-presentation.html
 
-56. proof-lean-cbmc.html
+57. proof-lean-cbmc.html
    https://zuwasi.github.io/Public-html-pages/proof-lean-cbmc.html
 
-57. python-json-throughput.html
+58. python-json-throughput.html
    https://zuwasi.github.io/Public-html-pages/python-json-throughput.html
 
-58. rna-transcript-svd-lean4-presentation.html
+59. rna-transcript-svd-lean4-presentation.html
    https://zuwasi.github.io/Public-html-pages/rna-transcript-svd-lean4-presentation.html
 
-59. skillspector-droid-locate-and-judge.html
+60. skillspector-droid-locate-and-judge.html
    https://zuwasi.github.io/Public-html-pages/skillspector-droid-locate-and-judge.html
 
-60. static-code-analysis-2026.html
+61. static-code-analysis-2026.html
    https://zuwasi.github.io/Public-html-pages/static-code-analysis-2026.html
 
-61. threadx-parasoft-sonarqube.html
+62. threadx-parasoft-sonarqube.html
    https://zuwasi.github.io/Public-html-pages/threadx-parasoft-sonarqube.html
 
-62. why-amp-doesnt-need-node9-proxy.html
+63. why-amp-doesnt-need-node9-proxy.html
    https://zuwasi.github.io/Public-html-pages/why-amp-doesnt-need-node9-proxy.html
 
-63. wolfram-engine-gpu-demo-presentation.html
+64. wolfram-engine-gpu-demo-presentation.html
    https://zuwasi.github.io/Public-html-pages/wolfram-engine-gpu-demo-presentation.html
 
-64. xdp-verification-workflow-presentation.html
+65. xdp-verification-workflow-presentation.html
    https://zuwasi.github.io/Public-html-pages/xdp-verification-workflow-presentation.html
 
 ──────────────────────────────────────────────────────────────
