@@ -37,7 +37,7 @@ th{background:var(--sheet2);text-align:left;padding:10px 14px;font-size:clamp(12
 td{padding:8px 12px;border-top:1px solid var(--line);color:var(--muted);line-height:1.45;vertical-align:top}
 td b,td strong{color:var(--ink)}
 code,.mono{font-family:"Cascadia Mono",Consolas,monospace;font-size:1em;background:var(--code-bg);border:1px solid var(--code-cap);border-radius:4px;padding:1px 5px;color:var(--ink)}
-pre.box{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.5;background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:16px 20px;overflow-x:auto;color:var(--ink);white-space:pre}
+pre.box{font-family:"Cascadia Mono",Consolas,monospace;font-size:clamp(12px,1.15vw,16px);line-height:1.5;background:var(--sheet);border:1px solid var(--line);border-left:5px solid var(--blue);border-radius:8px;padding:16px 20px;overflow-x:auto;color:var(--ink);white-space:pre;flex:none}
 pre.box .r{color:var(--red)}pre.box .g{color:var(--green)}pre.box .b{color:var(--blue)}pre.box .a{color:var(--amber)}
 .chart{background:var(--sheet);border:1px solid var(--line);border-radius:10px;padding:14px 16px 8px;box-shadow:0 1px 4px rgba(20,30,50,.06);max-width:1240px;margin-left:auto;margin-right:auto}
 .chart .cap{font-size:clamp(12px,1vw,15px);color:var(--muted);margin:6px 2px 8px;line-height:1.4}
@@ -280,7 +280,7 @@ svg{display:block;width:100%;height:auto}
     <div class="card green"><div class="label">Proof it works</div><div class="stat green">21.7 <small>s</small></div><p>Depot-to-graph: a fresh Perforce project seeded, synced, and fully ingested into a queryable graph in under 22 seconds</p></div>
     <div class="card"><div class="label">Ecosystem position</div><h3>Upstream credibility</h3><p>ESL contributed fixes upstream that FalkorDB merged (Windows UTF-8, embed env, BOM handling, cross-repo resolution #827, #830, #832, #850). We are not a wrapper: we are a recognized contributor with a working fork.</p></div>
   </div>
-  <div class="foot">Fork state as of 24 Nov 2026: upstream v0.8.5 merged into zuwasi/auryn-p4 main, all 11 CI checks green, backup branch retained.</div>
+  <div class="foot">Fork state as of 24 Nov 2026: upstream v0.8.5 merged into zuwasi/auryn-p4 main, all 11 CI checks green, backup branch retained. Known issue, reported upstream: when the depot path root is itself a Python package, import resolution needs the parent root; the measured demo pipeline (p4 sync, then ingest the sync root) is unaffected.</div>
 </section>
 
 <!-- 09 WHO BUYS -->
@@ -353,8 +353,9 @@ svg{display:block;width:100%;height:auto}
 <span class="a"># 1. FalkorDB in Docker</span>
 docker run -d --name falkordb -p 6379:6379 falkordb/falkordb:latest
 
-<span class="a"># 2. Ingest the Perforce demo project (straight from the depot)</span>
-$env:PYTHONUTF8="1"; auryn ingest p4 //demo/meridian --port 127.0.0.1:1777 --user tester --client ws
+<span class="a"># 2. Sync from Helix Core, then ingest the sync root</span>
+p4 -p 127.0.0.1:1777 -u tester sync //demo/meridian/... //ws/meridian
+$env:PYTHONUTF8="1"; auryn ingest dir C:\ws\meridian --project-name meridian
 
 <span class="a"># 3. Ask the reachability question (the one files-only agents get wrong)</span>
 MATCH (src:Function)-[:CALLS*1..6]-&gt;(t:Function)
