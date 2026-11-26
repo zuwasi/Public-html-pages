@@ -4,7 +4,7 @@
   Auto-updated on every commit via GitHub Actions
 ═══════════════════════════════════════════════════════════════
 
-Last updated: 2026-11-25
+Last updated: 2026-11-26
 
 ──────────────────────────────────────────────────────────────
   PAGE LINKS
@@ -271,6 +271,9 @@ Last updated: 2026-11-25
 
 • assets
   https://zuwasi.github.io/Public-html-pages/assets
+
+• auryn-graphinator-pitch
+  https://zuwasi.github.io/Public-html-pages/auryn-graphinator-pitch
 
 • axelera-logo-white.png
   https://zuwasi.github.io/Public-html-pages/axelera-logo-white.png
