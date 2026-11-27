@@ -101,9 +101,9 @@
       <div class="subtitle">Provably optimal post-quantum migration waves for Meridian Bank</div>
     </div>
     <div class="badges">
-      <span class="badge">Wolfram Quantum Framework 1.6.5: exact statevector + QF sampler</span>
+      <span class="badge">Wolfram Quantum Framework 1.6.5: exact statevector + seeded sample</span>
       <span class="badge lean">Lean 4 v4.33.0: optimum certificate, 0 sorry</span>
-      <span class="badge qf">Classiq QMOD artifact (57 Pauli-Z terms)</span>
+      <span class="badge qf">Classiq QMOD artifact (56 non-identity Pauli-Z terms, 57 with identity)</span>
     </div>
   </div>
 </header>
@@ -113,7 +113,7 @@
   <h2>The asset the bank actually cares about</h2>
   <div class="panel">
     <div class="chain" id="chain"></div>
-    <div class="muted">One cryptographic asset, walked down from the business: a retail-bank payment flow whose TLS certificate is RSA-2048 and therefore harvest-now-decrypt-later exposed. This is the chain Q.security's platform inventories; the planner decides which chains get fixed in the next wave. Exposure model: Gupta &amp; Mittal 2026 (Cybersecurity 9:147), midline GRI-2024 Q-day distribution, start 2026, 6-year migration.</div>
+    <div class="muted">One cryptographic asset, walked down from the business: a retail-bank payment flow whose TLS handshake uses ECDHE P-256 key exchange, so traffic recorded today can be decrypted once a cryptographically relevant quantum computer exists (harvest-now-decrypt-later); the RSA-2048 certificate authenticates the connection and is instead a harvest-now-sign-later integrity asset. This is the chain Q.security's platform inventories; the planner decides which chains get fixed in the next wave. Exposure model: Gupta &amp; Mittal 2026 (Cybersecurity 9:147), midline GRI-2024 Q-day distribution, start 2026, 6-year migration.</div>
   </div>
 
   <h2>Set the engineering budget, watch the wave flip</h2>
@@ -128,7 +128,7 @@
     <div class="flip-banner hidden" id="flipBanner"></div>
   </div>
 
-  <h2>Exact optimum vs the ranked list a crypto inventory alone gives you</h2>
+  <h2>Exact optimum vs the naive exposure-ranked list</h2>
   <div class="grid2">
     <div class="plan-card opt" id="cardOpt">
       <h3>Exact optimum (all 64 plans enumerated)</h3>
@@ -137,7 +137,7 @@
       <div class="plan-meta" id="optMeta"></div>
     </div>
     <div class="plan-card worst" id="cardRanked">
-      <h3>Ranked-list prioritizer (greedy by exposure-per-week)</h3>
+      <h3>Naive exposure-ranked prioritizer (greedy by exposure-per-week)</h3>
       <div class="plan-points" id="rankedPoints"></div>
       <div class="plan-members" id="rankedMembers"></div>
       <div class="plan-meta" id="rankedMeta"></div>
@@ -150,12 +150,12 @@
       <thead><tr><th>Project</th><th>Business chain</th><th>Crypto</th><th class="num">Weeks</th><th class="num">Points</th><th>Requires</th></tr></thead>
       <tbody id="projBody"></tbody>
     </table>
-    <div class="muted">Points = round(40 &middot; E[f]) + business bonus. E[f] is the HNDL exposure fraction from the paper's model (SIGN, a non-HNDL integrity asset, uses P(T<span style="font-size:9px">q</span> &lt; T<span style="font-size:9px">c</span>)); the business bonus is an explicit demo assumption, not from the paper.</div>
+    <div class="muted">Points = round(40 &middot; E[f]) + business bonus. E[f] is the HNDL exposure fraction from the paper's model (SIGN and SSO, non-HNDL integrity assets, use P(T<span style="font-size:9px">q</span> &lt; T<span style="font-size:9px">c</span>)); the business bonus is an explicit demo assumption, not from the paper.</div>
   </div>
 
   <h2>Quantum layer: QAOA p=1 over the 64-plan search space</h2>
   <div class="panel">
-    <div class="muted" style="margin:0 0 4px">The budget-constrained, dependency-aware cost Hamiltonian is encoded on 6 qubits (one per candidate). The statevector below is computed live in your browser, the same construction Wolfram's Quantum Framework certifies; at the default and live-event budgets the Wolfram-optimized angles are used and the distribution must match Wolfram's to machine precision.</div>
+    <div class="muted" style="margin:0 0 4px">The budget-constrained, dependency-aware cost Hamiltonian is encoded on 6 qubits (one per candidate). The statevector below is computed live in your browser, the same construction Wolfram's Quantum Framework computes; at the default and live-event budgets the Wolfram search-found angles are used and the distribution matches Wolfram's stored distribution to machine precision. QAOA p=1 is illustrative here: at most budgets it barely beats uniform sampling, and the exact enumeration is the decision layer.</div>
     <div class="qstats">
       <div class="stat"><div class="v" id="qPopt">&ndash;</div><div class="k">P(exact optimum)</div></div>
       <div class="stat"><div class="v" id="qPfeas">&ndash;</div><div class="k">P(any feasible plan)</div></div>
@@ -165,7 +165,7 @@
     <canvas id="qBars" width="1120" height="300"></canvas>
     <div class="qangle" id="qAngles"></div>
     <div class="btn-row">
-      <button class="btn ghost" id="btnSample">Sample 4096 shots (seed 20261123, as the QF run did)</button>
+      <button class="btn ghost" id="btnSample">Sample 4096 shots (seed 20261123, seeded sample from the exact statevector)</button>
     </div>
     <div class="qstats" id="sampleStats" style="display:none">
       <div class="stat"><div class="v" id="sPopt">&ndash;</div><div class="k">sampled P(optimal)</div></div>
@@ -178,7 +178,7 @@
 
   <h2>The Lean certificate</h2>
   <div class="panel">
-    <div class="muted" style="margin:0 0 10px">Every headline number on this page is a theorem in <span style="font-family:monospace">Hackton.QWavePlanner</span>, proved by <span style="font-family:monospace">decide</span> over the full 64-plan enumeration. No heuristic is trusted: if the scoring, budget or dependency changed and the numbers below drifted, the build would fail.</div>
+    <div class="muted" style="margin:0 0 10px">The optimum facts for this instance are theorems in <span style="font-family:monospace">Hackton.QWavePlanner</span>, proved by <span style="font-family:monospace">decide</span> over the full 64-plan enumeration; Python, Wolfram and this page recompute each other's arithmetic. No heuristic is trusted for the optimum: if the scoring, budget or dependency changed and the numbers below drifted, the build would fail.</div>
     <pre class="cert" id="leanCert"></pre>
     <div class="muted">Built with Lean/Mathlib v4.33.0: 3006 jobs, 0 errors, 0 warnings, 0 sorries. Source: <span style="font-family:monospace">lean/QWavePlanner.lean</span>, build log: <span style="font-family:monospace">lean/qwave_planner_build.log</span>.</div>
   </div>
@@ -202,7 +202,7 @@
 </main>
 
 <script id="embedded-data" type="application/json">
-{"projects":[{"id":"PAY","name":"Payments TLS termination","business_unit":"Retail Banking","application":"Payments","platform":"PKI","component":"TLS certificate, RSA-2048","crypto":"RSA-2048 / ECDHE P-256","criticality":"Critical","data_lifetime_years":10,"hndl":true,"business_bonus":20,"cost_weeks":5,"owner_team":"Platform","runbook":"Replace RSA-2048 certificates with ML-DSA/hybrid certs; enable ML-KEM hybrid key exchange on the payment edge."},{"id":"VPN","name":"Core banking VPN (IPsec)","business_unit":"Core Banking","application":"Settlement","platform":"Network","component":"IPsec tunnel, RSA-2048 IKE","crypto":"RSA-2048 (IKEv2)","criticality":"High","data_lifetime_years":20,"hndl":true,"business_bonus":13,"cost_weeks":7,"owner_team":"Network","runbook":"Re-key IPsec tunnels with ML-KEM hybrid IKEv2 between data centers; verify both peers before cutover."},{"id":"SIGN","name":"Code signing (updates)","business_unit":"Corporate","application":"Release pipeline","platform":"HSM","component":"Signing key, RSA-4096","crypto":"RSA-4096 (PKCS#1 v1.5)","criticality":"High","data_lifetime_years":0,"hndl":false,"business_bonus":12,"cost_weeks":3,"owner_team":"Security Engineering","runbook":"Move signing to ML-DSA on the HSM; keep a dual-signing window so old clients keep verifying."},{"id":"PRT","name":"Customer portal TLS","business_unit":"Retail Banking","application":"Customer Portal","platform":"Web tier","component":"TLS 1.3 endpoint, ECDHE P-256","crypto":"ECDSA P-256 / ECDHE","criticality":"Critical","data_lifetime_years":15,"hndl":true,"business_bonus":25,"cost_weeks":6,"owner_team":"Digital","requires":"GWY","runbook":"Enable hybrid ML-KEM on the portal endpoints, then cut customer traffic over from the legacy cipher suites."},{"id":"GWY","name":"Shared edge gateway (mTLS)","business_unit":"Retail Banking","application":"Customer Portal","platform":"Edge","component":"mTLS termination, ECDHE P-256","crypto":"ECDSA P-256 (mTLS)","criticality":"Medium","data_lifetime_years":1,"hndl":true,"business_bonus":6,"cost_weeks":4,"owner_team":"Platform","runbook":"Upgrade the shared gateway to hybrid ML-KEM mTLS termination. Prerequisite for the portal cutover."},{"id":"SSO","name":"HR SaaS SSO certificates","business_unit":"Internal Tools","application":"HR SaaS","platform":"SSO","component":"SAML signing cert, ECC P-256","crypto":"ECDSA P-256 (SAML)","criticality":"Low","data_lifetime_years":2,"hndl":true,"business_bonus":0,"cost_weeks":2,"owner_team":"IT","runbook":"Rotate the SAML signing certificate to an ML-DSA-backed one at the identity provider."}],"value":[35,35,19,44,13,8],"penalty":{"lambda_budget":12,"mu_dependency":20},"budget_default":12,"budget_live":16,"opt12_points":70,"shots":4096,"mc_seed":20261123,"wolfram":{"qaoa_12":{"angles_p1":[1.0195610060284157,0.5853981633974483],"probs_p1":[0.005784136697251081,0.04637889361720135,0.032133636821166774,0.29854339727112644,0.0007631314286831864,0.02135027592261494,0.01338066304224498,0.024277709826981637,0.008880121572188678,0.03634051550857214,0.016376959434694627,0.02692763698951769,0.00792393176093479,0.005849126596880658,0.004264107320742491,0.007144791765139572,0.003977700380106006,0.05125159807995572,0.021103956239456594,0.015588378035082277,0.0044539624591110605,0.003609013605074895,0.0002412942490216099,0.0012673161260206684,0.025464379104215007,0.046954728366707936,0.01782998351515149,0.07263328978512258,0.00021478716756621996,0.009751122777598473,0.001790707103703577,0.002932643643470624,0.0032988397734652975,0.015533660362841036,0.008282741599777219,0.04536450395527778,0.0005139764944343227,0.0035157944397403353,0.0011124947416259047,0.0028163798570695884,0.0024966054906732315,0.0018705890575405066,0.0007208497194097735,0.000667850862309114,8.12995213011985e-05,2.1263404214220085e-05,0.0001554469823635482,0.00017783444921388504,0.004825666843525965,0.01044805709350468,0.004093609031215302,0.005714036327871054,0.0010997565341940283,0.0011510524295441599,0.0004314586186330136,0.0006828408320991738,0.01102538845639218,0.015741076256405938,0.0028331525908229546,0.015020846603534827,0.002329668299812173,0.001568693147157962,0.0006023713446142279,0.00041829866610984567],"p_optimal_p1":0.29854339727112644},"qaoa_16":{"angles_p1":[0.045121221920475706,2.859831895805508],"probs_p1":[0.0010820099374266585,0.0021542642746461478,0.001648242318898569,0.01873720506317825,0.0032901997000660873,0.002104090159072574,0.0028911013695559376,0.053407148653565155,0.0020677357593379075,0.004526171852842146,0.010692601576737938,0.0297412626011934,0.0001275562562065736,0.0279691076035898,0.046631913950542,0.0017786643261749363,0.0025706450816629627,7.812562508318366e-05,0.000694393133478386,0.0472924541629821,0.0016247451378566704,0.015778379367891657,0.024546802646875494,0.013819746637048255,0.000907043025326453,0.045917022259787735,0.048282847597155606,0.0026898828835032556,0.0229608747187533,0.04599478222813584,0.015113024782380392,0.0020769997874376996,0.0021514876650633842,0.0010199446630109622,0.0007093629346365899,0.037039694582813976,0.002556913026008683,0.008533138014657892,0.014594852419580487,0.040635546554087035,0.0003549607668859703,0.013603979812374826,0.031188803414157563,0.005947990956624806,0.002459716978866263,0.045955699583246516,0.019480990210700384,0.0036443632669543543,0.0017363705314015444,0.004992700229554294,0.010670084093695112,0.02031892624834555,0.0006227509185899014,0.03503790276968181,0.04350314938140928,0.004196527990543802,0.00908526406256118,0.04606118980650796,0.02209313010237953,0.001008470319619462,0.044583239349545827,0.01906283159686709,0.0033001119465027734,0.004652861324732783],"p_optimal_p1":0.045917022259787735},"qf":{"sample_feasible":0.57958984375,"sample_optimal":0.297607421875,"sample_beats_ranked":0.301513671875,"tvd_exact_vs_qf":2.425834598300536e-16},"mosca":{"ef_curve_years":[2025,2026,2027,2028,2029,2030,2031,2032,2033,2034],"ef_curve_values":[0.32434,0.3662100000000001,0.40886000000000006,0.45228999999999997,0.4965,0.53938,0.5788200000000001,0.61482,0.6473800000000001,0.6765],"ef_x10_start2026_python_exact":0.3662}}}
+{"projects":[{"id":"PAY","name":"Payments TLS termination","business_unit":"Retail Banking","application":"Payments","platform":"PKI","component":"TLS certificate, RSA-2048","crypto":"RSA-2048 / ECDHE P-256","criticality":"Critical","data_lifetime_years":10,"hndl":true,"business_bonus":20,"cost_weeks":5,"owner_team":"Platform","runbook":"Replace RSA-2048 certificates with ML-DSA/hybrid certs; enable ML-KEM hybrid key exchange on the payment edge."},{"id":"VPN","name":"Core banking VPN (IPsec)","business_unit":"Core Banking","application":"Settlement","platform":"Network","component":"IPsec tunnel, RSA-2048 IKE","crypto":"RSA-2048 (IKEv2)","criticality":"High","data_lifetime_years":20,"hndl":true,"business_bonus":13,"cost_weeks":7,"owner_team":"Network","runbook":"Re-key IPsec tunnels with ML-KEM hybrid IKEv2 between data centers; verify both peers before cutover."},{"id":"SIGN","name":"Code signing (updates)","business_unit":"Corporate","application":"Release pipeline","platform":"HSM","component":"Signing key, RSA-4096","crypto":"RSA-4096 (PKCS#1 v1.5)","criticality":"High","data_lifetime_years":0,"hndl":false,"business_bonus":12,"cost_weeks":3,"owner_team":"Security Engineering","runbook":"Move signing to ML-DSA on the HSM; keep a dual-signing window so old clients keep verifying."},{"id":"PRT","name":"Customer portal TLS","business_unit":"Retail Banking","application":"Customer Portal","platform":"Web tier","component":"TLS 1.3 endpoint, ECDHE P-256","crypto":"ECDSA P-256 / ECDHE","criticality":"Critical","data_lifetime_years":15,"hndl":true,"business_bonus":25,"cost_weeks":6,"owner_team":"Digital","requires":"GWY","runbook":"Enable hybrid ML-KEM on the portal endpoints, then cut customer traffic over from the legacy cipher suites."},{"id":"GWY","name":"Shared edge gateway (mTLS)","business_unit":"Retail Banking","application":"Customer Portal","platform":"Edge","component":"mTLS termination, ECDHE P-256","crypto":"ECDSA P-256 (mTLS)","criticality":"Medium","data_lifetime_years":1,"hndl":true,"business_bonus":6,"cost_weeks":4,"owner_team":"Platform","runbook":"Upgrade the shared gateway to hybrid ML-KEM mTLS termination. Prerequisite for the portal cutover."},{"id":"SSO","name":"HR SaaS SSO certificates","business_unit":"Internal Tools","application":"HR SaaS","platform":"SSO","component":"SAML signing cert, ECC P-256","crypto":"ECDSA P-256 (SAML)","criticality":"Low","data_lifetime_years":2,"hndl":false,"business_bonus":0,"cost_weeks":2,"owner_team":"IT","runbook":"Rotate the SAML signing certificate to an ML-DSA-backed one at the identity provider."}],"value":[35,35,19,44,13,7],"penalty":{"lambda_budget":12,"mu_dependency":20},"budget_default":12,"budget_live":16,"opt12_points":70,"shots":4096,"mc_seed":20261123,"wolfram":{"qaoa_12":{"angles_p1":[0.04122840599120485,2.85787527612928],"probs_p1":[0.0025722033520682807,0.0038732137988311106,0.01091035798002156,0.0603789611565455,7.043488703245119e-05,0.027504908261067423,0.04041738783848157,0.018831318692039436,0.002412634162536404,0.03837458023249092,0.043881291699703756,0.0005964050387795166,0.01778136889192744,0.025363212696963542,0.008339588516372735,0.0020774200110996763,0.0010576999064897557,0.018485236636477314,0.039228362203795275,0.006812815758799733,0.0038932444188062086,0.04714983715255429,0.023874451794351298,0.0001745922625451781,0.030941151773722645,0.029547811352558295,0.009982675266403932,0.0018886361059567793,0.04768773230657952,0.004032993566817727,0.00048707406980519867,0.0036108772415139176,0.0004942661211013476,0.013949598054944628,0.022592733753927886,0.024272134317456312,0.002677846051618533,0.040694503303310064,0.045921868357576334,0.002460417181078936,0.006293171075409815,0.028768535132211382,0.014156068796832023,0.0011271312340282546,0.03130036354225614,0.006009651825314823,4.785467221688996e-05,0.0030059234945673317,0.0012290741412939686,0.032066202080895716,0.028293537144572674,0.0002624755386874349,0.016388511641530774,0.020423324808450972,0.0041975204145630355,0.0018799009914163766,0.04439701918471579,0.007171629398680605,0.000524093550274483,0.0031071469723095418,0.020170861157488448,0.00013771399994916275,0.002260792796143836,0.0014776502320388758],"p_optimal_p1":0.0603789611565455},"qaoa_16":{"angles_p1":[0.045156530711697535,2.8593058653982597],"probs_p1":[0.001113935337968627,0.0021714493227286873,0.0016408685986316566,0.019374753153825055,0.0033581399827104664,0.002180722267593411,0.0030349796573238977,0.054558091020321935,0.0020918101306675947,0.004697946996376106,0.011100449233527921,0.03004148134369265,0.00012881105393485815,0.028813761635391778,0.04735037683535767,0.001797827892842057,0.0026223654604688516,7.955551381717637e-05,0.0007473942935754018,0.04802724996179783,0.0016537286482258707,0.016317912149054196,0.02531888913629021,0.013953372172884749,0.0009621713950202454,0.04702090692384512,0.04906903067871281,0.0027171225843655414,0.02370172024772128,0.04673628048808678,0.015265004703726952,0.0021761667880363014,0.0021117055834665804,0.000981386058215164,0.0007022127398778017,0.036421788831286835,0.0024833004503627873,0.008416352000946535,0.0144192228795413,0.0395256168365362,0.0003340264217311883,0.013381897422746307,0.030778948333110765,0.0056197016960550655,0.0024307299507268744,0.04509640324230308,0.018760863762680435,0.003681250859950867,0.0016880400328028466,0.004959150288459878,0.010585288636667519,0.019574251557027487,0.0006012942323135289,0.03445299648388717,0.04271724605796024,0.0041036076035139805,0.00897885843953949,0.04497170339541403,0.02131624619053074,0.0010192064852149849,0.043797364835071004,0.018458696267866465,0.003196769877379087,0.004609596938290579],"p_optimal_p1":0.04702090692384512},"qf":{"sample_feasible":0.513916015625,"sample_optimal":0.064453125,"sample_beats_ranked":0.11669921875,"tvd_exact_vs_qf":5.892604926140826e-16},"mosca":{"ef_curve_years":[2025,2026,2027,2028,2029,2030,2031,2032,2033,2034],"ef_curve_values":[0.32434,0.3662100000000001,0.40886000000000006,0.45228999999999997,0.4965,0.53938,0.5788200000000001,0.61482,0.6473800000000001,0.6765],"ef_x10_start2026_python_exact":0.3662}}}
 </script>
 <script>
 "use strict";
@@ -337,18 +337,19 @@ function renderPlans(b) {
   $("rankedMembers").innerHTML = membersOf(ranked).map(i => chipFor(i, "red")).join("");
   const gap = opt.value - valueOf(ranked);
   $("rankedMeta").textContent = `cost ${costOf(ranked)} of ${b} weeks, ` +
-    (gap > 0 ? `${gap} points left on the table by ranking projects without planning the wave` : `matches the optimum at this budget`);
+    (gap > 0 ? `${gap} point${gap === 1 ? "" : "s"} left on the table by ranking projects without planning the wave` : `matches the optimum at this budget`);
 
-  const flip = opt.value - EMBED.opt12_points;
   const banner = $("flipBanner");
-  if (b > B12 && opt.value > EMBED.opt12_points) {
+  if (b >= 15 && b <= 16) {
     banner.classList.remove("hidden");
-    banner.innerHTML = `<b>The wave flipped.</b> At the default ${B12}-week budget the best plan is ${EMBED.opt12_points} points and every feasible plan is worth &le; ${EMBED.opt12_points}. At ${b} weeks the optimum is <b>${opt.value} points</b>: four extra weeks do not grow the old wave, they change which systems get fixed. The Lean theorem <span style="font-family:monospace">qwave_budget_flip</span> certifies this for every one of the 64 plans.`;
+    banner.innerHTML = `<b>The wave flipped.</b> At the default ${B12}-week budget the best plan is ${EMBED.opt12_points} points and every feasible plan is worth &le; ${EMBED.opt12_points}. At ${b} weeks the optimum is <b>${opt.value} points</b>: extra weeks do not grow the old wave, they change which systems get fixed. The Lean theorem <span style="font-family:monospace">qwave_budget_flip</span> certifies this for every one of the 64 plans.`;
   } else if (b <= B12) {
     banner.classList.remove("hidden");
-    banner.innerHTML = `At this budget the optimum is worth <b>${opt.value} points</b> and no feasible plan can beat it; the ranked list misses ${EMBED.opt12_points - valueOf(ranked) >= 0 && b === B12 ? EMBED.opt12_points - valueOf(ranked) : Math.max(0, EMBED.opt12_points - valueOf(ranked))} of the points the exact planner finds at ${B12} weeks.`;
+    const gap = opt.value - valueOf(ranked);
+    banner.innerHTML = `At this budget the optimum is worth <b>${opt.value} points</b> and no feasible plan can beat it; the naive ranked list ${gap > 0 ? `leaves ${gap} of those points on the table` : "also finds the optimum"} at this budget.`;
   } else {
-    banner.classList.add("hidden");
+    banner.classList.remove("hidden");
+    banner.innerHTML = `At this budget the optimum is worth <b>${opt.value} points</b> (${uniqueness(b) === 1 ? "unique" : uniqueness(b) + " plans tie"}). The dramatic flip happens at ${B12 + 3} to ${B12 + 4} weeks: slide there to see it.`;
   }
   renderTable(b, opt.mask);
   renderTickets(opt.mask);
@@ -396,13 +397,13 @@ function renderQAOA(b) {
     [gamma, beta] = anchor.angles_p1;
     probs = qaoaProbs(gamma, beta, C);
     const dev = tvd(probs, anchor.probs_p1);
-    angleNote = `angles (gamma, beta) = (${gamma.toFixed(6)}, ${beta.toFixed(6)}), Wolfram-optimized on the exact statevector`;
-    badge = `<span class="verify-badge ${dev < 1e-9 ? "pass" : "info"}">${dev < 1e-9 ? "PASS" : "CHECK"}: browser statevector vs Wolfram QF distribution, TVD = ${dev.toExponential(1)}</span>`;
+    angleNote = `angles (gamma, beta) = (${gamma.toFixed(6)}, ${beta.toFixed(6)}), search-found by the Wolfram pipeline's dense-grid search`;
+    badge = `<span class="verify-badge ${dev < 1e-9 ? "pass" : "info"}">${dev < 1e-9 ? "PASS" : "CHECK"}: browser statevector vs Wolfram's stored distribution, TVD = ${dev.toExponential(1)}</span>`;
   } else {
     const o = optimizeAngles(C);
     gamma = o.gamma; beta = o.beta; probs = qaoaProbs(gamma, beta, C);
-    angleNote = `angles (gamma, beta) = (${gamma.toFixed(6)}, ${beta.toFixed(6)}), re-optimized in-browser by grid search + refinement (Wolfram certifies the anchors at ${B12} and ${B16} weeks)`;
-    badge = `<span class="verify-badge info">in-browser optimization; Wolfram anchors at ${B12} and ${B16} weeks are certified to machine precision</span>`;
+    angleNote = `angles (gamma, beta) = (${gamma.toFixed(6)}, ${beta.toFixed(6)}), re-optimized in-browser by grid search + refinement (Wolfram's stored anchor distributions at ${B12} and ${B16} weeks match to machine precision)`;
+    badge = `<span class="verify-badge info">in-browser optimization; Wolfram's stored anchor distributions at ${B12} and ${B16} weeks match to machine precision</span>`;
   }
   const opt = optimum(b), pOpt = probs[opt.mask], pFeas = probs.reduce((s, p, m) => s + (feasible(m, b) ? p : 0), 0);
   $("qPopt").textContent = (pOpt * 100).toFixed(1) + "%";
@@ -426,7 +427,7 @@ function renderQAOA(b) {
     $("sBeats").textContent = (beats / total * 100).toFixed(2) + "%";
     $("sTvd").textContent = tvd(sampled, probs).toFixed(4);
   };
-  $("qfBadge").innerHTML = `Wolfram QF reference (budget 12): 4096-shot sample gave P(feasible) = ${fmt(EMBED.wolfram.qf.sample_feasible)}, P(optimal) = ${fmt(EMBED.wolfram.qf.sample_optimal)}, P(beats ranked) = ${fmt(EMBED.wolfram.qf.sample_beats_ranked)}; exact-vs-QF-rebuild TVD = ${EMBED.wolfram.qf.tvd_exact_vs_qf.toExponential(1)}.`;
+  $("qfBadge").innerHTML = `Wolfram seeded-sample reference (budget 12): a 4096-shot seeded sample from the exact statevector gave P(feasible) = ${fmt(EMBED.wolfram.qf.sample_feasible)}, P(optimal) = ${fmt(EMBED.wolfram.qf.sample_optimal)}, P(beats ranked) = ${fmt(EMBED.wolfram.qf.sample_beats_ranked)}; exact-vs-rebuild TVD = ${EMBED.wolfram.qf.tvd_exact_vs_qf.toExponential(1)}.`;
 }
 
 function renderTickets(optMask) {
@@ -454,7 +455,7 @@ function renderMosca() {
     ctx.textAlign = "right"; ctx.fillText((t / 5).toFixed(1), padL - 6, y + 4);
   }
   const xOf = yr => padL + plotW * (yr - years[0]) / (years[years.length - 1] - years[0]);
-  const yOf = v => padT + plotH * (1 - v / 0.75);
+  const yOf = v => padT + plotH * (1 - v);
   ctx.beginPath(); years.forEach((yr, i) => i ? ctx.lineTo(xOf(yr), yOf(vals[i])) : ctx.moveTo(xOf(yr), yOf(vals[i])));
   ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2; ctx.stroke();
   years.forEach((yr, i) => {
@@ -480,8 +481,8 @@ theorem qwave_opt12_unique :
   -- no other feasible plan reaches 70: the optimum is unique
 
 theorem qwave_ranked12_loses :
-    qwaveFeasible 56 12 = true ∧ qwaveValueOf 56 = 65 ∧ qwaveValueOf 56 < 70 := by decide
-  -- the ranked list {PRT, GWY, SSO} is feasible but five points short
+    qwaveFeasible 56 12 = true ∧ qwaveValueOf 56 = 64 ∧ qwaveValueOf 56 < 70 := by decide
+  -- the ranked list {PRT, GWY, SSO} is feasible but six points short
 
 theorem qwave_opt16_attained :
     qwaveFeasible 25 16 = true ∧ qwaveValueOf 25 = 92 := by decide
@@ -489,7 +490,7 @@ theorem qwave_opt16_attained :
 
 theorem qwave_budget_flip :
     ∀ m : Fin 64, qwaveFeasible m 12 = true → qwaveValueOf m ≤ 70 ∧ qwaveValueOf 25 = 92 := by decide
-  -- every 12-week-feasible plan is dominated: 70 < 92, the wave flips`;
+  -- every 12-week-feasible plan is worth at most 70: 70 < 92, the wave flips`;
 $("leanCert").textContent = LEAN_CERT;
 
 /* ---------- init ---------- */
