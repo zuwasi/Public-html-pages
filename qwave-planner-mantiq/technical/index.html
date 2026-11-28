@@ -215,6 +215,7 @@ th,td{padding:8px 12px}
     <span id="brand">Q-Wave Planner · Provably Optimal PQC Migration Waves · MantiQ demo</span>
   </div>
   <nav class="links" aria-label="Related links">
+    <a href="https://zuwasi.github.io/Public-html-pages/qwave-planner-mantiq/" target="_blank" rel="noopener">Live demo + source</a>
     <a href="https://www.q.security/" target="_blank" rel="noopener">q.security</a>
     <a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a>
     <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a>
@@ -235,7 +236,7 @@ th,td{padding:8px 12px}
   </div>
   <div class="grid2 mid">
     <div class="stack">
-      <div class="card"><div class="n">64 plans &middot; 3 proofs</div><div class="l">every possible first-wave selection over six candidate migrations, enumerated exhaustively and certified by Python enumeration, Wolfram exact statevector and Lean 4 decide: no heuristic decides what gets fixed</div></div>
+      <div class="card"><div class="n">64 plans &middot; one proof</div><div class="l">every possible first-wave selection over six candidate migrations, enumerated exhaustively; the optimum facts are certified by one Lean 4 <span style="font-family:monospace">decide</span> proof, and Python, Wolfram and the browser recompute each other's arithmetic</div></div>
       <div class="card v"><div class="n">70 &rarr; 92</div><div class="l">the budget flip: at 12 engineer-weeks the best wave is Payments + VPN; at 16 weeks four extra weeks flip the whole wave to Payments + Gateway + Portal</div></div>
     </div>
     <div class="person-card">
@@ -280,10 +281,10 @@ th,td{padding:8px 12px}
   <p class="subtitle">The chain Q.security's platform inventories, and the clock that makes it urgent: harvest now, decrypt later</p>
   <div class="diagram">Retail Banking  &#8594;  Payments  &#8594;  PKI  &#8594;  TLS termination: ECDHE P-256 + RSA-2048 certificate
 (business unit)    (application)   (platform)    (component: HNDL-exposed key exchange;
-                                                    HNSL integrity-asset certificate)</div>
+                                                    forge-later integrity-asset certificate)</div>
   <div class="grid2">
     <div class="card"><span class="tag">The clock</span><h3>Harvest now, decrypt later</h3>
-      <p>Traffic recorded today is kept confidential by the ECDHE P-256 key exchange, and a cryptographically relevant quantum computer breaks that exchange: anything recorded now can be decrypted later. The RSA-2048 certificate is a second clock, not the first one: it authenticates the connection, and its signatures can be forged later (harvest now, sign later). Every asset with data that must stay secret that long is already losing its protection, year by year, while the migration runs.</p>
+      <p>Traffic recorded today is kept confidential by the ECDHE P-256 key exchange, and a cryptographically relevant quantum computer breaks that exchange: anything recorded now can be decrypted later. The RSA-2048 certificate is a second clock, not the first one: it authenticates the connection, and its signatures can be forged later (harvest now, forge later). Every asset with data that must stay secret that long is already losing its protection, year by year, while the migration runs.</p>
     </div>
     <div class="card v"><span class="tag">The paper behind the demo</span><h3>Gupta &amp; Mittal 2026</h3>
       <p>"Post-quantum readiness and cryptographic transition planning for enterprise cloud" (Cybersecurity 9:147) turns the clock into arithmetic: an expected exposed fraction E[f] of each asset's hackable lifetime, driven by a Q-day distribution and the migration schedule. This demo uses the paper's midline model end to end (PDF in the repository root).</p>
@@ -301,11 +302,11 @@ th,td{padding:8px 12px}
     <a class="zoom" href="../assets/mosca_curve.png"><img src="../assets/mosca_curve.png" alt="E[f] vs migration start year, 2025 to 2034, rising from 0.324 to 0.677, with 2026 at 0.366 and 2030 at 0.539 marked" style="--w:1200px" width="1200"></a>
     <div class="side">
       <p class="subtitle">Two readings off the curve</p>
-      <p>Starting the migration in <b>2026</b> leaves <b>E[f] = 0.366</b> of the exposure window open. Waiting until <b>2030</b> raises it to <b>0.539</b>: nearly half of every asset's hackable lifetime spent readable to a future CRQC.</p>
-      <p>The Python module integrates the piecewise-linear CDF exactly. An independent 200,000-sample Monte Carlo in Wolfram agrees to 1.5&middot;10&#8315;&#179;, about 1.4 standard errors of the estimate (SE &plusmn;0.0011; the run's assertion gate is 3 SE = 0.0034).</p>
+      <p>Starting the migration in <b>2026</b> leaves <b>E[f] = 0.366</b> of the exposure window open. Waiting until <b>2030</b> raises it to <b>0.539</b>: more than half of a 10-year asset's exposure window spent readable to a future CRQC.</p>
+      <p>The Python module integrates the piecewise-linear CDF exactly. An independent 200,000-sample Monte Carlo in Wolfram agrees to 1.5&middot;10&#8315;&#179;, about 1.4 standard errors of the estimate (SE &plusmn;0.0011; the run's assertion gate is 2 SE = 0.0022).</p>
     </div>
   </div>
-  <div class="foot">Model: Gupta &amp; Mittal 2026, Cybersecurity 9:147 (s42400-026-00579-2), midline GRI-2024 expert-elicitation Q-day distribution, X = 10-year data lifetime, Y = 6-year migration. Chart generated by wolfram/qwave_planner.wl, 27 November 2026</div>
+  <div class="foot">Model: Gupta &amp; Mittal 2026, Cybersecurity 9:147 (s42400-026-00579-2), midline GRI-2024 expert-elicitation Q-day distribution, Y = 6-year migration, X = 10 shown; per-asset X = 10/20/15/1 years for the four HNDL assets. Chart generated by wolfram/qwave_planner.wl, 27 November 2026</div>
 </div></section>
 
 <!-- 05 · the instance -->
@@ -324,7 +325,7 @@ th,td{padding:8px 12px}
       <tr><td>5</td><td><b>SSO</b></td><td>HR SaaS SSO certificates</td><td>Internal Tools &rsaquo; HR SaaS &rsaquo; SSO</td><td class="num">2</td><td class="num">7</td><td>&ndash;</td></tr>
     </tbody>
   </table></div>
-  <div class="note">Points = round(40 &middot; E[f]) + business bonus. E[f] comes from the paper's model (for SIGN and SSO, non-HNDL integrity assets, it is P(T<span style="font-size:10px">q</span> &lt; T<span style="font-size:10px">c</span>)). The business bonus is an explicit demo assumption, not from the paper: without it the 12-week optimum becomes a tie at 37 points, so part of the story is carried by that assumption (sensitivity note in data/instance.json). The portal PRT, the highest-value project, requires the gateway GWY first: that single edge is what breaks every naive ranked list.</div>
+  <div class="note">Points = round(40 &middot; E[f]) + business bonus. E[f] comes from the paper's model (for SIGN and SSO, non-HNDL integrity assets, it is P(T<span style="font-size:10px">q</span> &lt; T<span style="font-size:10px">c</span>)). The business bonus is an explicit demo assumption, not from the paper: without it the 12-week optimum is unique ({PAY, VPN} = 37) and the 16-week optimum is a three-way tie at 44, so the flip is a consequence of that assumption (sensitivity note in data/instance.json). The portal PRT, the highest-value project, requires the gateway GWY first: that single edge is what breaks every naive ranked list.</div>
   <div class="foot">Instance: data/instance.json in the demo repository, 27 November 2026</div>
 </div></section>
 
@@ -405,7 +406,7 @@ ranked list   = greedy by points-per-week, pulling prerequisites in</div>
       <text x="695" y="323" font-size="12.5" fill="#6b6353" text-anchor="middle">PAY + GWY + PRT &#183; cost 15, unique</text>
     </g>
   </svg></div>
-  <div class="note">The flip is a theorem, not an observation: Lean proves every 12-week-feasible plan is worth at most 70, and the 16-week optimum is worth 92. The naive ranked list cannot even see the flip: it happens to reach 92 at 16 weeks, but it loses 4 points at budgets 10 and 11, 6 at the default 12, and 1 at 14.</div>
+  <div class="note">The flip is a theorem, not an observation: Lean proves every 12-week-feasible plan is worth at most 70, and the 16-week optimum is worth 92. The naive ranked list happens to reach 92 at 16 weeks, but it loses 4 points at budgets 10 and 11, 6 at the default 12, and 1 at 14; it matches the optimum at the other budgets.</div>
   <div class="foot">Source: data/results/plans.json (64 plans per budget), cross-checked by all three pipelines, 27 November 2026</div>
 </div></section>
 
@@ -460,7 +461,7 @@ theorem qwave_budget_flip :
     &#8704; m : Fin 64, qwaveFeasible m 12 = true &#8594;
       qwaveValueOf m &#8804; 70 &#8743; qwaveValueOf 25 = 92 := by decide</div>
   <div class="grid2">
-    <div class="card"><span class="tag">What this buys</span><h3>The certificate travels with the instance</h3><p>Change the scoring, the budget or the dependency, and the build fails until someone re-proves the new optimum. The demo cannot silently drift from its own claims.</p></div>
+    <div class="card"><span class="tag">What this buys</span><h3>The certificate travels with the instance</h3><p>The certificate is tied to the shipped instance constants: change the scoring, the budget or the dependency and a changed instance needs a re-proved certificate. The demo cannot silently drift from its own claims.</p></div>
     <div class="card v"><span class="tag">Build result</span><h3>3006 jobs, 0 sorry</h3><p>Lean/Mathlib v4.33.0, lake build Hackton.QWavePlanner: zero errors, zero warnings, zero sorries. Source and build log ship in the repository (lean/QWavePlanner.lean, lean/qwave_planner_build.log).</p></div>
   </div>
   <div class="foot">One Lean proof plus two independent recomputations: the Lean value function (additive points, weekly costs, the PRT&#8594;GWY dependency) is the same object the Python and Wolfram pipelines enumerate, so the three cannot disagree unnoticed</div>
@@ -532,15 +533,15 @@ theorem qwave_budget_flip :
 <!-- 15 · closing -->
 <section class="slide"><div class="inner">
   <div class="eyebrow"><span class="mark"></span>Verdict · 15</div>
-  <h1>One instance, three proofs, <span class="hl">one executable answer</span></h1>
-  <p class="subtitle">The MantiQ workflow, end to end on a real-shaped problem: simulate it, prove it, ship it</p>
+  <h1>One instance, one proof, <span class="hl">one executable answer</span></h1>
+  <p class="subtitle">The MantiQ workflow on a real-shaped problem: simulate it, prove it, ship it</p>
   <div class="diagram">REPRODUCE (every step is in the repository)
   py -3 data/scoring.py            exact E[f] + 200k Monte Carlo
   py -3 data/plan_search.py        64-plan enumeration, story assertions
   wolframscript -file wolfram/qwave_planner.wl
-                                   QAOA p=1/p=2, QF rebuild, charts (~4 min)
+                                   QAOA p=1/p=2, QF rebuild, charts (~5 min)
   lake build Hackton.QWavePlanner  the certificate, 0 sorry
-  py -3 classiq/generate_qmod.py   the QMOD artifact
+  py -3.12 classiq/generate_qmod.py  the QMOD artifact
   py -3 app/build_app.py           the executable system</div>
   <div class="grid2 mid">
     <div class="stack">
@@ -559,7 +560,7 @@ theorem qwave_budget_flip :
   </div>
   <div class="contact">
     <img src="../assets/esl-logo.png" alt="ESL">
-    <p><a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> · Problem context: <a href="https://www.q.security/" target="_blank" rel="noopener">q.security</a></p>
+    <p><a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a> · <a href="https://eswlab.com/contact-us/" target="_blank" rel="noopener">Contact ESL</a> · Problem context: <a href="https://www.q.security/" target="_blank" rel="noopener">q.security</a> · Full public package: <a href="https://zuwasi.github.io/Public-html-pages/qwave-planner-mantiq/" target="_blank" rel="noopener">zuwasi.github.io/Public-html-pages/qwave-planner-mantiq</a></p>
   </div>
   <div class="foot">27 November 2026 · Paper: Gupta &amp; Mittal, Cybersecurity 9:147 (2026) · Q.security launch: GlobeNewswire press release and The Quantum Insider, 23 November 2026</div>
 </div></section>

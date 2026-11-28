@@ -113,7 +113,7 @@
   <h2>The asset the bank actually cares about</h2>
   <div class="panel">
     <div class="chain" id="chain"></div>
-    <div class="muted">One cryptographic asset, walked down from the business: a retail-bank payment flow whose TLS handshake uses ECDHE P-256 key exchange, so traffic recorded today can be decrypted once a cryptographically relevant quantum computer exists (harvest-now-decrypt-later); the RSA-2048 certificate authenticates the connection and is instead a harvest-now-sign-later integrity asset. This is the chain Q.security's platform inventories; the planner decides which chains get fixed in the next wave. Exposure model: Gupta &amp; Mittal 2026 (Cybersecurity 9:147), midline GRI-2024 Q-day distribution, start 2026, 6-year migration.</div>
+    <div class="muted">One cryptographic asset, walked down from the business: a retail-bank payment flow whose TLS handshake uses ECDHE P-256 key exchange, so traffic recorded today can be decrypted once a cryptographically relevant quantum computer exists (harvest-now-decrypt-later); the RSA-2048 certificate authenticates the connection and is instead a harvest-now-forge-later integrity asset. This is the chain Q.security's platform inventories; the planner decides which chains get fixed in the next wave. Exposure model: Gupta &amp; Mittal 2026 (Cybersecurity 9:147), midline GRI-2024 Q-day distribution, start 2026, 6-year migration.</div>
   </div>
 
   <h2>Set the engineering budget, watch the wave flip</h2>
@@ -178,7 +178,7 @@
 
   <h2>The Lean certificate</h2>
   <div class="panel">
-    <div class="muted" style="margin:0 0 10px">The optimum facts for this instance are theorems in <span style="font-family:monospace">Hackton.QWavePlanner</span>, proved by <span style="font-family:monospace">decide</span> over the full 64-plan enumeration; Python, Wolfram and this page recompute each other's arithmetic. No heuristic is trusted for the optimum: if the scoring, budget or dependency changed and the numbers below drifted, the build would fail.</div>
+    <div class="muted" style="margin:0 0 10px">The optimum facts for this instance are theorems in <span style="font-family:monospace">Hackton.QWavePlanner</span>, proved by <span style="font-family:monospace">decide</span> over the full 64-plan enumeration; Python, Wolfram and this page recompute each other's arithmetic. The certificate is tied to the shipped instance constants: a changed instance needs a re-proved certificate, not just a rebuild.</div>
     <pre class="cert" id="leanCert"></pre>
     <div class="muted">Built with Lean/Mathlib v4.33.0: 3006 jobs, 0 errors, 0 warnings, 0 sorries. Source: <span style="font-family:monospace">lean/QWavePlanner.lean</span>, build log: <span style="font-family:monospace">lean/qwave_planner_build.log</span>.</div>
   </div>
@@ -293,7 +293,7 @@ function optimizeAngles(C) {
   return { gamma: bg, beta: bb, expected: bc };
 }
 
-/* seeded 4096-shot sampler, same seed as the Wolfram QF run */
+/* seeded 4096-shot sampler, same seed value as the Wolfram QF run (RNG streams differ) */
 function mulberry32(seed) {
   return function () {
     seed |= 0; seed = seed + 0x6D2B79F5 | 0;
@@ -321,7 +321,7 @@ const $ = id => document.getElementById(id);
 const fmt = x => x.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
 
 function renderChain() {
-  const chain = [["Business unit", "Retail Banking"], ["Application", "Payments"], ["Platform", "PKI"], ["Component", "TLS certificate, RSA-2048"]];
+  const chain = [["Business unit", "Retail Banking"], ["Application", "Payments"], ["Platform", "PKI"], ["Component", "ECDHE P-256 session keys, RSA-2048 certificates"]];
   $("chain").innerHTML = chain.map(([k, v]) => `<div class="node"><div class="k">${k}</div><div class="v">${v}</div></div>`).join(`<div class="arrow">&#8594;</div>`);
 }
 
@@ -342,7 +342,7 @@ function renderPlans(b) {
   const banner = $("flipBanner");
   if (b >= 15 && b <= 16) {
     banner.classList.remove("hidden");
-    banner.innerHTML = `<b>The wave flipped.</b> At the default ${B12}-week budget the best plan is ${EMBED.opt12_points} points and every feasible plan is worth &le; ${EMBED.opt12_points}. At ${b} weeks the optimum is <b>${opt.value} points</b>: extra weeks do not grow the old wave, they change which systems get fixed. The Lean theorem <span style="font-family:monospace">qwave_budget_flip</span> certifies this for every one of the 64 plans.`;
+    banner.innerHTML = `<b>The wave flipped.</b> At the default ${B12}-week budget the best plan is ${EMBED.opt12_points} points and every feasible plan is worth &le; ${EMBED.opt12_points}. At ${b} weeks the optimum is <b>${opt.value} points</b>: extra weeks do not grow the old wave, they change which systems get fixed. The Lean theorem <span style="font-family:monospace">qwave_budget_flip</span> certifies the ${B12}-to-${B16}-week flip.`;
   } else if (b <= B12) {
     banner.classList.remove("hidden");
     const gap = opt.value - valueOf(ranked);
@@ -402,8 +402,8 @@ function renderQAOA(b) {
   } else {
     const o = optimizeAngles(C);
     gamma = o.gamma; beta = o.beta; probs = qaoaProbs(gamma, beta, C);
-    angleNote = `angles (gamma, beta) = (${gamma.toFixed(6)}, ${beta.toFixed(6)}), re-optimized in-browser by grid search + refinement (Wolfram's stored anchor distributions at ${B12} and ${B16} weeks match to machine precision)`;
-    badge = `<span class="verify-badge info">in-browser optimization; Wolfram's stored anchor distributions at ${B12} and ${B16} weeks match to machine precision</span>`;
+    angleNote = `angles (gamma, beta) = (${gamma.toFixed(6)}, ${beta.toFixed(6)}), re-optimized in-browser by grid search + refinement (an estimate, not a certified optimum; Wolfram's stored anchor distributions at ${B12} and ${B16} weeks match to machine precision)`;
+    badge = `<span class="verify-badge info">in-browser optimization, estimate not certified; Wolfram's stored anchor distributions at ${B12} and ${B16} weeks match to machine precision</span>`;
   }
   const opt = optimum(b), pOpt = probs[opt.mask], pFeas = probs.reduce((s, p, m) => s + (feasible(m, b) ? p : 0), 0);
   $("qPopt").textContent = (pOpt * 100).toFixed(1) + "%";
@@ -467,7 +467,7 @@ function renderMosca() {
   ctx.fillText("2030: E[f] = 0.539", xOf(2030), yOf(vals[5]) - 12);
   ctx.fillStyle = "#93a4bf";
   years.filter(y => y % 2 === 0).forEach(yr => ctx.fillText(yr, xOf(yr), padT + plotH + 16));
-  $("moscaNote").innerHTML = `Expected fraction of each asset's hackable lifetime spent harvest-now-decrypt-later exposed, against the migration start year (X = 10-year data lifetime, Y = 6-year migration, midline Q-day distribution). Starting in 2026 leaves <b>E[f] = ${EMBED.wolfram.mosca.ef_x10_start2026_python_exact.toFixed(3)}</b> of the exposure window open; waiting until 2030 raises it to 0.539. This is the arithmetic that makes the wave plan urgent, and it comes straight from the paper's model.`;
+  $("moscaNote").innerHTML = `Expected fraction of each asset's hackable lifetime spent harvest-now-decrypt-later exposed, against the migration start year (per-asset data lifetimes X = 10/20/15/1 years for the four HNDL assets, X = 10 shown, Y = 6-year migration, midline Q-day distribution). Starting in 2026 leaves <b>E[f] = ${EMBED.wolfram.mosca.ef_x10_start2026_python_exact.toFixed(3)}</b> of the exposure window open; waiting until 2030 raises it to 0.539. This is the arithmetic that makes the wave plan urgent, and it comes straight from the paper's model.`;
 }
 
 const LEAN_CERT = `theorem qwave_opt12_attained :

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Q-Wave Planner: provably optimal PQC migration waves (public review copy)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f4eedc; --sheet:#fbf8ee; --sheet2:#ece4cc; --ink:#1d1a16; --muted:#6b6353;
+  --line:#b9ae90; --blue:#12457a; --accent:#1d6bd0; --amber:#8a5e00; --amber-hi:#e8a317;
+  --red:#b8322a; --green:#1e7d33; --code-bg:#f6efdc;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.55;padding-top:52px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+.topbar{position:fixed;top:0;left:0;right:0;height:52px;background:var(--sheet);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;padding:0 clamp(12px,3vw,28px);z-index:10}
+.topbar .esl{font-weight:800}
+.topbar .esl span{color:var(--blue)}
+.topbar img{height:30px;vertical-align:middle}
+.topbar nav{margin-left:auto;display:flex;gap:16px;font-size:13px;flex-wrap:wrap}
+.topbar a{color:var(--accent);text-decoration:none}
+.topbar a:hover{text-decoration:underline}
+.brandchip{border:1px solid var(--line);border-radius:999px;padding:2px 10px;background:var(--sheet2);font-size:12px;color:var(--muted)}
+header{padding:clamp(28px,5vw,64px) 0 clamp(20px,3vw,40px)}
+.kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:700;display:flex;align-items:center;gap:10px}
+.mark{position:relative;width:18px;height:14px;display:inline-block;flex:none}
+.mark::before{content:"";position:absolute;left:0;top:2px;width:11px;height:11px;background:var(--blue)}
+.mark::after{content:"";position:absolute;left:7px;top:0;width:11px;height:11px;background:var(--amber-hi);opacity:.85}
+h1{font-size:clamp(30px,4.4vw,54px);line-height:1.12;font-weight:800;margin:14px 0 10px}
+h1 .hl{color:var(--blue)}
+.sub{font-size:clamp(15px,1.6vw,21px);color:var(--muted);max-width:900px}
+.statrow{display:flex;gap:clamp(14px,3vw,40px);flex-wrap:wrap;margin:26px 0 8px}
+.stat b{display:block;font-size:clamp(30px,4.6vw,56px);color:var(--blue);font-weight:800;line-height:1.05}
+.stat span{font-size:13px;color:var(--muted)}
+.stat.bad b{color:var(--amber)}
+h2{font-size:clamp(22px,2.6vw,32px);font-weight:800;margin:0 0 14px}
+h2 .tag{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);font-weight:700;margin-bottom:6px}
+section{padding:clamp(24px,4vw,48px) 0;border-top:1px solid var(--line)}
+p{margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--sheet);border:1px solid var(--line);border-top:3px solid var(--blue);padding:16px 18px}
+.card.amber{border-top-color:var(--amber-hi)}
+.card.green{border-top-color:var(--green)}
+.card h3{font-size:clamp(15px,1.5vw,19px);margin-bottom:6px}
+.card p{font-size:clamp(13.5px,1.2vw,16px);color:var(--ink);margin:0}
+.card .m{color:var(--muted)}
+.ctarow{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
+.btn{display:inline-block;background:var(--blue);color:#fff;text-decoration:none;font-weight:700;padding:12px 22px;border-radius:6px;font-size:15px}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent;color:var(--blue);border:1.5px solid var(--blue)}
+video{width:100%;max-width:1100px;display:block;margin:6px auto 0;background:#111;border:1px solid var(--line)}
+.vcap{font-size:12.5px;color:var(--muted);text-align:center;margin-top:6px}
+pre.box{background:var(--code-bg);border:1px solid var(--line);border-top:4px solid var(--code-cap);padding:14px 18px;font-family:Consolas,Menlo,monospace;font-size:clamp(12px,1.15vw,15px);overflow-x:auto;line-height:1.6;margin:0}
+.scope{background:var(--sheet2);border:1px dashed var(--amber);padding:16px 20px}
+.scope li{margin:0 0 8px;font-size:clamp(13.5px,1.2vw,16px)}
+.scope ul{padding-left:20px}
+.foot{font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);margin-top:34px;padding:16px 0 40px}
+.person{display:flex;gap:14px;align-items:center;background:var(--sheet);border:1px solid var(--line);padding:14px;max-width:560px;margin-top:18px}
+.person img{width:64px;height:74px;object-fit:cover;border:1px solid var(--line)}
+.person .n{font-weight:800}
+.person .r{color:var(--blue);font-size:13px;font-weight:600}
+.person .b{font-size:12.5px;color:var(--muted)}
+.person a{color:var(--accent);font-size:12.5px}
+@media (max-width:640px){.topbar nav{display:none}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="esl"><img src="assets/esl-logo.png" alt="ESL logo"> <span>ESL</span> - Engineering Software Lab</div>
+  <nav>
+    <a href="app/">Live planner</a>
+    <a href="technical/">Technical deck</a>
+    <a href="https://eswlab.com/" target="_blank" rel="noopener">eswlab.com</a>
+  </nav>
+</div>
+
+<div class="wrap">
+<header>
+  <div class="kicker"><span class="mark"></span>Q-Wave Planner &middot; public review copy</div>
+  <h1>A post-quantum migration planner that is <span class="hl">simulated, proven, and executable</span></h1>
+  <p class="sub">Q-Wave Planner decides which systems a bank should migrate to post-quantum cryptography first, and it proves the answer is optimal before a single engineer-week is spent. It is a working demonstration of the MantiQ workflow: a Wolfram Quantum Framework simulation, a Lean 4 certificate, and an executable planner that all compute the same numbers.</p>
+  <div class="statrow">
+    <div class="stat"><b>64</b><span>migration plans, all enumerated</span></div>
+    <div class="stat"><b>70 &rarr; 92</b><span>the budget flip: 12 vs 16 engineer-weeks</span></div>
+    <div class="stat"><b>0</b><span>sorries in the Lean 4 certificate</span></div>
+    <div class="stat"><b>5.9e-16</b><span>browser vs Wolfram statevector distance</span></div>
+  </div>
+</header>
+
+<section id="what">
+  <h2><span class="tag">What this is</span>One instance, four layers, one answer</h2>
+  <p>A fictional bank (Meridian Bank) faces the question Q.security helps customers answer: with a fixed budget of engineer-weeks, which cryptographic assets do we migrate to post-quantum first? Six candidate migrations, each with a cost in weeks and a risk score in points, one dependency (the portal needs the gateway), and a budget of 12 or 16 engineer-weeks.</p>
+  <p>The same instance runs through the whole MantiQ stack: the exposure model comes from a real peer-reviewed paper (Gupta &amp; Mittal 2026, <i>Cybersecurity</i> 9:147), a Python module integrates it exactly, Wolfram's Quantum Framework builds and simulates the QAOA circuit for it, Lean 4 proves the optimum is optimal (by exhaustive decision over all 64 plans), and the browser app recomputes everything live. The demo's conclusion: at 12 engineer-weeks the best first wave is Payments + VPN, worth 70 points; at 16 weeks four extra weeks flip the whole wave to Payments + Gateway + Portal, worth 92. A naive exposure-ranked list misses that flip.</p>
+</section>
+
+<section id="foryou">
+  <h2><span class="tag">What it can do for you</span>Six things you get in the next five minutes</h2>
+  <div class="grid">
+    <div class="card"><h3>See the flaw in ranked lists</h3><p>Open the <a href="app/">live planner</a> and move the budget slider: the optimal plan changes at 15 weeks in a way no exposure-ranked list predicts. You get the intuition in one drag.</p></div>
+    <div class="card"><h3>Get a certificate, not a claim</h3><p>The optimum facts are Lean 4 theorems, proved by exhaustive decision over all 64 plans: 3006 build jobs, zero errors, zero sorries. You get machine-checked optimality, not a vendor assertion.</p></div>
+    <div class="card"><h3>Run the quantum layer yourself</h3><p>A QAOA statevector computed live in your browser at Wolfram's search-found angles, matching Wolfram's stored distribution to TVD 5.9e-16. You get the same circuit in two independent implementations.</p></div>
+    <div class="card"><h3>Show the cost of waiting</h3><p>The paper's exposure curve, drawn live: starting the migration in 2026 leaves E[f] = 0.366 of a 10-year asset's exposure window open; waiting until 2030 raises it to 0.539. You get the "why now" argument with numbers behind it.</p></div>
+    <div class="card green"><h3>Reproduce everything locally</h3><p>Every number regenerates from source on your machine: Python for the exposure model and enumeration, Wolfram for QAOA and charts, Lean for the certificate. No account, no cloud, no trust required.</p></div>
+    <div class="card amber"><h3>A template for your own instance</h3><p>Swap in your own asset inventory, costs and scores, and the same four layers re-plan your migration. At this size (six projects) enumeration is exact; past roughly 30 projects the same cost layer hands over to integer programming.</p></div>
+  </div>
+</section>
+
+<section id="try">
+  <h2><span class="tag">Try it</span>Everything on this page is public</h2>
+  <div class="ctarow">
+    <a class="btn" href="app/">Open the live planner</a>
+    <a class="btn ghost" href="technical/">Read the technical deck (15 slides)</a>
+    <a class="btn ghost" href="source/qwave-planner-source.zip">Download the full source (zip)</a>
+  </div>
+  <video controls preload="metadata" src="video/qwave-planner-demo.mp4" poster="assets/app-top-b12.png"></video>
+  <p class="vcap">Demo walkthrough (about 4.5 minutes): the planner, the QAOA panel, the Lean certificate, and the budget flip. Transcript: <a href="video/transcript.md">video/transcript.md</a>.</p>
+</section>
+
+<section id="reproduce">
+  <h2><span class="tag">Reproduce</span>Every number regenerates from source</h2>
+  <pre class="box">py -3 data/scoring.py              # exact E[f] exposure model + 200k Monte Carlo
+py -3 data/plan_search.py          # 64-plan enumeration per budget
+wolframscript -file wolfram/qwave_planner.wl   # QAOA p=1/p=2, QF rebuild, charts (~5 min)
+lake build Hackton.QWavePlanner    # the Lean certificate, 0 sorry
+py -3.12 classiq/generate_qmod.py  # the Classiq QMOD artifact
+py -3 app/build_app.py             # rebuild the executable planner</pre>
+  <p style="margin-top:12px">Requirements: Python 3, Wolfram Language (free <a href="https://www.wolfram.com/engine/" target="_blank" rel="noopener">Wolfram Engine</a> works), <a href="https://leanprover.github.io/" target="_blank" rel="noopener">Lean 4 + Mathlib</a> (lake), the Classiq Python SDK on Python 3.12 (only for the QMOD artifact), Node.js with Playwright only if you want to re-record the demo video.</p>
+</section>
+
+<section id="scope">
+  <h2><span class="tag">Honest scope</span>What is proven, what is measured, what is assumed</h2>
+  <div class="scope">
+    <ul>
+      <li><b>Proven (Lean 4):</b> at 12 engineer-weeks the optimum is {PAY, VPN} = 70, it is unique, and every feasible plan is worth at most 70; at 16 weeks the optimum is {PAY, GWY, PRT} = 92. The flip theorem covers the 12-to-16-week comparison, not every budget.</li>
+      <li><b>Measured (Python + Wolfram, cross-checked):</b> the E[f] exposure model, the 64-plan enumeration at every budget, the QAOA distributions, and the 4096-shot sample statistics. The two pipelines recompute each other's arithmetic.</li>
+      <li><b>Best found, not certified global:</b> the QAOA angles (dense-grid multi-start search). At budget 16 with p=2 the best found P(optimal) is 0.0075; the enumeration layer, not the sampler, makes the decision.</li>
+      <li><b>Assumed (disclosed in data/instance.json):</b> the 0-25 business-impact bonus weighting. Without it the 12-week optimum is unique ({PAY, VPN} = 37) and the 16-week optimum is a three-way tie at 44, so the flip is a consequence of that assumption. The paper's Tables 8 and 9 are not consistent with its own Eq (2), so those values are recomputed from Eq (2).</li>
+      <li><b>Fictional:</b> Meridian Bank and its assets are invented for the demo. Not affiliated with Q.security.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="who">
+  <div class="person">
+    <img src="assets/daniel-liezrowice.jpg" alt="Daniel Liezrowice">
+    <div>
+      <div class="n">Daniel Liezrowice</div>
+      <div class="r">Engineering Software Lab (ESL)</div>
+      <div class="b">Built with Wolfram Quantum Framework, Lean 4/Mathlib, and the MantiQ workflow: simulate it, prove it, ship it.</div>
+      <a href="https://www.linkedin.com/in/liezrowice/" target="_blank" rel="noopener">linkedin.com/in/liezrowice</a>
+    </div>
+  </div>
+  <div class="foot">Public review copy, 28 November 2026. The exposure model is from Gupta &amp; Mittal 2026, "Post-quantum readiness and cryptographic transition planning for enterprise cloud", <i>Cybersecurity</i> 9:147 (s42400-026-00579-2), included in the source zip. Q-Wave Planner is a demo by Engineering Software Lab; it is not a Q.security product and makes no claim of affiliation.</div>
+</section>
+</div>
+</body>
+</html>
